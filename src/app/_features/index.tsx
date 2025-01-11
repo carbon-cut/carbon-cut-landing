@@ -1,9 +1,9 @@
 "use client"
 import React, { useCallback, useState } from "react";
 import Image from "next/image";
-const svg1 = "/home/features/4";
-const svg2 = "/home/features/5";
-const svg3 = "/home/features/6";
+const svg1 = "home/features/4";
+const svg2 = "home/features/5";
+const svg3 = "home/features/6";
 import {
   Card,
   CardContent,

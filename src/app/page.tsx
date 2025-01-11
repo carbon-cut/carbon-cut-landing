@@ -72,9 +72,9 @@ export default function Home() {
   </div>
   <div className="h-full">
     <div className="relative h-full">
-    <img width={250} alt="total orders" className="absolute right-0 bottom-0 z-0" src={'/home/hero/Total orders.svg'}/>
-    <img width={250} alt="Visitors" className="absolute right-0 left-0 bottom-0 mx-auto z-10" src={'/home/hero/Visitors.svg'}/>
-    <img width={250} alt="Total sales" className="absolute left-0 bottom-0 z-0" src={'/home/hero/Total Sales.svg'}/>
+    <img width={250} alt="total orders" className="absolute right-0 bottom-0 z-0" src={'home/hero/Total orders.svg'}/>
+    <img width={250} alt="Visitors" className="absolute right-0 left-0 bottom-0 mx-auto z-10" src={'home/hero/Visitors.svg'}/>
+    <img width={250} alt="Total sales" className="absolute left-0 bottom-0 z-0" src={'home/hero/Total Sales.svg'}/>
     </div>
   </div>
 </div>
