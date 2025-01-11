@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Features from "./_features";
 import Pricing from "./_pricing";
+import Testimonials from "./_testimonials";
 
 export default function Home() {
   return (
@@ -47,10 +48,17 @@ export default function Home() {
         </p>
         <Features />
         </div>
-        {
+        
+      </section>
+      {
+        //section Testimonials
+      }
+      <section id="testimonials">
+        <Testimonials />
+      </section>
+      {
           // section 3 Pricing
         }
-      </section>
       <section id="pricing">
       <div className="flex flex-col w-full items-center ">
         <Badge variant="default">Plans & Features</Badge>
