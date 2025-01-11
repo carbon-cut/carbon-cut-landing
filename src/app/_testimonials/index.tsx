@@ -27,7 +27,7 @@ function Testimonials() {
         <div className='pr-16'>
             <Image width={28} height={28} alt='testimonial' src={'home/features/bi_chat-quote-fill.svg'} />
             <p className='text-black font-bold text-lg'>
-            Our business was in chaos before we started using this Saas dashboard. We were drowning in data and couldn't make sense of it. Thanks to this amazing tool, we now have clarity, and our decision-making has become precise and data-driven.
+            Our business was in chaos before we started using this Saas dashboard. We were drowning in data and couldn&apos;t make sense of it. Thanks to this amazing tool, we now have clarity, and our decision-making has become precise and data-driven.
             </p>
             <div>
                 <div className='flex flex-row justify-start mt-3'>
