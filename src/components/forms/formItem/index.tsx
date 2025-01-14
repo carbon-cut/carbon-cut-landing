@@ -4,14 +4,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  TName,
 } from "@/components/ui/forms";
 import { Input } from "@/components/ui/input";
-import React, { cloneElement, InputHTMLAttributes } from "react";
-import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
+import React from "react";
+import { ControllerRenderProps, FieldValues, UseFormReturn } from "react-hook-form";
 
-interface props {
-  form: UseFormReturn<any, undefined>;
-  name: string;
+interface Props<T extends FieldValues> {
+  form: UseFormReturn<T, undefined>;
+  name: TName<T>;
   label?: string | undefined;
   mandetory?: boolean;
   type?: React.HTMLInputTypeAttribute | undefined | "calendar" | "combox";
@@ -19,7 +20,7 @@ interface props {
   readOnly?: boolean;
 }
 
-const FormComponent: React.FC<props> = ({
+function FormComponent<T extends FieldValues> ({
   form,
   name,
   label,
@@ -27,7 +28,7 @@ const FormComponent: React.FC<props> = ({
   type = "text",
   children,
   readOnly,
-}) => {
+}:Props<T>)  {
   return (
     <FormField
       control={form.control}

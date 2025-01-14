@@ -139,7 +139,7 @@ export default {
       basic: {
         energie: {
           heating: {
-            q: "Quel type de système de chauffage utilisez-vous pour chauffer votre maison ?",
+            q: "Quel type de système de chauffage utilisez-vous pour chauffer votre maison?",
             options: {
               heatPump: { label: "Pompe à chaleur", unit: "null" },
               electricity: { label: "Électricité", unit: "null" },

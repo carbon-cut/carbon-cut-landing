@@ -1,12 +1,12 @@
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
+  TName,
 } from "../ui/forms";
 import {
   Select,
@@ -16,23 +16,23 @@ import {
   SelectValue,
 } from "../ui/select";
 
-interface Props {
-  form: UseFormReturn<any, undefined>;
-  name: string;
+interface Props<T extends FieldValues> {
+  form: UseFormReturn<T, undefined>;
+  name: TName<T>;
   label?: string | undefined;
   mandetory?: boolean;
   data: { label: string; value: string }[];
   placeholder?: string;
 }
 
-function FormSelect({
+function FormSelect<T extends FieldValues>({
   form,
   name,
   label,
   placeholder,
   mandetory,
   data,
-}: Props) {
+}: Props<T>) {
   return (
     <FormField
       control={form.control}

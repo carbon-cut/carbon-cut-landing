@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { useScopedI18n } from "@/locales/client";
 import Input from "../../../../components/input";
-import { PlusCircle, Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FormMultiCombox from "../../../../components/multiCombox";
 import { useQuery } from "@tanstack/react-query";
@@ -81,7 +81,7 @@ function QAir({ mainForm }: QuestionProps) {
   }, [data, mainForm]);
 
   return (
-    <Table>
+    <Table className="max-h-full">
       <TableHeader>
         <TableRow>
           <TableHead></TableHead>
@@ -219,6 +219,7 @@ function QAir({ mainForm }: QuestionProps) {
             </TableCell>
             <TableCell>
               <Input
+              size="sm"
                 half
                 type="number"
                 form={mainForm}
@@ -227,6 +228,7 @@ function QAir({ mainForm }: QuestionProps) {
             </TableCell>
             <TableCell>
               <Input
+              size="sm"
                 half
                 type="number"
                 form={mainForm}
@@ -236,6 +238,9 @@ function QAir({ mainForm }: QuestionProps) {
             <TableCell>
               <Button
                 type="button"
+                variant={'ghost'}
+                size={'icon'}
+                className="rounded-full hover:bg-destructive/50"
                 onClick={() => {
                   setData((prev) => {
                     const out = prev.toSpliced(index, 1);
@@ -259,6 +264,8 @@ function QAir({ mainForm }: QuestionProps) {
       <TableFooter>
         <Button
           type="button"
+          className="rounded-full ml-2 my-3 "
+          size={'icon'}
           onClick={() => {
             mainForm.setValue(`transport.airs`, [
               ...(mainForm.getValues("transport.airs") ?? []),
@@ -280,7 +287,7 @@ function QAir({ mainForm }: QuestionProps) {
             ]);
           }}
         >
-          <PlusCircle />
+          <Plus />
         </Button>
       </TableFooter>
     </Table>

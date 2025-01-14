@@ -42,7 +42,7 @@ function QHeating({ mainForm }: QuestionProps) {
           setGazTank(ui != null);
         }}
       />
-      {gazTank && (
+      {/* {gazTank && (
         <>
           <Question>{tAdd("q")}</Question>
           <div className="grid grid-cols-3 w-2/3">
@@ -60,7 +60,7 @@ function QHeating({ mainForm }: QuestionProps) {
             />
           </div>
         </>
-      )}
+      )} */}
     </div>
   );
 }

@@ -1,28 +1,21 @@
-import { formSchema } from '@/app/form/formSchema';
-import { TName } from '@/components/ui/forms';
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import React from 'react'
-import { UseFormReturn } from 'react-hook-form';
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import React from "react"
+import * as SwitchPrimitives from "@radix-ui/react-switch"
 
-type Props = {
-    id: string;
-    label?:string;
-    form: UseFormReturn<typeof formSchema>
-    name: TName<typeof formSchema>
-}
-function SwitchForm({
-    id,
-    label,
-    form,
-    name
-}: Props) {
-  return (
+const  SwitchForm = React.forwardRef<
+  React.ElementRef<typeof SwitchPrimitives.Root>,
+  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & {label?:string}
+>(({ className, label, ...props }, ref) => (
     <div className="flex items-center space-x-2">
-      <Switch id={id} />
-      {label && <Label htmlFor={id}>{label}</Label>}
+      <Switch
+        ref={ref}
+        {...props}
+      />
+      {label && <Label className="w-full" htmlFor={props.id}>{label}</Label>}
     </div>
   )
-}
+)
 
-export default SwitchForm
+SwitchForm.displayName = "SwitchForm"
+export default SwitchForm;

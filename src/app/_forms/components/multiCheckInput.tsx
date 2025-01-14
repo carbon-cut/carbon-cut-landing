@@ -7,14 +7,10 @@ import {
   FormField,
   TName,
   FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/forms";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ReactNode, useState } from "react";
-import { Checkbox, CheckboxItem } from "@/components/ui/checkbox";
+import {  useState } from "react";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import MinimalInput from "./minimalInput";
+import SwitchForm from "./switch";
 
 type InputType = React.HTMLInputTypeAttribute | undefined;
 
@@ -39,7 +35,7 @@ export function MultiCheckInput<
     //@ts-ignore
     const currentValue = props.form.getValues(`${props.name}.${value}`);
     if (currentValue) return true;
-    else false;
+    else return false;
   }
 
   function onCheckedChange(value: string) {
@@ -62,12 +58,12 @@ export function MultiCheckInput<
           control={props.form.control}
           name={props.name}
           key={value}
-          render={({ field }) => {
+          render={() => {
             const [checkedValue, setChecked] = useState(checked(value));
             return (
-              <FormItem className="w-5/12 grid grid-cols-5">
-                <FormControl className="col-span-4">
-                  <CheckboxItem
+              <FormItem className="w-5/12 ">
+                <FormControl className="">
+                  <SwitchForm
                     id={value}
                     checked={checkedValue}
                     onCheckedChange={(v) => {
@@ -77,7 +73,7 @@ export function MultiCheckInput<
                     label={label}
                   />
                 </FormControl>
-                {unit !== "null" && (
+                {/*{ unit !== "null" && (
                   <MinimalInput
                     disabeled={!checkedValue}
                     form={props.form}
@@ -86,7 +82,7 @@ export function MultiCheckInput<
                     className="ml-1"
                     unit={unit}
                   />
-                )}
+                )} */}
               </FormItem>
             );
           }}

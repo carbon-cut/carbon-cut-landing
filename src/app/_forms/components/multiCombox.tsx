@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
 import {
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/forms";
 import {
   Popover,
@@ -14,14 +12,11 @@ import {
 import React, { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
+import {  ChevronsUpDown } from "lucide-react";
 import {
   Command,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem,
-  CommandList,
 } from "@/components/ui/command";
 import { MenuList } from "@/components/ui/menuList";
 import {ClassValue} from "clsx";
@@ -46,7 +41,7 @@ const FormMultiCombox: React.FC<props> = ({
   mandetory = false,
   disabled = false,
   data,
-  setValue = (v) => {},
+  setValue = () => {},
   className,
 }) => {
   const t = useScopedI18n("components.forms.combox");

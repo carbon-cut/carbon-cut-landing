@@ -13,7 +13,9 @@ const output: (
 
   for (let i = init; i < count + init; i++) {
     console.log("looop");
-    arr.push(QCar1(i), QCar2(i), QCar3(i), QCar4(i)); //fill(QCar1(i), QCar2(i))
+    arr.push(QCar1(i), QCar2(i), 
+    //QCar3(i),
+    QCar4(i)); //fill(QCar1(i), QCar2(i))
   }
   console.log(arr);
   return arr;

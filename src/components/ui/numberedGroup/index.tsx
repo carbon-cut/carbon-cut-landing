@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as NumberedGroupPrimitive from "./root";
-import { Check, Circle } from "lucide-react";
+import {  Circle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 

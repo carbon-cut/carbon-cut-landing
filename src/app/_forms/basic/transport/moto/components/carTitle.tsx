@@ -1,4 +1,4 @@
-import { formSchema } from "@/app/[locale]/dashboard/form/formSchema";
+import { formSchema } from "@/app/form/formSchema"; 
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";

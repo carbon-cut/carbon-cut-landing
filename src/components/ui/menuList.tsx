@@ -1,8 +1,6 @@
-import { Children, FC, PropsWithChildren, useEffect, useRef } from "react";
+import { FC, useRef } from "react";
 
 import {
-  CommandEmpty,
-  CommandGroup,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";

@@ -41,9 +41,10 @@ export default function Home() {
           <h1 className="text-primary text-center text-sm font-normal tracking-tight lg:text-lg">
             Mesurez, réduisez, agissez
           </h1>
-          <Button size="lg" className="mt-6 -mb-2 rounded-full">
-            Commoncer <ArrowRight />
-          </Button>
+          <Button asChild size="lg" className="mt-6 -mb-2 rounded-full">
+            <Link href={'/form'}>
+          Commencer <ArrowRight />
+          </Link></Button>
           <Image
             width="930"
             height="600"

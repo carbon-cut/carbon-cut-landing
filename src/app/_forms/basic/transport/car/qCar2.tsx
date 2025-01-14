@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { QuestionProps } from "../../../types";
 import Input from "../../../components/input";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {  useQuery } from "@tanstack/react-query";
 import CarTitle from "./components/carTitle";
-import Radio from "@/app/_forms/components/radio";
-import { Label } from "@radix-ui/react-label";
 
 const QCar2 = (index: number) => {
-  function CarComponent({ mainForm, setIsDirty }: QuestionProps) {
+  function CarComponent({ mainForm }: QuestionProps) {
     const t = useScopedI18n("forms.basic.transport.qCar2");
-
+/*
     const isCombustion = //@ts-ignore
       mainForm.getValues(`transport.cars.${index}.fuelType`) != "Electrique";
 
-    const { data: cylinders } = useQuery({
+     const { data: cylinders } = useQuery({
       queryKey: [
         "cylinders", //@ts-ignore
         mainForm.getValues(`transport.cars.${index}.carModel`),
@@ -35,14 +33,14 @@ const QCar2 = (index: number) => {
         if (result.error) throw new Error(result.error.message);
         return result;
       },
-    });
+    }); */
 
     return (
       <div className="py-12">
         <CarTitle mainForm={mainForm} index={index} />
         <Question className='mb-12'>{t("q")}</Question>
         <Content>
-          {cylinders ? (
+          {/* {cylinders ? (
             <Content>
               <h4>Cylinders:</h4>
               <Radio
@@ -56,23 +54,15 @@ const QCar2 = (index: number) => {
             </Content>
           ) : (
             <></>
-          )}
+          )} */}
 
-          <Content>
             <Input
               name={`transport.cars.${index}.carConsumption`}
               label={t("l5")}
               placeholder={t("l5")}
               form={mainForm}
-              unit={
-                mainForm.getValues(`transport.cars.${index}.carType`) ===
-                "Electrique"
-                  ? "KWh/100 Km"
-                  : "L/100 Km"
-              }
             />
           </Content>
-        </Content>
       </div>
     );
   }

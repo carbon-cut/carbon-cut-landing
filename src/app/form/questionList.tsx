@@ -35,7 +35,7 @@ function QuestionList({ setTab, setIndex, list, mainForm }: Props) {
                   Symbol={Symbol}
                   key={Symbol?.question}
                   setInterface={() => {
-                    setIndex(index), setTab(key);
+                    setIndex(index); setTab(key);
                   }}
                 />
               ))

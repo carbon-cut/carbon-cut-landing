@@ -82,8 +82,8 @@ const Q2 = ({ mainForm }: QuestionProps) => {
 
   return (
     <div>
-      <Question>{t("q1")}</Question>
-      <Table>
+      <Question className='text-xl'>{t("q1")}</Question>
+      {/* <Table>
         <TableHeader>
           <TableRow>
             {getLast12Months().map(({ month, year }, index) => (
@@ -117,23 +117,20 @@ const Q2 = ({ mainForm }: QuestionProps) => {
             </TableCell>
           </TableRow>
         </TableBody>
-      </Table>
-      <FormAlert
-        title={`${t("alert.title")}:`}
-        description={t("alert.description")}
-        variant="note"
+      </Table> */}
+      <div className="px-16 mb-6">
+      <Input
+      form={mainForm}
+      name="energie.gaz.total"
+      
       />
+      </div>
       <SideQuestion
         Question={t("q3")}
         Content={
-          <Input form={mainForm} name="energie.gaz.money" unit="€" type="number" half />
+          <Input form={mainForm} name="energie.gaz.money" placeholder="€" type="number" half />
         }
       />
-      <Separator className="mt-3" />
-      <Question>{t("q2")}</Question>
-      <Content>
-        <Input form={mainForm} name="energie.gaz.index" type="number" />
-      </Content>
     </div>
   );
 };

@@ -1,17 +1,10 @@
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
-import { formSchema } from "../../form/formSchema";
 import {ClassValue} from "clsx";
 import {
-  FormControl,
-  FormField,
-  FormItem,
   FormLabel,
 } from "@/components/ui/forms";
-import {
-  NumberedGroup,
-  NumberedGroupItemCheck,
-} from "@/components/ui/numberedGroup";
+
+
 type Props = {
   options: {
     label: string;

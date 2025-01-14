@@ -22,7 +22,7 @@ function QSea1({ mainForm }: QuestionProps) {
   const [data, setData] = useState(mainForm.getValues("transport.seas") ?? []);
 
   return (
-    <Table>
+    <Table className="max-h-full">
       <TableHeader>
         <TableRow>
           <TableHead></TableHead>
@@ -55,7 +55,7 @@ function QSea1({ mainForm }: QuestionProps) {
             <TableCell>
               {ele?.type === "ferry" && (
                 <div className="flex justify-between">
-                  <p className="whitespace-nowrap mr-3">with a car?</p>
+                  <p className="whitespace-nowrap mr-3">avec voiture?</p>
                   <FormCheckbox
                     form={mainForm}
                     name={`transport.seas.${index}.withCar`}
@@ -68,6 +68,7 @@ function QSea1({ mainForm }: QuestionProps) {
             <TableCell>
               <Input
                 half
+                size="sm"
                 type="number"
                 form={mainForm}
                 name={`transport.seas.${index}.distance`}
@@ -84,6 +85,7 @@ function QSea1({ mainForm }: QuestionProps) {
             <TableCell>
               <Input
                 half
+                size="sm"
                 type="number"
                 form={mainForm}
                 name={`transport.seas.${index}.frequency`}
@@ -100,6 +102,9 @@ function QSea1({ mainForm }: QuestionProps) {
             <TableCell>
               <Button
                 type="button"
+                variant={'ghost'}
+                size={'icon'}
+                className="rounded-full hover:bg-destructive/50"
                 onClick={() => {
                   setData((prev) => {
                     const out = prev.toSpliced(index, 1);
@@ -117,6 +122,8 @@ function QSea1({ mainForm }: QuestionProps) {
       <TableFooter>
         <Button
           type="button"
+          className="rounded-full ml-2 my-3 "
+          size={'icon'}
           onClick={() => {
             mainForm.setValue(`transport.seas`, [...data, null]);
             setData((prev) => [...prev, null]);

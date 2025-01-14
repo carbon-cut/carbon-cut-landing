@@ -85,14 +85,14 @@ export function FormRadio<FormShema extends FieldValues>({
 function checked(
   type: InputType,
   element: { label: string; value: string },
-  fieldValue: any,
+  fieldValue?: unknown ,
 ): boolean | undefined {
   switch (type) {
     case "boolean":
       return (
         (element.value === "true" && fieldValue) ||
         (element.value === "false" && fieldValue === false)
-      );
+      ) ? true : false;
     default:
       return element.value === fieldValue;
   }

@@ -2,8 +2,7 @@ import React from "react";
 import { FormControl, FormField, FormItem } from "../ui/forms";
 import { UseFormReturn } from "react-hook-form";
 import { Checkbox } from "../ui/checkbox";
-import { ClassNameValue } from "tailwind-merge";
-import { ClassValue, ClassArray } from "clsx";
+import { ClassValue,  } from "clsx";
 import { cn } from "@/lib/utils";
 
 interface Props {

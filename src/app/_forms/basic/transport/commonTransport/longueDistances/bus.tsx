@@ -32,6 +32,7 @@ const Bus = ({ mainForm }: QuestionProps) => {
             <TableCell>
               <FormSelect
                 form={mainForm}
+                //@ts-expect-error
                 name={`transport.commonTransport.longueDistances.bus.${index}.carType`}
                 data={[
                   { label: "Electrique", value: "Electrique" },

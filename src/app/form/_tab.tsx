@@ -78,13 +78,14 @@ const TabContent = React.forwardRef<
         className="mt-3 px-16 border-0 mx-4 rounded-md  max-h-screen overflow-y-auto"
         {...props}
       >
-        <div className="relative h-full">
-          <div className=" flex justify-center">
+        <div className="h-full grid grid-rows-12">
+          <div className=" flex justify-center self-start">
             {/* <Stepper
               currentStep={currentIndex}
               numberOfSteps={questions.length}
             /> */}
           </div>
+          <div className="row-span-9 overflow-y-auto mb-3">
           {questions[currentIndex] && (
             <QuestionRendrer
               props={{
@@ -97,7 +98,8 @@ const TabContent = React.forwardRef<
               Question={questions[currentIndex]}
             />
           )}
-          <div className="flex justify-center mb-12 absolute bottom-0 right-28">
+          </div>
+          <div className="flex justify-center mb-12 mt-auto bottom-0 right-28">
             <Button
               className="text-xl"
               variant={'ghost'}

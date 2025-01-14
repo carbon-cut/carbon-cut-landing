@@ -5,6 +5,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  TName,
 } from "@/components/ui/forms";
 import {
   Popover,
@@ -12,7 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
@@ -24,22 +25,22 @@ import {
   CommandList,
 } from "@/components/ui/command";
 
-interface props {
-  form: UseFormReturn<any, undefined>;
-  name: string;
+interface Props<T extends FieldValues> {
+  form: UseFormReturn<T, undefined>;
+  name: TName<T>;
   label?: string | undefined;
   mandetory?: boolean;
   type?: React.HTMLInputTypeAttribute | undefined | "calendar" | "combox";
   data: { value: any; label: string }[];
 }
 
-const FormCombox: React.FC<props> = ({
+function FormCombox<T extends FieldValues>({
   form,
   name,
   label,
   mandetory = true,
   data,
-}) => {
+}: Props<T>) {
 
   return (
     <FormField

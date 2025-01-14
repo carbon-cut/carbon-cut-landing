@@ -22,7 +22,7 @@ const QCar4 = (index: number) => {
     });
 
     return (
-      <div>
+      <div className="py-12">
         <Question>{t("q")}</Question>
         <Content>
           <Input

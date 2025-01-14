@@ -115,7 +115,7 @@ function Page() {
               <TabsContent value="food"></TabsContent>
               <TabsContent value="trash"></TabsContent>
               <TabsContent value="vacation"></TabsContent>
-              <Dialog>
+              {/* <Dialog>
                 <DialogTrigger asChild>
                   <Button
                     type="button"
@@ -135,7 +135,7 @@ function Page() {
                     }}
                   />
                 </DialogContent>
-              </Dialog>
+              </Dialog> */}
             </Tabs>
             <div className="bg-primary  pb-40">
               <div className="relative h-full">
