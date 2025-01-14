@@ -1,12 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import FAQs from "./_faqs";
+import FAQs from "./_home/_faqs";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import Features from "./_features";
-import Pricing from "./_pricing";
-import Testimonials from "./_testimonials";
+import Features from "./_home/_features";
+import Pricing from "./_home/_pricing";
+import Testimonials from "./_home/_testimonials";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -101,9 +102,11 @@ export default function Home() {
             <h1 className="text-primary text-left text-4xl font-bold tracking-tight lg:text-6xl">
             Votre empreinte  <br /> carbone en toute simplicité !
           </h1>
-              <Button size={'lg'} className="rounded-full mt-16 py-4">
+              <Button asChild size={'lg'} className="rounded-full mt-16 py-4"><Link href="/form">
                 Commencer <ArrowRight />
+                </Link>
               </Button>
+              
             </div>
             <div className="h-fit">
               <div className="relative h-fit">
