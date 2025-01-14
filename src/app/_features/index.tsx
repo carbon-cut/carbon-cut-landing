@@ -15,39 +15,39 @@ import {
 const cardContent: Props[] = [
   {
     icon: svg1,
-    title: "Data Visualization",
+    title: "Calculateur d'empreinte carbone",
     description:
-      "The ability to present complex data in a visually understandable way, such as through charts.",
+      "Estimation fiable basée sur vos habitudes.",
   },
   {
     icon: svg2,
-    title: "Integration",
+    title: "onseils personnalisés",
     description:
-      "Seamless integration with other software and tools that a business uses, creating a unified system",
+      "Conseils pratiques pour réduire vos émissions.",
   },
   {
     icon: svg3,
-    title: "Customization",
+    title: "Tableau de bord carbone",
     description:
-      "Allowing users to tailor the dashboard to their specific needs and preferences.",
+      "Visualisation claire avec graphiques et rapports.",
   },
   {
     icon: svg1,
-    title: "Reporting",
+    title: "Comparateur d'émissions",
     description:
-      "Generating detailed reports that provide insights into the business's performance.",
+      "Comparez votre empreinte à des moyennes locales et mondiales.",
   },
   {
     icon: svg2,
-    title: "User Access Control",
+    title: "Plan de réduction carbone",
     description:
-      "Managing who can access and interact with the dashboard, ensuring data security.",
+      "Étapes concrètes pour adopter un mode de vie durable.",
   },
   {
     icon: svg3,
-    title: "Collaboration Tools",
+    title: "Analyse pour entreprises",
     description:
-      "Features that facilitate teamwork and communication among team members.",
+      "Outil pour évaluer et réduire les émissions des entreprises.",
   },
 ];
 
@@ -78,7 +78,7 @@ const CardComponent: React.FC<Props> = (props) => {
     <Card
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`w-[300px] py-5 rounded-3xl ${isHovered ? "bg-card-primary" : ""}`}
+      className={`w-[300px] py-5 rounded-3xl ${isHovered ? "bg-linear" : ""}`}
     >
       <CardHeader>
         <Image
@@ -88,12 +88,12 @@ const CardComponent: React.FC<Props> = (props) => {
           src={`${isHovered ? svg1+'light.png' : props.icon +'.png'}`}
           alt={props.title}
         />
-        <CardTitle className={`text-center self-center ${isHovered ? "text-primary-foreground" : ""}`}>
+        <CardTitle className={`text-center self-center text-primary ${isHovered ? "text-primary-foreground" : ""}`}>
           {props.title}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className={`text-center ${isHovered ? "text-card-primary-foreground" : ""}`}>
+        <CardDescription className={`text-muted-foreground text-center ${isHovered ? "text-primary-foreground" : ""}`}>
           {props.description}
         </CardDescription>
       </CardContent>

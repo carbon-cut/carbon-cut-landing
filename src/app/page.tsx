@@ -11,44 +11,62 @@ import Testimonials from "./_testimonials";
 export default function Home() {
   return (
     <>
-    {
-      // secrion 1
-    }
+      {
+        // secrion 1
+      }
       <section>
         <div className="flex flex-col w-full items-center ">
           <Badge variant="default">
-            7 Day Free Trial - No Credit card required
+            Essai gratuit de 7 jours - Sans carte de crédit requise
           </Badge>
           <div className="my-6">
             <span className="text-center text-4xl font-bold tracking-tight lg:text-5xl">
-              <h1 className="text-center">Unlock the</h1>
-              <span className="text-chart-3">Power </span>
-              of<span> Data <Image height={19} width={137} alt="vector" className="ml-auto" src={'home/features/Vector 6.svg'} /></span>
+              <span className="text-center">votre empreinte</span>
+              <span className="gradient-text"> carbone</span> <br />
+              <div>
+                <span className="inline-block">
+                  en toute simplicité !
+                  <Image
+                    height={19}
+                    width={137}
+                    alt="vector"
+                    className="ml-auto mr-14 scale-125"
+                    src={"home/features/Vector 6.svg"}
+                  />
+                </span>
+              </div>
             </span>
           </div>
-          <h1 className="text-primary text-center text-sm font-light tracking-tight lg:text-lg">
-          Turn Data into Actionable Insights <br /> with Our SaaS Dashboard
+          <h1 className="text-primary text-center text-sm font-normal tracking-tight lg:text-lg">
+            Mesurez, réduisez, agissez
           </h1>
-          <Button size="lg" className="my-6 rounded-full">Get Started <ArrowRight /></Button>
-          <Image width="715" height="510" alt="dashboard" src={'SaaS Dashboard.svg'}/>
+          <Button size="lg" className="mt-6 -mb-2 rounded-full">
+            Commoncer <ArrowRight />
+          </Button>
+          <Image
+            width="930"
+            height="600"
+            alt="dashboard"
+            src={"home/Dashboard Screen.png"}
+          />
         </div>
       </section>
       {
-      // secrion 2
-    }
+        // secrion 2 Features
+      }
       <section id="features">
-      <div className="flex flex-col w-full items-center ">
-        <Badge variant="default">Features</Badge>
-        <span className="text-center text-4xl font-bold tracking-tight lg:text-5xl my-6">
-          <h1>Real-Time Insights,</h1>
-          <h1 className="text-chart-2">Real-Time Results</h1>
-        </span>
-        <p className="text-card-foreground text-center text-sm font-light tracking-tight lg:text-lg">
-        Saas dashboard that enable users to perform various <br /> tasks and activities related to their business
-        </p>
-        <Features />
+        <div className="flex flex-col w-full items-center ">
+          <Badge variant="default">Fonctionnalités</Badge>
+          <span className="text-center text-4xl font-bold tracking-tight lg:text-5xl my-6 text-primary">
+            <h1>Calculez votre impact, réduisez votre</h1>
+            empreinte,
+            <span className="gradient-text"> préservez la planète !</span>
+          </span>
+          <p className="text-secondary text-center text-sm font-light tracking-tight lg:text-lg">
+          Tableau de bord SaaS permettant aux utilisateurs de suivre  <br /> et de réduire leur empreinte carbone personnelle
+          </p>
+          <Features />
         </div>
-        
       </section>
       {
         //section Testimonials
@@ -57,44 +75,57 @@ export default function Home() {
         <Testimonials />
       </section>
       {
-          // section 3 Pricing
-        }
+        // section 3 Pricing
+      }
       <section id="pricing">
-      <div className="flex flex-col w-full items-center ">
-        <Badge variant="default">Plans & Features</Badge>
-        <h1 className="text-center text-4xl font-bold tracking-tight lg:text-5xl my-6">Pricing</h1>
-        <Pricing />
-      </div>
+        <div className="flex flex-col w-full items-center ">
+          <Badge variant="default">Plans & Features</Badge>
+          <h1 className="text-center text-4xl font-bold tracking-tight lg:text-5xl my-6 text-primary">
+            Tarifs
+          </h1>
+          <Pricing />
+        </div>
       </section>
       {
         // section 4 Hero
       }
-      <section className="mt-6" style={{backgroundColor: '#E7E7E7'}}>
+      <section
+        className="mt-6"
+        style={{
+          background: "linear-gradient(to bottom right, #C0C7CD, #D6DBDF)",
+        }}
+      >
         <div className=" px-28 py-16 w-full xl:px-36">
-        <h1 className="text-left text-4xl font-bold tracking-tight lg:text-5xl">Unlock Your Business <br /> Potential Today!</h1>
-<div className="grid grid-cols-2 w-full">
-
-  <div className="">
-  <p className="text-muted-foreground my-6">Small businesses and startups looking to <br /> gain data insights</p>
-  <Button className="rounded-full">Get Started <ArrowRight /></Button>
-  </div>
-  <div className="h-full">
-    <div className="relative h-full">
-    <img width={250} alt="total orders" className="absolute right-0 bottom-0 z-0" src={'home/hero/Total orders.svg'}/>
-    <img width={250} alt="Visitors" className="absolute right-0 left-0 bottom-0 mx-auto z-10" src={'home/hero/Visitors.svg'}/>
-    <img width={250} alt="Total sales" className="absolute left-0 bottom-0 z-0" src={'home/hero/Total Sales.svg'}/>
-    </div>
-  </div>
-</div>
-</div>
+          <div className="grid grid-cols-2 w-full h-fit">
+            <div className="">
+            <h1 className="text-primary text-left text-4xl font-bold tracking-tight lg:text-6xl">
+            Votre empreinte  <br /> carbone en toute simplicité !
+          </h1>
+              <Button size={'lg'} className="rounded-full mt-16 py-4">
+                Commencer <ArrowRight />
+              </Button>
+            </div>
+            <div className="h-fit">
+              <div className="relative h-fit">
+                <img
+                  width={559}
+                  
+                  alt="home image"
+                  className="absolute  top-0  z-0 scale-125"
+                  src={"home/image 5.png"}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
       <section id="faq">
-        <div className="flex flex-col w-full items-center ">
-          <Badge variant="default">Frequently asked questions</Badge>
+        <div className="flex flex-col w-full items-center px-16">
+          <Badge variant="default">Questions fréquemment posées</Badge>
           <h1 className="mt-4 text-center scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">
             FAQs
           </h1>
-          <div className="min-w-full mx-24 mt-6 px-12 py-8 rounded-xl bg-card-primary">
+          <div className="min-w-full mx-24 my-12 px-12 pt-8 pb-12 rounded-xl bg-primary">
             <FAQs />
           </div>
         </div>

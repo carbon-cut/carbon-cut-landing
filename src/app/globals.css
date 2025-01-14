@@ -8,21 +8,22 @@ body {
 
 @layer base {
   :root {
+    --linear: linear-gradient(to bottom right, hsl(var(--chart-1)), hsl(var(--chart-2)));
     --background: 210, 30%, 96%;
     --foreground: 227, 9%, 14%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-    --card-primary: 227, 9%, 14%;
+    --card-primary: 230 8% 14%;
     --card-primary-foreground: 0 0% 69%;
     --card-primary-muted: 0 0% 62%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 170 61% 10%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
+    --secondary: 0 0% 28%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
-    --muted-foreground: 0 0% 28%;
+    --muted-foreground: 0 0% 45%;
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
@@ -30,8 +31,8 @@ body {
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-    --chart-1: 325 73% 70%;
-    --chart-2: 265 74% 70%;
+    --chart-1: 126 75% 64%;
+    --chart-2: 175 67% 40%;
     --chart-3: 209 72% 67%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
@@ -77,5 +78,30 @@ body {
   }
   section {
     @apply px-24 py-8 flex flex-1 justify-center w-screen flex-wrap;
+  }
+}
+
+@layer components {
+  .primary {
+    background: var(--linear);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .primary:hover {
+    transform: scale(1.05);
+    box-shadow: 1px 2px 0px rgba(0, 0, 0, 0.2);
+  }
+
+  .primary:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .gradient-text {
+    background: var(--linear);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
   }
 }

@@ -10,9 +10,13 @@ export default {
   ],
   theme: {
   	extend: {
+		backgroundImage: {
+			linear: 'var(--linear)'
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+			liniar: 'var(--liniar)',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))',

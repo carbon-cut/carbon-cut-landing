@@ -59,9 +59,9 @@ const CardComponent: React.FC<Props> = (props) => {
     <Card className="rounded-3xl w-[320px] py-5 justify-between">
         <div>
       <CardHeader>
-        <CardTitle className="text-center">
+        <CardTitle className="text-center text-primary">
           <h1 className="mb-4 text-4xl">{props.title}</h1>
-          <div className="flex items-start justify-center pr-5">
+          <div className="flex items-start justify-center ">
             <span className="text-2xl align-text-top mt-1">€</span>
             <span className="text-8xl align-text-top leading-none">
               {props.price}
@@ -70,7 +70,7 @@ const CardComponent: React.FC<Props> = (props) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className="grid grid-cols-5 gap-2 ">
+        <CardDescription className="grid grid-cols-5 gap-2 text-secondary">
           {props.features.map((feature) => (
             <Fragment key={feature}>
                
