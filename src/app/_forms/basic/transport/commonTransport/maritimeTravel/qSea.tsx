@@ -6,7 +6,7 @@ import Question from "../../../../components/question";
 import Content from "../../../../components/content";
 import { FormRadio } from "@/components/forms/formRadio";
 function QSea({
-  setOnSubmit = () => {},
+  setOnSubmit,
   setQuestions,
   mainForm,
   currentIndex,

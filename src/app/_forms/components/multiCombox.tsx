@@ -1,9 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/forms";
+import { FormField, FormItem, FormLabel } from "@/components/ui/forms";
 import {
   Popover,
   PopoverContent,
@@ -12,14 +8,10 @@ import {
 import React, { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import {  ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-} from "@/components/ui/command";
+import { ChevronsUpDown } from "lucide-react";
+import { Command, CommandEmpty, CommandInput } from "@/components/ui/command";
 import { MenuList } from "@/components/ui/menuList";
-import {ClassValue} from "clsx";
+import { ClassValue } from "clsx";
 import { useScopedI18n } from "@/locales/client";
 
 interface props {
@@ -55,8 +47,8 @@ const FormMultiCombox: React.FC<props> = ({
       data.filter(
         (option) =>
           option.value.toLowerCase().includes(search.toLowerCase() ?? []) ||
-          option.label.toLowerCase().includes(search.toLowerCase() ?? []),
-      ),
+          option.label.toLowerCase().includes(search.toLowerCase() ?? [])
+      )
     );
   };
 
@@ -78,8 +70,8 @@ const FormMultiCombox: React.FC<props> = ({
                 variant={"outline"}
                 type="button"
                 className={cn(
-                  "w-full pl-3 text-left font-normal",
-                  !field.value && "text-muted-foreground",
+                  "w-full pl-3 text-left font-normal rounded-full bg-white",
+                  !field.value && "text-muted-foreground"
                 )}
               >
                 {field.value

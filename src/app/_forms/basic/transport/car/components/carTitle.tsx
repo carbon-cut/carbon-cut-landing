@@ -14,7 +14,7 @@ function CarTitle({
 
   if (carModel && carModel != "") return(
     <h3 className="font-semibold text-primary">
-      .{carMake}:{" "}
+      {carMake}:{" "}
       <span className="font-medium">
         {carModel}
       </span>

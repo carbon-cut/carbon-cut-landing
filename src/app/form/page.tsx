@@ -2,33 +2,27 @@
 
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import {TabContent, TabTrigger, } from "./_tab";
-import {
-  Car,
-  MessageCircleQuestion,
-  Plane,
-  Trash,
-  Utensils,
-  Zap,
-} from "lucide-react";
 import initEnergieQuestions from "../_forms/basic/energie";
 import initTransportQuestions from "../_forms/basic/transport";
 import React, {
   useCallback,
   useState,
 } from "react";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/forms";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema } from "./formSchema";
-import QuestionList from "./questionList";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import FormContext from "./_formContext";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 function Page() {
   const [tab, setTab] = useState("transport");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [resultOpen, setResultOpen] = useState<boolean>(false)
+  const [submit, setSubmit] = useState<boolean>(false)
+const [result, setResult] = useState<unknown>(null)
 
   const transportQuestions = useState(initTransportQuestions);
   const energieQuestions = useState(initEnergieQuestions);
@@ -38,9 +32,17 @@ function Page() {
     defaultValues: {},
   });
 
-  const [onSubmit, setOnSubmit] = useState<() => Promise<void>>(
-    () => async () => {},
-  );
+  const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (formResponse, e) => {
+    e?.preventDefault()
+    setResultOpen(true)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/basic`, {method:'POST', headers:{'Content-Type': 'application/json'} ,body:JSON.stringify(formResponse)}).then(r=>r.json())
+    console.log(res)
+    setResult(res)
+  }
+
+  const handleError = (...args: unknown[]) => {
+    console.log(...args)
+  }
 
   const setNextTab = useCallback(() => {
     setTab((prev) => {
@@ -48,7 +50,6 @@ function Page() {
         case "transport":
           return "energie";
         case "energie":
-          mainForm.trigger();
           return "energie";
         case "food":
           return "trash";
@@ -71,7 +72,7 @@ function Page() {
       }}
     >
         <Form {...mainForm}>
-          <form onSubmit={onSubmit} className="min-h-screen grid grid-cols-2 h-full">
+          <form onSubmit={mainForm.handleSubmit(handleSubmit, handleError)} className="min-h-screen grid grid-cols-2 h-full">
             <Tabs
               className="relative mt-8"
               value={tab}
@@ -85,29 +86,29 @@ function Page() {
                 <TabTrigger value="energie" >
                 <img width={'26px'} src="form/energie.svg" />
                 </TabTrigger>
-                <TabTrigger value="food" >
+                <TabTrigger disabled value="food" >
                 <img width={'26px'} src="form/food.svg" />
                 </TabTrigger>
-                <TabTrigger value="trash">
+                <TabTrigger disabled value="trash">
                 <img width={'26px'} src="form/waste.svg" />
                 </TabTrigger>
-                <TabTrigger value="vacation" >
+                <TabTrigger disabled value="vacation" >
                 <img width={'26px'} src="form/vacation.svg" />
                 </TabTrigger>
                 <div  className="col-span-3"></div>
               </TabsList>
               <TabContent
                 mainForm={mainForm}
-                onSubmit={onSubmit}
-                setOnSubmit={setOnSubmit}
+                submit={submit}
+                setSubmit={setSubmit}
                 initQuestions={transportQuestions}
                 setNextTab={setNextTab}
                 value="transport"
               />
               <TabContent
                 mainForm={mainForm}
-                onSubmit={onSubmit}
-                setOnSubmit={setOnSubmit}
+                submit={submit}
+                setSubmit={setSubmit}
                 initQuestions={energieQuestions}
                 setNextTab={setNextTab}
                 value="energie"
@@ -144,6 +145,19 @@ function Page() {
             </div>
           </form>
         </Form>
+        <Dialog open={resultOpen} onOpenChange={setResultOpen}>
+          
+          <DialogContent>
+            <DialogHeader>
+          <DialogTitle>Your result</DialogTitle>
+          </DialogHeader>
+          <div>
+            {
+              result != null ? <>{JSON.stringify(result)}</> :<>no Result yet</>
+            }
+            </div>
+          </DialogContent>
+        </Dialog>
     </FormContext.Provider>
   );
 }

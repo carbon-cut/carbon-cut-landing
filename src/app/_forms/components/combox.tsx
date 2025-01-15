@@ -67,7 +67,7 @@ const FormCombox: React.FC<props> = ({
                     variant={"outline"}
                     type="button"
                     className={cn(
-                      "w-full pl-3 text-left font-normal rounded-full",
+                      "w-full pl-3 text-left font-normal rounded-full bg-white",
                       !field.value && "text-muted-foreground",
                     )}
                   >
@@ -88,7 +88,7 @@ const FormCombox: React.FC<props> = ({
                   <CommandGroup>
                     {data.map((element, index) => (
                       <CommandItem
-                        className="hover:bg-gray-200 hover:cursor-pointer"
+                        className={`${element.value === field.value ? '!bg-card-primary-foreground':''}`}
                         value={element.value}
                         key={index}
                         onSelect={() => {

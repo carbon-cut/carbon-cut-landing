@@ -60,14 +60,14 @@ function QAir({ mainForm }: QuestionProps) {
 
   const [data, setData] = useState<
     {
-      destination: string | null;
-      origin: string | null;
-      stopover: string | null;
+      destination?: string | null;
+      origin?: string | null;
+      stopover?: string | null;
     }[]
   >(mainForm.getValues("transport.airs") ?? []);
   const [stopovers, setStopovers] = useState(
     (mainForm.getValues("transport.airs") ?? []).map((e) =>
-      e.stopover ? true : false,
+      e?.stopover ? true : false,
     ),
   );
 
@@ -76,7 +76,7 @@ function QAir({ mainForm }: QuestionProps) {
     if (!RawAirports) return [];
     return data.map((ele) => {
       //const {origin, destination} = RawAirports?.filter((v)=>({origin: v.code===ele.origin, destination:}))
-      return getDistance(ele, RawAirports);
+      return getDistance(ele ?? null, RawAirports);
     });
   }, [data, mainForm]);
 
@@ -298,9 +298,9 @@ export default QAir;
 
 function getDistance(
   ele: {
-    destination: string | null;
-    origin: string | null;
-    stopover: string | null;
+    destination?: string | null;
+    origin?: string | null;
+    stopover?: string | null;
   },
   RawAirports: any[],
 ) {

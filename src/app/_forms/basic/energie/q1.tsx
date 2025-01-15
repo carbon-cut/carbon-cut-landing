@@ -123,6 +123,7 @@ const Q1 = ({ mainForm }: QuestionProps) => {
       <Input
       form={mainForm}
       name="energie.electricity.total"
+      placeholder="kWh"
       
       />
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { QuestionProps } from "../../../types";
 import Question from "../../../components/question";
 import { MultiCheckInput } from "../../../components/multiCheckInput";
@@ -17,7 +17,7 @@ const heatingMethods = [
   "wood",
 ] as const;
 
-function QHeating({ mainForm }: QuestionProps) {
+function QHeating({ mainForm, setOnSubmit }: QuestionProps) {
   const t = useScopedI18n("forms.basic.energie.heating");
   const tAdd = useScopedI18n("forms.basic.energie.heating.options.QgazTank");
 
@@ -29,6 +29,7 @@ function QHeating({ mainForm }: QuestionProps) {
     <div>
       <Question>{t("q")}</Question>
       <MultiCheckInput
+      type="number"
         form={mainForm}
         name="energie.heating"
         options={heatingMethods.map((e) => ({

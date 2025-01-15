@@ -7,7 +7,7 @@ import Content from "../../../../components/content";
 import { FormRadio } from "@/components/forms/formRadio";
 
 function QAir({
-  setOnSubmit = () => {},
+  setOnSubmit,
   setQuestions,
   mainForm,
   currentIndex,

@@ -7,7 +7,7 @@ import carsQuestions from "./index";
 import Input from "../../../components/input";
 
 function QMoto({
-  setOnSubmit = () => {},
+  setOnSubmit,
   setQuestions,
   mainForm,
   currentIndex,

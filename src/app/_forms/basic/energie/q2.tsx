@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -34,11 +34,19 @@ const getLast12Months = () => {
   return months.reverse();
 };
 
-const Q2 = ({ mainForm }: QuestionProps) => {
+const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.q2");
   const tm = useScopedI18n("utils.months");
 
   const [change, setChange] = useState(false);
+
+  useEffect(()=>{
+    setSubmit(true)
+
+    return ()=>{
+      setSubmit(false)
+    }
+  }, [])
 
   const tableRows = (
     months: {
@@ -122,7 +130,7 @@ const Q2 = ({ mainForm }: QuestionProps) => {
       <Input
       form={mainForm}
       name="energie.gaz.total"
-      
+      placeholder="m³"
       />
       </div>
       <SideQuestion

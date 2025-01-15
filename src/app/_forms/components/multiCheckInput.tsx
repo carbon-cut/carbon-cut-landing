@@ -42,7 +42,8 @@ export function MultiCheckInput<
     return (checked: CheckedState) => {
       if (checked) {
         //@ts-ignore
-        props.form.setValue(`${props.name}.${value}`, "");
+        props.form.setValue(`${props.name}.${value}`,
+           props.type === 'number' ? 0 : '');
       } else {
         //@ts-ignore
         props.form.setValue(`${props.name}.${value}`, null);

@@ -35,6 +35,7 @@ export const MenuList: FC<{
           const element = options[virtualRow.index];
           return (
             <CommandItem
+            className={`${element.value === selectedValue ? '!bg-card-primary-foreground':''}`}
               style={{
                 position: "absolute",
                 top: 0,

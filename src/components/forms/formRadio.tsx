@@ -41,7 +41,6 @@ export function FormRadio<FormShema extends FieldValues>({
       control={form.control}
       name={name}
       render={({ field }) => {
-        console.log(field.value);
 
         return (
           <FormItem className="space-y-3 w-full">

@@ -7,9 +7,9 @@ export default {
       forms: {
         calendar: "Choisissez une date",
         combox: {
-          placeholder: "Rechercher {label}...",
-          notFound: "Aucune entrée {label} trouvée.",
-          value: "Sélectionnez {label}",
+          placeholder: "Rechercher ...",
+          notFound: "Aucune entrée  trouvée.",
+          value: "Sélectionnez ",
         },
       },
     },

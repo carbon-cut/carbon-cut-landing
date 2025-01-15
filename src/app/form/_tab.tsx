@@ -11,18 +11,15 @@ import { Button } from "@/components/ui/button";
 import FormContext from "./_formContext";
 
 const TabTrigger = React.forwardRef<
-  React.ElementRef<typeof TabsTrigger>,
+  React.ComponentRef<typeof TabsTrigger>,
   React.ComponentPropsWithoutRef<typeof TabsTrigger>
 >(({ className, ...props }, ref) => (
   <TabsTrigger
     ref={ref}
     className={cn(
-      "rounded-2xl h-12 w-12 p-2  disabled:pointer-events-none disabled:bg-opacity-50 data-[state=active]:!bg-linear data-[state=active]:shadow-2xl",
+      "bg-[#D6D6D6] rounded-2xl h-12 w-12 p-2  disabled:pointer-events-none disabled:bg-opacity-50 data-[state=active]:!bg-linear data-[state=active]:shadow-2xl",
       className,
     )}
-    style={{
-      background: '#D6D6D6'
-    }}
     {...props}
   />
 ));
@@ -34,8 +31,8 @@ interface TabCProps {
     React.FC<QuestionProps>[],
     React.Dispatch<React.SetStateAction<React.FC<QuestionProps>[]>>,
   ];
-  onSubmit: () => Promise<void>;
-  setOnSubmit: React.Dispatch<React.SetStateAction<() => Promise<void>>>;
+  setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
+  submit: boolean;
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
 }
 
@@ -44,23 +41,19 @@ const TabContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof TabsContent> & TabCProps
 >(
   (
-    { setNextTab, initQuestions, onSubmit, setOnSubmit, mainForm, ...props },
+    { setNextTab, initQuestions,submit, setSubmit, mainForm, ...props },
     ref,
   ) => {
     const { tab, currentIndex, setCurrentIndex } = useContext(FormContext);
     const [questions, setQuestions] = initQuestions;
     const [isDirty, setIsDirty] = useState(false);
+    const [onSubmit,setOnSubmit] = useState<()=>void>(()=>()=>{})
 
     const next = useCallback(() => {
       setCurrentIndex((prev) => prev + 1);
     }, []);
 
     useEffect(() => {
-      console.log({
-        currentIndex,
-        len: questions.length,
-        questions,
-      });
       if (tab === props.value && currentIndex >= questions.length) {
         setNextTab();
         setCurrentIndex(0);
@@ -92,6 +85,7 @@ const TabContent = React.forwardRef<
                 currentIndex,
                 setQuestions,
                 setOnSubmit,
+                setSubmit,
                 mainForm,
                 setIsDirty,
               }}
@@ -99,9 +93,9 @@ const TabContent = React.forwardRef<
             />
           )}
           </div>
-          <div className="flex justify-center mb-12 mt-auto bottom-0 right-28">
+          <div className="flex justify-center mb-12 mt-auto bottom-0 right-28 gap-12">
             <Button
-              className="text-xl"
+              className="text-xl hover:bg-card-primary-foreground/70"
               variant={'ghost'}
               size={"lg"}
               type="button"
@@ -111,17 +105,18 @@ const TabContent = React.forwardRef<
               Précédent
             </Button>
             <Button
-              className={`text-xl rounded-full  w-64 ring-1`}
+              className={`text-xl rounded-full  w-64 `}
               style={{ background: isDirty ? undefined : "" }}
               size={"lg"}
-              type="button"
+              type={submit ?  "submit": "button" }
               variant="default"
               onClick={async () => {
-                await onSubmit();
+                //console.log(onSubmit)
+                onSubmit()
                 next();
               }}
             >
-              Suivant
+             {submit ? 'Submit' : 'Suivant'}
             </Button>
           </div>
         </div>
