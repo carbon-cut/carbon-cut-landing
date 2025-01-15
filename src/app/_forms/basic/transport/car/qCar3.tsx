@@ -10,7 +10,7 @@ import { TriangleAlert } from "lucide-react";
 
 const QCar3 = (index: number) => {
   function CarComponent({ mainForm, setIsDirty }: QuestionProps) {
-    const [carType] = useState<FuelTypes>(
+    const [carType] = useState<FuelTypes | null | undefined>(
       mainForm.getValues(`transport.cars.${index}.carType`),
     );
     const [warning, setWarning] = useState<string | null>(null);
@@ -35,7 +35,7 @@ const QCar3 = (index: number) => {
       };
     });
 
-    useEffect(() => {
+ /*    useEffect(() => {
       let carCalculatedConsumption = null;
       console.log("calculating");
       const [
@@ -67,7 +67,7 @@ const QCar3 = (index: number) => {
             `Warning: the calculated avreage consumption per 100Km ${carCalculatedConsumption} doesn't match the provided avreage consumption ${carConsumption}`,
           );
       }
-    }, [change]);
+    }, [change]); */
 
     return (
       <div>

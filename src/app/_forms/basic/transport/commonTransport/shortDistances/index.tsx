@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/* import React, { useEffect, useState } from "react";
 import { QuestionProps } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../../components/question";
@@ -104,3 +104,4 @@ QShortDistances["Symbol"] = {
 };
 
 export default QShortDistances;
+ */

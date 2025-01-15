@@ -1,4 +1,4 @@
-import QMoto1 from "./qMoto1";
+/* import QMoto1 from "./qMoto1";
 import { QuestionProps } from "../../../types";
 import QMoto3 from "./qMoto3";
 import QMoto2 from "./qMoto2";
@@ -20,3 +20,4 @@ const output: (
 };
 
 export default output;
+ */

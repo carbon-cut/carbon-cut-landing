@@ -23,7 +23,7 @@ const menu: MenuItem[] = [
 
 function Header() {
   return (
-    <div className="bg-white items-center grid grid-cols-12 py-8 px-20 sticky top-0 z-50 shadow-md">
+    <header className="bg-white items-center grid grid-cols-12 py-8 px-20 sticky top-0 z-50 shadow-md">
       <div className=""></div>
         <Link href={'/'}>
       <Image src={'logo/logoLight.svg'} className="scale-125" alt="logo" width={141} height={48} />
@@ -35,7 +35,7 @@ function Header() {
         </div>
       ))}
       <Button asChild className="rounded-full py-6" size={'lg'}><Link href={'/form'}>Commencer</Link></Button>
-    </div>
+    </header>
   );
 }
 

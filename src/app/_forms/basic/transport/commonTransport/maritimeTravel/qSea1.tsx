@@ -144,10 +144,10 @@ export default QSea1;
 
 const rest = (
   v: {
-    withCar: boolean | null;
-    distance: number | null;
-    frequency: number | null;
-    type: "fluvial" | "ferry" | "cruise" | null;
+    withCar?: boolean | null ;
+    distance?: number | null | undefined;
+    frequency?: number | null | undefined;
+    type?: "fluvial" | "ferry" | "cruise" | null | undefined;
   } | null,
 ) => {
   return {

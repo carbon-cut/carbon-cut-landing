@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/* import React, { useEffect, useState } from "react";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
@@ -76,3 +76,4 @@ QMoto["Symbol"] = {
 };
 
 export default QMoto;
+ */

@@ -10,7 +10,7 @@ function CarTitle({
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
   index: number;
 }) {
-  const {carMake, carModel} = mainForm.getValues(`transport.cars.${index}`)
+  const {carMake, carModel} = mainForm.getValues(`transport.cars.${index}`) ?? {}
 
   if (carModel && carModel != "") return(
     <h3 className="font-semibold text-primary">
