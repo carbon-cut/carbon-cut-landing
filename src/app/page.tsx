@@ -15,7 +15,7 @@ export default function Home() {
       {
         // secrion 1
       }
-      <section>
+      <section className="pt-32">
         <div className="flex flex-col w-full items-center ">
           <Badge variant="default">
             Essai gratuit de 7 jours - Sans carte de crédit requise

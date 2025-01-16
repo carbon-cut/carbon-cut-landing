@@ -74,7 +74,7 @@ const [result, setResult] = useState<unknown>(null)
         <Form {...mainForm}>
           <form onSubmit={mainForm.handleSubmit(handleSubmit, handleError)} className="min-h-screen grid grid-cols-2 h-full">
             <Tabs
-              className="relative mt-8"
+              className="relative mt-8 pt-32"
               value={tab}
               onValueChange={(v) => setTab(v)}
             >
@@ -138,7 +138,7 @@ const [result, setResult] = useState<unknown>(null)
                 </DialogContent>
               </Dialog> */}
             </Tabs>
-            <div className="bg-primary  pb-40">
+            <div className="bg-primary pt-32  pb-40">
               <div className="relative h-full">
               <img className="top-0 bottom-0 left-0 ml-16 absolute m-auto scale-150" src="form/digital-art-with-planet-earth 1.png" />
               </div>
