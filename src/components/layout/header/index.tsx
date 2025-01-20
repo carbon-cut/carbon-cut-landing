@@ -18,15 +18,15 @@ const bigHeaderUrls = ['']
 const menu: MenuItem[] = [
     {
         title: "Tarifs",
-        url: "/#pricing",
+        url: "./#pricing",
     },
     {
         title: "FAQ",
-        url: "/#faq",
+        url: "./#faq",
     },
     {
         title: "Assistance",
-        url: "/#support",
+        url: "./#support",
     }
 ];
 
