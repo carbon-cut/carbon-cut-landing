@@ -5,7 +5,6 @@ import { QuestionProps } from "../_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "./formSchema";
-import Stepper from "@/components/forms/multiStepForm/Stepper";
 import QuestionRendrer from "./_questionRendere";
 import { Button } from "@/components/ui/button";
 import FormContext from "./_formContext";
@@ -44,25 +43,28 @@ const TabContent = React.forwardRef<
     { setNextTab, initQuestions,submit, setSubmit, mainForm, ...props },
     ref,
   ) => {
-    const { tab, currentIndex, setCurrentIndex } = useContext(FormContext);
+    const { tab, currentIndexes, setCurrentIndexes } = useContext(FormContext);
     const [questions, setQuestions] = initQuestions;
     const [isDirty, setIsDirty] = useState(false);
     const [onSubmit,setOnSubmit] = useState<()=>void>(()=>()=>{})
 
+    console.log("__tab",tab)
+
     const next = useCallback(() => {
-      setCurrentIndex((prev) => prev + 1);
-    }, []);
+      setCurrentIndexes((prev) => ({...prev , [tab]: prev[tab] + 1}));
+    }, [tab]);
 
     useEffect(() => {
+      const currentIndex = currentIndexes[tab];
       if (tab === props.value && currentIndex >= questions.length) {
         setNextTab();
-        setCurrentIndex(0);
+        setCurrentIndexes(p=>({...p,[tab]:0}));
       }
-    }, [currentIndex, questions, setNextTab]);
+    }, [currentIndexes, questions, setNextTab, tab]);
 
     const prev = useCallback(() => {
-      setCurrentIndex((prev) => prev - 1);
-    }, []);
+      setCurrentIndexes((p) =>( {...p , [tab]: p[tab] - 1}));
+    }, [tab]);
 
     return (
       <TabsContent
@@ -79,17 +81,17 @@ const TabContent = React.forwardRef<
             /> */}
           </div>
           <div className="row-span-9 overflow-y-auto mb-3">
-          {questions[currentIndex] && (
+          {questions[currentIndexes[tab]] && (
             <QuestionRendrer
               props={{
-                currentIndex,
+                currentIndex: currentIndexes[tab],
                 setQuestions,
                 setOnSubmit,
                 setSubmit,
                 mainForm,
                 setIsDirty,
               }}
-              Question={questions[currentIndex]}
+              Question={questions[currentIndexes[tab]]}
             />
           )}
           </div>
@@ -99,7 +101,7 @@ const TabContent = React.forwardRef<
               variant={'ghost'}
               size={"lg"}
               type="button"
-              disabled={currentIndex == 0}
+              disabled={currentIndexes[tab] == 0}
               onClick={prev}
             >
               Précédent

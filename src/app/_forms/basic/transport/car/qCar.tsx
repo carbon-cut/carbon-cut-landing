@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { QuestionProps } from "../../../types";
 import carsQuestions from "./index";
 import Input from "../../../components/input";
+import FormContext from "@/app/form/_formContext";
 
 function QCar({
   setOnSubmit,
@@ -15,6 +16,7 @@ function QCar({
 }: QuestionProps) {
   const t = useScopedI18n("forms.basic.transport.qCar");
   const [prevValue] = useState(mainForm.getValues("transport.hasCar") ?? 0);
+  const {tab} = useContext(FormContext)
   useEffect(() => {
     setOnSubmit(() => async () => {
       const hasCar = mainForm.getValues("transport.hasCar") ?? 0;
@@ -56,7 +58,7 @@ function QCar({
     return () => {
       setOnSubmit(() => async () => {});
     };
-  }, [currentIndex, mainForm, prevValue, setOnSubmit, setQuestions]);
+  }, [currentIndex, mainForm, prevValue, setOnSubmit, setQuestions, tab]);
 
   useEffect(() => {
     if (mainForm.getValues("transport.hasCar")) {

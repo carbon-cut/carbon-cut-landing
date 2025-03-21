@@ -51,12 +51,12 @@ function FAQs() {
     <Accordion
       type="single"
       collapsible
-      className="w-full text-primary-foreground bg-primary"
+      className="w-full text-primary-foreground bg-inherit"
     >
       {items.map((e) => (
-        <AccordionItem key={e.value} value={e.value}>
-          <AccordionTrigger className="text-primary-foreground text-2xl">{e.title}</AccordionTrigger>
-          <AccordionContent className=" px-3 text-primary-foreground/70">
+        <AccordionItem className="py-8" key={e.value} value={e.value}>
+          <AccordionTrigger className="text-primary text-2xl">{e.title}</AccordionTrigger>
+          <AccordionContent className="font-medium px-3 text text-primary/70">
             {e.content}
           </AccordionContent>
         </AccordionItem>

@@ -37,10 +37,10 @@ const classes = ["economy", "premium", "business", "first"];
 function QAir({ mainForm }: QuestionProps) {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qAir.q1");
 
-  const { data: airports } = useQuery<{ reduced: any[]; raw: any[] }>({
+  const { data: airports } = useQuery<{ reduced: any[]; raw?: any[] }>({
     queryKey: ["airports"],
     queryFn: async () => {
-      const res = await fetch(
+/*       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/airports`,
       ).then((r) => r.json());
       if (res.error) throw new Error(res.error.message);
@@ -54,7 +54,17 @@ function QAir({ mainForm }: QuestionProps) {
       return {
         reduced,
         raw: res,
-      };
+      }; */
+      return { reduced: [{
+        label:"Paris",
+        value:"PAR"
+      },{
+        label:"London",
+        value:"LHR"
+      },{
+        label:"New York",
+        value:"JFK"
+      }], raw: undefined }; 
     },
   });
 

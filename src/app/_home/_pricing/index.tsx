@@ -84,7 +84,7 @@ const CardComponent: React.FC<Props> = (props) => {
       </CardContent>
       </div>
       <CardFooter>
-        <Button size="lg" className={`z-30 mx-auto rounded-full ${props.color} hover:bg-chart-1/90`}>Learn More<ArrowRight /></Button>
+        <Button size="lg" className={`z-30 mx-auto bg-linear-2`}>Learn More<ArrowRight /></Button>
       </CardFooter>
     </Card>
   );

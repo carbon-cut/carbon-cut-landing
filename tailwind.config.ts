@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-import { DEFAULT_CIPHERS } from "tls";
 
 export default {
     darkMode: ["class"],
@@ -11,7 +10,9 @@ export default {
   theme: {
   	extend: {
 		backgroundImage: {
-			linear: 'var(--linear)'
+			'linear-1': 'var(--linear-1)',
+			'linear-2': 'var(--linear-2-1)',
+			'linear-2-2': 'var(--linear-2-2)',
 		},
   		colors: {
   			background: 'hsl(var(--background))',
@@ -91,6 +92,9 @@ export default {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		},
+		fontFamily: {
+			manrope_sans: ['var(--font-manrope_sans)'],
+		},
   	}
   },
   plugins: [require("tailwindcss-animate")],

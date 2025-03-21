@@ -1,9 +1,19 @@
 import { createContext } from "react";
 
-const FormContext = createContext<{
-    tab: string;
-    currentIndex: number;
-    setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
-  }>({ tab: "", currentIndex: 0, setCurrentIndex: () => {} });
+type TabValues = "transport" | "food" | "vacation" | "energie" | "waste";
 
-  export default FormContext
+const FormContext = createContext<{
+  tab: TabValues;
+  setTab: React.Dispatch<React.SetStateAction<TabValues>>;
+  currentIndexes: { [key in TabValues]: number };
+  setCurrentIndexes: React.Dispatch<
+    React.SetStateAction<{ [key in TabValues]: number }>
+  >;
+}>({
+  tab: "transport",
+  currentIndexes: { transport: 0, food: 0, vacation: 0, energie: 0, waste: 0 },
+  setCurrentIndexes: () => {},
+  setTab: () => {},
+});
+
+export default FormContext;

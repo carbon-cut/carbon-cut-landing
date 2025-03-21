@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import { Button } from "../ui/button";
 
 type QuickLink = {
   title: string;
@@ -67,14 +68,11 @@ function Footer() {
             placeholder="Email"
             className="rounded-full px-4 py-2 w-full"
           />
-          <button
-            className="primary absolute z-10 right-0 rounded-full py-2 px-4 text-primary-foreground font-thin"
-            style={{
-              backgroundColor: "#AA7AEB",
-            }}
+          <Button
+            className="primary absolute z-10 right-0 rounded-full py-5 px-4 text-primary-foreground font-normal"
           >
             Subscribe
-          </button>
+          </Button>
         </div>
       </div>
     </div>

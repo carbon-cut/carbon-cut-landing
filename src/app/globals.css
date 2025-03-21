@@ -2,13 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
 
 @layer base {
   :root {
-    --linear: linear-gradient(to bottom right, hsl(var(--chart-1)), hsl(var(--chart-2)));
+    --linear-1: linear-gradient(to bottom right, hsl(var(--chart-1)), hsl(var(--chart-2)));
+    --linear-2-1: linear-gradient(to right, hsl(var(--chart-3)), hsl(17, 100%, 86%));
+    --linear-2-2: linear-gradient(to bottom right, hsl(var(--chart-3)), hsl(17, 100%, 86%));
     --background: 210, 30%, 96%;
     --foreground: 227, 9%, 14%;
     --card: 0 0% 100%;
@@ -31,9 +30,9 @@ body {
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-    --chart-1: 126 75% 64%;
-    --chart-2: 175 67% 40%;
-    --chart-3: 209 72% 67%;
+    --chart-1: 126 75% 64%; /* light green */
+    --chart-2: 175 67% 40%; /* middle dark green */
+    --chart-3: 17 100% 60%; /* ornage */
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
@@ -74,7 +73,7 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-manrope_sans;
   }
   section {
     @apply px-24 py-8 flex flex-1 justify-center w-screen flex-wrap;

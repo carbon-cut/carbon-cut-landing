@@ -15,7 +15,7 @@ function Testimonials() {
         </Badge>
         <br className="" />
         <span className="text-center text-4xl font-bold tracking-tight lg:text-5xl text-primary">
-          Ce que nos <span className="text-chart-1">clients</span> <br /> disent
+          Ce que nos <span className="text-chart-3">clients</span> <br /> disent
           de nous
         </span>
         <br />
@@ -27,27 +27,27 @@ function Testimonials() {
           <Button
             size={"icon"}
             variant={"ghost"}
-            className=" hover:bg-transparent rounded-full bg-white border-chart-1 border-2 "
+            className=" hover:bg-transparent rounded-full bg-white border-chart-2 border "
           >
-            <ArrowLeft className="stroke-chart-1" />
+            <ArrowLeft className="stroke-chart-2" />
           </Button>
           <Button
             size={"icon"}
             variant={"ghost"}
-            className="rounded-full bg-white border-chart-1 border-2 "
+            className="rounded-full bg-white border-chart-2 border "
           >
-            <ArrowRight className="stroke-chart-1" />
+            <ArrowRight className="stroke-chart-2" />
           </Button>
         </div>
       </div>
       <div className="pr-16">
         <Image
-          width={28}
-          height={28}
+          width={32}
+          height={32}
           alt="testimonial"
           src={"home/features/bi_chat-quote-fill.svg"}
         />
-        <p className="text-primary font-bold text-lg">
+        <p className="text-primary font-semibold text-xl my-4">
           J&lsquo;ai utilisé ce site pour calculer mon empreinte carbone et
           j&lsquo;ai été impressionné par la simplicité et la précision des
           résultats. Les recommandations pour réduire mon impact sont claires et

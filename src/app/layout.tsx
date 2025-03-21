@@ -1,22 +1,11 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Providers from "@/lib/partials/Providers";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+import { manropeSans } from "@/lib/fonts";
 export const metadata: Metadata = {
   title: "Carbon Cut",
   description:
@@ -31,10 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${manropeSans.variable} antialiased`}
       >
         <Providers>
-          <Header />
+         {/*  <Header /> */}
           {children}
           <Footer />
         </Providers>
