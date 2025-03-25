@@ -1,0 +1,17 @@
+.prevButton {
+    @apply text-lg w-48 relative overflow-hidden px-0 py-0;
+
+    border: double 0.14em transparent;
+    background-image: linear-gradient(hsl(var(--background)), hsl(var(--background))),
+                      linear-gradient(hsl(var(--background)), hsl(var(--background))),
+                      var(--linear-1);
+    background-origin: content-box,content-box, border-box;
+    background-clip: content-box,content-box, border-box;
+  }
+
+  .prevButton:hover {
+    background-image: linear-gradient(  hsl(var(--card-primary-foreground) / 0.2), hsl(var(--card-primary-foreground) / 0.2)), 
+    linear-gradient(hsl(var(--background)), hsl(var(--background))),
+    var(--linear-1);
+    
+  }

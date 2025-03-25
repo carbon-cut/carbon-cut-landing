@@ -297,7 +297,7 @@ export default {
       no: "non",
       unit: "en {unit}",
       idk: "Je ne sais pas",
-      next: "Suivant",
+      next: "Continuer",
       back: "Précédent",
     },
     utils: {

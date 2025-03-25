@@ -23,7 +23,7 @@ export default function RootLayout({
         className={`${manropeSans.variable} antialiased`}
       >
         <Providers>
-         {/*  <Header /> */}
+          <Header />
           {children}
           <Footer />
         </Providers>

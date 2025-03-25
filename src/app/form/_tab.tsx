@@ -8,6 +8,10 @@ import { formSchema } from "./formSchema";
 import QuestionRendrer from "./_questionRendere";
 import { Button } from "@/components/ui/button";
 import FormContext from "./_formContext";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import style from './form.module.css'
+import LeftArrow from "./arrowLeft";
+import Image from "next/image";
 
 const TabTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsTrigger>,
@@ -16,7 +20,7 @@ const TabTrigger = React.forwardRef<
   <TabsTrigger
     ref={ref}
     className={cn(
-      "bg-[#D6D6D6] rounded-2xl h-12 w-12 p-2  disabled:pointer-events-none disabled:bg-opacity-50 data-[state=active]:!bg-linear data-[state=active]:shadow-2xl",
+      "bg-[#D6D6D6] rounded-2xl h-12 w-12 p-2  disabled:pointer-events-none disabled:bg-opacity-50 data-[state=active]:!bg-linear-2-2 data-[state=active]:shadow-2xl",
       className,
     )}
     {...props}
@@ -95,19 +99,25 @@ const TabContent = React.forwardRef<
             />
           )}
           </div>
-          <div className="flex justify-center mb-12 mt-auto bottom-0 right-28 gap-12">
+          <div className="flex justify-end mb-12 mt-auto bottom-0 right-12 gap-12">
             <Button
-              className="text-xl hover:bg-card-primary-foreground/70"
+              className={style.prevButton}
               variant={'ghost'}
               size={"lg"}
               type="button"
               disabled={currentIndexes[tab] == 0}
               onClick={prev}
             >
+              <span className="flex items-center gap-3">
+                <Image src={'/form/utils/arrow-left.svg'} width={18} height={18} alt="arrow-left"/>
+              <span className="bg-linear-1 text-transparent bg-clip-text">
               Précédent
+              </span>
+              </span>
+              
             </Button>
             <Button
-              className={`text-xl rounded-full  w-64 `}
+              className={`text-lg  w-48 py-4`}
               style={{ background: isDirty ? undefined : "" }}
               size={"lg"}
               type={submit ?  "submit": "button" }
@@ -118,7 +128,8 @@ const TabContent = React.forwardRef<
                 next();
               }}
             >
-             {submit ? 'Submit' : 'Suivant'}
+             {submit ? 'Submit' : 'Continuer'}
+             <Image src={'/form/utils/arrow-right.svg'} width={16} height={16} alt="arrow-right"/>
             </Button>
           </div>
         </div>

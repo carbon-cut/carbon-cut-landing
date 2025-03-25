@@ -78,7 +78,7 @@ const {tab, setTab} = React.useContext(FormContext)
       <Form {...mainForm}>
         <form
           onSubmit={mainForm.handleSubmit(handleSubmit, handleError)}
-          className="min-h-screen grid grid-cols-2 h-full"
+          className="min-h-screen grid grid-cols-2 h-full w-full"
         >
           <Tabs
             className="relative mt-8 pt-32"
@@ -146,10 +146,10 @@ const {tab, setTab} = React.useContext(FormContext)
                 </DialogContent>
               </Dialog> */}
           </Tabs>
-          <div className="bg-primary pt-32  pb-40">
+          <div className="bg-linear-1 pt-32  pb-40 w-full">
             <div className="relative h-full">
               <img
-                className="top-0 bottom-0 left-0 ml-16 absolute m-auto scale-150"
+                className="absolute top-0 bottom-0 right-0 left-0 my-auto mx-auto scale-150 pt-8 pr-16"
                 src="form/digital-art-with-planet-earth 1.png"
               />
             </div>
