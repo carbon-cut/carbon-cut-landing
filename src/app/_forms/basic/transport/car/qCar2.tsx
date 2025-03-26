@@ -61,6 +61,7 @@ const QCar2 = (index: number) => {
               label={t("l5")}
               placeholder={t("l5")}
               form={mainForm}
+              type="number"
             />
           </Content>
       </div>

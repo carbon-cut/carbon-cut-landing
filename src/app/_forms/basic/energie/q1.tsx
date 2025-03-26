@@ -124,7 +124,7 @@ const Q1 = ({ mainForm }: QuestionProps) => {
       form={mainForm}
       name="energie.electricity.total"
       placeholder="kWh"
-      
+      type="number"
       />
       </div>
       <SideQuestion

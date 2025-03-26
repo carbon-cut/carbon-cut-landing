@@ -35,7 +35,7 @@ export const formSchema = z.object({
         carMoneyConsumption: z.number().nullable().optional(),
         carMoneyEConsumption: z.number().nullable().optional(),
         carDistanceConsumption: z.number().nullable().optional(),
-        carMileage: z.number(),
+        carMileage: z.number().optional(),
       }),
     ).nullable().optional(),
     motos: z.array(

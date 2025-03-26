@@ -131,6 +131,7 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
       form={mainForm}
       name="energie.gaz.total"
       placeholder="m³"
+      type="number"
       />
       </div>
       <SideQuestion

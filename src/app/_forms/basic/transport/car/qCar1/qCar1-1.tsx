@@ -74,6 +74,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
             data={cars ?? []}
             form={mainForm}
             label={t("l1")}
+            className="w-10/12"
           />
           </div>
           <div className="">
@@ -84,6 +85,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
             data={mutation.data ?? []}
             form={mainForm}
             label={t("l2")}
+            className="w-10/12"
           />
           </div>
         </Content>

@@ -24,6 +24,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { useScopedI18n } from "@/locales/client";
+import { type ClassValue } from "clsx"
 
 interface props {
   form: UseFormReturn<any, undefined>;
@@ -33,6 +34,7 @@ interface props {
   type?: React.HTMLInputTypeAttribute | undefined | "calendar" | "combox";
   data: { value: any; label: string }[];
   setValue?: (v: any) => void;
+  className?: ClassValue;
 }
 
 const FormCombox: React.FC<props> = ({
@@ -42,6 +44,7 @@ const FormCombox: React.FC<props> = ({
   required = false,
   data,
   setValue = (v) => {},
+  className,
 }) => {
   const t = useScopedI18n("components.forms.combox");
 
@@ -53,7 +56,7 @@ const FormCombox: React.FC<props> = ({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="w-full">
+        <FormItem className={cn("w-full", className)}>
           {label && (
             <FormLabel className="text-lg font-bold">
               {label} {required && <span className="text-red-500">*</span>}
