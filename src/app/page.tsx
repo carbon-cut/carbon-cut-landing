@@ -8,6 +8,7 @@ import Features from "./_home/_features";
 import Pricing from "./_home/_pricing";
 import Testimonials from "./_home/_testimonials";
 import Link from "next/link";
+import Typography from "@/components/ui/typography";
 export default function Home() {
   return (
     <>
@@ -19,7 +20,7 @@ export default function Home() {
           className="h-full w-full absolute top-0 left-0  z-10"
           style={{
             background:
-              "linear-gradient(0deg, rgba(10,41,36,1) -44%, rgba(217,255,249,0.44) 120%);",
+              "linear-gradient(0deg, rgba(10,41,36,1) -44%, rgba(217,255,249,0.44) 120%)",
           }}
         />
         <Image
@@ -32,7 +33,7 @@ export default function Home() {
         {
           <div className="flex flex-col w-full items-center z-20 ">
             <div className="my-6">
-              <span className="text-center text-6xl font-bold tracking-tight lg:text-7xl">
+              <Typography variant={"title"} size={"huge"} className="text-center">
                 <span className="text-center">votre empreinte</span>
                 <span className="text-chart-3"> carbone</span> <br />
                 <div>
@@ -40,11 +41,11 @@ export default function Home() {
                     en toute simplicité !
                   </span>
                 </div>
-              </span>
+              </Typography>
             </div>
-            <h1 className="text-primary text-center text-sm font-normal tracking-tight lg:text-2xl my-12">
+            <Typography variant={'subtitle'} size={'md'} className="text-center my-12">
               Mesurez, réduisez, agissez
-            </h1>
+            </Typography>
             <Button asChild size="lg" className="mt-6 py-6 rounded-full">
               <Link href={"/form"}>
                 Commencer <ArrowRight />
@@ -66,15 +67,15 @@ export default function Home() {
       <section id="features">
         <div className="flex flex-col w-full items-center ">
           <Badge variant="default">Fonctionnalités</Badge>
-          <span className="text-center text-4xl font-bold tracking-tight lg:text-6xl my-6 text-primary">
+          <Typography variant={"title"} size={"huge"} className="text-center my-6">
             <h1>Calculez votre impact, réduisez votre</h1>
             empreinte,
             <span className="text-chart-3"> préservez la planète !</span>
-          </span>
-          <p className="my-3 text-secondary text-center text-sm font-light tracking-tight lg:text-lg">
+          </Typography>
+          <Typography variant={"description"} size={"sm"} className="my-3 text-center  ">
             Tableau de bord SaaS permettant aux utilisateurs de suivre <br /> et
             de réduire leur empreinte carbone personnelle
-          </p>
+          </Typography>
           <Features />
         </div>
       </section>
@@ -90,9 +91,9 @@ export default function Home() {
       <section id="pricing">
         <div className="flex flex-col w-full items-center ">
           <Badge variant="default">Plans & Features</Badge>
-          <h1 className="text-center text-4xl font-bold tracking-tight lg:text-5xl my-6 text-primary">
+          <Typography variant={'title'} size={'xl'} className="my-6 text-center">
             Tarifs
-          </h1>
+          </Typography>
           <Pricing />
         </div>
       </section>
@@ -105,9 +106,9 @@ export default function Home() {
         <div className="z-0 px-28 py-16 w-full xl:px-36 xl:py-24">
           <div className="grid grid-cols-2 w-full h-fit">
             <div className="">
-              <h1 className="text-primary text-left text-4xl font-bold tracking-tight lg:text-6xl">
-                Votre empreinte <br /> carbone en toute simplicité !
-              </h1>
+              <Typography variant={"title"} size={"xl"} className="text-left">
+              <h1>Votre empreinte <br /> carbone en toute simplicité !</h1>
+              </Typography>
               <Button asChild size={"lg"} className="mt-16 bg-linear-2-2">
                 <Link href="/form">
                   Commencer <ArrowRight />
@@ -129,9 +130,9 @@ export default function Home() {
       <section id="faq">
         <div className="flex flex-col w-full items-center px-16">
           <Badge variant="default">Questions fréquemment posées</Badge>
-          <h1 className="mt-4 text-center scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">
+          <Typography variant={'title'} size={'xl'}  className="mt-4 text-center scroll-m-20">
             FAQs
-          </h1>
+          </Typography>
           <div className="min-w-full mx-24 my-12 px-12 pt-8 pb-12 rounded-xl bg-card">
             <FAQs />
           </div>

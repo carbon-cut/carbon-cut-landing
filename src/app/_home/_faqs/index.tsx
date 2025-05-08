@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Typography from "@/components/ui/typography";
 
 type AccordionItem = {
   value: string;
@@ -55,7 +56,11 @@ function FAQs() {
     >
       {items.map((e) => (
         <AccordionItem className="py-8" key={e.value} value={e.value}>
-          <AccordionTrigger className="text-primary text-2xl">{e.title}</AccordionTrigger>
+          <AccordionTrigger>
+          <Typography variant={"subtitle"} className="text-3xl">
+            {e.title}
+            </Typography>
+          </AccordionTrigger>
           <AccordionContent className="font-medium px-3 text text-primary/70">
             {e.content}
           </AccordionContent>
