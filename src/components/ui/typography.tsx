@@ -8,7 +8,7 @@ const typographyVariants = cva("tracking-tight", {
     variant: {
       default: "",
       title: "font-bold text-primary",
-      subtitle: "text-primary font-normal ",
+      subtitle: "font-medium text-primary ",
       description: "font-light text-secondary",
       secondary:
         "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
@@ -17,7 +17,7 @@ const typographyVariants = cva("tracking-tight", {
     },
     size: {
       default: "",
-      huge: "text-6xl lg:text-7xl",
+      huge: "font-extrabold text-3xl md:text-6xl lg:text-7xl",
       xl: "text-4xl lg:text-5xl",
       md: "text-xl lg:text-2xl",
       sm: "text-sm lg:text-lg",
@@ -47,5 +47,7 @@ const Typography = React.forwardRef<HTMLDivElement, Props>(
     );
   }
 );
+
+Typography.displayName = "Typography";
 
 export default Typography;

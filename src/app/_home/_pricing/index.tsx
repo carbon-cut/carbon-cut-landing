@@ -36,7 +36,7 @@ const Prices: Props[] = [
 
 function Pricing() {
   return (
-    <div className="grid grid-cols-3 gap-6">
+    <div className="grid md:grid-cols-3 gap-6">
       {Prices.map((price) => (
         <CardComponent key={price.title} {...price} />
       ))}

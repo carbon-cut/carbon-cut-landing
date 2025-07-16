@@ -53,7 +53,7 @@ const cardContent: Props[] = [
 
 function Features() {
   return (
-    <div className="grid grid-cols-3 gap-8 mt-6">
+    <div className="grid md:grid-cols-3 grid-cols-2 gap-8 mt-6">
       {cardContent.map((e) => (
         <CardComponent key={e.title} {...e} />
       ))}
@@ -78,17 +78,17 @@ const CardComponent: React.FC<Props> = (props) => {
     <Card
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`w-[300px] py-5 rounded-3xl ${isHovered ? "bg-linear" : ""}`}
+      className={`md:w-[300px] py-5 rounded-3xl ${isHovered ? "bg-linear" : ""}`}
     >
-      <CardHeader>
+      <CardHeader className="grid grid-rows-2 md:h-36 h-32">
         <Image
-          className="self-center mb-8"
+          className=" mx-auto mb-0 md:scale-100 scale-[60%]"
           height={69}
           width={69}
           src={`${isHovered ? svg1+'light.png' : props.icon +'.png'}`}
           alt={props.title}
         />
-        <CardTitle className={`text-center self-center text-primary ${isHovered ? "text-primary-foreground" : ""}`}>
+        <CardTitle className={` text-center my-auto self-center text-primary ${isHovered ? "text-primary-foreground" : ""}`}>
           {props.title}
         </CardTitle>
       </CardHeader>

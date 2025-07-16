@@ -76,7 +76,8 @@
     @apply bg-background text-foreground font-manrope_sans;
   }
   section {
-    @apply px-24 py-8 flex flex-1 justify-center w-screen flex-wrap;
+    @apply flex flex-1 justify-center w-screen flex-wrap
+            px-3 md:px-24  md:py-8;
   }
 }
 

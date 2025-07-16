@@ -24,7 +24,7 @@ const quickLinks: QuickLink[] = [
 
 function Footer() {
   return (
-    <div className="bg-card-primary py-12 px-12 grid grid-cols-12 gap-12">
+    <div className="bg-card-primary md:p-12 p-6 grid md:grid-cols-12 grid-cols-3 gap-12">
       <div></div>
       <div className="flex flex-col col-span-3 self-start">
         <Image
@@ -40,15 +40,15 @@ function Footer() {
           activities related to their business
         </p>
       </div>
-      <div></div>
+      <div className="md:block hidden"></div>
       <div className="flex flex-col col-span-3 self-start">
-        <h1 className="text-primary-foreground scroll-m-20 text-xl font-sans tracking-tight lg:text-2xl mb-6">
+        <h1 className="text-primary-foreground scroll-m-20 text-xl font-sans tracking-tight lg:text-2xl md:mb-6 mb-3">
           QuickLinks
         </h1>
         {quickLinks.map((item) => (
           <a
             key={item.title}
-            className="text-card-primary-muted/80 text-xl mb-2"
+            className="text-card-primary-muted/80 text-xl mb-2 ml-2 md:ml-4"
             href={item.url}
           >
             {item.title}
@@ -56,13 +56,13 @@ function Footer() {
         ))}
       </div>
       <div className="flex flex-col col-span-3 self-start">
-        <h1 className="text-primary-foreground scroll-m-20 text-xl font-sans tracking-tight lg:text-2xl mb-6">
+        <h1 className="text-primary-foreground scroll-m-20 text-xl font-sans tracking-tight lg:text-2xl md:mb-6 mb-3">
           Newsletter
         </h1>
-        <p className="text-card-primary-foreground mb-6 mr-20">
+        <p className="text-card-primary-foreground mb-6 mr-20 ml-2 md:ml-4">
         Entrez votre email pour recevoir des réductions et des offres exclusives.
         </p>
-        <div className="relative w-11/12">
+        <div className="relative md:w-11/12 w-8/12 ml-2 md:ml-4">
           <input
             type="email"
             placeholder="Email"

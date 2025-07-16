@@ -8,7 +8,7 @@ import React from "react";
 
 function Testimonials() {
   return (
-    <div className="grid grid-cols-2 py-12 px-32">
+    <div className="grid md:grid-cols-2 md:py-12 md:px-32 py-6 px-2">
       <div className="pr-24">
         <Badge className="mb-6" variant="default">
           Témoignages
