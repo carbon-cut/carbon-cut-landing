@@ -13,7 +13,6 @@ const QuestionCompo2: React.FC<
 
   useEffect(() => {
     const someField = mainForm.getValues(`transport.cars.${index}.carType`);
-
     if (
       someField &&
       //@ts-ignore maybe the value is not entered yet
@@ -42,7 +41,6 @@ const QuestionCompo2: React.FC<
 
   return (
     <>
-      {fuelTypes && (
         <div>
           <Question>{t("q")}</Question>
           <Content>
@@ -50,14 +48,13 @@ const QuestionCompo2: React.FC<
               className="w-2/3 felx justify-between"
               name={`transport.cars.${index}.carType`}
               form={mainForm}
-              options={fuelTypes.map((element: FuelTypes) => ({
+              options={fuelTypes?.map((element: FuelTypes) => ({
                 label: t(element),
                 value: element,
-              }))}
+              })) ?? []}
             />
           </Content>
         </div>
-      )}
     </>
   );
 };

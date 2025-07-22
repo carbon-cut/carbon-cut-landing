@@ -52,8 +52,6 @@ const TabContent = React.forwardRef<
     const [isDirty, setIsDirty] = useState(false);
     const [onSubmit,setOnSubmit] = useState<()=>void>(()=>()=>{})
 
-    console.log("__tab",tab)
-
     const next = useCallback(() => {
       setCurrentIndexes((prev) => ({...prev , [tab]: prev[tab] + 1}));
     }, [tab]);

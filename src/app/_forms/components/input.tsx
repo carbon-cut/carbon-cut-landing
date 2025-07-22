@@ -60,6 +60,7 @@ function Input<T extends FieldValues>({
                   placeholder={placeholder}
                   type={type}
                   {...field}
+                  value={field.value ?? ""}
                   {...(type === "number"
                     ? {
                         onChange: (event) => {

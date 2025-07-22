@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { QuestionProps } from "../../../../types";
 import QuestionCompo1 from "./qCar1-1";
 import QuestionCompo2 from "./qCar1-2";
 
 function QCar1(index: number) {
   function CarComponent(questionProps: QuestionProps) {
-    const [make, setMake] = useState(
-      //@ts-ignore
-      questionProps.mainForm.getValues(`cars.${index}.carMake`),
-    );
+    const [make, setMake] = useState(() => {
+      console.log('lookk up for make')
+      return questionProps.mainForm.getValues(
+        `transport.cars.${index}.carMake`
+      );
+    });
+
+    useEffect(()=>{
+      console.log('useEffect',make);
+    }, [make])
 
     const [model, setModel] = useState(
-      //@ts-ignore
-      questionProps.mainForm.getValues(`cars.${index}.carModel`),
+      questionProps.mainForm.getValues(`transport.cars.${index}.carModel`)
     );
     return (
       <>

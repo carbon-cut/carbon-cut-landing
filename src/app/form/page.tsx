@@ -29,7 +29,6 @@ const {tab, setTab} = React.useContext(FormContext)
 
   const mainForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
   });
 
   const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (
