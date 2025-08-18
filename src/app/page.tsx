@@ -9,6 +9,7 @@ import Pricing from "./_home/_pricing";
 import Testimonials from "./_home/_testimonials";
 import Link from "next/link";
 import Typography from "@/components/ui/typography";
+
 export default function Home() {
   return (
     <>

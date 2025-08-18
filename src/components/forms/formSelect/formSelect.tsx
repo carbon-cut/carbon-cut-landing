@@ -7,14 +7,14 @@ import {
   FormLabel,
   FormMessage,
   TName,
-} from "../ui/forms";
+} from "../../ui/forms";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "../../ui/select";
 
 interface Props<T extends FieldValues> {
   form: UseFormReturn<T, undefined>;
