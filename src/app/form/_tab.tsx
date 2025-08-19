@@ -7,7 +7,7 @@ import { z } from "zod";
 import { formSchema } from "./formSchema";
 import QuestionRendrer from "./_questionRendere";
 import { Button } from "@/components/ui/button";
-import FormContext from "./_formContext";
+import FormContext from "./layout/_formContext";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import style from './form.module.css'
 import LeftArrow from "./arrowLeft";
