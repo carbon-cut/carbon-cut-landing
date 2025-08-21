@@ -1,5 +1,5 @@
 import { Button } from "./button";
-import { StoryObj, Meta } from "@storybook/nextjs-vite";
+import { StoryObj, Meta } from "@storybook/nextjs";
 import { fn } from "storybook/test";
 
 const meta = {

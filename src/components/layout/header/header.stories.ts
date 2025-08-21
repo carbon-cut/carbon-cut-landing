@@ -1,4 +1,4 @@
-import { StoryObj } from '@storybook/nextjs-vite';
+import { StoryObj } from '@storybook/nextjs';
 import Header from './index';
 import next from 'next';
 

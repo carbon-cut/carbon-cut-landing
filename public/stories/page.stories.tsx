@@ -1,10 +1,10 @@
 import { Meta, StoryObj } from "@storybook/nextjs";
-import Layout from "./layout";
-import Page from "../page";
+import Layout from "../../src/app/layout";
+import Page from "../../src/app/page";
 import React from "react";
 
 const meta: Meta<typeof Layout> = {
-  title: "Layout/FormLayout",
+  title: "Pages/Home",
   component: Layout,
   parameters: {
     layout: "fullscreen",
