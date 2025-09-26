@@ -4,7 +4,7 @@ import Page from "../page";
 import React from "react";
 
 const meta: Meta<typeof Layout> = {
-  title: "Layout/FormLayout",
+  title: "Layout/Form",
   component: Layout,
   parameters: {
     layout: "fullscreen",

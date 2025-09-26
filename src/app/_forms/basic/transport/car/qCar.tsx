@@ -69,8 +69,8 @@ function QCar({
     };
   });
   return (
-    <div className="p-12">
-      <Question className='mb-12'>{t("q")}</Question>
+    <div className="space-y-3">
+      <Question>{t("q")}</Question>
       <Content className="pl-0" >
         <Input name="transport.hasCar" form={mainForm} type="number" />
       </Content>

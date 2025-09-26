@@ -8,10 +8,11 @@ import { formSchema } from "./formSchema";
 import QuestionRendrer from "./_questionRendere";
 import { Button } from "@/components/ui/button";
 import FormContext from "./layout/_formContext";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight, ArrowLeft, Car } from "lucide-react";
 import style from './form.module.css'
 import LeftArrow from "./arrowLeft";
 import Image from "next/image";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const TabTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsTrigger>,
@@ -20,11 +21,19 @@ const TabTrigger = React.forwardRef<
   <TabsTrigger
     ref={ref}
     className={cn(
-      "bg-[#D6D6D6] rounded-2xl h-12 w-12 p-2  disabled:pointer-events-none disabled:bg-opacity-50 data-[state=active]:!bg-linear-2-2 data-[state=active]:shadow-2xl",
+      `flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200  
+      disabled:pointer-events-none disabled:bg-opacity-50 
+      data-[state=active]:bg-[#00A261] data-[state=active]:text-white data-[state=active]:shadow-md
+      data-[state=completed]:bg-[#D1FAE5] data-[state=completed]:text-[#00A261] data-[state=completed]:hover:bg-[#ECFDF5]
+      bg-gray-100 text-gray-500 hover:bg-gray-200
+      `,
       className,
     )}
     {...props}
-  />
+  >
+    {props.children}
+    <span className="font-medium text-sm">{props.value}</span>
+  </TabsTrigger>
 ));
 TabTrigger.displayName = "TabTrigger";
 
@@ -70,19 +79,29 @@ const TabContent = React.forwardRef<
 
     return (
       <TabsContent
-        style={{ height: "72vh" }}
+        //style={{ height: "72vh" }}
         ref={ref}
-        className="mt-3 px-16 border-0 mx-4 rounded-md  max-h-screen overflow-y-auto"
+        className="px-32 border-0 mx-4 overflow-y-hidden"
         {...props}
       >
-        <div className="h-full grid grid-rows-12">
-          <div className=" flex justify-center self-start">
-            {/* <Stepper
-              currentStep={currentIndex}
-              numberOfSteps={questions.length}
-            /> */}
-          </div>
-          <div className="row-span-9 overflow-y-auto mb-3">
+        <Card className="shadow-xl border-0">
+          <CardHeader className="text-center pb-6 mt-7">
+              <div className="flex justify-center mb-4">
+                {(() => {
+                  const Icon = Car
+                  return (
+                    <div className={`p-4 rounded-full bg-[#00A261]`}>
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                  )
+                })()}
+              </div>
+              <CardTitle className="text-2xl font-bold">{tab}</CardTitle>
+              <CardDescription className="text-base">
+                Question { 1} of {3}
+              </CardDescription>
+            </CardHeader>
+          <CardContent className="md:p-12">
           {questions[currentIndexes[tab]] && (
             <QuestionRendrer
               props={{
@@ -96,8 +115,9 @@ const TabContent = React.forwardRef<
               Question={questions[currentIndexes[tab]]}
             />
           )}
-          </div>
-          <div className="flex justify-end mb-12 mt-auto bottom-0 right-12 gap-12">
+          </CardContent>
+        </Card>
+        <div className="flex justify-end gap-12 mb-8 mt-8">
             <Button
               className={style.prevButton}
               variant={'ghost'}
@@ -130,7 +150,7 @@ const TabContent = React.forwardRef<
              <Image src={'/form/utils/arrow-right.svg'} width={16} height={16} alt="arrow-right"/>
             </Button>
           </div>
-        </div>
+        
       </TabsContent>
     );
   },

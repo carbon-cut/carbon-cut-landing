@@ -13,6 +13,7 @@ import { formSchema } from "./formSchema";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import FormContext from "./layout/_formContext";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { Car, Zap, UtensilsCrossed, Trash2, Plane, ChevronLeft, ChevronRight } from "lucide-react";
 
 type TabValue = "transport" | "energie" | "food" | "waste" | "vacation";
 
@@ -77,7 +78,7 @@ const {tab, setTab} = React.useContext(FormContext)
       <Form {...mainForm}>
         <form
           onSubmit={mainForm.handleSubmit(handleSubmit, handleError)}
-          className="min-h-screen grid grid-cols-2 h-full w-full"
+          className="min-h-screen h-full w-full"
         >
           <Tabs
             className="relative mt-8 pt-32"
@@ -85,25 +86,28 @@ const {tab, setTab} = React.useContext(FormContext)
             //@ts-expect-error because Tabs cannot access to possible values
             onValueChange={(v) => setTab(v)}
           >
-            <TabsList className=" grid grid-cols-11 w-full h-fit">
-              <div className="col-span-3"></div>
+            <div className="flex justify-center mb-8">
+            
+            <TabsList className="flex space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
+              
               <TabTrigger value="transport">
-                <img width={"26px"} src="form/transport.svg" />
+                <Car className="w-4 h-4" />
               </TabTrigger>
               <TabTrigger value="energie">
-                <img width={"26px"} src="form/energie.svg" />
+                <Zap className="w-4 h-4" />
               </TabTrigger>
               <TabTrigger disabled value="food">
-                <img width={"26px"} src="form/food.svg" />
+                <UtensilsCrossed className="w-4 h-4" />
               </TabTrigger>
               <TabTrigger disabled value="waste">
-                <img width={"26px"} src="form/waste.svg" />
+                <Trash2 className="w-4 h-4" />
               </TabTrigger>
               <TabTrigger disabled value="vacation">
-                <img width={"26px"} src="form/vacation.svg" />
+                <Plane className="w-4 h-4" />
               </TabTrigger>
-              <div className="col-span-3"></div>
+              
             </TabsList>
+            </div>
             <TabContent
               mainForm={mainForm}
               submit={submit}
@@ -145,14 +149,7 @@ const {tab, setTab} = React.useContext(FormContext)
                 </DialogContent>
               </Dialog> */}
           </Tabs>
-          <div className="bg-linear-1 pt-32  pb-40 w-full">
-            <div className="relative h-full">
-              <img
-                className="absolute top-0 bottom-0 right-0 left-0 my-auto mx-auto scale-150 pt-8 pr-16"
-                src="form/digital-art-with-planet-earth 1.png"
-              />
-            </div>
-          </div>
+          
         </form>
       </Form>
       <Dialog open={resultOpen} onOpenChange={setResultOpen}>

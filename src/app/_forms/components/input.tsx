@@ -56,7 +56,7 @@ function Input<T extends FieldValues>({
             <FormControl>
               <div className={`w-full inline-block`}>
                 <InputRoot
-                  className={`col-span-2 w-full ${size === 'xl' ? 'h-12' : 'h-8'} rounded-full text-3xl bg-white`}
+                  className={`col-span-2 w-full ${size === 'xl' ? 'h-9' : 'h-8'} rounded-full text-xl bg-white`}
                   placeholder={placeholder}
                   type={type}
                   {...field}
