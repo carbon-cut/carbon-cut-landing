@@ -1,25 +1,25 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
-import { TabContent, TabTrigger } from "./_tab";
+import { TabContent, TabTrigger } from "./_components/_tab";
 import initEnergieQuestions from "../_forms/basic/energie";
 import initTransportQuestions from "../_forms/basic/transport";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Form } from "@/components/ui/forms";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema } from "./formSchema";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
-import FormContext from "./layout/_formContext";
+import FormContext from "./_layout/_formContext";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { Car, Zap, UtensilsCrossed, Trash2, Plane, ChevronLeft, ChevronRight } from "lucide-react";
-
-type TabValue = "transport" | "energie" | "food" | "waste" | "vacation";
+import { Car, Zap, UtensilsCrossed, Trash2, Plane } from "lucide-react";
+import ProgressBar from "./_components/_progressBar";
+import {  getIndex, getName } from "@/lib/formTabs/geters";
 
 function Page() {
 
-const {tab, setTab} = React.useContext(FormContext)
+  const {tab, setTab, currentIndexes} = React.useContext(FormContext)
 
   const [resultOpen, setResultOpen] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
@@ -54,6 +54,18 @@ const {tab, setTab} = React.useContext(FormContext)
     console.log(...args);
   };
 
+  const dataLengths = useMemo(()=>{
+    return {
+      transport: transportQuestions[0].length,
+      energie: energieQuestions[0].length,
+      food: 0,
+      waste: 0,
+      vacation: 0,
+      total: transportQuestions[0].length + energieQuestions[0].length
+    }
+  }, [transportQuestions, energieQuestions])
+
+
   const setNextTab = useCallback(() => {
     setTab((prev) => {
       switch (prev) {
@@ -72,7 +84,7 @@ const {tab, setTab} = React.useContext(FormContext)
           return "transport";
       }
     });
-  }, []);
+  }, [setTab]);
   return (
     <>
       <Form {...mainForm}>
@@ -86,15 +98,16 @@ const {tab, setTab} = React.useContext(FormContext)
             //@ts-expect-error because Tabs cannot access to possible values
             onValueChange={(v) => setTab(v)}
           >
+            <ProgressBar tab={tab} dataLengths={dataLengths} currentQuestion={currentIndexes[tab]} currentSectionDataLength={dataLengths[tab]} currentSectionName={getName(tab)} />
             <div className="flex justify-center mb-8">
             
             <TabsList className="flex space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
               
-              <TabTrigger value="transport">
-                <Car className="w-4 h-4" />
+              <TabTrigger value="transport" data-state={getIndex(tab) > 0 ? "completed" : tab === "transport" ? "active" : "inactive"}>
+                <Car className={`w-4 h-4`} />
               </TabTrigger>
-              <TabTrigger value="energie">
-                <Zap className="w-4 h-4" />
+              <TabTrigger value="energie" data-state={getIndex(tab) > 1 ? "completed" : tab === "energie" ? "active" : "inactive"}>
+                <Zap className={`w-4 h-4 `} />
               </TabTrigger>
               <TabTrigger disabled value="food">
                 <UtensilsCrossed className="w-4 h-4" />

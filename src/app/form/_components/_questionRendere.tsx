@@ -1,4 +1,4 @@
-import { QuestionProps } from "../_forms/types";
+import { QuestionProps } from "@/app/_forms/types";
 
 const QuestionRendrer = ({
   Question,

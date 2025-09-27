@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import FormContext from './_formContext';
+import FormContext from './_layout/_formContext';
 
 type TabValue = "transport" | "energie" | "food" | "waste" | "vacation";
 
@@ -15,8 +15,6 @@ export default function FormLayout({children}:{children:React.ReactNode}) {
       waste: 0,
       vacation: 0,
     });
-
-    console.log("layout",tab);
 
     return (
       <FormContext.Provider

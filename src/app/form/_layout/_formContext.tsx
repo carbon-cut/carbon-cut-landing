@@ -1,6 +1,5 @@
+import { TabValues } from "@/lib/formTabs/types";
 import { createContext } from "react";
-
-type TabValues = "transport" | "food" | "vacation" | "energie" | "waste";
 
 const FormContext = createContext<{
   tab: TabValues;

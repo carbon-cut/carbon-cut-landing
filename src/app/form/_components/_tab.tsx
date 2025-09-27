@@ -1,18 +1,20 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {  TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { QuestionProps } from "../_forms/types";
+import { QuestionProps } from "../../_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { formSchema } from "./formSchema";
+import { formSchema } from "../formSchema";
 import QuestionRendrer from "./_questionRendere";
 import { Button } from "@/components/ui/button";
-import FormContext from "./layout/_formContext";
-import { ArrowRight, ArrowLeft, Car } from "lucide-react";
-import style from './form.module.css'
-import LeftArrow from "./arrowLeft";
+import FormContext from "../_layout/_formContext";
+import style from '../form.module.css'
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {ChevronLeft, ChevronRight, Plane, Zap} from "lucide-react";
+import { get } from "http";
+import { getColor, getIcon, getName } from "@/lib/formTabs/geters";
+import { stat } from "fs";
 
 const TabTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsTrigger>,
@@ -22,17 +24,18 @@ const TabTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       `flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200  
-      disabled:pointer-events-none disabled:bg-opacity-50 
-      data-[state=active]:bg-[#00A261] data-[state=active]:text-white data-[state=active]:shadow-md
-      data-[state=completed]:bg-[#D1FAE5] data-[state=completed]:text-[#00A261] data-[state=completed]:hover:bg-[#ECFDF5]
-      bg-gray-100 text-gray-500 hover:bg-gray-200
+      disabled:pointer-events-auto disabled:cursor-not-allowed disabled:bg-opacity-50 
+      hover:!bg-[${getColor(props.value)}60]
+      data-[state=active]:bg-[${getColor(props.value)}] data-[state=active]:text-white data-[state=active]:shadow-md
+      data-[state=completed]:bg-[#00A26120]  
+      bg-gray-100 text-gray-500 
       `,
-      className,
+      className, 
     )}
     {...props}
   >
     {props.children}
-    <span className="font-medium text-sm">{props.value}</span>
+    <span className="font-medium text-sm">{getName(props.value)}</span>
   </TabsTrigger>
 ));
 TabTrigger.displayName = "TabTrigger";
@@ -62,7 +65,8 @@ const TabContent = React.forwardRef<
     const [onSubmit,setOnSubmit] = useState<()=>void>(()=>()=>{})
 
     const next = useCallback(() => {
-      setCurrentIndexes((prev) => ({...prev , [tab]: prev[tab] + 1}));
+      console.log("next");
+      setCurrentIndexes((prev) => {console.log("prev");console.log(prev);return({...prev , [tab]: prev[tab] + 1})});
     }, [tab]);
 
     useEffect(() => {
@@ -88,17 +92,17 @@ const TabContent = React.forwardRef<
           <CardHeader className="text-center pb-6 mt-7">
               <div className="flex justify-center mb-4">
                 {(() => {
-                  const Icon = Car
+                  const Icon = getIcon(tab);
                   return (
-                    <div className={`p-4 rounded-full bg-[#00A261]`}>
-                      <Icon className="w-8 h-8 text-white" />
+                    <div className={`p-4 rounded-full bg-[${getColor(tab)}]`}>
+                     <Icon className="h-6 w-6 text-white" />
                     </div>
                   )
                 })()}
               </div>
-              <CardTitle className="text-2xl font-bold">{tab}</CardTitle>
+              <CardTitle className="text-2xl font-bold">{getName(tab)}</CardTitle>
               <CardDescription className="text-base">
-                Question { 1} of {3}
+                Question { currentIndexes[tab] + 1} of {questions.length}
               </CardDescription>
             </CardHeader>
           <CardContent className="md:p-12">
@@ -141,7 +145,6 @@ const TabContent = React.forwardRef<
               type={submit ?  "submit": "button" }
               variant="default"
               onClick={async () => {
-                //console.log(onSubmit)
                 onSubmit()
                 next();
               }}

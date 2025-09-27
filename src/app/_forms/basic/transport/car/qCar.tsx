@@ -5,7 +5,7 @@ import Content from "../../../components/content";
 import { QuestionProps } from "../../../types";
 import carsQuestions from "./index";
 import Input from "../../../components/input";
-import FormContext from "@/app/form/layout/_formContext";
+import FormContext from "@/app/form/_layout/_formContext";
 
 function QCar({
   setOnSubmit,
@@ -20,7 +20,6 @@ function QCar({
   useEffect(() => {
     setOnSubmit(() => async () => {
       const hasCar = mainForm.getValues("transport.hasCar") ?? 0;
-      console.log({ hasCar });
       //add Car questions
       if (prevValue == 0 && hasCar > 0)
         setQuestions((prev) => {

@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import React from "react";
-import { QuestionProps } from "../_forms/types";
+import { QuestionProps } from "@/app/_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 

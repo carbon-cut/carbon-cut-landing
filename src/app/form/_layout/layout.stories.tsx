@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/nextjs";
-import Layout from "./layout";
+import Layout from "../layout";
 import Page from "../page";
 import React from "react";
 

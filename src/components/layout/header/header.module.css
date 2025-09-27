@@ -6,7 +6,7 @@
         transition-all duration-700
 }
 .header[data-state="small"]{
-    @apply bg-white w-8/12 mt-4 py-4 px-6 translate-y-6 rounded-3xl transition-all duration-700 shadow-md
+    @apply bg-white w-8/12 mt-4 py-4 px-6 translate-y-6 rounded-3xl transition-all duration-700 shadow-md absolute
 }
 .header[data-state="scrollOut"]{
     @apply bg-white
