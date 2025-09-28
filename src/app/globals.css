@@ -8,8 +8,13 @@
     --linear-1: linear-gradient(to bottom right, hsl(var(--chart-1)), hsl(var(--chart-2)));
     --linear-2-1: linear-gradient(to right, hsl(var(--chart-3)), hsl(17, 100%, 86%));
     --linear-2-2: linear-gradient(to bottom right, hsl(var(--chart-3)), hsl(17, 100%, 86%));
-    --background: 210, 30%, 96%;
-    --foreground: 227, 9%, 14%;
+    --section-transport: 156 100% 32%;
+    --section-food: 198 100% 16%;
+    --section-vacation: 216 100% 38%;
+    --section-energie: 13 100% 60%;
+    --section-waste: 16 66% 48%;
+    --background: 210 30% 96%;
+    --foreground: 227 9% 14%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --card-primary: 230 8% 14%;

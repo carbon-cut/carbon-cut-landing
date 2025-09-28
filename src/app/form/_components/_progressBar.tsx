@@ -1,5 +1,4 @@
 import { Progress } from '@/components/ui/progress';
-import { getColor } from '@/lib/formTabs/geters';
 import { TabValues } from '@/lib/formTabs/types';
 import React, { useMemo } from 'react'
 
@@ -39,6 +38,14 @@ function ProgressBar({
 return (sup + currentQuestion)/dataLengths.total * 100
   }, [dataLengths])
 
+  const ColorVariants = {
+    transport: {bg: "bg-section-transport/40", main: "bg-section-transport"},
+    energie: {bg: "bg-section-energie/40", main: "bg-section-energie"},
+    food: {bg: "bg-section-food/40", main: "bg-section-food"},
+    waste: { bg: "bg-section-waste/40", main: "bg-section-waste"},
+    vacation: {bg: "bg-section-vacation/40", main: "bg-section-vacation"},
+  }
+
   return (
     <div className='max-w-6xl mx-auto'>
     <div className="mb-8 ">
@@ -48,7 +55,7 @@ return (sup + currentQuestion)/dataLengths.total * 100
           </span>
           <span className="text-sm font-medium text-muted-foreground">{Math.round(progress)}% Complete</span>
         </div>
-        <Progress color={getColor(tab)} value={progress} className="h-2" />
+        <Progress color={ColorVariants[tab].main} value={progress} bg={`h-21 ${ColorVariants[tab].bg}`} />
     </div>
     </div>
   )

@@ -18,6 +18,13 @@ export default {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
 			liniar: 'var(--liniar)',
+			section: {
+				transport: 'hsl(var(--section-transport))',
+				food: 'hsl(var(--section-food))',
+				vacation: 'hsl(var(--section-vacation))',
+				energie: 'hsl(var(--section-energie))',
+				waste: 'hsl(var(--section-waste))',
+			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))',
