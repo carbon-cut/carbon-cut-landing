@@ -237,6 +237,7 @@ export default {
             Electrique: "Électrique",
             "Plug-in Hybrid": "Hybride rechargeable",
             "mild Hybrid": "Hybride léger",
+            other: "Autre",
           },
           qCar2: {
             q: "Informations supplémentaires",

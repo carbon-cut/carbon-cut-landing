@@ -5,6 +5,7 @@ import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { Check, Circle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { Switch } from "./switch";
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
@@ -29,7 +30,7 @@ const RadioGroupItem = React.forwardRef<
       ref={ref}
       className={cn(
         "aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className,
+        className
       )}
       {...props}
     >
@@ -50,7 +51,7 @@ const RadioGroupItemCheck = React.forwardRef<
       ref={ref}
       className={cn(
         "aspect-square h-4 w-4 border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className,
+        className
       )}
       {...props}
     >
@@ -62,4 +63,33 @@ const RadioGroupItemCheck = React.forwardRef<
 });
 RadioGroupItemCheck.displayName = RadioGroupPrimitive.Item.displayName;
 
-export { RadioGroup, RadioGroupItem, RadioGroupItemCheck };
+const RadioGroupItemSwitch = React.forwardRef<
+  React.ElementRef<typeof RadioGroupPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> & {
+    label?: string;
+  }
+>(({ className, checked, ...props }, ref) => {
+  return (
+    <RadioGroupPrimitive.Item
+      ref={ref}
+      className={cn("h-4 w-8 ", className)}
+      {...props}
+      asChild
+    >
+      <Switch
+      className="
+      data-[state=checked]:bg-chart-2 data-[state=unchecked]:bg-input h-4 w-8"
+      checked={checked}
+      data-state={checked ? 'checked' : 'unchecked'}
+      />
+    </RadioGroupPrimitive.Item>
+  );
+});
+RadioGroupItemSwitch.displayName = RadioGroupPrimitive.Item.displayName;
+
+export {
+  RadioGroup,
+  RadioGroupItem,
+  RadioGroupItemCheck,
+  RadioGroupItemSwitch,
+};

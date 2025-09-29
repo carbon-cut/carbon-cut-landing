@@ -35,6 +35,7 @@ interface props {
   data: { value: any; label: string }[];
   setValue?: (v: any) => void;
   className?: ClassValue;
+  disabled?: boolean;
 }
 
 const FormCombox: React.FC<props> = ({
@@ -45,6 +46,7 @@ const FormCombox: React.FC<props> = ({
   data,
   setValue = (v) => {},
   className,
+  disabled = false,
 }) => {
   const t = useScopedI18n("components.forms.combox");
 
@@ -58,7 +60,7 @@ const FormCombox: React.FC<props> = ({
       render={({ field }) => (
         <FormItem className={cn("w-full", className)}>
           {label && (
-            <FormLabel className="text-lg font-bold">
+            <FormLabel className="text-sm font-semibold">
               {label} {required && <span className="text-red-500">*</span>}
             </FormLabel>
           )}
@@ -70,9 +72,10 @@ const FormCombox: React.FC<props> = ({
                     variant={"outline"}
                     type="button"
                     className={cn(
-                      "w-full pl-3 text-left font-normal rounded-full bg-white",
+                      "w-full pl-3 text-left font-normal rounded-full bg-white disabled:hover:bg-white disabled:hover:text-muted-foreground disabled:cursor-not-allowed disabled:pointer-events-auto",
                       !field.value && "text-muted-foreground",
                     )}
+                    disabled={disabled}
                   >
                     {field.value
                       ? data.find((elem) => field.value === elem.value)?.label

@@ -1,9 +1,11 @@
 import QCar1 from "./qCar1";
+import QCar12 from "./qCar1-2";
 import { QuestionProps } from "../../../types";
 import QCar3 from "./qCar3";
 import QCar2 from "./qCar2";
 import QCar4 from "./qCar4";
 import {JSX} from "react";
+import QCar from "./qCar";
 
 const output: (
   count: number,
@@ -13,7 +15,7 @@ const output: (
 
   for (let i = init; i < count + init; i++) {
     console.log("looop");
-    arr.push(QCar1(i), QCar2(i), 
+    arr.push(QCar1(i), QCar12(i), QCar2(i), 
     //QCar3(i),
     QCar4(i)); //fill(QCar1(i), QCar2(i))
   }

@@ -30,6 +30,7 @@ type Props<T extends FieldValues> = {
   info?: React.ReactNode;
   onChange?: (v: any) => void;
   size?: "xl"|"sm";
+  disabled?: boolean;
 };
 
 function Input<T extends FieldValues>({
@@ -43,6 +44,7 @@ function Input<T extends FieldValues>({
   half = false,
   info = undefined,
   size = "xl",
+  disabled = false,
   onChange = () => {},
 }: Props<T>) {
   return (
@@ -52,10 +54,11 @@ function Input<T extends FieldValues>({
       render={({ field }) => {
         return (
           <FormItem>
-            {label && <FormLabel className="text-lg font-bold" >{label}</FormLabel>}
+            {label && <FormLabel className={`text-sm font-semibold ${disabled ? 'text-muted-foreground' : ''}`} >{label}</FormLabel>}
             <FormControl>
               <div className={`w-full inline-block`}>
                 <InputRoot
+                  disabled={disabled}
                   className={`col-span-2 w-full ${size === 'xl' ? 'h-9' : 'h-8'} rounded-full text-xl bg-white`}
                   placeholder={placeholder}
                   type={type}

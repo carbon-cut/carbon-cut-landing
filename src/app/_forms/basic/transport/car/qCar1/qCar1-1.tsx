@@ -11,11 +11,9 @@ interface Props {
   index: number;
   make: string | undefined | null;
   setMake: React.Dispatch<any>;
-  setModel: React.Dispatch<any>;
 }
 
 const QuestionCompo1: React.FC<QuestionProps & Props> = ({
-  setModel,
   make,
   setMake,
   index,
@@ -62,11 +60,10 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
 
   return (
     <div className="">
-      <Question className=''>{t("q")}</Question>
+      <div><Question className='text-lg text-center font-bold'>{t("q")}</Question></div>
       <Content className="pl-0 grid grid-cols-2 gap-6 my-12">
         <div className="">
           <FormCombox
-            required
             setValue={setMake}
             name={`transport.cars.${index}.carMake`}
             data={cars ?? []}
@@ -77,13 +74,12 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
           </div>
           <div className="">
           <FormCombox
-            required
-            setValue={setModel}
             name={`transport.cars.${index}.carModel`}
             data={query?.data ?? []}
             form={mainForm}
             label={t("l2")}
             className="w-10/12"
+            disabled={!make || make == ""}
           />
           </div>
         </Content>

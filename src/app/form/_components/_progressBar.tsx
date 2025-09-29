@@ -39,11 +39,11 @@ return (sup + currentQuestion)/dataLengths.total * 100
   }, [dataLengths])
 
   const ColorVariants = {
-    transport: {bg: "bg-section-transport/40", main: "bg-section-transport"},
-    energie: {bg: "bg-section-energie/40", main: "bg-section-energie"},
-    food: {bg: "bg-section-food/40", main: "bg-section-food"},
-    waste: { bg: "bg-section-waste/40", main: "bg-section-waste"},
-    vacation: {bg: "bg-section-vacation/40", main: "bg-section-vacation"},
+    transport: {bg: "bg-section-transport/20", main: "bg-section-transport"},
+    energie: {bg: "bg-section-energie/20", main: "bg-section-energie"},
+    food: {bg: "bg-section-food/20", main: "bg-section-food"},
+    waste: { bg: "bg-section-waste/20", main: "bg-section-waste"},
+    vacation: {bg: "bg-section-vacation/20", main: "bg-section-vacation"},
   }
 
   return (

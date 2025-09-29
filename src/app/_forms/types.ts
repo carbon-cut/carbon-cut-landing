@@ -16,4 +16,5 @@ export type FuelTypes =
   | "Plug-in Hybrid"
   | "natural Gaz"
   | "Diesel"
-  | "Gasoline";
+  | "Gasoline"
+  | "other";

@@ -15,6 +15,7 @@ const carType = z.union([
   z.literal("Plug-in Hybrid"),
   z.literal("mild Hybrid"),
   z.literal("natural Gaz"),
+  z.literal("other"),
 ]);
 export const formSchema = z.object({
   transport: z.object({
@@ -27,6 +28,7 @@ export const formSchema = z.object({
         carMake: z.string().nullable().optional(),
         carModel: z.string().nullable().optional(),
         carType: carType.nullable().optional(),
+        carTypeOther: z.string().nullable().optional(),
         carEngine: z.string().nullable().optional(),
         carConsumption: z.number().nullable().optional(),
         carCalculatedConsumption: z.number().nullable().optional(),

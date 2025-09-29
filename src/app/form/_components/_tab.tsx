@@ -37,7 +37,7 @@ const TabTrigger = React.forwardRef<
       ref={ref}
       className={cn(
         `flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200  
-      disabled:pointer-events-auto disabled:cursor-not-allowed disabled:bg-opacity-50 
+      disabled:pointer-events-auto disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:hover:bg-white
     data-[state=active]:text-white data-[state=active]:shadow-md
     ${colorVariants[tab]}
       `,

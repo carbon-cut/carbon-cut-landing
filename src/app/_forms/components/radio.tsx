@@ -7,7 +7,9 @@ import {
 import {
   RadioGroup,
   RadioGroupItemCheck,
+  RadioGroupItemSwitch,
 } from "@/components/ui/radio-group";
+import { cn } from "@/lib/utils";
 import {ClassValue} from "clsx";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
@@ -21,8 +23,9 @@ type Props = {
   name: string;
   className?: ClassValue;
   required?: boolean;
+  setState?: (v: any) => void;
 };
-function Radio({ options, form, name, required = false }: Props) {
+function Radio({ className, options, form, name, required = false, setState }: Props) {
   const selected = (fieldvalue: string, value: string) => fieldvalue === value;
   return (
     <FormField
@@ -32,27 +35,29 @@ function Radio({ options, form, name, required = false }: Props) {
         <FormItem>
           <FormControl>
             <RadioGroup
-              className={
-                "w-3/6 mx-auto flex flex-row flex-wrap justify-between "
+              className={cn(
+                "w-3/6 mx-auto flex flex-row flex-wrap justify-between ", className)
               }
               defaultValue={field.value}
-              onValueChange={field.onChange}
+              onValueChange={(v) => {field.onChange(v); setState?.(v)}}
               {...form.register(name)}
             >
               {options?.map((option, index) => (
                 <FormLabel
                   key={index}
                   htmlFor={`r${index}`}
-                  className={`flex items-center pl-3 rounded-lg w-5/12 h-14 border-2 ${
+                  className={`flex items-center pl-3 rounded-lg w-5/12 h-14 ${
                     selected(field.value, option.value)
                       ? "border-slate-600"
                       : "hover:bg-gray-500/20"
                   }`}
                 >
                   <FormControl>
-                    <RadioGroupItemCheck
+                    <RadioGroupItemSwitch
                       value={option.value}
                       id={`r${index}`}
+                      label={option.label}
+                      checked={selected(field.value, option.value)}
                     />
                   </FormControl>
                   <FormLabel className="ml-2" htmlFor={`r${index}`}>
