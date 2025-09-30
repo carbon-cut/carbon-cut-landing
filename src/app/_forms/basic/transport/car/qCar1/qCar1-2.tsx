@@ -6,7 +6,7 @@ import Radio from "@/app/_forms/components/radio";
 import { FuelTypes, QuestionProps } from "../../../../types";
 import { useQuery } from "@tanstack/react-query";
 import Input from "@/app/_forms/components/input";
-import { useFormField } from "@/components/ui/forms";
+import CarTitle from "../components/carTitle";
 
 const defaultFuelTypes: FuelTypes[] = [
   "Electrique",
@@ -24,7 +24,9 @@ const QuestionCompo2: React.FC<
   const t = useScopedI18n("forms.basic.transport.qCar1-2");
 
   const [ carType, setCarType ] = useState(mainForm.getValues(`transport.cars.${index}.carType`)); 
-
+  const [car] = useState(
+    {make: mainForm.getValues(`transport.cars.${index}.carMake`), model: mainForm.getValues(`transport.cars.${index}.carModel`)}
+  );
   useEffect(() => {
     const someField = mainForm.getValues(`transport.cars.${index}.carType`);
     if (
@@ -56,6 +58,7 @@ const QuestionCompo2: React.FC<
   return (
     <>
         <div>
+          <CarTitle mainForm={mainForm} index={index} />
           <Question>{t("q")}</Question>
           <Content className="flex flex-row justify-start">
             <div className="self-start w-1/2 ">

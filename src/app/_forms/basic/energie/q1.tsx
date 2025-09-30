@@ -79,7 +79,7 @@ const Q1 = ({ mainForm }: QuestionProps) => {
   }, [change]);
   return (
     <div>
-      <Question className='text-xl'>{t("q1")}</Question>
+      <Question className='px-12'>{t("q1")}</Question>
 
       {/* <Table className="">
         <TableHeader>
@@ -119,17 +119,17 @@ const Q1 = ({ mainForm }: QuestionProps) => {
           </TableRow>
         </TableBody>
       </Table> */}
-      <div className="px-16 mb-6">
+      <Content className="px-12 mb-6">
       <Input
       form={mainForm}
       name="energie.electricity.total"
       placeholder="kWh"
       type="number"
       />
-      </div>
+      </Content>
       <SideQuestion
-        Question={t("q3")}
-        Content={
+        question={t("q3")}
+        content={
           <Input
             form={mainForm}
             name="energie.electricity.money"

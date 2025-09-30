@@ -90,7 +90,7 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
 
   return (
     <div>
-      <Question className='text-xl'>{t("q1")}</Question>
+      <Question className='px-12'>{t("q1")}</Question>
       {/* <Table>
         <TableHeader>
           <TableRow>
@@ -135,8 +135,8 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
       />
       </div>
       <SideQuestion
-        Question={t("q3")}
-        Content={
+        question={t("q3")}
+        content={
           <Input form={mainForm} name="energie.gaz.money" placeholder="€" type="number" half />
         }
       />

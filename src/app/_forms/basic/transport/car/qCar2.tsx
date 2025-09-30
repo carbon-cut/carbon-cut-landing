@@ -55,7 +55,6 @@ const QCar2 = (index: number) => {
           ) : (
             <></>
           )} */}
-
             <Input
               name={`transport.cars.${index}.carConsumption`}
               label={t("l5")}
