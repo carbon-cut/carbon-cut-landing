@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   output: "export",
   reactStrictMode: false,
   images: { unoptimized: true },
+  instrumentationHook: true,
 };
 
 export default nextConfig;
