@@ -1,8 +1,8 @@
 import content from './fr'
-
-const useScopedI18n = (scope: string) => {
+ //const unit = content.forms.unit;
+const useScopedI18n = (scope?: string) => {
     return (...keys: [string, ...unknown[]]) => {
-        const scopeParts = scope.split('.'); // Split the scope into parts
+        const scopeParts = scope?.split('.') || []; // Split the scope into parts
         let scopedContent = content;
 
         // Traverse the content object based on scope parts
@@ -22,9 +22,13 @@ const useScopedI18n = (scope: string) => {
         }
 
         // Return the requested key or a fallback message
-        if (!scopedContent || typeof scopedContent != 'string') return `Missing translation for ${scope}.${keys[0]}`
-        
-        return scopedContent;
+        if (!scopedContent) return `Missing translation for ${scope}.${keys[0]}`
+        else if (typeof scopedContent === 'string') return scopedContent;
+        else if (typeof scopedContent === 'function') {
+            //@ts-ignore
+            return scopedContent(keys[1]);
+        }
+        else return `Invalid translation type for ${scope}.${keys[0]}`;
     };
 };
 

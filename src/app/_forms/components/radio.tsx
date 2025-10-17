@@ -3,6 +3,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  TName,
 } from "@/components/ui/forms";
 import {
   RadioGroup,
@@ -12,20 +13,27 @@ import {
 import { cn } from "@/lib/utils";
 import {ClassValue} from "clsx";
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 
-type Props = {
+type Props<T extends FieldValues> = {
+  form: UseFormReturn<T, undefined>;
   options: {
     label: string;
     value: string;
   }[];
-  form: UseFormReturn<any, undefined>;
-  name: string;
+  name: TName<T>;
   className?: ClassValue;
   required?: boolean;
   setState?: (v: any) => void;
 };
-function Radio({ className, options, form, name, required = false, setState }: Props) {
+function Radio<T extends FieldValues>({
+  form,
+  name,
+  options,
+  className = "",
+  required = false,
+  setState = undefined,
+}: Props<T>) {
   const selected = (fieldvalue: string, value: string) => fieldvalue === value;
   return (
     <FormField

@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { QuestionProps } from "../../_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { formSchema } from "../formSchema";
+import { formSchema } from "@/app/_forms/formSchema";
 import QuestionRendrer from "./_questionRendere";
 import { Button } from "@/components/ui/button";
 import FormContext from "../_layout/_formContext";
@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getIcon, getName } from "@/lib/formTabs/geters";
-import { stat } from "fs";
+import { TName } from "@/components/ui/forms";
 
 const TabTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsTrigger>,
@@ -75,14 +75,25 @@ const TabContent = React.forwardRef<
     const [questions, setQuestions] = initQuestions;
     const [isDirty, setIsDirty] = useState(false);
     const [onSubmit, setOnSubmit] = useState<() => void>(() => () => {});
+    const [prevAction, setPrevAction] = useState<'next' | 'prev' | null>(null);
+    const [verifyFields, setVerifyFields] = useState<TName<z.infer<typeof formSchema>>[]>([]);
+
+    const verify = useCallback< ()=>Promise<boolean>>(async () => {
+      if (verifyFields.length === 0) return true;
+      const res = await mainForm.trigger(verifyFields);
+      return res;
+    }, [mainForm, verifyFields]);
 
     const next = useCallback(() => {
-      console.log("next");
+      setPrevAction('next');
       setCurrentIndexes((prev) => {
-        console.log("prev");
-        console.log(prev);
         return { ...prev, [tab]: prev[tab] + 1 };
       });
+    }, [tab]);
+
+    const prev = useCallback(() => {
+      setPrevAction('prev');
+      setCurrentIndexes((p) => ({ ...p, [tab]: p[tab] - 1 }));
     }, [tab]);
 
     useEffect(() => {
@@ -93,15 +104,11 @@ const TabContent = React.forwardRef<
       }
     }, [currentIndexes, questions, setNextTab, tab]);
 
-    const prev = useCallback(() => {
-      setCurrentIndexes((p) => ({ ...p, [tab]: p[tab] - 1 }));
-    }, [tab]);
-
     return (
       <TabsContent
         //style={{ height: "72vh" }}
         ref={ref}
-        className="px-32 border-0 mx-4 overflow-y-hidden"
+        className=" border-0 mx-4 overflow-y-hidden"
         {...props}
       >
         <Card className="shadow-xl border-0">
@@ -138,6 +145,10 @@ const TabContent = React.forwardRef<
                   setSubmit,
                   mainForm,
                   setIsDirty,
+                  next,
+                  prev,
+                  prevAction,
+                  setVerifyFields
                 }}
                 Question={questions[currentIndexes[tab]]}
               />
@@ -172,8 +183,9 @@ const TabContent = React.forwardRef<
             type={submit ? "submit" : "button"}
             variant="default"
             onClick={async () => {
+              const ver = await verify();
               onSubmit();
-              next();
+              if (ver) next();
             }}
           >
             {submit ? "Submit" : "Continuer"}

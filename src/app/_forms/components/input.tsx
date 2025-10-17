@@ -14,6 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 import React, { useEffect } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
@@ -31,12 +32,15 @@ type Props<T extends FieldValues> = {
   onChange?: (v: any) => void;
   size?: "xl"|"sm";
   disabled?: boolean;
+  labelClassName?: string;
+  valueControl?: (v: any) => boolean;
 };
 
 function Input<T extends FieldValues>({
   form,
   name,
   label,
+  labelClassName,
   placeholder,
   description,
   type,
@@ -45,21 +49,28 @@ function Input<T extends FieldValues>({
   info = undefined,
   size = "xl",
   disabled = false,
+  valueControl = (v: any) =>{
+    if (v >= 0 || v === "") return true;
+    return false;
+  },
   onChange = () => {},
 }: Props<T>) {
   return (
     <FormField
       control={form.control}
       name={name}
-      render={({ field }) => {
+      render={({ field, fieldState }) => {
         return (
           <FormItem>
-            {label && <FormLabel className={`text-sm font-semibold ${disabled ? 'text-muted-foreground' : ''}`} >{label}</FormLabel>}
+            {label && <FormLabel className={cn(
+               `text-sm font-medium ${disabled ? 'text-muted-foreground' : ''}`, labelClassName)}>{label}</FormLabel>}
             <FormControl>
               <div className={`w-full inline-block`}>
                 <InputRoot
                   disabled={disabled}
-                  className={`col-span-2 w-full ${size === 'xl' ? 'h-9' : 'h-8'} rounded-full text-xl bg-white`}
+                  className={`col-span-2 w-full ${size === 'xl' ? 'h-9' : 'h-8'} rounded-full text-xl bg-white 
+                  ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : ''}
+                  `}
                   placeholder={placeholder}
                   type={type}
                   {...field}
@@ -67,10 +78,12 @@ function Input<T extends FieldValues>({
                   {...(type === "number"
                     ? {
                         onChange: (event) => {
-                          onChange(event.target.value);
+                          const val = event.target.value;
+                          if (valueControl(val)){
+                          onChange(val);
                           return field.onChange?.(
-                            parseInt(event.target.value, 0),
-                          );
+                            parseInt(event.target.value, 0)
+                          );}
                         },
                       }
                     : {
@@ -81,8 +94,8 @@ function Input<T extends FieldValues>({
                       })}
                       
                 />
-                <div className="grid grid-cols-2">
-                  <p className="self-end mb-2 ml-3">{unit}</p>
+                <div className="grid grid-cols-2 h-fit">
+                  {unit && <p className="self-end mb-2 ml-3">{unit}</p>}
                   {info && (
                     <Popover>
                       <PopoverTrigger asChild>
@@ -102,7 +115,7 @@ function Input<T extends FieldValues>({
               </div>
             </FormControl>
             {description && <FormDescription>{description}</FormDescription>}
-            <FormMessage />
+            <FormMessage className="ml-3" />
           </FormItem>
         );
       }}

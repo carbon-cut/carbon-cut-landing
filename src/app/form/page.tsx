@@ -9,17 +9,18 @@ import { Form } from "@/components/ui/forms";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { formSchema } from "./formSchema";
+import { formSchema } from "../_forms/formSchema";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import FormContext from "./_layout/_formContext";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Car, Zap, UtensilsCrossed, Trash2, Plane } from "lucide-react";
 import ProgressBar from "./_components/_progressBar";
 import {  getIndex, getName } from "@/lib/formTabs/geters";
+import QuestionList from "./_components/questionList";
 
 function Page() {
 
-  const {tab, setTab, currentIndexes} = React.useContext(FormContext)
+  const {tab, setTab, currentIndexes, setCurrentIndexes} = React.useContext(FormContext)
 
   const [resultOpen, setResultOpen] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
@@ -93,13 +94,24 @@ function Page() {
           className="min-h-screen h-full w-full"
         >
           <Tabs
-            className="relative mt-8 pt-32"
+            className="relative mt-8 pt-32 px-32"
             value={tab}
             //@ts-expect-error because Tabs cannot access to possible values
             onValueChange={(v) => setTab(v)}
           >
             <ProgressBar tab={tab} dataLengths={dataLengths} currentQuestion={currentIndexes[tab]} currentSectionDataLength={dataLengths[tab]} currentSectionName={getName(tab)} />
-            <div className="flex justify-center mb-8">
+            
+            <div className="flex justify-center mb-8 relative">
+              
+              <div className="absolute top-0 bottom-0 my-auto right-0">
+                <QuestionList
+                    mainForm={mainForm}
+                    list={{
+                      transport: transportQuestions[0],
+                      energie: energieQuestions[0],
+                    }}
+                />
+              </div>
             
             <TabsList className="flex space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
               
@@ -121,6 +133,7 @@ function Page() {
               
             </TabsList>
             </div>
+
             <TabContent
               mainForm={mainForm}
               submit={submit}
@@ -140,27 +153,6 @@ function Page() {
             <TabsContent value="food"></TabsContent>
             <TabsContent value="waste"></TabsContent>
             <TabsContent value="vacation"></TabsContent>
-            {/* <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    type="button"
-                    className="absolute top-0 w-16 right-0 ml-auto mb-auto"
-                  >
-                    <MessageCircleQuestion />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="">
-                  <QuestionList
-                    mainForm={mainForm}
-                    setTab={setTab}
-                    setIndex={setCurrentIndex}
-                    list={{
-                      transport: transportQuestions[0],
-                      energie: energieQuestions[0],
-                    }}
-                  />
-                </DialogContent>
-              </Dialog> */}
           </Tabs>
           
         </form>

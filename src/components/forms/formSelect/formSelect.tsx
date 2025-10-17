@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
+import { useScopedI18n } from "@/locales/client";
 
 interface Props<T extends FieldValues> {
   form: UseFormReturn<T, undefined>;
@@ -23,6 +24,7 @@ interface Props<T extends FieldValues> {
   mandetory?: boolean;
   data: { label: string; value: string }[];
   placeholder?: string;
+  labelClassName?: string;
 }
 
 function FormSelect<T extends FieldValues>({
@@ -32,7 +34,9 @@ function FormSelect<T extends FieldValues>({
   placeholder,
   mandetory,
   data,
+  labelClassName
 }: Props<T>) {
+  const t = useScopedI18n("components.forms.combox");
   return (
     <FormField
       control={form.control}
@@ -40,14 +44,14 @@ function FormSelect<T extends FieldValues>({
       render={({ field }) => (
         <FormItem>
           {label && (
-            <FormLabel className="mb-1 font-semibold peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-destructive form-label text-lg">
+            <FormLabel className={labelClassName}>
               {label} {mandetory && <span className="text-red-500">*</span>}
             </FormLabel>
           )}
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select onValueChange={field.onChange}>
             <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder={placeholder} />
+              <SelectTrigger  className="rounded-full w-full pl-3 text-left font-normal bg-white" >
+                <SelectValue  placeholder={t("value", { placeholder })}  />
               </SelectTrigger>
             </FormControl>
             <SelectContent>

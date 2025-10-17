@@ -12,7 +12,7 @@ export default meta;
 type Story = StoryObj< typeof meta>;
 
 
-export const mainPage: Story = {
+export const MainPage: Story = {
     parameters:{
         nextjs: {
       appDirectory: true,
@@ -24,7 +24,7 @@ export const mainPage: Story = {
 }
 
 
-export const formPages: Story = {
+export const FormPages: Story = {
     args:{
 
     }

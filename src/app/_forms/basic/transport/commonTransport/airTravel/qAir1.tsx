@@ -18,6 +18,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
 import FormSelect from "@/components/forms/formSelect";
 import FormCheckbox from "@/components/forms/formCheckbox";
+import { FormLabel } from "@/components/ui/forms";
+import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
+import Question from "@/app/_forms/components/question";
+import Content from "@/app/_forms/components/content";
 
 const aircraftTypes = [
   "A220",
@@ -40,8 +45,8 @@ function QAir({ mainForm }: QuestionProps) {
   const { data: airports } = useQuery<{ reduced: any[]; raw?: any[] }>({
     queryKey: ["airports"],
     queryFn: async () => {
-/*       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/airports`,
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/airports`
       ).then((r) => r.json());
       if (res.error) throw new Error(res.error.message);
       const reduced = res.reduce(
@@ -49,22 +54,29 @@ function QAir({ mainForm }: QuestionProps) {
         (prev, curr, _) => {
           return [...prev, { label: curr.name, value: curr.code }];
         },
-        [],
+        []
       );
       return {
         reduced,
         raw: res,
-      }; */
-      return { reduced: [{
-        label:"Paris",
-        value:"PAR"
-      },{
-        label:"London",
-        value:"LHR"
-      },{
-        label:"New York",
-        value:"JFK"
-      }], raw: undefined }; 
+      };
+      return {
+        reduced: [
+          {
+            label: "Paris",
+            value: "PAR",
+          },
+          {
+            label: "London",
+            value: "LHR",
+          },
+          {
+            label: "New York",
+            value: "JFK",
+          },
+        ],
+        raw: undefined,
+      };
     },
   });
 
@@ -77,8 +89,8 @@ function QAir({ mainForm }: QuestionProps) {
   >(mainForm.getValues("transport.airs") ?? []);
   const [stopovers, setStopovers] = useState(
     (mainForm.getValues("transport.airs") ?? []).map((e) =>
-      e?.stopover ? true : false,
-    ),
+      e?.stopover ? true : false
+    )
   );
 
   const distance = useMemo(() => {
@@ -91,216 +103,190 @@ function QAir({ mainForm }: QuestionProps) {
   }, [data, mainForm]);
 
   return (
-    <Table className="max-h-full">
-      <TableHeader>
-        <TableRow>
-          <TableHead></TableHead>
-          <TableHead>{t("origin")}</TableHead>
-          <TableHead>{t("destination")}</TableHead>
-          <TableHead>{t("stopover")}</TableHead>
-          <TableHead>{t("via")}</TableHead>
-          <TableHead>{t("aircraftType")}</TableHead>
-          <TableHead>{t("class")}</TableHead>
-          <TableHead>{t("roundTrip")}</TableHead>
-          <TableHead>{t("distance")}</TableHead>
-          <TableHead>{t("frequency")}</TableHead>
-          <TableHead>{t("carbonEmissions")}</TableHead>
-          <TableHead></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((_, index) => (
-          <TableRow key={index}>
-            <TableCell>{index + 1}</TableCell>
-            {
-              //origin
-              <TableCell>
-                <FormMultiCombox
-                  form={mainForm}
-                  name={`transport.airs.${index}.origin`}
-                  data={airports?.reduced ?? []}
-                  setValue={(v) => {
-                    setData((prev) =>
-                      prev.toSpliced(index, 1, { ...prev[index], origin: v }),
-                    );
-                  }}
-                />
-              </TableCell>
-            }
-            {
-              //destination
-              <TableCell>
-                <FormMultiCombox
-                  form={mainForm}
-                  name={`transport.airs.${index}.destination`}
-                  data={airports?.reduced ?? []}
-                  setValue={(v) => {
-                    setData((prev) =>
-                      prev.toSpliced(index, 1, {
-                        ...prev[index],
-                        destination: v,
-                      }),
-                    );
-                  }}
-                />
-              </TableCell>
-            }
-            {
-              //stopover
-              <TableCell>
-                <Checkbox
-                  id={`stopover${index}`}
-                  checked={stopovers[index]}
-                  onCheckedChange={(v) => {
-                    setStopovers((prev) => prev.toSpliced(index, 1, !!v));
-                    if (!v) {
-                      mainForm.setValue(
-                        `transport.airs.${index}.stopover`,
-                        null,
-                      );
-                      setData((prev) =>
-                        prev.toSpliced(index, 1, {
-                          ...prev[index],
-                          stopover: null,
-                        }),
-                      );
-                    }
-                  }}
-                />
-              </TableCell>
-            }
-            {
-              //via
-              <TableCell>
-                <FormMultiCombox
-                  disabled={!stopovers[index]}
-                  form={mainForm}
-                  name={`transport.airs.${index}.stopover`}
-                  data={airports?.reduced ?? []}
-                  setValue={(v) => {
-                    setData((prev) =>
-                      prev.toSpliced(index, 1, {
-                        ...prev[index],
-                        stopover: v,
-                      }),
-                    );
-                  }}
-                />
-              </TableCell>
-            }
-            {
-              //aircraftType
-              <TableCell>
-                <FormSelect
-                  data={aircraftTypes.map((e) => ({ label: e, value: e }))}
-                  form={mainForm}
-                  name={`transport.airs.${index}.aircraftType`}
-                />
-              </TableCell>
-            }
-            {
-              //classes
-              <TableCell>
-                <FormSelect
-                  data={classes.map((e) => ({ label: e, value: e }))}
-                  form={mainForm}
-                  name={`transport.airs.${index}.class`}
-                />
-              </TableCell>
-            }
-            {
-              //roundTrip
-              <TableCell>
-                <div className="flex items-center space-x-2">
-                  <FormCheckbox
-                    form={mainForm}
-                    name={`transport.airs.${index}.roundTrip`}
-                    id={`roundTrip${index}`}
-                  />
-                </div>
-              </TableCell>
-            }
-
-            <TableCell>
-              <p className="inline whitespace-nowrap">
-                {" "}
-                {Math.floor(distance[index] / 1000)} Km
-              </p>
-            </TableCell>
-            <TableCell>
-              <Input
-              size="sm"
-                half
-                type="number"
-                form={mainForm}
-                name={`transport.airs.${index}.frequency`}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-              size="sm"
-                half
-                type="number"
-                form={mainForm}
-                name={`transport.airs.${index}.carbonEmissions`}
-              />
-            </TableCell>
-            <TableCell>
-              <Button
-                type="button"
-                variant={'ghost'}
-                size={'icon'}
-                className="rounded-full hover:bg-destructive/50"
-                onClick={() => {
-                  setData((prev) => {
-                    const out = prev.toSpliced(index, 1);
-                    console.log(out);
-                    mainForm.setValue(
-                      `transport.airs`,
-                      mainForm
-                        .getValues("transport.airs")
-                        ?.toSpliced(index, 1) ?? [],
-                    );
-                    return out;
-                  });
-                }}
-              >
-                <Trash />
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <Button
-          type="button"
-          className="rounded-full ml-2 my-3 "
-          size={'icon'}
-          onClick={() => {
-            mainForm.setValue(`transport.airs`, [
-              ...(mainForm.getValues("transport.airs") ?? []),
-              {
-                destination: null,
-                origin: null,
-                frequency: null,
-                aircraftType: null,
-                class: null,
-                roundTrip: false,
-                stopover: null,
-                carbonEmissions: null,
-                distance: 0,
-              },
-            ]);
-            setData((prev) => [
-              ...prev,
-              { destination: "", origin: "", stopover: null },
-            ]);
-          }}
+    <>
+    <Question className="text-center font-semibold text-xl">{t("q")}</Question>
+    <Content className="text-center text-muted-foreground">{t("description")}</Content>
+      {data.map((_, index) => (
+        <div
+          key={index}
+          className="bg-white border-2 relative border-gray-200 rounded-lg p-12 hover:border-[#00A261] transition-colors mb-6"
         >
-          <Plus />
-        </Button>
-      </TableFooter>
-    </Table>
+
+          <Button
+            type="button"
+            variant={"ghost"}
+            size={"icon"}
+            className="rounded-full hover:bg-destructive/50 absolute top-4 right-4"
+            onClick={() => {
+              setData((prev) => {
+                const out = prev.toSpliced(index, 1);
+                console.log(out);
+                mainForm.setValue(
+                  `transport.airs`,
+                  mainForm.getValues("transport.airs")?.toSpliced(index, 1) ??
+                    []
+                );
+                return out;
+              });
+            }}
+          >
+            <Trash />
+          </Button>
+          <div className="grid grid-cols-4 gap-10 mb-6">
+            <FormMultiCombox
+              labelClassName="text-black/70"
+              className="text-primary"
+              form={mainForm}
+              name={`transport.airs.${index}.origin`}
+              data={airports?.reduced ?? []}
+              label={t("origin")}
+              setValue={(v) => {
+                setData((prev) =>
+                  prev.toSpliced(index, 1, { ...prev[index], origin: v })
+                );
+              }}
+            />
+            <FormMultiCombox
+            labelClassName="text-black/70"
+              form={mainForm}
+              name={`transport.airs.${index}.destination`}
+              label={t("destination")}
+              data={airports?.reduced ?? []}
+              setValue={(v) => {
+                setData((prev) =>
+                  prev.toSpliced(index, 1, {
+                    ...prev[index],
+                    destination: v,
+                  })
+                );
+              }}
+            />
+            <FormSelect
+            labelClassName="text-black/70"
+              data={aircraftTypes.map((e) => ({ label: e, value: e }))}
+              form={mainForm}
+              name={`transport.airs.${index}.aircraftType`}
+              label={t("aircraftType")}
+            />
+            <FormSelect
+            labelClassName="text-black/70"
+              data={classes.map((e) => ({ label: e, value: e }))}
+              form={mainForm}
+              name={`transport.airs.${index}.class`}
+              label={t("class")}
+            />
+          </div>
+          <div className="grid grid-cols-4 gap-10">
+            <Input
+            labelClassName="text-black/70"
+              label={t("frequency")}
+              size="sm"
+              type="number"
+              form={mainForm}
+              name={`transport.airs.${index}.frequency`}
+            />
+            <Input
+            labelClassName="text-black/70"
+              label={t("carbonEmissions")}
+              size="sm"
+              type="number"
+              form={mainForm}
+              name={`transport.airs.${index}.carbonEmissions`}
+            />
+            <div>
+              <div className='flex items-center gap-4 mt-6'>
+              <Checkbox
+                id={`stopover${index}`}
+                checked={stopovers[index]}
+                onCheckedChange={(v) => {
+                  setStopovers((prev) => prev.toSpliced(index, 1, !!v));
+                  if (!v) {
+                    mainForm.setValue(`transport.airs.${index}.stopover`, null);
+                    setData((prev) =>
+                      prev.toSpliced(index, 1, {
+                        ...prev[index],
+                        stopover: null,
+                      })
+                    );
+                  }
+                }}
+              />
+            <FormLabel className="text-black/70" >
+              {t("stopover")} 
+            </FormLabel>
+            </div>
+              <FormCheckbox
+                  form={mainForm}
+                  name={`transport.airs.${index}.roundTrip`}
+                  id={`roundTrip${index}`}
+                  label={t("roundTrip")}
+                  labelClassName="text-black/70"
+              />
+            </div>
+            <FormMultiCombox
+            labelClassName="text-black/70"
+              disabled={!stopovers[index]}
+              form={mainForm}
+              name={`transport.airs.${index}.stopover`}
+              label={t("via")}
+              data={airports?.reduced ?? []}
+              setValue={(v) => {
+                setData((prev) =>
+                  prev.toSpliced(index, 1, {
+                    ...prev[index],
+                    stopover: v,
+                  })
+                );
+              }}
+            />
+          </div>
+          <Separator className="my-4" />
+          <div className="flex flex-row justify-between">
+            <Label className="text-muted-foreground text-base font-semibold">{t("distance")}</Label>
+          <p className="inline whitespace-nowrap">
+            {" "}
+            {
+              (Math.floor(distance[index] / 1000)).toString() === 'NaN' ? '????' : (Math.floor(distance[index] / 1000)) + 'Km'
+            } 
+          </p>
+          </div>
+        </div>
+      ))}
+      <Button
+        type="button"
+        className="rounded-full w-full ml-2 my-3 border-2
+         border-section-transport/70 hover:border-section-transport
+         hover:bg-section-transport/80
+         text-section-transport hover:text-muted
+         "
+        size={"lg"}
+        variant={"ghost"}
+        onClick={() => {
+          mainForm.setValue(`transport.airs`, [
+            {
+              destination: null,
+              origin: null,
+              frequency: null,
+              aircraftType: null,
+              class: null,
+              roundTrip: false,
+              stopover: null,
+              carbonEmissions: null,
+              distance: 0,
+              flightPurpose: "personal",
+              familyMembers: 1,
+            },
+          ]);
+          setData((prev) => [
+            ...prev,
+            { destination: "", origin: "", stopover: null },
+          ]);
+        }}
+      >
+        <Plus />
+        <Label className="">Ajout d&apos;un vol</Label>
+      </Button>
+    </>
   );
 }
 
@@ -312,7 +298,7 @@ function getDistance(
     origin?: string | null;
     stopover?: string | null;
   },
-  RawAirports: any[],
+  RawAirports: any[]
 ) {
   if (!ele.destination || !ele.origin) return 0;
   let origin = null;

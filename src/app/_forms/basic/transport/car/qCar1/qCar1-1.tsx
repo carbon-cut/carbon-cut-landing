@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Question from "../../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/content";
 import { QuestionProps } from "../../../../types";
-import Input from "../../../../components/input";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import FormCombox from "../../../../components/combox";
 
 interface Props {
@@ -41,12 +40,11 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
       return fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/cars/models?make=${make}`,
         {},
-      ).then((res) => res.json());
+      ).then((res) => {const daa = res.json();return daa}).then((daa) => {console.log("the fuck:", daa);return daa});
     },
     enabled: !!make,
     select: (data) => data.map((ele: any) => ({ value: ele.model, label: ele.model }))
   });
-    console.log('data', query.data, 'make:', make);
 
 /*   useEffect(() => {
     if (make && make != "") {
@@ -65,7 +63,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
         <div className="">
           <FormCombox
             setValue={setMake}
-            name={`transport.cars.${index}.carMake`}
+            name={`transport.cars.${index}.make`}
             data={cars ?? []}
             form={mainForm}
             label={t("l1")}
@@ -74,7 +72,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
           </div>
           <div className="">
           <FormCombox
-            name={`transport.cars.${index}.carModel`}
+            name={`transport.cars.${index}.model`}
             data={query?.data ?? []}
             form={mainForm}
             label={t("l2")}

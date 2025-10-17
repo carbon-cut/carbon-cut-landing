@@ -7,19 +7,22 @@ import Input from "../../../components/input";
 import {  useQuery } from "@tanstack/react-query";
 import CarTitle from "./components/carTitle";
 
-const QCar2 = (index: number) => {
-  function CarComponent({ mainForm }: QuestionProps) {
+const QCarComponent2 =  ({ mainForm, index }: QuestionProps & {index: number}) => {
     const t = useScopedI18n("forms.basic.transport.qCar2");
-/*
-    const isCombustion = //@ts-ignore
-      mainForm.getValues(`transport.cars.${index}.fuelType`) != "Electrique";
 
-     const { data: cylinders } = useQuery({
+    const isCombustion = 
+      mainForm.getValues(`transport.cars.${index}.engine`) != "Electrique";
+
+    const isElectric = 
+      mainForm.getValues(`transport.cars.${index}.engine`) === "Electrique"
+      || mainForm.getValues(`transport.cars.${index}.engine`) === "Plug-in Hybrid";
+
+/*     const { data: cylinders } = useQuery({
       queryKey: [
         "cylinders", //@ts-ignore
         mainForm.getValues(`transport.cars.${index}.carModel`),
       ],
-      queryFn: async () => {
+       queryFn: async () => {
         if (!isCombustion) return null;
         const result = await fetch(
           //@ts-ignore
@@ -36,44 +39,48 @@ const QCar2 = (index: number) => {
     }); */
 
     return (
-      <div className="py-12">
+      <div className="py-2">
         <CarTitle mainForm={mainForm} index={index} />
         <Question className='mb-12'>{t("q")}</Question>
-        <Content>
-          {/* {cylinders ? (
-            <Content>
-              <h4>Cylinders:</h4>
-              <Radio
-                name={`transport.cars.${index}.carEngine`}
-                form={mainForm}
-                options={cylinders.map((cyl: string) => ({
-                  label: cyl,
-                  value: cyl,
-                }))}
-              />
-            </Content>
-          ) : (
-            <></>
-          )} */}
-            <Input
-              name={`transport.cars.${index}.carConsumption`}
-              label={t("l5")}
-              placeholder={t("l5")}
+        <Content className="mb-0">
+          <>
+            {isCombustion && <Input
+              name={`transport.cars.${index}.thermalAvg`}
+              label={t("l11")}
+              placeholder={t("l12")}
               form={mainForm}
               type="number"
+            />}
+          </>
+            <>
+            {isElectric && <Input
+              name={`transport.cars.${index}.electricAvg`}
+              label={t("l21")}
+              placeholder={t("l22")}
+              form={mainForm}
+              type="number"
+            />}
+            </>
+            <div className="mb-8" />
+            <Input
+              name={`transport.cars.${index}.distanceWeekly`}
+              //label={t("l5")}
+              placeholder={'km'}
+              form={mainForm}
+              type="number"
+              label={"Distance parcourue par semaine (km)"}
             />
           </Content>
       </div>
     );
   }
-  CarComponent["Symbol"] = {
+    QCarComponent2["Symbol"] = {
     question: "forms.basic.transport.qCar2.q",
     fields: [
-      `transport.cars.${index}.carEngine`,
-      `transport.cars.${index}.carConsumption`,
+      "transport.cars.${index}.carEngine",
+      "transport.cars.${index}.carConsumption",
     ],
   };
-  return CarComponent;
-};
 
-export default QCar2;
+
+export default QCarComponent2;

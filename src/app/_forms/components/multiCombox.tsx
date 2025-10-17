@@ -24,6 +24,7 @@ interface props {
   setValue?: (v: any) => void;
   disabled?: boolean;
   className?: ClassValue;
+  labelClassName?: ClassValue;
 }
 
 const FormMultiCombox: React.FC<props> = ({
@@ -35,6 +36,7 @@ const FormMultiCombox: React.FC<props> = ({
   data,
   setValue = () => {},
   className,
+  labelClassName,
 }) => {
   const t = useScopedI18n("components.forms.combox");
   const [filteredOptions, setFilteredOptions] = React.useState(data);
@@ -59,7 +61,7 @@ const FormMultiCombox: React.FC<props> = ({
       render={({ field }) => (
         <FormItem className={cn("", className)}>
           {label && (
-            <FormLabel>
+            <FormLabel aria-disabled={disabled} className={cn(`${disabled ? '!text-muted-foreground/60' : ''}`, labelClassName)}>
               {label} {mandetory && <span className="text-red-500">*</span>}
             </FormLabel>
           )}
@@ -70,7 +72,7 @@ const FormMultiCombox: React.FC<props> = ({
                 variant={"outline"}
                 type="button"
                 className={cn(
-                  "w-full pl-3 text-left font-normal rounded-full bg-white",
+                  "hover:text-muted-foreground w-full pl-3 text-left font-normal rounded-full bg-white disabled:hover:bg-white disabled:cursor-not-allowed disabled:pointer-events-auto",
                   !field.value && "text-muted-foreground"
                 )}
               >

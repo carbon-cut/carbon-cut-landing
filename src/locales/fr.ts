@@ -139,18 +139,19 @@ export default {
       basic: {
         energie: {
           heating: {
+            title: "système de chauffage",
             q: "Quel type de système de chauffage utilisez-vous pour chauffer votre maison?",
             options: {
               heatPump: { label: "Pompe à chaleur", unit: "null" },
               electricity: { label: "Électricité", unit: "null" },
-              gazNetwork: { label: "Réseau de gaz", unit: "null" },
+              gasNetwork: { label: "Réseau de gaz", unit: "null" },
               heatNetwork: { label: "Réseau de chaleur", unit: "null" },
               GPL: {
                 label: "Gaz de pétrole liquéfié (GPL)",
                 unit: "bouteille/semaine",
               },
-              gazTank: { label: "Citerne de gaz", unit: "null" },
-              QgazTank: {
+              gasTank: { label: "Citerne de gaz", unit: "null" },
+              QgasTank: {
                 q: "Informations supplémentaires sur la citerne de gaz",
                 l1: "fréquence",
                 u1: "remplissages/an",
@@ -163,12 +164,14 @@ export default {
             },
           },
           q1: {
+            title: "facture d'électricité",
             q1: "En utilisant votre facture d'électricité comme référence, quelle a été votre consommation d'électricité au cours des 12 derniers mois ?",
             q2: "Quel est l'index de votre compteur d'électricité ?",
             q3: "Si vous n'avez pas votre facture, quelle a été votre dépense mensuelle en électricité pendant cette année ?",
             Total: "Totale",
           },
           q2: {
+            title: "facture de gaz",
             q1: "En utilisant vos factures de gaz comme référence, quelle a été votre consommation de gaz au cours des 12 derniers mois ?",
             q2: "Quelle est la lecture de votre compteur de gaz ?",
             q3: "Si vous n'avez pas votre facture, quelle a été votre dépense mensuelle de gaz au cours de l'année dernière ?",
@@ -186,9 +189,8 @@ export default {
           },
           qAux: {
             q: "Est-ce que vous utilisez un transport auxiliaire ?",
-            bicycle: "Vélos en libre-service",
-            scooter: "Trottinette électrique libre service",
-            car: "voiture libre service",
+            electricBike: "Vélos électrique",
+            electricScooter: "Trottinette électrique",
           },
           qMotos: {
             qMoto: {
@@ -239,15 +241,27 @@ export default {
             "mild Hybrid": "Hybride léger",
             other: "Autre",
           },
+          "qCar1-3": {
+            q: "Quelle est le carburant de votre voiture ?",
+            Gasoline: "Essence",
+            Diesel: "Diesel",
+            "natural Gaz": "Bio-gaz",
+            other: "Autre",
+          },
           qCar2: {
             q: "Informations supplémentaires",
             l3: "Année",
             l4: "Cylindrée",
-            l5: "Consommation par 100 km",
+            l11: "Consommation carburant (L par 100 km)",
+            l12: "L / 100 km",
+            l21: "Consommation électrique (kWh par 100 km)",
+            l22: "kWh / 100 km",
           },
           qCar3: {
             q1L: "Combien de litres votre voiture consomme-t-elle par semaine ?",
-            q1E: "Combien d'electricite (en kW h) votre voiture consomme-t-elle par semaine ?",
+            q1E: "Combien d'electricite (en kWh) votre voiture consomme-t-elle par semaine ?",
+            q1LL: "Litres par semaine",
+            q1LE: "kWh par semaine",
             q2: "Si vous ne connaissez pas la consommation, vous pouvez fournir vos dépenses hebdomadaires.",
             q3: "Quelle est la distance parcourue par votre voiture chaque semaine ?",
           },
@@ -266,6 +280,8 @@ export default {
               lT: "Oui",
               lF: "Non",
               q1: {
+                q:"Détails de vos vols",
+                description: "Ajoutez les détails de vos vols annuels",
                 origin: "origin",
                 destination: "destination",
                 stopover: "escale",
@@ -275,7 +291,7 @@ export default {
                 class: "class de vol ",
                 roundTrip: "Allez-retour",
                 carbonEmissions: "Emissions de Carbon",
-                distance: "distance",
+                distance: "Distance",
               },
             },
             qSea: {
@@ -296,10 +312,11 @@ export default {
       },
       yes: "oui",
       no: "non",
-      unit: "en {unit}",
+      unit: ({ unit }:{unit: string}) => `en ${unit}`,
       idk: "Je ne sais pas",
       next: "Continuer",
       back: "Précédent",
+      preview: "Aperçu",
     },
     utils: {
       months: {

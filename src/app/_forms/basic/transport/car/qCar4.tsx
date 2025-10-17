@@ -4,30 +4,31 @@ import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { QuestionProps } from "../../../types";
 import Input from "../../../components/input";
+import CarTitle from "./components/carTitle";
 
 const QCar4 = (index: number) => {
-  function CarComponent({ mainForm, setIsDirty }: QuestionProps) {
+  function CarComponent({ mainForm }: QuestionProps) {
     const t = useScopedI18n("forms.basic.transport.qCar4");
 
-    useEffect(() => {
-      //@ts-ignore
-      const someField = mainForm.getValues(`cars.${index}.carMileage`);
+/*     useEffect(() => {
+      const someField = mainForm.getValues(`transport.cars.${index}.mileage`);
 
-      if (someField && someField != "") {
+      if (someField) {
         setIsDirty(true);
       }
       return () => {
         setIsDirty(false);
       };
-    });
+    }); */
 
     return (
-      <div className="py-12">
+      <div className="py-24">
+        <CarTitle mainForm={mainForm} index={index} />
         <Question>{t("q")}</Question>
         <Content>
           <Input
             form={mainForm}
-            name={`transport.cars.${index}.carMileage`}
+            name={`transport.cars.${index}.mileage`}
             type="number"
           />
         </Content>

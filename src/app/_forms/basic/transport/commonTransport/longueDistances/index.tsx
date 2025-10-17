@@ -31,16 +31,15 @@ const QLongueDistances = (props: QuestionProps) => {
       mainForm.setValue("transport.commonTransport.longueDistances", {
         bus: [],
         covoiturage: [],
-        TGV: [],
         train: [],
       });
-    const keys = ["bus", "TGV", "train", "covoiturage"] as const;
+    const keys = ["bus", "train", "covoiturage"] as const;
     if (prevFields) {
       for (const key of keys) {
         if (prevFields[key].length < elements[key]) {
-          //@ts-ignore
           mainForm.setValue(
             `transport.commonTransport.longueDistances.${key}`,
+            //@ts-ignore
             [
               ...prevFields[key],
               ...Array.from(
@@ -53,8 +52,8 @@ const QLongueDistances = (props: QuestionProps) => {
         } else if (prevFields[key].length > elements[key]) {
           mainForm.setValue(
             `transport.commonTransport.longueDistances.${key}`,
+          //@ts-ignore
             [
-              //@ts-ignore
               ...Array.from(
                 { length: elements[key] },
                 (_, index) => prevFields[key][index],

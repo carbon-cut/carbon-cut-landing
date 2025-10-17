@@ -91,7 +91,7 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
   return (
     <div>
       <Question className='px-12'>{t("q1")}</Question>
-      {/* <Table>
+{/*   <Table>
         <TableHeader>
           <TableRow>
             {getLast12Months().map(({ month, year }, index) => (
@@ -126,15 +126,16 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
           </TableRow>
         </TableBody>
       </Table> */}
-      <div className="px-16 mb-6">
+      <Content className="px-16 mb-6">
       <Input
       form={mainForm}
       name="energie.gaz.total"
       placeholder="m³"
       type="number"
       />
-      </div>
+      </Content>
       <SideQuestion
+      className="py-1 w-2/4 bg-section-food/20"
         question={t("q3")}
         content={
           <Input form={mainForm} name="energie.gaz.money" placeholder="€" type="number" half />
@@ -145,8 +146,8 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
 };
 
 Q2["Symbol"] = {
-  question: "forms.basic.energie.q2.q",
-  fields: [`gaz`],
+  question: "forms.basic.energie.q2.title",
+  fields: ["energie.gaz.total", "energie.gaz.money"],
 };
 
 export default Q2;

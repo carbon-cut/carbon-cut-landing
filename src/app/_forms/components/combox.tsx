@@ -5,6 +5,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  TName,
 } from "@/components/ui/forms";
 import {
   Popover,
@@ -12,7 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import React, { useEffect } from "react";
-import { UseFormReturn } from "react-hook-form";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
@@ -24,11 +25,11 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { useScopedI18n } from "@/locales/client";
-import { type ClassValue } from "clsx"
+import { type ClassValue } from "clsx";
 
-interface props {
-  form: UseFormReturn<any, undefined>;
-  name: string;
+interface props<T extends FieldValues> {
+  form: UseFormReturn<T, any>;
+  name: TName<T>;
   label?: string | undefined;
   required?: boolean;
   type?: React.HTMLInputTypeAttribute | undefined | "calendar" | "combox";
@@ -38,7 +39,7 @@ interface props {
   disabled?: boolean;
 }
 
-const FormCombox: React.FC<props> = ({
+function FormCombox<T extends FieldValues>({
   form,
   name,
   label,
@@ -47,7 +48,7 @@ const FormCombox: React.FC<props> = ({
   setValue = (v) => {},
   className,
   disabled = false,
-}) => {
+}: props<T>) {
   const t = useScopedI18n("components.forms.combox");
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const FormCombox: React.FC<props> = ({
                     type="button"
                     className={cn(
                       "w-full pl-3 text-left font-normal rounded-full bg-white disabled:hover:bg-white disabled:hover:text-muted-foreground disabled:cursor-not-allowed disabled:pointer-events-auto",
-                      !field.value && "text-muted-foreground",
+                      !field.value && "text-muted-foreground"
                     )}
                     disabled={disabled}
                   >
@@ -94,7 +95,11 @@ const FormCombox: React.FC<props> = ({
                   <CommandGroup>
                     {data.map((element, index) => (
                       <CommandItem
-                        className={`${element.value === field.value ? '!bg-card-primary-foreground':''}`}
+                        className={`${
+                          element.value === field.value
+                            ? "!bg-card-primary-foreground"
+                            : ""
+                        }`}
                         value={element.value}
                         key={index}
                         onSelect={() => {
@@ -107,7 +112,7 @@ const FormCombox: React.FC<props> = ({
                             "mr-2 h-4 w-4",
                             element.value === field.value
                               ? "opacity-100"
-                              : "opacity-0",
+                              : "opacity-0"
                           )}
                         />
                         {element.label}
@@ -122,6 +127,6 @@ const FormCombox: React.FC<props> = ({
       )}
     />
   );
-};
+}
 
 export default FormCombox;

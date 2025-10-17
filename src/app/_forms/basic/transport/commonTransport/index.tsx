@@ -9,7 +9,7 @@ const output: ((props: QuestionProps) => JSX.Element)[] = [
   //QShortDistances,
   //QLongueDistances,
   QAir,
-  QSea,
+  //QSea,
 ];
 
 export default output;

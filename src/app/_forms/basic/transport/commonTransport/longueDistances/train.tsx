@@ -15,9 +15,6 @@ const Train = ({ mainForm }: QuestionProps) => {
       mainForm.getValues("transport.commonTransport.longueDistances.train") ??
       []
     ).map((e) => ({ ...e, type: "train" })),
-    ...(
-      mainForm.getValues("transport.commonTransport.longueDistances.TGV") ?? []
-    ).map((e) => ({ ...e, type: "TGV" })),
   ];
 
   return (

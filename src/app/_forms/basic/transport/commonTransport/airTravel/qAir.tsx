@@ -4,7 +4,10 @@ import { useScopedI18n } from "@/locales/client";
 import AirQuestions from "./index";
 import Question from "../../../../components/question";
 import Content from "../../../../components/content";
-import { FormRadio } from "@/components/forms/formRadio";
+import Radio from "@/app/_forms/components/radio";
+import { Field, FieldValues, UseFormReturn } from "react-hook-form";
+import { formSchema } from "@/app/_forms/formSchema";
+import Input from "@/app/_forms/components/input";
 
 function QAir({
   setOnSubmit,
@@ -45,11 +48,10 @@ function QAir({
     <div>
       <Question>{t("q")}</Question>
       <Content>
-        <FormRadio
-          type={"boolean"}
-          name="transport.hasAir"
+        <Radio
           form={mainForm}
-          data={[
+          name="transport.hasAir"
+          options={[
             { label: t("lT"), value: "true" },
             { label: t("lF"), value: "false" },
           ]}

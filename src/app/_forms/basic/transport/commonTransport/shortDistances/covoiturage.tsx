@@ -57,7 +57,7 @@ const Covoiturage = ({ mainForm }: QuestionProps) => {
             <TableCell>
               <FormSelect
                 form={mainForm}
-                name={`transport.commonTransport.shortDistances.covoiturage.${index}.carType`}
+                name={`transport.commonTransport.shortDistances.covoiturage.${index}.engine`}
                 data={[
                   { label: "Electrique", value: "Electrique" },
                   { label: "Diesel", value: "Diesel" },

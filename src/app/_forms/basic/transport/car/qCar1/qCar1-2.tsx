@@ -4,11 +4,12 @@ import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/content";
 import Radio from "@/app/_forms/components/radio";
 import { FuelTypes, QuestionProps } from "../../../../types";
-import { useQuery } from "@tanstack/react-query";
 import Input from "@/app/_forms/components/input";
 import CarTitle from "../components/carTitle";
+import { formSchema } from "@/app/_forms/formSchema/formSchemav0";
+import { UseFormReturn } from "react-hook-form";
 
-const defaultFuelTypes: FuelTypes[] = [
+const fuelTypes: FuelTypes[] = [
   "Electrique",
   "mild Hybrid",
   "Plug-in Hybrid",
@@ -19,16 +20,14 @@ const defaultFuelTypes: FuelTypes[] = [
 ];
 
 const QuestionCompo2: React.FC<
-  QuestionProps & { index: number; model?: any }
-> = ({ model, index, mainForm, setIsDirty }) => {
+  QuestionProps & { index: number; }
+> = ({  index, mainForm, setVerifyFields,  }) => {
   const t = useScopedI18n("forms.basic.transport.qCar1-2");
 
-  const [ carType, setCarType ] = useState(mainForm.getValues(`transport.cars.${index}.carType`)); 
-  const [car] = useState(
-    {make: mainForm.getValues(`transport.cars.${index}.carMake`), model: mainForm.getValues(`transport.cars.${index}.carModel`)}
-  );
-  useEffect(() => {
-    const someField = mainForm.getValues(`transport.cars.${index}.carType`);
+  const [ carType, setCarType ] = useState(mainForm.getValues(`transport.cars.${index}.engine`)); 
+
+  /* useEffect(() => {
+    const someField = mainForm.getValues(`transport.cars.${index}.engine`);
     if (
       someField &&
       //@ts-ignore maybe the value is not entered yet
@@ -39,22 +38,11 @@ const QuestionCompo2: React.FC<
     return () => {
       setIsDirty(false);
     };
-  });
+  }); */ 
+  useEffect(() => {
+    setVerifyFields([`transport.cars.${index}.engine`, `transport.cars.${index}.otherEngine`]);
+  } , [index]);
 
-  const { data: fuelTypes } = useQuery({
-    queryKey: [`fuelTypes.${model}`],
-    queryFn: async () => {
-      if (model) {
-        const data = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/cars/fuel?model=${model}`,
-        ).then((res) => res.json());
-        if (data.error) throw new Error(data.error.message);
-        return [...data, "other"];
-      }
-      return defaultFuelTypes;
-    },
-  });
-  
   return (
     <>
         <div>
@@ -65,7 +53,7 @@ const QuestionCompo2: React.FC<
             <Radio
               className=" w-2/3 flex justify-between  mx-0"
               setState={setCarType}
-              name={`transport.cars.${index}.carType`}
+              name={`transport.cars.${index}.engine`}
               form={mainForm}
               options={fuelTypes?.map((element: FuelTypes) => ({
                 label: t(element),
@@ -76,7 +64,7 @@ const QuestionCompo2: React.FC<
             <Input
               type="number"
               form={mainForm}
-              name={`transport.cars.${index}.carTypeOther`}
+              name={`transport.cars.${index}.otherEngine`}
               label={"Autre"}
               disabled={
                 (carType !== "other") ? true : false

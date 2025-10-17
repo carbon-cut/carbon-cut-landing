@@ -90,14 +90,24 @@ export default {
   				to: {
   					height: '0'
   				}
-  			}
+  			},
+			'preview-up': {
+          from: { height: 'auto' }, // or a specific value
+          to: { height: '0', display: 'none' },
+        },
+		'preview-down': {
+			from: { height: '0' },
+          to: { height: 'auto' }, // or a specific value
+        },
   		},
 		transitionBehavior: {
 			descrete: 'allow-descrete'
 		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+			'preview-up': 'preview-up 0.2s ease-out forwards',
+			'preview-down': 'preview-down 0.2s ease-out forwards',
   		},
 		fontFamily: {
 			manrope_sans: ['var(--font-manrope_sans)'],

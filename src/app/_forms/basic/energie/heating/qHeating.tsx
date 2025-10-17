@@ -7,11 +7,10 @@ import MinimalInput from "../../../components/minimalInput";
 
 const heatingMethods = [
   "heatPump",
-  "electricity",
-  "gazNetwork",
+  "gasNetwork",
   "heatNetwork",
   "GPL",
-  "gazTank",
+  "gasTank",
   "fioul",
   "charcoal",
   "wood",
@@ -19,10 +18,10 @@ const heatingMethods = [
 
 function QHeating({ mainForm, setOnSubmit }: QuestionProps) {
   const t = useScopedI18n("forms.basic.energie.heating");
-  const tAdd = useScopedI18n("forms.basic.energie.heating.options.QgazTank");
+  const tAdd = useScopedI18n("forms.basic.energie.heating.options.QgasTank");
 
-  const [gazTank, setGazTank] = useState(
-    mainForm.getValues("energie.heating.gazTank") ? true : false,
+  const [gasTank, setGasTank] = useState(
+    mainForm.getValues("energie.heating.gasTank") ? true : false,
   );
 
   return (
@@ -38,12 +37,12 @@ function QHeating({ mainForm, setOnSubmit }: QuestionProps) {
           unit: t(`options.${e}.unit`),
         }))}
         onChange={(v) => {
-          const ui = mainForm.getValues("energie.heating.gazTank");
+          const ui = mainForm.getValues("energie.heating.gasTank");
           console.log({ ui });
-          setGazTank(ui != null);
+          setGasTank(ui != null);
         }}
       />
-      {/* {gazTank && (
+      {/* {gasTank && (
         <>
           <Question>{tAdd("q")}</Question>
           <div className="grid grid-cols-3 w-2/3">
@@ -67,7 +66,7 @@ function QHeating({ mainForm, setOnSubmit }: QuestionProps) {
 }
 
 QHeating["Symbol"] = {
-  question: "forms.basic.energie.q1.q",
+  question: "forms.basic.energie.heating.title",
   fields: [`electricity`],
 };
 

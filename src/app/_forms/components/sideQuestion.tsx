@@ -6,14 +6,16 @@ import {
 import React, {JSX} from "react";
 import Question from "./question";
 import Content from "./content";
+import { cn } from "@/lib/utils";
   
 interface Props {
   question: string;
   content: JSX.Element | JSX.Element[];
+  className?: string
 }
-function SideQuestion({ question, content }: Props) {
+function SideQuestion({ question, content, className }: Props) {
   return (
-    <div className="ml-16 w-7/12 p-3 bg-slate-500/30 rounded-xl">
+    <div className={cn("ml-16 w-7/12 p-3 bg-slate-500/30 rounded-xl", className)}>
       <Question className="text-gray-700 md:text-base font-light mb-0">
         {question}
       </Question>

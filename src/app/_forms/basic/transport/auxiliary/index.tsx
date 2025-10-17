@@ -2,10 +2,10 @@ import React from "react";
 import Question from "../../../components/question";
 import { QuestionProps } from "../../../types";
 import Content from "../../../components/content";
-import { MultiCheckInput } from "../../../components/multiCheckInput";
+import Input from "@/app/_forms/components/input";
 import { useScopedI18n } from "@/locales/client";
 
-const auxilaryTransport = ["bicycle", "scooter", "car"] as const;
+const auxilaryTransport = ["electricBike", "electricScooter"] as const;
 
 function QAuxilary({ mainForm }: QuestionProps) {
   const t = useScopedI18n("forms.basic.transport.qAux");
@@ -15,14 +15,20 @@ function QAuxilary({ mainForm }: QuestionProps) {
       <Question>{t("q")}</Question>
       <Content>
         <>
-          <MultiCheckInput
+          <Input
             form={mainForm}
-            name={"transport.auxilary"}
-            options={auxilaryTransport.map((e) => ({
-              label: t(e),
-              value: e,
-              unit: "h/semaine",
-            }))}
+            name={"transport.auxilary.electricBike"}
+            type="number"
+            label={t("electricBike")}
+            placeholder="h/semaine"
+          />
+          <div className="my-4" />
+          <Input
+            form={mainForm}
+            name={"transport.auxilary.electricScooter"}
+            type="number"
+            label={t("electricScooter")}
+            placeholder="h/semaine"
           />
         </>
       </Content>
@@ -31,8 +37,8 @@ function QAuxilary({ mainForm }: QuestionProps) {
 }
 
 QAuxilary["Symbol"] = {
-  question: "forms.basic.transport.qMotos.qMoto.q",
-  fields: [`transport.hasMoto`],
+  question: "forms.basic.transport.qAux.q",
+  fields: ["transport.auxilary.electricBike", "transport.auxilary.electricScooter"],
 };
 
 export default QAuxilary;

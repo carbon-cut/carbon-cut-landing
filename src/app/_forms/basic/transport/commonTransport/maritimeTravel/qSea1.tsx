@@ -16,6 +16,21 @@ import { Button } from "@/components/ui/button";
 import Select from "../../../../components/select";
 import FormCheckbox from "@/components/forms/formCheckbox";
 
+const boats = [
+  "fluvial",
+  "ferry",
+  "cruise",
+] as const
+
+const init = {
+  type: "ferry",
+  distance: null,
+  frequency: null,
+  withCar: false,
+  people: null,
+  tripPurpose: "personal",
+} as const;
+
 function QSea1({ mainForm }: QuestionProps) {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qSea.q1");
 
@@ -40,14 +55,13 @@ function QSea1({ mainForm }: QuestionProps) {
               <Select
                 form={mainForm}
                 name={`transport.seas.${index}.type`}
-                options={[
-                  { label: t("fluvial"), value: "fluvial" },
-                  { label: t("ferry"), value: "ferry" },
-                  { label: t("cruise"), value: "cruise" },
-                ]}
-                onChange={(v) => {
+                options={boats.map((e) => ({ label: e, value: e }))}
+                onChange={(v: typeof boats[number]) => {
                   setData((prev) =>
-                    prev.toSpliced(index, 1, { ...rest(prev[index]), type: v }),
+                    prev.toSpliced(index, 1, { 
+                      ...prev[index],
+                      type: v 
+                    }),
                   );
                 }}
               />
@@ -75,7 +89,7 @@ function QSea1({ mainForm }: QuestionProps) {
                 onChange={(v) => {
                   setData((prev) =>
                     prev.toSpliced(index, 1, {
-                      ...rest(prev[index]),
+                      ...prev[index],
                       distance: v,
                     }),
                   );
@@ -92,7 +106,7 @@ function QSea1({ mainForm }: QuestionProps) {
                 onChange={(v) => {
                   setData((prev) =>
                     prev.toSpliced(index, 1, {
-                      ...rest(prev[index]),
+                      ...prev[index],
                       frequency: v,
                     }),
                   );
@@ -125,8 +139,8 @@ function QSea1({ mainForm }: QuestionProps) {
           className="rounded-full ml-2 my-3 "
           size={'icon'}
           onClick={() => {
-            mainForm.setValue(`transport.seas`, [...data, null]);
-            setData((prev) => [...prev, null]);
+            mainForm.setValue(`transport.seas`, [...data, init]);
+            setData((prev) => [...prev, init]);
           }}
         >
           <PlusCircle />
@@ -142,18 +156,3 @@ QSea1["Symbol"] = {
 };
 export default QSea1;
 
-const rest = (
-  v: {
-    withCar?: boolean | null ;
-    distance?: number | null | undefined;
-    frequency?: number | null | undefined;
-    type?: "fluvial" | "ferry" | "cruise" | null | undefined;
-  } | null,
-) => {
-  return {
-    distance: v?.distance ?? null,
-    frequency: v?.frequency ?? null,
-    type: v?.type ?? null,
-    withCar: v?.withCar ?? null,
-  };
-};

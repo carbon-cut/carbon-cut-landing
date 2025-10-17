@@ -41,7 +41,7 @@ const QuestionCompo2: React.FC<QuestionProps & { index: number }> = ({
         <Content>
           <Radio
             className="w-2/3 felx justify-between"
-            name={`transport.cars.${index}.carType`}
+            name={`transport.cars.${index}.engine`}
             form={mainForm}
             options={fuelTypes.map((element: FuelTypes) => ({
               label: t(element),

@@ -119,7 +119,7 @@ const Q1 = ({ mainForm }: QuestionProps) => {
           </TableRow>
         </TableBody>
       </Table> */}
-      <Content className="px-12 mb-6">
+      <Content className="px-16 mb-6">
       <Input
       form={mainForm}
       name="energie.electricity.total"
@@ -128,6 +128,7 @@ const Q1 = ({ mainForm }: QuestionProps) => {
       />
       </Content>
       <SideQuestion
+      className="py-1 w-2/4 bg-section-food/20"
         question={t("q3")}
         content={
           <Input
@@ -150,8 +151,8 @@ const Q1 = ({ mainForm }: QuestionProps) => {
 };
 
 Q1["Symbol"] = {
-  question: "forms.basic.energie.q1.q",
-  fields: [`electricity`],
+  question: "forms.basic.energie.q1.title",
+  fields: ["energie.electricity.total", "energie.electricity.money"],
 };
 
 export default Q1;
