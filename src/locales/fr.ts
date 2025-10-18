@@ -227,11 +227,13 @@ export default {
             },
           },
           "qCar1-1": {
+            title: ({index}:{index:number}) =>(`Voiture ${index + 1} : Informations sur la voiture`),
             q: "Informations sur la voiture",
             l1: "Marque",
             l2: "Modèle",
           },
           "qCar1-2": {
+            title: ({index}:{index:number}) =>(`Voiture ${index + 1} : type de voiture`),
             q: "Quel type de voiture avez-vous ?",
             Gasoline: "Essence",
             Diesel: "Diesel",
@@ -242,6 +244,7 @@ export default {
             other: "Autre",
           },
           "qCar1-3": {
+            title: ({index}:{index:number}) =>(`Voiture ${index + 1} : carburant de voiture`),
             q: "Quelle est le carburant de votre voiture ?",
             Gasoline: "Essence",
             Diesel: "Diesel",
@@ -249,6 +252,7 @@ export default {
             other: "Autre",
           },
           qCar2: {
+            title: ({index}:{index:number}) =>(`Voiture ${index + 1} : Informations supplémentaires`),
             q: "Informations supplémentaires",
             l3: "Année",
             l4: "Cylindrée",
@@ -258,6 +262,7 @@ export default {
             l22: "kWh / 100 km",
           },
           qCar3: {
+            title: ({index}:{index:number}) =>(`Voiture ${index + 1} : Consommation de voiture`),
             q1L: "Combien de litres votre voiture consomme-t-elle par semaine ?",
             q1E: "Combien d'electricite (en kWh) votre voiture consomme-t-elle par semaine ?",
             q1LL: "Litres par semaine",
@@ -266,6 +271,7 @@ export default {
             q3: "Quelle est la distance parcourue par votre voiture chaque semaine ?",
           },
           qCar4: {
+            title: ({index}:{index:number}) =>(`Voiture ${index + 1} : Distance totale affichée`),
             q: "Quelle est la distance totale affichée sur le tableau de bord de votre voiture ?",
           },
           commonTransport: {

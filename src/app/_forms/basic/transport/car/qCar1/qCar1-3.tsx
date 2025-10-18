@@ -70,5 +70,4 @@ const QuestionCompo3: React.FC<QuestionProps & Props> = ({
     </div>
   )
 }
-
 export default QuestionCompo3

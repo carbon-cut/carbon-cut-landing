@@ -23,6 +23,8 @@ import { useScopedI18n } from "@/locales/client";
 import { getIcon, getName } from "@/lib/formTabs/geters";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { error } from "console";
+import Question from "./question";
 
 interface Props {
   list: { [key in TabValues]?: React.FC<QuestionProps>[] };
@@ -49,7 +51,7 @@ function QuestionList({ list, mainForm }: Props) {
 
   const { tab, setTab, currentIndexes, setCurrentIndexes } =
     React.useContext(FormContext);
-  
+
   const [error, setError] = React.useState({
     transport: false,
     energie: false,
@@ -57,6 +59,8 @@ function QuestionList({ list, mainForm }: Props) {
     waste: false,
     vacation: false,
   });
+
+  const [transportError, setTransportError] = React.useState(false);
 
   return (
     <Dialog>
@@ -74,144 +78,100 @@ function QuestionList({ list, mainForm }: Props) {
           {t("preview")}
         </Button>
       </DialogTrigger>
-      
-      <DialogContent className="w-full  h-4/6 overflow-auto">
-      <ScrollArea>
-        <DialogHeader className="mb-4">
-          <DialogTitle className="font-extrabold text-section-transport text-2xl">
-            Form overview
-          </DialogTitle>
-          <DialogDescription className="text-sm">
-            View all sections and questions in this carbon footprint assessment
-          </DialogDescription>
-        </DialogHeader>
-        <Accordion type="single" collapsible className="w-full">
-          {(Object.keys(list) as TabValues[]).map((key) => {
-            const Icon = getIcon(key);
-            const ColorVariant = {
-              transport: "bg-section-transport",
-              energie: "bg-section-energie",
-              food: "bg-section-food",
-              waste: "bg-section-waste",
-              vacation: "bg-section-vacation",
-            };
 
-            return (
-              <AccordionItem
-                className={`max-w-full rounded-2xl mb-4 border-b-0 border-2 
+      <DialogContent asChild className="w-full  h-4/6 overflow-hidden">
+        
+          <DialogHeader className="mb-4">
+            <DialogTitle className="font-extrabold text-section-transport text-2xl">
+              Form overview
+            </DialogTitle>
+            <DialogDescription className="text-sm">
+              View all sections and questions in this carbon footprint
+              assessment
+            </DialogDescription>
+          </DialogHeader>
+          <Accordion type="single" collapsible className="w-full">
+            {(Object.keys(list) as TabValues[]).map((key) => {
+              const Icon = getIcon(key);
+              const ColorVariant = {
+                transport: "bg-section-transport",
+                energie: "bg-section-energie",
+                food: "bg-section-food",
+                waste: "bg-section-waste",
+                vacation: "bg-section-vacation",
+              };
+
+              return (
+                <AccordionItem
+                  className={`max-w-full rounded-2xl mb-4 border-b-0 border-2 
                 hover:border-section-transport   
-                ${error[key] ? "border-red-500" : "border-transparent"} 
+                ${error[key] ? "border-destructive hover:border-destructive/60" : "border-transparent"} 
                 `}
-                style={{
-                  //@ts-expect-error interpolateSize is not supported, only in Chrome
-                  interpolateSize: 'allow-keywords'
-                }}
-                key={key}
-                value={key}
-              >
-                <AccordionTrigger
-                  icon="chevron-down"
-                  className="font-extralight hover:no-underline  
-                 px-6 py-3"
+                  style={{
+                    //@ts-expect-error interpolateSize is not supported, only in Chrome
+                    interpolateSize: "allow-keywords",
+                  }}
+                  key={key}
+                  value={key}
                 >
-                  <div className="flex flex-row">
-                    <div
-                      className={`p-2 rounded-full h-fit my-auto ${ColorVariant[key]}`}
-                    >
-                      <Icon className="h-5 w-5 text-white" />
+                  <AccordionTrigger
+                    icon="chevron-down"
+                    className="font-extralight hover:no-underline  
+                 px-6 py-3"
+                  >
+                    <div className="flex flex-row">
+                      <div
+                        className={`p-2 rounded-full h-fit my-auto ${ColorVariant[key]}`}
+                      >
+                        <Icon className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="grid grid-rows-2 ml-3">
+                        <Label className="font-extrabold text-lg">
+                          {getName(key)}
+                        </Label>
+                        <Label className="font-semibold text-sm text-muted-foreground">
+                          {list[key]?.length} questions
+                        </Label>
+                      </div>
                     </div>
-                    <div className="grid grid-rows-2 ml-3">
-                      <Label className="font-extrabold text-lg">
-                        {getName(key)}
-                      </Label>
-                      <Label className="font-semibold text-sm text-muted-foreground">
-                        3 questions
-                      </Label>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent forceMount type="preview" className="px-6 space-y-3">
-                  {list[key]?.map(
-                    (
-                      //@ts-expect-error cause symbol is bot included in Types
-                      { Symbol },
-                      index
-                    ) => (
-                      <Question
-                      
-                        index={index}
-                        mainForm={mainForm}
-                        Symbol={Symbol}
-                        key={`${key}-${index}`}
-                        section={key}
-                        setInterface={() => {
-                          setCurrentIndexes((p) => ({ ...p, [key]: index }));
-                          setTab(key);
-                        }}
-                      />
-                    )
-                  )}
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
-        </Accordion>
-        </ScrollArea>
+                  </AccordionTrigger>
+                  <AccordionContent
+                    forceMount
+                    type="preview"
+                    className="px-6 space-y-3"
+                  >
+                    {list[key]?.map(
+                      (
+                        //@ts-expect-error cause symbol is bot included in Types
+                        { Symbol },
+                        index
+                      ) => (
+                        <Question
+                        setError={setError}
+                        error={error}
+                        transportError={transportError}
+                        setTransportError={setTransportError}
+                          index={index}
+                          mainForm={mainForm}
+                          Symbol={Symbol}
+                          key={`${key}-${index}`}
+                          section={key}
+                          setInterface={() => {
+                            setCurrentIndexes((p) => ({ ...p, [key]: index }));
+                            setTab(key);
+                          }}
+                        />
+                      )
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
       </DialogContent>
-      
     </Dialog>
   );
 }
 
 export default QuestionList;
 
-const Question = ({
-  mainForm,
-  Symbol,
-  section,
-  setInterface,
-  index,
-}: {
-  mainForm: UseFormReturn<any>;
-  Symbol?: any;
-  setInterface: () => void;
-  section: TabValues;
-  index: number;
-}) => {
-  const t = useScopedI18n();
-
-  const getState = useCallback (() => {
-    if (Symbol?.fields)
-      for (const field of Symbol?.fields) {
-        console.log({
-          field,
-          result: mainForm.getFieldState(field),
-        });
-        if (mainForm.getFieldState(field)?.error) {
-          return false;
-        }
-      }
-    return true;
-  }, [mainForm, section])
-
-  return (
-    <Button
-      type="button"
-      variant={"outline"}
-      className={`
-        ${getState() ? "bg-white" : "bg-red-400"}
-        w-full rounded-x text-start justify-start
-        `}
-      onClick={setInterface}
-    >
-      <Label
-        className={`font-bold text-section-${section} hover:cursor-pointer`}
-      >
-        Q{index + 1}
-      </Label>
-      <Label className={`text-extrabold max-w-1 hover:cursor-pointer`}>
-        {t(Symbol?.question ?? "")}
-      </Label>
-    </Button>
-  );
-};

@@ -36,7 +36,7 @@ const QCar4 = (index: number) => {
     );
   }
   CarComponent["Symbol"] = {
-    question: "forms.basic.transport.qCar4.q",
+    question: ["forms.basic.transport.qCar4.title", {index}],
     fields: [`transport.cars.${index}.carMileage`],
   };
   return CarComponent;

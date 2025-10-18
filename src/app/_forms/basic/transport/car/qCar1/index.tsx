@@ -26,13 +26,13 @@ function QCar1(index: number) {
     );
   }
   CarComponent["Symbol"] = {
-    question: "forms.basic.transport.qCar1-1.q",
+    question: ["forms.basic.transport.qCar1-1.title", {index: index}],
     fields: [
       `transport.cars.${index}.carMake`,
       `transport.cars.${index}.carModel`,
     ],
   };
-  CarComponent.displayName = `QCar1-${index}`;
+  CarComponent.displayName = `QCar11-${index}`;
 
   return CarComponent;
 }
@@ -47,19 +47,25 @@ function QCar12(index: number) {
     );
   }
   CarComponent["Symbol"] = {
-    question: "forms.basic.transport.qCar1-1.q",
+    question: ["forms.basic.transport.qCar1-2.title", {index: index}],
     fields: [
-      `transport.cars.${index}.carType`,
+      `transport.cars.${index}.engine`,
     ],
   };
 
-  CarComponent.displayName = `QCar1-${index}`;
+  CarComponent.displayName = `QCar12-${index}`;
 
   return CarComponent;
 }
 
- const QCar13 = (index: number) => 
-  // eslint-disable-next-line react/display-name
-  (props: QuestionProps) => <QuestionCompo3 index={index} {...props} />;
-
+ const QCar13 = (index: number) => {
+  const CarComponent = (props: QuestionProps) => <QuestionCompo3 index={index} {...props} />;
+  CarComponent["Symbol"] = {
+    question: ["forms.basic.transport.qCar1-3.title", {index: index}],
+    fields: [
+      `transport.cars.${index}.secondThermal`,
+    ],
+  };
+  return CarComponent;
+}
 export {QCar1, QCar12, QCar13};

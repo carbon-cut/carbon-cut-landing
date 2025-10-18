@@ -52,7 +52,7 @@ function QCarComponent({ mainForm, index, prevAction, next, prev }: QuestionProp
         <div className="w-1/2 mt-4">
           <Input
             form={mainForm}
-            name={`transport.cars.${index}.moneyElectricConsumption`}
+            name={`transport.cars.${index}.electricPrice`}
             type="number"
             label={`Prix de kWh (€)`}
             disabled={selectedUnit === "unit"}
@@ -62,7 +62,4 @@ function QCarComponent({ mainForm, index, prevAction, next, prev }: QuestionProp
     </div>
   );
 }
-const QCar32 = (index: number) => 
-    // eslint-disable-next-line react/display-name
-  (props: QuestionProps) => <QCarComponent {...props} index={index} />;
-export default QCar32;
+export default QCarComponent;

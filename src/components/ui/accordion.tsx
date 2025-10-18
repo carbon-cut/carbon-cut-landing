@@ -51,9 +51,8 @@ const AccordionContent = React.forwardRef<
     ref={ref}
     className={`overflow-hidden text-sm 
     ${type === 'preview'? 
-      'data-[state=open]:animate-preview-down data-[state=closed]:animate-preview-up':
+      'data-[state=open]:animate-preview-down data-[state=closed]:animate-preview-up h-0':
       'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down' }
-      
     `}
     {...props}
   >

@@ -51,7 +51,7 @@ import SegmentedControl from "@/components/ui/segmentedControl";
             form={mainForm}
             name={`transport.cars.${index}.${
               carType === "Electrique" ?
-              'moneyElectricConsumption': 'moneyThermalConsumption'}`}
+              'electricPrice': 'thermalPrice'}`}
             type="number"
             label={`Prix de ${unit} (€)`}
             disabled={selectedUnit === "unit"}
