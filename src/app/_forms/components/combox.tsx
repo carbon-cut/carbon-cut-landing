@@ -36,6 +36,7 @@ interface props<T extends FieldValues> {
   data: { value: any; label: string }[];
   setValue?: (v: any) => void;
   className?: ClassValue;
+  labelClassName?: ClassValue;
   disabled?: boolean;
 }
 
@@ -48,6 +49,7 @@ function FormCombox<T extends FieldValues>({
   setValue = (v) => {},
   className,
   disabled = false,
+  labelClassName,
 }: props<T>) {
   const t = useScopedI18n("components.forms.combox");
 
@@ -58,13 +60,14 @@ function FormCombox<T extends FieldValues>({
     <FormField
       control={form.control}
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <FormItem className={cn("w-full", className)}>
-          {label && (
-            <FormLabel className="text-sm font-semibold">
-              {label} {required && <span className="text-red-500">*</span>}
-            </FormLabel>
-          )}
+          {label &&  
+            <FormLabel data-state={fieldState.error && "error"} className={cn(
+              `text-sm font-medium 
+              ${disabled ? 'text-muted-foreground data-[state=error]:text-destructive/60' : ''}`,
+              labelClassName)}>{label}</FormLabel>
+          }
           <Popover>
             <PopoverTrigger asChild>
               <div>
@@ -73,7 +76,10 @@ function FormCombox<T extends FieldValues>({
                     variant={"outline"}
                     type="button"
                     className={cn(
-                      "w-full pl-3 text-left font-normal rounded-full bg-white disabled:hover:bg-white disabled:hover:text-muted-foreground disabled:cursor-not-allowed disabled:pointer-events-auto",
+                      `w-full pl-3 text-left font-normal rounded-full bg-white disabled:hover:bg-white
+                      disabled:hover:text-muted-foreground disabled:cursor-not-allowed disabled:pointer-events-auto
+                      ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : ''}
+                      `,
                       !field.value && "text-muted-foreground"
                     )}
                     disabled={disabled}
@@ -84,7 +90,7 @@ function FormCombox<T extends FieldValues>({
                     <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
                 </FormControl>
-                <FormMessage className="text-red-800 max-w-full" />
+                
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -123,6 +129,10 @@ function FormCombox<T extends FieldValues>({
               </Command>
             </PopoverContent>
           </Popover>
+          <FormMessage 
+            data-state={disabled && "disabled"}
+            className="ml-3 data-[state=disabled]:text-destructive/70"
+          />
         </FormItem>
       )}
     />

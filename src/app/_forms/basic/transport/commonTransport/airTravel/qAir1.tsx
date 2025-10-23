@@ -284,11 +284,16 @@ function QAir({ mainForm }: QuestionProps) {
         }}
       >
         <Plus />
-        <Label className="">Ajout d&apos;un vol</Label>
+        <Label className="cursor-pointer">Ajout d&apos;un vol</Label>
       </Button>
     </>
   );
 }
+
+QAir["Symbol"] = {
+  question: "forms.basic.transport.commonTransport.qAir.q1.q",
+  fields: ["transport.airs"],
+};
 
 export default QAir;
 

@@ -1,101 +1,86 @@
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
 import { QuestionProps } from "../../../../types";
-import FormCombox from "@/components/forms/formCombox";
 import { useQuery } from "@tanstack/react-query";
+import Input from "@/app/_forms/components/input";
+import { useScopedI18n } from "@/locales/client";
+import { Button } from "@/components/ui/button";
+import { UseFieldArrayRemove } from "react-hook-form";
+import { X } from "lucide-react";
 import FormSelect from "@/components/forms/formSelect";
-import Input from "../../../../components/input";
 
-const Covoiturage = ({ mainForm }: QuestionProps) => {
-  const data =
-    mainForm.getValues(
-      "transport.commonTransport.shortDistances.covoiturage",
-    ) ?? [];
+const fuelTypes = [
+  "Electrique",
+  "mild Hybrid",
+  "Plug-in Hybrid",
+  "natural Gaz",
+  "Diesel",
+  "Gasoline",
+  "other",
+] as const;
 
-  const { data: cars } = useQuery<{ value: string; label: string }[], Error>({
+type Props = {
+  idx: number;
+};
+
+const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
+  const t = useScopedI18n(
+    "forms.basic.transport.commonTransport.shortDistances.covoiturage"
+  );
+
+  const tEngines = useScopedI18n(
+    "forms.basic.transport.commonTransport.shortDistances.covoiturage.engines"
+  );
+
+  /*   const { data: cars } = useQuery<{ value: string; label: string }[], Error>({
     queryKey: ["carMakes"],
     queryFn: async () => {
       const data = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/cars/makes`,
         {
           headers: new Headers({ "User-Agent": "69420" }),
-        },
+        }
       ).then((res) => res.json());
       return data.map((ele: any) => ({ value: ele.make, label: ele.make }));
     },
-  });
+  }); */
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Covoiturage</TableHead>
-          <TableHead>Make</TableHead>
-          <TableHead>Engine</TableHead>
-          <TableHead>Distance</TableHead>
-          <TableHead>personne covoituré</TableHead>
-          <TableHead>Frequency</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((ele, index) => (
-          <TableRow key={index}>
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>
-              <FormCombox
-                form={mainForm}
-                data={cars ?? []}
-                name={`transport.commonTransport.shortDistances.covoiturage.${index}.make`}
-              />
-            </TableCell>
-            <TableCell>
-              <FormSelect
-                form={mainForm}
-                name={`transport.commonTransport.shortDistances.covoiturage.${index}.engine`}
-                data={[
-                  { label: "Electrique", value: "Electrique" },
-                  { label: "Diesel", value: "Diesel" },
-                  { label: "Gasoline", value: "Gasoline" },
-                  { label: "Plug-in Hybrid", value: "Plug-in Hybrid" },
-                  { label: "mild Hybrid", value: "mild Hybrid" },
-                  { label: "natural Gaz", value: "natural Gaz" },
-                ]}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                half
-                type="number"
-                form={mainForm}
-                name={`transport.commonTransport.shortDistances.covoiturage.${index}.distance`}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                half
-                type="number"
-                form={mainForm}
-                name={`transport.commonTransport.shortDistances.covoiturage.${index}.pepole`}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                half
-                type="number"
-                form={mainForm}
-                name={`transport.commonTransport.shortDistances.covoiturage.${index}.frequency`}
-              />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <Input
+        form={mainForm}
+        type="text"
+        label={t("make")}
+        name={`transport.commonTransport.shortDistances.covoiturage.${idx}.make`}
+      />
+      <div className="w-full">
+        <FormSelect
+          name={`transport.commonTransport.shortDistances.covoiturage.${idx}.engine`}
+          form={mainForm}
+          label={t("engine")}
+          data={fuelTypes.map((ele) => ({
+            value: ele,
+            label: tEngines(ele),
+          }))}
+        />
+      </div>
+      <Input
+        type="number"
+        form={mainForm}
+        name={`transport.commonTransport.shortDistances.covoiturage.${idx}.distance`}
+        label={t("distance")}
+      />
+      <Input
+        type="number"
+        label={t("people")}
+        form={mainForm}
+        name={`transport.commonTransport.shortDistances.covoiturage.${idx}.pepole`}
+      />
+      <Input
+        type="number"
+        label={t("frequency")}
+        form={mainForm}
+        name={`transport.commonTransport.shortDistances.covoiturage.${idx}.frequency`}
+      />
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import {union, carType} from "./utils";
+import car from "./validation/cars";
 
 const transport = z.object({
   hasCar: z.coerce.number().default(0),
@@ -8,29 +9,7 @@ const transport = z.object({
   hasAir: z.coerce.boolean().default(false),
   hasSea: z.coerce.boolean().default(false),
   cars: z.array(
-    z.object({
-      make: z.string().min(1),
-      model: z.string().min(1),
-      engine: carType,
-      otherEngine: z.string().optional(),
-      secondThermal: union("gasoline", "diesel", "naturalGas", "other").optional(),
-      otherSecondThermal: z.string().optional(),
-      distanceWeekly: z.number(),
-      //thermal
-      thermalAvg: z.number(),
-      thermalConsumption: z.number(),
-      moneyThermalConsumption: z.number(),
-      //electric
-      electricAvg: z.number(),
-      electricConsumption: z.number(),
-      moneyElectricConsumption: z.number(),
-      //prices
-      thermalPrice: z.number(),
-      electricPrice: z.number(),
-      
-      carCalculatedConsumption: z.number(),
-      mileage: z.number(),
-    }),
+    car
   ),
   motos: z.array(
     z.object({
@@ -132,7 +111,7 @@ const transport = z.object({
       covoiturage: z.array(
         z.object({
           make: z.string(),
-          engine: carType,
+          engine: carType.optional(),
           distance: z.number(),
           pepole: z.number(),
           frequency: z.number(),

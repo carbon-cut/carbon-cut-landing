@@ -5,9 +5,6 @@ import AirQuestions from "./index";
 import Question from "../../../../components/question";
 import Content from "../../../../components/content";
 import Radio from "@/app/_forms/components/radio";
-import { Field, FieldValues, UseFormReturn } from "react-hook-form";
-import { formSchema } from "@/app/_forms/formSchema";
-import Input from "@/app/_forms/components/input";
 
 function QAir({
   setOnSubmit,

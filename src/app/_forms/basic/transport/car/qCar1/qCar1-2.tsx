@@ -41,6 +41,10 @@ const QuestionCompo2: React.FC<
   }); */ 
   useEffect(() => {
     setVerifyFields([`transport.cars.${index}.engine`, `transport.cars.${index}.otherEngine`]);
+
+    return () => {
+      setVerifyFields([]);
+    }
   } , [index]);
 
   return (
@@ -62,7 +66,7 @@ const QuestionCompo2: React.FC<
             />
             </div>
             <Input
-              type="number"
+              type="text"
               form={mainForm}
               name={`transport.cars.${index}.otherEngine`}
               label={"Autre"}

@@ -1,5 +1,5 @@
-import React from "react";
-import { FieldValues, UseFormReturn } from "react-hook-form";
+import React, { useEffect } from "react";
+import { FieldValues, set, UseFormReturn } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -18,7 +18,7 @@ import {
 import { useScopedI18n } from "@/locales/client";
 
 interface Props<T extends FieldValues> {
-  form: UseFormReturn<T, undefined>;
+  form: UseFormReturn<T, any, undefined>;
   name: TName<T>;
   label?: string | undefined;
   mandetory?: boolean;
@@ -37,11 +37,18 @@ function FormSelect<T extends FieldValues>({
   labelClassName
 }: Props<T>) {
   const t = useScopedI18n("components.forms.combox");
+
+  const [open, setOpen] = React.useState(false);
+
+  useEffect(() => {
+    console.log(open);
+  }, [open]);
+
   return (
     <FormField
       control={form.control}
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <FormItem>
           {label && (
             <FormLabel className={labelClassName}>
@@ -50,11 +57,16 @@ function FormSelect<T extends FieldValues>({
           )}
           <Select onValueChange={field.onChange}>
             <FormControl>
-              <SelectTrigger  className="rounded-full w-full pl-3 text-left font-normal bg-white" >
+              <SelectTrigger 
+              onClick={e=>{setOpen(true)}}
+              key={`${open}`}
+              className={`rounded-full w-full pl-3 
+                text-left font-normal bg-white
+                 ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : open ? 'outline-4 ring-1 ring-ring' : ''}`} >
                 <SelectValue  placeholder={t("value", { placeholder })}  />
               </SelectTrigger>
             </FormControl>
-            <SelectContent>
+            <SelectContent onFocus={_=>setOpen(true)} onCloseAutoFocus={_=>setOpen(false)}>
               {data.map((ele, index) => (
                 <SelectItem key={index} value={ele.value}>
                   {ele.label}

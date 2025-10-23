@@ -12,7 +12,6 @@ const output: (
   const arr: ((props: QuestionProps) => JSX.Element)[] = [];
 
   for (let i = init; i < count + init; i++) {
-    console.log("looop");
     arr.push(QMoto1(i), QMoto2(i), QMoto3(i), QMoto4(i)); //fill(QMoto1(i), QMoto2(i))
   }
   console.log(arr);

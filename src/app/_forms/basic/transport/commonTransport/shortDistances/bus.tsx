@@ -1,77 +1,61 @@
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
 import { QuestionProps } from "../../../../types";
 import FormSelect from "@/components/forms/formSelect";
 import Input from "../../../../components/input";
+import { useScopedI18n } from "@/locales/client";
 
-const Bus = ({ mainForm }: QuestionProps) => {
-  const data =
-    mainForm.getValues("transport.commonTransport.shortDistances.bus") ?? [];
+type Props = {
+  idx: number;
+};
+
+const busTypes = [
+  "electric",
+  "diesel",
+  "gasoline",
+  "hybrid",
+  "naturalGaz",
+] as const;
+
+const Bus = ({ mainForm, idx }: QuestionProps & Props) => {
+  const t = useScopedI18n(
+    "forms.basic.transport.commonTransport.shortDistances.bus"
+  );
+
+  const tEngines = useScopedI18n(
+    "forms.basic.transport.commonTransport.shortDistances.bus.busTypes"
+  );
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Bus</TableHead>
-          <TableHead>Engine</TableHead>
-          <TableHead>Distance</TableHead>
-          <TableHead>nombre de personne</TableHead>
-          <TableHead>Frequency</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((ele, index) => (
-          <TableRow key={index}>
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>
-              <FormSelect
-                form={mainForm}
-                //@ts-expect-error
-                name={`transport.commonTransport.shortDistances.bus.${index}.carType`}
-                data={[
-                  { label: "Electrique", value: "Electrique" },
-                  { label: "Diesel", value: "Diesel" },
-                  { label: "Gasoline", value: "Gasoline" },
-                  { label: "Plug-in Hybrid", value: "Plug-in Hybrid" },
-                  { label: "mild Hybrid", value: "mild Hybrid" },
-                  { label: "natural Gaz", value: "natural Gaz" },
-                ]}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                half
-                type="number"
-                form={mainForm}
-                name={`transport.commonTransport.shortDistances.bus.${index}.distance`}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                half
-                type="number"
-                form={mainForm}
-                name={`transport.commonTransport.shortDistances.bus.${index}.nbPeople`}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                half
-                type="number"
-                form={mainForm}
-                name={`transport.commonTransport.shortDistances.bus.${index}.frequency`}
-              />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <FormSelect
+        form={mainForm}
+        name={`transport.commonTransport.shortDistances.bus.${idx}.busType`}
+        data={busTypes.map((type) => ({
+          value: type,
+          label: tEngines(type),
+        }))}
+        label={t("busType")}
+      />
+
+      <Input
+        form={mainForm}
+        name={`transport.commonTransport.shortDistances.bus.${idx}.distance`}
+        label={t("distance")}
+        type="number"
+        placeholder="(km)"
+      />
+      <Input
+        type="number"
+        form={mainForm}
+        name={`transport.commonTransport.shortDistances.bus.${idx}.frequency`}
+        label={t("frequency")}
+      />
+      <Input
+        type="number"
+        form={mainForm}
+        name={`transport.commonTransport.shortDistances.bus.${idx}.nbPeople`}
+        label={t("nbPeople")}
+      />
+    </>
   );
 };
 

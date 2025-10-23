@@ -8,7 +8,6 @@ import QuestionCompo3 from "./qCar1-3";
 function QCar1(index: number) {
   function CarComponent(questionProps: QuestionProps) {
     const [make, setMake] = useState(() => {
-      console.log('lookk up for make')
       return questionProps.mainForm.getValues(
         `transport.cars.${index}.make`
       );
@@ -28,8 +27,8 @@ function QCar1(index: number) {
   CarComponent["Symbol"] = {
     question: ["forms.basic.transport.qCar1-1.title", {index: index}],
     fields: [
-      `transport.cars.${index}.carMake`,
-      `transport.cars.${index}.carModel`,
+      `transport.cars.${index}.make`,
+      `transport.cars.${index}.model`,
     ],
   };
   CarComponent.displayName = `QCar11-${index}`;

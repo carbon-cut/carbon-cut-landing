@@ -62,8 +62,8 @@ function Input<T extends FieldValues>({
       render={({ field, fieldState }) => {
         return (
           <FormItem>
-            {label && <FormLabel className={cn(
-               `text-sm font-medium ${disabled ? 'text-muted-foreground' : ''}`, labelClassName)}>{label}</FormLabel>}
+            {label && <FormLabel data-state={fieldState.error && "error"} className={cn(
+               `text-sm font-medium ${disabled ? 'text-muted-foreground data-[state=error]:text-destructive/60' : ''}`, labelClassName)}>{label}</FormLabel>}
             <FormControl>
               <div className={`w-full inline-block`}>
                 <InputRoot
@@ -115,7 +115,7 @@ function Input<T extends FieldValues>({
               </div>
             </FormControl>
             {description && <FormDescription>{description}</FormDescription>}
-            <FormMessage className="ml-3" />
+            <FormMessage data-state={disabled && "disabled"} className="ml-3 data-[state=disabled]:text-destructive/60" />
           </FormItem>
         );
       }}

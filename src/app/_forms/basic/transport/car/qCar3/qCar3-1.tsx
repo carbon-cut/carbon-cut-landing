@@ -11,9 +11,16 @@ import SegmentedControl from "@/components/ui/segmentedControl";
     const t = useScopedI18n("forms.basic.transport.qCar3");
     const ti = useScopedI18n("forms");
 
-    const [selectedUnit, setSelectedUnit] = useState<"unit" | "money">("unit");
+    const [selectedUnit, setSelectedUnit] = useState<"unit" | "money">(
+      mainForm.getValues(`transport.cars.${index}.engine`) === "Electrique" ? (
+        mainForm.getValues(`transport.cars.${index}.electricConsumption`) ? "unit" :
+        mainForm.getValues(`transport.cars.${index}.moneyElectricConsumption`) ? "money" : "unit"
+      ) :
+      mainForm.getValues(`transport.cars.${index}.thermalConsumption`) ? "unit" :
+      mainForm.getValues(`transport.cars.${index}.moneyThermalConsumption`) ? "money" : "unit"
+    );
 
-    const [carType] = useState<FuelTypes | null | undefined>(
+    const [carType] = useState<FuelTypes | null | undefined | false>(
       mainForm.getValues(`transport.cars.${index}.engine`)
     );
     const unit = useMemo(() => {
@@ -35,16 +42,15 @@ import SegmentedControl from "@/components/ui/segmentedControl";
               className="mb-4"
             />
           <Input
+            key={selectedUnit}
             form={mainForm}
             name={`transport.cars.${index}.${
-                selectedUnit === "unit" ? 
+                selectedUnit === "unit" ?
                 (carType === "Electrique" ? "electricConsumption" : "thermalConsumption") :
                  carType === "Electrique" ? "moneyElectricConsumption" : "moneyThermalConsumption"
                 }`}
             type="number"
             label={(selectedUnit === "unit") ? (carType === "Electrique" ? t("q1LE") : t("q1LL")): 'Montant dépensé par semaine (€)'}
-            //unit={carType === "Electrique" ? unit("kW h") : unit("L")}
-            //onChange={() => setChange((prev) => !prev)}
           />
           <div className="w-1/2 mt-4">
         <Input
@@ -55,7 +61,6 @@ import SegmentedControl from "@/components/ui/segmentedControl";
             type="number"
             label={`Prix de ${unit} (€)`}
             disabled={selectedUnit === "unit"}
-            //onChange={() => setChange((prev) => !prev)}
           />
           </div>
         </Content>

@@ -4,9 +4,9 @@ import { Tabs, TabsContent, TabsList } from "@/components/ui/tabs";
 import { TabContent, TabTrigger } from "./_components/_tab";
 import initEnergieQuestions from "../_forms/basic/energie";
 import initTransportQuestions from "../_forms/basic/transport";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Form } from "@/components/ui/forms";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { set, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema } from "../_forms/formSchema";
@@ -20,11 +20,13 @@ import QuestionList from "./_components/questionList";
 
 function Page() {
 
-  const {tab, setTab, currentIndexes, setCurrentIndexes} = React.useContext(FormContext)
+  const {tab, setTab, currentIndexes} = React.useContext(FormContext)
 
   const [resultOpen, setResultOpen] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
   const [result, setResult] = useState<unknown>(null);
+
+  const [questionList, setQuestionList] = useState<boolean>(false);
 
   const transportQuestions = useState(initTransportQuestions);
   const energieQuestions = useState(initEnergieQuestions);
@@ -53,6 +55,8 @@ function Page() {
 
   const handleError = (...args: unknown[]) => {
     console.log(...args);
+    console.log(mainForm.getValues());
+    setQuestionList(true);
   };
 
   const dataLengths = useMemo(()=>{
@@ -110,6 +114,8 @@ function Page() {
                       transport: transportQuestions[0],
                       energie: energieQuestions[0],
                     }}
+                    dialog={questionList}
+                    setDialog={setQuestionList}
                 />
               </div>
             

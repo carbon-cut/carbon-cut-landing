@@ -13,22 +13,22 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Menu } from "lucide-react";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React from "react";
 import { QuestionProps } from "@/app/_forms/types";
-import { set, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { TabValues } from "@/lib/formTabs/types";
 import FormContext from "../_layout/_formContext";
 import { useScopedI18n } from "@/locales/client";
 import { getIcon, getName } from "@/lib/formTabs/geters";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { error } from "console";
 import Question from "./question";
 
 interface Props {
   list: { [key in TabValues]?: React.FC<QuestionProps>[] };
   mainForm: UseFormReturn<any>;
+  dialog: boolean;
+  setDialog: React.Dispatch<React.SetStateAction<boolean>>; 
 }
 
 function buttonVariants(tab: TabValues) {
@@ -46,8 +46,9 @@ function buttonVariants(tab: TabValues) {
   }
 }
 
-function QuestionList({ list, mainForm }: Props) {
+function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
   const t = useScopedI18n("forms");
+  const tOverview = useScopedI18n("components.forms.overview");
 
   const { tab, setTab, currentIndexes, setCurrentIndexes } =
     React.useContext(FormContext);
@@ -60,10 +61,8 @@ function QuestionList({ list, mainForm }: Props) {
     vacation: false,
   });
 
-  const [transportError, setTransportError] = React.useState(false);
-
   return (
-    <Dialog>
+    <Dialog open={dialog} onOpenChange={setDialog}>
       <DialogTrigger asChild>
         <Button
           type="button"
@@ -79,15 +78,16 @@ function QuestionList({ list, mainForm }: Props) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent asChild className="w-full  h-4/6 overflow-hidden">
+      <DialogContent asChild className="   h-4/6 overflow-hidden">
         
-          <DialogHeader className="mb-4">
+          <DialogHeader className="mb-4 max-w-full">
             <DialogTitle className="font-extrabold text-section-transport text-2xl">
-              Form overview
+              {tOverview("title")}
             </DialogTitle>
             <DialogDescription className="text-sm">
-              View all sections and questions in this carbon footprint
-              assessment
+              {
+                tOverview("description")
+              }
             </DialogDescription>
           </DialogHeader>
           <Accordion type="single" collapsible className="w-full">
@@ -138,7 +138,7 @@ function QuestionList({ list, mainForm }: Props) {
                   <AccordionContent
                     forceMount
                     type="preview"
-                    className="px-6 space-y-3"
+                    className="px-6 space-y-3 pt-3"
                   >
                     {list[key]?.map(
                       (
@@ -149,9 +149,8 @@ function QuestionList({ list, mainForm }: Props) {
                         <Question
                         setError={setError}
                         error={error}
-                        transportError={transportError}
-                        setTransportError={setTransportError}
                           index={index}
+                          currentIndex={currentIndexes[key]}
                           mainForm={mainForm}
                           Symbol={Symbol}
                           key={`${key}-${index}`}

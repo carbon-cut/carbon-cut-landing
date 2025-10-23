@@ -3,6 +3,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
   TName,
 } from "@/components/ui/forms";
 import {
@@ -46,7 +47,6 @@ function Radio<T extends FieldValues>({
               className={cn(
                 "w-3/6 mx-auto flex flex-row flex-wrap justify-between ", className)
               }
-              defaultValue={field.value}
               onValueChange={(v) => {field.onChange(v); setState?.(v)}}
               {...form.register(name)}
             >
@@ -75,6 +75,7 @@ function Radio<T extends FieldValues>({
               ))}
             </RadioGroup>
           </FormControl>
+          <FormMessage className="ml-3" />
         </FormItem>
       )}
     />

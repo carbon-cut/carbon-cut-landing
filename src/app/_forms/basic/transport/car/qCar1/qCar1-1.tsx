@@ -5,6 +5,7 @@ import Content from "../../../../components/content";
 import { QuestionProps } from "../../../../types";
 import { useQuery } from "@tanstack/react-query";
 import FormCombox from "../../../../components/combox";
+import Input from "@/app/_forms/components/input";
 
 interface Props {
   index: number;
@@ -17,7 +18,6 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
   setMake,
   index,
   mainForm,
-  setIsDirty,
 }) => {
   const t = useScopedI18n("forms.basic.transport.qCar1-1");
 
@@ -45,16 +45,6 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
     enabled: !!make,
     select: (data) => data.map((ele: any) => ({ value: ele.model, label: ele.model }))
   });
-
-/*   useEffect(() => {
-    if (make && make != "") {
-      mutation.mutate(make);
-      setIsDirty(true);
-    }
-    return () => {
-      setIsDirty(false);
-    };
-  }, [make]); */
 
   return (
     <div className="">

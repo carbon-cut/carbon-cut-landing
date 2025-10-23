@@ -26,7 +26,7 @@ const TabTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => {
   const tab = props.value as keyof typeof colorVariants
   const colorVariants = {
-    transport: "data-[state=active]:bg-section-transport/90 hover:bg-section-transport/20 data-[state=completed]:bg-section-transport/40 ",
+    transport: "data-[state=active]:bg-section-transport/90 data-[state=completed]:bg-section-transport/10  hover:bg-section-transport/20 data-[state=completed]:hover:bg-section-transport/20",
     energie: "data-[state=active]:bg-section-energie hover:bg-section-energie/20 data-[state=completed]:bg-section-energie/40",
     food: "data-[state=active]:bg-section-food hover:bg-section-food/80 data-[state=completed]:bg-section-food/40",
     waste: "data-[state=active]:bg-section-waste hover:bg-section-waste/80 data-[state=completed]:bg-section-waste/40",
@@ -100,7 +100,7 @@ const TabContent = React.forwardRef<
       const currentIndex = currentIndexes[tab];
       if (tab === props.value && currentIndex >= questions.length) {
         setNextTab();
-        setCurrentIndexes((p) => ({ ...p, [tab]: 0 }));
+        setCurrentIndexes((p) => ({ ...p, [tab]: p[tab] - 1 }));
       }
     }, [currentIndexes, questions, setNextTab, tab]);
 

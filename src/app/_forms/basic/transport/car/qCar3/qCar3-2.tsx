@@ -1,6 +1,6 @@
 import { FuelTypes, QuestionProps } from "@/app/_forms/types";
 import { useScopedI18n } from "@/locales/client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CarTitle from "../components/carTitle";
 import Question from "@/app/_forms/components/question";
 import Content from "@/app/_forms/components/content";
@@ -22,7 +22,10 @@ function QCarComponent({ mainForm, index, prevAction, next, prev }: QuestionProp
   const t = useScopedI18n("forms.basic.transport.qCar3");
   const ti = useScopedI18n("forms");
 
-  const [selectedUnit, setSelectedUnit] = useState<"unit" | "money">("unit");
+  const [selectedUnit, setSelectedUnit] = useState<"unit" | "money">(
+    mainForm.getValues(`transport.cars.${index}.electricConsumption`) ? "unit" : 
+    mainForm.getValues(`transport.cars.${index}.moneyElectricConsumption`) ? "money" : 'unit'
+  );
 
   return (
     <div>

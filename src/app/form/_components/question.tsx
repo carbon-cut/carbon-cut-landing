@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { TabValues } from "@/lib/formTabs/types";
 import { useScopedI18n } from "@/locales/client";
-import { useCallback, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { set, UseFormReturn } from "react-hook-form";
+import FormContext from "../_layout/_formContext";
 
 const Question = ({
   mainForm,
@@ -13,8 +14,7 @@ const Question = ({
   index,
   setError,
   error,
-  transportError,
-  setTransportError
+  currentIndex
 }: {
   mainForm: UseFormReturn<any>;
   Symbol?: any;
@@ -22,53 +22,52 @@ const Question = ({
   section: TabValues;
   index: number;
   error: { [key in TabValues]: boolean };
+  currentIndex: number;
   setError: React.Dispatch<React.SetStateAction<{ [key in TabValues]: boolean }>>;
-  transportError: boolean
-  setTransportError: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const t = useScopedI18n();
 
-    const [errorc, setErrorc] = useState(!error[section]);
+  const { tab } = useContext(FormContext);
+
+    const [errorc, setErrorc] = useState(false);
 
     useEffect(() => {
-      for (const field of Symbol?.fields) {
+      for (const field of Symbol?.fields ?? []) {
+        if (!mainForm.getFieldState(field)) throw new Error(`Field: "${field}" not found`);
         if (mainForm.getFieldState(field)?.error) {
-          //console.log(section,' : ', error[section])
+        
           if(!error[section]) setError(prev => ({ ...prev, [section]: true }));
-          setErrorc(false);
+          setErrorc(true);
+          return;
         }
       }
+      setErrorc(false);
     }, [mainForm]);
-
-  const getState = useCallback(() => {
-    if (Symbol?.fields){
-      for (const field of Symbol?.fields) {
-        if (mainForm.getFieldState(field)?.error) {
-          //console.log(section,' : ', error[section])
-          if(!error[section]) setError(prev => ({ ...prev, [section]: true }));
-          return false;
-        }
-      }
-    }
-    return true;
-  }, [mainForm]);
 
   return (
     <Button
       type="button"
       variant={"outline"}
+      data-state={errorc ? "error" : ""}
+      data-current={(currentIndex === index && tab === section) ? "true" : "false"}
       className={`
-        ${errorc ? "bg-white" : "bg-red-400"}
-        w-full rounded-x text-start justify-start
+        w-full rounded-x text-start justify-start bg-white
+        ring-ring
+        data-[state=error]:bg-destructive/70
+        data-[current=true]:ring-ring
+        data-[current=true]:ring-1
+        h-fit p-3
+        grid grid-cols-12
         `}
       onClick={setInterface}
     >
       <Label
-        className={`font-bold text-section-${section} hover:cursor-pointer`}
+        data-state={errorc ? "error" : ""}
+        className={`font-bold text-section-${section} hover:cursor-pointer data-[state=error]:text-muted-foreground `}
       >
         Q{index + 1}
       </Label>
-      <Label className={`text-extrabold max-w-1 hover:cursor-pointer`}>
+      <Label className={`text-extrabold hover:cursor-pointer max-w-full text-wrap col-span-11`}>
         {typeof Symbol?.question === "string" ? t(Symbol.question): Symbol?.question ? t(Symbol.question[0], Symbol.question[1]) : ''}
       </Label>
     </Button>
