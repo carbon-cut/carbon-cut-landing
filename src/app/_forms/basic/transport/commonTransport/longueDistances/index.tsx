@@ -2,102 +2,100 @@ import React, { useEffect, useState } from "react";
 import { QuestionProps } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../../components/question";
-import NumberedInputs from "../../../../components/numberedGroup";
+import {Container, Title} from "../shortDistances/container";
 import { Separator } from "@/components/ui/separator";
 import Covoiturage from "./covoiturage";
 import Bus from "./bus";
 import Train from "./train";
+import { useFieldArray } from "react-hook-form";
 
 const QLongueDistances = (props: QuestionProps) => {
-  const { mainForm, setIsDirty } = props;
-  const [elements, setElements] = useState({
-    bus: 0,
-    TGV: 0,
-    train: 0,
-    covoiturage: 0,
-  });
-
-  const [changed, setChanged] = useState(false);
-
+  
   const t = useScopedI18n(
-    "forms.basic.transport.commonTransport.longueDistances",
+    "forms.basic.transport.commonTransport.longueDistances"
   );
 
-  useEffect(() => {
-    const prevFields = mainForm.getValues(
-      "transport.commonTransport.longueDistances",
-    );
-    if (!prevFields)
-      mainForm.setValue("transport.commonTransport.longueDistances", {
-        bus: [],
-        covoiturage: [],
-        train: [],
-      });
-    const keys = ["bus", "train", "covoiturage"] as const;
-    if (prevFields) {
-      for (const key of keys) {
-        if (prevFields[key].length < elements[key]) {
-          mainForm.setValue(
-            `transport.commonTransport.longueDistances.${key}`,
-            //@ts-ignore
-            [
-              ...prevFields[key],
-              ...Array.from(
-                { length: elements[key] - prevFields[key].length },
-                () => null,
-              ),
-            ],
-          );
-          setChanged((prev) => !prev);
-        } else if (prevFields[key].length > elements[key]) {
-          mainForm.setValue(
-            `transport.commonTransport.longueDistances.${key}`,
-          //@ts-ignore
-            [
-              ...Array.from(
-                { length: elements[key] },
-                (_, index) => prevFields[key][index],
-              ),
-            ],
-          );
-          setChanged((prev) => !prev);
-        }
-      }
-    }
-  }, [elements]);
+  const {
+    fields: fieldsCovoiturage,
+    append: appendCovoiturage,
+    remove: removeCovoiturage,
+  } = useFieldArray({
+    name: "transport.commonTransport.longueDistances.covoiturage",
+  });
+
+  const {
+    fields: fieldsBus,
+    append: appendBus,
+    remove: removeBus,
+  } = useFieldArray({
+    name: "transport.commonTransport.longueDistances.bus",
+  });
+
+  const {
+    fields: fieldsTrain,
+    append: appendTrain,
+    remove: removeTrain,
+  } = useFieldArray({
+    name: "transport.commonTransport.longueDistances.train",
+  });
+
 
   return (
     <>
       <Question>{t("q")}</Question>
-      <NumberedInputs
-        states={elements}
-        options={[
-          { label: "bus", value: "bus" },
-          { label: "train", value: "train" },
-          { label: "TGV", value: "TGV" },
-          { label: "covoiturage", value: "covoiturage" },
-        ]}
-        setState={(k, o) =>
-          setElements((prev) => ({
-            ...prev,
-            [k]:
-              o === "+"
-                ? //@ts-ignore
-                  prev[k] + 1
-                : //@ts-ignore
-                prev[k] === 0
-                ? 0 //@ts-ignore
-                : prev[k] - 1,
-          }))
-        }
-      />
       <Separator className="my-3" />
-      <Covoiturage key={+changed} {...props} />
+      {/* Covoiturage */}
+      <div className="space-y-3 mb-3">
+        <Title append={appendCovoiturage} type="covoiturage" />
+        <div className="space-y-2">
+          {fieldsCovoiturage?.map((fieldCov, idx) => (
+            <Container
+              section="covoiturage"
+              idx={idx}
+              id={fieldCov.id}
+              key={fieldCov.id}
+              remove={removeCovoiturage}
+            >
+              <Covoiturage {...props} idx={idx} />
+            </Container>
+          ))}
+        </div>
+      </div>
       <Separator className="my-3" />
-      <div className="grid grid-cols-1">
-        <Bus key={2 + +changed} {...props} />
-
-        <Train key={4 + +changed} {...props} />
+      {/* Bus */}
+      <div className="space-y-3 mb-3">
+        <Title type="bus" append={appendBus} />
+        <div className="space-y-2">
+          {fieldsBus?.map((fieldBus, idx) => (
+            <Container
+              section="bus"
+              idx={idx}
+              key={fieldBus.id}
+              id={fieldBus.id}
+              remove={removeBus}
+            >
+              <Bus {...props} idx={idx} />
+            </Container>
+          ))}
+        </div>
+      </div>
+      <Separator className="my-3" />
+      {/* Train */}
+      <div className="space-y-3">
+        <Title type="train" append={appendTrain} />
+        <div className="space-y-2">
+          {fieldsTrain?.map((fieldMetro, idx) => (
+            <Container
+            section="train"
+              idx={idx}
+              key={fieldMetro.id}
+              id={fieldMetro.id}
+              remove={removeTrain}
+            >
+              <Train {...props} idx={idx} />
+            </Container>
+          ))}
+        </div>
       </div>
     </>
   );

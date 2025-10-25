@@ -7,10 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import Covoiturage from "./covoiturage";
 import Bus from "./bus";
 import Metro from "./metro";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import { useFieldArray } from "react-hook-form";
-import Container from "./container";
+import {Container, Title} from "./container";
 
 const QShortDistances = (props: QuestionProps) => {
   const t = useScopedI18n(
@@ -109,83 +107,3 @@ QShortDistances["Symbol"] = {
 
 export default QShortDistances;
 
-type TransportType = "bus" | "metro" | "covoiturage";
-
-const Title = ({
-  type,
-  append,
-}: {
-  type: TransportType;
-  append: (type: unknown) => void;
-}) => {
-  const t = useScopedI18n(
-    "forms.basic.transport.commonTransport.shortDistances.titles"
-  );
-
-  const data = useMemo<{ title: string; icon: string }>(() => {
-    switch (type) {
-      case "metro":
-        return {
-          title: t("metro"),
-          icon: "🚇",
-        };
-      case "covoiturage":
-        return {
-          title: t("covoiturage"),
-          icon: "🚗",
-        };
-      case "bus":
-        return {
-          title: t("bus"),
-          icon: "🚌",
-        };
-    }
-  }, [type]);
-
-  const addTransportEntry = () => {
-    switch (type) {
-      case "bus":
-        return {
-          busType: "diesel",
-          distance: 0,
-          nbPeople: 1,
-          frequency: 0,
-        };
-
-      case "metro":
-        return {
-          distance: 0,
-          nbPeople: 1,
-          frequency: 0,
-        };
-      case "covoiturage":
-        return {
-          distance: 0,
-          pepole: 1,
-          frequency: 0,
-          make: "",
-          engine: false,
-        };
-    }
-  };
-
-  return (
-    <div className="flex items-center justify-between">
-      <h4 className="font-semibold text-foreground flex items-center gap-2">
-        <span className="text-xl mb-2">{data.icon}</span> {data.title}
-      </h4>
-      <Button
-        type="button"
-        onClick={() => {
-          append(addTransportEntry());
-        }}
-        variant="outline"
-        size="sm"
-        className="border-[#00A261] text-[#00A261] hover:bg-[#ECFDF5] h-8 px-2"
-      >
-        <Plus className="w-3 h-3 mr-1" />
-        <span className="text-xs">{t("add")}</span>
-      </Button>
-    </div>
-  );
-};

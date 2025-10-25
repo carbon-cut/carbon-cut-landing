@@ -122,7 +122,7 @@ const transport = z.object({
       bus: z.array(
         z
           .object({
-            busType: union("electric", "diesel", "hybrid", "naturalGaz"),
+            busType: union("other", "diesel",),
             distance: z.number(),
             frequency: z.number(),
             nbPeople: z.number().nullable(),
@@ -135,6 +135,7 @@ const transport = z.object({
             distance: z.number(),
             frequency: z.number(),
             type: union("intercity", "TER", "TGV"),
+            nbPeople: z.number().nullable(),
           })
           .nullable(),
       ),

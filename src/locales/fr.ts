@@ -292,6 +292,7 @@ export default {
             titles: {
               bus: "Bus",
               metro: "Metro",
+              train: "Train",
               covoiturage: "Covoiturage",
               add: "Ajouté",
               trip: "Voyage",
@@ -333,6 +334,23 @@ export default {
           },
           longueDistances: {
             q: "Quels sont les moyens de transport longue distance utilisés par tous les membres de votre foyer?",
+            bus:{
+              busTypes:{
+                  "other": "Autre",
+                  "diesel": "Diesel",
+              }
+            },
+            train: {
+              types: {
+                "intercity": "Intercity",
+                "TER": "TER",
+                "TGV": "TGV",
+              },
+              frequency: "frequence hebdomadaire",
+              distance: "distance",
+              nbPeople: "personnes de famille",
+              type: "type de train",
+            },
           },
           qAir: {
             q: "Avez-vous voyagé par avion cette année?",

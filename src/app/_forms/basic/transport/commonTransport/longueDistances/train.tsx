@@ -1,69 +1,55 @@
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
 import { QuestionProps } from "../../../../types";
 import Input from "../../../../components/input";
+import { useScopedI18n } from "@/locales/client";
+import FormSelect from "@/components/forms/formSelect";
 
-const Train = ({ mainForm }: QuestionProps) => {
-  const data = [
-    ...(
-      mainForm.getValues("transport.commonTransport.longueDistances.train") ??
-      []
-    ).map((e) => ({ ...e, type: "train" })),
-  ];
+type Props = {
+  idx: number;
+};
+
+const trainTypes = [
+  "intercity", "TER", "TGV"
+] as const;
+
+const Train = ({ mainForm, idx }: QuestionProps & Props) => {
+  const t = useScopedI18n(
+    "forms.basic.transport.commonTransport.longueDistances.train"
+  );
+
+  const tTypes = useScopedI18n(
+    "forms.basic.transport.commonTransport.longueDistances.train.types"
+  );
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Train</TableHead>
-          <TableHead>Type</TableHead>
-          <TableHead>Distance</TableHead>
-          <TableHead>nombre de personne</TableHead>
-          <TableHead>Frequency</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map(({ type }, index) => (
-          <TableRow key={index}>
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>{type}</TableCell>
-            <TableCell>
-              <Input
-                half
-                type="number"
-                form={mainForm}
-                //@ts-ignore
-                name={`transport.commonTransport.longueDistances.${type}.${index}.distance`}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                half
-                type="number"
-                form={mainForm}
-                // @ts-ignore
-                name={`transport.commonTransport.longueDistances.${type}.${index}.nbPeople`}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                half
-                type="number"
-                form={mainForm}
-                //@ts-ignore
-                name={`transport.commonTransport.longueDistances.${type}.${index}.frequency`}
-              />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <FormSelect
+        form={mainForm}
+        name={`transport.commonTransport.longueDistances.train.${idx}.type`}
+        data={trainTypes.map((type) => ({
+          value: type,
+          label: tTypes(type),
+        }))}
+        label={t("type")}
+      />
+      <Input
+        type="number"
+        form={mainForm}
+        name={`transport.commonTransport.longueDistances.train.${idx}.distance`}
+        label={t("distance")}
+      />
+      <Input
+        type="number"
+        form={mainForm}
+        name={`transport.commonTransport.longueDistances.train.${idx}.frequency`}
+        label={t("frequency")}
+      />
+      <Input
+        type="number"
+        form={mainForm}
+        name={`transport.commonTransport.longueDistances.train.${idx}.nbPeople`}
+        label={t("nbPeople")}
+      />
+    </>
   );
 };
 

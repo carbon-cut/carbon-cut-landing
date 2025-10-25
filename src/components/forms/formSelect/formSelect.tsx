@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FieldValues, set, UseFormReturn } from "react-hook-form";
+import { FieldPath, FieldValues, set, UseFormReturn } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -7,6 +7,7 @@ import {
   FormLabel,
   FormMessage,
   TName,
+  TValue
 } from "../../ui/forms";
 import {
   Select,
@@ -17,17 +18,17 @@ import {
 } from "../../ui/select";
 import { useScopedI18n } from "@/locales/client";
 
-interface Props<T extends FieldValues> {
+interface Props<T extends FieldValues, E extends FieldPath<T>> {
   form: UseFormReturn<T, any, undefined>;
-  name: TName<T>;
+  name: E;
   label?: string | undefined;
   mandetory?: boolean;
-  data: { label: string; value: string }[];
+  data: { label: string; value: TValue<T, E> }[];
   placeholder?: string;
   labelClassName?: string;
 }
 
-function FormSelect<T extends FieldValues>({
+function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
   form,
   name,
   label,
@@ -35,7 +36,7 @@ function FormSelect<T extends FieldValues>({
   mandetory,
   data,
   labelClassName
-}: Props<T>) {
+}: Props<T, E>) {
   const t = useScopedI18n("components.forms.combox");
 
   const [open, setOpen] = React.useState(false);

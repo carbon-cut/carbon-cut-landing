@@ -5,6 +5,7 @@ import {
   Controller,
   ControllerProps,
   FieldPath,
+  FieldPathValue,
   FieldValues,
   FormProvider,
   useFormContext,
@@ -16,6 +17,7 @@ import { Label } from "@/components/ui/label";
 const Form = FormProvider;
 
 type TNameExport<T extends FieldValues> = FieldPath<T>;
+type TValueExport<T extends FieldValues, E extends FieldPath<T>> = FieldPathValue<T, E>;
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -178,4 +180,4 @@ export {
   FormField,
 };
 
-export type { TNameExport as TName };
+export type { TNameExport as TName, TValueExport as TValue };
