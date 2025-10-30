@@ -20,11 +20,15 @@ import QuestionList from "./_components/questionList";
 
 function Page() {
 
-  const {tab, setTab, currentIndexes} = React.useContext(FormContext)
+  const {tab, setTab, currentIndexes, readyToSubmit} = React.useContext(FormContext)
 
   const [resultOpen, setResultOpen] = useState<boolean>(false);
-  const [submit, setSubmit] = useState<boolean>(false);
   const [result, setResult] = useState<unknown>(null);
+
+useEffect(()=>{
+  console.log(readyToSubmit);
+}, [readyToSubmit])
+
 
   const [questionList, setQuestionList] = useState<boolean>(false);
 
@@ -94,7 +98,15 @@ function Page() {
     <>
       <Form {...mainForm}>
         <form
-          onSubmit={mainForm.handleSubmit(handleSubmit, handleError)}
+          onSubmit={(e) =>{
+            if (!readyToSubmit) {
+              e.preventDefault();
+              e.stopPropagation();
+              console.warn("Prevented unintended submit on mount");
+              return;
+            }
+            return mainForm.handleSubmit(handleSubmit, handleError)(e);
+          }}
           className="min-h-screen h-full w-full"
         >
           <Tabs
@@ -142,16 +154,12 @@ function Page() {
 
             <TabContent
               mainForm={mainForm}
-              submit={submit}
-              setSubmit={setSubmit}
               initQuestions={transportQuestions}
               setNextTab={setNextTab}
               value="transport"
             />
             <TabContent
               mainForm={mainForm}
-              submit={submit}
-              setSubmit={setSubmit}
               initQuestions={energieQuestions}
               setNextTab={setNextTab}
               value="energie"

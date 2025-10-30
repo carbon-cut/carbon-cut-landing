@@ -36,47 +36,7 @@ const getLast12Months = () => {
 
 const Q1 = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.q1");
-  const tm = useScopedI18n("utils.months");
 
-  const [change, setChange] = useState(false);
-
-  const tableRows = (
-    months: {
-      month: string;
-      monthNumber: number;
-      year: number;
-    }[],
-  ) => {
-    const list = [];
-    for (let i = 0; i < 12; i++) {
-      list.push(
-        <TableCell key={i} className="px-1">
-          <TableInput
-            setChange={setChange}
-            form={mainForm}
-            name={`energie.electricity.kWh.${months[i].monthNumber}/${months[i].year}`}
-            type="number"
-          />
-        </TableCell>,
-      );
-    }
-    return list;
-  };
-
-  const total: number = useMemo(() => {
-    const tableValues = mainForm.getValues("energie.electricity.kWh");
-    if (tableValues) {
-      const out = Object.keys(tableValues).reduce((acc, key) => {
-        const v = tableValues[key];
-        return acc + (
-          //@ts-ignore
-          v === "" ? 
-          0 : v ?? 0);
-      }, 0);
-      return out;
-    }
-    return 0;
-  }, [change]);
   return (
     <div>
       <Question className='px-12'>{t("q1")}</Question>
@@ -136,7 +96,6 @@ const Q1 = ({ mainForm }: QuestionProps) => {
             name="energie.electricity.money"
             unit=""
             type="number"
-            half
             placeholder="€"
           />
         }

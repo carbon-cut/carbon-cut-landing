@@ -1,3 +1,5 @@
+import { title } from "process";
+
 export default {
   toast: {
     success: "Succès",
@@ -149,6 +151,11 @@ export default {
           options: {
             heatPump: { label: "Pompe à chaleur", unit: "null" },
             electricity: { label: "Électricité", unit: "null" },
+            electricHeating: { label: "Chauffage électrique", unit: "null" },
+            electricalCentralHeating: {
+              label: "Chauffage central electrique",
+              unit: "null",
+            },
             gasNetwork: { label: "Réseau de gaz", unit: "null" },
             heatNetwork: { label: "Réseau de chaleur", unit: "null" },
             GPL: {
@@ -157,15 +164,59 @@ export default {
             },
             gasTank: { label: "Citerne de gaz", unit: "null" },
             QgasTank: {
+              title:'Citerne de gaz',
               q: "Informations supplémentaires sur la citerne de gaz",
-              l1: "fréquence",
+              l1: "Fréquence",
               u1: "remplissages/an",
-              l2: "volume",
-              u2: "m³",
+              l2: 'Capacité',
+              u2: 'L',
             },
-            fioul: { label: "Fioul domestique", unit: "L/semaine" },
-            charcoal: { label: "Charbon", unit: "Kg/semaine" },
-            wood: { label: "Bois", unit: "Kg/semaine" },
+            fioul: { 
+              q: "Informations supplémentaires sur l'usage de fioul",
+              label: "Fioul domestique", unit: "L/fréquence",
+              placeholder: 'quantity', 
+              frequency:{
+                label:'Fréquence',
+                month:'mois',
+                year:'année'
+              } },
+            charcoal: { 
+              label: "Charbon",
+              unit: "Kg/" ,
+              frequency: 'fréquence',
+              qunits:{
+                label: 'unité',
+                kg: 'Kg',
+                m3: 'm3',
+              },
+              funits:{
+                label: 'Fréquence',
+                day: 'jour',
+                week: 'semaine',
+                month: 'mois',
+                year: 'annee'
+              },
+            },
+            wood: {
+              label: "Bois",
+              title: "Bois et Charbon",
+              quantity: "Quantité",
+              unit: "Kg/",
+              frequency: 'fréquence',
+              qunits:{
+                label: 'unité',
+                kg: 'Kg',
+                m3: 'm3',
+                stere: 'stere'
+              },
+              funits:{
+                label: 'Fréquence',
+                day: 'jour',
+                week: 'semaine',
+                month: 'mois',
+                year: 'annee'
+              },
+            },
           },
         },
         q1: {
@@ -333,6 +384,7 @@ export default {
             },
           },
           longueDistances: {
+            title:'Moyens de transport longue distance',
             q: "Quels sont les moyens de transport longue distance utilisés par tous les membres de votre foyer?",
             bus:{
               busTypes:{

@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "../../ui/select";
 import { useScopedI18n } from "@/locales/client";
+import { cn } from "@/lib/utils";
 
 interface Props<T extends FieldValues, E extends FieldPath<T>> {
   form: UseFormReturn<T, any, undefined>;
@@ -41,10 +42,6 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
 
   const [open, setOpen] = React.useState(false);
 
-  useEffect(() => {
-    console.log(open);
-  }, [open]);
-
   return (
     <FormField
       control={form.control}
@@ -52,7 +49,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
       render={({ field, fieldState }) => (
         <FormItem>
           {label && (
-            <FormLabel className={labelClassName}>
+            <FormLabel data-state={fieldState.error && "error"} className={cn('', labelClassName)}>
               {label} {mandetory && <span className="text-red-500">*</span>}
             </FormLabel>
           )}
@@ -64,7 +61,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
               className={`rounded-full w-full pl-3 
                 text-left font-normal bg-white
                  ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : open ? 'outline-4 ring-1 ring-ring' : ''}`} >
-                <SelectValue  placeholder={t("value", { placeholder })}  />
+                <SelectValue  placeholder={placeholder ?? t("value", { placeholder })}  />
               </SelectTrigger>
             </FormControl>
             <SelectContent onFocus={_=>setOpen(true)} onCloseAutoFocus={_=>setOpen(false)}>
@@ -75,7 +72,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
               ))}
             </SelectContent>
           </Select>
-          <FormMessage className="text-red-800 max-w-full" />
+          <FormMessage className="data-[state=disabled]:text-destructive/60" />
         </FormItem>
       )}
     />

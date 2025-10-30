@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 import React, { useEffect } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
+import Unit from "./unit";
 
 type Props<T extends FieldValues> = {
   form: UseFormReturn<T, undefined>;
@@ -26,14 +27,14 @@ type Props<T extends FieldValues> = {
   label?: string;
   description?: string;
   type?: React.HTMLInputTypeAttribute | undefined;
-  unit?: string;
-  half?: boolean;
+  unit?: React.ReactNode;
   info?: React.ReactNode;
   onChange?: (v: any) => void;
   size?: "xl"|"sm";
   disabled?: boolean;
   labelClassName?: string;
   valueControl?: (v: any) => boolean;
+  className?: string;
 };
 
 function Input<T extends FieldValues>({
@@ -44,11 +45,11 @@ function Input<T extends FieldValues>({
   placeholder,
   description,
   type,
-  unit,
-  half = false,
+  unit= <></>,
   info = undefined,
   size = "xl",
   disabled = false,
+  className,
   valueControl = (v: any) =>{
     if (v >= 0 || v === "") return true;
     return false;
@@ -65,12 +66,12 @@ function Input<T extends FieldValues>({
             {label && <FormLabel data-state={fieldState.error && "error"} className={cn(
                `text-sm font-medium ${disabled ? 'text-muted-foreground data-[state=error]:text-destructive/60' : ''}`, labelClassName)}>{label}</FormLabel>}
             <FormControl>
-              <div className={`w-full inline-block`}>
+              <div className={cn(`w-full inline-block`, className)}>
                 <InputRoot
                   disabled={disabled}
-                  className={`col-span-2 w-full ${size === 'xl' ? 'h-9' : 'h-8'} rounded-full text-xl bg-white 
+                  className={cn(`w-full ${size === 'xl' ? 'h-9' : 'h-8'} rounded-full text-xl bg-white 
                   ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : ''}
-                  `}
+                  `, '')}
                   placeholder={placeholder}
                   type={type}
                   {...field}
@@ -95,7 +96,7 @@ function Input<T extends FieldValues>({
                       
                 />
                 <div className="grid grid-cols-2 h-fit">
-                  {unit && <p className="self-end mb-2 ml-3">{unit}</p>}
+                  {unit}
                   {info && (
                     <Popover>
                       <PopoverTrigger asChild>

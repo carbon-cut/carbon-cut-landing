@@ -3,9 +3,9 @@ import { formSchema } from "./formSchema";
 import { z } from "zod";
 import { TName } from "@/components/ui/forms";
 export interface QuestionProps {
-  setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
   setOnSubmit: React.Dispatch<React.SetStateAction<() => void>>;
   setQuestions: React.Dispatch<React.SetStateAction<React.FC<QuestionProps>[]>>;
+  setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
   //setVerify: React.Dispatch<React.SetStateAction<() => boolean>>;
   setVerifyFields: React.Dispatch<React.SetStateAction<TName<z.infer<typeof formSchema>>[]>>;
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;

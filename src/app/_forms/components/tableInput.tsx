@@ -19,7 +19,6 @@ type Props<T extends FieldValues> = {
   description?: string;
   type?: React.HTMLInputTypeAttribute | undefined;
   unit?: string;
-  half?: boolean;
   inputProps?: InputProps;
   setChange?: React.Dispatch<React.SetStateAction<boolean>>;
 };

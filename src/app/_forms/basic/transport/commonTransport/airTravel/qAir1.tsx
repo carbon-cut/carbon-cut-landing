@@ -36,8 +36,8 @@ const aircraftTypes = [
   "Boeing777",
   "Boeing787",
   "other",
-];
-const classes = ["economy", "premium", "business", "first"];
+] as const;
+const classes = ["economy", "premium", "business", "first"] as const;
 
 function QAir({ mainForm }: QuestionProps) {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qAir.q1");

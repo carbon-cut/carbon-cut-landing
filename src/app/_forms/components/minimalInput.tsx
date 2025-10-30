@@ -28,7 +28,6 @@ type Props<FormShema extends FieldValues> = {
   description?: string;
   type?: React.HTMLInputTypeAttribute | undefined;
   unit?: string;
-  half?: boolean;
   info?: React.ReactNode;
   className?: ClassValue;
   onChange?: (v: any) => void;

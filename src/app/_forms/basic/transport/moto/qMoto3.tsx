@@ -88,7 +88,7 @@ const QMoto3 = (index: number) => {
         <Content>
           <div className="grid grid-cols-2">
             <Input
-              half
+              
               form={mainForm}
               name={`transport.motos.${index}.${
                 motoType === "Electrique"
@@ -101,7 +101,7 @@ const QMoto3 = (index: number) => {
             />
             {motoType === "Plug-in Hybrid" ? (
               <Input
-                half
+                
                 form={mainForm}
                 name={`transport.motos.${index}.motoEConsmption`}
                 type="number"
@@ -127,7 +127,7 @@ const QMoto3 = (index: number) => {
               form={mainForm}
               name={`transport.motos.${index}.motoMoneyConsumption`}
               type="number"
-              half
+              
               onChange={() => setChange((prev) => !prev)}
             />
             {motoType === "Plug-in Hybrid" ? (
@@ -135,7 +135,7 @@ const QMoto3 = (index: number) => {
                 form={mainForm}
                 name={`transport.motos.${index}.motoMoneyEConsumption`}
                 type="number"
-                half
+                
                 onChange={() => setChange((prev) => !prev)}
               />
             ) : (

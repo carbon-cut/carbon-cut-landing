@@ -15,6 +15,7 @@ export default function FormLayout({children}:{children:React.ReactNode}) {
       waste: 0,
       vacation: 0,
     });
+    const [readyToSubmit, setReadyToSubmit] = React.useState(true);
 
     return (
       <FormContext.Provider
@@ -23,6 +24,8 @@ export default function FormLayout({children}:{children:React.ReactNode}) {
           tab: tab,
           currentIndexes: currentIndexes,
           setCurrentIndexes: setCurrentIndexes,
+          readyToSubmit: readyToSubmit,
+          setReadyToSubmit: setReadyToSubmit,
         }}
       >
         {children}

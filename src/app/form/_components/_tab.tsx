@@ -1,6 +1,6 @@
 import { TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { QuestionProps } from "../../_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
@@ -58,8 +58,6 @@ interface TabCProps {
     React.FC<QuestionProps>[],
     React.Dispatch<React.SetStateAction<React.FC<QuestionProps>[]>>
   ];
-  setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
-  submit: boolean;
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
 }
 
@@ -68,7 +66,7 @@ const TabContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof TabsContent> & TabCProps
 >(
   (
-    { setNextTab, initQuestions, submit, setSubmit, mainForm, ...props },
+    { setNextTab, initQuestions,  mainForm, ...props },
     ref
   ) => {
     const { tab, currentIndexes, setCurrentIndexes } = useContext(FormContext);
@@ -77,6 +75,7 @@ const TabContent = React.forwardRef<
     const [onSubmit, setOnSubmit] = useState<() => void>(() => () => {});
     const [prevAction, setPrevAction] = useState<'next' | 'prev' | null>(null);
     const [verifyFields, setVerifyFields] = useState<TName<z.infer<typeof formSchema>>[]>([]);
+   
 
     const verify = useCallback< ()=>Promise<boolean>>(async () => {
       if (verifyFields.length === 0) return true;
@@ -103,6 +102,8 @@ const TabContent = React.forwardRef<
         setCurrentIndexes((p) => ({ ...p, [tab]: p[tab] - 1 }));
       }
     }, [currentIndexes, questions, setNextTab, tab]);
+
+    const [submit, setSubmit] = useState(false);
 
     return (
       <TabsContent
@@ -180,11 +181,15 @@ const TabContent = React.forwardRef<
             className={`text-lg  w-48 py-4`}
             style={{ background: isDirty ? undefined : "" }}
             size={"lg"}
+            //key={`${submit}`}
             type={submit ? "submit" : "button"}
             variant="default"
             onClick={async () => {
+              console.log('clicked')
               const ver = await verify();
+              console.log('bruuuuh')
               onSubmit();
+              console.log('bruuuuh2')
               if (ver) next();
             }}
           >

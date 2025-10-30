@@ -81,7 +81,7 @@ function QSea1({ mainForm }: QuestionProps) {
             </TableCell>
             <TableCell>
               <Input
-                half
+                
                 size="sm"
                 type="number"
                 form={mainForm}
@@ -98,7 +98,7 @@ function QSea1({ mainForm }: QuestionProps) {
             </TableCell>
             <TableCell>
               <Input
-                half
+                
                 size="sm"
                 type="number"
                 form={mainForm}

@@ -1,6 +1,21 @@
-import qHeating from "./qHeating";
+import Heating from "./qHeating1";
 import { QuestionProps } from "../../../types";
-import {JSX} from 'react'
-const output: ((props: QuestionProps) => JSX.Element)[] = [qHeating];
+import QHeating2 from "./qHeating1-2";
+import {
+  GasTank,
+  WoodCharcoal,
+  Fioul,
+} from "./quantities";
+import ElectricalHeating from "./electricalHeating";
+//import Gpl from "./gpl";
 
-export default output;
+
+export {
+  Heating,
+  //QHeating2,
+  GasTank,
+  WoodCharcoal, 
+  Fioul,
+  //ElectricalHeating,
+  //Gpl
+};
