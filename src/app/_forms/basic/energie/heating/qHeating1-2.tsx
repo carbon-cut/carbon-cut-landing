@@ -16,7 +16,7 @@ import FormCheckbox from "@/components/forms/formCheckbox";
 const headerKeys = [0, 1, 2] as const;
 const bodyKeys = [
   { l: "insert", n: 0 },
-  { l: "woodPole", n: 1 },
+  { l: "stove", n: 1 },
   { l: "openFireplace", n: 2 },
   { l: "woodBoiler", n: 3 },
 ] as const;

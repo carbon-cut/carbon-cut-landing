@@ -16,13 +16,13 @@ const heating = z.object({
       .object({
         charcoal: z.object({
           insert: z.boolean().default(false),
-          woodPole: z.boolean().default(false),
+          stove: z.boolean().default(false),
           openFireplace: z.boolean().default(false),
           woodBoiler: z.boolean().default(false),
         }),
         wood: z.object({
           insert: z.boolean().default(false),
-          woodPole: z.boolean().default(false),
+          stove: z.boolean().default(false),
           openFireplace: z.boolean().default(false),
           woodBoiler: z.boolean().default(false),
         }),
@@ -32,14 +32,14 @@ const heating = z.object({
       GPL: z.object({
         types: z.object({
           big: z.object({
-            butane: z.boolean().default(false), // 13 Kg
-            propane: z.boolean().default(false), // 35 Kg
+            butane: z.boolean().default(false).optional(), // 13 Kg
+            propane: z.boolean().default(false).optional(), // 35 Kg
           }),
           small: z.object({
-            butaneSmall: z.boolean().default(false), // 5.5kg
-            butaneBig: z.boolean().default(false), // 10 kg
-            propaneSmall: z.boolean().default(false), // 5 kg
-            propaneBig: z.boolean().default(false), // 13 kg
+            butaneSmall: z.boolean().default(false).optional(), // 5.5kg
+            butaneBig: z.boolean().default(false).optional() , // 10 kg
+            propaneSmall: z.boolean().default(false).optional(), // 5 kg
+            propaneBig: z.boolean().default(false).optional(), // 13 kg
           }),
         }),
         quantities: z.record(
@@ -51,14 +51,12 @@ const heating = z.object({
             "propaneSmall",
             "propaneBig",
           ),
-          z
-            .object({
-              quantity: z.number(),
-              frequency: union("month", "year"),
-            })
-            .nullable(),
-        ),
-      }),
+          z.object({
+              quantity: z.number().optional(),
+              frequency: union("month", "year").optional(),
+            }),
+        ).optional(),
+      }).optional(),
       fioul: z.object({
         quantity: z.number().optional(),
         frequency: union("month", "year").optional(), // monthly
@@ -71,27 +69,27 @@ const heating = z.object({
         .object({
           energyLabel: union("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"),
           dailyFrequency: z.number(), // h / day
-          anualFrequency: z.number(), // week / year
+          annualFrequency: z.number(), // week / year
           number: z.number(),
         })
         .optional(),
       electricalCentral: z.object({
         energyLabel: union("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"),
         dailyFrequency: z.number(), // h / day
-        anualFrequency: z.number(), // week / year
-      }),
+        annualFrequency: z.number(), // week / year
+      }).optional(),
       charcoal: z.object({
         quantity: z.number().optional(),
         quantityUnit: union("m3" /*³*/, "kg").optional(),
         frequency: z.number().optional(),
         frequencyUnit: union("day", "week", "month", "year").optional(),
-      }),
+      }).optional(),
       wood: z.object({
         quantity: z.number().optional(),
         quantityUnit: union("m3", "kg", "stere").optional(),
         frequency: z.number().optional(),
         frequencyUnit: union("day", "week", "month", "year").optional(),
-      }),
+      }).optional(),
     }),
   })
 

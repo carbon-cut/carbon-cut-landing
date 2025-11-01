@@ -59,7 +59,6 @@ useEffect(()=>{
 
   const handleError = (...args: unknown[]) => {
     console.log(...args);
-    console.log(mainForm.getValues());
     setQuestionList(true);
   };
 

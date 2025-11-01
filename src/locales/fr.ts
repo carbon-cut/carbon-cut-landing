@@ -1,4 +1,5 @@
 import { title } from "process";
+import { number } from "zod";
 
 export default {
   toast: {
@@ -151,16 +152,45 @@ export default {
           options: {
             heatPump: { label: "Pompe à chaleur", unit: "null" },
             electricity: { label: "Électricité", unit: "null" },
-            electricHeating: { label: "Chauffage électrique", unit: "null" },
+            electricHeating: { 
+              label: "Chauffage électrique",
+              unit: "null",
+              fields:{
+                energyLabel: "label Energetique",
+                dailyFrequency: {label: "Fréquence quotidienne", unit: "h/jours"},
+                annualFrequency: {label: "fréquence annuelle", unit: "moins/an"},
+                nbUnit: "nombre d'unité individuelle",
+              }
+            },
             electricalCentralHeating: {
               label: "Chauffage central electrique",
               unit: "null",
+              fields:{
+                energyLabel: "label Energetique",
+                dailyFrequency: {label: "Fréquence quotidienne", unit: "h/jours"},
+                annualFrequency: {label: "fréquence annuelle", unit: "moins/an"},
+              }
             },
             gasNetwork: { label: "Réseau de gaz", unit: "null" },
             heatNetwork: { label: "Réseau de chaleur", unit: "null" },
             GPL: {
               label: "Gaz de pétrole liquéfié (GPL)",
-              unit: "bouteille/semaine",
+              unit: "bouteille",
+              big:'Grand Format',
+              small:'Petit Format',
+              types: {
+                propane: "propane: vert/doré",
+                butane: "butane bleu foncé/rouge",
+                butaneSmall: "butane 5.5kg rouge",
+                butaneBig: "butane 10kg rouge/bleu",
+                propaneBig: "propane: 5kg jaune",
+                propaneSmall: "propane: 13kg vert/doré",
+              },
+              frequency: {
+                placeholder: "sélectionnez fréquence",
+                month: "chaque mois",
+                year: "chaque annné",
+              },
             },
             gasTank: { label: "Citerne de gaz", unit: "null" },
             QgasTank: {
@@ -218,6 +248,17 @@ export default {
               },
             },
           },
+          q2:{
+            q: 'what is the type of your fireplace?',
+            title: 'Fireplace Type',
+            rows:{
+              insert: 'Insert',
+              stove: 'poele',
+              openFireplace: 'openFireplace',
+              woodBoiler: 'woodBoiler',
+            }
+
+          }
         },
         q1: {
           title: "facture d'électricité",

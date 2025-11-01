@@ -9,9 +9,6 @@ import Input from "../../components/input";
 
 const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.q2");
-  const tm = useScopedI18n("utils.months");
-
-  const [change, setChange] = useState(false);
 
   useEffect(()=>{
     setSubmit(true)

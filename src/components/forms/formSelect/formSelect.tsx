@@ -53,7 +53,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
               {label} {mandetory && <span className="text-red-500">*</span>}
             </FormLabel>
           )}
-          <Select onValueChange={field.onChange}>
+          <Select onValueChange={(_) => {console.log(_) ;field.onChange(_)}} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger 
               onClick={e=>{setOpen(true)}}

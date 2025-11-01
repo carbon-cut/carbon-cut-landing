@@ -16,6 +16,6 @@ export {
   GasTank,
   WoodCharcoal, 
   Fioul,
-  //ElectricalHeating,
+  ElectricalHeating,
   //Gpl
 };

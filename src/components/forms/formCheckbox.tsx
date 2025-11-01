@@ -1,13 +1,13 @@
 import React from "react";
-import { FormControl, FormField, FormItem, FormLabel } from "../ui/forms";
-import { UseFormReturn } from "react-hook-form";
+import { FormControl, FormField, FormItem, FormLabel, TName } from "../ui/forms";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 import { Checkbox } from "../ui/checkbox";
 import { ClassValue,  } from "clsx";
 import { cn } from "@/lib/utils";
 
-interface Props {
-  form: UseFormReturn<any, undefined>;
-  name: string;
+interface Props<T extends FieldValues> {
+  form: UseFormReturn<T,any , undefined>;
+  name: TName<T>;
   label?: string | undefined;
   mandetory?: boolean;
   placeholder?: string;
@@ -16,7 +16,7 @@ interface Props {
   labelClassName?: ClassValue;
 }
 
-function FormCheckbox({ id, form, name, className, label, mandetory, labelClassName }: Props) {
+function FormCheckbox<T extends FieldValues>({ id, form, name, className, label, mandetory, labelClassName }: Props<T>) {
   return (
     <FormField
       control={form.control}

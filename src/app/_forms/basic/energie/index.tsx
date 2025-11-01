@@ -7,6 +7,7 @@ const output: React.FC<QuestionProps>[] = [
     //Q1,
     //Q2,
     Heating,
+    Q2
 ];
 
 export default output;

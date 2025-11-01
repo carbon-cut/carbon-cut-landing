@@ -185,11 +185,8 @@ const TabContent = React.forwardRef<
             type={submit ? "submit" : "button"}
             variant="default"
             onClick={async () => {
-              console.log('clicked')
               const ver = await verify();
-              console.log('bruuuuh')
               onSubmit();
-              console.log('bruuuuh2')
               if (ver) next();
             }}
           >

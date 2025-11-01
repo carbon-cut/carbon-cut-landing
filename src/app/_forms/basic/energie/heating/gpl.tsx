@@ -1,12 +1,15 @@
-/* import React from "react";
+import React, { useContext } from "react";
 import { QuestionProps } from "../../../types";
 import { Label } from "@/components/ui/label";
-import Input from "../../../components/input";
+import Input from "@/app/_forms/components/input";
 import Select from "../../../components/select";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../components/question";
 import Content from "../../../components/content";
 import { MultiCheckInput } from "../../../components/multiCheckInput";
+import { Separator } from "@/components/ui/separator";
+import FormSelect from "@/components/forms/formSelect";
+import { useSubmit } from "@/lib/hooks/useSubmit";
 
 const gplBig = ["propane", "butane"] as const;
 const gplSmall = [
@@ -16,94 +19,119 @@ const gplSmall = [
   "propaneSmall",
 ] as const;
 
-function Gpl({ mainForm }: QuestionProps) {
+function Gpl({ mainForm,  }: QuestionProps) {
   const t = useScopedI18n("forms.basic.energie.heating.options");
 
+  useSubmit();
+
   const { big, small } = mainForm.watch(
-    "energie.heating.quantitties.GPL.types",
-  ) ?? {big:{}, small:{} };
+    "energie.heating.quantities.GPL.types"
+  ) ?? { big: {}, small: {} };
 
   return (
     <div>
-      <Question className="">{t("GPL.label")}</Question>
+      <Question className="mb-9">{t("GPL.label")}</Question>
       <Content>
-        <Label className="">Grand Format</Label>
+        <div className="flex flex-row mb-6">
+        <Label className="w-1/6">{t("GPL.big")}</Label>
+        
         <MultiCheckInput
           form={mainForm}
-          name="energie.heating.quantitties.GPL.types.big"
+          name="energie.heating.quantities.GPL.types.big"
           options={[
-            { label: "butane bleu foncé/rouge", value: "butane", unit:"null" },
-            { label: "propane: vert/doré", value: "propane", unit:"null" },
+            { label: "butane bleu foncé/rouge", value: "butane", unit: "null" },
+            { label: "propane: vert/doré", value: "propane", unit: "null" },
           ]}
           type="boolean"
         />
-        <Label className="">Petit Format</Label>
+        </div>
+        <div className="flex flex-row">
+        <Label className="w-1/6">{t("GPL.small")}</Label>
         <MultiCheckInput
           form={mainForm}
-          name="energie.heating.quantitties.GPL.types.small"
-          options={gplSmall.map((e) => ({ label: t(`GPL.types.${e}`), value: e, unit:"null" }))}
+          name="energie.heating.quantities.GPL.types.small"
+          options={gplSmall.map((e) => ({
+            label: t(`GPL.types.${e}`),
+            value: e,
+            unit: "null",
+          }))}
           type="boolean"
         />
+        </div>
       </Content>
-      <div>
+      <Separator className="mt-6" />
+      <Content className="mt-9">
+        <div>
         {gplBig.map((key) => (
           <div key={key}>
             {big?.[key] && (
-              <div className="grid grid-cols-12 mt-3">
-                <div>{}</div>
-                <div className="col-span-3">
+              <div className="flex flex-row mb-6 space-x-3">
+                <Label className="w-1/6 my-auto">{t(`GPL.types.${key}`)}:</Label>
+                <div className="w-1/12"/>
+                <div className="w-2/6">
                   <Input
                     form={mainForm}
-                    name={`energie.heating.quantitties.GPL.quantitties.${key}.quantity`}
-                    unit={t("GPL.unit")}
-                    full
-                    
+                    name={`energie.heating.quantities.GPL.quantities.${key}.quantity`}
+                    placeholder={t("GPL.unit")}
                   />
                 </div>
-                <div></div>
-                <Select
-                  form={mainForm}
-                  name={`energie.heating.quantitties.GPL.quantitties.${key}.frequency`}
-                  placeholder={t("GPL.frequency.placeholder")}
-                  options={[
-                    { value: "month", label: t("GPL.frequency.month") },
-                    { value: "year", label: t("GPL.frequency.year") },
-                  ]}
-                  className="col-span-3"
-                />
+                
+                <div className="w-2/6">
+                  <FormSelect
+                    form={mainForm}
+                    name={`energie.heating.quantities.GPL.quantities.${key}.frequency`}
+                    placeholder={t("GPL.frequency.placeholder")}
+                    data={[
+                      { value: "month", label: t("GPL.frequency.month") },
+                      { value: "year", label: t("GPL.frequency.year") },
+                    ]}
+                  />
+                </div>
               </div>
             )}
           </div>
         ))}
         {gplSmall.map((key) => (
-          <div key={key}>{small?.[key] && <div className="grid grid-cols-12 mt-3">
-            <div className="col-span-2 flex flex-col align-center justify-center"><span className=""> {t(`GPL.types.${key}`)}:{' '}</span></div>
-            <div className="col-span-3">
-              <Input
-                form={mainForm}
-                name={`energie.heating.quantitties.GPL.quantitties.${key}.quantity`}
-                unit={t("GPL.unit")}
-                full
+          <div key={key}>
+            {small?.[key] && (
+              <div className="flex flex-row mb-6 space-x-3">
                 
-              />
-            </div>
-            <div></div>
-            <Select
-              form={mainForm}
-              name={`energie.heating.quantitties.GPL.quantitties.${key}.frequency`}
-              placeholder={t("GPL.frequency.placeholder")}
-              options={[
-                { value: "month", label: t("GPL.frequency.month") },
-                { value: "year", label: t("GPL.frequency.year") },
-              ]}
-              className="col-span-3"
-            />
-          </div>}</div>
+                  <Label className="w-1/6 my-auto"> {t(`GPL.types.${key}`)}: </Label>
+
+                <div className="w-1/12"/>
+                <div className="w-2/6">
+                  <Input
+                    form={mainForm}
+                    name={`energie.heating.quantities.GPL.quantities.${key}.quantity`}
+                    placeholder={t("GPL.unit")}
+                  />
+                </div>
+                <div className="w-2/6">
+                  <FormSelect
+                    form={mainForm}
+                    name={`energie.heating.quantities.GPL.quantities.${key}.frequency`}
+                    placeholder={t("GPL.frequency.placeholder")}
+                    data={[
+                      { value: "month", label: t("GPL.frequency.month") },
+                      { value: "year", label: t("GPL.frequency.year") },
+                    ]}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         ))}
-      </div>
+        </div>
+      </Content>
     </div>
   );
 }
 
+Gpl['Symbol'] ={
+  question: "forms.basic.energie.heating.options.GPL.label",
+  fields: [
+    "energie.heating.quantities.GPL.quantities",
+  ],
+};
+
 export default Gpl;
- */
