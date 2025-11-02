@@ -12,6 +12,7 @@ import {
 import {  useCallback, useState } from "react";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import SwitchForm from "./switch";
+import { cn } from "@/lib/utils";
 
 type InputType = React.HTMLInputTypeAttribute | undefined;
 
@@ -32,6 +33,7 @@ export function MultiCheckInput<
   }[];
   disabled?: boolean;
   onChange?: (v: CheckedState) => void;
+  className?: string;
 }) {
   function checked(value: string) {
     
@@ -58,7 +60,7 @@ export function MultiCheckInput<
   }, [props.form, props.name, props.type, props.onChange]);
 
   return (
-    <div className="w-4/6 mx-auto flex flex-row flex-wrap justify-between gap-y-3 gap-x-1">
+    <div className={cn(`w-4/6 mx-auto flex flex-row flex-wrap justify-between gap-y-3 gap-x-1`, props.className)}>
       {props.options.map(({ label, value, unit }) => (
         <FormField
           control={props.form.control}
@@ -66,12 +68,14 @@ export function MultiCheckInput<
           key={value}
           render={({ field}) => {
             const [checkedValue, setChecked] = useState(checked(value));
+            console.log('val:', field.value);
             return (
               <FormItem className="w-5/12 ">
                 <FormControl className="">
                   <SwitchForm
                     disabled={props.disabled}
                     id={value}
+                    
                     checked={checkedValue}
                     onCheckedChange={(v) => {
                       //field.onChange(v);

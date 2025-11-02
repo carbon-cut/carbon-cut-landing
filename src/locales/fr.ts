@@ -146,6 +146,29 @@ export default {
   forms: {
     basic: {
       energie: {
+        housing: {
+          q1: {
+            q1: "Parlez-nous de votre logement :",
+            q1Labels: {
+              type: "type",
+              area: "surface",
+              heatedVolume: "volume chauffé",
+              conditionedVolume: "volume climatisé",
+            },
+            options: ["appartment", "maison", "villa", "autre"],
+            q2: "combien de chambres avez-vous?",
+            q3: "est-ce que votre maison a:",
+            q3Labels: {
+              thermalInsulation: "isolation thermique",
+              insulatedGlazing: "double vitrage",
+            },
+            alert: {
+              title: "Note",
+              description:
+                "Nous posons ces questions afin de mieux comprendre votre situation et de vous fournir des conseils et des informations plus précis.",
+            },
+          },
+        },
         heating: {
           title: "système de chauffage",
           q: "Quel type de système de chauffage utilisez-vous pour chauffer votre maison?",
