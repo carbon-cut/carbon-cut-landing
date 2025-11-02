@@ -73,6 +73,7 @@ function Gpl({ mainForm,  }: QuestionProps) {
                     form={mainForm}
                     name={`energie.heating.quantities.GPL.quantities.${key}.quantity`}
                     placeholder={t("GPL.unit")}
+                    type="number"
                   />
                 </div>
                 
@@ -104,6 +105,7 @@ function Gpl({ mainForm,  }: QuestionProps) {
                     form={mainForm}
                     name={`energie.heating.quantities.GPL.quantities.${key}.quantity`}
                     placeholder={t("GPL.unit")}
+                    type="number"
                   />
                 </div>
                 <div className="w-2/6">

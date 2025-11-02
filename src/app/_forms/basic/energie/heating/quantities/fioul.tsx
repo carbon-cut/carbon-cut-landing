@@ -27,6 +27,7 @@ const Fioul = ({ mainForm, setSubmit }: QuestionProps) => {
               name={"energie.heating.quantities.fioul.quantity"}
               placeholder={t("fioul.placeholder")}
               label={t("fioul.label")}
+              type="number"
             />
           </div>
           <div className="col-span-1 w-3/12">

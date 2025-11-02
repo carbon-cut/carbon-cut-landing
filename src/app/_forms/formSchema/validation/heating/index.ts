@@ -5,6 +5,7 @@ import fioul from "./fioul";
 import gasTank from "./gasTank";
 import woodCharcoal from "./woodCharcoal";
 import Gpl from "./gpl";
+import heatingBill from "./heatingNetwork";
 
   const output = z.preprocess((input, ctx)=>{
 
@@ -13,6 +14,7 @@ import Gpl from "./gpl";
     woodCharcoal(input, ctx, 'wood');
     woodCharcoal(input, ctx, 'charcoal');
     Gpl(input, ctx);
+    heatingBill(input, ctx);
     return input;
   }, heating);
   

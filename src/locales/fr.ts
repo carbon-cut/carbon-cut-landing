@@ -147,6 +147,7 @@ export default {
     basic: {
       energie: {
         housing: {
+          title: "Logement",
           q1: {
             q1: "Parlez-nous de votre logement :",
             q1Labels: {
@@ -300,6 +301,16 @@ export default {
             title: "Note",
             description:
               "Si votre facture n'est pas mensuelle, vous pouvez saisir une seule valeur pour toute la période. Par exemple : Mars : 0, Avril : 0, Mai : 1020.",
+          },
+        },
+        heatingBill: {
+          title:'Réseaux de chaleur',
+          q: "En utilisant vos factures de réseaux de chaleur comme référence, quelle a été votre consommation au cours des 12 derniers mois ?",
+          q2: "Quel est l'index de votre compteur de chaleur ?",
+          q3: {
+            q: "Si vous n'avez pas votre factures, quelle a été votre dépense anunuelle pendant cette année ?",
+            money: "Total depenses",
+            price: "Prix d'un kWh",
           },
         },
       },

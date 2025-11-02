@@ -28,16 +28,23 @@ function CentralHeating({mainForm}: QuestionProps) {
           form={mainForm}
           name={"energie.heating.quantities.electricalCentral.dailyFrequency"}
           placeholder={t("fields.dailyFrequency.unit")}
+          type="number"
         />
         <Input
           label={t("fields.annualFrequency.label")}
           form={mainForm}
           name={"energie.heating.quantities.electricalCentral.annualFrequency"}
           placeholder={t("fields.annualFrequency.unit")}
+          type="number"
         />
       </div>
     </Content>
   );
+}
+
+CentralHeating['Symbol'] = {
+  question: "forms.basic.energie.heating.options.electricalCentralHeating.label",
+  fields: ["energie.heating.quantities.electricalCentral"],
 }
 
 export default CentralHeating;

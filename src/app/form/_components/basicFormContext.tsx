@@ -8,13 +8,14 @@ type HeatingQuantities = {
     electricalHeating: boolean;
     electricalCentralHeating: boolean;
     GPL: boolean;
+    heatNetwork: boolean;
   }
 
 const BasicFormContext = createContext<{
   heatingQuantities: HeatingQuantities,
   setHeatingQuantities: React.Dispatch<React.SetStateAction<HeatingQuantities>>
 }>({
-  heatingQuantities: { GPL: false, fioul: false, gasTank: false, woodCharcoal: false , electricalHeating: false, electricalCentralHeating: false},
+  heatingQuantities: { heatNetwork: false, GPL: false, fioul: false, gasTank: false, woodCharcoal: false , electricalHeating: false, electricalCentralHeating: false},
   setHeatingQuantities: () => {},
 });
 

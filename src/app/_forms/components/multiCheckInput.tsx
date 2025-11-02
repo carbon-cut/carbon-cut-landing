@@ -68,7 +68,6 @@ export function MultiCheckInput<
           key={value}
           render={({ field}) => {
             const [checkedValue, setChecked] = useState(checked(value));
-            console.log('val:', field.value);
             return (
               <FormItem className="w-5/12 ">
                 <FormControl className="">

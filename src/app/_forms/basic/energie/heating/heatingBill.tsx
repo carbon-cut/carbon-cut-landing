@@ -11,41 +11,39 @@ function HeatingBill({ mainForm }: QuestionProps) {
   const t = useScopedI18n("forms.basic.energie.heatingBill");
   return (
     <div>
-      <Question>{t("q")}</Question>
-      <Content>
+      <Question className="px-12">{t("q")}</Question>
+      <Content className="px-16 mb-6">
         <Input
           form={mainForm}
-          name={"energie.heatingNetwork.total"}
+          name="energie.heating.quantities.heatingNetwork.total"
+          placeholder="kWh"
           type="number"
         />
       </Content>
-
       <SideQuestion
-      question={t("q3.q")}
-      content={
-        <>
-        <Input
-        form={mainForm}
-        name={"energie.heatingNetwork.money"}
-        type="number"
-        label={t("q3.money")}
-        />
-        <Input
-        form={mainForm}
-        name={"energie.heatingNetwork.price"}
-        type="number"
-        label={t("q3.price")}
-        />
-        </>
-      }
+        className="py-1 w-2/4 bg-section-food/20"
+        question={t("q3.q")}
+        content={
+          <Input
+            form={mainForm}
+            name="energie.heating.quantities.heatingNetwork.money"
+            unit=""
+            type="number"
+            placeholder="€"
+          />
+        }
       />
-      <Separator className="mt-3" />
-            <Question>{t("q2")}</Question>
-            <Content>
-              <Input form={mainForm} name="energie.heatingNetwork.index" type="number" />
-            </Content>
+      {/* <Separator className="mt-3" />
+      <Question>{t("q2")}</Question>
+      <Content>
+        <Input form={mainForm} name="energie.electricity.index" type="number" />
+      </Content> */}
     </div>
   );
+}
+HeatingBill['Symbol'] = {
+  question: "forms.basic.energie.heatingBill.title",
+  fields: ["energie.heating.quantities.heatingNetwork.total", "energie.heating.quantities.heatingNetwork.money"],
 }
 
 export default HeatingBill;

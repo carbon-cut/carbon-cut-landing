@@ -26,44 +26,45 @@ const Gpl = (input: unknown, ctx: z.RefinementCtx) => {
     );
   if (GplParse.success && GplQuantityParse.success) {
     const { GPL } = GplQuantityParse.data;
+    if (GPL) {
+      const { quantities, types } = GPL!;
 
-    const { quantities, types } = GPL!;
-
-    function verify(
-      used: boolean | undefined,
-      type: (typeof gplBig)[number] | (typeof gplSmall)[number]
-    ) {
-      if (used) {
-        const element = quantities?.[type];
-        if (element) {
-          const { quantity, frequency } = element;
-          if (!quantity) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "Required",
-              path: [`quantities.GPL.quantities.${type}.quantity`],
-            });
-          }
-          if (!frequency) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "Required",
-              path: [`quantities.GPL.quantities.${type}.frequency`],
-            });
+      function verify(
+        used: boolean | undefined,
+        type: (typeof gplBig)[number] | (typeof gplSmall)[number]
+      ) {
+        if (used) {
+          const element = quantities?.[type];
+          if (element) {
+            const { quantity, frequency } = element;
+            if (!quantity) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Required",
+                path: [`quantities.GPL.quantities.${type}.quantity`],
+              });
+            }
+            if (!frequency) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Required",
+                path: [`quantities.GPL.quantities.${type}.frequency`],
+              });
+            }
           }
         }
       }
-    }
 
-    gplBig.forEach((type) => {
-      const used = types.big[type];
-      verify(used, type);
-    });
-    
-    gplSmall.forEach((type) => {
-      const used = types.small[type];
-      verify(used, type);
-    });
+      gplBig.forEach((type) => {
+        const used = types.big[type];
+        verify(used, type);
+      });
+
+      gplSmall.forEach((type) => {
+        const used = types.small[type];
+        verify(used, type);
+      });
+    }
   }
 };
 export default Gpl;

@@ -97,4 +97,9 @@ function Q1({ mainForm }: QuestionProps) {
   );
 }
 
+Q1['Symbol'] = {
+  question: "forms.basic.energie.housing.title",
+  fields: ['energie.housing'],
+}
+
 export default Q1;

@@ -9,7 +9,7 @@ const union = <
   ...args: [v1, v2, ...v3]
 ) => {
   // Map each string to a ZodLiteral and assert the type
-  const t = args.map((e) => z.literal(e)) as [
+  const t = args.map((e) => z.literal(e, {  errorMap: (s) => ({ message: 'Required' })})) as [
     z.ZodLiteral<v1>,
     z.ZodLiteral<v2>,
     ...Array<z.ZodLiteral<v3[number]>>

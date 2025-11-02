@@ -12,6 +12,8 @@ function getNumber(inputs: input[]){
 function addQestions(inputs: input[], currentIndex: number, Components: React.FC<QuestionProps>[]) {
     return (prev: React.FC<QuestionProps>[]) =>{
         const out = prev.slice();
+        console.log('number:: ', getNumber(inputs), ' : ', Components[0].name);
+        console.log('input:', inputs);
         out.splice(currentIndex + 1 + 
                     getNumber(inputs),
                     0, ...Components);

@@ -21,9 +21,11 @@ function GasTank({ mainForm }: QuestionProps) {
             name="energie.heating.quantities.gasTank.frequency"
             placeholder={t("QgasTank.u1")}
             label={t("QgasTank.l1")}
+            type="number"
           />
           <div className="">
               <Input
+                type="number"
                 form={mainForm}
                 name="energie.heating.quantities.gasTank.capacity"
                 placeholder={t("QgasTank.l2")}

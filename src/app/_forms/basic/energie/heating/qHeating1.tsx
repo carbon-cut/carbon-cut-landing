@@ -8,8 +8,8 @@ import BasicFormContext from "@/app/form/_components/basicFormContext";
 import { addQestions, deleteQuestions } from "@/lib/utils/addQuestion";
 import ElectricalHeating from "./electricalHeating";
 import CentralHeating from "./centralHeating";
-import heating from "@/app/_forms/formSchema/validation/heating/raw";
 import Gpl from "./gpl";
+import HeatingBill from "./heatingBill";
 
 const heatingMethods = [
   "heatPump",
@@ -24,6 +24,8 @@ const heatingMethods = [
   "electricalCentralHeating",
 ] as const;
 
+type heatingQuestions = 'heatNetwork' | 'GPL' | 'fioul' | 'gasTank' | 'woodCharcoal' | 'electricalHeating' | 'electricalCentralHeating';
+
 function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: QuestionProps) {
   const t = useScopedI18n("forms.basic.energie.heating");
 
@@ -35,6 +37,7 @@ function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: Questio
       electricalHeating: prevElectricalHeating,
       electricalCentralHeating: prevElectricalCentralHeating,
       GPL: prevGpl,
+      heatNetwork: prevHeatNetwork,
     },
     setHeatingQuantities
   } = useContext(BasicFormContext);
@@ -55,7 +58,7 @@ function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: Questio
       } = mainForm.getValues("energie.heating");
       
       const heatingMethods:{
-        name: 'GPL' | 'fioul' | 'gasTank' | 'woodCharcoal' | 'electricalHeating' | 'electricalCentralHeating',
+        name: heatingQuestions,
         form: boolean | undefined,
         component: React.FC<QuestionProps>[],
         prev: boolean ,
@@ -102,17 +105,25 @@ function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: Questio
           component: [Gpl],
           prev: prevGpl,
           add: null
+        },
+        {
+          name: 'heatNetwork',
+          form: heatNetwork,
+          component: [HeatingBill],
+          prev: prevHeatNetwork,
+          add: null
         }
       ]
       const acc: Array<[boolean | undefined, boolean | null]> = []
 
       for(const item of heatingMethods) {
         const {form, component, prev} = item
+        const accSnapshot = [...acc];
         if (form && !prev) {
-          setQuestions(addQestions(acc, currentIndex, component));
+          setQuestions(addQestions(accSnapshot, currentIndex, component));
           item.add = true;
         }else if(!form && prev){
-          setQuestions(deleteQuestions(acc, currentIndex, component.length));
+          setQuestions(deleteQuestions(accSnapshot, currentIndex, component.length));
           item.add = false;
         }
         acc.push([form, item.add])
@@ -167,16 +178,12 @@ function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: Questio
               [item.name]: item.add === null ? p[item.name] : item.add,
             };
           }, {} as {
-            [k in 'GPL' | 'fioul' | 'gasTank' | 'woodCharcoal' | 'electricalHeating' | 'electricalCentralHeating']: boolean
+            [k in heatingQuestions]: boolean
           })))
     });
     return () => {
       setOnSubmit(() => () => {});}
   }, []);
-
-  useEffect(() => {
-  }, [prevGasTank, prevFioul, prevWoodCharcoal]);
-
 
   return (
     <div>

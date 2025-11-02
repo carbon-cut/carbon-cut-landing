@@ -30,12 +30,14 @@ function ElectricalHeating({ mainForm }: QuestionProps) {
           form={mainForm}
           name={"energie.heating.quantities.electricalHeating.dailyFrequency"}
           placeholder={t("fields.dailyFrequency.unit")}
+          type="number"
         />
         <Input
           label={t("fields.annualFrequency.label")}
           form={mainForm}
           name={"energie.heating.quantities.electricalHeating.annualFrequency"}
           placeholder={t("fields.annualFrequency.unit")}
+          type="number"
         />
         
       </div>
@@ -44,10 +46,16 @@ function ElectricalHeating({ mainForm }: QuestionProps) {
           label={t("fields.nbUnit")}
           name="energie.heating.quantities.electricalHeating.number"
           form={mainForm}
+          type="number"
         />
         </div>
     </Content>
   );
+}
+
+ElectricalHeating['Symbol'] = {
+  question: "forms.basic.energie.heating.options.electricHeating.label",
+  fields: ["energie.heating.quantities.electricalHeating"],
 }
 
 export default ElectricalHeating;

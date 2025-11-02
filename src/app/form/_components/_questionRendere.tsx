@@ -24,7 +24,8 @@ const QuestionRendrer = ({
     woodCharcoal: (getValues("energie.heating.wood") || getValues("energie.heating.charcoal") )?? false,
     electricalHeating: getValues("energie.heating.electricHeating") ?? false,
     electricalCentralHeating: getValues("energie.heating.electricalCentralHeating") ?? false,
-    GPL: getValues("energie.heating.GPL") ?? false
+    GPL: getValues("energie.heating.GPL") ?? false,
+    heatNetwork: getValues("energie.heating.heatNetwork") ?? false
   });
 
   return (

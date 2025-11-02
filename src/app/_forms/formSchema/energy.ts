@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { union } from "./utils";
 import heating from "./validation/heating";
+import bills from "./validation/bills";
 
 
 const energie = z.object({
@@ -67,39 +68,20 @@ const energie = z.object({
     smartphones: z.number(),
   }),
   electricity: z.object({
-    kWh: z.record(
-      z
-        .string()
-        .regex(
-          /^(0?[1-9]|1[0-2])\/\d{4}$/,
-          "Key must follow the format monthNumber/year (e.g., 1/2025)",
-        ),
-      z.number(),
-    ),
-    total: z.number(),
-    money: z.number().nullable(),
-    index: z.number(),
+    total: z.number().optional(),
+    money: z.number().optional(),
+    //index: z.number(),
   }),
   gaz: z.object({
-    m: z.record(
-      z
-        .string()
-        .regex(
-          /^(0?[1-9]|1[0-2])\/\d{4}$/,
-          "Key must follow the format monthNumber/year (e.g., 1/2025)",
-        ),
-      z.number(),
-    ),
-    total: z.number(),
-    money: z.number().nullable(),
-    index: z.number(),
-  }),
-  heatingNetwork: z.object({
-    total: z.number().nullable(),
-    money: z.number().nullable(),
-    price: z.number().nullable(),
-    index: z.number().nullable(),
+    total: z.number().optional(),
+    money: z.number().optional(),
+    //index: z.number(),
   }),
 });
 
-export { energie };
+const out = z.preprocess((input, ctx) => {
+  bills(input, ctx);
+  return input;
+}, energie);
+
+export { out as energie, energie as raw };
