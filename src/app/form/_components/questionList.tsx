@@ -70,6 +70,7 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
           className={`absolute top-0 bottom-0 my-auto right-5
           w-fit
           hover:text-accent
+          bg-transparent
           ${buttonVariants(tab)}
           `}
         >

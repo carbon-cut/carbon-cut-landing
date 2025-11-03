@@ -20,14 +20,20 @@ import {
 import { getIcon, getName } from "@/lib/formTabs/geters";
 import { TName } from "@/components/ui/forms";
 
+/* bg-gradient-to-r from-[#00A261] to-[#00c074]  */
 const TabTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsTrigger>,
   React.ComponentPropsWithoutRef<typeof TabsTrigger>
 >(({ className, ...props }, ref) => {
   const tab = props.value as keyof typeof colorVariants
   const colorVariants = {
-    transport: "data-[state=active]:bg-section-transport/90 data-[state=completed]:bg-section-transport/10  hover:bg-section-transport/20 data-[state=completed]:hover:bg-section-transport/20",
-    energie: "data-[state=active]:bg-section-energie hover:bg-section-energie/20 data-[state=completed]:bg-section-energie/40",
+    transport: `
+    data-[state=active]:bg-linear-transport
+    data-[state=completed]:bg-section-transport/10  
+    hover:bg-section-transport/20 data-[state=completed]:hover:bg-section-transport/20`,
+    energie: `
+    data-[state=active]:bg-linear-energie
+    data-[state=completed]:bg-section-energie/40 hover:bg-section-energie/20`,
     food: "data-[state=active]:bg-section-food hover:bg-section-food/80 data-[state=completed]:bg-section-food/40",
     waste: "data-[state=active]:bg-section-waste hover:bg-section-waste/80 data-[state=completed]:bg-section-waste/40",
     vacation: "data-[state=active]:bg-section-vacation hover:bg-section-vacation/80 data-[state=completed]:bg-section-vacation/40",
@@ -38,7 +44,8 @@ const TabTrigger = React.forwardRef<
       className={cn(
         `flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200  
       disabled:pointer-events-auto disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:hover:bg-white
-    data-[state=active]:text-white data-[state=active]:shadow-md
+    data-[state=active]:text-white data-[state=active]:shadow-lg
+     bg-gray-200 text-gray-600 
     ${colorVariants[tab]}
       `,
         className
@@ -109,11 +116,23 @@ const TabContent = React.forwardRef<
       <TabsContent
         //style={{ height: "72vh" }}
         ref={ref}
-        className=" border-0 mx-4 overflow-y-hidden"
+        className=" border-0 mx-4 "
         {...props}
       >
-        <Card className="shadow-xl border-0">
-          <CardHeader className="text-center pb-6 mt-7">
+        <Card className=" border-0 pt-0 relative">
+          <div className="absolute inset-0 pointer-events-none opacity-5">
+              <svg className="w-full h-full" viewBox="0 0 400 300" preserveAspectRatio="none">
+                <defs>
+                  <pattern id="eco-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                    <circle cx="25" cy="25" r="8" fill="#00A261" />
+                    <path d="M50 40 Q60 30 70 40" stroke="#FF6034" strokeWidth="2" fill="none" />
+                    <rect x="75" y="50" width="20" height="20" fill="#00A261" opacity="0.3" />
+                  </pattern>
+                </defs>
+                <rect width="400" height="300" fill="url(#eco-pattern)" />
+              </svg>
+            </div>
+          <CardHeader className="text-center pt-6 pb-6 bg-gradient-to-t from-white to-[#ECFDF5] relative z-10">
             <div className="flex justify-center mb-4">
               {(() => {
                 const Icon = getIcon(tab);
@@ -156,10 +175,10 @@ const TabContent = React.forwardRef<
             )}
           </CardContent>
         </Card>
-        <div className="flex justify-end gap-12 mb-8 mt-8">
+        <div className="flex justify-between gap-12 mb-8 mt-8">
           <Button
-            className={style.prevButton}
-            variant={"ghost"}
+            className={'px-8 py-3 rounded-full font-semibold flex items-center gap-2 border-2 border-[#00A261] text-[#00A261] bg-white hover:bg-[#ECFDF5] hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none'}
+            variant={"outline"}
             size={"lg"}
             type="button"
             disabled={currentIndexes[tab] == 0}
@@ -178,10 +197,8 @@ const TabContent = React.forwardRef<
             </span>
           </Button>
           <Button
-            className={`text-lg  w-48 py-4`}
-            style={{ background: isDirty ? undefined : "" }}
+            className={`px-8 py-3 rounded-full font-semibold flex items-center gap-2 bg-gradient-to-r from-[#00A261] to-[#003A52] text-white hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg`}
             size={"lg"}
-            //key={`${submit}`}
             type={submit ? "submit" : "button"}
             variant="default"
             onClick={async () => {

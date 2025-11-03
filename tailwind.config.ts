@@ -13,6 +13,11 @@ export default {
 			'linear-1': 'var(--linear-1)',
 			'linear-2': 'var(--linear-2-1)',
 			'linear-2-2': 'var(--linear-2-2)',
+			'linear-transport': 'var(--linear-transport)',
+			'linear-food': 'var(--linear-food)',
+			'linear-vacation': 'var(--linear-vacation)',
+			'linear-energie': 'var(--linear-energie)',
+			'linear-waste': 'var(--linear-waste)',
 		},
   		colors: {
   			background: 'hsl(var(--background))',

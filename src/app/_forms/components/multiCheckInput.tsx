@@ -60,7 +60,7 @@ export function MultiCheckInput<
   }, [props.form, props.name, props.type, props.onChange]);
 
   return (
-    <div className={cn(`w-4/6 mx-auto flex flex-row flex-wrap justify-between gap-y-3 gap-x-1`, props.className)}>
+    <div className={cn(`w-full px-20 mx-auto flex flex-row flex-wrap justify-between  gap-y-3`, props.className)}>
       {props.options.map(({ label, value, unit }) => (
         <FormField
           control={props.form.control}

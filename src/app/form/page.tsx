@@ -17,6 +17,7 @@ import { Car, Zap, UtensilsCrossed, Trash2, Plane } from "lucide-react";
 import ProgressBar from "./_components/_progressBar";
 import {  getIndex, getName } from "@/lib/formTabs/geters";
 import QuestionList from "./_components/questionList";
+import style from "./form.module.css";
 
 function Page() {
 
@@ -94,7 +95,8 @@ useEffect(()=>{
     });
   }, [setTab]);
   return (
-    <>
+    <div className={style.body}>
+      {/* bg-[#e8e8e8] */}
       <Form {...mainForm}>
         <form
           onSubmit={(e) =>{
@@ -109,7 +111,7 @@ useEffect(()=>{
           className="min-h-screen h-full w-full"
         >
           <Tabs
-            className="relative mt-8 pt-32 px-32"
+            className="relative pt-48 px-0 lg:w-[850px] mx-auto"
             value={tab}
             //@ts-expect-error because Tabs cannot access to possible values
             onValueChange={(v) => setTab(v)}
@@ -184,7 +186,7 @@ useEffect(()=>{
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }
 

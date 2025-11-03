@@ -12,6 +12,16 @@
     --section-vacation: 216 100% 38%;
     --section-energie: 13 100% 60%;
     --section-waste: 16 66% 48%;
+    --section-transport-light: 156, 100%, 38%;
+    --section-food-light: 198, 100%, 22%;
+    --section-vacation-light: 216, 100%, 44%;
+    --section-energie-light: 13, 100%, 70%;
+    --section-waste-light: 16, 66%, 54%;
+    --linear-transport: linear-gradient(to right, hsl(var(--section-transport)), hsl(var(--section-transport-light)));
+    --linear-food: linear-gradient(to right, hsl(var(--section-food)), hsl(var(--section-food-light)));
+    --linear-vacation: linear-gradient(to right, hsl(var(--section-vacation)), hsl(var(--section-vacation-light)));
+    --linear-energie: linear-gradient(to right, hsl(var(--section-energie)), hsl(var(--section-energie-light)));
+    --linear-waste: linear-gradient(to right, hsl(var(--section-waste)), hsl(var(--section-waste-light)));
     --background: 210 30% 96%;
     --foreground: 227 9% 14%;
     --card: 0 0% 100%;
