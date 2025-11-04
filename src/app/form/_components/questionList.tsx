@@ -104,9 +104,9 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
 
               return (
                 <AccordionItem
-                  className={`max-w-full rounded-2xl mb-4 border-b-0 border-2 
-                hover:border-section-transport   
-                ${error[key] ? "border-destructive hover:border-destructive/60" : "border-transparent"} 
+                  className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-4
+                border-gray-200 hover:border-section-transport transition-colors
+                ${error[key] ? "border-destructive hover:border-destructive/60" : ""} 
                 `}
                   style={{
                     //@ts-expect-error interpolateSize is not supported, only in Chrome

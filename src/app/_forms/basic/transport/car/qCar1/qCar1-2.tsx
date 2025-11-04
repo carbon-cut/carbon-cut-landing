@@ -26,19 +26,6 @@ const QuestionCompo2: React.FC<
 
   const [ carType, setCarType ] = useState(mainForm.getValues(`transport.cars.${index}.engine`)); 
 
-  /* useEffect(() => {
-    const someField = mainForm.getValues(`transport.cars.${index}.engine`);
-    if (
-      someField &&
-      //@ts-ignore maybe the value is not entered yet
-      someField != ""
-    ) {
-      setIsDirty(true);
-    }
-    return () => {
-      setIsDirty(false);
-    };
-  }); */ 
   useEffect(() => {
     setVerifyFields([`transport.cars.${index}.engine`, `transport.cars.${index}.otherEngine`]);
 

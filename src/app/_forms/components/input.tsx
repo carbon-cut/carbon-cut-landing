@@ -35,6 +35,7 @@ type Props<T extends FieldValues> = {
   labelClassName?: string;
   valueControl?: (v: any) => boolean;
   className?: string;
+  fallback?: boolean;
 };
 
 function Input<T extends FieldValues>({
@@ -50,6 +51,7 @@ function Input<T extends FieldValues>({
   size = "xl",
   disabled = false,
   className,
+  fallback = false,
   valueControl = (v: any) =>{
     if (v >= 0 || v === "") return true;
     return false;
@@ -116,7 +118,7 @@ function Input<T extends FieldValues>({
               </div>
             </FormControl>
             {description && <FormDescription>{description}</FormDescription>}
-            <FormMessage data-state={disabled && "disabled"} className="ml-3 data-[state=disabled]:text-destructive/60" />
+            <FormMessage fallback={fallback} data-state={disabled && "disabled"} className="ml-3 data-[state=disabled]:text-destructive/60" />
           </FormItem>
         );
       }}

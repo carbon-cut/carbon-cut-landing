@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { QuestionProps } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../../components/question";
-import NumberedInputs from "../../../../components/numberedGroup";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { Separator } from "@/components/ui/separator";
 import Covoiturage from "./covoiturage";
 import Bus from "./bus";
@@ -22,7 +22,9 @@ const QShortDistances = (props: QuestionProps) => {
   } = useFieldArray({
     name: "transport.commonTransport.shortDistances.covoiturage",
   });
-
+  const [parentCovoiturage] = useAutoAnimate()
+  const [parentBus] = useAutoAnimate()
+  const [parentMetro] = useAutoAnimate()
   const {
     fields: fieldsBus,
     append: appendBus,
@@ -40,13 +42,13 @@ const QShortDistances = (props: QuestionProps) => {
   });
 
   return (
-    <>
+    <div>
       <Question>{t("q")}</Question>
       <Separator className="my-3" />
       {/* Covoiturage */}
       <div className="space-y-3 mb-3">
         <Title append={appendCovoiturage} type="covoiturage" />
-        <div className="space-y-2">
+        <ul className="space-y-2" ref={parentCovoiturage}>
           {fieldsCovoiturage?.map((fieldCov, idx) => (
             <Container
               section="covoiturage"
@@ -58,13 +60,13 @@ const QShortDistances = (props: QuestionProps) => {
               <Covoiturage {...props} idx={idx} />
             </Container>
           ))}
-        </div>
+        </ul>
       </div>
       <Separator className="my-3" />
       {/* Bus */}
       <div className="space-y-3 mb-3">
         <Title type="bus" append={appendBus} />
-        <div className="space-y-2">
+        <ul className="space-y-2" ref={parentBus}>
           {fieldsBus?.map((fieldBus, idx) => (
             <Container
               section="bus"
@@ -76,13 +78,13 @@ const QShortDistances = (props: QuestionProps) => {
               <Bus {...props} idx={idx} />
             </Container>
           ))}
-        </div>
+        </ul>
       </div>
       <Separator className="my-3" />
       {/* Metro */}
       <div className="space-y-3">
         <Title type="metro" append={appendMetro} />
-        <div className="space-y-2">
+        <ul className="space-y-2" ref={parentMetro}>
           {fieldsMetro?.map((fieldMetro, idx) => (
             <Container
             section="metro"
@@ -94,9 +96,10 @@ const QShortDistances = (props: QuestionProps) => {
               <Metro {...props} idx={idx} />
             </Container>
           ))}
-        </div>
+        </ul>
       </div>
-    </>
+      <div className="h-2" />
+    </div>
   );
 };
 

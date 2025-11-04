@@ -6,21 +6,8 @@ import { QuestionProps } from "../../../types";
 import Input from "../../../components/input";
 
 const QMoto4 = (index: number) => {
-  function MotoComponent({ mainForm, setIsDirty }: QuestionProps) {
+  function MotoComponent({ mainForm, }: QuestionProps) {
     const t = useScopedI18n("forms.basic.transport.qMotos.qMoto4");
-
-    useEffect(() => {
-      const someField = mainForm.getValues(
-        `transport.motos.${index}.motoMileage`,
-      );
-      //@ts-ignore
-      if (someField && someField != "") {
-        setIsDirty(true);
-      }
-      return () => {
-        setIsDirty(false);
-      };
-    });
 
     return (
       <div>

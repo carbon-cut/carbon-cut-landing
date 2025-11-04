@@ -15,24 +15,8 @@ const fuelTypes: FuelTypes[] = [
 const QuestionCompo2: React.FC<QuestionProps & { index: number }> = ({
   index,
   mainForm,
-  setIsDirty,
 }) => {
   const t = useScopedI18n("forms.basic.transport.qMotos.qMoto1-2");
-
-  useEffect(() => {
-    const someField = mainForm.getValues(`transport.motos.${index}.motoType`);
-
-    if (
-      someField &&
-      //@ts-ignore maybe the value is not entered yet
-      someField != ""
-    ) {
-      setIsDirty(true);
-    }
-    return () => {
-      setIsDirty(false);
-    };
-  });
 
   return (
     <>

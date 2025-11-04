@@ -12,6 +12,7 @@
     "chromatic": "npx chromatic --project-token=chpt_fb6149d9ad50769"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.9.0",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-avatar": "^1.1.2",
@@ -33,6 +34,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
     "lucide-react": "^0.469.0",
+    "motion": "^12.23.24",
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

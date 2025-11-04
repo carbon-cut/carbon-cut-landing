@@ -14,7 +14,6 @@ interface Props {
 const QuestionCompo1: React.FC<QuestionProps & Props> = ({
   index,
   mainForm,
-  setIsDirty,
 }) => {
   const t = useScopedI18n("forms.basic.transport.qMotos.qMoto1-1");
 

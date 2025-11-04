@@ -8,12 +8,17 @@ import Covoiturage from "./covoiturage";
 import Bus from "./bus";
 import Train from "./train";
 import { useFieldArray } from "react-hook-form";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const QLongueDistances = (props: QuestionProps) => {
   
   const t = useScopedI18n(
     "forms.basic.transport.commonTransport.longueDistances"
   );
+
+    const [parentCovoiturage] = useAutoAnimate()
+    const [parentBus] = useAutoAnimate()
+    const [parentTrain] = useAutoAnimate()
 
   const {
     fields: fieldsCovoiturage,
@@ -47,7 +52,7 @@ const QLongueDistances = (props: QuestionProps) => {
       {/* Covoiturage */}
       <div className="space-y-3 mb-3">
         <Title append={appendCovoiturage} type="covoiturage" />
-        <div className="space-y-2">
+        <ul ref={parentCovoiturage} className="space-y-2">
           {fieldsCovoiturage?.map((fieldCov, idx) => (
             <Container
               section="covoiturage"
@@ -59,13 +64,13 @@ const QLongueDistances = (props: QuestionProps) => {
               <Covoiturage {...props} idx={idx} />
             </Container>
           ))}
-        </div>
+        </ul>
       </div>
       <Separator className="my-3" />
       {/* Bus */}
       <div className="space-y-3 mb-3">
         <Title type="bus" append={appendBus} />
-        <div className="space-y-2">
+        <ul ref={parentBus} className="space-y-2">
           {fieldsBus?.map((fieldBus, idx) => (
             <Container
               section="bus"
@@ -77,25 +82,25 @@ const QLongueDistances = (props: QuestionProps) => {
               <Bus {...props} idx={idx} />
             </Container>
           ))}
-        </div>
+        </ul>
       </div>
       <Separator className="my-3" />
       {/* Train */}
       <div className="space-y-3">
         <Title type="train" append={appendTrain} />
-        <div className="space-y-2">
-          {fieldsTrain?.map((fieldMetro, idx) => (
+        <ul ref={parentTrain} className="space-y-2">
+          {fieldsTrain?.map((fieldTrain, idx) => (
             <Container
             section="train"
               idx={idx}
-              key={fieldMetro.id}
-              id={fieldMetro.id}
+              key={fieldTrain.id}
+              id={fieldTrain.id}
               remove={removeTrain}
             >
               <Train {...props} idx={idx} />
             </Container>
           ))}
-        </div>
+        </ul>
       </div>
     </>
   );

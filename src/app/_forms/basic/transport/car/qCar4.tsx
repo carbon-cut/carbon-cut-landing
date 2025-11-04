@@ -10,19 +10,8 @@ const QCar4 = (index: number) => {
   function CarComponent({ mainForm }: QuestionProps) {
     const t = useScopedI18n("forms.basic.transport.qCar4");
 
-/*     useEffect(() => {
-      const someField = mainForm.getValues(`transport.cars.${index}.mileage`);
-
-      if (someField) {
-        setIsDirty(true);
-      }
-      return () => {
-        setIsDirty(false);
-      };
-    }); */
-
     return (
-      <div className="py-24">
+      <div className="mb-12">
         <CarTitle mainForm={mainForm} index={index} />
         <Question>{t("q")}</Question>
         <Content>

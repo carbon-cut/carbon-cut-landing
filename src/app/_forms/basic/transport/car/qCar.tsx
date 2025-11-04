@@ -12,7 +12,6 @@ function QCar({
   setQuestions,
   mainForm,
   currentIndex,
-  setIsDirty,
 }: QuestionProps) {
   const t = useScopedI18n("forms.basic.transport.qCar");
   const [prevValue] = useState(mainForm.getValues("transport.hasCar") ?? 0);
@@ -59,18 +58,10 @@ function QCar({
     };
   }, [currentIndex, mainForm, prevValue, setOnSubmit, setQuestions, tab]);
 
-  useEffect(() => {
-    if (mainForm.getValues("transport.hasCar")) {
-      setIsDirty(true);
-    }
-    return () => {
-      setIsDirty(false);
-    };
-  });
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 mt-6 mb-24">
       <Question>{t("q")}</Question>
-      <Content className="pl-0" >
+      <Content className="pl-0 " >
         <Input name="transport.hasCar" form={mainForm} type="number" />
       </Content>
     </div>

@@ -10,7 +10,6 @@ function QSea({
   setQuestions,
   mainForm,
   currentIndex,
-  setIsDirty,
 }: QuestionProps) {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qSea");
   const [prevValue] = useState(mainForm.getValues("transport.hasSea") ?? 0);

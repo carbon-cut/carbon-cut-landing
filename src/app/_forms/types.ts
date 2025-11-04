@@ -10,7 +10,7 @@ export interface QuestionProps {
   setVerifyFields: React.Dispatch<React.SetStateAction<TName<z.infer<typeof formSchema>>[]>>;
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
   currentIndex: number;
-  setIsDirty: React.Dispatch<React.SetStateAction<boolean>>;
+  //setIsDirty: React.Dispatch<React.SetStateAction<boolean>>;
   next: () => void;
   prev: () => void;
   prevAction: 'next' | 'prev' | null;

@@ -27,6 +27,7 @@ interface Props<T extends FieldValues, E extends FieldPath<T>> {
   data: { label: string; value: TValue<T, E> }[];
   placeholder?: string;
   labelClassName?: string;
+  fallback?: boolean;
 }
 
 function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
@@ -36,7 +37,8 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
   placeholder,
   mandetory,
   data,
-  labelClassName
+  labelClassName,
+  fallback = false,
 }: Props<T, E>) {
   const t = useScopedI18n("components.forms.combox");
 
@@ -59,9 +61,9 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
               onClick={e=>{setOpen(true)}}
               key={`${open}`}
               className={`rounded-full w-full pl-3 
-                text-left font-normal bg-white
+                text-left font-normal bg-white text-ellipsis
                  ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : open ? 'outline-4 ring-1 ring-ring' : ''}`} >
-                <SelectValue  placeholder={placeholder ?? t("value", { placeholder })}  />
+                <SelectValue className="text-ellipsis"  placeholder={placeholder ?? t("value", { placeholder })}  />
               </SelectTrigger>
             </FormControl>
             <SelectContent onFocus={_=>setOpen(true)} onCloseAutoFocus={_=>setOpen(false)}>
@@ -72,7 +74,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
               ))}
             </SelectContent>
           </Select>
-          <FormMessage className="data-[state=disabled]:text-destructive/60" />
+          <FormMessage fallback={fallback} className="data-[state=disabled]:text-destructive/60" />
         </FormItem>
       )}
     />

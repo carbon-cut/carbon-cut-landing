@@ -34,6 +34,7 @@ const Bus = ({ mainForm, idx }: QuestionProps & Props) => {
           label: tEngines(type),
         }))}
         label={t("busType")}
+        fallback
       />
 
       <Input
@@ -42,18 +43,21 @@ const Bus = ({ mainForm, idx }: QuestionProps & Props) => {
         label={t("distance")}
         type="number"
         placeholder="(km)"
+        fallback
       />
       <Input
         type="number"
         form={mainForm}
         name={`transport.commonTransport.shortDistances.bus.${idx}.frequency`}
         label={t("frequency")}
+        fallback
       />
       <Input
         type="number"
         form={mainForm}
         name={`transport.commonTransport.shortDistances.bus.${idx}.nbPeople`}
         label={t("nbPeople")}
+        fallback
       />
     </>
   );

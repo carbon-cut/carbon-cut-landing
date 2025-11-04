@@ -10,7 +10,7 @@ import Radio from "../../../components/radio";
 import { Label } from "@radix-ui/react-label";
 
 const QMoto2 = (index: number) => {
-  function MotoComponent({ mainForm, setIsDirty }: QuestionProps) {
+  function MotoComponent({ mainForm,  }: QuestionProps) {
     const t = useScopedI18n("forms.basic.transport.qMotos.qMoto2");
 
     const isCombustion = //@ts-ignore

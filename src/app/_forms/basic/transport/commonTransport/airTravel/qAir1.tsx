@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { QuestionProps } from "../../../../types";
 import {
   Table,
@@ -23,6 +23,8 @@ import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import Question from "@/app/_forms/components/question";
 import Content from "@/app/_forms/components/content";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 
 const aircraftTypes = [
   "A220",
@@ -80,18 +82,20 @@ function QAir({ mainForm }: QuestionProps) {
     },
   });
 
-  const [data, setData] = useState<
-    {
-      destination?: string | null;
-      origin?: string | null;
-      stopover?: string | null;
-    }[]
-  >(mainForm.getValues("transport.airs") ?? []);
+  const {
+    fields: data,
+    append,
+    remove,
+  } = useFieldArray({name:'transport.airs', control: mainForm.control});
+
   const [stopovers, setStopovers] = useState(
     (mainForm.getValues("transport.airs") ?? []).map((e) =>
       e?.stopover ? true : false
     )
   );
+
+
+  const [parent] = useAutoAnimate()
 
   const distance = useMemo(() => {
     const RawAirports = airports?.raw;
@@ -101,14 +105,37 @@ function QAir({ mainForm }: QuestionProps) {
       return getDistance(ele ?? null, RawAirports);
     });
   }, [data, mainForm]);
+  const handleAdd = () => {
+    const scrollY = window.scrollY
+
+    // Add your new item here (state update)
+    append(
+            {
+              destination: null,
+              origin: null,
+              frequency: null,
+              aircraftType: null,
+              class: null,
+              roundTrip: false,
+              stopover: null,
+              carbonEmissions: null,
+              distance: 0,
+              flightPurpose: "personal",
+              familyMembers: 1,
+            },
+          );
+
+          window.scrollTo(0, scrollY)
+  }
 
   return (
     <>
     <Question className="text-center font-semibold text-xl">{t("q")}</Question>
-    <Content className="text-center text-muted-foreground">{t("description")}</Content>
-      {data.map((_, index) => (
-        <div
-          key={index}
+    <Content  className="text-center text-muted-foreground mb-0">{t("description")}</Content>
+      <ul ref={parent}>
+      {data.map(({ id,}, index) => (
+        <li
+          key={id}
           className="bg-white border-2 relative border-gray-200 rounded-lg p-12 hover:border-[#00A261] transition-colors mb-6"
         >
 
@@ -118,16 +145,7 @@ function QAir({ mainForm }: QuestionProps) {
             size={"icon"}
             className="rounded-full hover:bg-destructive/50 absolute top-4 right-4"
             onClick={() => {
-              setData((prev) => {
-                const out = prev.toSpliced(index, 1);
-                console.log(out);
-                mainForm.setValue(
-                  `transport.airs`,
-                  mainForm.getValues("transport.airs")?.toSpliced(index, 1) ??
-                    []
-                );
-                return out;
-              });
+              remove(index);
             }}
           >
             <Trash />
@@ -140,11 +158,6 @@ function QAir({ mainForm }: QuestionProps) {
               name={`transport.airs.${index}.origin`}
               data={airports?.reduced ?? []}
               label={t("origin")}
-              setValue={(v) => {
-                setData((prev) =>
-                  prev.toSpliced(index, 1, { ...prev[index], origin: v })
-                );
-              }}
             />
             <FormMultiCombox
             labelClassName="text-black/70"
@@ -152,14 +165,6 @@ function QAir({ mainForm }: QuestionProps) {
               name={`transport.airs.${index}.destination`}
               label={t("destination")}
               data={airports?.reduced ?? []}
-              setValue={(v) => {
-                setData((prev) =>
-                  prev.toSpliced(index, 1, {
-                    ...prev[index],
-                    destination: v,
-                  })
-                );
-              }}
             />
             <FormSelect
             labelClassName="text-black/70"
@@ -202,12 +207,6 @@ function QAir({ mainForm }: QuestionProps) {
                   setStopovers((prev) => prev.toSpliced(index, 1, !!v));
                   if (!v) {
                     mainForm.setValue(`transport.airs.${index}.stopover`, null);
-                    setData((prev) =>
-                      prev.toSpliced(index, 1, {
-                        ...prev[index],
-                        stopover: null,
-                      })
-                    );
                   }
                 }}
               />
@@ -230,14 +229,6 @@ function QAir({ mainForm }: QuestionProps) {
               name={`transport.airs.${index}.stopover`}
               label={t("via")}
               data={airports?.reduced ?? []}
-              setValue={(v) => {
-                setData((prev) =>
-                  prev.toSpliced(index, 1, {
-                    ...prev[index],
-                    stopover: v,
-                  })
-                );
-              }}
             />
           </div>
           <Separator className="my-4" />
@@ -250,8 +241,9 @@ function QAir({ mainForm }: QuestionProps) {
             } 
           </p>
           </div>
-        </div>
+        </li>
       ))}
+      </ul>
       <Button
         type="button"
         className="rounded-full w-full ml-2 my-3 border-2
@@ -262,25 +254,7 @@ function QAir({ mainForm }: QuestionProps) {
         size={"lg"}
         variant={"ghost"}
         onClick={() => {
-          mainForm.setValue(`transport.airs`, [
-            {
-              destination: null,
-              origin: null,
-              frequency: null,
-              aircraftType: null,
-              class: null,
-              roundTrip: false,
-              stopover: null,
-              carbonEmissions: null,
-              distance: 0,
-              flightPurpose: "personal",
-              familyMembers: 1,
-            },
-          ]);
-          setData((prev) => [
-            ...prev,
-            { destination: "", origin: "", stopover: null },
-          ]);
+          handleAdd();
         }}
       >
         <Plus />

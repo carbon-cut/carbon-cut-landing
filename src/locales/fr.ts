@@ -228,7 +228,7 @@ export default {
             fioul: { 
               q: "Informations supplémentaires sur l'usage de fioul",
               label: "Fioul domestique", unit: "L/fréquence",
-              placeholder: 'quantity', 
+              placeholder: 'quantité', 
               frequency:{
                 label:'Fréquence',
                 month:'mois',
@@ -414,7 +414,7 @@ export default {
         commonTransport: {
           shortDistances: {
             title:'Moyens de transport communs',
-            q: "Quels sont les moyens de transport communs utilisés par tous les membres de votre foyer ?",
+            q: "Quels sont les moyens de transport communs utilisés par tous les membres de votre foyer?",
             titles: {
               bus: "Bus",
               metro: "Metro",

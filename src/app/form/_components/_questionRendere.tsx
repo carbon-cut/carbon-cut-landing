@@ -33,6 +33,7 @@ const QuestionRendrer = ({
       heatingQuantities: heatingQuantities,
       setHeatingQuantities: setHaetingQuantities}}>
       <Question {...props} />
+      <div className="h-6"></div>
     </BasicFormContext.Provider>
   );
 };

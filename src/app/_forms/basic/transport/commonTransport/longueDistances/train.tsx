@@ -30,24 +30,28 @@ const Train = ({ mainForm, idx }: QuestionProps & Props) => {
           label: tTypes(type),
         }))}
         label={t("type")}
+        fallback
       />
       <Input
         type="number"
         form={mainForm}
         name={`transport.commonTransport.longueDistances.train.${idx}.distance`}
         label={t("distance")}
+        fallback
       />
       <Input
         type="number"
         form={mainForm}
         name={`transport.commonTransport.longueDistances.train.${idx}.frequency`}
         label={t("frequency")}
+        fallback
       />
       <Input
         type="number"
         form={mainForm}
         name={`transport.commonTransport.longueDistances.train.${idx}.nbPeople`}
         label={t("nbPeople")}
+        fallback
       />
     </>
   );

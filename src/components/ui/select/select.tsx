@@ -49,6 +49,7 @@ function SelectTrigger({
         *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center
         *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none
         [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+        [&_span]:truncate
         `,
         className
       )}

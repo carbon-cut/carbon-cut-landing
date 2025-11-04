@@ -30,7 +30,7 @@ const Fioul = ({ mainForm, setSubmit }: QuestionProps) => {
               type="number"
             />
           </div>
-          <div className="col-span-1 w-3/12">
+          <div className="col-span-1 w-6/12">
             <FormSelect
               form={mainForm}
               name="energie.heating.quantities.fioul.frequency"

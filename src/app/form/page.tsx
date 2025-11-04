@@ -18,6 +18,7 @@ import ProgressBar from "./_components/_progressBar";
 import {  getIndex, getName } from "@/lib/formTabs/geters";
 import QuestionList from "./_components/questionList";
 import style from "./form.module.css";
+import Container  from "./_components/container";
 
 function Page() {
 
@@ -152,22 +153,12 @@ useEffect(()=>{
               
             </TabsList>
             </div>
-
-            <TabContent
+            <Container
               mainForm={mainForm}
-              initQuestions={transportQuestions}
+              initQuestions={{transport: transportQuestions, energie: energieQuestions, food: [[], ()=>{}], waste: [[], ()=>{}], vacation: [[], ()=>{}]}}
               setNextTab={setNextTab}
               value="transport"
-            />
-            <TabContent
-              mainForm={mainForm}
-              initQuestions={energieQuestions}
-              setNextTab={setNextTab}
-              value="energie"
-            />
-            <TabsContent value="food"></TabsContent>
-            <TabsContent value="waste"></TabsContent>
-            <TabsContent value="vacation"></TabsContent>
+             />
           </Tabs>
           
         </form>

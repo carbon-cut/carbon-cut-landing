@@ -37,9 +37,8 @@ function Container({ remove, children, id, idx, section }: Props) {
 
 
   return (
-    <div className="space-y-2">
+    <li key={id} className="space-y-2">
       <div
-        key={id}
         className={style.bg +"border rounded p-3 space-y-2 " }
       >
         <div className="flex items-center justify-between mb-2">
@@ -56,11 +55,11 @@ function Container({ remove, children, id, idx, section }: Props) {
             <X className="w-3 h-3" />
           </Button>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm items-end">
           {children}
         </div>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -106,24 +105,24 @@ const Title = ({
     switch (type) {
       case "bus":
         return {
-          busType: "diesel",
-          distance: 0,
-          nbPeople: 1,
-          frequency: 0,
+          busType: null,
+          distance: null,
+          nbPeople: null,
+          frequency: null,
         };
 
       case "metro":
         return {
-          distance: 0,
-          nbPeople: 1,
-          frequency: 0,
+          distance: null,
+          nbPeople: null,
+          frequency: null,
         };
       case "covoiturage":
         return {
-          distance: 0,
-          pepole: 1,
-          frequency: 0,
-          make: "",
+          distance: null,
+          pepole: null,
+          frequency: null,
+          make: null,
           engine: false,
         };
     }

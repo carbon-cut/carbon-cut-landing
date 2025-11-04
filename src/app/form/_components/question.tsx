@@ -44,30 +44,38 @@ const Question = ({
       setErrorc(false);
     }, [mainForm]);
 
+    const isCurrent = currentIndex === index && tab === section;
   return (
     <Button
       type="button"
       variant={"outline"}
       data-state={errorc ? "error" : ""}
-      data-current={(currentIndex === index && tab === section) ? "true" : "false"}
+      data-current={isCurrent ? "true" : "false"}
       className={`
-        w-full rounded-x text-start justify-start bg-white
-        ring-ring
-        data-[state=error]:bg-destructive/70
-        data-[current=true]:ring-ring
-        data-[current=true]:ring-1
-        h-fit p-3
-        grid grid-cols-12
+        w-full text-left p-3 rounded-md transition-all
+        bg-gray-50 hover:bg-gray-100 text-foreground
+        grid grid-cols-12 shadow-none border-0 h-fit
+        data-[current=true]:bg-section-transport data-[current=true]text-white data-[current=true]shadow-md
+        data-[state=error]:border-2 data-[state=error]:border-destructive
         `}
       onClick={setInterface}
     >
       <Label
         data-state={errorc ? "error" : ""}
-        className={`font-bold text-section-${section} hover:cursor-pointer data-[state=error]:text-muted-foreground `}
+        data-current={isCurrent ? "true" : "false"}
+        className={`my-auto font-bold text-section-${section}
+         data-[current=true]:text-white hover:cursor-pointer
+          data-[state=error]:!text-destructive
+         `}
       >
         Q{index + 1}
       </Label>
-      <Label className={`text-extrabold hover:cursor-pointer max-w-full text-wrap col-span-11`}>
+      <Label
+      className={`text-extrabold hover:cursor-pointer max-w-full text-wrap col-span-11
+        data-[current=true]:text-white data-[state=error]:!text-destructive`}
+      data-state={errorc ? "error" : ""}
+      data-current={isCurrent ? "true" : "false"}
+      >
         {typeof Symbol?.question === "string" ? t(Symbol.question): Symbol?.question ? t(Symbol.question[0], Symbol.question[1]) : ''}
       </Label>
     </Button>

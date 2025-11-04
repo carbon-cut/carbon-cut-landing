@@ -60,6 +60,7 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
             value: ele,
             label: tEngines(ele),
           }))}
+          fallback
         />
       </div>
       <Input
@@ -67,18 +68,22 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
         form={mainForm}
         name={`transport.commonTransport.shortDistances.covoiturage.${idx}.distance`}
         label={t("distance")}
+        placeholder="(km)"
+        fallback
       />
       <Input
         type="number"
         label={t("people")}
         form={mainForm}
         name={`transport.commonTransport.shortDistances.covoiturage.${idx}.pepole`}
+        fallback
       />
       <Input
         type="number"
         label={t("frequency")}
         form={mainForm}
         name={`transport.commonTransport.shortDistances.covoiturage.${idx}.frequency`}
+        fallback
       />
     </>
   );

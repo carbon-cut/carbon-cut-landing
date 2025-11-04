@@ -37,7 +37,6 @@ const meta = {
     setOnSubmit: fn(() => console.log("setOnSubmit")),
     setQuestions: fn(() => console.log("setQuestions")),
     currentIndex: 0,
-    setIsDirty: fn(() => console.log("setIsDirty")),
     index: 0,
   },
 } satisfies Meta<typeof Component>;

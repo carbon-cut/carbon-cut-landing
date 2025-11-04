@@ -29,18 +29,21 @@ const Metro = ({ mainForm, idx }: QuestionProps & Props) => {
         form={mainForm}
         name={`transport.commonTransport.shortDistances.metro.${idx}.distance`}
         label={t("distance")}
+        fallback
       />
       <Input
         type="number"
         form={mainForm}
         name={`transport.commonTransport.shortDistances.metro.${idx}.frequency`}
         label={t("frequency")}
+        fallback
       />
       <Input
         type="number"
         form={mainForm}
         name={`transport.commonTransport.shortDistances.metro.${idx}.nbPeople`}
         label={t("nbPeople")}
+        fallback
       />
     </>
   );

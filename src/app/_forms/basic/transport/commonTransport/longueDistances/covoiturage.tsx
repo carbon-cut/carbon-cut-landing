@@ -46,6 +46,7 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
         type="text"
         label={t("make")}
         name={`transport.commonTransport.longueDistances.covoiturage.${idx}.make`}
+        fallback
       />
       <div className="w-full">
         <FormSelect
@@ -56,6 +57,7 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
             value: ele,
             label: tEngines(ele),
           }))}
+          fallback
         />
       </div>
       <Input
@@ -63,18 +65,21 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
         form={mainForm}
         name={`transport.commonTransport.longueDistances.covoiturage.${idx}.distance`}
         label={t("distance")}
+        fallback
       />
       <Input
         type="number"
         label={t("people")}
         form={mainForm}
         name={`transport.commonTransport.longueDistances.covoiturage.${idx}.pepole`}
+        fallback
       />
       <Input
         type="number"
         label={t("frequency")}
         form={mainForm}
         name={`transport.commonTransport.longueDistances.covoiturage.${idx}.frequency`}
+        fallback
       />
     </>
   );
