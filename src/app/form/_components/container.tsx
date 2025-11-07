@@ -27,6 +27,7 @@ import { TName } from "@/components/ui/forms";
 import { TabValues } from "@/lib/formTabs/types";
 import { TabContent } from "./_tab";
 import { motion } from 'framer-motion'
+import { useScopedI18n } from "@/locales/client";
 interface ContainerProps {
   setNextTab: () => void;
   initQuestions: {
@@ -48,6 +49,8 @@ const Container = React.forwardRef<
   const [verifyFields, setVerifyFields] = useState<
     TName<z.infer<typeof formSchema>>[]
   >([]);
+
+  const t = useScopedI18n('forms');
 
   const verify = useCallback<() => Promise<boolean>>(async () => {
     if (verifyFields.length === 0) return true;
@@ -176,19 +179,28 @@ useEffect(() => {
         >
           <span className="flex items-center gap-3">
             <Image
-              src={"/form/utils/arrow-left.svg"}
+              src={"./form/utils/arrow-left.svg"}
               width={18}
               height={18}
               alt="arrow-left"
             />
             <span className="bg-linear-1 text-transparent bg-clip-text">
-              Précédent
+              {t("back")}
             </span>
           </span>
         </Button>
         <Button
-          className={`px-8 py-3 w-[175px] rounded-full font-semibold flex items-center gap-2 bg-gradient-to-r from-[#00A261] to-[#003A52] text-white hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg`}
+          className={`px-8 py-3 w-[175px] 
+            rounded-full font-semibold flex items-center gap-2 
+            bg-gradient-to-r from-[#00A261] to-[#003A52]
+            data-[state=submit]:bg-linear-energie
+            text-white hover:shadow-xl hover:scale-105
+            active:scale-95 
+            transition-all 
+            duration-200 shadow-lg`}
+            
           size={"lg"}
+          data-state={submit ? "submit" : "next"}
           type={submit ? "submit" : "button"}
           variant="default"
           onClick={async () => {
@@ -196,14 +208,15 @@ useEffect(() => {
             onSubmit();
             if (ver) next();
           }}
-        >
-          {submit ? "Submit" : "Continuer"}
-          <Image
-            src={"/form/utils/arrow-right.svg"}
+        ><span className="">
+          {submit ? t("submit") : t("next")}
+          </span>
+          {!submit && <Image
+            src={"./form/utils/arrow-right.svg"}
             width={16}
             height={16}
             alt="arrow-right"
-          />
+          />}
         </Button>
       </div>
     </div>

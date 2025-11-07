@@ -100,7 +100,7 @@ function Gpl({mainForm}: QuestionProps) {
 
         {Object.entries(groupedByFormat).map(([format, items]) => (
           <div key={format} className="mb-8">
-            <Question className="text-sm  font-semibold text-gray-700 mb-4 uppercase tracking-wide">
+            <Question className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">
               {t(format)}
             </Question>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

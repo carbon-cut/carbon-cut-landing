@@ -524,6 +524,7 @@ export default {
     next: "Continuer",
     back: "Précédent",
     preview: "Aperçu",
+    submit: 'Résultat',
   },
   utils: {
     months: {
