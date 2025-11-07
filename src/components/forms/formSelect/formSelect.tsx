@@ -28,6 +28,7 @@ interface Props<T extends FieldValues, E extends FieldPath<T>> {
   placeholder?: string;
   labelClassName?: string;
   fallback?: boolean;
+  size?: "sm" | "xl";
 }
 
 function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
@@ -39,6 +40,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
   data,
   labelClassName,
   fallback = false,
+  size = "xl",
 }: Props<T, E>) {
   const t = useScopedI18n("components.forms.combox");
 
@@ -58,12 +60,15 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
           <Select onValueChange={(_) => {console.log(_) ;field.onChange(_)}} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger 
+              data-size={'none'}
               onClick={e=>{setOpen(true)}}
               key={`${open}`}
-              className={`rounded-full w-full pl-3 
+              className={`rounded-full w-full  
                 text-left font-normal bg-white text-ellipsis
-                 ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : open ? 'outline-4 ring-1 ring-ring' : ''}`} >
-                <SelectValue className="text-ellipsis"  placeholder={placeholder ?? t("value", { placeholder })}  />
+                 ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : open ? 'outline-4 ring-1 ring-ring' : ''}
+                 ${size === 'sm' ? 'h-8 [&_span]:text-xs [&_svg]:size-3.5' : 'h-9'}
+                 `} >
+                <SelectValue placeholder={placeholder ?? t("value", { placeholder })}  />
               </SelectTrigger>
             </FormControl>
             <SelectContent onFocus={_=>setOpen(true)} onCloseAutoFocus={_=>setOpen(false)}>
@@ -74,7 +79,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
               ))}
             </SelectContent>
           </Select>
-          <FormMessage fallback={fallback} className="data-[state=disabled]:text-destructive/60" />
+          <FormMessage fallback={fallback} className={labelClassName} />
         </FormItem>
       )}
     />

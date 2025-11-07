@@ -105,7 +105,7 @@ const Title = ({
     switch (type) {
       case "bus":
         return {
-          busType: null,
+          busType: undefined,
           distance: null,
           nbPeople: null,
           frequency: null,
@@ -120,10 +120,10 @@ const Title = ({
       case "covoiturage":
         return {
           distance: null,
-          pepole: null,
+          people: null,
           frequency: null,
           make: null,
-          engine: false,
+          engine: undefined,
         };
     }
   };

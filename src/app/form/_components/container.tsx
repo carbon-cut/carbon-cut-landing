@@ -112,7 +112,7 @@ useEffect(() => {
               return (
                 <div
                   className={`p-4 rounded-full ${
-                    ColorVariant[props.value as keyof typeof ColorVariant]
+                    ColorVariant[tab as keyof typeof ColorVariant]
                   }`}
                 >
                   <Icon className="h-6 w-6 text-white" />

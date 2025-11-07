@@ -30,6 +30,7 @@ const Metro = ({ mainForm, idx }: QuestionProps & Props) => {
         name={`transport.commonTransport.shortDistances.metro.${idx}.distance`}
         label={t("distance")}
         fallback
+        placeholder="Km"
       />
       <Input
         type="number"

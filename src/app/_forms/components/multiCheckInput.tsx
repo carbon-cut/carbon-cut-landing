@@ -69,7 +69,7 @@ export function MultiCheckInput<
           render={({ field}) => {
             const [checkedValue, setChecked] = useState(checked(value));
             return (
-              <FormItem className="w-5/12 ">
+              <FormItem className="w-6/12 ">
                 <FormControl className="">
                   <SwitchForm
                     disabled={props.disabled}

@@ -42,7 +42,7 @@ const Bus = ({ mainForm, idx }: QuestionProps & Props) => {
         name={`transport.commonTransport.shortDistances.bus.${idx}.distance`}
         label={t("distance")}
         type="number"
-        placeholder="(km)"
+        placeholder="Km"
         fallback
       />
       <Input

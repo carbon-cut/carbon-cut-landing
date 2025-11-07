@@ -1,17 +1,19 @@
 import { z } from "zod";
 
-import {union, carType} from "./utils";
+import { union, carType } from "./utils";
 import car from "./validation/cars";
+
+const required = {
+  errorMap: () => ({ message: "Required" }),
+} as const;
 
 const transport = z.object({
   hasCar: z.coerce.number().default(0),
   hasMoto: z.coerce.number().default(0),
-  hasAir: z.coerce.boolean().default(false),
+  hasAir: z.coerce.boolean(),
   hasSea: z.coerce.boolean().default(false),
-  cars: z.array(
-    car
-  ),
-  motos: z.array(
+  cars: z.array(car).optional(),
+  /* motos: z.array(
     z.object({
       motoMake: z.string().min(1),
       motoModel: z.string().min(1),
@@ -26,8 +28,8 @@ const transport = z.object({
       motoDistanceConsumption: z.number(),
       motoMileage: z.number(),
       motoFuelPrise: z.number().optional(),
-    }),
-  ),
+    })
+  ), */
   auxilary: z.object({
     electricBike: z.number().default(0),
     electricScooter: z.number().default(0),
@@ -35,41 +37,39 @@ const transport = z.object({
   }),
   airs: z.array(
     z.object({
-      origin: z.string().nullable(),
-      destination: z.string().nullable(),
+      origin: z.string(required),
+      destination: z.string(required),
       stopover: z.string().nullable(),
       carbonEmissions: z.number().nullable(),
       distance: z.number(),
-      aircraftType: z
-        .union([
-          z.literal("A220"),
-          z.literal("A319"),
-          z.literal("A320"),
-          z.literal("A321"),
-          z.literal("A330"),
-          z.literal("Boeing737"),
-          z.literal("Boeing757"),
-          z.literal("Boeing767"),
-          z.literal("Boeing777"),
-          z.literal("Boeing787"),
-          z.literal("other"),
-        ])
-        .nullable(),
-      class: z
-        .union([
-          z.literal("economy"),
-          z.literal("premium"),
-          z.literal("business"),
-          z.literal("first"),
-        ])
+      aircraftType: 
+        union(
+          "A220",
+          "A319",
+          "A320",
+          "A321",
+          "A330",
+          "Boeing737",
+          "Boeing757",
+          "Boeing767",
+          "Boeing777",
+          "Boeing787",
+          "other",
+        ),
+      class: union(
+          "economy",
+          "premium",
+          "business",
+          "first",
+        )
         .nullable(),
       roundTrip: z.boolean().default(false),
       flightPurpose: union("tourism", "business", "personal").nullable(),
       frequency: z.number().nullable(),
       familyMembers: z.number().nullable(),
-    }),
+    })
   ),
-  seas: z.array(
+  /* seas: z.array(
     z.object({
       distance: z.number().nullable(),
       frequency: z.number().nullable(),
@@ -77,8 +77,8 @@ const transport = z.object({
       people: z.number().nullable(),
       type: union("fluvial", "ferry", "cruise").nullable().default("ferry"),
       tripPurpose: union("tourism", "business", "personal").nullable(),
-    }),
-  ),
+    })
+  ), */
   commonTransport: z.object({
     shortDistances: z.object({
       bus: z.array(
@@ -88,70 +88,66 @@ const transport = z.object({
             "diesel",
             "gasoline",
             "hybrid",
-            "naturalGaz",
+            "naturalGaz"
           ),
-          distance: z.number(),
-          frequency: z.number(),
+          distance: z.number(required),
+          frequency: z.number(required),
           nbPeople: z.number().nullable(),
-        }),
+        })
       ),
       metro: z.array(
         z.object({
-          distance: z.number(),
-          frequency: z.number(),
+          distance: z.number(required),
+          frequency: z.number(required),
           nbPeople: z.number().nullable(),
-        }),
-      ),
-      tramway: z.array(
-        z.object({
-          distance: z.number(),
-          frequency: z.number(),
-        }),
+        })
       ),
       covoiturage: z.array(
         z.object({
-          make: z.string(),
-          engine: carType.optional(),
-          distance: z.number(),
-          pepole: z.number(),
-          frequency: z.number(),
-        }),
+          make: z.string().optional().nullable(),
+          engine: carType,
+          distance: z.number({
+            errorMap: () => ({ message: "Required" }),
+          }),
+          people: z.number().nullable(),
+          frequency: z.number({
+            errorMap: () => ({ message: "Required" }),
+          }),
+        })
       ),
     }),
     longueDistances: z.object({
       bus: z.array(
         z
           .object({
-            busType: union("other", "diesel",),
-            distance: z.number(),
-            frequency: z.number(),
+            busType: union("other", "diesel"),
+            distance: z.number(required),
+            frequency: z.number(required),
             nbPeople: z.number().nullable(),
           })
-          .nullable(),
+          .nullable()
       ),
       train: z.array(
         z
           .object({
-            distance: z.number(),
-            frequency: z.number(),
+            distance: z.number(required),
+            frequency: z.number(required),
             type: union("intercity", "TER", "TGV"),
             nbPeople: z.number().nullable(),
           })
-          .nullable(),
+          .nullable()
       ),
       covoiturage: z.array(
-        z
-          .object({
-            make: z.string(),
-            engine: carType,
-            distance: z.number(),
-            pepole: z.number(),
-            frequency: z.number(),
-          })
-          .nullable(),
+        z.object({
+          make: z.string().optional().nullable(),
+          engine: carType,
+          distance: z.number(required),
+          people: z.number().nullable(),
+          frequency: z.number(required),
+        })
       ),
     }),
   }),
 });
 
-export {transport}
+export { transport };

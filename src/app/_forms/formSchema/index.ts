@@ -8,7 +8,7 @@ import { holiday } from "./holiday";
 export const formSchema = z.object({
   transport,
   energie,
-  waste,
-  food,
-  holiday,
+  //waste,
+  //food,
+  //holiday,
 });

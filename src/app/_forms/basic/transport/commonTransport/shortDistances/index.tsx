@@ -104,8 +104,11 @@ const QShortDistances = (props: QuestionProps) => {
 };
 
 QShortDistances["Symbol"] = {
-  question: "forms.basic.transport.commonTransport.shortDistances.q",
-  fields: [],
+  question: "forms.basic.transport.commonTransport.shortDistances.title",
+  fields: [
+    'transport.commonTransport',
+    'transport.commonTransport.shortDistances'
+  ],
 };
 
 export default QShortDistances;

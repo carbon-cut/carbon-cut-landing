@@ -8,7 +8,7 @@ import BasicFormContext from "@/app/form/_components/basicFormContext";
 import { addQestions, deleteQuestions } from "@/lib/utils/addQuestion";
 import ElectricalHeating from "./electricalHeating";
 import CentralHeating from "./centralHeating";
-import Gpl from "./gpl";
+import Gpl from "./quantities/gpl";
 import HeatingBill from "./heatingBill";
 
 const heatingMethods = [

@@ -109,6 +109,7 @@ const QLongueDistances = (props: QuestionProps) => {
 QLongueDistances["Symbol"] = {
   question: "forms.basic.transport.commonTransport.longueDistances.title",
   fields: [
+    'transport.commonTransport',
     'transport.commonTransport.longueDistances',
   ],
 };

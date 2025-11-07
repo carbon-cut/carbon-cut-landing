@@ -22,8 +22,8 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
     "forms.basic.transport.commonTransport.shortDistances.covoiturage"
   );
 
-  const tEngines = useScopedI18n(
-    "forms.basic.transport.commonTransport.longueDistances.shortDistances.engines"
+    const tEngines = useScopedI18n(
+    "forms.basic.transport.qCar1-2"
   );
 
   /*   const { data: cars } = useQuery<{ value: string; label: string }[], Error>({
@@ -41,13 +41,6 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
 
   return (
     <>
-      <Input
-        form={mainForm}
-        type="text"
-        label={t("make")}
-        name={`transport.commonTransport.longueDistances.covoiturage.${idx}.make`}
-        fallback
-      />
       <div className="w-full">
         <FormSelect
           name={`transport.commonTransport.longueDistances.covoiturage.${idx}.engine`}
@@ -66,12 +59,13 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
         name={`transport.commonTransport.longueDistances.covoiturage.${idx}.distance`}
         label={t("distance")}
         fallback
+        placeholder="Km"
       />
       <Input
         type="number"
         label={t("people")}
         form={mainForm}
-        name={`transport.commonTransport.longueDistances.covoiturage.${idx}.pepole`}
+        name={`transport.commonTransport.longueDistances.covoiturage.${idx}.people`}
         fallback
       />
       <Input

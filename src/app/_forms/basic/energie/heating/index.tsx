@@ -7,7 +7,7 @@ import {
   Fioul,
 } from "./quantities";
 import ElectricalHeating from "./electricalHeating";
-//import Gpl from "./gpl";
+import Gpl from "./quantities/gpl";
 
 
 export {
@@ -17,5 +17,5 @@ export {
   WoodCharcoal, 
   Fioul,
   ElectricalHeating,
-  //Gpl
+  Gpl
 };

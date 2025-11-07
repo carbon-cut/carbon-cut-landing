@@ -198,22 +198,25 @@ export default {
             gasNetwork: { label: "Réseau de gaz", unit: "null" },
             heatNetwork: { label: "Réseau de chaleur", unit: "null" },
             GPL: {
+              title: "Gaz de pétrole liquéfié (GPL)",
               label: "Gaz de pétrole liquéfié (GPL)",
-              unit: "bouteille",
+              description: 'Sélectionnez les types de gaz que vous utilisez et indiquez la fréquence de renouvellement',
+              unit: "Bouteille",
+              quantity: "Quantité",
               big:'Grand Format',
               small:'Petit Format',
               types: {
-                propane: "propane: vert/doré",
-                butane: "butane bleu foncé/rouge",
-                butaneSmall: "butane 5.5kg rouge",
-                butaneBig: "butane 10kg rouge/bleu",
-                propaneBig: "propane: 5kg jaune",
-                propaneSmall: "propane: 13kg vert/doré",
+                propane: "Propane: 35kg vert/doré", // 35 Kg
+                butane: "Butane: 13kg bleu foncé/rouge", //13
+                butaneSmall: "Butane: 5.5kg rouge", //5.5
+                butaneBig: "Butane: 10kg rouge/bleu", //10
+                propaneSmall: "Propane: 5kg jaune", //5
+                propaneBig: "Propane: 13kg vert/doré", //13
               },
               frequency: {
-                placeholder: "sélectionnez fréquence",
+                placeholder: "Fréquence",
                 month: "chaque mois",
-                year: "chaque annné",
+                year: "chaque année",
               },
             },
             gasTank: { label: "Citerne de gaz", unit: "null" },
@@ -486,13 +489,13 @@ export default {
             q1: {
               q: "Détails de vos vols",
               description: "Ajoutez les détails de vos vols annuels",
-              origin: "origin",
-              destination: "destination",
+              origin: "Origine",
+              destination: "Destination",
               stopover: "escale",
               via: "À travers",
-              frequency: "frequence annuelle",
+              frequency: "Frequence annuelle",
               aircraftType: "Type Avion",
-              class: "class de vol ",
+              class: "Class de vol ",
               roundTrip: "Allez-retour",
               carbonEmissions: "Emissions de Carbon",
               distance: "Distance",

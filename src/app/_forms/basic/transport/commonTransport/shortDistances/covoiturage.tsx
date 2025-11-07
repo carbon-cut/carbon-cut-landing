@@ -1,10 +1,6 @@
 import { QuestionProps } from "../../../../types";
-import { useQuery } from "@tanstack/react-query";
 import Input from "@/app/_forms/components/input";
 import { useScopedI18n } from "@/locales/client";
-import { Button } from "@/components/ui/button";
-import { UseFieldArrayRemove } from "react-hook-form";
-import { X } from "lucide-react";
 import FormSelect from "@/components/forms/formSelect";
 
 const fuelTypes = [
@@ -27,7 +23,7 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
   );
 
   const tEngines = useScopedI18n(
-    "forms.basic.transport.commonTransport.shortDistances.covoiturage.engines"
+    "forms.basic.transport.qCar1-2"
   );
 
   /*   const { data: cars } = useQuery<{ value: string; label: string }[], Error>({
@@ -45,12 +41,6 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
 
   return (
     <>
-      <Input
-        form={mainForm}
-        type="text"
-        label={t("make")}
-        name={`transport.commonTransport.shortDistances.covoiturage.${idx}.make`}
-      />
       <div className="w-full">
         <FormSelect
           name={`transport.commonTransport.shortDistances.covoiturage.${idx}.engine`}
@@ -68,14 +58,14 @@ const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
         form={mainForm}
         name={`transport.commonTransport.shortDistances.covoiturage.${idx}.distance`}
         label={t("distance")}
-        placeholder="(km)"
+        placeholder="Km"
         fallback
       />
       <Input
         type="number"
         label={t("people")}
         form={mainForm}
-        name={`transport.commonTransport.shortDistances.covoiturage.${idx}.pepole`}
+        name={`transport.commonTransport.shortDistances.covoiturage.${idx}.people`}
         fallback
       />
       <Input

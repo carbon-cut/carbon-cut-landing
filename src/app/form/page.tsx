@@ -27,11 +27,6 @@ function Page() {
   const [resultOpen, setResultOpen] = useState<boolean>(false);
   const [result, setResult] = useState<unknown>(null);
 
-useEffect(()=>{
-  console.log(readyToSubmit);
-}, [readyToSubmit])
-
-
   const [questionList, setQuestionList] = useState<boolean>(false);
 
   const transportQuestions = useState(initTransportQuestions);

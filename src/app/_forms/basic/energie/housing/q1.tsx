@@ -73,7 +73,8 @@ function Q1({ mainForm }: QuestionProps) {
         </div>
       </Content>
       <Question>{t("q3")}</Question>
-      <Content>
+      <Content className="-ml-16">
+        <div className="-ml-4">
         <MultiCheckInput
           type="boolean"
           className="grid grid-rows-2 grid-cols-1 ml-0"
@@ -92,6 +93,7 @@ function Q1({ mainForm }: QuestionProps) {
             },
           ]}
         />
+        </div>
       </Content>
     </div>
   );

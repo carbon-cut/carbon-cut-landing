@@ -71,7 +71,7 @@ function Input<T extends FieldValues>({
               <div className={cn(`w-full inline-block`, className)}>
                 <InputRoot
                   disabled={disabled}
-                  className={cn(`w-full ${size === 'xl' ? 'h-9' : 'h-8'} rounded-full text-xl bg-white 
+                  className={cn(`w-full ${size === 'xl' ? 'h-9 text-xl' : 'h-8 !text-xs'} rounded-full  bg-white 
                   ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : ''}
                   `, '')}
                   placeholder={placeholder}
@@ -118,7 +118,8 @@ function Input<T extends FieldValues>({
               </div>
             </FormControl>
             {description && <FormDescription>{description}</FormDescription>}
-            <FormMessage fallback={fallback} data-state={disabled && "disabled"} className="ml-3 data-[state=disabled]:text-destructive/60" />
+            <FormMessage className={labelClassName} 
+            fallback={fallback} data-state={disabled && "disabled"}  />
           </FormItem>
         );
       }}

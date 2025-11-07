@@ -109,12 +109,12 @@ function QAir({ mainForm }: QuestionProps) {
     const scrollY = window.scrollY
 
     // Add your new item here (state update)
+    
     append(
-            {
-              destination: null,
-              origin: null,
+            { 
+              //@ts-expect-error
+              destination: null, origin: null,  aircraftType: null,
               frequency: null,
-              aircraftType: null,
               class: null,
               roundTrip: false,
               stopover: null,
@@ -150,7 +150,7 @@ function QAir({ mainForm }: QuestionProps) {
           >
             <Trash />
           </Button>
-          <div className="grid grid-cols-4 gap-10 mb-6">
+          <div className="grid grid-cols-4 gap-10 mb-6 items-end">
             <FormMultiCombox
               labelClassName="text-black/70"
               className="text-primary"
@@ -158,6 +158,7 @@ function QAir({ mainForm }: QuestionProps) {
               name={`transport.airs.${index}.origin`}
               data={airports?.reduced ?? []}
               label={t("origin")}
+              fallback
             />
             <FormMultiCombox
             labelClassName="text-black/70"
@@ -165,6 +166,7 @@ function QAir({ mainForm }: QuestionProps) {
               name={`transport.airs.${index}.destination`}
               label={t("destination")}
               data={airports?.reduced ?? []}
+              fallback
             />
             <FormSelect
             labelClassName="text-black/70"
@@ -172,6 +174,7 @@ function QAir({ mainForm }: QuestionProps) {
               form={mainForm}
               name={`transport.airs.${index}.aircraftType`}
               label={t("aircraftType")}
+              fallback
             />
             <FormSelect
             labelClassName="text-black/70"
@@ -179,9 +182,10 @@ function QAir({ mainForm }: QuestionProps) {
               form={mainForm}
               name={`transport.airs.${index}.class`}
               label={t("class")}
+              fallback
             />
           </div>
-          <div className="grid grid-cols-4 gap-10">
+          <div className="grid grid-cols-4 gap-10 items-end">
             <Input
             labelClassName="text-black/70"
               label={t("frequency")}
@@ -189,6 +193,7 @@ function QAir({ mainForm }: QuestionProps) {
               type="number"
               form={mainForm}
               name={`transport.airs.${index}.frequency`}
+              fallback
             />
             <Input
             labelClassName="text-black/70"
@@ -197,8 +202,9 @@ function QAir({ mainForm }: QuestionProps) {
               type="number"
               form={mainForm}
               name={`transport.airs.${index}.carbonEmissions`}
+              fallback
             />
-            <div>
+            <div className="self-center">
               <div className='flex items-center gap-4 mt-6'>
               <Checkbox
                 id={`stopover${index}`}
@@ -229,6 +235,7 @@ function QAir({ mainForm }: QuestionProps) {
               name={`transport.airs.${index}.stopover`}
               label={t("via")}
               data={airports?.reduced ?? []}
+              fallback
             />
           </div>
           <Separator className="my-4" />
