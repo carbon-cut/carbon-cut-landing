@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 function Footer() {
@@ -11,9 +12,9 @@ function Footer() {
               Share Results
             </button>
 
-            <button className="px-8 py-3 rounded-lg border-2 border-[#4ECDC4] bg-white text-[#4ECDC4] font-light hover:bg-[#E6FFFE] transition-colors duration-300 shadow-md hover:shadow-lg">
+            <Link href={'/form'} className="px-8 py-3 rounded-lg border-2 border-[#4ECDC4] bg-white text-[#4ECDC4] font-light hover:bg-[#E6FFFE] transition-colors duration-300 shadow-md hover:shadow-lg">
               Retake Assessment
-            </button>
+            </Link>
           </div>
   )
 }

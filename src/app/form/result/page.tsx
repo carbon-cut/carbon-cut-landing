@@ -5,6 +5,7 @@ import ResultCard from "./resultCard"
 import Recommendations from "./recommendations"
 import Footer from "./footer"
 import Categorisation from "./categorisation"
+import { TabValues } from "@/lib/formTabs/types"
 
 export default function Page() {
   const [carbonFootprint, setCarbonFootprint] = useState(0)
@@ -30,33 +31,38 @@ export default function Page() {
     animateCounter()
   }, [])
 
-  const breakdownData = [
+  const breakdownData:{
+    name: TabValues,
+    value: number,
+    tons: number,
+    color: string
+  }[] = [
     {
-      name: "Transport",
+      name: "transport",
       value: 35,
       tons: 1.82,
       color: "#FF6034",
     },
     {
-      name: "Energy",
+      name: "energie",
       value: 28,
       tons: 1.46,
       color: "#00A261",
     },
     {
-      name: "Food",
+      name: "food",
       value: 18,
       tons: 0.94,
       color: "#FFB84D",
     },
     {
-      name: "Waste",
+      name: "waste",
       value: 12,
       tons: 0.62,
       color: "#4ECDC4",
     },
     {
-      name: "Vacation",
+      name: "vacation",
       value: 7,
       tons: 0.36,
       color: "#A78BFA",

@@ -33,6 +33,23 @@ export const getName = (tab: TabValues | string) => {
     }
 }
 
+export const getSvg = (tab: TabValues | string) => {
+    switch (tab) {
+        case "transport":
+            return 'car';
+        case "food":
+            return 'utensils-crossed';
+        case "vacation":
+            return 'plane';
+        case "energie":
+            return 'zap';
+        case "waste":
+            return 'trash-2';
+            default:
+                return 'car';
+    }
+}
+
 export const getIcon = (tab: TabValues | string) => {
     switch (tab) {
         case "transport":
