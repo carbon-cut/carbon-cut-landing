@@ -1,10 +1,8 @@
-import { TabsContent, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
+import { TabsContent } from "@/components/ui/tabs";
 import React, {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -37,12 +35,13 @@ interface ContainerProps {
     ];
   };
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
+  loading: boolean
 }
 
 const Container = React.forwardRef<
   React.ElementRef<typeof TabsContent>,
   React.ComponentPropsWithoutRef<typeof TabsContent> & ContainerProps
->(({ setNextTab, initQuestions, mainForm, ...props }, ref) => {
+>(({ setNextTab, initQuestions, mainForm,loading ,...props }, ref) => {
   const { tab, currentIndexes, setCurrentIndexes } = useContext(FormContext);
   const [onSubmit, setOnSubmit] = useState<() => void>(() => () => {});
   const [prevAction, setPrevAction] = useState<"next" | "prev" | null>(null);
@@ -178,8 +177,8 @@ useEffect(() => {
           onClick={prev}
         >
           <span className="flex items-center gap-3">
-            <Image
-              src={"./form/utils/arrow-left.svg"}
+            <img
+              src={"/form/utils/arrow-left.svg"}
               width={18}
               height={18}
               alt="arrow-left"
@@ -198,7 +197,7 @@ useEffect(() => {
             active:scale-95 
             transition-all 
             duration-200 shadow-lg`}
-            
+            disabled={loading}
           size={"lg"}
           data-state={submit ? "submit" : "next"}
           type={submit ? "submit" : "button"}
@@ -211,8 +210,8 @@ useEffect(() => {
         ><span className="">
           {submit ? t("submit") : t("next")}
           </span>
-          {!submit && <Image
-            src={"./form/utils/arrow-right.svg"}
+          {!submit && <img
+            src={"/form/utils/arrow-right.svg"}
             width={16}
             height={16}
             alt="arrow-right"

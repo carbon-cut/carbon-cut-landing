@@ -1,11 +1,13 @@
-"use client"
-
+'use client'
 import { useState, useEffect } from "react"
 import ResultCard from "./resultCard"
 import Recommendations from "./recommendations"
 import Footer from "./footer"
-import Categorisation from "./categorisation"
 import { TabValues } from "@/lib/formTabs/types"
+
+import dynamic from 'next/dynamic';
+
+const Categorisation = dynamic(() => import('./categorisation'), { ssr: false });
 
 export default function Page() {
   const [carbonFootprint, setCarbonFootprint] = useState(0)

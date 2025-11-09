@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { QuestionProps } from "../../../../types";
-import QuestionCompo1 from "./qMoto1-1";
+//import QuestionCompo1 from "./qMoto1-1";
 import QuestionCompo2 from "./qMoto1-2";
 
 function QMoto1(index: number) {
   function MotoComponent(questionProps: QuestionProps) {
     return (
       <>
-        <QuestionCompo1 index={index} {...questionProps} />
+       {/*  <QuestionCompo1 index={index} {...questionProps} /> */}
         <QuestionCompo2 index={index} {...questionProps} />
       </>
     );

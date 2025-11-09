@@ -15,4 +15,7 @@ export const handlers = [
     console.log("mocked result:", output)
     return HttpResponse.json(output)
   }),
+  http.post(`${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/basic`, () => {
+    return HttpResponse.json({id: 1})
+  })
 ]

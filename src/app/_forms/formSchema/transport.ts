@@ -13,7 +13,7 @@ const transport = z.object({
   hasAir: z.coerce.boolean(),
   hasSea: z.coerce.boolean().default(false),
   cars: z.array(car).optional(),
-  /* motos: z.array(
+  motos: z.array(
     z.object({
       motoMake: z.string().min(1),
       motoModel: z.string().min(1),
@@ -29,7 +29,7 @@ const transport = z.object({
       motoMileage: z.number(),
       motoFuelPrise: z.number().optional(),
     })
-  ), */
+  ).optional(),
   auxilary: z.object({
     electricBike: z.number().default(0),
     electricScooter: z.number().default(0),
@@ -68,7 +68,7 @@ const transport = z.object({
       frequency: z.number().nullable(),
       familyMembers: z.number().nullable(),
     })
-  ),
+  ).optional(),
   /* seas: z.array(
     z.object({
       distance: z.number().nullable(),

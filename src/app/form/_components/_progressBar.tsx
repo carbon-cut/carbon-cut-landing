@@ -10,10 +10,11 @@ type ProgressProps = {
     currentQuestion: number;
     currentSectionDataLength: number;
     currentSectionName: string;
-    tab: TabValues
+    tab: TabValues;
+    children?: React.ReactNode
 }
 function ProgressBar({
-    dataLengths, currentQuestion, currentSectionDataLength, currentSectionName, tab
+    children,dataLengths, currentQuestion, currentSectionDataLength, currentSectionName, tab
 }: ProgressProps) {
 
   const progress = useMemo(()=>{
@@ -47,16 +48,21 @@ return (sup + currentQuestion)/dataLengths.total * 100
   }
 
   return (
-    <div className='max-w-6xl mx-auto'>
+    <div className='max-w-6xl mx-auto relative'>
     <div className="mb-8 ">
+      
         <div className="flex justify-between items-center mb-2 ">
           <span className="text-sm font-medium text-muted-foreground">
             {currentSectionName} - Question {currentQuestion + 1} of {currentSectionDataLength}
           </span>
-          <span className="text-sm font-medium text-muted-foreground">{Math.round(progress)}% Complete</span>
+          <div>
+          <span className="text-sm mr-4 font-medium text-muted-foreground">{Math.round(progress)}% Complete</span>
+          {children}
+          </div>
         </div>
         <Progress color={ColorVariants[tab].main} value={progress} bg={`h-21 ${ColorVariants[tab].bg}`} />
     </div>
+    
     </div>
   )
 }

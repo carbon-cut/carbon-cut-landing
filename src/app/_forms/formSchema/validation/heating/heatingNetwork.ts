@@ -5,7 +5,7 @@ const heatingBill = (input: unknown, ctx: z.RefinementCtx) => {
     const fioulParse = heating.pick({
         heatNetwork: true,
     }).safeParse(input);
-    const fiouqntityParse = heating.shape.quantities.pick({
+    const fiouqntityParse = heating.shape.quantities.unwrap().pick({
         heatingNetwork: true,
     }).safeParse(
     //@ts-ignore

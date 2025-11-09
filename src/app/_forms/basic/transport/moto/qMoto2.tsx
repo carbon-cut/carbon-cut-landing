@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/* import React, { useEffect, useState } from "react";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
@@ -59,3 +59,4 @@ const QMoto2 = (index: number) => {
 };
 
 export default QMoto2;
+ */

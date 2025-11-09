@@ -112,7 +112,7 @@ const heating = z.object({
         //index: z.number().nullable(),
       })
       .optional(),
-  }),
+  }).optional(),
 });
 
 export default heating;

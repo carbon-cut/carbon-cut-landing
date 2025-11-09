@@ -114,7 +114,7 @@ function Gpl({mainForm}: QuestionProps) {
                     const parent = useRef(null);
 
                     useEffect(() => {
-                      parent.current &&
+                      if (parent.current)
                         autoAnimate(parent.current, { duration: 200 });
                     }, [parent]);
 

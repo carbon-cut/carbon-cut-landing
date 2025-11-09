@@ -9,7 +9,7 @@ const woodCharcoal = (input: unknown, ctx: z.RefinementCtx, type: 'wood' | 'char
     const rawParse = heating.pick({
         [type]: true,
     } as WoodCharcoalType).safeParse(input);
-    const rawQuantityParse = heating.shape.quantities.pick({
+    const rawQuantityParse = heating.shape.quantities.unwrap().pick({
         [type]: true,
     } as WoodCharcoalType).safeParse(
         //@ts-ignore

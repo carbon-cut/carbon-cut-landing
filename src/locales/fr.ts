@@ -176,35 +176,48 @@ export default {
           options: {
             heatPump: { label: "Pompe à chaleur", unit: "null" },
             electricity: { label: "Électricité", unit: "null" },
-            electricHeating: { 
+            electricHeating: {
               label: "Chauffage électrique",
               unit: "null",
-              fields:{
+              fields: {
                 energyLabel: "label Energetique",
-                dailyFrequency: {label: "Fréquence quotidienne", unit: "h/jours"},
-                annualFrequency: {label: "fréquence annuelle", unit: "moins/an"},
+                dailyFrequency: {
+                  label: "Fréquence quotidienne",
+                  unit: "h/jours",
+                },
+                annualFrequency: {
+                  label: "fréquence annuelle",
+                  unit: "moins/an",
+                },
                 nbUnit: "nombre d'unité individuelle",
-              }
+              },
             },
             electricalCentralHeating: {
               label: "Chauffage central electrique",
               unit: "null",
-              fields:{
+              fields: {
                 energyLabel: "label Energetique",
-                dailyFrequency: {label: "Fréquence quotidienne", unit: "h/jours"},
-                annualFrequency: {label: "fréquence annuelle", unit: "moins/an"},
-              }
+                dailyFrequency: {
+                  label: "Fréquence quotidienne",
+                  unit: "h/jours",
+                },
+                annualFrequency: {
+                  label: "fréquence annuelle",
+                  unit: "moins/an",
+                },
+              },
             },
             gasNetwork: { label: "Réseau de gaz", unit: "null" },
             heatNetwork: { label: "Réseau de chaleur", unit: "null" },
             GPL: {
               title: "Gaz de pétrole liquéfié (GPL)",
               label: "Gaz de pétrole liquéfié (GPL)",
-              description: 'Sélectionnez les types de gaz que vous utilisez et indiquez la fréquence de renouvellement',
+              description:
+                "Sélectionnez les types de gaz que vous utilisez et indiquez la fréquence de renouvellement",
               unit: "Bouteille",
               quantity: "Quantité",
-              big:'Grand Format',
-              small:'Petit Format',
+              big: "Grand Format",
+              small: "Petit Format",
               types: {
                 propane: "Propane: 35kg vert/doré", // 35 Kg
                 butane: "Butane: 13kg bleu foncé/rouge", //13
@@ -221,37 +234,39 @@ export default {
             },
             gasTank: { label: "Citerne de gaz", unit: "null" },
             QgasTank: {
-              title:'Citerne de gaz',
+              title: "Citerne de gaz",
               q: "Informations supplémentaires sur la citerne de gaz",
               l1: "Fréquence",
               u1: "remplissages/an",
-              l2: 'Capacité',
-              u2: 'L',
+              l2: "Capacité",
+              u2: "L",
             },
-            fioul: { 
+            fioul: {
               q: "Informations supplémentaires sur l'usage de fioul",
-              label: "Fioul domestique", unit: "L/fréquence",
-              placeholder: 'quantité', 
-              frequency:{
-                label:'Fréquence',
-                month:'mois',
-                year:'année'
-              } },
-            charcoal: { 
-              label: "Charbon",
-              unit: "Kg/" ,
-              frequency: 'fréquence',
-              qunits:{
-                label: 'unité',
-                kg: 'Kg',
-                m3: 'm3',
+              label: "Fioul domestique",
+              unit: "L/fréquence",
+              placeholder: "quantité",
+              frequency: {
+                label: "Fréquence",
+                month: "mois",
+                year: "année",
               },
-              funits:{
-                label: 'Fréquence',
-                day: 'jour',
-                week: 'semaine',
-                month: 'mois',
-                year: 'annee'
+            },
+            charcoal: {
+              label: "Charbon",
+              unit: "Kg/",
+              frequency: "fréquence",
+              qunits: {
+                label: "unité",
+                kg: "Kg",
+                m3: "m3",
+              },
+              funits: {
+                label: "Fréquence",
+                day: "jour",
+                week: "semaine",
+                month: "mois",
+                year: "annee",
               },
             },
             wood: {
@@ -259,33 +274,32 @@ export default {
               title: "Bois et Charbon",
               quantity: "Quantité",
               unit: "Kg/",
-              frequency: 'fréquence',
-              qunits:{
-                label: 'unité',
-                kg: 'Kg',
-                m3: 'm3',
-                stere: 'stere'
+              frequency: "fréquence",
+              qunits: {
+                label: "unité",
+                kg: "Kg",
+                m3: "m3",
+                stere: "stere",
               },
-              funits:{
-                label: 'Fréquence',
-                day: 'jour',
-                week: 'semaine',
-                month: 'mois',
-                year: 'annee'
+              funits: {
+                label: "Fréquence",
+                day: "jour",
+                week: "semaine",
+                month: "mois",
+                year: "annee",
               },
             },
           },
-          q2:{
-            q: 'what is the type of your fireplace?',
-            title: 'Fireplace Type',
-            rows:{
-              insert: 'Insert',
-              stove: 'poele',
-              openFireplace: 'openFireplace',
-              woodBoiler: 'woodBoiler',
-            }
-
-          }
+          q2: {
+            q: "what is the type of your fireplace?",
+            title: "Fireplace Type",
+            rows: {
+              insert: "Insert",
+              stove: "poele",
+              openFireplace: "openFireplace",
+              woodBoiler: "woodBoiler",
+            },
+          },
         },
         q1: {
           title: "facture d'électricité",
@@ -307,7 +321,7 @@ export default {
           },
         },
         heatingBill: {
-          title:'Réseaux de chaleur',
+          title: "Réseaux de chaleur",
           q: "En utilisant vos factures de réseaux de chaleur comme référence, quelle a été votre consommation au cours des 12 derniers mois ?",
           q2: "Quel est l'index de votre compteur de chaleur ?",
           q3: {
@@ -416,7 +430,7 @@ export default {
         },
         commonTransport: {
           shortDistances: {
-            title:'Moyens de transport communs',
+            title: "Moyens de transport communs",
             q: "Quels sont les moyens de transport communs utilisés par tous les membres de votre foyer?",
             titles: {
               bus: "Bus",
@@ -442,18 +456,18 @@ export default {
               },
               distance: "distance",
             },
-            bus:{
+            bus: {
               busType: "type de bus",
               frequency: "frequence hebdomadaire",
               nbPeople: "personnes de famille",
               distance: "distance",
-              busTypes:{
-                  "electric": "Electric",
-                  "diesel": "Diesel",
-                  "gasoline": "Essence",
-                  "hybrid": "Hybride",
-                  "naturalGaz": "gaz naturel",
-              }
+              busTypes: {
+                electric: "Electric",
+                diesel: "Diesel",
+                gasoline: "Essence",
+                hybrid: "Hybride",
+                naturalGaz: "gaz naturel",
+              },
             },
             metro: {
               frequency: "frequence hebdomadaire",
@@ -462,19 +476,19 @@ export default {
             },
           },
           longueDistances: {
-            title:'Moyens de transport longue distance',
+            title: "Moyens de transport longue distance",
             q: "Quels sont les moyens de transport longue distance utilisés par tous les membres de votre foyer?",
-            bus:{
-              busTypes:{
-                  "other": "Autre",
-                  "diesel": "Diesel",
-              }
+            bus: {
+              busTypes: {
+                other: "Autre",
+                diesel: "Diesel",
+              },
             },
             train: {
               types: {
-                "intercity": "Intercity",
-                "TER": "TER",
-                "TGV": "TGV",
+                intercity: "Intercity",
+                TER: "TER",
+                TGV: "TGV",
               },
               frequency: "frequence hebdomadaire",
               distance: "distance",
@@ -524,7 +538,61 @@ export default {
     next: "Continuer",
     back: "Précédent",
     preview: "Aperçu",
-    submit: 'Résultat',
+    submit: "Résultat",
+  },
+  result: {
+    card: {
+      title: "Votre empreinte carbone",
+      subtitle: "Basé sur votre style de vie",
+      unit: "tonnes CO₂/année",
+      tons: "tonnes",
+      avgGlobal: "vs Global Average",
+      difference: "Difference",
+    },
+    categorisation: {
+      title: "Répartition par catégorie",
+    },
+    recommendations: {
+      title:'Moyens de réduire votre impact',
+      transport: {
+        transportation: {
+          title: "Transportation",
+          desc: "Optez pour le transport en commun, le covoiturage ou le vélo",
+        },
+      },
+      energie: {
+        energie: {
+          title: "Energie",
+          desc: "Passer à des sources renouvelables et améliorer l’isolation",
+        },
+      },
+      food: {
+        diet: {
+
+            title: "Alimentation",
+            desc: "Reduire la consommation de viande et acheter des aliments locaux",
+        },
+      },
+      waste: {
+        waste: {
+          title: "Déchets",
+          desc: "Recyclez davantage et pratiquez le compostage",
+        },
+      },
+      footer: {},
+    },
+    footer:{
+      download: 'Telecharger le rapport',
+      share: 'Partager votre résultat',
+      retake: 'Reprendre l\'evaluation',
+    },
+  },
+  sections: {
+    transport: "Transport",
+    energie: "Energie",
+    waste: "Déchets",
+    food: "Alimentation",
+    vacation: "Vacances",
   },
   utils: {
     months: {

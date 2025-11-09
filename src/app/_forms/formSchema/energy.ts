@@ -6,7 +6,7 @@ import bills from "./validation/bills";
 
 
 const energie = z.object({
-  energies: z.object({
+  /* energies: z.object({
     electricity: z.boolean().default(false),
     gasNetwork: z.boolean().default(false),
     heatNetwork: z.boolean().default(false),
@@ -17,7 +17,7 @@ const energie = z.object({
     disel: z.boolean().default(false),
     other: z.boolean().default(false),
     otherValue: z.string().optional(),
-  }),
+  }), */
   housing: z.object({
     area: z.number().optional(),
     category: union("appartment", "house", "villa", "other").optional(),
@@ -66,7 +66,7 @@ const energie = z.object({
     ),
     computers: z.number(),
     smartphones: z.number(),
-  }),
+  }).optional(),
   electricity: z.object({
     total: z.number().optional(),
     money: z.number().optional(),

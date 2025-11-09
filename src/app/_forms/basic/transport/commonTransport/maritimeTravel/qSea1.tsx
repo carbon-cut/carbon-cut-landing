@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+/* import React, { useEffect, useMemo, useState } from "react";
 import { QuestionProps } from "../../../../types";
 import {
   Table,
@@ -156,3 +156,4 @@ QSea1["Symbol"] = {
 };
 export default QSea1;
 
+ */

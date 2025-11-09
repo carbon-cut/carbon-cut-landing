@@ -15,7 +15,7 @@ const Gpl = (input: unknown, ctx: z.RefinementCtx) => {
       GPL: true,
     })
     .safeParse(input);
-  const GplQuantityParse = heating.shape.quantities
+  const GplQuantityParse = heating.shape.quantities.unwrap()
     .pick({
       //gasTank: true,
       GPL: true,

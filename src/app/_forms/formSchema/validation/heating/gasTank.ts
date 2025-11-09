@@ -4,7 +4,7 @@ const gasTank = (input: unknown, ctx: z.RefinementCtx) => {
     const gasTankParse = heating.pick({
         gasTank: true,
     }).safeParse(input);
-    const gasTankQuantityParse = heating.shape.quantities.pick({
+    const gasTankQuantityParse = heating.shape.quantities.unwrap().pick({
         gasTank: true,
     }).safeParse(
         //@ts-ignore

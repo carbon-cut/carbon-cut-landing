@@ -67,7 +67,7 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
         <Button
           type="button"
           variant="outline"
-          className={`absolute top-0 bottom-0 my-auto right-5
+          className={`
           w-fit
           hover:text-accent
           bg-transparent

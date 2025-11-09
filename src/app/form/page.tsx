@@ -19,10 +19,15 @@ import {  getIndex, getName } from "@/lib/formTabs/geters";
 import QuestionList from "./_components/questionList";
 import style from "./form.module.css";
 import Container  from "./_components/container";
+import { useRouter } from "next/navigation";
 
 function Page() {
 
-  const {tab, setTab, currentIndexes, readyToSubmit} = React.useContext(FormContext)
+  const {tab, setTab, currentIndexes, readyToSubmit} = React.useContext(FormContext);
+
+  const router = useRouter();
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [resultOpen, setResultOpen] = useState<boolean>(false);
   const [result, setResult] = useState<unknown>(null);
@@ -41,7 +46,7 @@ function Page() {
     e
   ) => {
     e?.preventDefault();
-    setResultOpen(true);
+    setLoading(true);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/basic`,
       {
@@ -50,8 +55,8 @@ function Page() {
         body: JSON.stringify(formResponse),
       }
     ).then((r) => r.json());
-    console.log(res);
-    setResult(res);
+    setLoading(false);
+    router.push(`/form/result?id=${res.id}`);
   };
 
   const handleError = (...args: unknown[]) => {
@@ -83,7 +88,6 @@ function Page() {
         case "waste":
           return "vacation";
         case "vacation":
-          //TODO
           return "transport";
         default:
           return "transport";
@@ -95,7 +99,7 @@ function Page() {
       {/* bg-[#e8e8e8] */}
       <Form {...mainForm}>
         <form
-          onSubmit={(e) =>{
+          onSubmit={(e) => {
             if (!readyToSubmit) {
               e.preventDefault();
               e.stopPropagation();
@@ -112,50 +116,75 @@ function Page() {
             //@ts-expect-error because Tabs cannot access to possible values
             onValueChange={(v) => setTab(v)}
           >
-            <ProgressBar tab={tab} dataLengths={dataLengths} currentQuestion={currentIndexes[tab]} currentSectionDataLength={dataLengths[tab]} currentSectionName={getName(tab)} />
-            
+            <ProgressBar
+              tab={tab}
+              dataLengths={dataLengths}
+              currentQuestion={currentIndexes[tab]}
+              currentSectionDataLength={dataLengths[tab]}
+              currentSectionName={getName(tab)}
+            >
+              <QuestionList
+                mainForm={mainForm}
+                list={{
+                  transport: transportQuestions[0],
+                  energie: energieQuestions[0],
+                }}
+                dialog={questionList}
+                setDialog={setQuestionList}
+              />
+            </ProgressBar>
+
             <div className="flex justify-center mb-8 relative">
-              
-              <div className="absolute top-0 bottom-0 my-auto right-0">
-                <QuestionList
-                    mainForm={mainForm}
-                    list={{
-                      transport: transportQuestions[0],
-                      energie: energieQuestions[0],
-                    }}
-                    dialog={questionList}
-                    setDialog={setQuestionList}
-                />
-              </div>
-            
-            <TabsList className="flex space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
-              
-              <TabTrigger value="transport" data-state={getIndex(tab) > 0 ? "completed" : tab === "transport" ? "active" : "inactive"}>
-                <Car className={`w-4 h-4`} />
-              </TabTrigger>
-              <TabTrigger value="energie" data-state={getIndex(tab) > 1 ? "completed" : tab === "energie" ? "active" : "inactive"}>
-                <Zap className={`w-4 h-4 `} />
-              </TabTrigger>
-              <TabTrigger disabled value="food">
-                <UtensilsCrossed className="w-4 h-4" />
-              </TabTrigger>
-              <TabTrigger disabled value="waste">
-                <Trash2 className="w-4 h-4" />
-              </TabTrigger>
-              <TabTrigger disabled value="vacation">
-                <Plane className="w-4 h-4" />
-              </TabTrigger>
-              
-            </TabsList>
+              <TabsList className="flex space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
+                <TabTrigger
+                  value="transport"
+                  data-state={
+                    getIndex(tab) > 0
+                      ? "completed"
+                      : tab === "transport"
+                      ? "active"
+                      : "inactive"
+                  }
+                >
+                  <Car className={`w-4 h-4`} />
+                </TabTrigger>
+                <TabTrigger
+                  value="energie"
+                  data-state={
+                    getIndex(tab) > 1
+                      ? "completed"
+                      : tab === "energie"
+                      ? "active"
+                      : "inactive"
+                  }
+                >
+                  <Zap className={`w-4 h-4 `} />
+                </TabTrigger>
+                <TabTrigger disabled value="food">
+                  <UtensilsCrossed className="w-4 h-4" />
+                </TabTrigger>
+                <TabTrigger disabled value="waste">
+                  <Trash2 className="w-4 h-4" />
+                </TabTrigger>
+                <TabTrigger disabled value="vacation">
+                  <Plane className="w-4 h-4" />
+                </TabTrigger>
+              </TabsList>
             </div>
             <Container
               mainForm={mainForm}
-              initQuestions={{transport: transportQuestions, energie: energieQuestions, food: [[], ()=>{}], waste: [[], ()=>{}], vacation: [[], ()=>{}]}}
+              initQuestions={{
+                transport: transportQuestions,
+                energie: energieQuestions,
+                food: [[], () => {}],
+                waste: [[], () => {}],
+                vacation: [[], () => {}],
+              }}
               setNextTab={setNextTab}
               value="transport"
-             />
+              loading={loading}
+            />
           </Tabs>
-          
         </form>
       </Form>
       <Dialog open={resultOpen} onOpenChange={setResultOpen}>

@@ -1,4 +1,3 @@
-"use client";
 import React, { useMemo } from "react";
 import { Chart as ChartJS, ArcElement } from "chart.js/auto";
 ChartJS.register(ArcElement);
@@ -7,6 +6,7 @@ import { TabValues } from "@/lib/formTabs/types";
 import doughtPlugin from "@/lib/chartPlugins/doughnut";
 import { plugin } from "@/lib/chartPlugins/ChartJS";
 import { getName } from "@/lib/formTabs/geters";
+import { useScopedI18n } from "@/locales/client";
 
 const tabs: TabValues[] = ["transport", "food", "vacation", "energie", "waste"];
 
@@ -21,6 +21,8 @@ type Props = {
 };
 function Categorisation({ data, isAnimating }: Props) {
 
+  const t = useScopedI18n("result.categorisation")
+
   const { values, labels, colors } = useMemo(() => {
     if (typeof window === 'undefined') return { values: [], labels: [], colors: [] };
     const values: number[] = [];
@@ -33,6 +35,7 @@ function Categorisation({ data, isAnimating }: Props) {
         window.getComputedStyle(document.documentElement)
         .getPropertyValue(`--section-${elem.name}`)
         .trim();
+        console.log(elem.name, ' ', color);
       colors.push(color);
     });
     return {
@@ -42,16 +45,14 @@ function Categorisation({ data, isAnimating }: Props) {
     };
   }, [data]);
 
-  
-
   return (
     <div className="mb-20">
       <h2 className="text-3xl font-light text-foreground mb-10 tracking-tight">
-        Breakdown by Category
+        {t('title')}
       </h2>
 
-      <div className="bg-white rounded-2xl border border-[#E0F2F1] p-8 shadow-md hover:shadow-lg transition-shadow duration-300">
-        <div className="w-full h-[300px] flex items-center justify-center">
+      <div className="bg-white flex flex-row-reverse rounded-2xl border border-[#E0F2F1] p-8 shadow-md hover:shadow-lg transition-shadow duration-300">
+        <div className="w-full h-[350px] flex items-center justify-center">
           <Doughnut
             options={{
               responsive: true,
@@ -93,7 +94,7 @@ function Categorisation({ data, isAnimating }: Props) {
             plugins={[doughtPlugin, plugin.noData]}
           />
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mt-8">
+        <div className="grid md:grid-cols-2 gap-4 w-9/12 mt-8">
           {data.map((item, index) => {
             
             const color = (opacity = 1 ) => {
@@ -102,7 +103,7 @@ function Categorisation({ data, isAnimating }: Props) {
             return(
             <div
               key={index}
-              className="p-4 rounded-lg border-2"
+              className="p-2 rounded-lg border-2 w-full"
               style={{
                 borderColor: color(0.2),
                 backgroundColor: color(0.1),
@@ -113,14 +114,16 @@ function Categorisation({ data, isAnimating }: Props) {
                   className={`w-3 h-3 rounded-full `}
                   style={{backgroundColor: color()}}
                 />
-                <span className="font-light text-sm text-foreground text-left">
+                <span className="font-light text-base text-foreground text-left">
                   {getName(item.name)}
                 </span>
               </div>
+              <div className="grid grid-cols-2 items-end">
               <p className="font-light text-xl" style={{ color: color() }}>
                 {item.tons.toFixed(2)} t
               </p>
-              <p className="font-light text-xs text-gray-500">{item.value}%</p>
+              <p className="font-light text-base text-gray-500">{item.value}%</p>
+              </div>
             </div>
           )})}
         </div>
