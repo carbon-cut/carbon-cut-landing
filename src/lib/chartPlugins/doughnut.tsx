@@ -18,7 +18,7 @@ const doughtPlugin: Plugin<"doughnut", any> = {
       const value = datasets[0].data[i];
       const label = labels ? labels[i] : "";
       const image = new Image();
-      image.src = `./icons/tabs/${getSvg(label as TabValues)}.svg`;
+      image.src = `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/tabs/${getSvg(label as TabValues)}.svg`;
 
       const sumOfValues = datasets[0].data.reduce((acc, val) => acc + val);
       ctx.textBaseline = "middle";

@@ -31,6 +31,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Create .env.local from secrets
+        run: |
+          cat > .env.local <<EOF
+          NEXT_PUBLIC_BASE_PATH=/carbon-cut-landing
+          # add more as needed
+          EOF
+        # do not print secret values; GitHub masks secrets in logs
+        shell: bash
       - name: Detect package manager
         id: detect-package-manager
         run: |
