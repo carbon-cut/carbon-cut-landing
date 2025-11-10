@@ -42,7 +42,7 @@ import { url } from 'inspector';
       format: "Grand Format",
       color: "from-green-400 to-teal-500",
       icon: null,
-      url: './icons/gpl/propane35kg.png',
+      url: './icons/gpl/Propane35kg.png',
       className: 'h-8 w-8',
       url2: '',
     },

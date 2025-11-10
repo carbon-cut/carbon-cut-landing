@@ -58,7 +58,7 @@ function Header() {
       <Link className="z-50" href={"/"} onClick={() => setShow(false)}>
         <Image
           data-state={dataState}
-          src={"logo/logoLight.svg"}
+          src={"/logo/logoLight.svg"}
           className={style.logo}
           alt="logo"
           width={141}
