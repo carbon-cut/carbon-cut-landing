@@ -27,7 +27,7 @@ function Footer() {
     <div className="bg-card-primary md:p-12 p-6 grid md:grid-cols-12 grid-cols-3 gap-12">
       <div></div>
       <div className="flex flex-col col-span-3 self-start">
-        <Image
+        <img
           className=" scroll-m-20  mb-6 scale-125 self-start"
           src={"/logo/logoDark.svg"}
           alt="logo"
