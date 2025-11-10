@@ -177,8 +177,8 @@ useEffect(() => {
           onClick={prev}
         >
           <span className="flex items-center gap-3">
-            <img
-              src={"/form/utils/arrow-left.svg"}
+            <Image
+              src={"form/utils/arrow-left.svg"}
               width={18}
               height={18}
               alt="arrow-left"
@@ -210,8 +210,8 @@ useEffect(() => {
         ><span className="">
           {submit ? t("submit") : t("next")}
           </span>
-          {!submit && <img
-            src={"/form/utils/arrow-right.svg"}
+          {!submit && <Image
+            src={"form/utils/arrow-right.svg"}
             width={16}
             height={16}
             alt="arrow-right"

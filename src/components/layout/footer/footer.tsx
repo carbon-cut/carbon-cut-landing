@@ -29,7 +29,7 @@ function Footer() {
       <div className="flex flex-col col-span-3 self-start">
         <Image
           className=" scroll-m-20  mb-6 scale-125 self-start"
-          src={"/logo/logoDark.svg"}
+          src={"logo/logoDark.svg"}
           alt="logo"
           width={141}
           height={48}

@@ -29,9 +29,6 @@ function Page() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [resultOpen, setResultOpen] = useState<boolean>(false);
-  const [result, setResult] = useState<unknown>(null);
-
   const [questionList, setQuestionList] = useState<boolean>(false);
 
   const transportQuestions = useState(initTransportQuestions);
@@ -187,20 +184,6 @@ function Page() {
           </Tabs>
         </form>
       </Form>
-      <Dialog open={resultOpen} onOpenChange={setResultOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Your result</DialogTitle>
-          </DialogHeader>
-          <div>
-            {result != null ? (
-              <>{JSON.stringify(result)}</>
-            ) : (
-              <>no Result yet</>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

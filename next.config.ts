@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   basePath: "/carbon-cut-landing",
-  assetPrefix: "/carbon-cut-landing",
   output: "export",
   reactStrictMode: false,
   images: { unoptimized: true },

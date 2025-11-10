@@ -3,10 +3,10 @@
 import React, { useEffect } from "react";
 import style from "./header.module.css";
 import { Button } from "../../ui/button";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import MenuHamburger from "./_menuHamburger";
+import Image from "next/image";
 
 type MenuItem = {
   title: string;
@@ -56,9 +56,9 @@ function Header() {
       className={style.header}
     >
       <Link className="z-50" href={"/"} onClick={() => setShow(false)}>
-        <img
+        <Image
           data-state={dataState}
-          src={"/logo/logoLight.svg"}
+          src={"logo/logoLight.svg"}
           className={style.logo}
           alt="logo"
           width={141}
