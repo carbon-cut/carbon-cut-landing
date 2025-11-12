@@ -30,7 +30,7 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
       />
       </Content>
       <SideQuestion
-      className="py-1 w-2/4 bg-section-food/20"
+      className="py-1 w-2/4 bg-section-transport/20"
         question={t("q3")}
         content={
           <Input form={mainForm} name="energie.gaz.money" placeholder="€" type="number" />

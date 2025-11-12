@@ -56,6 +56,7 @@ function Input<T extends FieldValues>({
     if (v >= 0 || v === "") return true;
     return false;
   },
+  /** @decapricated **/
   onChange = () => {},
 }: Props<T>) {
   return (
@@ -83,15 +84,19 @@ function Input<T extends FieldValues>({
                         onChange: (event) => {
                           const val = event.target.value;
                           if (valueControl(val)){
-                          onChange(val);
+                          let out = val as string | number | null;
+                          if (out || out === 0) {
+                            out = parseInt(val, 0);
+                          }
+                          else out = undefined;
+                          console.log('out: ', out, 'type: ', typeof out);
                           return field.onChange?.(
-                            parseInt(event.target.value, 0)
+                            out
                           );}
                         },
                       }
                     : {
                         onChange: (event) => {
-                          onChange(event.target.value);
                           return field.onChange(event.target.value);
                         },
                       })}

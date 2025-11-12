@@ -4,5 +4,6 @@
     ["Classes \\=([^;]*);", "\"([^\"]*)\""],
     ["Classes \\=([^;]*);", "\\`([^\\`]*)\\`"]
   ],
-  "editor.fontSize": 14
+  "editor.fontSize": 14,
+  "chatgpt.runCodexInWindowsSubsystemForLinux": true
 }

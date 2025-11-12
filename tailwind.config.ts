@@ -29,6 +29,13 @@ export default {
           vacation: "hsl(var(--section-vacation))",
           energie: "hsl(var(--section-energie))",
           waste: "hsl(var(--section-waste))",
+          light:{
+            transport: "hsl(var(--section-transport-light))",
+            food: "hsl(var(--section-food-light))",
+            vacation: "hsl(var(--section-vacation-light))",
+            energie: "hsl(var(--section-energie-light))",
+            waste: "hsl(var(--section-waste-light))",
+          }
         },
         card: {
           DEFAULT: "hsl(var(--card))",

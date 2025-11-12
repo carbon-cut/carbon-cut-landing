@@ -157,8 +157,8 @@ export default {
               conditionedVolume: "volume climatisé",
             },
             options: ["appartment", "maison", "villa", "autre"],
-            q2: "combien de chambres avez-vous?",
-            q3: "est-ce que votre maison a:",
+            q2: "Combien de chambres avez-vous?",
+            q3: "Est-ce que votre maison a:",
             q3Labels: {
               thermalInsulation: "isolation thermique",
               insulatedGlazing: "double vitrage",
