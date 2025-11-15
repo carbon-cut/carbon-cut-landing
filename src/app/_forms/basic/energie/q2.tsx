@@ -27,13 +27,16 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
       name="energie.gaz.total"
       placeholder="m³"
       type="number"
+      attachedFields={['energie.gaz.money']}
       />
       </Content>
       <SideQuestion
       className="py-1 w-2/4 bg-section-transport/20"
         question={t("q3")}
         content={
-          <Input form={mainForm} name="energie.gaz.money" placeholder="€" type="number" />
+          <Input form={mainForm} name="energie.gaz.money" placeholder="€" type="number" 
+          attachedFields={['energie.gaz.total']}
+          />
         }
       />
     </div>

@@ -24,7 +24,7 @@ import { Label } from "@/components/ui/label";
 import Question from "@/app/_forms/components/question";
 import Content from "@/app/_forms/components/content";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 
 const aircraftTypes = [
   "A220",

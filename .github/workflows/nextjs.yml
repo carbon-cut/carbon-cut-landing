@@ -35,7 +35,7 @@ jobs:
         run: |
           cat > .env.local <<EOF
           NEXT_PUBLIC_BASE_PATH=/carbon-cut-landing
-          # add more as needed
+          NEXT_PUBLIC_SERVER=http://localhost:1337
           EOF
         # do not print secret values; GitHub masks secrets in logs
         shell: bash

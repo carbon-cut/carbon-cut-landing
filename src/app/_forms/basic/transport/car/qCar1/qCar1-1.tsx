@@ -5,7 +5,6 @@ import Content from "../../../../components/content";
 import { QuestionProps } from "../../../../types";
 import { useQuery } from "@tanstack/react-query";
 import FormCombox from "../../../../components/combox";
-import Input from "@/app/_forms/components/input";
 
 interface Props {
   index: number;

@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
-import React, { useEffect } from "react";
-import { FieldValues, UseFormReturn } from "react-hook-form";
+import React, { useEffect, useRef } from "react";
+import { FieldValues, useForm, UseFormReturn, useWatch } from "react-hook-form";
 import Unit from "./unit";
 
 type Props<T extends FieldValues> = {
@@ -36,6 +36,7 @@ type Props<T extends FieldValues> = {
   valueControl?: (v: any) => boolean;
   className?: string;
   fallback?: boolean;
+  attachedFields?: TName<T>[];
 };
 
 function Input<T extends FieldValues>({
@@ -52,6 +53,7 @@ function Input<T extends FieldValues>({
   disabled = false,
   className,
   fallback = false,
+  attachedFields = [],
   valueControl = (v: any) =>{
     if (v >= 0 || v === "") return true;
     return false;
@@ -59,72 +61,138 @@ function Input<T extends FieldValues>({
   /** @decapricated **/
   onChange = () => {},
 }: Props<T>) {
+
+  const {
+    trigger,
+    formState:{
+      isSubmitted
+    }
+  } = form
+
+  const verifyAttachedFields = () =>{
+    if (isSubmitted){
+      trigger(attachedFields)
+    }
+  }
+
+  const value = form.getValues(name) ? 'y' : 'n'
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      },[value]);
+
   return (
     <FormField
       control={form.control}
       name={name}
+      key={value}
       render={({ field, fieldState }) => {
         return (
           <FormItem>
-            {label && <FormLabel data-state={fieldState.error && "error"} className={cn(
-               `text-sm font-medium ${disabled ? 'text-muted-foreground data-[state=error]:text-destructive/60' : ''}`, labelClassName)}>{label}</FormLabel>}
-            <FormControl>
-              <div className={cn(`w-full inline-block`, className)}>
+            {label && (
+              <FormLabel
+                data-state={fieldState.error && "error"}
+                className={cn(
+                  `text-sm font-medium ${
+                    disabled
+                      ? "text-muted-foreground data-[state=error]:text-destructive/60"
+                      : ""
+                  }`,
+                  labelClassName
+                )}
+              >
+                {label}
+              </FormLabel>
+            )}
+
+            <div className={cn(`w-full inline-block`, className)}>
+              <FormControl>
                 <InputRoot
+                  
                   disabled={disabled}
-                  className={cn(`w-full ${size === 'xl' ? 'h-9 text-xl' : 'h-8 !text-xs'} rounded-full  bg-white 
-                  ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : ''}
-                  `, '')}
+                  className={cn(
+                    `w-full ${
+                      size === "xl" ? "h-9 text-xl" : "h-8 !text-xs"
+                    } rounded-full  bg-white 
+                  ${
+                    fieldState.error
+                      ? "outline-none ring-1 ring-destructive/60 "
+                      : ""
+                  }
+                  `,
+                    ""
+                  )}
                   placeholder={placeholder}
                   type={type}
                   {...field}
-                  value={field.value ?? ""}
+                  ref={node=>{
+                    inputRef.current = node;
+                    field.ref(node)
+                  }}
+                  value={field.value ?? ''}
                   {...(type === "number"
                     ? {
                         onChange: (event) => {
                           const val = event.target.value;
-                          if (valueControl(val)){
-                          let out = val as string | number | null;
-                          if (out || out === 0) {
-                            out = parseInt(val, 0);
+
+                          if (val === "") {
+                            console.log("empty");                            
+                            field.onChange(undefined);
+                            verifyAttachedFields();
+                            return;
                           }
-                          else out = undefined;
-                          console.log('out: ', out, 'type: ', typeof out);
-                          return field.onChange?.(
-                            out
-                          );}
+
+                          if (!valueControl(val)) {
+                            console.log("not Value control");
+                            return;
+                          }
+
+                          const parsedValue = Number(val);
+                          if (!Number.isNaN(parsedValue)) {
+                            console.log("parsed");
+                            field.onChange(parsedValue);
+                            verifyAttachedFields();
+                          }
                         },
                       }
                     : {
                         onChange: (event) => {
-                          return field.onChange(event.target.value);
+                          field.onChange(event.target.value);
+                          verifyAttachedFields();
                         },
                       })}
-                      
                 />
-                <div className="grid grid-cols-2 h-fit">
-                  {unit}
-                  {info && (
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          className="self-end place-self-start text-start  p-0 "
-                          variant={"ghost"}
-                        >
-                          <Info />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent side="right" sideOffset={8}>
-                        some notes
-                      </PopoverContent>
-                    </Popover>
-                  )}
-                </div>
+              </FormControl>
+              <div className="grid grid-cols-2 h-fit">
+                {unit}
+                {info && (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        className="self-end place-self-start text-start  p-0 "
+                        variant={"ghost"}
+                      >
+                        <Info />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent side="right" sideOffset={8}>
+                      some notes
+                    </PopoverContent>
+                  </Popover>
+                )}
               </div>
-            </FormControl>
+            </div>
+
             {description && <FormDescription>{description}</FormDescription>}
-            <FormMessage className={labelClassName} 
-            fallback={fallback} data-state={disabled && "disabled"}  />
+            <FormMessage
+              className={labelClassName}
+              fallback={fallback}
+              data-state={disabled && "disabled"}
+            />
           </FormItem>
         );
       }}
