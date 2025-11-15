@@ -7,7 +7,11 @@ import { worker } from "@/mocks/worker";
 const Providers = ({ children }: { children: ReactNode }) => {
   
   useEffect(() => {
-    worker.start();
+    worker.start({
+      serviceWorker: {
+        url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/mockServiceWorker.js`,
+      },
+    });
   }, []);
   
   const queryClient = new QueryClient();
