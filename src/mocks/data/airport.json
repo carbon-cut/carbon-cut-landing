@@ -1,0 +1,20 @@
+[
+    {
+      "name": "Guanghan",
+      "code": "GHN",
+      "latitude": 30.466667,
+      "longitude": 106.65
+    },
+    {
+        "name": "Kawama",
+        "code": "VRO",
+        "latitude": 23.036111,
+        "longitude": -81.573889
+    },
+    {
+        "name": "Suffolk County",
+        "code": "FOK",
+        "latitude": 40.833333,
+        "longitude": -72.616667
+    }
+]

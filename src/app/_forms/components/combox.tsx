@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -53,6 +53,8 @@ function FormCombox<T extends FieldValues>({
 }: props<T>) {
   const t = useScopedI18n("components.forms.combox");
 
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     if (form && name) form.register(name);
   }, [form, name]);
@@ -63,7 +65,9 @@ function FormCombox<T extends FieldValues>({
       render={({ field, fieldState }) => (
         <FormItem className={cn("w-full", className)}>
           {label &&  
-            <FormLabel data-state={fieldState.error && "error"} className={cn(
+            <FormLabel 
+              data-state={fieldState.error && "error"}
+              className={cn(
               `text-sm font-medium 
               ${disabled ? 'text-muted-foreground data-[state=error]:text-destructive/60' : ''}`,
               labelClassName)}>{label}</FormLabel>

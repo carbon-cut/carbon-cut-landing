@@ -1,14 +1,5 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { QuestionProps } from "../../../../types";
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableFooter,
-} from "@/components/ui/table";
 import { useScopedI18n } from "@/locales/client";
 import Input from "../../../../components/input";
 import { Plus, Trash } from "lucide-react";
@@ -58,26 +49,10 @@ function QAir({ mainForm }: QuestionProps) {
         },
         []
       );
+      console.log('reduced:', reduced)
       return {
         reduced,
         raw: res,
-      };
-      return {
-        reduced: [
-          {
-            label: "Paris",
-            value: "PAR",
-          },
-          {
-            label: "London",
-            value: "LHR",
-          },
-          {
-            label: "New York",
-            value: "JFK",
-          },
-        ],
-        raw: undefined,
       };
     },
   });
@@ -95,7 +70,7 @@ function QAir({ mainForm }: QuestionProps) {
   );
 
 
-  const [parent] = useAutoAnimate()
+  const [parent] = useAutoAnimate({duration:100})
 
   const distance = useMemo(() => {
     const RawAirports = airports?.raw;
@@ -129,7 +104,7 @@ function QAir({ mainForm }: QuestionProps) {
   }
 
   return (
-    <>
+    <div className="">
     <Question className="text-center font-semibold text-xl">{t("q")}</Question>
     <Content  className="text-center text-muted-foreground mb-0">{t("description")}</Content>
       <ul ref={parent}>
@@ -138,7 +113,6 @@ function QAir({ mainForm }: QuestionProps) {
           key={id}
           className="bg-white border-2 relative border-gray-200 rounded-lg p-12 hover:border-[#00A261] transition-colors mb-6"
         >
-
           <Button
             type="button"
             variant={"ghost"}
@@ -161,7 +135,7 @@ function QAir({ mainForm }: QuestionProps) {
               fallback
             />
             <FormMultiCombox
-            labelClassName="text-black/70"
+              labelClassName="text-black/70"
               form={mainForm}
               name={`transport.airs.${index}.destination`}
               label={t("destination")}
@@ -253,7 +227,7 @@ function QAir({ mainForm }: QuestionProps) {
       </ul>
       <Button
         type="button"
-        className="rounded-full w-full ml-2 my-3 border-2
+        className="rounded-full w-full  my-3 border-2
          border-section-transport/70 hover:border-section-transport
          hover:bg-section-transport/80
          text-section-transport hover:text-muted
@@ -267,7 +241,7 @@ function QAir({ mainForm }: QuestionProps) {
         <Plus />
         <Label className="cursor-pointer">Ajout d&apos;un vol</Label>
       </Button>
-    </>
+    </div>
   );
 }
 

@@ -23,11 +23,12 @@ export const MenuList: FC<{
     overscan: 25,
   });
   return (
-    <CommandList ref={parentRef}>
+    <CommandList ref={parentRef} className="max-w-60">
       <div
+        className="w-full"
         style={{
           height: `${rowVirtualizer.getTotalSize()}px`,
-          width: "100%",
+          //width: "100%",
           position: "relative",
         }}
       >
@@ -35,15 +36,7 @@ export const MenuList: FC<{
           const element = options[virtualRow.index];
           return (
             <CommandItem
-            className={`${element.value === selectedValue ? '!bg-card-primary-foreground':''}`}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: `${virtualRow.size}px`,
-                transform: `translateY(${virtualRow.start}px)`,
-              }}
+            className={`h-fit w-full ${element.value === selectedValue ? '!bg-card-primary-foreground':''}`}
               key={element.value}
               value={element.value}
               onSelect={() => onSelectOption(element)}

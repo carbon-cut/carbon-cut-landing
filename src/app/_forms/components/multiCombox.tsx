@@ -72,7 +72,7 @@ const FormMultiCombox: React.FC<props> = ({
             <PopoverTrigger asChild>
               <Button
                 key={`${open}`}
-                onClick={e=>{setOpen(true)}}
+                //onClick={e=>{setOpen(true)}}
                 disabled={disabled}
                 variant={"outline"}
                 type="button"
@@ -89,7 +89,7 @@ const FormMultiCombox: React.FC<props> = ({
                 <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto p-0" align="start" onFocus={_=>setOpen(true)} onCloseAutoFocus={_=>setOpen(false)}>
               <Command shouldFilter={false}>
                 <CommandInput
                   onValueChange={handleSearch}

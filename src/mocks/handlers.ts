@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw'
 import makes from "./data/makes.json"
 import models from "./data/models.json"
+import airports from './data/airports.json'
 
 export const handlers = [
   http.get(`http://localhost:1337/api/carbon-footprint/forms/cars/makes`, () => {
@@ -12,10 +13,12 @@ export const handlers = [
     const make = url.searchParams.get('make')
     
     const output = models[make as keyof typeof models] || []
-    console.log("mocked result:", output)
     return HttpResponse.json(output)
   }),
   http.post(`${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/basic`, () => {
     return HttpResponse.json({id: 1})
+  }),
+  http.get(`${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/airports`, () =>{
+    return HttpResponse.json(airports)
   })
 ]
