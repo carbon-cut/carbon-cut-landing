@@ -84,6 +84,78 @@ export default {
       },
     },
   },
+  home: {
+    hero: {
+      title: {
+        line1: "Votre empreinte",
+        highlight: "carbone",
+        line2: "en toute simplicité !",
+      },
+      description:
+        "Mesurez, réduisez et agissez grâce à un parcours guidé et des recommandations personnalisées.",
+      imageAlt: "Illustration du tableau de bord Carbon Cut",
+      primaryCta: {
+        label: "Commencer",
+        aria: "Commencer le questionnaire empreinte carbone",
+      },
+      secondaryCta: {
+        label: "Découvrir les fonctionnalités",
+        aria: "Découvrir les fonctionnalités clés",
+      },
+      quickLinks: {
+        ariaLabel: "Navigation rapide",
+        links: {
+          features: "Fonctionnalités",
+          pricing: "Tarifs",
+          faq: "Questions fréquentes",
+        },
+      },
+    },
+    preview: {
+      ariaLabel: "Aperçu du produit",
+      imageAlt: "Capture d'écran du tableau de bord Carbon Cut",
+    },
+    features: {
+      badge: "Fonctionnalités",
+      title: {
+        line1: "Calculez votre impact, réduisez votre",
+        line2: {
+          prefix: "empreinte et",
+          highlight: "préservez la planète",
+          suffix: "",
+        },
+      },
+      description:
+        "Un tableau de bord SaaS intuitif pour collecter vos données, visualiser vos émissions par poste et accélérer votre transition bas carbone.",
+    },
+    testimonials: {
+      title: "Ils adoptent Carbon Cut",
+    },
+    pricing: {
+      badge: "Plans & fonctionnalités",
+      title: "Tarifs transparents pour chaque étape",
+      description:
+        "Choisissez le plan adapté à votre maturité carbone et débloquez des fonctionnalités avancées : export des rapports, recommandations ciblées et accompagnement expert.",
+    },
+    cta: {
+      title: "Passez à l’action avec Carbon Cut dès aujourd’hui",
+      description:
+        "Lancez votre audit carbone, partagez des liens directs avec vos équipes et centralisez les données clés pour piloter vos efforts de réduction.",
+      primaryCta: {
+        label: "Commencer",
+        aria: "Remplir le formulaire de calcul",
+      },
+      secondaryCta: {
+        label: "Voir les offres",
+        aria: "Consulter les offres",
+      },
+      imageAlt: "Application Carbon Cut sur mobile et desktop",
+    },
+    faq: {
+      badge: "Questions fréquentes",
+      title: "FAQ",
+    },
+  },
   root: {
     header: {
       menu: {

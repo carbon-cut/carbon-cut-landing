@@ -22,7 +22,7 @@ const useScopedI18n = (scope?: string) => {
         }
 
         // Return the requested key or a fallback message
-        if (!scopedContent) return `Missing translation for ${scope}.${keys[0]}`
+        if (!scopedContent && scopedContent !== '') return `Missing translation for ${scope}.${keys[0]}`
         else if (typeof scopedContent === 'string') return scopedContent;
         else if (typeof scopedContent === 'function') {
             //@ts-ignore
