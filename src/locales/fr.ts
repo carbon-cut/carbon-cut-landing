@@ -21,6 +21,69 @@ export default {
       },
     },
   },
+  seo: {
+    site: {
+      title: "Carbon Cut | Tableau de bord carbone personnel",
+      description:
+        "Tableau de bord SaaS permettant aux utilisateurs de suivre et de réduire leur empreinte carbone personnelle",
+      keywords: [
+        "empreinte carbone",
+        "tableau de bord climat",
+        "calculateur CO2",
+        "suivi des émissions",
+        "réduction carbone",
+        "bilan carbone personnel",
+        "SaaS climat",
+        "analyse des émissions",
+        "optimisation durable",
+        "transition écologique numérique",
+      ],
+    },
+    pages: {
+      home: {
+        title: "Carbon Cut | Mesurez et réduisez votre empreinte carbone",
+        description:
+          "Découvrez comment Carbon Cut aide les particuliers et les équipes à mesurer, suivre et réduire facilement leur empreinte carbone.",
+        keywords: [
+          "application empreinte carbone",
+          "dashboard environnemental",
+          "réduction des émissions",
+          "mesure CO2 domicile",
+          "sensibilisation climat",
+          "suivi durable",
+          "solutions bas carbone",
+          "outil écologique SaaS",
+        ],
+      },
+      form: {
+        title: "Questionnaire Empreinte Carbone | Carbon Cut",
+        description:
+          "Remplissez le formulaire guidé pour calculer vos émissions de transport, d'énergie, d'alimentation, de déchets et de voyage.",
+        keywords: [
+          "formulaire empreinte carbone",
+          "questionnaire CO2",
+          "calculateur émissions transport",
+          "bilan énergétique personnel",
+          "collecte données climat",
+          "auto-évaluation carbone",
+          "questionnaire durable",
+        ],
+      },
+      results: {
+        title: "Résultats et recommandations carbone | Carbon Cut",
+        description:
+          "Consultez la répartition de votre empreinte carbone et recevez des recommandations personnalisées pour réduire vos émissions.",
+        keywords: [
+          "résultats empreinte carbone",
+          "recommandations CO2",
+          "analyse personnalisée climat",
+          "dashboard résultats carbone",
+          "suivi des progrès écologiques",
+          "plan d'action carbone",
+        ],
+      },
+    },
+  },
   root: {
     header: {
       menu: {

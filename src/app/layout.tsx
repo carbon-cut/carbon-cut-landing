@@ -1,15 +1,21 @@
 import React from "react";
 import type { Metadata } from "next";
-import "./globals.css";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import Providers from "@/lib/partials/Providers";
 import { manropeSans } from "@/lib/fonts";
-export const metadata: Metadata = {
-  title: "Carbon Cut",
-  description:
-    "Tableau de bord SaaS permettant aux utilisateurs de suivre et de réduire leur empreinte carbone personnelle",
-};
+import { useScopedServerI18n } from "@/locales/server";
+import { toKeywordArray } from "@/lib/seo";
+import "./globals.css";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = useScopedServerI18n("seo.site");
+  return {
+    title: t("title"),
+    description: t("description"),
+    keywords: toKeywordArray(t("keywords") as unknown),
+  };
+}
 
 export default function RootLayout({
   children,
