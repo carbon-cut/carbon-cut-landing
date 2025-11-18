@@ -13,14 +13,13 @@ import type { Metadata } from "next";
 import { useScopedServerI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = useScopedServerI18n("seo.pages.home");
-  return {
-    title: t("title"),
-    description: t("description"),
-    keywords: toKeywordArray(t("keywords") as unknown),
-  };
-}
+const homeSeo = useScopedServerI18n("seo.pages.home");
+
+export const metadata: Metadata = {
+  title: homeSeo("title"),
+  description: homeSeo("description"),
+  keywords: toKeywordArray(homeSeo("keywords") as unknown),
+};
 export default function Home() {
   const quickLinks = [
     { href: "#features", label: "Fonctionnalités" },

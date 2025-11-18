@@ -3,14 +3,13 @@ import { useScopedServerI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
 import ResultPageClient from "./resultPageClient";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = useScopedServerI18n("seo.pages.results");
-  return {
-    title: t("title"),
-    description: t("description"),
-    keywords: toKeywordArray(t("keywords") as unknown),
-  };
-}
+const resultSeo = useScopedServerI18n("seo.pages.results");
+
+export const metadata: Metadata = {
+  title: resultSeo("title"),
+  description: resultSeo("description"),
+  keywords: toKeywordArray(resultSeo("keywords") as unknown),
+};
 
 export default function Page() {
   return <ResultPageClient />;

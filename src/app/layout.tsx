@@ -8,14 +8,13 @@ import { useScopedServerI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
 import "./globals.css";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = useScopedServerI18n("seo.site");
-  return {
-    title: t("title"),
-    description: t("description"),
-    keywords: toKeywordArray(t("keywords") as unknown),
-  };
-}
+const siteSeo = useScopedServerI18n("seo.site");
+
+export const metadata: Metadata = {
+  title: siteSeo("title"),
+  description: siteSeo("description"),
+  keywords: toKeywordArray(siteSeo("keywords") as unknown),
+};
 
 export default function RootLayout({
   children,

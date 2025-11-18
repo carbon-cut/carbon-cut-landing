@@ -1,4 +1,3 @@
-'use server'
 import content from './fr'
 
 //const unit = content.forms.unit;
