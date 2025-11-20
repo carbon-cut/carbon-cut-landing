@@ -35,7 +35,7 @@ const classes = ["economy", "premium", "business", "first"] as const;
 function QAir({ mainForm }: QuestionProps) {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qAir.q1");
 
-  const { data: airports } = useQuery<{ reduced: any[]; raw?: any[] }>({
+  const { data: airports, isLoading } = useQuery<{ reduced: any[]; raw?: any[] }>({
     queryKey: ["airports"],
     queryFn: async () => {
       const res = await fetch(
@@ -71,7 +71,7 @@ function QAir({ mainForm }: QuestionProps) {
 
 
   const [parent] = useAutoAnimate({duration:100})
-
+  //TODO
   const distance = useMemo(() => {
     const RawAirports = airports?.raw;
     if (!RawAirports) return [];
@@ -133,6 +133,7 @@ function QAir({ mainForm }: QuestionProps) {
               data={airports?.reduced ?? []}
               label={t("origin")}
               fallback
+              loading={isLoading}
             />
             <FormMultiCombox
               labelClassName="text-black/70"
@@ -141,6 +142,7 @@ function QAir({ mainForm }: QuestionProps) {
               label={t("destination")}
               data={airports?.reduced ?? []}
               fallback
+              loading={isLoading}
             />
             <FormSelect
             labelClassName="text-black/70"
@@ -210,6 +212,7 @@ function QAir({ mainForm }: QuestionProps) {
               label={t("via")}
               data={airports?.reduced ?? []}
               fallback
+              loading={isLoading}
             />
           </div>
           <Separator className="my-4" />

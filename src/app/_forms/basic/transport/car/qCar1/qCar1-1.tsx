@@ -20,8 +20,9 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
 }) => {
   const t = useScopedI18n("forms.basic.transport.qCar1-1");
 
-  const { data: cars } = useQuery<{ value: string; label: string }[], Error>({
+  const { data: cars, isLoading: makesLoading  } = useQuery<{ value: string; label: string }[], Error>({
     queryKey: ["carMakes"],
+    refetchInterval: 1000,
     queryFn: async () => {
       const data = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/cars/makes`,
@@ -33,7 +34,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
     },
   });
 
-  const query = useQuery({
+  const {data: models, isLoading: modelsLoading} = useQuery({
     queryKey: ["carModels", make],
     queryFn: async () => {
       return fetch(
@@ -57,12 +58,14 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
             form={mainForm}
             label={t("l1")}
             className="w-10/12"
+            loading={makesLoading}
           />
           </div>
           <div className="">
           <FormCombox
             name={`transport.cars.${index}.model`}
-            data={query?.data ?? []}
+            data={models ?? []}
+            loading={modelsLoading}
             form={mainForm}
             label={t("l2")}
             className="w-10/12"

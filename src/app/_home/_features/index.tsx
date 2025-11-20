@@ -1,9 +1,13 @@
-"use client"
-import React, { useCallback, useState } from "react";
+//"use server"
+import React from "react";
 import Image from "next/image";
-const svg1 = "home/features/4";
-const svg2 = "home/features/5";
-const svg3 = "home/features/6";
+const calculator = "home/features/icon_1";
+const recomendation = "home/features/icon_2";
+const dashboard = "home/features/icon_3";
+const scale = "home/features/icon_4";
+const plan = "home/features/icon_5";
+const analysis = "home/features/icon_6";
+
 import {
   Card,
   CardContent,
@@ -11,43 +15,44 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useScopedI18n } from "@/locales/client";
 
 const cardContent: Props[] = [
   {
-    icon: svg1,
-    title: "Calculateur d'empreinte carbone",
-    description:
-      "Estimation fiable basée sur vos habitudes.",
+    icon: calculator,
+    altKey: "cards.0.alt",
+    titleKey: "cards.0.title",
+    descriptionKey: "cards.0.description",
   },
   {
-    icon: svg2,
-    title: "onseils personnalisés",
-    description:
-      "Conseils pratiques pour réduire vos émissions.",
+    icon: recomendation,
+    altKey: "cards.1.alt",
+    titleKey: "cards.1.title",
+    descriptionKey: "cards.1.description",
   },
   {
-    icon: svg3,
-    title: "Tableau de bord carbone",
-    description:
-      "Visualisation claire avec graphiques et rapports.",
+    icon: dashboard,
+    altKey: "cards.2.alt",
+    titleKey: "cards.2.title",
+    descriptionKey: "cards.2.description",
   },
   {
-    icon: svg1,
-    title: "Comparateur d'émissions",
-    description:
-      "Comparez votre empreinte à des moyennes locales et mondiales.",
+    icon: scale,
+    altKey: "cards.3.alt",
+    titleKey: "cards.3.title",
+    descriptionKey: "cards.3.description",
   },
   {
-    icon: svg2,
-    title: "Plan de réduction carbone",
-    description:
-      "Étapes concrètes pour adopter un mode de vie durable.",
+    icon: plan,
+    altKey: "cards.4.alt",
+    titleKey: "cards.4.title",
+    descriptionKey: "cards.4.description",
   },
   {
-    icon: svg3,
-    title: "Analyse pour entreprises",
-    description:
-      "Outil pour évaluer et réduire les émissions des entreprises.",
+    icon: analysis,
+    altKey: "cards.5.alt",
+    titleKey: "cards.5.title",
+    descriptionKey: "cards.5.description",
   },
 ];
 
@@ -55,7 +60,7 @@ function Features() {
   return (
     <div className="grid md:grid-cols-3 grid-cols-2 gap-8 mt-6">
       {cardContent.map((e) => (
-        <CardComponent key={e.title} {...e} />
+        <CardComponent key={e.titleKey} {...e} />
       ))}
     </div>
   );
@@ -65,36 +70,37 @@ export default Features;
 
 type Props = {
   icon: string;
-  title: string;
-  description: string;
+  altKey: string;
+  titleKey: string;
+  descriptionKey: string;
 };
 const CardComponent: React.FC<Props> = (props) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const t = useScopedI18n("home.features");
 
-  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
-  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+  //const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  //const handleMouseLeave = useCallback(() => setIsHovered(false), []);
 
   return (
     <Card
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className={`md:w-[300px] py-5 rounded-3xl ${isHovered ? "bg-linear" : ""}`}
+      //onMouseEnter={handleMouseEnter}
+      //onMouseLeave={handleMouseLeave}
+      className={`md:w-[300px] py-5 rounded-3xl`}
     >
       <CardHeader className="grid grid-rows-2 md:h-36 h-32">
         <Image
           className=" mx-auto mb-0 md:scale-100 scale-[60%]"
           height={69}
           width={69}
-          src={`${isHovered ? svg1+'light.png' : props.icon +'.png'}`}
-          alt={props.title}
+          src={`${ props.icon +'.png'}`}
+          alt={t(props.altKey)}
         />
-        <CardTitle className={` text-center my-auto self-center text-primary ${isHovered ? "text-primary-foreground" : ""}`}>
-          {props.title}
+        <CardTitle className={`text-center mt-6 text-primary`}>
+          {t(props.titleKey)}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className={`text-muted-foreground text-center ${isHovered ? "text-primary-foreground" : ""}`}>
-          {props.description}
+        <CardDescription className={`text-muted-foreground text-center`}>
+          {t(props.descriptionKey)}
         </CardDescription>
       </CardContent>
     </Card>

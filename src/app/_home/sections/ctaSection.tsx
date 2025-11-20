@@ -20,7 +20,7 @@ export default function CtaSection() {
               asChild
               variant="description"
               size="sm"
-              className="text-center md:text-left"
+              className="text-center md:text-left my-3"
             >
               <p>{t("description")}</p>
             </Typography>

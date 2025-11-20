@@ -2,8 +2,8 @@ import { z } from "zod";
 import { carType, union } from "../utils";
 
 const car = z.object({
-  make: z.string().min(1),
-  model: z.string().min(1),
+  make: z.string().optional(),
+  model: z.string().optional(),
   engine: carType,
   otherEngine: z.string().optional(),
   secondThermal: union(

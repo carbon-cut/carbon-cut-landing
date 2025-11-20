@@ -13,6 +13,7 @@ export default {
         placeholder: "Rechercher ...",
         notFound: "Aucune entrée  trouvée.",
         value: "Sélectionnez ",
+        loading: "Chargement...",
       },
       overview: {
         title: "Aperçu du formulaire",
@@ -93,7 +94,7 @@ export default {
       },
       description:
         "Mesurez, réduisez et agissez grâce à un parcours guidé et des recommandations personnalisées.",
-      imageAlt: "Illustration du tableau de bord Carbon Cut",
+      imageAlt: "Image héro principale de Carbon Cut",
       primaryCta: {
         label: "Commencer",
         aria: "Commencer le questionnaire empreinte carbone",
@@ -127,6 +128,38 @@ export default {
       },
       description:
         "Un tableau de bord SaaS intuitif pour collecter vos données, visualiser vos émissions par poste et accélérer votre transition bas carbone.",
+      cards: [
+        {
+          title: "Calculateur d'empreinte carbone",
+          description: "Estimation fiable basée sur vos habitudes.",
+          alt: "Icône de calculatrice représentant le calculateur d'empreinte carbone",
+        },
+        {
+          title: "Conseils personnalisés",
+          description: "Conseils pratiques pour réduire vos émissions.",
+          alt: "Icône de bulle de dialogue symbolisant des conseils personnalisés",
+        },
+        {
+          title: "Tableau de bord carbone",
+          description: "Visualisation claire avec graphiques et rapports.",
+          alt: "Icône de tableau de bord illustrant la visualisation carbone",
+        },
+        {
+          title: "Comparateur d'émissions",
+          description: "Comparez votre empreinte à des moyennes locales et mondiales.",
+          alt: "Icône de balance représentant le comparateur d'émissions",
+        },
+        {
+          title: "Plan de réduction carbone",
+          description: "Étapes concrètes pour adopter un mode de vie durable.",
+          alt: "Icône de planification symbolisant un plan de réduction carbone",
+        },
+        {
+          title: "Analyse pour entreprises",
+          description: "Outil pour évaluer et réduire les émissions des entreprises.",
+          alt: "Icône analytique représentant l'analyse carbone pour entreprises",
+        },
+      ],
     },
     testimonials: {
       title: "Ils adoptent Carbon Cut",
@@ -149,7 +182,7 @@ export default {
         label: "Voir les offres",
         aria: "Consulter les offres",
       },
-      imageAlt: "Application Carbon Cut sur mobile et desktop",
+      imageAlt: "Image d'une ville polluée pour rappeler l'urgence d'agir",
     },
     faq: {
       badge: "Questions fréquentes",
@@ -698,7 +731,7 @@ export default {
       energie: {
         energie: {
           title: "Energie",
-          desc: "Passer à des sources renouvelables et améliorer l’isolation",
+          desc: "Passer à des sources renouvelables et améliorer l\'isolation",
         },
       },
       food: {

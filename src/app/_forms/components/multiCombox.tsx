@@ -8,7 +8,7 @@ import {
 import React, { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, Loader2 } from "lucide-react";
 import { Command, CommandEmpty, CommandInput } from "@/components/ui/command";
 import { MenuList } from "@/components/ui/menuList";
 import { ClassValue } from "clsx";
@@ -26,6 +26,7 @@ interface props {
   className?: ClassValue;
   labelClassName?: ClassValue;
   fallback?: boolean;
+  loading: boolean;
 }
 
 const FormMultiCombox: React.FC<props> = ({
@@ -39,6 +40,7 @@ const FormMultiCombox: React.FC<props> = ({
   className,
   labelClassName,
   fallback = false,
+  loading = false,
 }) => {
   const t = useScopedI18n("components.forms.combox");
   const [filteredOptions, setFilteredOptions] = React.useState(data);
@@ -91,20 +93,28 @@ const FormMultiCombox: React.FC<props> = ({
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start" onFocus={_=>setOpen(true)} onCloseAutoFocus={_=>setOpen(false)}>
               <Command shouldFilter={false}>
-                <CommandInput
-                  onValueChange={handleSearch}
-                  placeholder={t("placeholder", { label })}
-                />
-                <CommandEmpty>{t("notFound", { label })}</CommandEmpty>
-
-                <MenuList
-                  options={filteredOptions}
-                  onSelectOption={(element: any) => {
-                    setValue(element.value);
-                    form.setValue(name, element.value);
-                  }}
-                  selectedValue={field.value}
-                />
+                  <CommandInput
+                    onValueChange={handleSearch}
+                    placeholder={t("placeholder", { label })}
+                  />
+                {loading ? (
+                  <div className="flex items-center gap-2 px-4 py-6 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    {t("loading")}
+                  </div>
+                ) : (
+                  <>
+                    <CommandEmpty>{t("notFound", { label })}</CommandEmpty>
+                    <MenuList
+                      options={filteredOptions}
+                      onSelectOption={(element: any) => {
+                        setValue(element.value);
+                        form.setValue(name, element.value);
+                      }}
+                      selectedValue={field.value}
+                    />
+                  </>
+                )}
               </Command>
             </PopoverContent>
           </Popover>

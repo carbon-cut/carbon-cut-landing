@@ -15,7 +15,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -38,6 +38,7 @@ interface props<T extends FieldValues> {
   className?: ClassValue;
   labelClassName?: ClassValue;
   disabled?: boolean;
+  loading: boolean;
 }
 
 function FormCombox<T extends FieldValues>({
@@ -50,6 +51,7 @@ function FormCombox<T extends FieldValues>({
   className,
   disabled = false,
   labelClassName,
+  loading = false,
 }: props<T>) {
   const t = useScopedI18n("components.forms.combox");
 
@@ -101,34 +103,43 @@ function FormCombox<T extends FieldValues>({
               <Command>
                 <CommandInput placeholder={t("placeholder", { label })} />
                 <CommandList>
-                  <CommandEmpty>{t("notFound", { label })}</CommandEmpty>
-                  <CommandGroup>
-                    {data.map((element, index) => (
-                      <CommandItem
-                        className={`${
-                          element.value === field.value
-                            ? "!bg-card-primary-foreground"
-                            : ""
-                        }`}
-                        value={element.value}
-                        key={index}
-                        onSelect={() => {
-                          setValue(element.value);
-                          form.setValue(name, element.value);
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            element.value === field.value
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        {element.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+                  {loading ? (
+                    <div className="flex items-center gap-2 px-4 py-6 text-sm text-muted-foreground">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {t("loading")}
+                    </div>
+                  ) : (
+                    <>
+                      <CommandEmpty>{t("notFound", { label })}</CommandEmpty>
+                      <CommandGroup>
+                        {data.map((element, index) => (
+                          <CommandItem
+                            className={`${
+                              element.value === field.value
+                                ? "!bg-card-primary-foreground"
+                                : ""
+                            }`}
+                            value={element.value}
+                            key={index}
+                            onSelect={() => {
+                              setValue(element.value);
+                              form.setValue(name, element.value);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                element.value === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {element.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </>
+                  )}
                 </CommandList>
               </Command>
             </PopoverContent>
