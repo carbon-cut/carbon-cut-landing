@@ -84,7 +84,7 @@ const CardComponent: React.FC<Props> = (props) => {
     <Card
       //onMouseEnter={handleMouseEnter}
       //onMouseLeave={handleMouseLeave}
-      className={`md:w-[300px] py-5 rounded-3xl`}
+      className="md:w-[300px] py-5 rounded-3xl"
     >
       <CardHeader className="grid grid-rows-2 md:h-36 h-32">
         <Image

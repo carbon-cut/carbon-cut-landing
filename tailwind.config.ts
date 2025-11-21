@@ -29,13 +29,13 @@ export default {
           vacation: "hsl(var(--section-vacation))",
           energie: "hsl(var(--section-energie))",
           waste: "hsl(var(--section-waste))",
-          light:{
+          light: {
             transport: "hsl(var(--section-transport-light))",
             food: "hsl(var(--section-food-light))",
             vacation: "hsl(var(--section-vacation-light))",
             energie: "hsl(var(--section-energie-light))",
             waste: "hsl(var(--section-waste-light))",
-          }
+          },
         },
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -111,10 +111,10 @@ export default {
           from: { height: "0" },
           to: { height: "auto" }, // or a specific value
         },
-		"fit":{
-			from: { width: "auto" },
-			to: { width: "auto" }
-		}
+        fit: {
+          from: { width: "auto" },
+          to: { width: "auto" },
+        },
       },
       transitionBehavior: {
         descrete: "allow-descrete",
@@ -124,12 +124,15 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "preview-up": "preview-up 0.4s ease-out forwards",
         "preview-down": "preview-down 0.4s ease-out forwards",
-		"fit": "fit 0.5s ease-in-out"
+        fit: "fit 0.5s ease-in-out",
       },
       fontFamily: {
         manrope_sans: ["var(--font-manrope_sans)"],
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@adam.plesnik/tailwindcss-scroll-driven-animations"),
+  ],
 } satisfies Config;

@@ -24,11 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="google-site-verification" content="SoS9lEY4Q1vtAs6pZxz6wGH0BKOiFj2cU2hj71xMGHg" />
+        <meta
+          name="google-site-verification"
+          content="SoS9lEY4Q1vtAs6pZxz6wGH0BKOiFj2cU2hj71xMGHg"
+        />
       </head>
-      <body
-        className={`${manropeSans.variable} antialiased`}
-      >
+      <body className={`${manropeSans.variable} antialiased`}>
         <Providers>
           <Header />
           {children}
