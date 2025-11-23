@@ -55,13 +55,13 @@ function FAQs() {
       className="w-full text-primary-foreground bg-inherit"
     >
       {items.map((e) => (
-        <AccordionItem className="md:py-8 py-1" key={e.value} value={e.value}>
+        <AccordionItem className="md:py-3 py-1" key={e.value} value={e.value}>
           <AccordionTrigger>
-          <Typography variant={"subtitle"} className="md:text-3xl text-lg">
-            {e.title}
+            <Typography variant={"subtitle"} className="md:text-xl text-base">
+              {e.title}
             </Typography>
           </AccordionTrigger>
-          <AccordionContent className="font-medium px-3 text text-primary/70">
+          <AccordionContent className="font-medium px-3 pb-2 text text-primary/70">
             {e.content}
           </AccordionContent>
         </AccordionItem>

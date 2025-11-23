@@ -21,6 +21,12 @@ export default {
           "Afficher toutes les sections et questions de cette évaluation de l'empreinte carbone",
       },
     },
+    layout: {
+      scrollToTop: {
+        label: "Retour en haut de page",
+        ariaLabel: "Revenir en haut de la page",
+      },
+    },
   },
   seo: {
     site: {
@@ -162,6 +168,7 @@ export default {
       ],
     },
     testimonials: {
+      badge: "Témoignages",
       title: "Ils adoptent Carbon Cut",
     },
     pricing: {

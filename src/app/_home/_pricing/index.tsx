@@ -1,3 +1,5 @@
+ "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ArrowRight, Check, InfoIcon } from "lucide-react";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 
 const Prices: Props[] = [
   {
@@ -37,8 +39,12 @@ const Prices: Props[] = [
 function Pricing() {
   return (
     <div className="grid md:grid-cols-3 gap-6">
-      {Prices.map((price) => (
-        <CardComponent key={price.title} {...price} />
+      {Prices.map((price, index) => (
+        <CardComponent
+          key={price.title}
+          {...price}
+          delay={index * 200}
+        />
       ))}
     </div>
   );
@@ -52,11 +58,49 @@ type Props = {
   features: string[];
   price: number;
   color: string;
+  delay?: number;
 };
 
 const CardComponent: React.FC<Props> = (props) => {
+
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const [isActive, setIsActive] = useState(false);
+  const [canAnimate, setCanAnimate] = useState(true);
+
+  // Trigger animation when the card reaches ~70% visibility.
+  // Reset when it exits past the top (0vh) so it can play again on next entry.
+  useEffect(() => {
+    if (!cardRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio >= 0.55 && canAnimate) {
+            setIsActive(true);
+            setCanAnimate(false);
+          }
+          // If the card is above the top of the viewport, restore pre-animation state.
+          if (entry.intersectionRatio === 0 && entry.boundingClientRect.top > 0) {
+            setIsActive(false);
+            setCanAnimate(true);
+          }
+        });
+      },
+      { threshold: [0, 0.55, 1] }
+    );
+    observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, [canAnimate]);
+
   return (
-    <Card className="rounded-3xl w-[320px] py-5 justify-between">
+    <Card
+      ref={cardRef}
+      className={`rounded-3xl w-[320px] py-5 justify-between transition-all duration-700 ease-out translate-y-8 opacity-0 ${
+        isActive ? "translate-y-0 opacity-100" : "transition-none"
+      }`}
+      style={{
+        transitionDelay: `${props.delay ?? 0}ms`,
+      }}
+    >
         <div>
       <CardHeader>
         <CardTitle className="text-center text-primary">

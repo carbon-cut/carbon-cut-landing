@@ -8,12 +8,10 @@ import React from "react";
 
 function Testimonials() {
   return (
-    <div className="grid md:grid-cols-2 md:py-12 md:px-32 py-6 px-2">
-      <div className="pr-24">
-        <Badge className="mb-6" variant="default">
-          Témoignages
-        </Badge>
-        <br className="" />
+    <div className="grid md:grid-cols-2 md:py-12 md:px-32 py-6 px-2 gap-8">
+      <div className="pr-24 timeline-view range-on-entry/20vh_50vh opacity-0 animate-tilt-in-left motion-reduce:animate-none no-animations:translate-y-0 no-animations:translate-x-0 no-animations:rotate-0 no-animations:opacity-100">
+        
+        <div className="h-[50px]" />
         <span className="text-center text-4xl font-bold tracking-tight lg:text-5xl text-primary">
           Ce que nos <span className="text-chart-3">clients</span> <br /> disent
           de nous
@@ -40,7 +38,10 @@ function Testimonials() {
           </Button>
         </div>
       </div>
-      <div className="pr-16">
+      <div
+        className="pr-16 timeline-view range-on-entry/20vh_50vh animate-tilt-in-right translate-y-8 opacity-0  motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100 no-animations:blur-0"
+        style={{ animationDelay: "140ms" }}
+      >
         <Image
           width={32}
           height={32}

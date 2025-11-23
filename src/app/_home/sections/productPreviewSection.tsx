@@ -14,7 +14,7 @@ export default function ProductPreviewSection() {
         height={600}
         alt={t("imageAlt")}
         src={"home/Dashboard Screen.png"}
-        className="mx-auto rounded-3xl shadow-xl"
+        className="mx-auto rounded-3xl shadow-xl timeline-view range-on-entry/30vh_80vh blur-md opacity-60 animate-deblur motion-reduce:animate-none no-animations:blur-0 no-animations:opacity-100"
       />
     </section>
   );
