@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { useScopedServerI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
 import HeroSection from "./_home/sections/heroSection";
-import ProductPreviewSection from "./_home/sections/productPreviewSection";
 import FeaturesSection from "./_home/sections/featuresSection";
 import TestimonialsSection from "./_home/sections/testimonialsSection";
 import PricingSection from "./_home/sections/pricingSection";
@@ -21,7 +20,6 @@ export default function Home() {
   return (
     <main id="content">
       <HeroSection />
-      <ProductPreviewSection />
       <FeaturesSection />
       <TestimonialsSection />
       <PricingSection />

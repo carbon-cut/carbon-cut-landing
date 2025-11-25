@@ -5,17 +5,17 @@ export default function ProductPreviewSection() {
   const t = useScopedI18n("home.preview");
 
   return (
-    <section
+    <div
       aria-label={t("ariaLabel")}
-      className="flex justify-center py-16 px-4 bg-background"
+      className="flex justify-center bg-background/40  px-4 rounded-t-3xl isolate w-full"
     >
       <Image
-        width={930}
-        height={600}
+        width={3000}
+        height={3000}
         alt={t("imageAlt")}
         src={"home/Dashboard Screen.png"}
-        className="mx-auto rounded-3xl shadow-xl timeline-view range-on-entry/30vh_80vh blur-md opacity-60 animate-deblur motion-reduce:animate-none no-animations:blur-0 no-animations:opacity-100"
+        className="mx-auto timeline-view range-on-entry/30vh_80vh blur-md opacity-60 animate-deblur motion-reduce:animate-none no-animations:blur-0 no-animations:opacity-100"
       />
-    </section>
+    </div>
   );
 }
