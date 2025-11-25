@@ -47,6 +47,7 @@ const testimonialKeys: Testimonial[] = [
 function Testimonials() {
   const t = useScopedI18n("home.testimonials");
   const [index, setIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const items = useMemo(() => testimonialKeys.map((item) => ({
     quote: t(item.quote),
     detail: t(item.detail),
@@ -67,13 +68,19 @@ function Testimonials() {
   useEffect(() => {
     const measure = () => {
       const track = trackRef.current;
-      if (!track || !track.firstElementChild) return;
-      const first = track.firstElementChild as HTMLElement;
-      const rect = first.getBoundingClientRect();
+      const container = containerRef.current;
+      if (!track || !container || !track.firstElementChild) return;
+      const prefersDesktop = window.matchMedia("(min-width: 768px)").matches;
       const gapValue = parseFloat(
         getComputedStyle(track).columnGap || getComputedStyle(track).gap || "0"
       );
-      setItemWidth(rect.width + (Number.isFinite(gapValue) ? gapValue : 0));
+      if (prefersDesktop) {
+        const first = track.firstElementChild as HTMLElement;
+        const rect = first.getBoundingClientRect();
+        setItemWidth(rect.width + (Number.isFinite(gapValue) ? gapValue : 0));
+      } else {
+        setItemWidth(container.clientWidth);
+      }
     };
     measure();
     window.addEventListener("resize", measure);
@@ -81,8 +88,8 @@ function Testimonials() {
   }, [items.length]);
 
   return (
-    <div className="grid md:grid-cols-2 md:py-12 md:px-32 py-6 px-2 gap-8">
-      <div className="pr-24 timeline-view range-on-entry/20vh_50vh opacity-0 animate-tilt-in-left motion-reduce:animate-none no-animations:translate-y-0 no-animations:translate-x-0 no-animations:rotate-0 no-animations:opacity-100">
+    <div className="flex flex-col md:grid md:grid-cols-2 md:py-12 md:px-32 py-6 px-2 gap-8 w-full max-w-full">
+      <div className=" md:pr-24 timeline-view range-on-entry/20vh_50vh opacity-0 animate-tilt-in-left motion-reduce:animate-none no-animations:translate-y-0 no-animations:translate-x-0 no-animations:rotate-0 no-animations:opacity-100">
         
         <div className="h-[50px]" />
         <span className="text-center text-4xl font-bold tracking-tight lg:text-5xl text-primary">
@@ -113,20 +120,19 @@ function Testimonials() {
           </Button>
         </div>
       </div>
-      <div
-        className="pr-16 timeline-view range-on-entry/20vh_50vh animate-tilt-in-right translate-y-8 opacity-0  motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100 no-animations:blur-0"
+      <div className=" timeline-view range-on-entry/20vh_50vh animate-tilt-in-right translate-y-8 opacity-0  motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100 no-animations:blur-0"
         style={{ animationDelay: "140ms" }}
       >
-        <div className="overflow-x-hidden">
+        <div className="overflow-x-hidden w-full" ref={containerRef}>
           <div
             ref={trackRef}
-            className="flex gap-6 transition-transform duration-700 ease-out"
+            className=" flex gap-0 md:gap-6 transition-transform duration-700 ease-out"
             style={{ transform: `translateX(-${currentIndex * itemWidth}px)` }}
           >
             {items.map((item) => (
               <article
                 key={item.quote}
-                className="flex-none w-full rounded-3xl bg-card p-6 border border-border/60 flex flex-col"
+                className="flex-none basis-full w-full min-w-0 rounded-3xl bg-card p-6 border border-border/60 flex flex-col"
               >
                 <Image
                   width={32}

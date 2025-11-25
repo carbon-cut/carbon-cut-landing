@@ -93,7 +93,7 @@
     @apply outline-none ring-2 ring-chart-3 ring-offset-2 ring-offset-background rounded-md;
   }
   section {
-    @apply flex flex-1 justify-center w-screen flex-wrap
+    @apply flex flex-1 justify-center  flex-wrap
             px-3 md:px-24  md:py-8;
   }
 }

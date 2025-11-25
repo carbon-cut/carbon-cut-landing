@@ -51,7 +51,7 @@ function Footer() {
     { title: tFooter("legal.cookies"), url: "/legal/cookies" },
   ];
   return (
-    <div className="bg-card-primary md:p-12 p-6">
+    <footer id="site-footer" className="bg-card-primary md:p-12 p-6 z-[60]">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8">
         <div className="flex flex-col lg:col-span-3 sm:col-span-2 self-start">
           <img
@@ -115,7 +115,7 @@ function Footer() {
           </span>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
 

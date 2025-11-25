@@ -20,7 +20,7 @@ export default function FeaturesSection() {
           asChild
           variant={"title"}
           size={"xl"}
-          className={"text-center md:my-6 my-3 mx-32" + " " + titleAnimation}
+          className={"text-center md:my-6 my-3 md:mx-32 " + " " + titleAnimation}
         >
           <h2 id="features-heading">
             {t("title.line1")}{" "}

@@ -1,7 +1,7 @@
 .header{
     @apply 
         bg-transparent 
-         w-full right-0 left-0 mx-auto py-8 px-8 md:px-16 fixed top-0 z-50
+         w-screen right-0 left-0 md:mx-auto mx-0 py-8 px-4 md:px-16 fixed top-0 z-50
         flex flex-row justify-between gap-12
         transition-all duration-700
 }

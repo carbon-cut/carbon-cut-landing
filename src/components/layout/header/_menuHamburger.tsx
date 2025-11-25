@@ -18,5 +18,5 @@ export default function MenuHamburger({ isOpen }: {isOpen: boolean}) {
     return () => obj.removeEventListener('load', onLoad);
   }, [isOpen]);
 
-  return <object className='pointer-events-none' ref={ref} type="image/svg+xml" data="menu/charm_menu-hamburger.svg" />;
+  return <object className='pointer-events-none mt-3' ref={ref} type="image/svg+xml" data="menu/charm_menu-hamburger.svg" />;
 }

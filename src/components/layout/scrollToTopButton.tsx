@@ -15,8 +15,22 @@ const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const t = useScopedI18n("components.layout.scrollToTop");
+
+  useEffect(() => {
+    const footer = document.getElementById("site-footer");
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsFooterVisible(entry.isIntersecting),
+      { threshold: 0 }
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,7 +40,7 @@ function ScrollToTopButton() {
         scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0;
 
       setProgress(ratio);
-      setIsVisible(window.scrollY > SCROLL_TRIGGER);
+      setIsVisible(window.scrollY > SCROLL_TRIGGER && !isFooterVisible);
     };
 
     handleScroll();
@@ -37,7 +51,7 @@ function ScrollToTopButton() {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
-  }, []);
+  }, [isFooterVisible]);
 
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });

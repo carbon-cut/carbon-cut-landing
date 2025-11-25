@@ -19,10 +19,11 @@ export default function HeroSection() {
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="pt-32 relative min-h-screen overflow-hidden bg-[#F8F8EC]"
+      className="relative overflow-hidden  pt-24 md:pt-32 pb-16 md:pb-0 min-h-[100vh] flex-row flex md:min-h-screen"
     >
+      
       <div
-        className="h-full w-full absolute top-0 left-0  z-10 md:[clip-path:none] [clip-path:polygon(0_0,100%_0,100%_55%,0_55%)]"
+        className="md:h-full h-4/6 w-full absolute top-0 left-0  z-10 md:[clip-path:none] [clip-path:polygon(0_0,100%_0,100%_55%,0_55%)]"
         style={{
           background:
             "linear-gradient(0deg, rgba(10,41,36,79%) -30%, rgba(217,255,249,0.34) 100%)",
@@ -34,12 +35,10 @@ export default function HeroSection() {
         alt={t("imageAlt")}
         src={"home/hero/bg1.png"}
         priority
-        className="absolute md:-bottom-48 bottom-[45%]  
-            left-0 mx-auto z-0 w-screen  origin-bottom-left scale-125 md:scale-100 md:blur-[2px] blur-[1px]"
+        className="absolute md:-bottom-48 bottom-auto top-0 md:top-auto left-0 md:left-0 mx-auto z-0 w-full md:w-screen max-h-[50vh] md:max-h-none object-cover md:object-contain origin-bottom-left scale-100 md:scale-100 md:blur-[2px] blur-[1px]"
       />
-      <div className="bg-background h-full w-full absolute top-0 left-0 md:hidden  z-11 md:[clip-path:none] [clip-path:polygon(0_55%,100%_55%,100%_100%,0_100%)]" />
-      <div className="absolute top-[50%] translate-y-[60%] md:translate-y-0 md:static flex flex-col w-full z-20 items-center px-4">
-        <div className="my-3 md:my-6">
+      <div className="absolute md:flex bottom-[15%] md:static md:translate-y-0 flex flex-col w-full z-20 items-center px-4 md:px-6">
+        <div className="my-3 md:my-6 max-w-5xl">
           <Typography
             asChild
             variant={"title"}
@@ -57,15 +56,15 @@ export default function HeroSection() {
           asChild
           variant={"subtitle"}
           size={"md"}
-          className="text-center my-3 md:my-12 "
+          className="text-center my-4 md:my-12 max-w-3xl"
         >
           <p>{t("description")}</p>
         </Typography>
-        <div className="flex flex-col sm:flex-row gap-4 my-3 md:my-6">
+        <div className="flex flex-col sm:flex-row gap-4 my-4 md:my-6 w-full sm:w-auto justify-center max-w-lg">
           <Button
             asChild
             size="lg"
-            className="py-6 rounded-full"
+            className="py-6 rounded-full w-full sm:w-auto justify-center"
             aria-label={t("primaryCta.aria")}
           >
             <Link href="/form">
@@ -76,7 +75,7 @@ export default function HeroSection() {
             variant="outline"
             asChild
             size="lg"
-            className="py-6 rounded-full"
+            className="py-6 rounded-full w-full sm:w-auto justify-center"
             aria-label={t("secondaryCta.aria")}
           >
             <Link href="#features">{t("secondaryCta.label")}</Link>

@@ -114,7 +114,7 @@ function Header() {
         </Button>
       </nav>
           <Button
-            className="md:hidden z-10 hover:bg-transparent"
+            className="md:hidden z-10 hover:bg-transparent flex flex-col items-center justify-center"
             variant={"ghost"}
             type="button"
             aria-label={tNav("toggleLabel")}
@@ -123,35 +123,6 @@ function Header() {
             onClick={() => setShow(!show)}
           >
             <MenuHamburger isOpen={show} />
-          {/* <Image
-          data-state={dataState}
-          src={"menu/charm_menu-hamburger.svg"}
-          alt="menu"
-          width={40}
-          height={40}
-          /> */}
-{/*           <svg id="charm_menu-hamburger" width="40" height="40" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <style>
-#hamburger-icon path{
-    transition: linear 0.2s all;
-}
-#hamburger-icon:hover path:nth-child(1) {
-transform-origin : 20% 35%;
-transform: rotate(45deg) scale(1.2);
-}
-#hamburger-icon:hover path:nth-child(2) {
-transform: translateX(50%) scaleX(0);
-opacity: 0;
-}
-#hamburger-icon:hover path:nth-child(3) {
-transform-origin: 25% 70%;
-transform: rotate(-45deg) scale(1.2);
-}
-</style>
-            <path d="M4.98438 7.70312H24.0156" stroke="yellow" stroke-width="2.71875" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M4.98438  14.9531H24.0156M4.98438" stroke="red" stroke-width="2.71875" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M4.98438 22.2031H24.0156M4.98438" stroke="black" stroke-width="2.71875" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg> */}
       </Button>
     </header>
   );
