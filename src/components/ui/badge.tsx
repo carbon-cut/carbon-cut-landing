@@ -13,7 +13,7 @@ const badgeVariantsClasses = {
 };
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-3 py-1 text-s font-light transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full border px-3 py-1 text-s font-light transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
   {
     variants: {
       variant: badgeVariantsClasses,
@@ -31,6 +31,7 @@ export interface BadgeProps
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
     <div
+      tabIndex={props.tabIndex ?? 0}
       className={cn(badgeVariants({ variant }), className)}
       {...props}
             style={{

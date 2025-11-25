@@ -92,6 +92,13 @@ export default {
     },
   },
   home: {
+    nav: {
+      features: "Fonctionnalités",
+      testimonials: "Témoignages",
+      pricing: "Tarifs",
+      faq: "FAQ",
+      toggleLabel: "Basculer la navigation principale",
+    },
     hero: {
       title: {
         line1: "Votre empreinte",
@@ -114,6 +121,7 @@ export default {
         links: {
           features: "Fonctionnalités",
           pricing: "Tarifs",
+          testimonials: "Témoignages",
           faq: "Questions fréquentes",
         },
       },
@@ -170,6 +178,38 @@ export default {
     testimonials: {
       badge: "Témoignages",
       title: "Ils adoptent Carbon Cut",
+      description:
+        "Des utilisateurs qui mesurent, comprennent et agissent pour réduire leur empreinte carbone.",
+      controls: {
+        prev: "Témoignage précédent",
+        next: "Témoignage suivant",
+      },
+      cards: [
+        {
+          quote:
+            "J'ai utilisé ce site pour calculer mon empreinte carbone et j'ai été impressionné par la simplicité et la précision des résultats.",
+          detail:
+            "Les recommandations pour réduire mon impact sont claires et utiles. Un outil indispensable pour tout le monde qui veut contribuer à la préservation de la planète.",
+          name: "Sarah Johnson",
+          role: "Marketing Manager",
+        },
+        {
+          quote:
+            "Une expérience fluide, des explications claires et un suivi qui motive à progresser.",
+          detail:
+            "Les conseils personnalisés m'ont aidé à réduire mes émissions de transport en quelques semaines.",
+          name: "Hugo Martin",
+          role: "Chef de projet",
+        },
+        {
+          quote:
+            "Enfin un outil qui transforme les calculs carbone en actions concrètes.",
+          detail:
+            "Les visualisations sont claires et le parcours guidé facilite l'engagement de mon équipe.",
+          name: "Clara Dupont",
+          role: "Responsable RSE",
+        },
+      ],
     },
     pricing: {
       badge: "Plans & fonctionnalités",
@@ -194,6 +234,43 @@ export default {
     faq: {
       badge: "Questions fréquentes",
       title: "FAQ",
+    },
+    footer: {
+      brand: {
+        name: "Carbon Cut",
+        description:
+          "Tableau de bord carbone personnel pour suivre, comprendre et réduire vos émissions.",
+      },
+      headings: {
+        quickLinks: "Liens rapides",
+        support: "Support & contact",
+        social: "Réseaux",
+        legal: "Mentions légales",
+        newsletter: "Newsletter",
+      },
+      support: {
+        email: "Contacter le support",
+        helpCenter: "Centre d'aide",
+        demo: "Demander une démo",
+      },
+      social: {
+        linkedin: "LinkedIn",
+        twitter: "X / Twitter",
+        facebook: "Facebook",
+        instagram: "Instagram",
+      },
+      legal: {
+        privacy: "Politique de confidentialité",
+        terms: "Conditions d'utilisation",
+        cookies: "Politique de cookies",
+      },
+      newsletter: {
+        description:
+          "Recevez des conseils bas carbone et les nouveautés produit (1 à 2 emails par mois).",
+        placeholder: "Votre email",
+        cta: "S'abonner",
+        privacy: "Pas de spam. Désinscription en un clic.",
+      },
     },
   },
   root: {

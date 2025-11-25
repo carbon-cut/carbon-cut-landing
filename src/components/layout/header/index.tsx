@@ -7,31 +7,36 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import MenuHamburger from "./_menuHamburger";
 import Image from "next/image";
+import { useScopedI18n } from "@/locales/client";
 
 type MenuItem = {
   title: string;
   url: string;
 };
 
-
-const menu: MenuItem[] = [
-  {
-    title: "Tarifs",
-    url: "./#pricing",
-  },
-  {
-    title: "FAQ",
-    url: "./#faq",
-  },
-  {
-    title: "Assistance",
-    url: "./#support",
-  },
-];
-
 function Header() {
+  const tNav = useScopedI18n("home.nav");
+  const menu: MenuItem[] = [
+    {
+      title: tNav("features"),
+      url: "/#features",
+    },
+    {
+      title: tNav("testimonials"),
+      url: "/#testimonials",
+    },
+    {
+      title: tNav("pricing"),
+      url: "/#pricing",
+    },
+    {
+      title: tNav("faq"),
+      url: "/#faq",
+    },
+  ];
   const [dataState, setDataState] = React.useState("big");
   const [show, setShow] = React.useState(false);
+  const [isDesktop, setIsDesktop] = React.useState(false);
 
   const pathName = usePathname();
 
@@ -50,6 +55,16 @@ function Header() {
     } else setDataState("big");
   }, [pathName]);
 
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const updateMatch = () => setIsDesktop(media.matches);
+    updateMatch();
+    media.addEventListener("change", updateMatch);
+    return () => media.removeEventListener("change", updateMatch);
+  }, []);
+
+  const navHidden = !show && !isDesktop;
+
   return (
     <header
       /* ref={headerDiv} */ data-state={dataState}
@@ -66,10 +81,25 @@ function Header() {
         />
       </Link>
 
-      <div className={`${style.itemsContainer} ${show ? style.show : ''}`}>
+      <nav
+        id="primary-navigation"
+        aria-label="Primary navigation"
+        aria-hidden={navHidden}
+        className={`${style.itemsContainer} ${show ? style.show : ''}`}
+      >
         {menu.map((item) => (
-          <div key={item.title} className="self-center  md:text-base md:font-normal text-4xl  ">
-            <a onClick={() => setShow(false)} href={item.url}>{item.title}</a>
+          <div
+            key={item.title}
+            className="self-center md:text-base md:font-normal text-4xl"
+          >
+            <Link
+              onClick={() => setShow(false)}
+              href={item.url}
+              tabIndex={navHidden ? -1 : 0}
+              className="px-2 py-1"
+            >
+              {item.title}
+            </Link>
           </div>
         ))}
 
@@ -78,11 +108,20 @@ function Header() {
           asChild
           className={style.button}
           size={"lg"}
+          tabIndex={navHidden ? -1 : 0}
         >
           <Link href={"/form"}>Commencer</Link>
         </Button>
-      </div>
-          <Button className="md:hidden z-10 hover:bg-transparent" variant={"ghost"} type="button" onClick={() => setShow(!show)}>
+      </nav>
+          <Button
+            className="md:hidden z-10 hover:bg-transparent"
+            variant={"ghost"}
+            type="button"
+            aria-label={tNav("toggleLabel")}
+            aria-expanded={show}
+            aria-controls="primary-navigation"
+            onClick={() => setShow(!show)}
+          >
             <MenuHamburger isOpen={show} />
           {/* <Image
           data-state={dataState}

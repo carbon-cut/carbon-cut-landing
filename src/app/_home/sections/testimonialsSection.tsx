@@ -20,11 +20,6 @@ export default function TestimonialsSection() {
           {t("badge")}
         </Badge>
       
-      <div className="timeline-view range-on-entry/20vh_50vh translate-y-6 opacity-0 blur-sm animate-blur-in motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100 no-animations:blur-0">
-        <Typography asChild variant="title" size="xl" className="text-center mb-10">
-          <h2 id="testimonials-heading">{t("title")}</h2>
-        </Typography>
-      </div>
       </div>
       <Testimonials />
     </section>

@@ -10,6 +10,7 @@ export default function HeroSection() {
 
   const quickLinks = [
     { href: "#features", label: t("quickLinks.links.features") },
+    { href: "#testimonials", label: t("quickLinks.links.testimonials") },
     { href: "#pricing", label: t("quickLinks.links.pricing") },
     { href: "#faq", label: t("quickLinks.links.faq") },
   ];
@@ -87,7 +88,7 @@ export default function HeroSection() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="underline decoration-dotted underline-offset-4 hover:text-primary"
+                  className="underline decoration-dotted underline-offset-4 hover:text-primary px-2 py-1"
                 >
                   {link.label}
                 </Link>
