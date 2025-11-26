@@ -1,8 +1,11 @@
+'use client';
 import React, { useRef, useEffect } from 'react';
 
 export default function MenuHamburger({ isOpen }: {isOpen: boolean}) {
   const ref = useRef<HTMLObjectElement>(null);
-
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const iconPath = `${basePath}/menu/charm_menu-hamburger.svg`;
+console.log(iconPath);
   useEffect(() => {
     const obj = ref.current;
     if (!obj) return;
@@ -18,5 +21,5 @@ export default function MenuHamburger({ isOpen }: {isOpen: boolean}) {
     return () => obj.removeEventListener('load', onLoad);
   }, [isOpen]);
 
-  return <object className='pointer-events-none mt-3' ref={ref} type="image/svg+xml" data="menu/charm_menu-hamburger.svg" />;
+  return <object className='pointer-events-none mt-3' ref={ref} type="image/svg+xml" data={iconPath} />;
 }

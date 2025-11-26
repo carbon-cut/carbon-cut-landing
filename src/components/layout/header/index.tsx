@@ -40,17 +40,9 @@ function Header() {
 
   const pathName = usePathname();
 
-  /*   const headerDiv = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-      if (headerDiv.current === null) return ;
-      const headerBottom = headerDiv.current.offsetTop + headerDiv.current.offsetHeight;
-
-    }, [headerDiv]);
- */
   useEffect(() => {
     const isHome = pathName === "/";
-    if (!isHome) {
+    if (!isHome && isDesktop) {
       setDataState("small");
     } else setDataState("big");
   }, [pathName]);

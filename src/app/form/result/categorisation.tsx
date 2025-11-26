@@ -35,7 +35,6 @@ function Categorisation({ data, isAnimating }: Props) {
         window.getComputedStyle(document.documentElement)
         .getPropertyValue(`--section-${elem.name}`)
         .trim();
-        console.log(elem.name, ' ', color);
       colors.push(color);
     });
     return {
@@ -51,7 +50,7 @@ function Categorisation({ data, isAnimating }: Props) {
         {t('title')}
       </h2>
 
-      <div className="bg-white flex flex-row-reverse rounded-2xl border border-[#E0F2F1] p-8 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="bg-white flex flex-col md:flex-row-reverse rounded-2xl border border-[#E0F2F1] p-8 shadow-md hover:shadow-lg transition-shadow duration-300">
         <div className="w-full h-[350px] flex items-center justify-center">
           <Doughnut
             options={{
@@ -94,7 +93,7 @@ function Categorisation({ data, isAnimating }: Props) {
             plugins={[doughtPlugin, plugin.noData]}
           />
         </div>
-        <div className="grid md:grid-cols-2 gap-4 w-9/12 mt-8">
+        <div className="grid grid-cols-2 gap-4 md:w-9/12 mt-8">
           {data.map((item, index) => {
             
             const color = (opacity = 1 ) => {

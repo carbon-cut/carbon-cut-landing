@@ -86,7 +86,7 @@ const CardComponent: React.FC<Props> = (props) => {
       //onMouseEnter={handleMouseEnter}
       //onMouseLeave={handleMouseLeave}
       className="md:w-[300px] py-5 rounded-3xl timeline-view 
-      range-on-entry/160px_400px translate-x-12 opacity-0 animate-to-translate-0 motion-reduce:animate-none
+      range-on-entry/160px_400px translate-x-3 md:translate-x-12 opacity-0 animate-to-translate-0 motion-reduce:animate-none
       no-animations:translate-x-0 no-animations:opacity-100"
     >
       <CardHeader className="grid grid-rows-2 md:h-36 h-32">
