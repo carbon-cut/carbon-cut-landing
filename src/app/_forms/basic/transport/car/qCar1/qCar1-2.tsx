@@ -39,10 +39,10 @@ const QuestionCompo2: React.FC<
         <div>
           <CarTitle mainForm={mainForm} index={index} />
           <Question>{t("q")}</Question>
-          <Content className="flex flex-row justify-start">
-            <div className="self-start w-5/6 ">
+          <Content className="flex md:flex-row flex-col justify-start ">
+            <div className="self-start md:w-5/6 w-full ">
             <Radio
-              className=" w-5/6 flex justify-between  mx-0"
+              className="md:w-5/6 w-full flex justify-between  mx-0"
               setState={setCarType}
               name={`transport.cars.${index}.engine`}
               form={mainForm}

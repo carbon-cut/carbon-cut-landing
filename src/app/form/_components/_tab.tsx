@@ -36,7 +36,7 @@ const TabTrigger = React.forwardRef<
         `flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200  
       disabled:pointer-events-auto disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:hover:bg-white
     data-[state=active]:text-white data-[state=active]:shadow-lg
-     bg-gray-200 text-gray-600 
+     bg-gray-200 text-gray-600
     ${colorVariants[tab]}
       `,
         className
@@ -44,7 +44,7 @@ const TabTrigger = React.forwardRef<
       {...props}
     >
       {props.children}
-      <span className="font-medium text-sm">{getName(props.value)}</span>
+      <span className="font-medium md:text-sm text-xs md:block hidden">{getName(props.value)}</span>
     </TabsTrigger>
   );
 });

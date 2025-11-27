@@ -20,27 +20,6 @@ const QCarComponent2 = ({
     mainForm.getValues(`transport.cars.${index}.engine`) === "Electrique" ||
     mainForm.getValues(`transport.cars.${index}.engine`) === "Plug-in Hybrid";
 
-  /*     const { data: cylinders } = useQuery({
-      queryKey: [
-        "cylinders", //@ts-ignore
-        mainForm.getValues(`transport.cars.${index}.carModel`),
-      ],
-       queryFn: async () => {
-        if (!isCombustion) return null;
-        const result = await fetch(
-          //@ts-ignore
-          `${
-            process.env.NEXT_PUBLIC_SERVER
-          }/api/carbon-footprint/forms/cars/cylinders?model=${mainForm.getValues(
-            //@ts-ignore
-            `transport.cars.${index}.carModel`,
-          )}`,
-        ).then((res) => res.json());
-        if (result.error) throw new Error(result.error.message);
-        return result;
-      },
-    }); */
-
   return (
     <div className="py-2">
       <CarTitle mainForm={mainForm} index={index} />

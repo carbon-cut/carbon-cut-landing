@@ -49,7 +49,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
   return (
     <div className="">
       <div><Question className='text-lg text-center font-bold'>{t("q")}</Question></div>
-      <Content className="pl-0 grid grid-cols-2 gap-6 my-12">
+      <Content className="pl-0 pr-0 grid md:grid-cols-2 gap-6 mt-6 md:my-12">
         <div className="">
           <FormCombox
             setValue={setMake}
@@ -57,7 +57,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
             data={cars ?? []}
             form={mainForm}
             label={t("l1")}
-            className="w-10/12"
+            className="md:w-10/12"
             loading={makesLoading}
           />
           </div>
@@ -68,7 +68,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({
             loading={modelsLoading}
             form={mainForm}
             label={t("l2")}
-            className="w-10/12"
+            className="md:w-10/12"
             disabled={!make || make == ""}
           />
           </div>

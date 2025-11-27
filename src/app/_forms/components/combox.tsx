@@ -66,14 +66,22 @@ function FormCombox<T extends FieldValues>({
       name={name}
       render={({ field, fieldState }) => (
         <FormItem className={cn("w-full", className)}>
-          {label &&  
-            <FormLabel 
+          {label && (
+            <FormLabel
               data-state={fieldState.error && "error"}
               className={cn(
-              `text-sm font-medium 
-              ${disabled ? 'text-muted-foreground data-[state=error]:text-destructive/60' : ''}`,
-              labelClassName)}>{label}</FormLabel>
-          }
+                `text-sm font-medium 
+              ${
+                disabled
+                  ? "text-muted-foreground data-[state=error]:text-destructive/60"
+                  : ""
+              }`,
+                labelClassName
+              )}
+            >
+              {label}
+            </FormLabel>
+          )}
           <Popover>
             <PopoverTrigger asChild>
               <div>
@@ -84,19 +92,24 @@ function FormCombox<T extends FieldValues>({
                     className={cn(
                       `w-full pl-3 text-left font-normal rounded-full bg-white disabled:hover:bg-white
                       disabled:hover:text-muted-foreground disabled:cursor-not-allowed disabled:pointer-events-auto
-                      ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : ''}
+                      ${
+                        fieldState.error
+                          ? "outline-none ring-1 ring-destructive/60 "
+                          : ""
+                      }
                       `,
                       !field.value && "text-muted-foreground"
                     )}
                     disabled={disabled}
                   >
-                    {field.value
-                      ? data.find((elem) => field.value === elem.value)?.label
-                      : t("value", { label })}
+                    <span className="truncate">
+                      {field.value
+                        ? data.find((elem) => field.value === elem.value)?.label
+                        : t("value", { label })}
+                    </span>
                     <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
                 </FormControl>
-                
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -144,7 +157,7 @@ function FormCombox<T extends FieldValues>({
               </Command>
             </PopoverContent>
           </Popover>
-          <FormMessage 
+          <FormMessage
             data-state={disabled && "disabled"}
             className="ml-3 data-[state=disabled]:text-destructive/70"
           />

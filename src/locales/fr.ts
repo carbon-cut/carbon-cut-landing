@@ -814,6 +814,14 @@ export default {
     no: "non",
     unit: ({ unit }: { unit: string }) => `en ${unit}`,
     idk: "Je ne sais pas",
+    progress: {
+      title: ({
+        current,
+        total,
+      }: { current: number; total: number }) =>
+        `Question ${current} sur ${total}`,
+      percentage: ({ value }: { value: number }) => `${value}% terminé`,
+    },
     next: "Continuer",
     back: "Précédent",
     preview: "Aperçu",

@@ -90,7 +90,6 @@ export default function FormPageClient() {
   }, [setTab]);
   return (
     <div className={style.body}>
-      {/* bg-[#e8e8e8] */}
       <Form {...mainForm}>
         <form
           onSubmit={(e) => {
@@ -105,7 +104,7 @@ export default function FormPageClient() {
           className="min-h-screen h-full w-full"
         >
           <Tabs
-            className="relative pt-48 px-0 lg:w-[850px] mx-auto"
+            className="relative md:pt-32 pt-20 px-0 lg:w-[850px] mx-auto"
             value={tab}
             //@ts-expect-error because Tabs cannot access to possible values
             onValueChange={(v) => setTab(v)}
@@ -129,7 +128,7 @@ export default function FormPageClient() {
             </ProgressBar>
 
             <div className="flex justify-center mb-8 relative">
-              <TabsList className="flex space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
+              <TabsList className="flex max-w-full flex-wrap space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
                 <TabTrigger
                   value="transport"
                   data-state={
@@ -140,7 +139,7 @@ export default function FormPageClient() {
                       : "inactive"
                   }
                 >
-                  <Car className={`w-4 h-4`} />
+                  <Car className="w-4 h-4" />
                 </TabTrigger>
                 <TabTrigger
                   value="energie"
@@ -152,7 +151,7 @@ export default function FormPageClient() {
                       : "inactive"
                   }
                 >
-                  <Zap className={`w-4 h-4 `} />
+                  <Zap className="w-4 h-4" />
                 </TabTrigger>
                 <TabTrigger disabled value="food">
                   <UtensilsCrossed className="w-4 h-4" />

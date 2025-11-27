@@ -111,7 +111,7 @@ function QAir({ mainForm }: QuestionProps) {
       {data.map(({ id,}, index) => (
         <li
           key={id}
-          className="bg-white border-2 relative border-gray-200 rounded-lg p-12 hover:border-[#00A261] transition-colors mb-6"
+          className="bg-white border-2 relative border-gray-200 rounded-lg md:p-12 p-4 pt-12 hover:border-[#00A261] transition-colors mb-6"
         >
           <Button
             type="button"
@@ -124,7 +124,7 @@ function QAir({ mainForm }: QuestionProps) {
           >
             <Trash />
           </Button>
-          <div className="grid grid-cols-4 gap-10 mb-6 items-end">
+          <div className="grid md:grid-cols-4 grid-cols-2 md:gap-10 gap-4 items-end">
             <FormMultiCombox
               labelClassName="text-black/70"
               className="text-primary"
@@ -161,7 +161,7 @@ function QAir({ mainForm }: QuestionProps) {
               fallback
             />
           </div>
-          <div className="grid grid-cols-4 gap-10 items-end">
+          <div className="grid md:grid-cols-4 grid-cols-2 md:gap-10 gap-4 items-end">
             <Input
             labelClassName="text-black/70"
               label={t("frequency")}
@@ -181,7 +181,7 @@ function QAir({ mainForm }: QuestionProps) {
               fallback
             />
             <div className="self-center">
-              <div className='flex items-center gap-4 mt-6'>
+              <div className='flex items-center gap-4 md:mt-6'>
               <Checkbox
                 id={`stopover${index}`}
                 checked={stopovers[index]}

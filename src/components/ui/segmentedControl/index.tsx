@@ -27,15 +27,15 @@ function SegmentedControl<T extends string>({
       onValueChange={(v) => {
         setState(v as T);
       }}
-      className={cn("inline-flex rounded-lg bg-gray-300 p-1 w-2/3 max-w-md", className)}
+      className={cn("inline-flex rounded-lg bg-gray-300 p-1 md:w-2/3 max-w-md", className)}
     >
       {options.map(({ label, value }) => (
         <RadioGroupPrimitive.Item asChild key={value} value={value}>
-          <FormLabel className={`flex-1 px-6 py-3 rounded-md text-sm font-medium transition-all duration-200 text-center cursor-pointer ${
+          <FormLabel className={`flex flex-1 items-center justify-center px-6 md:py-3 py-1 rounded-md text-sm font-medium transition-all duration-200 text-center cursor-pointer ${
                 (value === state) ? "bg-[#00A261] text-white shadow-sm" : "text-gray-700 hover:text-gray-900"
               }`}>
             
-            <FormLabel className="cursor-pointer">{label}</FormLabel>
+            <span className="cursor-pointer">{label}</span>
           </FormLabel>
           </RadioGroupPrimitive.Item>
       ))}

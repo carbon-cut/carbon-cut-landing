@@ -42,8 +42,8 @@ const QuestionCompo3: React.FC<QuestionProps & Props> = ({
   return (
     <div>
       <Question>{t("q")}</Question>
-      <Content className="flex flex-row justify-start">
-        <div className="self-start w-1/2 ">
+      <Content className="flex md:flex-row flex-col justify-start">
+        <div className="self-start md:w-1/2 ">
           <Radio
             className=" w-2/3 flex justify-between  mx-0"
             setState={setSecondThermal}

@@ -168,7 +168,7 @@ useEffect(() => {
       <div className="flex justify-between gap-12 mb-8 mt-8">
         <Button
           className={
-            "px-8 py-3 w-[175px]  rounded-full font-semibold flex items-center gap-2 border-2 border-[#00A261] text-[#00A261] bg-white hover:bg-[#ECFDF5] hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+            "md:px-8 md:py-3 px-5 py-3 md:w-[175px]  rounded-full font-semibold flex items-center gap-2 border-2 border-[#00A261] text-[#00A261] bg-white hover:bg-[#ECFDF5] hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
           }
           variant={"outline"}
           size={"lg"}
@@ -183,13 +183,13 @@ useEffect(() => {
               height={18}
               alt="arrow-left"
             />
-            <span className="bg-linear-1 text-transparent bg-clip-text">
+            <span className="bg-linear-1 md:text-base text-xs text-transparent bg-clip-text">
               {t("back")}
             </span>
           </span>
         </Button>
         <Button
-          className={`px-8 py-3 w-[175px] 
+          className={`md:px-8 md:py-3 px-5 py-3 md:w-[175px] 
             rounded-full font-semibold flex items-center gap-2 
             bg-gradient-to-r from-[#00A261] to-[#003A52]
             data-[state=submit]:bg-linear-energie
@@ -207,7 +207,7 @@ useEffect(() => {
             onSubmit();
             if (ver) next();
           }}
-        ><span className="">
+        ><span className="md:text-base text-sm">
           {submit ? t("submit") : t("next")}
           </span>
           {!submit && <Image

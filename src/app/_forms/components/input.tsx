@@ -112,11 +112,10 @@ function Input<T extends FieldValues>({
             <div className={cn(`w-full inline-block`, className)}>
               <FormControl>
                 <InputRoot
-                  
                   disabled={disabled}
                   className={cn(
                     `w-full ${
-                      size === "xl" ? "h-9 text-xl" : "h-8 !text-xs"
+                      size === "xl" ? "h-9" : "h-8 !text-xs"
                     } rounded-full  bg-white 
                   ${
                     fieldState.error

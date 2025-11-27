@@ -46,6 +46,7 @@ function QAir({
       <Question>{t("q")}</Question>
       <Content>
         <Radio
+          className='w-4/6 md:w-3/6'
           form={mainForm}
           name="transport.hasAir"
           options={[
