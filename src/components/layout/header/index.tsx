@@ -44,7 +44,9 @@ function Header() {
     const isHome = pathName === "/";
     if (!isHome && isDesktop) {
       setDataState("small");
-    } else setDataState("big");
+    } else if (!isHome && !isDesktop) {
+      setDataState("bigSticky");
+    }else setDataState("big");
   }, [pathName]);
 
   useEffect(() => {

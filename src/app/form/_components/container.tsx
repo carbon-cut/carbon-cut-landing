@@ -165,11 +165,15 @@ useEffect(() => {
         </CardContent>
         </motion.div>
       </Card>
-      <div className="flex justify-between gap-12 mb-8 mt-8">
+      <div className="md:flex md:justify-between md:gap-12 gap-6 grid grid-cols-2 mb-8 mt-8">
         <Button
-          className={
-            "md:px-8 md:py-3 px-5 py-3 md:w-[175px]  rounded-full font-semibold flex items-center gap-2 border-2 border-[#00A261] text-[#00A261] bg-white hover:bg-[#ECFDF5] hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
-          }
+          className=
+            {`md:px-8 md:py-3 px-5 py-3 md:w-[175px] w-full rounded-full font-semibold flex items-center gap-2
+            border-2 border-[#00A261] text-[#00A261] bg-white
+            hover:bg-[#ECFDF5] 
+            hover:shadow-xl hover:scale-105 active:scale-95 transition-all
+            duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+            disabled:hover:scale-100 disabled:hover:shadow-none`}
           variant={"outline"}
           size={"lg"}
           type="button"
@@ -179,24 +183,25 @@ useEffect(() => {
           <span className="flex items-center gap-3">
             <Image
               src={"form/utils/arrow-left.svg"}
-              width={18}
-              height={18}
+              width={16}
+              height={16}
               alt="arrow-left"
             />
-            <span className="bg-linear-1 md:text-base text-xs text-transparent bg-clip-text">
+            <span className="md:text-base text-sm bg-linear-1 text-transparent bg-clip-text">
               {t("back")}
             </span>
           </span>
         </Button>
         <Button
-          className={`md:px-8 md:py-3 px-5 py-3 md:w-[175px] 
+          className={`md:px-8 md:py-3 py-3 md:w-[175px] w-full
             rounded-full font-semibold flex items-center gap-2 
             bg-gradient-to-r from-[#00A261] to-[#003A52]
             data-[state=submit]:bg-linear-energie
             text-white hover:shadow-xl hover:scale-105
             active:scale-95 
             transition-all 
-            duration-200 shadow-lg`}
+            duration-200 shadow-lg
+            `}
             disabled={loading}
           size={"lg"}
           data-state={submit ? "submit" : "next"}

@@ -30,9 +30,9 @@ function WoodCharcoal({ mainForm }: QuestionProps) {
             <p className="">{t("wood.label")}</p>
           </Question>
           <Content>
-            <div className="grid grid-cols-2 space-x-6">
+            <div className="grid md:grid-cols-2 md:space-x-6">
               <div className="grid grid-cols-12 space-x-3">
-                <div className="col-span-9">
+                <div className="col-span-7">
                   <Input
                     labelClassName="text-black/70"
                     label={t("wood.quantity")}
@@ -42,7 +42,7 @@ function WoodCharcoal({ mainForm }: QuestionProps) {
                     type="number"
                   />
                 </div>
-                <div className="col-span-3">
+                <div className="col-span-5">
                   <FormSelect
                     form={mainForm}
                     placeholder={t("wood.qunits.label")}
@@ -55,7 +55,8 @@ function WoodCharcoal({ mainForm }: QuestionProps) {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 space-x-3">
+              <div className="grid grid-cols-12 space-x-3">
+                <div className="col-span-7">
                 <Input
                   labelClassName="text-black/70"
                   form={mainForm}
@@ -64,11 +65,12 @@ function WoodCharcoal({ mainForm }: QuestionProps) {
                   placeholder={t("wood.funits.label")}
                   type="number"
                 />
-                <div className="">
+                </div>
+                <div className="col-span-5">
                   <FormSelect
                     form={mainForm}
                     label="&nbsp;"
-                    placeholder={t("wood.funits.label")}
+                    placeholder={t("wood.qunits.label")}
                     name={"energie.heating.quantities.wood.frequencyUnit"}
                     data={frequencyKeys.map((e) => ({
                       label: t(`wood.funits.${e}`),
@@ -88,9 +90,9 @@ function WoodCharcoal({ mainForm }: QuestionProps) {
             <p>{t("charcoal.label")}</p>
           </Question>
           <Content>
-            <div className=" grid grid-cols-2 space-x-6">
+            <div className="grid md:grid-cols-2 md:space-x-6">
               <div className="grid grid-cols-12 space-x-3">
-                <div className="col-span-9">
+                <div className="col-span-7">
                   <Input
                     labelClassName="text-black/70"
                     label={t("wood.quantity")}
@@ -100,7 +102,7 @@ function WoodCharcoal({ mainForm }: QuestionProps) {
                     type="number"
                   />
                 </div>
-                <div className="col-span-3">
+                <div className="col-span-5">
                   <FormSelect
                     form={mainForm}
                     label="&nbsp;"
@@ -109,24 +111,26 @@ function WoodCharcoal({ mainForm }: QuestionProps) {
                       label: t(`charcoal.qunits.${e}`),
                       value: e,
                     }))}
-                    placeholder={t("wood.qunits.label")}
+                    placeholder={t("charcoal.qunits.label")}
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 space-x-3">
-                <Input
-                  labelClassName="text-black/70"
-                  form={mainForm}
-                  name={"energie.heating.quantities.charcoal.frequency"}
-                  label={t("charcoal.funits.label")}
-                  placeholder={t("wood.funits.label")}
-                  type="number"
-                />
-                <div className="">
+              <div className="grid grid-cols-12 space-x-3">
+                <div className="col-span-7">
+                  <Input
+                    labelClassName="text-black/70"
+                    form={mainForm}
+                    name={"energie.heating.quantities.charcoal.frequency"}
+                    label={t("charcoal.funits.label")}
+                    placeholder={t("charcoal.funits.label")}
+                    type="number"
+                  />
+                </div>
+                <div className="col-span-5">
                   <FormSelect
                     form={mainForm}
                     label="&nbsp;"
-                    placeholder={t("wood.funits.label")}
+                    placeholder={t("charcoal.qunits.label")}
                     name={"energie.heating.quantities.charcoal.frequencyUnit"}
                     data={frequencyKeys.map((e) => ({
                       label: t(`charcoal.funits.${e}`),

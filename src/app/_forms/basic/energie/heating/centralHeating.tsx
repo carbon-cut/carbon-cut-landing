@@ -13,7 +13,7 @@ function CentralHeating({mainForm}: QuestionProps) {
   return (
     <Content className="">
       <Question>{t("label")}</Question>
-      <div className="grid grid-cols-3 space-x-4">
+      <div className="grid md:grid-cols-3 md:space-x-4">
         <FormSelect
           label={t("fields.energyLabel")}
           form={mainForm}

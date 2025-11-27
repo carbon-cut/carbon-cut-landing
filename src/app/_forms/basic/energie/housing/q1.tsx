@@ -20,9 +20,9 @@ function Q1({ mainForm }: QuestionProps) {
         variant="note"
       />
       <Question>{t("q1")}</Question>
-      <div className="grid grid-cols-2">
-        <Content>
-          <div className="w-2/3 mt-3">
+      <div className="grid md:grid-cols-2">
+        <Content className="mb-0">
+          <div className="md:w-2/3 md:mt-3">
             <FormSelect
               form={mainForm}
               name="energie.housing.category"
@@ -35,7 +35,7 @@ function Q1({ mainForm }: QuestionProps) {
               ]}
             />
           </div>
-          <div className="w-2/3 mt-3">
+          <div className="md:w-2/3 md:mt-3">
             <Input
               label={t("q1Labels.area")}
               placeholder="m²"
@@ -45,8 +45,8 @@ function Q1({ mainForm }: QuestionProps) {
             />
           </div>
         </Content>
-        <Content>
-          <div className="w-2/3 mt-3">
+        <Content className="mb-0">
+          <div className="md:w-2/3 md:mt-3">
             <Input
               label={t("q1Labels.heatedVolume")}
               form={mainForm}
@@ -55,7 +55,7 @@ function Q1({ mainForm }: QuestionProps) {
               
             />
           </div>
-          <div className="w-2/3 mt-3">
+          <div className="md:w-2/3 md:mt-3">
             <Input
               label={t("q1Labels.conditionedVolume")}
               form={mainForm}
@@ -73,11 +73,10 @@ function Q1({ mainForm }: QuestionProps) {
         </div>
       </Content>
       <Question>{t("q3")}</Question>
-      <Content className="-ml-16">
-        <div className="-ml-4">
+      <Content className="px-0">
         <MultiCheckInput
           type="boolean"
-          className="grid grid-rows-2 grid-cols-1 ml-0"
+          className="grid md:grid-rows-2 md:grid-cols-1 grid-cols-2 w-full px-0"
           form={mainForm}
           name={"energie.housing"}
           options={[
@@ -93,7 +92,6 @@ function Q1({ mainForm }: QuestionProps) {
             },
           ]}
         />
-        </div>
       </Content>
     </div>
   );

@@ -11,8 +11,8 @@ function HeatingBill({ mainForm }: QuestionProps) {
   const t = useScopedI18n("forms.basic.energie.heatingBill");
   return (
     <div>
-      <Question className="px-12">{t("q")}</Question>
-      <Content className="px-16 mb-6">
+      <Question className='md:px-12 px-0'>{t("q")}</Question>
+      <Content className="md:px-16 mb-6">
         <Input
           form={mainForm}
           name="energie.heating.quantities.heatingNetwork.total"
@@ -21,7 +21,7 @@ function HeatingBill({ mainForm }: QuestionProps) {
         />
       </Content>
       <SideQuestion
-        className="py-1 w-2/4 bg-section-transport/20"
+        className="py-1 md:w-2/4 w-11/12  bg-section-transport/20"
         question={t("q3.q")}
         content={
           <Input

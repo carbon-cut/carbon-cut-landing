@@ -52,9 +52,9 @@ const Question = ({
       data-state={errorc ? "error" : ""}
       data-current={isCurrent ? "true" : "false"}
       className={`
-        w-full text-left p-3 rounded-md transition-all
+        w-full text-left md:p-3 p-2 rounded-md transition-all
         bg-gray-50 hover:bg-gray-100 text-foreground
-        grid grid-cols-12 shadow-none border-0 h-fit
+        flex justify-start md:grid md:grid-cols-12 shadow-none border-0 h-fit
         data-[current=true]:bg-section-transport data-[current=true]text-white data-[current=true]shadow-md
         data-[state=error]:border-2 data-[state=error]:border-destructive
         `}

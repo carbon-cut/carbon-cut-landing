@@ -15,7 +15,7 @@ interface Props {
 }
 function SideQuestion({ question, content, className }: Props) {
   return (
-    <div className={cn("ml-16 w-7/12 p-3 bg-slate-500/30 rounded-xl", className)}>
+    <div className={cn("md:ml-16 ml-3 w-7/12 p-3 bg-slate-500/30 rounded-xl", className)}>
       <Question className="text-gray-700 md:text-base font-light mb-0">
         {question}
       </Question>

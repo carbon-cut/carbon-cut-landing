@@ -79,7 +79,7 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent asChild className="   h-4/6 overflow-hidden">
+      <DialogContent asChild className="h-4/6 overflow-hidden w-11/12 rounded-xl">
         
           <DialogHeader className="mb-4 max-w-full">
             <DialogTitle className="font-extrabold text-section-transport text-2xl">
@@ -104,7 +104,7 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
 
               return (
                 <AccordionItem
-                  className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-4
+                  className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 md:px-4
                 border-gray-200 hover:border-section-transport transition-colors
                 ${error[key] ? "border-destructive hover:border-destructive/60" : ""} 
                 `}
@@ -118,7 +118,7 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
                   <AccordionTrigger
                     icon="chevron-down"
                     className="font-extralight hover:no-underline  
-                 px-6 py-3"
+                 md:px-6 px-3 py-3"
                   >
                     <div className="flex flex-row">
                       <div
@@ -139,7 +139,7 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
                   <AccordionContent
                     forceMount
                     type="preview"
-                    className="px-6 space-y-3 pt-3"
+                    className="md:px-6 px-3 space-y-3 pt-3"
                   >
                     {list[key]?.map(
                       (

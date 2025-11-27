@@ -128,48 +128,6 @@ function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: Questio
         }
         acc.push([form, item.add])
       }
-
-/*       if (gasTank && !prevGasTank) {
-        setQuestions(addQestions(acc, currentIndex, [GasTank]));
-        addGasTank = true;
-      }else if(!gasTank && prevGasTank){
-        setQuestions(deleteQuestions(acc, currentIndex, 1));
-        addGasTank = false;
-      }
-      acc.push([gasTank, addGasTank])
-      if (fioul && !prevFioul) {
-        setQuestions(addQestions(acc, currentIndex, [Fioul]));
-        addFioul = true;
-      }else if(!fioul && prevFioul){
-        setQuestions(deleteQuestions(acc, currentIndex, 1));
-        addFioul = false;
-      }
-      acc.push([fioul, addFioul])
-      if ((wood || charcoal) && !prevWoodCharcoal) {
-        setQuestions(addQestions(acc, currentIndex, [WoodCharcoal]));
-        addWoodCharcoal = true;
-      }else if(!( wood || charcoal) && prevWoodCharcoal){
-        setQuestions(deleteQuestions(acc, currentIndex, 1));
-        addWoodCharcoal = false;
-      }
-      acc.push([(wood || charcoal), addWoodCharcoal])
-      if(electricHeating && !addElectricalHeating){
-        setQuestions(addQestions(acc, currentIndex, [ElectricalHeating]));
-        addElectricalHeating = true;
-      }
-      else if(!electricHeating && addElectricalHeating){
-        setQuestions(deleteQuestions(acc, currentIndex, 1));
-        addElectricalHeating = false;
-      }
-      acc.push([electricHeating, addElectricalHeating])
-      if(electricalCentralHeating && !addElectricalHeatingCentral){
-        setQuestions(addQestions(acc, currentIndex, [CentralHeating]));
-        addElectricalHeatingCentral = true;
-      }
-      else if(!electricalCentralHeating && addElectricalHeatingCentral){
-        setQuestions(deleteQuestions(acc, currentIndex, 1));
-        addElectricalHeatingCentral = false;
-      } */
       
         setHeatingQuantities(p=>(
           heatingMethods.reduce((acc, item) => {
@@ -189,6 +147,7 @@ function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: Questio
     <div>
       <Question>{t("q")}</Question>
       <MultiCheckInput
+      className="md:px-20 px-0"
         type="boolean"
         form={mainForm}
         name="energie.heating"
