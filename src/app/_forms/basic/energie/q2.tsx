@@ -24,10 +24,10 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
       <Content className="md:px-16 mb-6">
         <Input
           form={mainForm}
-          name="energie.gaz.total"
+          name="energie.gas.total"
           placeholder="m³"
           type="number"
-          attachedFields={["energie.gaz.money"]}
+          attachedFields={["energie.gas.money"]}
         />
       </Content>
       <SideQuestion
@@ -36,10 +36,10 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
         content={
           <Input
             form={mainForm}
-            name="energie.gaz.money"
+            name="energie.gas.money"
             placeholder="€"
             type="number"
-            attachedFields={["energie.gaz.total"]}
+            attachedFields={["energie.gas.total"]}
           />
         }
       />
@@ -49,7 +49,7 @@ const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
 
 Q2["Symbol"] = {
   question: "forms.basic.energie.q2.title",
-  fields: ["energie.gaz.total", "energie.gaz.money"],
+  fields: ["energie.gas.total", "energie.gas.money"],
 };
 
 export default Q2;

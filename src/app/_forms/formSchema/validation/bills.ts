@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { raw as energy } from "../energy";
-const elems =['gaz', 'electricity'] as const
+const elems =['gas', 'electricity'] as const
 const bills = (input: unknown, ctx: z.RefinementCtx) => {
   const rawParse = energy
     .pick({
-      gaz: true,
+      gas: true,
       electricity: true,
     })
     .safeParse(input);

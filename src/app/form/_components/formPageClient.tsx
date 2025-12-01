@@ -18,6 +18,7 @@ import QuestionList from "./questionList";
 import style from "../form.module.css";
 import Container from "./container";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function FormPageClient() {
   const { tab, setTab, currentIndexes, readyToSubmit } =
@@ -51,7 +52,10 @@ export default function FormPageClient() {
       }
     ).then((r) => r.json());
     setLoading(false);
-    router.push(`/form/result?id=${res.id}`);
+    if (res.id) router.push(`/form/result?id=${res.id}`);
+    else{
+      toast.error(res.error.message);
+    }
   };
 
   const handleError = (...args: unknown[]) => {

@@ -72,7 +72,7 @@ const energie = z.object({
     money: z.number().optional(),
     //index: z.number(),
   }),
-  gaz: z.object({
+  gas: z.object({
     total: z.number().optional(),
     money: z.number().optional(),
     //index: z.number(),

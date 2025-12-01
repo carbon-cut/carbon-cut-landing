@@ -7,6 +7,7 @@ import { manropeSans } from "@/lib/fonts";
 import { useScopedServerI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
 import ScrollToTopButton from "@/components/layout/scrollToTopButton";
+import { Toaster } from '@/components/ui/sonner';
 import "./globals.css";
 
 const siteSeo = useScopedServerI18n("seo.site");
@@ -31,6 +32,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${manropeSans.variable} antialiased`}>
+        <Toaster/>
         <Providers>
           <a
             href="#content"
