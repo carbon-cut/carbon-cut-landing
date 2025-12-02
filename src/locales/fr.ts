@@ -826,6 +826,9 @@ export default {
     back: "Précédent",
     preview: "Aperçu",
     submit: "Résultat",
+    errors:{
+      Required: "Obligatoire",
+    }
   },
   result: {
     card: {

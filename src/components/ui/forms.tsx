@@ -13,6 +13,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { useScopedI18n } from "@/locales/client";
 
 const Form = FormProvider;
 
@@ -152,28 +153,33 @@ const FormMessage = React.forwardRef<
   }
 >(({ className, children, fallback, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message) : children;
+  const t = useScopedI18n('forms.errors');
+  const  body = error?.message ?? children;
 
   if (!body) {
-    return     <p
-      ref={ref}
-      id={formMessageId}
-      className={cn("text-sm font-medium text-destructive", className)}
-      {...props}
-    >
-      {fallback ? "\u00A0" : ""}
-    </p>;
+    return (
+      <p
+        ref={ref}
+        id={formMessageId}
+        className={cn("text-sm font-medium text-destructive", className)}
+        {...props}
+      >
+        {fallback ? "\u00A0" : ""}
+      </p>
+    );
   }
 
   return (
     <p
       ref={ref}
       id={formMessageId}
-      className={cn("text-sm font-medium data-[state=disabled]:text-destructive/60", 
-        cn(className, 'text-destructive'))}
+      className={cn(
+        "text-sm font-medium data-[state=disabled]:text-destructive/60",
+        cn(className, "text-destructive")
+      )}
       {...props}
     >
-      {body}
+      {error ? t(String(error?.message)) : children}
     </p>
   );
 });

@@ -15,6 +15,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
   return (
     <Sonner
+      //richColors
       theme={theme as ToasterProps["theme"]}
       className="toaster group [&>li]:rounded-xl"
       icons={{
@@ -24,7 +25,6 @@ const Toaster = ({ ...props }: ToasterProps) => {
         error: <OctagonXIcon className="size-4" />,
         loading: <Loader2Icon className="size-4 animate-spin" />,
       }}
-      
       style={
         {
           "--normal-bg": "hsl(var(--popover))",
