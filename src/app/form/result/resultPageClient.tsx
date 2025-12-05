@@ -6,12 +6,34 @@ import Recommendations from "./recommendations";
 import Footer from "./footer";
 import { TabValues } from "@/lib/formTabs/types";
 import dynamic from "next/dynamic";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 const Categorisation = dynamic(() => import("./categorisation"), { ssr: false });
 
 export default function ResultPageClient() {
   const [carbonFootprint, setCarbonFootprint] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
+  const formId = useSearchParams().get("id");
+
+  const { data: cachedResult, error } = useQuery({
+    queryKey: ["basic-form", formId ?? ""],
+    queryFn: async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/responses/uid/${formId}`,
+      ).then((res) => res.json());
+      return response;
+    },
+    enabled: Boolean(formId),
+  });
+
+  useEffect(() => {
+    if (cachedResult) {
+      console.log("cached form result", cachedResult);
+    }
+    if (error) toast.error(error?.message ?? "");
+  }, [cachedResult, error]);
 
   useEffect(() => {
     const targetValue = 5.2; // tons of CO2 per year

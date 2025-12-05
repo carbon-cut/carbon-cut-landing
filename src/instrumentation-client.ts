@@ -1,4 +1,4 @@
-if (process.env.NEXT_PUBLIC_MSW_ENV === 'test') {
+/* if (process.env.NEXT_PUBLIC_MSW_ENV === 'test') {
   import('./mocks/worker')
     .then(async mod => {
       if (mod?.worker?.start) {
@@ -13,3 +13,4 @@ if (process.env.NEXT_PUBLIC_MSW_ENV === 'test') {
       console.error("Failed to load the worker module");
     });
 }
+ */

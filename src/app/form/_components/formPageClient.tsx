@@ -19,14 +19,14 @@ import style from "../form.module.css";
 import Container from "./container";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from 'uuid';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function FormPageClient() {
   const { tab, setTab, currentIndexes, readyToSubmit } =
     React.useContext(FormContext);
 
   const router = useRouter();
-
-  const [loading, setLoading] = useState<boolean>(false);
 
   const [questionList, setQuestionList] = useState<boolean>(false);
 
@@ -35,6 +35,46 @@ export default function FormPageClient() {
 
   const mainForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      uid: uuidv4(),
+    },
+  });
+
+  const queryClient = useQueryClient();
+
+  const submitMutation = useMutation<
+    { id: string; [key: string]: unknown },
+    Error,
+    z.infer<typeof formSchema>
+  >({
+    mutationKey: [`result-${mainForm.getValues("uid")}`],
+    mutationFn: async (formResponse) => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/basic`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formResponse),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data?.id) {
+        throw new Error(data?.error?.message ?? "Failed to submit form");
+      }
+
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["basic-form", data.id], 
+        data.result,
+      );
+      router.push(`/form/result?id=${data.id}`);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (
@@ -42,19 +82,10 @@ export default function FormPageClient() {
     e
   ) => {
     e?.preventDefault();
-    setLoading(true);
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/basic`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formResponse),
-      }
-    ).then((r) => r.json());
-    setLoading(false);
-    if (res.id) router.push(`/form/result?id=${res.id}`);
-    else{
-      toast.error(res.error.message);
+    try {
+      await submitMutation.mutateAsync(formResponse);
+    } catch {
+      // Error is handled inside the mutation's onError
     }
   };
 
@@ -179,7 +210,7 @@ export default function FormPageClient() {
               }}
               setNextTab={setNextTab}
               value="transport"
-              loading={loading}
+              loading={submitMutation.isPending}
             />
           </Tabs>
         </form>

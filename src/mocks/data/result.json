@@ -1,0 +1,50 @@
+{
+    "energie": {
+        "gas": {
+            "scope1": 1.91632
+        },
+        "thermal": {
+            "GPL": {
+                "scope1": 0,
+                "scope3": 0
+            },
+            "wood": {
+                "scope1": 0,
+                "scope3": 0
+            },
+            "fioul": {
+                "scope1": 0,
+                "scope3": 0
+            },
+            "gasTank": {
+                "scope1": 0,
+                "scope3": 0
+            },
+            "charcoal": {
+                "scope1": 0,
+                "scope3": 0
+            }
+        },
+        "electricity": {
+            "scope2": 0.23052
+        }
+    },
+    "transport": {
+        "airs": [],
+        "cars": [],
+        "auxilary": {
+            "scope3": 0
+        },
+        "commonTransport": {
+            "longDistances": {
+                "bus": [],
+                "train": []
+            },
+            "shortDistances": {
+                "bus": [],
+                "metro": [],
+                "covoiturage": []
+            }
+        }
+    }
+}
