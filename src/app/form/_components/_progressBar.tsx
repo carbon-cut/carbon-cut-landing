@@ -13,14 +13,17 @@ type ProgressProps = {
   children?: React.ReactNode;
 };
 
-function ProgressBar({
-  children,
-  dataLengths,
-  currentQuestion,
-  currentSectionDataLength,
-  currentSectionName,
-  tab,
-}: ProgressProps) {
+const ProgressBar = React.forwardRef<HTMLDivElement, ProgressProps>(function ProgressBar(
+  {
+    children,
+    dataLengths,
+    currentQuestion,
+    currentSectionDataLength,
+    currentSectionName,
+    tab,
+  },
+  ref
+) {
   const t = useScopedI18n("forms.progress");
 
   const progress = useMemo(() => {
@@ -60,7 +63,7 @@ function ProgressBar({
   };
 
   return (
-    <div className="max-w-6xl mx-auto relative">
+    <div ref={ref} className="max-w-6xl mx-auto relative">
       <div className="mb-8 ">
         <div className="flex justify-between items-center mb-2">
           <div className="md:w-fit flex-col md:flex-row flex text-sm font-medium text-muted-foreground self-end">
@@ -86,6 +89,6 @@ function ProgressBar({
       </div>
     </div>
   );
-}
+});
 
 export default ProgressBar;

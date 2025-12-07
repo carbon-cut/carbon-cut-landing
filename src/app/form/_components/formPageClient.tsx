@@ -28,6 +28,8 @@ export default function FormPageClient() {
 
   const router = useRouter();
 
+  const scrollToRef = React.useRef<HTMLDivElement>(null);
+
   const [questionList, setQuestionList] = useState<boolean>(false);
 
   const transportQuestions = useState(initTransportQuestions);
@@ -144,7 +146,9 @@ export default function FormPageClient() {
             //@ts-expect-error because Tabs cannot access to possible values
             onValueChange={(v) => setTab(v)}
           >
+            <div >
             <ProgressBar
+              ref={scrollToRef}
               tab={tab}
               dataLengths={dataLengths}
               currentQuestion={currentIndexes[tab]}
@@ -161,7 +165,7 @@ export default function FormPageClient() {
                 setDialog={setQuestionList}
               />
             </ProgressBar>
-
+</div>
             <div className="flex justify-center mb-8 relative">
               <TabsList className="flex max-w-full flex-wrap space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
                 <TabTrigger
@@ -200,6 +204,7 @@ export default function FormPageClient() {
               </TabsList>
             </div>
             <Container
+              scrollToRef={scrollToRef}
               mainForm={mainForm}
               initQuestions={{
                 transport: transportQuestions,
