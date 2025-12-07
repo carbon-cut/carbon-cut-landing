@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { useScopedServerI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
 import ResultPageClient from "./resultPageClient";
+import { Suspense } from "react";
 
 const resultSeo = useScopedServerI18n("seo.pages.results");
 
@@ -12,5 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <ResultPageClient />;
+  return (
+    <Suspense fallback={null}>
+      <ResultPageClient />
+    </Suspense>
+  );
 }

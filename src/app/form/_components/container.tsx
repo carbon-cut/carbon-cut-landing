@@ -81,19 +81,11 @@ const Container = React.forwardRef<
     const [height, setHeight] = useState<number | "auto">("auto");
 
     useLayoutEffect(() => {
-      if (cardRef.current && scrollToRef.current) {
+      if (cardRef.current) {
         const resizeObserver = new ResizeObserver((entries) => {
           // We only have one entry, so we can use entries[0].
           const observedHeight = entries[0].contentRect.height + 70;
           setHeight(observedHeight);
-          // scroll so the referenced element aligns to the top of the viewport
-          if (scrollToRef.current) {
-            const rect = scrollToRef.current.getBoundingClientRect();
-            window.scrollTo({
-              top: rect.top + window.scrollY - 20,
-              behavior: "smooth",
-            });
-          }
         });
 
         resizeObserver.observe(cardRef.current);
@@ -103,7 +95,14 @@ const Container = React.forwardRef<
           resizeObserver.disconnect();
         };
       }
-    }, [cardRef, scrollToRef]);
+    }, [cardRef]);
+
+    useEffect(() => {
+      if (scrollToRef.current) {
+        const targetTop = Math.max((scrollToRef.current.offsetTop ?? 0) + 20, 0);
+        window.scrollTo({ top: targetTop, behavior: "smooth" });
+      }
+    }, [tab, currentIndexes, scrollToRef]);
 
     return (
       <div

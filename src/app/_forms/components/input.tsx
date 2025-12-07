@@ -79,12 +79,6 @@ function Input<T extends FieldValues>({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-      },[value]);
-
   return (
     <FormField
       control={form.control}

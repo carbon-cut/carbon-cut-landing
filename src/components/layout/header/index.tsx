@@ -47,7 +47,7 @@ function Header() {
     } else if (!isHome && !isDesktop) {
       setDataState("bigSticky");
     }else setDataState("big");
-  }, [pathName]);
+  }, [pathName, isDesktop]);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 768px)");

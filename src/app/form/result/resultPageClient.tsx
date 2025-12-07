@@ -10,7 +10,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-const Categorisation = dynamic(() => import("./categorisation"), { ssr: false });
+const Categorisation = dynamic(() => import("./categorisation"), {
+  ssr: false,
+});
 
 export default function ResultPageClient() {
   const [carbonFootprint, setCarbonFootprint] = useState(0);
@@ -21,7 +23,7 @@ export default function ResultPageClient() {
     queryKey: ["basic-form", formId ?? ""],
     queryFn: async () => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/responses/uid/${formId}`,
+        `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/responses/uid/${formId}`
       ).then((res) => res.json());
       return response;
     },
