@@ -69,17 +69,9 @@ function QAir({ mainForm }: QuestionProps) {
     )
   );
 
+  const airValues = mainForm.watch("transport.airs") ?? [];
 
   const [parent] = useAutoAnimate({duration:100})
-  //TODO
-  const distance = useMemo(() => {
-    const RawAirports = airports?.raw;
-    if (!RawAirports) return [];
-    return data.map((ele) => {
-      //const {origin, destination} = RawAirports?.filter((v)=>({origin: v.code===ele.origin, destination:}))
-      return getDistance(ele ?? null, RawAirports);
-    });
-  }, [data, mainForm]);
   const handleAdd = () => {
     const scrollY = window.scrollY
 
@@ -109,123 +101,25 @@ function QAir({ mainForm }: QuestionProps) {
     <Content  className="text-center text-muted-foreground mb-0">{t("description")}</Content>
       <ul ref={parent}>
       {data.map(({ id,}, index) => (
-        <li
+        <AirTravelItem
           key={id}
-          className="bg-white border-2 relative border-gray-200 rounded-lg md:p-12 p-4 pt-12 hover:border-[#00A261] transition-colors mb-6"
-        >
-          <Button
-            type="button"
-            variant={"ghost"}
-            size={"icon"}
-            className="rounded-full hover:bg-destructive/50 absolute top-4 right-4"
-            onClick={() => {
-              remove(index);
-            }}
-          >
-            <Trash />
-          </Button>
-          <div className="grid md:grid-cols-4 grid-cols-2 md:gap-10 gap-4 items-end">
-            <FormMultiCombox
-              labelClassName="text-black/70"
-              className="text-primary"
-              form={mainForm}
-              name={`transport.airs.${index}.origin`}
-              data={airports?.reduced ?? []}
-              label={t("origin")}
-              fallback
-              loading={isLoading}
-            />
-            <FormMultiCombox
-              labelClassName="text-black/70"
-              form={mainForm}
-              name={`transport.airs.${index}.destination`}
-              label={t("destination")}
-              data={airports?.reduced ?? []}
-              fallback
-              loading={isLoading}
-            />
-            <FormSelect
-            labelClassName="text-black/70"
-              data={aircraftTypes.map((e) => ({ label: e, value: e }))}
-              form={mainForm}
-              name={`transport.airs.${index}.aircraftType`}
-              label={t("aircraftType")}
-              fallback
-            />
-            <FormSelect
-            labelClassName="text-black/70"
-              data={classes.map((e) => ({ label: e, value: e }))}
-              form={mainForm}
-              name={`transport.airs.${index}.class`}
-              label={t("class")}
-              fallback
-            />
-          </div>
-          <div className="grid md:grid-cols-4 grid-cols-2 md:gap-10 gap-4 items-end">
-            <Input
-            labelClassName="text-black/70"
-              label={t("frequency")}
-              size="sm"
-              type="number"
-              form={mainForm}
-              name={`transport.airs.${index}.frequency`}
-              fallback
-            />
-            <Input
-            labelClassName="text-black/70"
-              label={t("carbonEmissions")}
-              size="sm"
-              type="number"
-              form={mainForm}
-              name={`transport.airs.${index}.carbonEmissions`}
-              fallback
-            />
-            <div className="self-center">
-              <div className='flex items-center gap-4 md:mt-6'>
-              <Checkbox
-                id={`stopover${index}`}
-                checked={stopovers[index]}
-                onCheckedChange={(v) => {
-                  setStopovers((prev) => prev.toSpliced(index, 1, !!v));
-                  if (!v) {
-                    mainForm.setValue(`transport.airs.${index}.stopover`, null);
-                  }
-                }}
-              />
-            <FormLabel className="text-black/70" >
-              {t("stopover")} 
-            </FormLabel>
-            </div>
-              <FormCheckbox
-                  form={mainForm}
-                  name={`transport.airs.${index}.roundTrip`}
-                  id={`roundTrip${index}`}
-                  label={t("roundTrip")}
-                  labelClassName="text-black/70"
-              />
-            </div>
-            <FormMultiCombox
-            labelClassName="text-black/70"
-              disabled={!stopovers[index]}
-              form={mainForm}
-              name={`transport.airs.${index}.stopover`}
-              label={t("via")}
-              data={airports?.reduced ?? []}
-              fallback
-              loading={isLoading}
-            />
-          </div>
-          <Separator className="my-4" />
-          <div className="flex flex-row justify-between">
-            <Label className="text-muted-foreground text-base font-semibold">{t("distance")}</Label>
-          <p className="inline whitespace-nowrap">
-            {" "}
-            {
-              (Math.floor(distance[index] / 1000)).toString() === 'NaN' ? '????' : (Math.floor(distance[index] / 1000)) + 'Km'
-            } 
-          </p>
-          </div>
-        </li>
+          index={index}
+          t={t}
+          airports={airports}
+          isLoading={isLoading}
+          mainForm={mainForm}
+          stopoverChecked={!!stopovers[index]}
+          air={airValues[index]}
+          onStopoverChange={(value) => {
+            setStopovers((prev) => prev.toSpliced(index, 1, value));
+            if (!value) {
+              mainForm.setValue(`transport.airs.${index}.stopover`, null);
+            }
+          }}
+          onRemove={() => {
+            remove(index);
+          }}
+        />
       ))}
       </ul>
       <Button
@@ -254,6 +148,155 @@ QAir["Symbol"] = {
 };
 
 export default QAir;
+
+type AirTravelItemProps = {
+  index: number;
+  t: ReturnType<typeof useScopedI18n>;
+  airports: { reduced: any[]; raw?: any[] } | undefined;
+  isLoading: boolean;
+  mainForm: QuestionProps["mainForm"];
+  stopoverChecked: boolean;
+  air?: {
+    destination?: string | null;
+    origin?: string | null;
+    stopover?: string | null;
+  };
+  onStopoverChange: (value: boolean) => void;
+  onRemove: () => void;
+};
+
+function AirTravelItem({
+  index,
+  t,
+  airports,
+  isLoading,
+  mainForm,
+  stopoverChecked,
+  air,
+  onStopoverChange,
+  onRemove,
+}: AirTravelItemProps) {
+  const distance = useMemo(() => {
+    if (!airports?.raw) return undefined;
+    return getDistance(
+      {
+        destination: air?.destination,
+        origin: air?.origin,
+        stopover: air?.stopover,
+      },
+      airports.raw
+    );
+  }, [air?.destination, air?.origin, air?.stopover, airports?.raw]);
+
+  const airportsOptions = airports?.reduced ?? [];
+  const distanceKm = Math.floor((distance ?? 0) / 1000);
+  const displayDistance = Number.isNaN(distanceKm) ? "????" : `${distanceKm}Km`;
+
+  return (
+    <li className="bg-white border-2 relative border-gray-200 rounded-lg md:p-12 p-4 pt-12 hover:border-[#00A261] transition-colors mb-6">
+      <Button
+        type="button"
+        variant={"ghost"}
+        size={"icon"}
+        className="rounded-full hover:bg-destructive/50 absolute top-4 right-4"
+        onClick={onRemove}
+      >
+        <Trash />
+      </Button>
+      <div className="grid md:grid-cols-4 grid-cols-2 md:gap-10 gap-4 items-end">
+        <FormMultiCombox
+          labelClassName="text-black/70"
+          className="text-primary"
+          form={mainForm}
+          name={`transport.airs.${index}.origin`}
+          data={airportsOptions}
+          label={t("origin")}
+          fallback
+          loading={isLoading}
+        />
+        <FormMultiCombox
+          labelClassName="text-black/70"
+          form={mainForm}
+          name={`transport.airs.${index}.destination`}
+          label={t("destination")}
+          data={airportsOptions}
+          fallback
+          loading={isLoading}
+        />
+        <FormSelect
+          labelClassName="text-black/70"
+          data={aircraftTypes.map((e) => ({ label: e, value: e }))}
+          form={mainForm}
+          name={`transport.airs.${index}.aircraftType`}
+          label={t("aircraftType")}
+          fallback
+        />
+        <FormSelect
+          labelClassName="text-black/70"
+          data={classes.map((e) => ({ label: e, value: e }))}
+          form={mainForm}
+          name={`transport.airs.${index}.class`}
+          label={t("class")}
+          fallback
+        />
+      </div>
+      <div className="grid md:grid-cols-4 grid-cols-2 md:gap-10 gap-4 items-end">
+        <Input
+          labelClassName="text-black/70"
+          label={t("frequency")}
+          size="sm"
+          type="number"
+          form={mainForm}
+          name={`transport.airs.${index}.frequency`}
+          fallback
+        />
+        <Input
+          labelClassName="text-black/70"
+          label={t("carbonEmissions")}
+          size="sm"
+          type="number"
+          form={mainForm}
+          name={`transport.airs.${index}.carbonEmissions`}
+          fallback
+        />
+        <div className="self-center">
+          <div className="flex items-center gap-4 md:mt-6">
+            <Checkbox
+              id={`stopover${index}`}
+              checked={stopoverChecked}
+              onCheckedChange={(v) => onStopoverChange(!!v)}
+            />
+            <FormLabel className="text-black/70">{t("stopover")}</FormLabel>
+          </div>
+          <FormCheckbox
+            form={mainForm}
+            name={`transport.airs.${index}.roundTrip`}
+            id={`roundTrip${index}`}
+            label={t("roundTrip")}
+            labelClassName="text-black/70"
+          />
+        </div>
+        <FormMultiCombox
+          labelClassName="text-black/70"
+          disabled={!stopoverChecked}
+          form={mainForm}
+          name={`transport.airs.${index}.stopover`}
+          label={t("via")}
+          data={airportsOptions}
+          fallback
+          loading={isLoading}
+        />
+      </div>
+      <Separator className="my-4" />
+      <div className="flex flex-row justify-between">
+        <Label className="text-muted-foreground text-base font-semibold">
+          {t("distance")}
+        </Label>
+        <p className="inline whitespace-nowrap">{displayDistance}</p>
+      </div>
+    </li>
+  );
+}
 
 function getDistance(
   ele: {
