@@ -43,7 +43,11 @@ const HeatingBill: QuestionFC = ({ mainForm }: QuestionProps) => {
 };
 HeatingBill['Symbol'] = {
   question: "forms.basic.energie.heatingBill.title",
-  fields: ["energie.heating.quantities.heatingNetwork.total", "energie.heating.quantities.heatingNetwork.money"],
+  fields: [
+    "energie.heating.quantities.heatingNetwork",
+    "energie.heating.quantities.heatingNetwork.total",
+    "energie.heating.quantities.heatingNetwork.money",
+  ],
 }
 
 export default HeatingBill;

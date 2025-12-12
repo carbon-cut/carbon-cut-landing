@@ -111,6 +111,9 @@ QLongueDistances["Symbol"] = {
   fields: [
     'transport.commonTransport',
     'transport.commonTransport.longueDistances',
+    'transport.commonTransport.longueDistances.covoiturage',
+    'transport.commonTransport.longueDistances.bus',
+    'transport.commonTransport.longueDistances.train',
   ],
 };
 

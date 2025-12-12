@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Menu } from "lucide-react";
 import React from "react";
-import { QuestionProps } from "@/app/_forms/types";
+import { QuestionFC, QuestionProps } from "@/app/_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { TabValues } from "@/lib/formTabs/types";
@@ -25,7 +25,7 @@ import { Label } from "@/components/ui/label";
 import Question from "./question";
 
 interface Props {
-  list: { [key in TabValues]?: React.FC<QuestionProps>[] };
+  list: { [key in TabValues]?: QuestionFC[] };
   mainForm: UseFormReturn<any>;
   dialog: boolean;
   setDialog: React.Dispatch<React.SetStateAction<boolean>>; 
@@ -102,11 +102,17 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
                 vacation: "bg-section-vacation",
               };
 
+              const sectionError = mainForm.getFieldState(key)?.error
+
               return (
                 <AccordionItem
                   className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 md:px-4
                 border-gray-200 hover:border-section-transport transition-colors
-                ${error[key] ? "border-destructive hover:border-destructive/60" : ""} 
+                ${
+                  (error[key] || sectionError)
+                    ? "border-destructive hover:border-destructive/60"
+                    : ""
+                } 
                 `}
                   style={{
                     //@ts-expect-error interpolateSize is not supported, only in Chrome
@@ -141,28 +147,22 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
                     type="preview"
                     className="md:px-6 px-3 space-y-3 pt-3"
                   >
-                    {list[key]?.map(
-                      (
-                        //@ts-expect-error cause symbol is bot included in Types
-                        { Symbol },
-                        index
-                      ) => (
-                        <Question
+                    {list[key]?.map(({ Symbol }, index) => (
+                      <Question
                         setError={setError}
                         error={error}
-                          index={index}
-                          currentIndex={currentIndexes[key]}
-                          mainForm={mainForm}
-                          Symbol={Symbol}
-                          key={`${key}-${index}`}
-                          section={key}
-                          setInterface={() => {
-                            setCurrentIndexes((p) => ({ ...p, [key]: index }));
-                            setTab(key);
-                          }}
-                        />
-                      )
-                    )}
+                        index={index}
+                        currentIndex={currentIndexes[key]}
+                        mainForm={mainForm}
+                        Symbol={Symbol}
+                        key={`${key}-${index}`}
+                        section={key}
+                        setInterface={() => {
+                          setCurrentIndexes((p) => ({ ...p, [key]: index }));
+                          setTab(key);
+                        }}
+                      />
+                    ))}
                   </AccordionContent>
                 </AccordionItem>
               );

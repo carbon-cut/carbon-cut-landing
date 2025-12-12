@@ -221,6 +221,7 @@ const Gpl: QuestionFC = ({mainForm}: QuestionProps) => {
 Gpl['Symbol'] ={
   question: "forms.basic.energie.heating.options.GPL.title",
   fields: [
+    "energie.heating.quantities.GPL",
     "energie.heating.quantities.GPL.quantities",
   ],
 };

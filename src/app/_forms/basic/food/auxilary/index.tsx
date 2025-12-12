@@ -44,7 +44,11 @@ const Output: QuestionFC = ({ mainForm }: QuestionProps) => {
 
 Output["Symbol"] = {
   question: "forms.basic.food.auxilary.q1.title",
-  fields: ["food.auxilary.seasonProducts", "food.auxilary.localProducts"],
+  fields: [
+    "food.auxilary",
+    "food.auxilary.seasonProducts",
+    "food.auxilary.localProducts",
+  ],
 };
 
 export default Output;

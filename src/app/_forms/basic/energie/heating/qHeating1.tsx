@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../types";
 import Question from "../../../components/question";
 import { MultiCheckInput } from "../../../components/multiCheckInput";
@@ -10,6 +10,9 @@ import ElectricalHeating from "./electricalHeating";
 import CentralHeating from "./centralHeating";
 import Gpl from "./quantities/gpl";
 import HeatingBill from "./heatingBill";
+import { Badge } from "@/components/ui/badge";
+import { AlertTriangle } from "lucide-react";
+import { useFormState } from "react-hook-form";
 
 const heatingMethods = [
   "heatPump",
@@ -28,6 +31,17 @@ type heatingQuestions = 'heatNetwork' | 'GPL' | 'fioul' | 'gasTank' | 'woodCharc
 
 const QHeating: QuestionFC = ({ mainForm, setOnSubmit, setQuestions, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heating");
+  const { errors } = useFormState({ control: mainForm.control });
+
+  const hasErrors = useMemo(() => {
+    const heatingErrors = (errors as any)?.energie?.heating;
+    const walk = (err: unknown): boolean => {
+      if (!err) return false;
+      if (typeof err !== "object") return true;
+      return Object.values(err).some((value) => walk(value));
+    };
+    return walk(heatingErrors);
+  }, [errors]);
 
   const {
     heatingQuantities:{
@@ -151,7 +165,19 @@ const QHeating: QuestionFC = ({ mainForm, setOnSubmit, setQuestions, currentInde
 
   return (
     <div>
-      <Question>{t("q")}</Question>
+      {hasErrors && (
+        <div className="flex justify-center mb-3">
+          <Badge
+            variant="destructive"
+            className="flex items-center gap-1 text-xs font-medium px-3 py-1"
+            aria-live="polite"
+          >
+            <AlertTriangle className="h-3 w-3" aria-hidden="true" />
+            <span>{t("badge.incomplete")}</span>
+          </Badge>
+        </div>
+      )}
+      <Question className="mb-0">{t("q")}</Question>
       <MultiCheckInput
         className="md:px-20 px-0"
         type="boolean"

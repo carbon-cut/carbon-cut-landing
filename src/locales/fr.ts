@@ -456,6 +456,10 @@ export default {
         heating: {
           title: "système de chauffage",
           q: "Quel type de système de chauffage utilisez-vous pour chauffer votre maison?",
+          badge: {
+            multi: "Sélection multiple",
+            incomplete: "À compléter",
+          },
           options: {
             heatPump: { label: "Pompe à chaleur", unit: "null" },
             electricity: { label: "Électricité", unit: "null" },
@@ -710,6 +714,10 @@ export default {
           title: ({ index }: { index: number }) =>
             `Voiture ${index + 1} : Distance totale affichée`,
           q: "Quelle est la distance totale affichée sur le tableau de bord de votre voiture?",
+        },
+        carStatus: {
+          label: ({ index }: { index: number }) => `Voiture ${index}`,
+          incomplete: "À compléter",
         },
         commonTransport: {
           shortDistances: {

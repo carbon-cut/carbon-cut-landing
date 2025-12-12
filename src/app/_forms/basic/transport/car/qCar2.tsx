@@ -71,7 +71,7 @@ const QCar2 = (index: number) => {
     fields: [
       `transport.cars.${index}.thermalAvg`,
       `transport.cars.${index}.electricAvg`,
-      `transport.cars.${index}.distanceWeekly`
+      `transport.cars.${index}.distanceWeekly`,
     ],
   };
   return CarComponent;

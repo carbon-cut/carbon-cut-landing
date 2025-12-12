@@ -43,6 +43,7 @@ const GasTank: QuestionFC = ({ mainForm }: QuestionProps) => {
 GasTank['Symbol'] ={
   question: "forms.basic.energie.heating.options.QgasTank.title",
   fields: [
+    "energie.heating.quantities.gasTank",
     "energie.heating.quantities.gasTank.frequency",
     "energie.heating.quantities.gasTank.capacity"
   ],

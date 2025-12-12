@@ -107,7 +107,10 @@ QShortDistances["Symbol"] = {
   question: "forms.basic.transport.commonTransport.shortDistances.title",
   fields: [
     'transport.commonTransport',
-    'transport.commonTransport.shortDistances'
+    'transport.commonTransport.shortDistances',
+    'transport.commonTransport.shortDistances.covoiturage',
+    'transport.commonTransport.shortDistances.bus',
+    'transport.commonTransport.shortDistances.metro',
   ],
 };
 

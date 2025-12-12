@@ -26,7 +26,10 @@ function QCar1(index: number) {
   };
   CarComponent["Symbol"] = {
     question: ["forms.basic.transport.qCar1-1.title", { index: index }],
-    fields: [`transport.cars.${index}.make`, `transport.cars.${index}.model`],
+    fields: [
+      `transport.cars.${index}.make`,
+      `transport.cars.${index}.model`,
+    ],
   };
   CarComponent.displayName = `QCar11-${index}`;
 
@@ -46,6 +49,7 @@ function QCar12(index: number) {
     question: ["forms.basic.transport.qCar1-2.title", {index: index}],
     fields: [
       `transport.cars.${index}.engine`,
+      `transport.cars.${index}.otherEngine`,
     ],
   };
 
@@ -60,6 +64,7 @@ function QCar12(index: number) {
     question: ["forms.basic.transport.qCar1-3.title", {index: index}],
     fields: [
       `transport.cars.${index}.secondThermal`,
+      `transport.cars.${index}.otherSecondThermal`,
     ],
   };
   return CarComponent;
