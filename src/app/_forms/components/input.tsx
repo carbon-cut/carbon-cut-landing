@@ -83,7 +83,7 @@ function Input<T extends FieldValues>({
     <FormField
       control={form.control}
       name={name}
-      key={value}
+
       render={({ field, fieldState }) => {
         return (
           <FormItem>
