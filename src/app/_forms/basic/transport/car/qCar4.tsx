@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
-import { QuestionProps } from "../../../types";
+import { QuestionProps, QuestionFC } from "../../../types";
 import Input from "../../../components/input";
 import CarTitle from "./components/carTitle";
 
 const QCar4 = (index: number) => {
-  function CarComponent({ mainForm }: QuestionProps) {
+  const CarComponent: QuestionFC = ({ mainForm }: QuestionProps) => {
     const t = useScopedI18n("forms.basic.transport.qCar4");
 
     return (
@@ -23,10 +23,10 @@ const QCar4 = (index: number) => {
         </Content>
       </div>
     );
-  }
+  };
   CarComponent["Symbol"] = {
     question: ["forms.basic.transport.qCar4.title", {index}],
-    fields: [`transport.cars.${index}.carMileage`],
+    fields: [`transport.cars.${index}.mileage`],
   };
   return CarComponent;
 };

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { QuestionProps } from "../../../../types";
+import { QuestionProps, QuestionFC } from "../../../../types";
 import QuestionCompo1 from "./qCar1-1";
 import QuestionCompo2 from "./qCar1-2";
 import Question from "@/app/_forms/components/question";
 import QuestionCompo3 from "./qCar1-3";
 
 function QCar1(index: number) {
-  function CarComponent(questionProps: QuestionProps) {
+  const CarComponent: QuestionFC = (questionProps: QuestionProps) => {
     const [make, setMake] = useState(() => {
       return questionProps.mainForm.getValues(
         `transport.cars.${index}.make`
@@ -23,13 +23,10 @@ function QCar1(index: number) {
         />
       </>
     );
-  }
+  };
   CarComponent["Symbol"] = {
-    question: ["forms.basic.transport.qCar1-1.title", {index: index}],
-    fields: [
-      `transport.cars.${index}.make`,
-      `transport.cars.${index}.model`,
-    ],
+    question: ["forms.basic.transport.qCar1-1.title", { index: index }],
+    fields: [`transport.cars.${index}.make`, `transport.cars.${index}.model`],
   };
   CarComponent.displayName = `QCar11-${index}`;
 
@@ -38,13 +35,13 @@ function QCar1(index: number) {
 
 
 function QCar12(index: number) {
-  function CarComponent(questionProps: QuestionProps) {
+  const CarComponent: QuestionFC = (questionProps: QuestionProps) => {
     return (
       <>
         <QuestionCompo2 index={index} {...questionProps} />
       </>
     );
-  }
+  };
   CarComponent["Symbol"] = {
     question: ["forms.basic.transport.qCar1-2.title", {index: index}],
     fields: [
@@ -58,7 +55,7 @@ function QCar12(index: number) {
 }
 
  const QCar13 = (index: number) => {
-  const CarComponent = (props: QuestionProps) => <QuestionCompo3 index={index} {...props} />;
+  const CarComponent: QuestionFC = (props: QuestionProps) => <QuestionCompo3 index={index} {...props} />;
   CarComponent["Symbol"] = {
     question: ["forms.basic.transport.qCar1-3.title", {index: index}],
     fields: [

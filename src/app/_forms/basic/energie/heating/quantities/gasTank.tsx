@@ -1,4 +1,4 @@
-import { QuestionProps } from "@/app/_forms/types";
+import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import { useScopedI18n } from "@/locales/client";
 import Unit from "@/app/_forms/components/unit";
 import Content from "@/app/_forms/components/content";
@@ -6,7 +6,7 @@ import Input from "@/app/_forms/components/input";
 import Question from "@/app/_forms/components/question";
 import React from "react";
 
-function GasTank({ mainForm }: QuestionProps) {
+const GasTank: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heating.options");
 
   
@@ -38,7 +38,7 @@ function GasTank({ mainForm }: QuestionProps) {
       </Content>
     </>
   );
-}
+};
 
 GasTank['Symbol'] ={
   question: "forms.basic.energie.heating.options.QgasTank.title",

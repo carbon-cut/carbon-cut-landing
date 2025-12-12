@@ -4,17 +4,27 @@ import { z } from "zod";
 import { TName } from "@/components/ui/forms";
 export interface QuestionProps {
   setOnSubmit: React.Dispatch<React.SetStateAction<() => void>>;
-  setQuestions: React.Dispatch<React.SetStateAction<React.FC<QuestionProps>[]>>;
+  setQuestions: React.Dispatch<React.SetStateAction<QuestionFC[]>>;
   setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
   //setVerify: React.Dispatch<React.SetStateAction<() => boolean>>;
-  setVerifyFields: React.Dispatch<React.SetStateAction<TName<z.infer<typeof formSchema>>[]>>;
+  setVerifyFields: React.Dispatch<
+    React.SetStateAction<TName<z.infer<typeof formSchema>>[]>
+  >;
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
   currentIndex: number;
   //setIsDirty: React.Dispatch<React.SetStateAction<boolean>>;
   next: () => void;
   prev: () => void;
-  prevAction: 'next' | 'prev' | null;
+  prevAction: "next" | "prev" | null;
 }
+export type QuestionSymbol = {
+  question: string | [string, Record<string, any>];
+  fields: TName<z.infer<typeof formSchema>>[];
+};
+
+export type QuestionFC<T = {}> = React.FC<QuestionProps & T> & {
+  Symbol: QuestionSymbol;
+};
 
 export type FuelTypes =
   | "Electrique"

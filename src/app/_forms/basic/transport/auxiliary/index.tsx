@@ -1,13 +1,13 @@
 import React from "react";
 import Question from "../../../components/question";
-import { QuestionProps } from "../../../types";
+import { QuestionProps, QuestionFC } from "../../../types";
 import Content from "../../../components/content";
 import Input from "@/app/_forms/components/input";
 import { useScopedI18n } from "@/locales/client";
 
 const auxilaryTransport = ["electricBike", "electricScooter"] as const;
 
-function QAuxilary({ mainForm }: QuestionProps) {
+const QAuxilary: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.qAux");
 
   return (
@@ -34,7 +34,7 @@ function QAuxilary({ mainForm }: QuestionProps) {
       </Content>
     </div>
   );
-}
+};
 
 QAuxilary["Symbol"] = {
   question: "forms.basic.transport.qAux.q",

@@ -1,7 +1,7 @@
 import { TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import React, { useCallback, useContext, useEffect } from "react";
-import { QuestionProps } from "../../_forms/types";
+import { QuestionFC, QuestionProps } from "../../_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "@/app/_forms/formSchema";
@@ -22,8 +22,12 @@ const TabTrigger = React.forwardRef<
     hover:bg-section-transport/20 data-[state=completed]:hover:bg-section-transport/20`,
     energie: `
     data-[state=active]:bg-linear-energie
-    data-[state=completed]:bg-section-energie/40 hover:bg-section-energie/20`,
-    food: "data-[state=active]:bg-section-food hover:bg-section-food/80 data-[state=completed]:bg-section-food/40",
+    data-[state=completed]:bg-section-energie/10
+    hover:bg-section-energie/20 data-[state=completed]:hover:bg-section-energie/20`,
+    food: `
+    data-[state=active]:bg-linear-food
+    data-[state=completed]:bg-section-food/10
+    hover:bg-section-food/20 data-[state=completed]:hover:bg-section-food/20`,
     waste:
       "data-[state=active]:bg-section-waste hover:bg-section-waste/80 data-[state=completed]:bg-section-waste/40",
     vacation:
@@ -53,12 +57,12 @@ TabTrigger.displayName = "TabTrigger";
 interface TabCProps {
   setNextTab: () => void;
   initQuestions: [
-    React.FC<QuestionProps>[],
-    React.Dispatch<React.SetStateAction<React.FC<QuestionProps>[]>>
+    QuestionFC[],
+    React.Dispatch<React.SetStateAction<QuestionFC[]>>
   ];
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
-  questions: React.FC<QuestionProps>[];
-  setQuestions: React.Dispatch<React.SetStateAction<React.FC<QuestionProps>[]>>;
+  questions: QuestionFC[];
+  setQuestions: React.Dispatch<React.SetStateAction<QuestionFC[]>>;
   prevAction: "next" | "prev" | null;
   setPrevAction: React.Dispatch<React.SetStateAction<"next" | "prev" | null>>;
   setOnSubmit: React.Dispatch<React.SetStateAction<() => void>>;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { QuestionProps } from "../../../../types";
+import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../../components/question";
 import {Container, Title} from "../shortDistances/container";
@@ -10,7 +10,7 @@ import Train from "./train";
 import { useFieldArray } from "react-hook-form";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-const QLongueDistances = (props: QuestionProps) => {
+const QLongueDistances: QuestionFC = (props: QuestionProps) => {
   
   const t = useScopedI18n(
     "forms.basic.transport.commonTransport.longueDistances"

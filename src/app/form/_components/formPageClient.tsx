@@ -4,6 +4,7 @@ import { Tabs, TabsList } from "@/components/ui/tabs";
 import { TabTrigger } from "./_tab";
 import initEnergieQuestions from "../../_forms/basic/energie";
 import initTransportQuestions from "../../_forms/basic/transport";
+import initFoodQuestions from "../../_forms/basic/food";
 import React, { useCallback, useMemo, useState } from "react";
 import { Form } from "@/components/ui/forms";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -34,6 +35,7 @@ export default function FormPageClient() {
 
   const transportQuestions = useState(initTransportQuestions);
   const energieQuestions = useState(initEnergieQuestions);
+  const foodQuestions = useState(initFoodQuestions);
 
   const mainForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -100,12 +102,15 @@ export default function FormPageClient() {
     return {
       transport: transportQuestions[0].length,
       energie: energieQuestions[0].length,
-      food: 0,
+      food: foodQuestions[0].length,
       waste: 0,
       vacation: 0,
-      total: transportQuestions[0].length + energieQuestions[0].length,
+      total:
+        transportQuestions[0].length +
+        energieQuestions[0].length +
+        foodQuestions[0].length,
     };
-  }, [transportQuestions, energieQuestions]);
+  }, [foodQuestions, transportQuestions, energieQuestions]);
 
   const setNextTab = useCallback(() => {
     setTab((prev) => {
@@ -113,7 +118,7 @@ export default function FormPageClient() {
         case "transport":
           return "energie";
         case "energie":
-          return "energie";
+          return "food";
         case "food":
           return "waste";
         case "waste":
@@ -160,6 +165,7 @@ export default function FormPageClient() {
                 list={{
                   transport: transportQuestions[0],
                   energie: energieQuestions[0],
+                  food: foodQuestions[0],
                 }}
                 dialog={questionList}
                 setDialog={setQuestionList}
@@ -192,7 +198,16 @@ export default function FormPageClient() {
                 >
                   <Zap className="w-4 h-4" />
                 </TabTrigger>
-                <TabTrigger disabled value="food">
+                <TabTrigger
+                  value="food"
+                  data-state={
+                    getIndex(tab) > 2
+                      ? "completed"
+                      : tab === "food"
+                      ? "active"
+                      : "inactive"
+                  }
+                >
                   <UtensilsCrossed className="w-4 h-4" />
                 </TabTrigger>
                 <TabTrigger disabled value="waste">
@@ -209,7 +224,7 @@ export default function FormPageClient() {
               initQuestions={{
                 transport: transportQuestions,
                 energie: energieQuestions,
-                food: [[], () => {}],
+                food: foodQuestions,
                 waste: [[], () => {}],
                 vacation: [[], () => {}],
               }}

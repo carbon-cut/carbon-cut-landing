@@ -2,13 +2,13 @@ import React from "react";
 import Question from "../../components/question";
 import Content from "../../components/content";
 import { useScopedI18n } from "@/locales/client";
-import { QuestionProps } from "../../types";
+import { QuestionProps, QuestionFC } from "../../types";
 import SideQuestion from "../../components/sideQuestion";
 import Input from "../../components/input";
 import { useSubmit } from "@/lib/hooks/useSubmit";
 
 
-const Q1 = ({ mainForm }: QuestionProps) => {
+const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.q1");
 
   useSubmit()

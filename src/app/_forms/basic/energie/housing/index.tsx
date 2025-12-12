@@ -1,7 +1,6 @@
 import Q1 from "./q1";
-import { QuestionProps } from "../../../types";
-import React from "react";
+import { QuestionFC } from "../../../types";
 
-const output: ((props: QuestionProps) => React.JSX.Element)[] = [Q1];
+const output: QuestionFC[] = [Q1];
 
 export default output;

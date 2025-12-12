@@ -1,4 +1,4 @@
-import { QuestionProps } from "@/app/_forms/types"
+import { QuestionFC, QuestionProps } from "@/app/_forms/types"
 import { get } from "http";
 
 type input = [boolean | undefined, boolean | null]
@@ -9,8 +9,8 @@ function getNumber(inputs: input[]){
 
 
 
-function addQestions(inputs: input[], currentIndex: number, Components: React.FC<QuestionProps>[]) {
-    return (prev: React.FC<QuestionProps>[]) =>{
+function addQestions(inputs: input[], currentIndex: number, Components: QuestionFC[]) {
+    return (prev: QuestionFC[]) =>{
         const out = prev.slice();
         console.log('number:: ', getNumber(inputs), ' : ', Components[0].name);
         console.log('input:', inputs);
@@ -22,7 +22,7 @@ function addQestions(inputs: input[], currentIndex: number, Components: React.FC
 }
 
 function deleteQuestions(inputs: input[], currentIndex: number, deleteNum: number = 1) {
-    return( (prev: React.FC<QuestionProps>[])=>{
+    return( (prev: QuestionFC[])=>{
           const out = prev.slice();
           out.splice(currentIndex + 1 +
             getNumber(inputs), deleteNum);

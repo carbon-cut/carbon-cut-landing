@@ -2,7 +2,7 @@ import React from "react";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
-import { QuestionProps } from "../../../types";
+import { QuestionProps, QuestionFC } from "../../../types";
 import Input from "../../../components/input";
 import { useQuery } from "@tanstack/react-query";
 import CarTitle from "./components/carTitle";
@@ -63,7 +63,7 @@ const QCarComponent2 = ({
 
 const QCar2 = (index: number) => {
   // eslint-disable-next-line react/display-name
-  const CarComponent = (props: QuestionProps) => (
+  const CarComponent: QuestionFC = (props: QuestionProps) => (
     <QCarComponent2 {...props} index={index} />
   );
   CarComponent["Symbol"] = {

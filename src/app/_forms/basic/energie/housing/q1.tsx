@@ -2,14 +2,14 @@ import React from "react";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
-import { QuestionProps } from "../../../types";
+import { QuestionProps, QuestionFC } from "../../../types";
 import Input from "../../../components/input";
 import Select from "../../../components/select";
 import { MultiCheckInput } from "../../../components/multiCheckInput";
 import { FormAlert } from "../../../components/alert";
 import FormSelect from "@/components/forms/formSelect";
 
-function Q1({ mainForm }: QuestionProps) {
+const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.housing.q1");
 
   return (
@@ -95,7 +95,7 @@ function Q1({ mainForm }: QuestionProps) {
       </Content>
     </div>
   );
-}
+};
 
 Q1['Symbol'] = {
   question: "forms.basic.energie.housing.title",

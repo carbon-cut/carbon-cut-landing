@@ -1,5 +1,5 @@
 import React from "react";
-import { QuestionProps } from "../../../types";
+import { QuestionProps, QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import Question from "../../../components/question";
@@ -9,7 +9,7 @@ import FormSelect from "@/components/forms/formSelect";
 
 const energieLabels = ["A", "B", "C", "D", "E", "F", "G"] as const;
 
-function ElectricalHeating({ mainForm }: QuestionProps) {
+const ElectricalHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heating.options.electricHeating");
 
   return (
@@ -51,7 +51,7 @@ function ElectricalHeating({ mainForm }: QuestionProps) {
         </div>
     </Content>
   );
-}
+};
 
 ElectricalHeating['Symbol'] = {
   question: "forms.basic.energie.heating.options.electricHeating.label",

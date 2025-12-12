@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { QuestionProps } from "../../../../types";
+import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../../components/question";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
@@ -10,7 +10,7 @@ import Metro from "./metro";
 import { useFieldArray } from "react-hook-form";
 import {Container, Title} from "./container";
 
-const QShortDistances = (props: QuestionProps) => {
+const QShortDistances: QuestionFC = (props: QuestionProps) => {
   const t = useScopedI18n(
     "forms.basic.transport.commonTransport.shortDistances"
   );

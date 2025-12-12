@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { QuestionProps } from "../../../../types";
+import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import SeaQuestions from "./index";
 import Question from "../../../../components/question";
 import Content from "../../../../components/content";
 import { FormRadio } from "@/components/forms/formRadio";
-function QSea({
+const QSea: QuestionFC = ({
   setOnSubmit,
   setQuestions,
   mainForm,
   currentIndex,
-}: QuestionProps) {
+}: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qSea");
   const [prevValue] = useState(mainForm.getValues("transport.hasSea") ?? 0);
 
@@ -53,7 +53,7 @@ function QSea({
       </Content>
     </div>
   );
-}
+};
 
 QSea["Symbol"] = {
   question: "forms.basic.transport.commonTransport.qSea.q",

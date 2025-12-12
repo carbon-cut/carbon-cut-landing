@@ -1,13 +1,13 @@
 import Content from "@/app/_forms/components/content";
 import Input from "@/app/_forms/components/input";
 import Question from "@/app/_forms/components/question";
-import { QuestionProps } from "@/app/_forms/types";
+import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import FormSelect from "@/components/forms/formSelect";
 
 import { useScopedI18n } from "@/locales/client";
 import React, { useEffect } from "react";
 
-const Fioul = ({ mainForm, setSubmit }: QuestionProps) => {
+const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heating.options");
 
 /*   useEffect(()=>{
@@ -46,7 +46,7 @@ const Fioul = ({ mainForm, setSubmit }: QuestionProps) => {
       </Content>
     </>
   );
-}
+};
 Fioul["Symbol"] = {
   question: "forms.basic.energie.heating.options.fioul.label",
   fields: ["energie.heating.quantities.fioul"],

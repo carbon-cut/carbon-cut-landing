@@ -6,10 +6,10 @@ import { food } from "./food";
 import { holiday } from "./holiday";
 
 export const formSchema = z.object({
+  uid: z.string(),
   transport,
   energie,
-  uid: z.string()
+  food,
   //waste,
-  //food,
   //holiday,
 });

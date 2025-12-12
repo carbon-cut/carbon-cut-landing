@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+/* import React, { useEffect } from "react";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
-import { QuestionProps } from "../../../types";
+import { QuestionProps, QuestionFC } from "../../../types";
 import Input from "../../../components/input";
 
 const QMoto4 = (index: number) => {
-  function MotoComponent({ mainForm, }: QuestionProps) {
+  const MotoComponent: QuestionFC = ({ mainForm, }: QuestionProps) => {
     const t = useScopedI18n("forms.basic.transport.qMotos.qMoto4");
 
     return (
@@ -21,12 +21,13 @@ const QMoto4 = (index: number) => {
         </Content>
       </div>
     );
-  }
+  };
   MotoComponent["Symbol"] = {
     question: "forms.basic.transport.qMotos.qMoto4.q",
-    fields: [`motos.${index}.motoMileage`],
+    fields: [`transport.motos.${index}.mileage`],
   };
   return MotoComponent;
 };
 
 export default QMoto4;
+ */

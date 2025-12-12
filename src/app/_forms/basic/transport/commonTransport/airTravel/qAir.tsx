@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { QuestionProps } from "../../../../types";
+import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import AirQuestions from "./index";
 import Question from "../../../../components/question";
 import Content from "../../../../components/content";
 import Radio from "@/app/_forms/components/radio";
 
-function QAir({
+const QAir: QuestionFC = ({
   setOnSubmit,
   setQuestions,
   mainForm,
   currentIndex,
-}: QuestionProps) {
+}: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qAir");
   const [prevValue] = useState(mainForm.getValues("transport.hasAir") ?? 0);
 
@@ -57,7 +57,7 @@ function QAir({
       </Content>
     </div>
   );
-}
+};
 
 QAir["Symbol"] = {
   question: "forms.basic.transport.commonTransport.qAir.q",

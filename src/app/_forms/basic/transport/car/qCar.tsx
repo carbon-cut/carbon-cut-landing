@@ -2,17 +2,17 @@ import React, { useContext, useEffect, useState } from "react";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
-import { QuestionProps } from "../../../types";
+import { QuestionProps, QuestionFC } from "../../../types";
 import carsQuestions from "./index";
 import Input from "../../../components/input";
 import FormContext from "@/app/form/_layout/_formContext";
 
-function QCar({
+const QCar: QuestionFC = ({
   setOnSubmit,
   setQuestions,
   mainForm,
   currentIndex,
-}: QuestionProps) {
+}: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.qCar");
   const [prevValue] = useState(mainForm.getValues("transport.hasCar") ?? 0);
   const {tab} = useContext(FormContext)
@@ -66,8 +66,9 @@ function QCar({
       </Content>
     </div>
   );
-}
-QCar["Symbol"] = {
+};
+
+QCar.Symbol = {
   question: "forms.basic.transport.qCar.q",
   fields: [`transport.hasCar`],
 };

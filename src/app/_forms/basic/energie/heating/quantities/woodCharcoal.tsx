@@ -1,5 +1,5 @@
 import React from "react";
-import { QuestionProps } from "@/app/_forms/types";
+import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import Input from "@/app/_forms/components/input";
 import { useScopedI18n } from "@/locales/client";
 import Question from "@/app/_forms/components/question";
@@ -14,7 +14,7 @@ const charcoalKeys = ["m3", "kg"] as const;
 
 const frequencyKeys = ["day", "week", "month", "year"] as const;
 
-function WoodCharcoal({ mainForm }: QuestionProps) {
+const WoodCharcoal: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heating.options");
 
   const { getValues } = useFormContext();
@@ -145,7 +145,7 @@ function WoodCharcoal({ mainForm }: QuestionProps) {
       )}
     </>
   );
-}
+};
 
 WoodCharcoal["Symbol"] = {
   question: "forms.basic.energie.heating.options.wood.title",

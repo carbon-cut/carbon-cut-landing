@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { QuestionProps } from "../../../types";
+import { QuestionProps, QuestionFC } from "../../../types";
 import Question from "../../../components/question";
 import { MultiCheckInput } from "../../../components/multiCheckInput";
 import { useScopedI18n } from "@/locales/client";
@@ -26,7 +26,7 @@ const heatingMethods = [
 
 type heatingQuestions = 'heatNetwork' | 'GPL' | 'fioul' | 'gasTank' | 'woodCharcoal' | 'electricalHeating' | 'electricalCentralHeating';
 
-function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: QuestionProps) {
+const QHeating: QuestionFC = ({ mainForm, setOnSubmit, setQuestions, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heating");
 
   const {
@@ -56,88 +56,94 @@ function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: Questio
         charcoal,
         electricalCentralHeating,
       } = mainForm.getValues("energie.heating");
-      
-      const heatingMethods:{
-        name: heatingQuestions,
-        form: boolean | undefined,
-        component: React.FC<QuestionProps>[],
-        prev: boolean ,
-        add: boolean | null
+
+      const heatingMethods: {
+        name: heatingQuestions;
+        form: boolean | undefined;
+        component: QuestionFC[];
+        prev: boolean;
+        add: boolean | null;
       }[] = [
         {
-          name: 'fioul',
+          name: "fioul",
           form: fioul,
           component: [Fioul],
           prev: prevFioul,
           add: null,
         },
         {
-          name: 'gasTank',
+          name: "gasTank",
           form: gasTank,
           component: [GasTank],
           prev: prevGasTank,
           add: null,
         },
         {
-          name: 'woodCharcoal',
+          name: "woodCharcoal",
           form: wood || charcoal,
           component: [WoodCharcoal],
           prev: prevWoodCharcoal,
           add: null,
         },
         {
-          name: 'electricalHeating',
+          name: "electricalHeating",
           form: electricHeating,
           component: [ElectricalHeating],
           prev: prevElectricalHeating,
           add: null,
         },
         {
-          name: 'electricalCentralHeating',
+          name: "electricalCentralHeating",
           form: electricalCentralHeating,
           component: [CentralHeating],
           prev: prevElectricalCentralHeating,
           add: null,
         },
         {
-          name: 'GPL',
+          name: "GPL",
           form: GPL,
           component: [Gpl],
           prev: prevGpl,
-          add: null
+          add: null,
         },
         {
-          name: 'heatNetwork',
+          name: "heatNetwork",
           form: heatNetwork,
           component: [HeatingBill],
           prev: prevHeatNetwork,
-          add: null
-        }
-      ]
-      const acc: Array<[boolean | undefined, boolean | null]> = []
+          add: null,
+        },
+      ];
+      const acc: Array<[boolean | undefined, boolean | null]> = [];
 
-      for(const item of heatingMethods) {
-        const {form, component, prev} = item
+      for (const item of heatingMethods) {
+        const { form, component, prev } = item;
         const accSnapshot = [...acc];
         if (form && !prev) {
           setQuestions(addQestions(accSnapshot, currentIndex, component));
           item.add = true;
-        }else if(!form && prev){
-          setQuestions(deleteQuestions(accSnapshot, currentIndex, component.length));
+        } else if (!form && prev) {
+          setQuestions(
+            deleteQuestions(accSnapshot, currentIndex, component.length)
+          );
           item.add = false;
         }
-        acc.push([form, item.add])
+        acc.push([form, item.add]);
       }
-      
-        setHeatingQuantities(p=>(
-          heatingMethods.reduce((acc, item) => {
+
+      setHeatingQuantities((p) =>
+        heatingMethods.reduce(
+          (acc, item) => {
             return {
               ...acc,
               [item.name]: item.add === null ? p[item.name] : item.add,
             };
-          }, {} as {
-            [k in heatingQuestions]: boolean
-          })))
+          },
+          {} as {
+            [k in heatingQuestions]: boolean;
+          }
+        )
+      );
     });
     return () => {
       setOnSubmit(() => () => {});}
@@ -147,7 +153,7 @@ function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: Questio
     <div>
       <Question>{t("q")}</Question>
       <MultiCheckInput
-      className="md:px-20 px-0"
+        className="md:px-20 px-0"
         type="boolean"
         form={mainForm}
         name="energie.heating"
@@ -159,11 +165,11 @@ function QHeating({ mainForm, setOnSubmit, setQuestions, currentIndex }: Questio
       />
     </div>
   );
-}
+};
 
 QHeating["Symbol"] = {
   question: "forms.basic.energie.heating.title",
-  fields: heatingMethods.map((e) => `energie.heating.${e}`),
+  fields: heatingMethods.map((e) => `energie.heating.${e}` as const),
 };
 
 export default QHeating;

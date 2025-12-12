@@ -20,7 +20,7 @@ type Props<T extends FieldValues> = {
   form: UseFormReturn<T, undefined>;
   options: {
     label: string;
-    value: string;
+    value: string | number;
   }[];
   name: TName<T>;
   className?: ClassValue;
@@ -35,7 +35,7 @@ function Radio<T extends FieldValues>({
   required = false,
   setState = undefined,
 }: Props<T>) {
-  const selected = (fieldvalue: string, value: string) => fieldvalue === value;
+  const selected = (fieldvalue: string | number, value: string | number) => fieldvalue === value;
   return (
     <FormField
       control={form.control}
@@ -62,7 +62,7 @@ function Radio<T extends FieldValues>({
                 >
                   <FormControl>
                     <RadioGroupItemSwitch
-                      value={option.value}
+                      value={option.value as string}
                       id={`r${index}`}
                       label={option.label}
                       checked={selected(field.value, option.value)}

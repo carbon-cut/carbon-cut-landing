@@ -1,9 +1,9 @@
-import { QuestionProps } from "@/app/_forms/types";
+import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import QCar31 from "./qCar3-1";
 import QCar32 from "./qCar3-2";
 
 const QCar311 = (index: number) => {
-  const CarComponent = (props: QuestionProps) => (
+  const CarComponent: QuestionFC = (props: QuestionProps) => (
     <QCar31 {...props} index={index} />
   );
 
@@ -24,7 +24,7 @@ const QCar311 = (index: number) => {
 };
 
 const QCar322 = (index: number) => {
-  const CarComponent = (props: QuestionProps) => (
+  const CarComponent: QuestionFC = (props: QuestionProps) => (
     <QCar32 {...props} index={index} />
   );
 

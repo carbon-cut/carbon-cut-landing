@@ -3,11 +3,11 @@ import React from "react";
 import Question from "@/app/_forms/components/question";
 import Content from "@/app/_forms/components/content";
 import Input from "@/app/_forms/components/input";
-import { QuestionProps } from "@/app/_forms/types";
+import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import SideQuestion from "@/app/_forms/components/sideQuestion";
 import { Separator } from "@/components/ui/separator";
 
-function HeatingBill({ mainForm }: QuestionProps) {
+const HeatingBill: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heatingBill");
   return (
     <div>
@@ -40,7 +40,7 @@ function HeatingBill({ mainForm }: QuestionProps) {
       </Content> */}
     </div>
   );
-}
+};
 HeatingBill['Symbol'] = {
   question: "forms.basic.energie.heatingBill.title",
   fields: ["energie.heating.quantities.heatingNetwork.total", "energie.heating.quantities.heatingNetwork.money"],

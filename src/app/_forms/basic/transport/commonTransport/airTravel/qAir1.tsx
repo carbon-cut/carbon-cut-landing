@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { QuestionProps } from "../../../../types";
+import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Input from "../../../../components/input";
 import { Plus, Trash } from "lucide-react";
@@ -32,7 +32,7 @@ const aircraftTypes = [
 ] as const;
 const classes = ["economy", "premium", "business", "first"] as const;
 
-function QAir({ mainForm }: QuestionProps) {
+const QAir: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qAir.q1");
 
   const { data: airports, isLoading } = useQuery<{ reduced: any[]; raw?: any[] }>({
@@ -93,7 +93,7 @@ function QAir({ mainForm }: QuestionProps) {
           );
 
           window.scrollTo(0, scrollY)
-  }
+  };
 
   return (
     <div className="">

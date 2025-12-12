@@ -2,21 +2,13 @@ import React, { useEffect, useState } from "react";
 import Question from "../../components/question";
 import Content from "../../components/content";
 import { useScopedI18n } from "@/locales/client";
-import { QuestionProps } from "../../types";
+import { QuestionProps, QuestionFC } from "../../types";
 import SideQuestion from "../../components/sideQuestion";
 import Input from "../../components/input";
 
 
-const Q2 = ({ mainForm, setSubmit }: QuestionProps) => {
+const Q2: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.q2");
-
-  useEffect(()=>{
-    setSubmit(true)
-
-    return ()=>{
-      setSubmit(false)
-    }
-  }, [])
 
   return (
     <div>

@@ -1,8 +1,8 @@
 //import QSea1 from "./qSea1";
-import { QuestionProps } from "../../../../types";
+import { QuestionFC } from "../../../../types";
 import {JSX} from 'react'
 
-const output: ((props: QuestionProps) => JSX.Element)[] = [
+const output: QuestionFC[] = [
 //    QSea1
 ];
 

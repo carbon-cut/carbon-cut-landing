@@ -1,15 +1,9 @@
 import { z } from "zod";
 import { union } from "./utils";
+import { basicMeals } from "./validation/food";
 const food = z.object({
   basic: z.object({
-    meals: z.object({
-      redMeat: z.number(),
-      whiteMeat: z.number(),
-      oilyFish: z.number(),
-      whiteFish: z.number(),
-      vegan: z.number(),
-      vegetarian: z.number(),
-    }),
+    meals: basicMeals,
     distribution: z.object({
       // cooked at home, quantine or outside of house, livree a maison
       redMeat: z.tuple([z.number(), z.number(), z.number()]),
@@ -22,11 +16,11 @@ const food = z.object({
   }),
   breakfast: z.object({
     meals: z.object({
-      bread: z.number(),
-      salty: z.number(),
-      milk: z.number(),
-      fruits: z.number(),
-      no: z.number(),
+      bread: z.number().optional(),
+      salty: z.number().optional(),
+      milk: z.number().optional(),
+      fruits: z.number().optional(),
+      no: z.number().optional(),
     }),
     distribution: z.object({
       bread: z.tuple([z.number(), z.number(), z.number()]),

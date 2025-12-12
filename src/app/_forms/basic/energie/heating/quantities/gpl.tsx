@@ -1,4 +1,4 @@
-import { QuestionProps } from '@/app/_forms/types';
+import { QuestionProps, QuestionFC } from '@/app/_forms/types';
 import { FormControl, FormField, FormItem } from '@/components/ui/forms';
 import { Card } from '@/components/ui/card';
 import React, { useEffect, useRef } from 'react'
@@ -84,7 +84,7 @@ import FormSelect from '@/components/forms/formSelect/formSelect';
     "big": gasTypes.filter((g) => g.format === "Grand Format"),
     "small": gasTypes.filter((g) => g.format === "Petit Format"),
   }
-function Gpl({mainForm}: QuestionProps) {
+const Gpl: QuestionFC = ({mainForm}: QuestionProps) => {
 
   const t = useScopedI18n("forms.basic.energie.heating.options.GPL");
   
@@ -216,7 +216,7 @@ function Gpl({mainForm}: QuestionProps) {
       </div>
     </div>
   );
-}
+  };
 
 Gpl['Symbol'] ={
   question: "forms.basic.energie.heating.options.GPL.title",

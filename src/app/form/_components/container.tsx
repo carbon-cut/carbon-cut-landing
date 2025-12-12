@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { QuestionProps } from "../../_forms/types";
+import { QuestionFC, QuestionProps } from "../../_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "@/app/_forms/formSchema";
@@ -31,8 +31,8 @@ interface ContainerProps {
   setNextTab: () => void;
   initQuestions: {
     [key in TabValues]: [
-      React.FC<QuestionProps>[],
-      React.Dispatch<React.SetStateAction<React.FC<QuestionProps>[]>>
+      QuestionFC[],
+      React.Dispatch<React.SetStateAction<QuestionFC[]>>
     ];
   };
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
@@ -48,12 +48,10 @@ const Container = React.forwardRef<
     { setNextTab, initQuestions, mainForm, loading, scrollToRef, ...props },
     ref
   ) => {
-    const { tab, currentIndexes, setCurrentIndexes } = useContext(FormContext);
+    const { tab, currentIndexes, setCurrentIndexes, verifyFields } = useContext(FormContext);
     const [onSubmit, setOnSubmit] = useState<() => void>(() => () => {});
     const [prevAction, setPrevAction] = useState<"next" | "prev" | null>(null);
-    const [verifyFields, setVerifyFields] = useState<
-      TName<z.infer<typeof formSchema>>[]
-    >([]);
+
 
     const t = useScopedI18n("forms");
 
@@ -175,7 +173,20 @@ const Container = React.forwardRef<
                 setQuestions={initQuestions.energie[1]}
                 setPrevAction={setPrevAction}
               />
-              <TabsContent value="food"></TabsContent>
+              <TabContent
+                mainForm={mainForm}
+                initQuestions={initQuestions.food}
+                setNextTab={setNextTab}
+                value="food"
+                next={next}
+                prev={prev}
+                setSubmit={setSubmit}
+                setOnSubmit={setOnSubmit}
+                prevAction={prevAction}
+                questions={initQuestions.food[0]}
+                setQuestions={initQuestions.food[1]}
+                setPrevAction={setPrevAction}
+              />
               <TabsContent value="waste"></TabsContent>
               <TabsContent value="vacation"></TabsContent>
             </CardContent>
