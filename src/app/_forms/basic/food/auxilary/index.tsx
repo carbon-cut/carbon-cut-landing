@@ -5,11 +5,14 @@ import Question from "../../../components/question";
 import Content from "../../../components/content";
 import Radio from "@/app/_forms/components/radio";
 import { FormAlert } from "../../../components/alert";
+import { useSubmit } from "@/lib/hooks/useSubmit";
 
 const options = [0, 20,40, 60, 80, 100] as const;
 
 const Output: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.food.auxilary");
+
+  useSubmit();
 
   return (
     <div>
