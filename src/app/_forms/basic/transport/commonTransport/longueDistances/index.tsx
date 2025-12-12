@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../../components/question";
-import {Container, Title} from "../shortDistances/container";
+import { Container, Title } from "../shortDistances/container";
 import { Separator } from "@/components/ui/separator";
 import Covoiturage from "./covoiturage";
 import Bus from "./bus";
@@ -11,14 +11,11 @@ import { useFieldArray } from "react-hook-form";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const QLongueDistances: QuestionFC = (props: QuestionProps) => {
-  
-  const t = useScopedI18n(
-    "forms.basic.transport.commonTransport.longueDistances"
-  );
+  const t = useScopedI18n("forms.basic.transport.commonTransport.longueDistances");
 
-    const [parentCovoiturage] = useAutoAnimate()
-    const [parentBus] = useAutoAnimate()
-    const [parentTrain] = useAutoAnimate()
+  const [parentCovoiturage] = useAutoAnimate();
+  const [parentBus] = useAutoAnimate();
+  const [parentTrain] = useAutoAnimate();
 
   const {
     fields: fieldsCovoiturage,
@@ -43,7 +40,6 @@ const QLongueDistances: QuestionFC = (props: QuestionProps) => {
   } = useFieldArray({
     name: "transport.commonTransport.longueDistances.train",
   });
-
 
   return (
     <>
@@ -91,7 +87,7 @@ const QLongueDistances: QuestionFC = (props: QuestionProps) => {
         <ul ref={parentTrain} className="space-y-2">
           {fieldsTrain?.map((fieldTrain, idx) => (
             <Container
-            section="train"
+              section="train"
               idx={idx}
               key={fieldTrain.id}
               id={fieldTrain.id}
@@ -109,11 +105,11 @@ const QLongueDistances: QuestionFC = (props: QuestionProps) => {
 QLongueDistances["Symbol"] = {
   question: "forms.basic.transport.commonTransport.longueDistances.title",
   fields: [
-    'transport.commonTransport',
-    'transport.commonTransport.longueDistances',
-    'transport.commonTransport.longueDistances.covoiturage',
-    'transport.commonTransport.longueDistances.bus',
-    'transport.commonTransport.longueDistances.train',
+    "transport.commonTransport",
+    "transport.commonTransport.longueDistances",
+    "transport.commonTransport.longueDistances.covoiturage",
+    "transport.commonTransport.longueDistances.bus",
+    "transport.commonTransport.longueDistances.train",
   ],
 };
 

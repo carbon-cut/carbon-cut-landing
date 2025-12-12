@@ -11,7 +11,7 @@ const HeatingBill: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heatingBill");
   return (
     <div>
-      <Question className='md:px-12 px-0'>{t("q")}</Question>
+      <Question className="md:px-12 px-0">{t("q")}</Question>
       <Content className="md:px-16 mb-6">
         <Input
           form={mainForm}
@@ -41,13 +41,13 @@ const HeatingBill: QuestionFC = ({ mainForm }: QuestionProps) => {
     </div>
   );
 };
-HeatingBill['Symbol'] = {
+HeatingBill["Symbol"] = {
   question: "forms.basic.energie.heatingBill.title",
   fields: [
     "energie.heating.quantities.heatingNetwork",
     "energie.heating.quantities.heatingNetwork.total",
     "energie.heating.quantities.heatingNetwork.money",
   ],
-}
+};
 
 export default HeatingBill;

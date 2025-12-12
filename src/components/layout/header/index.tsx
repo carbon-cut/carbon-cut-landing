@@ -46,7 +46,7 @@ function Header() {
       setDataState("small");
     } else if (!isHome && !isDesktop) {
       setDataState("bigSticky");
-    }else setDataState("big");
+    } else setDataState("big");
   }, [pathName, isDesktop]);
 
   useEffect(() => {
@@ -60,10 +60,7 @@ function Header() {
   const navHidden = !show && !isDesktop;
 
   return (
-    <header
-      /* ref={headerDiv} */ data-state={dataState}
-      className={style.header}
-    >
+    <header /* ref={headerDiv} */ data-state={dataState} className={style.header}>
       <Link className="z-50" href={"/"} onClick={() => setShow(false)}>
         <Image
           data-state={dataState}
@@ -79,13 +76,10 @@ function Header() {
         id="primary-navigation"
         aria-label="Primary navigation"
         aria-hidden={navHidden}
-        className={`${style.itemsContainer} ${show ? style.show : ''}`}
+        className={`${style.itemsContainer} ${show ? style.show : ""}`}
       >
         {menu.map((item) => (
-          <div
-            key={item.title}
-            className="self-center md:text-base md:font-normal text-4xl"
-          >
+          <div key={item.title} className="self-center md:text-base md:font-normal text-4xl">
             <Link
               onClick={() => setShow(false)}
               href={item.url}
@@ -107,16 +101,16 @@ function Header() {
           <Link href={"/form"}>Commencer</Link>
         </Button>
       </nav>
-          <Button
-            className="md:hidden z-10 hover:bg-transparent flex flex-col items-center justify-center"
-            variant={"ghost"}
-            type="button"
-            aria-label={tNav("toggleLabel")}
-            aria-expanded={show}
-            aria-controls="primary-navigation"
-            onClick={() => setShow(!show)}
-          >
-            <MenuHamburger isOpen={show} />
+      <Button
+        className="md:hidden z-10 hover:bg-transparent flex flex-col items-center justify-center"
+        variant={"ghost"}
+        type="button"
+        aria-label={tNav("toggleLabel")}
+        aria-expanded={show}
+        aria-controls="primary-navigation"
+        onClick={() => setShow(!show)}
+      >
+        <MenuHamburger isOpen={show} />
       </Button>
     </header>
   );

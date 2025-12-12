@@ -1,9 +1,6 @@
 import React from "react";
-import {ClassValue} from "clsx";
-import {
-  FormLabel,
-} from "@/components/ui/forms";
-
+import { ClassValue } from "clsx";
+import { FormLabel } from "@/components/ui/forms";
 
 type Props = {
   options: {
@@ -17,9 +14,7 @@ type Props = {
 
 function NumberedInputs({ options, states, setState, className }: Props) {
   return (
-    <div
-      className={"gap-6 w-3/6 mx-auto flex flex-row flex-wrap justify-between "}
-    >
+    <div className={"gap-6 w-3/6 mx-auto flex flex-row flex-wrap justify-between "}>
       {options?.map((option, index) => (
         <label
           key={index}

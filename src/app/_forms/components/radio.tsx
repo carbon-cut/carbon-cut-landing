@@ -6,13 +6,9 @@ import {
   FormMessage,
   TName,
 } from "@/components/ui/forms";
-import {
-  RadioGroup,
-  RadioGroupItemCheck,
-  RadioGroupItemSwitch,
-} from "@/components/ui/radio-group";
+import { RadioGroup, RadioGroupItemCheck, RadioGroupItemSwitch } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
-import {ClassValue} from "clsx";
+import { ClassValue } from "clsx";
 import React from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
 
@@ -44,10 +40,11 @@ function Radio<T extends FieldValues>({
         <FormItem>
           <FormControl>
             <RadioGroup
-              className={cn(
-                "w-3/6 mx-auto flex flex-row flex-wrap justify-between ", className)
-              }
-              onValueChange={(v) => {field.onChange(v); setState?.(v)}}
+              className={cn("w-3/6 mx-auto flex flex-row flex-wrap justify-between ", className)}
+              onValueChange={(v) => {
+                field.onChange(v);
+                setState?.(v);
+              }}
               {...form.register(name)}
             >
               {options?.map((option, index) => (

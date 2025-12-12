@@ -8,13 +8,7 @@ const scale = "home/features/icon_4";
 const plan = "home/features/icon_5";
 const analysis = "home/features/icon_6";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useScopedI18n } from "@/locales/client";
 
 const cardContent: Props[] = [
@@ -94,7 +88,7 @@ const CardComponent: React.FC<Props> = (props) => {
           className=" mx-auto mb-0 md:scale-100 scale-[60%]"
           height={69}
           width={69}
-          src={`${ props.icon +'.png'}`}
+          src={`${props.icon + ".png"}`}
           alt={t(props.altKey)}
         />
         <CardTitle className={`text-center mt-6 text-primary md:text-xl`}>

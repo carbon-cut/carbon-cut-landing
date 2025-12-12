@@ -11,24 +11,17 @@ function CarTitle({
   index: number;
 }) {
   //TODO
-  const {make: carMake, model: carModel} = {make: "", model: ""} ///mainForm.getValues(`transport.motos.${index}`) ?? {}
+  const { make: carMake, model: carModel } = { make: "", model: "" }; ///mainForm.getValues(`transport.motos.${index}`) ?? {}
 
-  if (carModel && carModel != "") return(
-    <h3 className="font-semibold text-primary text-center">
-      {carMake}:{" "}
-      <span className="font-medium">
-        {carModel}
-      </span>
-    </h3>
-  )
-  else if(carMake && carMake !='') return(
-    <h3 className="font-semibold text-primary text-center">
-      {carMake}
-    </h3>
-  )
-  return (
-    <></>
-  );
+  if (carModel && carModel != "")
+    return (
+      <h3 className="font-semibold text-primary text-center">
+        {carMake}: <span className="font-medium">{carModel}</span>
+      </h3>
+    );
+  else if (carMake && carMake != "")
+    return <h3 className="font-semibold text-primary text-center">{carMake}</h3>;
+  return <></>;
 }
 
 export default CarTitle;

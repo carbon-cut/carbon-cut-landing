@@ -7,11 +7,7 @@ export default function FaqSection() {
   const t = useScopedI18n("home.faq");
 
   return (
-    <section
-      id="faq"
-      aria-labelledby="faq-heading"
-      className="pb-10"
-    >
+    <section id="faq" aria-labelledby="faq-heading" className="pb-10">
       <div className="flex flex-col w-full items-center md:px-12 px-3">
         <Badge
           variant="default"

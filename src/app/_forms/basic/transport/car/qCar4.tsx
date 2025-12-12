@@ -15,17 +15,13 @@ const QCar4 = (index: number) => {
         <CarTitle mainForm={mainForm} index={index} />
         <Question>{t("q")}</Question>
         <Content>
-          <Input
-            form={mainForm}
-            name={`transport.cars.${index}.mileage`}
-            type="number"
-          />
+          <Input form={mainForm} name={`transport.cars.${index}.mileage`} type="number" />
         </Content>
       </div>
     );
   };
   CarComponent["Symbol"] = {
-    question: ["forms.basic.transport.qCar4.title", {index}],
+    question: ["forms.basic.transport.qCar4.title", { index }],
     fields: [`transport.cars.${index}.mileage`],
   };
   return CarComponent;

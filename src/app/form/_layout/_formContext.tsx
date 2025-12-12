@@ -8,9 +8,7 @@ const FormContext = createContext<{
   tab: TabValues;
   setTab: React.Dispatch<React.SetStateAction<TabValues>>;
   currentIndexes: { [key in TabValues]: number };
-  setCurrentIndexes: React.Dispatch<
-    React.SetStateAction<{ [key in TabValues]: number }>
-  >;
+  setCurrentIndexes: React.Dispatch<React.SetStateAction<{ [key in TabValues]: number }>>;
   readyToSubmit: boolean;
   setReadyToSubmit: React.Dispatch<React.SetStateAction<boolean>>;
   verifyFields: TName<z.infer<typeof formSchema>>[];

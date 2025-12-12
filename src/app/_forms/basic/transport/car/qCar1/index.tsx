@@ -8,34 +8,23 @@ import QuestionCompo3 from "./qCar1-3";
 function QCar1(index: number) {
   const CarComponent: QuestionFC = (questionProps: QuestionProps) => {
     const [make, setMake] = useState(() => {
-      return questionProps.mainForm.getValues(
-        `transport.cars.${index}.make`
-      );
+      return questionProps.mainForm.getValues(`transport.cars.${index}.make`);
     });
 
     return (
       <>
-        <QuestionCompo1
-          make={make}
-          setMake={setMake}
-          index={index}
-          {...questionProps}
-        />
+        <QuestionCompo1 make={make} setMake={setMake} index={index} {...questionProps} />
       </>
     );
   };
   CarComponent["Symbol"] = {
     question: ["forms.basic.transport.qCar1-1.title", { index: index }],
-    fields: [
-      `transport.cars.${index}.make`,
-      `transport.cars.${index}.model`,
-    ],
+    fields: [`transport.cars.${index}.make`, `transport.cars.${index}.model`],
   };
   CarComponent.displayName = `QCar11-${index}`;
 
   return CarComponent;
 }
-
 
 function QCar12(index: number) {
   const CarComponent: QuestionFC = (questionProps: QuestionProps) => {
@@ -46,11 +35,8 @@ function QCar12(index: number) {
     );
   };
   CarComponent["Symbol"] = {
-    question: ["forms.basic.transport.qCar1-2.title", {index: index}],
-    fields: [
-      `transport.cars.${index}.engine`,
-      `transport.cars.${index}.otherEngine`,
-    ],
+    question: ["forms.basic.transport.qCar1-2.title", { index: index }],
+    fields: [`transport.cars.${index}.engine`, `transport.cars.${index}.otherEngine`],
   };
 
   CarComponent.displayName = `QCar12-${index}`;
@@ -58,15 +44,14 @@ function QCar12(index: number) {
   return CarComponent;
 }
 
- const QCar13 = (index: number) => {
-  const CarComponent: QuestionFC = (props: QuestionProps) => <QuestionCompo3 index={index} {...props} />;
+const QCar13 = (index: number) => {
+  const CarComponent: QuestionFC = (props: QuestionProps) => (
+    <QuestionCompo3 index={index} {...props} />
+  );
   CarComponent["Symbol"] = {
-    question: ["forms.basic.transport.qCar1-3.title", {index: index}],
-    fields: [
-      `transport.cars.${index}.secondThermal`,
-      `transport.cars.${index}.otherSecondThermal`,
-    ],
+    question: ["forms.basic.transport.qCar1-3.title", { index: index }],
+    fields: [`transport.cars.${index}.secondThermal`, `transport.cars.${index}.otherSecondThermal`],
   };
   return CarComponent;
-}
-export {QCar1, QCar12, QCar13};
+};
+export { QCar1, QCar12, QCar13 };

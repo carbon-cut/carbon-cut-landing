@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { union } from "./utils";
-import { basic as basicValidator, breakfast as breakfastValidator, market as marketValidator } from "./validation/food";
+import {
+  basic as basicValidator,
+  breakfast as breakfastValidator,
+  market as marketValidator,
+} from "./validation/food";
 
 const food = z.object({
   basic: basicValidator,
@@ -11,7 +15,7 @@ const food = z.object({
     bistro: z.number().optional(),
     classic: z.number().optional(),
     gastronomic: z.number().optional(),
-    bio: z.number().optional(), 
+    bio: z.number().optional(),
   }),
   drinks: z.object({
     // cup per day

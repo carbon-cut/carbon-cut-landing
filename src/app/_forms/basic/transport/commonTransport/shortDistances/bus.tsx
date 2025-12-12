@@ -7,18 +7,10 @@ type Props = {
   idx: number;
 };
 
-const busTypes = [
-  "electric",
-  "diesel",
-  "gasoline",
-  "hybrid",
-  "naturalGaz",
-] as const;
+const busTypes = ["electric", "diesel", "gasoline", "hybrid", "naturalGaz"] as const;
 
 const Bus = ({ mainForm, idx }: QuestionProps & Props) => {
-  const t = useScopedI18n(
-    "forms.basic.transport.commonTransport.shortDistances.bus"
-  );
+  const t = useScopedI18n("forms.basic.transport.commonTransport.shortDistances.bus");
 
   const tEngines = useScopedI18n(
     "forms.basic.transport.commonTransport.shortDistances.bus.busTypes"

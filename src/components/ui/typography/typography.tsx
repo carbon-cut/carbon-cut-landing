@@ -10,8 +10,7 @@ const typographyVariants = cva("tracking-tight", {
       title: "font-bold text-primary",
       subtitle: "font-medium text-primary ",
       description: "font-light text-secondary",
-      secondary:
-        "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+      secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
       ghost: "hover:bg-accent hover:text-accent-foreground",
       link: "text-primary underline-offset-4 hover:underline",
     },
@@ -29,8 +28,7 @@ const typographyVariants = cva("tracking-tight", {
   },
 });
 interface Props
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof typographyVariants> {
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof typographyVariants> {
   asChild?: boolean;
 }
 
@@ -39,11 +37,7 @@ const Typography = React.forwardRef<HTMLDivElement, Props>(
     const Comp = asChild ? Slot : "span";
 
     return (
-      <Comp
-        ref={ref}
-        {...props}
-        className={cn(typographyVariants({ variant, size }), className)}
-      />
+      <Comp ref={ref} {...props} className={cn(typographyVariants({ variant, size }), className)} />
     );
   }
 );

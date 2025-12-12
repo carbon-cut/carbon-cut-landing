@@ -4,7 +4,6 @@ import { union } from "./utils";
 import heating from "./validation/heating";
 import bills from "./validation/bills";
 
-
 const energie = z.object({
   /* energies: z.object({
     electricity: z.boolean().default(false),
@@ -28,45 +27,43 @@ const energie = z.object({
     insulatedGlazing: z.boolean().default(false).optional(),
   }),
   heating: heating,
-  repartition: z.object({
-    hasRepartition: z.boolean().default(false),
-    q1: z.array(
-      z.object({
-        type: z.union([
-          z.literal("tv"),
-          z.literal("washingMachine"),
-          z.literal("dishwasher"),
-        ]),
-        made: z.string(),
-        model: z.string(),
-        power: z.number(),
-        frequency: z.number(),
-        label: union("A", "B", "C", "D", "E", "F", "G", ""),
-      }),
-    ),
-    q2: z.array(
-      z.object({
-        type: z.union([z.literal("iron"), z.literal("electricOven")]),
-        made: z.string(),
-        model: z.string(),
-        frequency: z.number(),
-        label: union("A", "B", "C", "D", "E", "F", "G", ""),
-      }),
-    ),
-    q3: z.array(
-      z.object({
-        type: union("simpleRefrigerator", "combinedRefrigerator", "freezer"),
-        /* z.union([z.literal("simpleRefrigerator"), z.literal("combinedRefrigerator"), z.literal("freezer"),]), */
-        made: z.string(),
-        model: z.string(),
-        refrigeratorVolume: z.number().optional(),
-        freezerVolume: z.number().optional(),
-        label: union("A", "B", "C", "D", "E", "F", "G", ""),
-      }),
-    ),
-    computers: z.number(),
-    smartphones: z.number(),
-  }).optional(),
+  repartition: z
+    .object({
+      hasRepartition: z.boolean().default(false),
+      q1: z.array(
+        z.object({
+          type: z.union([z.literal("tv"), z.literal("washingMachine"), z.literal("dishwasher")]),
+          made: z.string(),
+          model: z.string(),
+          power: z.number(),
+          frequency: z.number(),
+          label: union("A", "B", "C", "D", "E", "F", "G", ""),
+        })
+      ),
+      q2: z.array(
+        z.object({
+          type: z.union([z.literal("iron"), z.literal("electricOven")]),
+          made: z.string(),
+          model: z.string(),
+          frequency: z.number(),
+          label: union("A", "B", "C", "D", "E", "F", "G", ""),
+        })
+      ),
+      q3: z.array(
+        z.object({
+          type: union("simpleRefrigerator", "combinedRefrigerator", "freezer"),
+          /* z.union([z.literal("simpleRefrigerator"), z.literal("combinedRefrigerator"), z.literal("freezer"),]), */
+          made: z.string(),
+          model: z.string(),
+          refrigeratorVolume: z.number().optional(),
+          freezerVolume: z.number().optional(),
+          label: union("A", "B", "C", "D", "E", "F", "G", ""),
+        })
+      ),
+      computers: z.number(),
+      smartphones: z.number(),
+    })
+    .optional(),
   electricity: z.object({
     total: z.number().optional(),
     money: z.number().optional(),

@@ -29,7 +29,6 @@ const meta = {
     },
   ],
   args: {
-
     setSubmit: fn(() => console.log("setSubmit")),
     next: fn(() => console.log("next")),
     prev: fn(() => console.log("prev")),
@@ -45,4 +44,4 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 //TODO type
 //@ts-ignore
-export const MainStory = (args, context) =>  <Component {...args} mainForm={context.mainForm} />;
+export const MainStory = (args, context) => <Component {...args} mainForm={context.mainForm} />;

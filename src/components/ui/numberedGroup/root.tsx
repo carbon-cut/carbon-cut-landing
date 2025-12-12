@@ -19,10 +19,10 @@ const ARROW_KEYS = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
 const RADIO_GROUP_NAME = "RadioGroup";
 
 type ScopedProps<P> = P & { __scopeRadioGroup?: Scope };
-const [createRadioGroupContext, createRadioGroupScope] = createContextScope(
-  RADIO_GROUP_NAME,
-  [createRovingFocusGroupScope, createInputScope],
-);
+const [createRadioGroupContext, createRadioGroupScope] = createContextScope(RADIO_GROUP_NAME, [
+  createRovingFocusGroupScope,
+  createInputScope,
+]);
 const useRovingFocusGroupScope = createRovingFocusGroupScope();
 const useRadioScope = createInputScope();
 
@@ -38,9 +38,7 @@ const [RadioGroupProvider, useRadioGroupContext] =
   createRadioGroupContext<RadioGroupContextValue>(RADIO_GROUP_NAME);
 
 type RadioGroupElement = React.ElementRef<typeof Primitive.div>;
-type RovingFocusGroupProps = React.ComponentPropsWithoutRef<
-  typeof RovingFocusGroup.Root
->;
+type RovingFocusGroupProps = React.ComponentPropsWithoutRef<typeof RovingFocusGroup.Root>;
 type PrimitiveDivProps = React.ComponentPropsWithoutRef<typeof Primitive.div>;
 interface InputGroupProps extends PrimitiveDivProps {
   name?: RadioGroupContextValue["name"];
@@ -105,7 +103,7 @@ const InputGroup = React.forwardRef<RadioGroupElement, InputGroupProps>(
         </RovingFocusGroup.Root>
       </RadioGroupProvider>
     );
-  },
+  }
 );
 
 InputGroup.displayName = RADIO_GROUP_NAME;
@@ -122,67 +120,66 @@ interface RadioGroupItemProps extends Omit<RadioProps, "onCheck" | "name"> {
   value: number;
 }
 
-const InputGroupItem = React.forwardRef<
-  RadioGroupItemElement,
-  RadioGroupItemProps
->((props: ScopedProps<RadioGroupItemProps>, forwardedRef) => {
-  const { __scopeRadioGroup, disabled, ...itemProps } = props;
-  const context = useRadioGroupContext(ITEM_NAME, __scopeRadioGroup);
-  const isDisabled = context.disabled || disabled;
-  const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeRadioGroup);
-  const radioScope = useRadioScope(__scopeRadioGroup);
-  const ref = React.useRef<React.ElementRef<typeof Input>>(null);
-  const composedRefs = useComposedRefs(forwardedRef, ref);
-  const number = itemProps.value;
-  const isArrowKeyPressedRef = React.useRef(false);
+const InputGroupItem = React.forwardRef<RadioGroupItemElement, RadioGroupItemProps>(
+  (props: ScopedProps<RadioGroupItemProps>, forwardedRef) => {
+    const { __scopeRadioGroup, disabled, ...itemProps } = props;
+    const context = useRadioGroupContext(ITEM_NAME, __scopeRadioGroup);
+    const isDisabled = context.disabled || disabled;
+    const rovingFocusGroupScope = useRovingFocusGroupScope(__scopeRadioGroup);
+    const radioScope = useRadioScope(__scopeRadioGroup);
+    const ref = React.useRef<React.ElementRef<typeof Input>>(null);
+    const composedRefs = useComposedRefs(forwardedRef, ref);
+    const number = itemProps.value;
+    const isArrowKeyPressedRef = React.useRef(false);
 
-  React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (ARROW_KEYS.includes(event.key)) {
-        isArrowKeyPressedRef.current = true;
-      }
-    };
-    const handleKeyUp = () => (isArrowKeyPressedRef.current = false);
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
+    React.useEffect(() => {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (ARROW_KEYS.includes(event.key)) {
+          isArrowKeyPressedRef.current = true;
+        }
+      };
+      const handleKeyUp = () => (isArrowKeyPressedRef.current = false);
+      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("keyup", handleKeyUp);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+      };
+    }, []);
 
-  return (
-    <RovingFocusGroup.Item
-      asChild
-      {...rovingFocusGroupScope}
-      focusable={!isDisabled}
-      active={number ? true : false}
-    >
-      <Input
-        disabled={isDisabled}
-        required={context.required}
-        number={number}
-        {...radioScope}
-        {...itemProps}
-        name={context.name}
-        ref={composedRefs}
-        onCheck={() => context.onValueChange(itemProps.value)}
-        onKeyDown={composeEventHandlers((event) => {
-          // According to WAI ARIA, radio groups don't activate items on enter keypress
-          if (event.key === "Enter") event.preventDefault();
-        })}
-        onFocus={composeEventHandlers(itemProps.onFocus, () => {
-          /**
-           * Our `RovingFocusGroup` will focus the radio when navigating with arrow keys
-           * and we need to "check" it in that case. We click it to "check" it (instead
-           * of updating `context.value`) so that the radio change event fires.
-           */
-          if (isArrowKeyPressedRef.current) ref.current?.click();
-        })}
-      />
-    </RovingFocusGroup.Item>
-  );
-});
+    return (
+      <RovingFocusGroup.Item
+        asChild
+        {...rovingFocusGroupScope}
+        focusable={!isDisabled}
+        active={number ? true : false}
+      >
+        <Input
+          disabled={isDisabled}
+          required={context.required}
+          number={number}
+          {...radioScope}
+          {...itemProps}
+          name={context.name}
+          ref={composedRefs}
+          onCheck={() => context.onValueChange(itemProps.value)}
+          onKeyDown={composeEventHandlers((event) => {
+            // According to WAI ARIA, radio groups don't activate items on enter keypress
+            if (event.key === "Enter") event.preventDefault();
+          })}
+          onFocus={composeEventHandlers(itemProps.onFocus, () => {
+            /**
+             * Our `RovingFocusGroup` will focus the radio when navigating with arrow keys
+             * and we need to "check" it in that case. We click it to "check" it (instead
+             * of updating `context.value`) so that the radio change event fires.
+             */
+            if (isArrowKeyPressedRef.current) ref.current?.click();
+          })}
+        />
+      </RovingFocusGroup.Item>
+    );
+  }
+);
 
 InputGroupItem.displayName = ITEM_NAME;
 
@@ -193,21 +190,16 @@ InputGroupItem.displayName = ITEM_NAME;
 const INDICATOR_NAME = "RadioGroupIndicator";
 
 type RadioGroupIndicatorElement = React.ElementRef<typeof NumberedIndicator>;
-type RadioIndicatorProps = React.ComponentPropsWithoutRef<
-  typeof NumberedIndicator
->;
+type RadioIndicatorProps = React.ComponentPropsWithoutRef<typeof NumberedIndicator>;
 interface RadioGroupIndicatorProps extends RadioIndicatorProps {}
 
-const InputGroupIndicator = React.forwardRef<
-  RadioGroupIndicatorElement,
-  RadioGroupIndicatorProps
->((props: ScopedProps<RadioGroupIndicatorProps>, forwardedRef) => {
-  const { __scopeRadioGroup, ...indicatorProps } = props;
-  const radioScope = useRadioScope(__scopeRadioGroup);
-  return (
-    <NumberedIndicator {...radioScope} {...indicatorProps} ref={forwardedRef} />
-  );
-});
+const InputGroupIndicator = React.forwardRef<RadioGroupIndicatorElement, RadioGroupIndicatorProps>(
+  (props: ScopedProps<RadioGroupIndicatorProps>, forwardedRef) => {
+    const { __scopeRadioGroup, ...indicatorProps } = props;
+    const radioScope = useRadioScope(__scopeRadioGroup);
+    return <NumberedIndicator {...radioScope} {...indicatorProps} ref={forwardedRef} />;
+  }
+);
 
 InputGroupIndicator.displayName = INDICATOR_NAME;
 

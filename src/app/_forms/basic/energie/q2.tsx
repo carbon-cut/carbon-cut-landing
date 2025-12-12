@@ -6,13 +6,12 @@ import { QuestionProps, QuestionFC } from "../../types";
 import SideQuestion from "../../components/sideQuestion";
 import Input from "../../components/input";
 
-
 const Q2: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.q2");
 
   return (
     <div>
-      <Question className='md:px-12 px-0'>{t("q1")}</Question>
+      <Question className="md:px-12 px-0">{t("q1")}</Question>
       <Content className="md:px-16 mb-6">
         <Input
           form={mainForm}

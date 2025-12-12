@@ -7,11 +7,7 @@ export default function TestimonialsSection() {
   const t = useScopedI18n("home.testimonials");
 
   return (
-    <section
-      id="testimonials"
-      aria-labelledby="testimonials-heading"
-      className="py-12"
-    >
+    <section id="testimonials" aria-labelledby="testimonials-heading" className="py-12">
       <div className="flex flex-col justify-center mb-4">
         <Badge
           variant="default"
@@ -19,7 +15,6 @@ export default function TestimonialsSection() {
         >
           {t("badge")}
         </Badge>
-      
       </div>
       <Testimonials />
     </section>

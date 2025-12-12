@@ -39,23 +39,22 @@ const ElectricalHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
           placeholder={t("fields.annualFrequency.unit")}
           type="number"
         />
-        
       </div>
       <div className="md:mt-6">
-      <Input
+        <Input
           label={t("fields.nbUnit")}
           name="energie.heating.quantities.electricalHeating.number"
           form={mainForm}
           type="number"
         />
-        </div>
+      </div>
     </Content>
   );
 };
 
-ElectricalHeating['Symbol'] = {
+ElectricalHeating["Symbol"] = {
   question: "forms.basic.energie.heating.options.electricHeating.label",
   fields: ["energie.heating.quantities.electricalHeating"],
-}
+};
 
 export default ElectricalHeating;

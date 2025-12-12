@@ -3,9 +3,7 @@ import QCar31 from "./qCar3-1";
 import QCar32 from "./qCar3-2";
 
 const QCar311 = (index: number) => {
-  const CarComponent: QuestionFC = (props: QuestionProps) => (
-    <QCar31 {...props} index={index} />
-  );
+  const CarComponent: QuestionFC = (props: QuestionProps) => <QCar31 {...props} index={index} />;
 
   CarComponent["Symbol"] = {
     question: ["forms.basic.transport.qCar3.title", { index: index }],
@@ -20,13 +18,10 @@ const QCar311 = (index: number) => {
   };
 
   return CarComponent;
-  
 };
 
 const QCar322 = (index: number) => {
-  const CarComponent: QuestionFC = (props: QuestionProps) => (
-    <QCar32 {...props} index={index} />
-  );
+  const CarComponent: QuestionFC = (props: QuestionProps) => <QCar32 {...props} index={index} />;
 
   CarComponent["Symbol"] = {
     question: ["forms.basic.transport.qCar3.title", { index: index }],
@@ -38,6 +33,5 @@ const QCar322 = (index: number) => {
   };
 
   return CarComponent;
-  
 };
 export { QCar311, QCar322 };

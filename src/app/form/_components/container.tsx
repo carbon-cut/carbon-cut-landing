@@ -14,13 +14,7 @@ import { formSchema } from "@/app/_forms/formSchema";
 import { Button } from "@/components/ui/button";
 import FormContext from "../_layout/_formContext";
 import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getIcon, getName } from "@/lib/formTabs/geters";
 import { TName } from "@/components/ui/forms";
 import { TabValues } from "@/lib/formTabs/types";
@@ -30,10 +24,7 @@ import { useScopedI18n } from "@/locales/client";
 interface ContainerProps {
   setNextTab: () => void;
   initQuestions: {
-    [key in TabValues]: [
-      QuestionFC[],
-      React.Dispatch<React.SetStateAction<QuestionFC[]>>
-    ];
+    [key in TabValues]: [QuestionFC[], React.Dispatch<React.SetStateAction<QuestionFC[]>>];
   };
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
   loading: boolean;
@@ -43,183 +34,170 @@ interface ContainerProps {
 const Container = React.forwardRef<
   React.ElementRef<typeof TabsContent>,
   React.ComponentPropsWithoutRef<typeof TabsContent> & ContainerProps
->(
-  (
-    { setNextTab, initQuestions, mainForm, loading, scrollToRef, ...props },
-    ref
-  ) => {
-    const { tab, currentIndexes, setCurrentIndexes, verifyFields } = useContext(FormContext);
-    const [onSubmit, setOnSubmit] = useState<() => void>(() => () => {});
-    const [prevAction, setPrevAction] = useState<"next" | "prev" | null>(null);
+>(({ setNextTab, initQuestions, mainForm, loading, scrollToRef, ...props }, ref) => {
+  const { tab, currentIndexes, setCurrentIndexes, verifyFields } = useContext(FormContext);
+  const [onSubmit, setOnSubmit] = useState<() => void>(() => () => {});
+  const [prevAction, setPrevAction] = useState<"next" | "prev" | null>(null);
 
+  const t = useScopedI18n("forms");
 
-    const t = useScopedI18n("forms");
+  const verify = useCallback<() => Promise<boolean>>(async () => {
+    if (verifyFields.length === 0) return true;
+    const res = await mainForm.trigger(verifyFields);
+    return res;
+  }, [mainForm, verifyFields]);
 
-    const verify = useCallback<() => Promise<boolean>>(async () => {
-      if (verifyFields.length === 0) return true;
-      const res = await mainForm.trigger(verifyFields);
-      return res;
-    }, [mainForm, verifyFields]);
+  const next = useCallback(() => {
+    setPrevAction("next");
+    setCurrentIndexes((prev) => {
+      return { ...prev, [tab]: prev[tab] + 1 };
+    });
+  }, [tab]);
 
-    const next = useCallback(() => {
-      setPrevAction("next");
-      setCurrentIndexes((prev) => {
-        return { ...prev, [tab]: prev[tab] + 1 };
+  const prev = useCallback(() => {
+    setPrevAction("prev");
+    setCurrentIndexes((p) => ({ ...p, [tab]: p[tab] - 1 }));
+  }, [tab]);
+
+  const [submit, setSubmit] = useState(false);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  const [height, setHeight] = useState<number | "auto">("auto");
+
+  useLayoutEffect(() => {
+    if (cardRef.current) {
+      const resizeObserver = new ResizeObserver((entries) => {
+        // We only have one entry, so we can use entries[0].
+        const observedHeight = entries[0].contentRect.height + 70;
+        setHeight(observedHeight);
       });
-    }, [tab]);
 
-    const prev = useCallback(() => {
-      setPrevAction("prev");
-      setCurrentIndexes((p) => ({ ...p, [tab]: p[tab] - 1 }));
-    }, [tab]);
+      resizeObserver.observe(cardRef.current);
 
-    const [submit, setSubmit] = useState(false);
-    const cardRef = useRef<HTMLDivElement | null>(null);
+      return () => {
+        // Cleanup the observer when the component is unmounted
+        resizeObserver.disconnect();
+      };
+    }
+  }, [cardRef]);
 
-    const [height, setHeight] = useState<number | "auto">("auto");
+  useEffect(() => {
+    if (scrollToRef.current) {
+      const targetTop = Math.max((scrollToRef.current.offsetTop ?? 0) + 20, 0);
+      window.scrollTo({ top: targetTop, behavior: "smooth" });
+    }
+  }, [tab, currentIndexes, scrollToRef]);
 
-    useLayoutEffect(() => {
-      if (cardRef.current) {
-        const resizeObserver = new ResizeObserver((entries) => {
-          // We only have one entry, so we can use entries[0].
-          const observedHeight = entries[0].contentRect.height + 70;
-          setHeight(observedHeight);
-        });
-
-        resizeObserver.observe(cardRef.current);
-
-        return () => {
-          // Cleanup the observer when the component is unmounted
-          resizeObserver.disconnect();
-        };
-      }
-    }, [cardRef]);
-
-    useEffect(() => {
-      if (scrollToRef.current) {
-        const targetTop = Math.max((scrollToRef.current.offsetTop ?? 0) + 20, 0);
-        window.scrollTo({ top: targetTop, behavior: "smooth" });
-      }
-    }, [tab, currentIndexes, scrollToRef]);
-
-    return (
-      <div
-        //style={{ height: "72vh" }}
-        ref={ref}
-        className=" border-0 mx-4 "
-        {...props}
-      >
-        <Card className=" border-0 pt-0 relative">
-          <CardHeader className="text-center pt-6 pb-6 bg-gradient-to-t from-white to-[#ECFDF5] relative z-10">
-            <div className="flex justify-center mb-4">
-              {(() => {
-                const Icon = getIcon(tab);
-                const ColorVariant = {
-                  transport: "bg-section-transport",
-                  energie: "bg-section-energie",
-                  food: "bg-section-food",
-                  waste: "bg-section-waste",
-                  vacation: "bg-section-vacation",
-                };
-                return (
-                  <div
-                    className={`p-4 rounded-full ${
-                      ColorVariant[tab as keyof typeof ColorVariant]
-                    }`}
-                  >
-                    <Icon className="h-6 w-6 text-white" />
-                  </div>
-                );
-              })()}
-            </div>
-            <CardTitle className="text-2xl font-bold">{getName(tab)}</CardTitle>
-            <CardDescription className="text-base">
-              Question {currentIndexes[tab] + 1} of{" "}
-              {initQuestions[tab][0].length}
-            </CardDescription>
-          </CardHeader>
-          <motion.div
-            style={{ height }}
-            className=""
-            animate={{ height }}
-            transition={{ duration: 0.09, ease: "linear" }}
-          >
-            <CardContent ref={cardRef} className="md:p-12">
-              <TabContent
-                mainForm={mainForm}
-                initQuestions={initQuestions.transport}
-                setNextTab={setNextTab}
-                value="transport"
-                next={next}
-                prev={prev}
-                setSubmit={setSubmit}
-                setOnSubmit={setOnSubmit}
-                prevAction={prevAction}
-                questions={initQuestions.transport[0]}
-                setQuestions={initQuestions.transport[1]}
-                setPrevAction={setPrevAction}
-              />
-              <TabContent
-                mainForm={mainForm}
-                initQuestions={initQuestions.energie}
-                setNextTab={setNextTab}
-                value="energie"
-                next={next}
-                prev={prev}
-                setSubmit={setSubmit}
-                setOnSubmit={setOnSubmit}
-                prevAction={prevAction}
-                questions={initQuestions.energie[0]}
-                setQuestions={initQuestions.energie[1]}
-                setPrevAction={setPrevAction}
-              />
-              <TabContent
-                mainForm={mainForm}
-                initQuestions={initQuestions.food}
-                setNextTab={setNextTab}
-                value="food"
-                next={next}
-                prev={prev}
-                setSubmit={setSubmit}
-                setOnSubmit={setOnSubmit}
-                prevAction={prevAction}
-                questions={initQuestions.food[0]}
-                setQuestions={initQuestions.food[1]}
-                setPrevAction={setPrevAction}
-              />
-              <TabsContent value="waste"></TabsContent>
-              <TabsContent value="vacation"></TabsContent>
-            </CardContent>
-          </motion.div>
-        </Card>
-        <div className="md:flex md:justify-between md:gap-12 gap-6 grid grid-cols-2 mb-8 mt-8">
-          <Button
-            className={`md:px-8 md:py-3 px-5 py-3 md:w-[175px] w-full rounded-full font-semibold flex items-center gap-2
+  return (
+    <div
+      //style={{ height: "72vh" }}
+      ref={ref}
+      className=" border-0 mx-4 "
+      {...props}
+    >
+      <Card className=" border-0 pt-0 relative">
+        <CardHeader className="text-center pt-6 pb-6 bg-gradient-to-t from-white to-[#ECFDF5] relative z-10">
+          <div className="flex justify-center mb-4">
+            {(() => {
+              const Icon = getIcon(tab);
+              const ColorVariant = {
+                transport: "bg-section-transport",
+                energie: "bg-section-energie",
+                food: "bg-section-food",
+                waste: "bg-section-waste",
+                vacation: "bg-section-vacation",
+              };
+              return (
+                <div
+                  className={`p-4 rounded-full ${ColorVariant[tab as keyof typeof ColorVariant]}`}
+                >
+                  <Icon className="h-6 w-6 text-white" />
+                </div>
+              );
+            })()}
+          </div>
+          <CardTitle className="text-2xl font-bold">{getName(tab)}</CardTitle>
+          <CardDescription className="text-base">
+            Question {currentIndexes[tab] + 1} of {initQuestions[tab][0].length}
+          </CardDescription>
+        </CardHeader>
+        <motion.div
+          style={{ height }}
+          className=""
+          animate={{ height }}
+          transition={{ duration: 0.09, ease: "linear" }}
+        >
+          <CardContent ref={cardRef} className="md:p-12">
+            <TabContent
+              mainForm={mainForm}
+              initQuestions={initQuestions.transport}
+              setNextTab={setNextTab}
+              value="transport"
+              next={next}
+              prev={prev}
+              setSubmit={setSubmit}
+              setOnSubmit={setOnSubmit}
+              prevAction={prevAction}
+              questions={initQuestions.transport[0]}
+              setQuestions={initQuestions.transport[1]}
+              setPrevAction={setPrevAction}
+            />
+            <TabContent
+              mainForm={mainForm}
+              initQuestions={initQuestions.energie}
+              setNextTab={setNextTab}
+              value="energie"
+              next={next}
+              prev={prev}
+              setSubmit={setSubmit}
+              setOnSubmit={setOnSubmit}
+              prevAction={prevAction}
+              questions={initQuestions.energie[0]}
+              setQuestions={initQuestions.energie[1]}
+              setPrevAction={setPrevAction}
+            />
+            <TabContent
+              mainForm={mainForm}
+              initQuestions={initQuestions.food}
+              setNextTab={setNextTab}
+              value="food"
+              next={next}
+              prev={prev}
+              setSubmit={setSubmit}
+              setOnSubmit={setOnSubmit}
+              prevAction={prevAction}
+              questions={initQuestions.food[0]}
+              setQuestions={initQuestions.food[1]}
+              setPrevAction={setPrevAction}
+            />
+            <TabsContent value="waste"></TabsContent>
+            <TabsContent value="vacation"></TabsContent>
+          </CardContent>
+        </motion.div>
+      </Card>
+      <div className="md:flex md:justify-between md:gap-12 gap-6 grid grid-cols-2 mb-8 mt-8">
+        <Button
+          className={`md:px-8 md:py-3 px-5 py-3 md:w-[175px] w-full rounded-full font-semibold flex items-center gap-2
             border-2 border-[#00A261] text-[#00A261] bg-white
             hover:bg-[#ECFDF5] 
             hover:shadow-xl hover:scale-105 active:scale-95 transition-all
             duration-200 disabled:opacity-50 disabled:cursor-not-allowed
             disabled:hover:scale-100 disabled:hover:shadow-none`}
-            variant={"outline"}
-            size={"lg"}
-            type="button"
-            disabled={currentIndexes[tab] == 0}
-            onClick={prev}
-          >
-            <span className="flex items-center gap-3">
-              <Image
-                src={"form/utils/arrow-left.svg"}
-                width={16}
-                height={16}
-                alt="arrow-left"
-              />
-              <span className="md:text-base text-sm bg-linear-1 text-transparent bg-clip-text">
-                {t("back")}
-              </span>
+          variant={"outline"}
+          size={"lg"}
+          type="button"
+          disabled={currentIndexes[tab] == 0}
+          onClick={prev}
+        >
+          <span className="flex items-center gap-3">
+            <Image src={"form/utils/arrow-left.svg"} width={16} height={16} alt="arrow-left" />
+            <span className="md:text-base text-sm bg-linear-1 text-transparent bg-clip-text">
+              {t("back")}
             </span>
-          </Button>
-          <Button
-            className={`md:px-8 md:py-3 py-3 md:w-[175px] w-full
+          </span>
+        </Button>
+        <Button
+          className={`md:px-8 md:py-3 py-3 md:w-[175px] w-full
             rounded-full font-semibold flex items-center gap-2 
             bg-gradient-to-r from-[#00A261] to-[#003A52]
             data-[state=submit]:bg-linear-energie
@@ -228,34 +206,26 @@ const Container = React.forwardRef<
             transition-all 
             duration-200 shadow-lg
             `}
-            disabled={loading}
-            size={"lg"}
-            data-state={submit ? "submit" : "next"}
-            type={submit ? "submit" : "button"}
-            variant="default"
-            onClick={async () => {
-              const ver = await verify();
-              onSubmit();
-              if (ver) next();
-            }}
-          >
-            <span className="md:text-base text-sm">
-              {submit ? t("submit") : t("next")}
-            </span>
-            {!submit && (
-              <Image
-                src={"form/utils/arrow-right.svg"}
-                width={16}
-                height={16}
-                alt="arrow-right"
-              />
-            )}
-          </Button>
-        </div>
+          disabled={loading}
+          size={"lg"}
+          data-state={submit ? "submit" : "next"}
+          type={submit ? "submit" : "button"}
+          variant="default"
+          onClick={async () => {
+            const ver = await verify();
+            onSubmit();
+            if (ver) next();
+          }}
+        >
+          <span className="md:text-base text-sm">{submit ? t("submit") : t("next")}</span>
+          {!submit && (
+            <Image src={"form/utils/arrow-right.svg"} width={16} height={16} alt="arrow-right" />
+          )}
+        </Button>
       </div>
-    );
-  }
-);
+    </div>
+  );
+});
 Container.displayName = "Tab Container";
 
 export default Container;

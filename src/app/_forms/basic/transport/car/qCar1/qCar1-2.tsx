@@ -19,50 +19,52 @@ const fuelTypes: FuelTypes[] = [
   "other",
 ];
 
-const QuestionCompo2: React.FC<
-  QuestionProps & { index: number; }
-> = ({  index, mainForm, setVerifyFields,  }) => {
+const QuestionCompo2: React.FC<QuestionProps & { index: number }> = ({
+  index,
+  mainForm,
+  setVerifyFields,
+}) => {
   const t = useScopedI18n("forms.basic.transport.qCar1-2");
 
-  const [ carType, setCarType ] = useState(mainForm.getValues(`transport.cars.${index}.engine`)); 
+  const [carType, setCarType] = useState(mainForm.getValues(`transport.cars.${index}.engine`));
 
   useEffect(() => {
     setVerifyFields([`transport.cars.${index}.engine`, `transport.cars.${index}.otherEngine`]);
 
     return () => {
       setVerifyFields([]);
-    }
-  } , [index]);
+    };
+  }, [index]);
 
   return (
     <>
-        <div>
-          <CarTitle mainForm={mainForm} index={index} />
-          <Question>{t("q")}</Question>
-          <Content className="flex md:flex-row flex-col justify-start ">
-            <div className="self-start md:w-5/6 w-full">
+      <div>
+        <CarTitle mainForm={mainForm} index={index} />
+        <Question>{t("q")}</Question>
+        <Content className="flex md:flex-row flex-col justify-start ">
+          <div className="self-start md:w-5/6 w-full">
             <Radio
               className="md:w-5/6 w-full flex justify-between  mx-0"
               setState={setCarType}
               name={`transport.cars.${index}.engine`}
               form={mainForm}
-              options={fuelTypes?.map((element: FuelTypes) => ({
-                label: t(element),
-                value: element,
-              })) ?? []}
-            />
-            </div>
-            <Input
-              type="text"
-              form={mainForm}
-              name={`transport.cars.${index}.otherEngine`}
-              label={"Autre"}
-              disabled={
-                (carType !== "other") ? true : false
+              options={
+                fuelTypes?.map((element: FuelTypes) => ({
+                  label: t(element),
+                  value: element,
+                })) ?? []
               }
             />
-          </Content>
-        </div>
+          </div>
+          <Input
+            type="text"
+            form={mainForm}
+            name={`transport.cars.${index}.otherEngine`}
+            label={"Autre"}
+            disabled={carType !== "other" ? true : false}
+          />
+        </Content>
+      </div>
     </>
   );
 };

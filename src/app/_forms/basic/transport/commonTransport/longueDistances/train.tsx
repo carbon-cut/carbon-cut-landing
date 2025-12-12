@@ -7,18 +7,12 @@ type Props = {
   idx: number;
 };
 
-const trainTypes = [
-  "intercity", "TER", "TGV"
-] as const;
+const trainTypes = ["intercity", "TER", "TGV"] as const;
 
 const Train = ({ mainForm, idx }: QuestionProps & Props) => {
-  const t = useScopedI18n(
-    "forms.basic.transport.commonTransport.longueDistances.train"
-  );
+  const t = useScopedI18n("forms.basic.transport.commonTransport.longueDistances.train");
 
-  const tTypes = useScopedI18n(
-    "forms.basic.transport.commonTransport.longueDistances.train.types"
-  );
+  const tTypes = useScopedI18n("forms.basic.transport.commonTransport.longueDistances.train.types");
 
   return (
     <>

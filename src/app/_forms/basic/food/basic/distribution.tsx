@@ -16,18 +16,17 @@ import { FormAlert } from "../../../components/alert";
 import { FormField, FormMessage } from "@/components/ui/forms";
 
 const cols = ["homemade", "quantine", "delivered"] as const;
-const meals = [
-  "redMeat",
-  "whiteMeat",
-  "oilyFish",
-  "whiteFish",
-  "vegan",
-  "vegetarian",
-] as const;
+const meals = ["redMeat", "whiteMeat", "oilyFish", "whiteFish", "vegan", "vegetarian"] as const;
 
 type Meals = (typeof meals)[number];
 
-const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction, setVerifyFields }: QuestionProps) => {
+const Distribution: QuestionFC = ({
+  mainForm,
+  next,
+  prev,
+  prevAction,
+  setVerifyFields,
+}: QuestionProps) => {
   const t = useScopedI18n("forms.basic.food");
 
   const [selectedMeals] = useState<{
@@ -44,7 +43,7 @@ const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction, setVerifyF
         ...acc,
         ...((rawMeals?.[curr] ?? 0) > 0 ? { [curr]: rawMeals[curr] } : undefined),
       }),
-      {},
+      {}
     );
   });
 
@@ -54,26 +53,30 @@ const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction, setVerifyF
         prev();
       } else next();
     }
-    setVerifyFields([
-      "food.basic.distribution",
-    ]);
-    
+    setVerifyFields(["food.basic.distribution"]);
+
     return () => {
       setVerifyFields([]);
-    }
+    };
   }, [next, prev, prevAction, selectedMeals]);
 
   return (
     <div>
       <Question>{t("basic.q2.text")}</Question>
-      <FormAlert variant="note" title="" description={"indication que le remplissage est approximative"} />
+      <FormAlert
+        variant="note"
+        title=""
+        description={"indication que le remplissage est approximative"}
+      />
       <div className="mt-4">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="min-w-[60px]"/>
+              <TableHead className="min-w-[60px]" />
               {cols.map((e) => (
-                <TableHead className="min-w-[100px]" key={e}>{t(`cols.${e}`)}</TableHead>
+                <TableHead className="min-w-[100px]" key={e}>
+                  {t(`cols.${e}`)}
+                </TableHead>
               ))}
             </TableRow>
           </TableHeader>
@@ -87,7 +90,9 @@ const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction, setVerifyF
                   <>
                     <TableRow className="border-t border-b-0">
                       <TableCell>
-                        {t(`basic.meals.${e}`)} {'('}{selectedMeals[e]}{')'}
+                        {t(`basic.meals.${e}`)} {"("}
+                        {selectedMeals[e]}
+                        {")"}
                       </TableCell>
                       {cols.map((c, index) => {
                         const realIndex = index as 0 | 1 | 2;

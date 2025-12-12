@@ -22,13 +22,11 @@ const Checkbox = React.forwardRef<
       data-[state=checked]:bg-section-transport
       data-[state=checked]:border-section-transport
       data-[state=checked]:text-primary-foreground`,
-      className,
+      className
     )}
     {...props}
   >
-    <CheckboxPrimitive.Indicator
-      className={cn("flex items-center justify-center text-current")}
-    >
+    <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center text-current")}>
       <Check className="h-4 w-4" />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
@@ -47,14 +45,12 @@ const CheckboxItem = React.forwardRef<
       `flex items-center pl-3 rounded-lg w-full h-14 border-2 ${
         props.checked ? "border-slate-600" : "hover:bg-gray-500/20"
       }`,
-      className,
+      className
     )}
     {...props}
   >
     <div className="border border-black !w-4 !h-4">
-      <CheckboxPrimitive.Indicator
-        className={cn("flex items-center justify-center text-current")}
-      >
+      <CheckboxPrimitive.Indicator className={cn("flex items-center justify-center text-current")}>
         <Check className="h-4 w-4" />
       </CheckboxPrimitive.Indicator>
     </div>

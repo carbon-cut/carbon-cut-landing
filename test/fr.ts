@@ -87,12 +87,10 @@ export default {
       "message.email": "Consultez votre messagerie",
       "form.password": "Nouveau mot de passe",
       "form.passwordConfirm": "Confirmez le nouveau mot de passe",
-      "message.code":
-        "Nous avons envoyé un lien de vérification à votre adresse e-mail",
+      "message.code": "Nous avons envoyé un lien de vérification à votre adresse e-mail",
     },
     verify: {
-      "message.email":
-        "Nous avons envoyé un code de vérification à votre adresse e-mail {email}",
+      "message.email": "Nous avons envoyé un code de vérification à votre adresse e-mail {email}",
       "form.submit": "Envoyer",
       "form.reset": "Renvoyer",
       "toast.succ": "L'e-mail a été envoyé.",
@@ -286,12 +284,7 @@ export default {
           q2: {
             q: "Quel type de chauffage au bois ou au charbon utilisez-vous ?",
             headers: ["type", "bois", "charbon"],
-            rows: [
-              "Cheminée munie d'un insert",
-              "Pôele",
-              "Cheminée a foyer ouvert",
-              "Chaudière",
-            ],
+            rows: ["Cheminée munie d'un insert", "Pôele", "Cheminée a foyer ouvert", "Chaudière"],
           },
         },
         repartition: {
@@ -508,8 +501,7 @@ export default {
         precise: {
           q: "Si vous effectuez le tri sélectif des déchets, pour lesquels de ces déchets pouvez-vous estimer les quantités :",
           labels: {
-            recylablePackaging:
-              "Emballages recyclables (plastiques, cartons, métaux)",
+            recylablePackaging: "Emballages recyclables (plastiques, cartons, métaux)",
             paper: "Papiers (journaux, magazines)",
             glass: "Verre (bouteilles et bocaux)",
             organic: "Déchets organiques",

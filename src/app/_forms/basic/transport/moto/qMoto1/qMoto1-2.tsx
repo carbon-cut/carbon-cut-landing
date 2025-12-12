@@ -5,17 +5,9 @@ import Content from "../../../../components/content";
 import Radio from "../../../../components/radio";
 import { FuelTypes, QuestionProps } from "../../../../types";
 
-const fuelTypes: FuelTypes[] = [
-  "Electrique",
-  "mild Hybrid",
-  "Plug-in Hybrid",
-  "Gasoline",
-];
+const fuelTypes: FuelTypes[] = ["Electrique", "mild Hybrid", "Plug-in Hybrid", "Gasoline"];
 
-const QuestionCompo2: React.FC<QuestionProps & { index: number }> = ({
-  index,
-  mainForm,
-}) => {
+const QuestionCompo2: React.FC<QuestionProps & { index: number }> = ({ index, mainForm }) => {
   const t = useScopedI18n("forms.basic.transport.qMotos.qMoto1-2");
 
   return (

@@ -17,11 +17,31 @@
     --section-vacation-light: 216, 100%, 44%;
     --section-energie-light: 13, 100%, 70%;
     --section-waste-light: 16, 66%, 54%;
-    --linear-transport: linear-gradient(to right, hsl(var(--section-transport)), hsl(var(--section-transport-light)));
-    --linear-food: linear-gradient(to right, hsl(var(--section-food)), hsl(var(--section-food-light)));
-    --linear-vacation: linear-gradient(to right, hsl(var(--section-vacation)), hsl(var(--section-vacation-light)));
-    --linear-energie: linear-gradient(to right, hsl(var(--section-energie)), hsl(var(--section-energie-light)));
-    --linear-waste: linear-gradient(to right, hsl(var(--section-waste)), hsl(var(--section-waste-light)));
+    --linear-transport: linear-gradient(
+      to right,
+      hsl(var(--section-transport)),
+      hsl(var(--section-transport-light))
+    );
+    --linear-food: linear-gradient(
+      to right,
+      hsl(var(--section-food)),
+      hsl(var(--section-food-light))
+    );
+    --linear-vacation: linear-gradient(
+      to right,
+      hsl(var(--section-vacation)),
+      hsl(var(--section-vacation-light))
+    );
+    --linear-energie: linear-gradient(
+      to right,
+      hsl(var(--section-energie)),
+      hsl(var(--section-energie-light))
+    );
+    --linear-waste: linear-gradient(
+      to right,
+      hsl(var(--section-waste)),
+      hsl(var(--section-waste-light))
+    );
     --background: 210 30% 96%;
     --foreground: 227 9% 14%;
     --card: 0 0% 100%;
@@ -43,7 +63,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 51.8% 91.4%;
-    --ring:  156 100% 32%;
+    --ring: 156 100% 32%;
     --chart-1: 126 75% 64%; /* light green */
     --chart-2: 175 67% 40%; /* middle dark green */
     --chart-3: 17 100% 60%; /* ornage */
@@ -106,7 +126,9 @@
 @layer components {
   .primary {
     background: var(--linear);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
   }
 
   .primary:hover {
@@ -130,6 +152,6 @@
 
 @layer utilities {
   .transition-descrete {
-    transition: allow-descrete;;
+    transition: allow-descrete;
   }
 }

@@ -1,7 +1,7 @@
 import { Plugin } from "chart.js/auto";
 import { TabValues } from "../formTabs/types";
 import { getIcon, getSvg } from "../formTabs/geters";
-import React from 'react';
+import React from "react";
 
 const doughtPlugin: Plugin<"doughnut", any> = {
   id: "DoughnutIcon",

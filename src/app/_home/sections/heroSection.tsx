@@ -21,12 +21,10 @@ export default function HeroSection() {
       aria-labelledby="hero-heading"
       className="relative overflow-hidden  pt-24 md:pt-32 pb-16 md:pb-0 min-h-[100vh] flex-row flex md:min-h-screen"
     >
-      
       <div
         className="md:h-full h-4/6 w-full absolute top-0 left-0  z-10 md:[clip-path:none] [clip-path:polygon(0_0,100%_0,100%_55%,0_55%)]"
         style={{
-          background:
-            "linear-gradient(0deg, rgba(10,41,36,79%) -30%, rgba(217,255,249,0.34) 100%)",
+          background: "linear-gradient(0deg, rgba(10,41,36,79%) -30%, rgba(217,255,249,0.34) 100%)",
         }}
       />
       <Image
@@ -39,12 +37,7 @@ export default function HeroSection() {
       />
       <div className="absolute md:flex bottom-[15%] md:static md:translate-y-0 flex flex-col w-full z-20 items-center px-4 md:px-6">
         <div className="my-3 md:my-6 max-w-5xl">
-          <Typography
-            asChild
-            variant={"title"}
-            size={"huge"}
-            className="text-center"
-          >
+          <Typography asChild variant={"title"} size={"huge"} className="text-center">
             <h1 id="hero-heading">
               <span className="text-center">{t("title.line1")}</span>{" "}
               <span className="text-chart-3">{t("title.highlight")}</span>{" "}

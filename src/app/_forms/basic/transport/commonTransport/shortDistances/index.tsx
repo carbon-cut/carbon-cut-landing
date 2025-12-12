@@ -2,18 +2,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../../components/question";
-import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Separator } from "@/components/ui/separator";
 import Covoiturage from "./covoiturage";
 import Bus from "./bus";
 import Metro from "./metro";
 import { useFieldArray } from "react-hook-form";
-import {Container, Title} from "./container";
+import { Container, Title } from "./container";
 
 const QShortDistances: QuestionFC = (props: QuestionProps) => {
-  const t = useScopedI18n(
-    "forms.basic.transport.commonTransport.shortDistances"
-  );
+  const t = useScopedI18n("forms.basic.transport.commonTransport.shortDistances");
 
   const {
     fields: fieldsCovoiturage,
@@ -22,9 +20,9 @@ const QShortDistances: QuestionFC = (props: QuestionProps) => {
   } = useFieldArray({
     name: "transport.commonTransport.shortDistances.covoiturage",
   });
-  const [parentCovoiturage] = useAutoAnimate()
-  const [parentBus] = useAutoAnimate()
-  const [parentMetro] = useAutoAnimate()
+  const [parentCovoiturage] = useAutoAnimate();
+  const [parentBus] = useAutoAnimate();
+  const [parentMetro] = useAutoAnimate();
   const {
     fields: fieldsBus,
     append: appendBus,
@@ -87,7 +85,7 @@ const QShortDistances: QuestionFC = (props: QuestionProps) => {
         <ul className="space-y-2" ref={parentMetro}>
           {fieldsMetro?.map((fieldMetro, idx) => (
             <Container
-            section="metro"
+              section="metro"
               idx={idx}
               key={fieldMetro.id}
               id={fieldMetro.id}
@@ -106,13 +104,12 @@ const QShortDistances: QuestionFC = (props: QuestionProps) => {
 QShortDistances["Symbol"] = {
   question: "forms.basic.transport.commonTransport.shortDistances.title",
   fields: [
-    'transport.commonTransport',
-    'transport.commonTransport.shortDistances',
-    'transport.commonTransport.shortDistances.covoiturage',
-    'transport.commonTransport.shortDistances.bus',
-    'transport.commonTransport.shortDistances.metro',
+    "transport.commonTransport",
+    "transport.commonTransport.shortDistances",
+    "transport.commonTransport.shortDistances.covoiturage",
+    "transport.commonTransport.shortDistances.bus",
+    "transport.commonTransport.shortDistances.metro",
   ],
 };
 
 export default QShortDistances;
-

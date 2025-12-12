@@ -40,10 +40,25 @@ function Footer() {
     },
   ];
   const socialLinks: FooterItem[] = [
-    { title: tFooter("social.linkedin"), url: "https://www.linkedin.com", Icon: Linkedin, external: true },
+    {
+      title: tFooter("social.linkedin"),
+      url: "https://www.linkedin.com",
+      Icon: Linkedin,
+      external: true,
+    },
     { title: tFooter("social.twitter"), url: "https://twitter.com", Icon: Twitter, external: true },
-    { title: tFooter("social.facebook"), url: "https://www.facebook.com", Icon: Facebook, external: true },
-    { title: tFooter("social.instagram"), url: "https://www.instagram.com", Icon: Instagram, external: true },
+    {
+      title: tFooter("social.facebook"),
+      url: "https://www.facebook.com",
+      Icon: Facebook,
+      external: true,
+    },
+    {
+      title: tFooter("social.instagram"),
+      url: "https://www.instagram.com",
+      Icon: Instagram,
+      external: true,
+    },
   ];
   const legalLinks: FooterItem[] = [
     { title: tFooter("legal.privacy"), url: "/legal/privacy" },
@@ -60,11 +75,8 @@ function Footer() {
             alt={`${tFooter("brand.name")} logo`}
             width={141}
             height={48}
-            
           />
-          <p className="text-card-primary-foreground">
-            {tFooter("brand.description")}
-          </p>
+          <p className="text-card-primary-foreground">{tFooter("brand.description")}</p>
         </div>
         <FooterColumn
           className="lg:col-span-2 sm:col-span-1"
@@ -95,18 +107,14 @@ function Footer() {
           <h1 className="text-primary-foreground scroll-m-20 text-xl font-sans tracking-tight lg:text-2xl md:mb-6 mb-3">
             {tFooter("headings.newsletter")}
           </h1>
-          <p className="text-card-primary-foreground mb-6">
-            {tFooter("newsletter.description")}
-          </p>
+          <p className="text-card-primary-foreground mb-6">{tFooter("newsletter.description")}</p>
           <div className="relative w-full md:w-11/12">
             <input
               type="email"
               placeholder={tFooter("newsletter.placeholder")}
               className="rounded-full px-4 py-2 w-full"
             />
-            <Button
-              className="primary absolute z-10 right-0 rounded-full py-5 px-4 text-primary-foreground font-normal"
-            >
+            <Button className="primary absolute z-10 right-0 rounded-full py-5 px-4 text-primary-foreground font-normal">
               {tFooter("newsletter.cta")}
             </Button>
           </div>

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function FormHeader() {
-  return (
-    <div>FormHeader</div>
-  )
+  return <div>FormHeader</div>;
 }
 
-export default FormHeader
+export default FormHeader;

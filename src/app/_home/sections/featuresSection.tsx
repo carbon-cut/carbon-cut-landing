@@ -5,17 +5,17 @@ import Features from "../_features";
 
 const titleAnimation = `timeline-view range-on-entry/360px_560px
           translate-y-[50px] opacity-0 no-animations:translate-x-0 no-animations:opacity-100
-          animate-to-translate-0 animate-fade-in-out`
+          animate-to-translate-0 animate-fade-in-out`;
 
 export default function FeaturesSection() {
   const t = useScopedI18n("home.features");
 
   return (
-    <section id="features" aria-labelledby="features-heading" 
-      className="py-12 px-4"
-    >
+    <section id="features" aria-labelledby="features-heading" className="py-12 px-4">
       <div className="flex flex-col w-full items-center ">
-        <Badge className={titleAnimation} variant="default">{t("badge")}</Badge>
+        <Badge className={titleAnimation} variant="default">
+          {t("badge")}
+        </Badge>
         <Typography
           asChild
           variant={"title"}
@@ -23,8 +23,7 @@ export default function FeaturesSection() {
           className={"text-center md:my-6 my-3 md:mx-32 " + " " + titleAnimation}
         >
           <h2 id="features-heading">
-            {t("title.line1")}{" "}
-            <br className="md:hidden" /> {t("title.line2.prefix")}{" "}
+            {t("title.line1")} <br className="md:hidden" /> {t("title.line2.prefix")}{" "}
             <span className="text-chart-3">{t("title.line2.highlight")}</span>{" "}
             {t("title.line2.suffix")}
           </h2>

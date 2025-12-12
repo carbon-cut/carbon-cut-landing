@@ -1,25 +1,27 @@
-'use client';
-import React, { useRef, useEffect } from 'react';
+"use client";
+import React, { useRef, useEffect } from "react";
 
-export default function MenuHamburger({ isOpen }: {isOpen: boolean}) {
+export default function MenuHamburger({ isOpen }: { isOpen: boolean }) {
   const ref = useRef<HTMLObjectElement>(null);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const iconPath = `${basePath}/menu/charm_menu-hamburger.svg`;
-console.log(iconPath);
+  console.log(iconPath);
   useEffect(() => {
     const obj = ref.current;
     if (!obj) return;
 
     const onLoad = () => {
-      const svg = obj.contentDocument?.querySelector('svg');
-      if (svg) svg.setAttribute('data-state', isOpen ? 'open' : 'closed');
+      const svg = obj.contentDocument?.querySelector("svg");
+      if (svg) svg.setAttribute("data-state", isOpen ? "open" : "closed");
     };
 
-    obj.addEventListener('load', onLoad);
+    obj.addEventListener("load", onLoad);
     if (obj.contentDocument) onLoad();
 
-    return () => obj.removeEventListener('load', onLoad);
+    return () => obj.removeEventListener("load", onLoad);
   }, [isOpen]);
 
-  return <object className='pointer-events-none mt-3' ref={ref} type="image/svg+xml" data={iconPath} />;
+  return (
+    <object className="pointer-events-none mt-3" ref={ref} type="image/svg+xml" data={iconPath} />
+  );
 }

@@ -6,12 +6,7 @@ import Question from "../../../../components/question";
 import Content from "../../../../components/content";
 import Radio from "@/app/_forms/components/radio";
 
-const QAir: QuestionFC = ({
-  setOnSubmit,
-  setQuestions,
-  mainForm,
-  currentIndex,
-}: QuestionProps) => {
+const QAir: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qAir");
   const [prevValue] = useState(mainForm.getValues("transport.hasAir") ?? 0);
 
@@ -46,7 +41,7 @@ const QAir: QuestionFC = ({
       <Question>{t("q")}</Question>
       <Content>
         <Radio
-          className='w-4/6 md:w-3/6'
+          className="w-4/6 md:w-3/6"
           form={mainForm}
           name="transport.hasAir"
           options={[

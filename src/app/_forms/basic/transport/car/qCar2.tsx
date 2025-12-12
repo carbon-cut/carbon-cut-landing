@@ -7,14 +7,10 @@ import Input from "../../../components/input";
 import { useQuery } from "@tanstack/react-query";
 import CarTitle from "./components/carTitle";
 
-const QCarComponent2 = ({
-  mainForm,
-  index,
-}: QuestionProps & { index: number }) => {
+const QCarComponent2 = ({ mainForm, index }: QuestionProps & { index: number }) => {
   const t = useScopedI18n("forms.basic.transport.qCar2");
 
-  const isCombustion =
-    mainForm.getValues(`transport.cars.${index}.engine`) != "Electrique";
+  const isCombustion = mainForm.getValues(`transport.cars.${index}.engine`) != "Electrique";
 
   const isElectric =
     mainForm.getValues(`transport.cars.${index}.engine`) === "Electrique" ||

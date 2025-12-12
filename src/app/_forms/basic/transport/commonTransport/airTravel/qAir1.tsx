@@ -49,7 +49,7 @@ const QAir: QuestionFC = ({ mainForm }: QuestionProps) => {
         },
         []
       );
-      console.log('reduced:', reduced)
+      console.log("reduced:", reduced);
       return {
         reduced,
         raw: res,
@@ -61,66 +61,66 @@ const QAir: QuestionFC = ({ mainForm }: QuestionProps) => {
     fields: data,
     append,
     remove,
-  } = useFieldArray({name:'transport.airs', control: mainForm.control});
+  } = useFieldArray({ name: "transport.airs", control: mainForm.control });
 
   const [stopovers, setStopovers] = useState(
-    (mainForm.getValues("transport.airs") ?? []).map((e) =>
-      e?.stopover ? true : false
-    )
+    (mainForm.getValues("transport.airs") ?? []).map((e) => (e?.stopover ? true : false))
   );
 
   const airValues = mainForm.watch("transport.airs") ?? [];
 
-  const [parent] = useAutoAnimate({duration:100})
+  const [parent] = useAutoAnimate({ duration: 100 });
   const handleAdd = () => {
-    const scrollY = window.scrollY
+    const scrollY = window.scrollY;
 
     // Add your new item here (state update)
-    
-    append(
-            { 
-              //@ts-expect-error
-              destination: null, origin: null,  aircraftType: null,
-              frequency: null,
-              class: null,
-              roundTrip: false,
-              stopover: null,
-              carbonEmissions: null,
-              distance: 0,
-              flightPurpose: "personal",
-              familyMembers: 1,
-            },
-          );
 
-          window.scrollTo(0, scrollY)
+    append({
+      //@ts-expect-error
+      destination: null,
+      //@ts-expect-error
+      origin: null,
+      //@ts-expect-error
+      aircraftType: null,
+      frequency: null,
+      class: null,
+      roundTrip: false,
+      stopover: null,
+      carbonEmissions: null,
+      distance: 0,
+      flightPurpose: "personal",
+      familyMembers: 1,
+    });
+
+    window.scrollTo(0, scrollY);
   };
 
   return (
     <div className="">
-    <Question className="text-center font-semibold text-xl">{t("q")}</Question>
-    <Content  className="text-center text-muted-foreground mb-0">{t("description")}</Content>
+      <Question className="text-center font-semibold text-xl">{t("q")}</Question>
+      <Content className="text-center text-muted-foreground mb-0">{t("description")}</Content>
       <ul ref={parent}>
-      {data.map(({ id,}, index) => (
-        <AirTravelItem
-          key={id}
-          index={index}
-          t={t}
-          airports={airports}
-          isLoading={isLoading}
-          mainForm={mainForm}
-          stopoverChecked={!!stopovers[index]}
-          air={airValues[index]}
-          onStopoverChange={(value) => {
-            setStopovers((prev) => prev.toSpliced(index, 1, value));
-            if (!value) {
-              mainForm.setValue(`transport.airs.${index}.stopover`, null);
-            }
-          }}
-          onRemove={() => {
-            remove(index);
-          }}
-        />
-      ))}
+        {data.map(({ id }, index) => (
+          <AirTravelItem
+            key={id}
+            index={index}
+            t={t}
+            airports={airports}
+            isLoading={isLoading}
+            mainForm={mainForm}
+            stopoverChecked={!!stopovers[index]}
+            air={airValues[index]}
+            onStopoverChange={(value) => {
+              setStopovers((prev) => prev.toSpliced(index, 1, value));
+              if (!value) {
+                mainForm.setValue(`transport.airs.${index}.stopover`, null);
+              }
+            }}
+            onRemove={() => {
+              remove(index);
+            }}
+          />
+        ))}
       </ul>
       <Button
         type="button"
@@ -140,7 +140,7 @@ const QAir: QuestionFC = ({ mainForm }: QuestionProps) => {
       </Button>
     </div>
   );
-}
+};
 
 QAir["Symbol"] = {
   question: "forms.basic.transport.commonTransport.qAir.q1.q",
@@ -289,9 +289,7 @@ function AirTravelItem({
       </div>
       <Separator className="my-4" />
       <div className="flex flex-row justify-between">
-        <Label className="text-muted-foreground text-base font-semibold">
-          {t("distance")}
-        </Label>
+        <Label className="text-muted-foreground text-base font-semibold">{t("distance")}</Label>
         <p className="inline whitespace-nowrap">{displayDistance}</p>
       </div>
     </li>
@@ -321,10 +319,7 @@ function getDistance(
   }
   if (!origin || !destination) throw new Error("Airport Not found");
   if (stopover)
-    return (
-      CalculateDistance(origin, stopover) +
-      CalculateDistance(stopover, destination)
-    );
+    return CalculateDistance(origin, stopover) + CalculateDistance(stopover, destination);
   return CalculateDistance(origin, destination);
 }
 

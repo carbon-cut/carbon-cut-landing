@@ -7,7 +7,7 @@ import Radio from "@/app/_forms/components/radio";
 import { FormAlert } from "../../../components/alert";
 import { useSubmit } from "@/lib/hooks/useSubmit";
 
-const options = [0, 20,40, 60, 80, 100] as const;
+const options = [0, 20, 40, 60, 80, 100] as const;
 
 const Output: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.food.auxilary");
@@ -16,7 +16,11 @@ const Output: QuestionFC = ({ mainForm }: QuestionProps) => {
 
   return (
     <div>
-      <FormAlert title="" variant="note" description={"indication que le remplissage est approximative"} />
+      <FormAlert
+        title=""
+        variant="note"
+        description={"indication que le remplissage est approximative"}
+      />
       <Question>{t("q1.text")}</Question>
       <Content>
         <Radio
@@ -47,11 +51,7 @@ const Output: QuestionFC = ({ mainForm }: QuestionProps) => {
 
 Output["Symbol"] = {
   question: "forms.basic.food.auxilary.q1.title",
-  fields: [
-    "food.auxilary",
-    "food.auxilary.seasonProducts",
-    "food.auxilary.localProducts",
-  ],
+  fields: ["food.auxilary", "food.auxilary.seasonProducts", "food.auxilary.localProducts"],
 };
 
 export default Output;

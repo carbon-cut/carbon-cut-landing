@@ -7,25 +7,15 @@ import Input from "../../../components/input";
 import { FormAlert } from "../../../components/alert";
 import { FormField, FormItem, FormMessage, useFormField } from "@/components/ui/forms";
 
-const meals = [
-  "redMeat",
-  "whiteMeat",
-  "oilyFish",
-  "whiteFish",
-  "vegan",
-  "vegetarian",
-] as const;
+const meals = ["redMeat", "whiteMeat", "oilyFish", "whiteFish", "vegan", "vegetarian"] as const;
 
 const Meals: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) => {
-
   useEffect(() => {
-    setVerifyFields([
-      "food.basic.meals",
-    ]);
+    setVerifyFields(["food.basic.meals"]);
 
     return () => {
       setVerifyFields([]);
-    }
+    };
   }, []);
 
   const t = useScopedI18n("forms.basic.food.basic");
@@ -37,9 +27,8 @@ const Meals: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) => {
         control={mainForm.control}
         name={"food.basic.meals"}
         render={() => {
-          
-          const {error} = useFormField();
-          
+          const { error } = useFormField();
+
           return (
             <FormItem>
               <div
@@ -59,7 +48,8 @@ const Meals: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) => {
               </div>
               <FormMessage />
             </FormItem>
-          );}}
+          );
+        }}
       />
     </div>
   );

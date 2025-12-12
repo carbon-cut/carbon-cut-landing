@@ -5,12 +5,7 @@ import SeaQuestions from "./index";
 import Question from "../../../../components/question";
 import Content from "../../../../components/content";
 import { FormRadio } from "@/components/forms/formRadio";
-const QSea: QuestionFC = ({
-  setOnSubmit,
-  setQuestions,
-  mainForm,
-  currentIndex,
-}: QuestionProps) => {
+const QSea: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qSea");
   const [prevValue] = useState(mainForm.getValues("transport.hasSea") ?? 0);
 
@@ -27,9 +22,7 @@ const QSea: QuestionFC = ({
       //remove Air questions
       else if (!hasSea && prevValue) {
         const quesLength = SeaQuestions.length;
-        setQuestions((prev) =>
-          prev.toSpliced(currentIndex + quesLength, quesLength),
-        );
+        setQuestions((prev) => prev.toSpliced(currentIndex + quesLength, quesLength));
       }
     });
     return () => {

@@ -20,12 +20,11 @@ import style from "../form.module.css";
 import Container from "./container";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function FormPageClient() {
-  const { tab, setTab, currentIndexes, readyToSubmit } =
-    React.useContext(FormContext);
+  const { tab, setTab, currentIndexes, readyToSubmit } = React.useContext(FormContext);
 
   const router = useRouter();
 
@@ -71,9 +70,7 @@ export default function FormPageClient() {
       return data;
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(["basic-form", data.id], 
-        data.result,
-      );
+      queryClient.setQueryData(["basic-form", data.id], data.result);
       router.push(`/form/result?id=${data.id}`);
     },
     onError: (error) => {
@@ -81,10 +78,7 @@ export default function FormPageClient() {
     },
   });
 
-  const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (
-    formResponse,
-    e
-  ) => {
+  const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (formResponse, e) => {
     e?.preventDefault();
     try {
       await submitMutation.mutateAsync(formResponse);
@@ -106,10 +100,7 @@ export default function FormPageClient() {
       food: foodQuestions[0].length,
       waste: 0,
       vacation: 0,
-      total:
-        transportQuestions[0].length +
-        energieQuestions[0].length +
-        foodQuestions[0].length,
+      total: transportQuestions[0].length + energieQuestions[0].length + foodQuestions[0].length,
     };
   }, [foodQuestions, transportQuestions, energieQuestions]);
 
@@ -152,37 +143,33 @@ export default function FormPageClient() {
             //@ts-expect-error because Tabs cannot access to possible values
             onValueChange={(v) => setTab(v)}
           >
-            <div >
-            <ProgressBar
-              ref={scrollToRef}
-              tab={tab}
-              dataLengths={dataLengths}
-              currentQuestion={currentIndexes[tab]}
-              currentSectionDataLength={dataLengths[tab]}
-              currentSectionName={getName(tab)}
-            >
-              <QuestionList
-                mainForm={mainForm}
-                list={{
-                  transport: transportQuestions[0],
-                  energie: energieQuestions[0],
-                  food: foodQuestions[0],
-                }}
-                dialog={questionList}
-                setDialog={setQuestionList}
-              />
-            </ProgressBar>
-</div>
+            <div>
+              <ProgressBar
+                ref={scrollToRef}
+                tab={tab}
+                dataLengths={dataLengths}
+                currentQuestion={currentIndexes[tab]}
+                currentSectionDataLength={dataLengths[tab]}
+                currentSectionName={getName(tab)}
+              >
+                <QuestionList
+                  mainForm={mainForm}
+                  list={{
+                    transport: transportQuestions[0],
+                    energie: energieQuestions[0],
+                    food: foodQuestions[0],
+                  }}
+                  dialog={questionList}
+                  setDialog={setQuestionList}
+                />
+              </ProgressBar>
+            </div>
             <div className="flex justify-center mb-8 relative">
               <TabsList className="flex max-w-full flex-wrap space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
                 <TabTrigger
                   value="transport"
                   data-state={
-                    getIndex(tab) > 0
-                      ? "completed"
-                      : tab === "transport"
-                      ? "active"
-                      : "inactive"
+                    getIndex(tab) > 0 ? "completed" : tab === "transport" ? "active" : "inactive"
                   }
                 >
                   <Car className="w-4 h-4" />
@@ -190,11 +177,7 @@ export default function FormPageClient() {
                 <TabTrigger
                   value="energie"
                   data-state={
-                    getIndex(tab) > 1
-                      ? "completed"
-                      : tab === "energie"
-                      ? "active"
-                      : "inactive"
+                    getIndex(tab) > 1 ? "completed" : tab === "energie" ? "active" : "inactive"
                   }
                 >
                   <Zap className="w-4 h-4" />
@@ -202,11 +185,7 @@ export default function FormPageClient() {
                 <TabTrigger
                   value="food"
                   data-state={
-                    getIndex(tab) > 2
-                      ? "completed"
-                      : tab === "food"
-                      ? "active"
-                      : "inactive"
+                    getIndex(tab) > 2 ? "completed" : tab === "food" ? "active" : "inactive"
                   }
                 >
                   <UtensilsCrossed className="w-4 h-4" />

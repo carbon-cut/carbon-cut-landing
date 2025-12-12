@@ -17,14 +17,10 @@ type Props = {
   idx: number;
 };
 
-const Covoiturage = ({ mainForm, idx}: QuestionProps & Props) => {
-  const t = useScopedI18n(
-    "forms.basic.transport.commonTransport.shortDistances.covoiturage"
-  );
+const Covoiturage = ({ mainForm, idx }: QuestionProps & Props) => {
+  const t = useScopedI18n("forms.basic.transport.commonTransport.shortDistances.covoiturage");
 
-    const tEngines = useScopedI18n(
-    "forms.basic.transport.qCar1-2"
-  );
+  const tEngines = useScopedI18n("forms.basic.transport.qCar1-2");
 
   /*   const { data: cars } = useQuery<{ value: string; label: string }[], Error>({
     queryKey: ["carMakes"],

@@ -39,11 +39,7 @@ const Market: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
               {t(`options.${e}`)}
             </FormLabel>
             <div className="md:col-span-3 col-span-2">
-              <Input
-                name={`food.market.${e}.frequency`}
-                form={mainForm}
-                type="number"
-              />
+              <Input name={`food.market.${e}.frequency`} form={mainForm} type="number" />
             </div>
             <FormLabel className="self-center md:col-span-2 font-light mx-auto">
               {t("unit")}

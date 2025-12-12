@@ -2,12 +2,7 @@ import { z } from "zod";
 import heating from "./raw";
 
 const gplBig = ["propane", "butane"] as const;
-const gplSmall = [
-  "butaneSmall",
-  "butaneBig",
-  "propaneBig",
-  "propaneSmall",
-] as const;
+const gplSmall = ["butaneSmall", "butaneBig", "propaneBig", "propaneSmall"] as const;
 
 const Gpl = (input: unknown, ctx: z.RefinementCtx) => {
   const GplParse = heating
@@ -15,7 +10,8 @@ const Gpl = (input: unknown, ctx: z.RefinementCtx) => {
       GPL: true,
     })
     .safeParse(input);
-  const GplQuantityParse = heating.shape.quantities.unwrap()
+  const GplQuantityParse = heating.shape.quantities
+    .unwrap()
     .pick({
       //gasTank: true,
       GPL: true,

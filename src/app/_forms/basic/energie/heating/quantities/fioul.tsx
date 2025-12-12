@@ -10,7 +10,7 @@ import React, { useEffect } from "react";
 const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heating.options");
 
-/*   useEffect(()=>{
+  /*   useEffect(()=>{
     setSubmit(true);
 
     return ()=>{setSubmit(false)}
@@ -19,7 +19,7 @@ const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
   return (
     <>
       <Question>{t("fioul.q")}</Question>
-      <Content className="" >
+      <Content className="">
         <div className="grid md:grid-cols-2 md:space-x-3">
           <div className="col-span-1">
             <Input
@@ -35,7 +35,6 @@ const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
               form={mainForm}
               name="energie.heating.quantities.fioul.frequency"
               label={t("fioul.frequency.label")}
-              
               data={[
                 { value: "month", label: t("fioul.frequency.month") },
                 { value: "year", label: t("fioul.frequency.year") },
@@ -50,6 +49,6 @@ const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
 Fioul["Symbol"] = {
   question: "forms.basic.energie.heating.options.fioul.label",
   fields: ["energie.heating.quantities.fioul"],
-}
+};
 
 export default Fioul;

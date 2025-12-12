@@ -41,7 +41,6 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
               placeholder="m²"
               form={mainForm}
               name={"energie.housing.area"}
-              
             />
           </div>
         </Content>
@@ -52,7 +51,6 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
               form={mainForm}
               placeholder="m³"
               name={"energie.housing.heatedVolume"}
-              
             />
           </div>
           <div className="md:w-2/3 md:mt-3">
@@ -61,7 +59,6 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
               form={mainForm}
               placeholder="m³"
               name={"energie.housing.conditionedVolume"}
-              
             />
           </div>
         </Content>
@@ -69,7 +66,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
       <Question>{t("q2")}</Question>
       <Content>
         <div className=" mt-3">
-          <Input form={mainForm} name={"energie.housing.rooms"}  />
+          <Input form={mainForm} name={"energie.housing.rooms"} />
         </div>
       </Content>
       <Question>{t("q3")}</Question>
@@ -97,9 +94,9 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   );
 };
 
-Q1['Symbol'] = {
+Q1["Symbol"] = {
   question: "forms.basic.energie.housing.title",
-  fields: ['energie.housing'],
-}
+  fields: ["energie.housing"],
+};
 
 export default Q1;

@@ -12,10 +12,7 @@ const baseMeals = z.object({
 const meals = z.preprocess((input, ctx) => {
   const parsed = baseMeals.safeParse(input);
   if (parsed.success) {
-    const totalMeals = Object.values(parsed.data).reduce(
-      (acc, curr) => acc + (curr ?? 0),
-      0,
-    );
+    const totalMeals = Object.values(parsed.data).reduce((acc, curr) => acc + (curr ?? 0), 0);
 
     if (totalMeals < 7) {
       ctx.addIssue({
@@ -30,7 +27,11 @@ const meals = z.preprocess((input, ctx) => {
 
   return input;
 }, baseMeals);
-const tupleOfThreeNumbers = z.tuple([z.number().optional(), z.number().optional(), z.number().optional()]);
+const tupleOfThreeNumbers = z.tuple([
+  z.number().optional(),
+  z.number().optional(),
+  z.number().optional(),
+]);
 const distributionBasic = z
   .object({
     redMeat: tupleOfThreeNumbers.optional(),
@@ -53,21 +54,17 @@ const basic = z.preprocess((input, ctx) => {
 
   const { meals: mealValues, distribution } = parsed.data;
   if (distribution) {
-    (Object.keys(mealValues) as Array<keyof typeof mealValues>).forEach(
-      (mealKey) => {
-        const target = mealValues[mealKey] ?? 0;
-        const total =
-          distribution[mealKey]?.reduce((acc: number, curr) => acc + (curr ?? 0), 0) ??
-          0;
-        if (total !== target) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "food.distributionMismatch",
-            path: ["distribution", mealKey],
-          });
-        }
-      },
-    );
+    (Object.keys(mealValues) as Array<keyof typeof mealValues>).forEach((mealKey) => {
+      const target = mealValues[mealKey] ?? 0;
+      const total = distribution[mealKey]?.reduce((acc: number, curr) => acc + (curr ?? 0), 0) ?? 0;
+      if (total !== target) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "food.distributionMismatch",
+          path: ["distribution", mealKey],
+        });
+      }
+    });
   }
 
   return parsed.data;

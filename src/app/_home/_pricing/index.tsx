@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,21 +18,21 @@ const Prices: Props[] = [
     description: "Small businesses and startups looking to gain data insights.",
     features: ["Data Visualization", "Real-Time Analytics", "Customization"],
     price: 10,
-    color: 'bg-chart-1',
+    color: "bg-chart-1",
   },
   {
     title: "Gold",
     description: "Growing businesses that need comprehensive data management and teamwork features",
     features: ["All Basic Plan Features", "Integrations", "Advanced Reporting"],
     price: 20,
-    color: 'bg-chart-2',
+    color: "bg-chart-2",
   },
   {
     title: "Premium",
     description: "Larger enterprises requiring advanced data solutions and personalized support.",
     features: ["All Pro Plan Features", "Full Access to API", "Dedicated Support"],
     price: 30,
-    color: 'bg-chart-3',
+    color: "bg-chart-3",
   },
 ];
 
@@ -40,11 +40,7 @@ function Pricing() {
   return (
     <div className="grid md:grid-cols-3 gap-6">
       {Prices.map((price, index) => (
-        <CardComponent
-          key={price.title}
-          {...price}
-          delay={index * 200}
-        />
+        <CardComponent key={price.title} {...price} delay={index * 200} />
       ))}
     </div>
   );
@@ -62,7 +58,6 @@ type Props = {
 };
 
 const CardComponent: React.FC<Props> = (props) => {
-
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [isActive, setIsActive] = useState(false);
   const [canAnimate, setCanAnimate] = useState(true);
@@ -101,34 +96,34 @@ const CardComponent: React.FC<Props> = (props) => {
         transitionDelay: `${props.delay ?? 0}ms`,
       }}
     >
-        <div>
-      <CardHeader>
-        <CardTitle className="text-center text-primary">
-          <h1 className="mb-4 text-4xl">{props.title}</h1>
-          <div className="flex items-start justify-center ">
-            <span className="text-2xl align-text-top mt-1">€</span>
-            <span className="text-8xl align-text-top leading-none">
-              {props.price}
-            </span>
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardDescription className="grid grid-cols-5 gap-2 text-secondary">
-          {props.features.map((feature) => (
-            <Fragment key={feature}>
-               
-            <Check className="ml-auto" />
-            <p className="ml-4 col-span-4 text-lg">{feature}</p>
-            </Fragment>
-          ))}
-          <InfoIcon className="ml-auto mt-4" />
-          <p className="ml-4 col-span-4 text-lg mt-4">{props.description}</p>
-        </CardDescription>
-      </CardContent>
+      <div>
+        <CardHeader>
+          <CardTitle className="text-center text-primary">
+            <h1 className="mb-4 text-4xl">{props.title}</h1>
+            <div className="flex items-start justify-center ">
+              <span className="text-2xl align-text-top mt-1">€</span>
+              <span className="text-8xl align-text-top leading-none">{props.price}</span>
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CardDescription className="grid grid-cols-5 gap-2 text-secondary">
+            {props.features.map((feature) => (
+              <Fragment key={feature}>
+                <Check className="ml-auto" />
+                <p className="ml-4 col-span-4 text-lg">{feature}</p>
+              </Fragment>
+            ))}
+            <InfoIcon className="ml-auto mt-4" />
+            <p className="ml-4 col-span-4 text-lg mt-4">{props.description}</p>
+          </CardDescription>
+        </CardContent>
       </div>
       <CardFooter>
-        <Button size="lg" className={`z-30 mx-auto bg-linear-2`}>Learn More<ArrowRight /></Button>
+        <Button size="lg" className={`z-30 mx-auto bg-linear-2`}>
+          Learn More
+          <ArrowRight />
+        </Button>
       </CardFooter>
     </Card>
   );

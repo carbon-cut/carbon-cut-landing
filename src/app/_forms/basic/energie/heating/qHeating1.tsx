@@ -27,9 +27,21 @@ const heatingMethods = [
   "electricalCentralHeating",
 ] as const;
 
-type heatingQuestions = 'heatNetwork' | 'GPL' | 'fioul' | 'gasTank' | 'woodCharcoal' | 'electricalHeating' | 'electricalCentralHeating';
+type heatingQuestions =
+  | "heatNetwork"
+  | "GPL"
+  | "fioul"
+  | "gasTank"
+  | "woodCharcoal"
+  | "electricalHeating"
+  | "electricalCentralHeating";
 
-const QHeating: QuestionFC = ({ mainForm, setOnSubmit, setQuestions, currentIndex }: QuestionProps) => {
+const QHeating: QuestionFC = ({
+  mainForm,
+  setOnSubmit,
+  setQuestions,
+  currentIndex,
+}: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energie.heating");
   const { errors } = useFormState({ control: mainForm.control });
 
@@ -44,7 +56,7 @@ const QHeating: QuestionFC = ({ mainForm, setOnSubmit, setQuestions, currentInde
   }, [errors]);
 
   const {
-    heatingQuantities:{
+    heatingQuantities: {
       gasTank: prevGasTank,
       fioul: prevFioul,
       woodCharcoal: prevWoodCharcoal,
@@ -53,11 +65,11 @@ const QHeating: QuestionFC = ({ mainForm, setOnSubmit, setQuestions, currentInde
       GPL: prevGpl,
       heatNetwork: prevHeatNetwork,
     },
-    setHeatingQuantities
+    setHeatingQuantities,
   } = useContext(BasicFormContext);
 
   useEffect(() => {
-    setOnSubmit(() =>  () => {
+    setOnSubmit(() => () => {
       const {
         heatPump,
         gasNetwork,
@@ -137,9 +149,7 @@ const QHeating: QuestionFC = ({ mainForm, setOnSubmit, setQuestions, currentInde
           setQuestions(addQestions(accSnapshot, currentIndex, component));
           item.add = true;
         } else if (!form && prev) {
-          setQuestions(
-            deleteQuestions(accSnapshot, currentIndex, component.length)
-          );
+          setQuestions(deleteQuestions(accSnapshot, currentIndex, component.length));
           item.add = false;
         }
         acc.push([form, item.add]);
@@ -160,7 +170,8 @@ const QHeating: QuestionFC = ({ mainForm, setOnSubmit, setQuestions, currentInde
       );
     });
     return () => {
-      setOnSubmit(() => () => {});}
+      setOnSubmit(() => () => {});
+    };
   }, []);
 
   return (

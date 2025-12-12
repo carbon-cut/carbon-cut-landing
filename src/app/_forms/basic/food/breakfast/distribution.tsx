@@ -19,11 +19,11 @@ const meals = ["bread", "salty", "milk", "fruits"] as const;
 
 type Meals = (typeof meals)[number];
 type SelectedMeals = {
-    bread?: number | undefined;
-    salty?: number | undefined;
-    milk?: number | undefined;
-    fruits?: number | undefined;
-}
+  bread?: number | undefined;
+  salty?: number | undefined;
+  milk?: number | undefined;
+  fruits?: number | undefined;
+};
 const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.food");
 
@@ -51,14 +51,20 @@ const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction }: Question
   return (
     <div>
       <Question>{t("breakfast.q2.text")}</Question>
-      <FormAlert variant="note" title="" description={"indication que le remplissage est approximative"} />
+      <FormAlert
+        variant="note"
+        title=""
+        description={"indication que le remplissage est approximative"}
+      />
       <Content className="mt-4">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="min-w-[60px]" />
               {cols.map((e) => (
-                <TableHead key={e} className="min-w-[100px]">{t(`cols.${e}`)}</TableHead>
+                <TableHead key={e} className="min-w-[100px]">
+                  {t(`cols.${e}`)}
+                </TableHead>
               ))}
             </TableRow>
           </TableHeader>
@@ -66,7 +72,9 @@ const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction }: Question
             {(Object.keys(selectedMeals) as Array<Meals>).map((e) => (
               <TableRow key={e}>
                 <TableCell>
-                  {t(`breakfast.meals.${e}`)} {'('}{selectedMeals[e]}{')'}
+                  {t(`breakfast.meals.${e}`)} {"("}
+                  {selectedMeals[e]}
+                  {")"}
                 </TableCell>
                 {cols.map((c, index) => {
                   const realIndex = index as 0 | 1 | 2;

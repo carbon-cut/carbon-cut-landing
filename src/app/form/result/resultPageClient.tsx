@@ -101,10 +101,7 @@ export default function ResultPageClient() {
     <div className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         {/* Main Result Card */}
-        <ResultCard
-          carbonFootprint={carbonFootprint}
-          averageFootprint={averageFootprint}
-        />
+        <ResultCard carbonFootprint={carbonFootprint} averageFootprint={averageFootprint} />
 
         <Categorisation data={breakdownData} isAnimating={isAnimating} />
 

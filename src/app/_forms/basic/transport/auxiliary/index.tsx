@@ -38,7 +38,11 @@ const QAuxilary: QuestionFC = ({ mainForm }: QuestionProps) => {
 
 QAuxilary["Symbol"] = {
   question: "forms.basic.transport.qAux.q",
-  fields: ["transport.auxilary", "transport.auxilary.electricBike", "transport.auxilary.electricScooter"],
+  fields: [
+    "transport.auxilary",
+    "transport.auxilary.electricBike",
+    "transport.auxilary.electricScooter",
+  ],
 };
 
 export default QAuxilary;

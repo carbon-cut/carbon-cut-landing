@@ -14,14 +14,7 @@ type ProgressProps = {
 };
 
 const ProgressBar = React.forwardRef<HTMLDivElement, ProgressProps>(function ProgressBar(
-  {
-    children,
-    dataLengths,
-    currentQuestion,
-    currentSectionDataLength,
-    currentSectionName,
-    tab,
-  },
+  { children, dataLengths, currentQuestion, currentSectionDataLength, currentSectionName, tab },
   ref
 ) {
   const t = useScopedI18n("forms.progress");
@@ -42,11 +35,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressProps>(function Pro
         sup = dataLengths.transport + dataLengths.energie + dataLengths.food;
         break;
       case "vacation":
-        sup =
-          dataLengths.transport +
-          dataLengths.energie +
-          dataLengths.food +
-          dataLengths.waste;
+        sup = dataLengths.transport + dataLengths.energie + dataLengths.food + dataLengths.waste;
         break;
     }
     return ((sup + currentQuestion) / dataLengths.total) * 100;

@@ -161,8 +161,7 @@ export default {
         },
         {
           title: "Comparateur d'émissions",
-          description:
-            "Comparez votre empreinte à des moyennes locales et mondiales.",
+          description: "Comparez votre empreinte à des moyennes locales et mondiales.",
           alt: "Icône de balance représentant le comparateur d'émissions",
         },
         {
@@ -172,8 +171,7 @@ export default {
         },
         {
           title: "Analyse pour entreprises",
-          description:
-            "Outil pour évaluer et réduire les émissions des entreprises.",
+          description: "Outil pour évaluer et réduire les émissions des entreprises.",
           alt: "Icône analytique représentant l'analyse carbone pour entreprises",
         },
       ],
@@ -205,8 +203,7 @@ export default {
           role: "Chef de projet",
         },
         {
-          quote:
-            "Enfin un outil qui transforme les calculs carbone en actions concrètes.",
+          quote: "Enfin un outil qui transforme les calculs carbone en actions concrètes.",
           detail:
             "Les visualisations sont claires et le parcours guidé facilite l'engagement de mon équipe.",
           name: "Clara Dupont",
@@ -239,8 +236,7 @@ export default {
       title: "FAQ",
       items: [
         {
-          title:
-            "Comment fonctionne le calcul de l'empreinte carbone sur ce site?",
+          title: "Comment fonctionne le calcul de l'empreinte carbone sur ce site?",
           content:
             "Le calcul de votre empreinte carbone se base sur vos réponses à un formulaire simple qui couvre plusieurs aspects de votre quotidien : vos modes de transport, votre consommation d'énergie, vos habitudes alimentaires, votre gestion des déchets et vos voyages, notamment vos vacances. Ces informations sont ensuite analysées pour estimer vos émissions de CO₂ et vous fournir un aperçu clair de votre impact environnemental.",
         },
@@ -366,12 +362,10 @@ export default {
       "message.email": "Consultez votre messagerie",
       "form.password": "Nouveau mot de passe",
       "form.passwordConfirm": "Confirmez le nouveau mot de passe",
-      "message.code":
-        "Nous avons envoyé un lien de vérification à votre adresse e-mail",
+      "message.code": "Nous avons envoyé un lien de vérification à votre adresse e-mail",
     },
     verify: {
-      "message.email":
-        "Nous avons envoyé un code de vérification à votre adresse e-mail {email}",
+      "message.email": "Nous avons envoyé un code de vérification à votre adresse e-mail {email}",
       "form.submit": "Envoyer",
       "form.reset": "Renvoyer",
       "toast.succ": "L'e-mail a été envoyé.",
@@ -669,8 +663,7 @@ export default {
           l2: "Modèle",
         },
         "qCar1-2": {
-          title: ({ index }: { index: number }) =>
-            `Voiture ${index + 1} : type de voiture`,
+          title: ({ index }: { index: number }) => `Voiture ${index + 1} : type de voiture`,
           q: "Quel type de voiture avez-vous?",
           Gasoline: "Essence",
           Diesel: "Diesel",
@@ -681,8 +674,7 @@ export default {
           other: "Autre",
         },
         "qCar1-3": {
-          title: ({ index }: { index: number }) =>
-            `Voiture ${index + 1} : carburant de voiture`,
+          title: ({ index }: { index: number }) => `Voiture ${index + 1} : carburant de voiture`,
           q: "Quelle est le carburant de votre voiture?",
           Gasoline: "Essence",
           Diesel: "Diesel",
@@ -701,8 +693,7 @@ export default {
           l22: "kWh / 100 km",
         },
         qCar3: {
-          title: ({ index }: { index: number }) =>
-            `Voiture ${index + 1} : Consommation de voiture`,
+          title: ({ index }: { index: number }) => `Voiture ${index + 1} : Consommation de voiture`,
           q1L: "Combien de litres votre voiture consomme-t-elle par semaine?",
           q1E: "Combien d'electricite (en kWh) votre voiture consomme-t-elle par semaine?",
           q1LL: "Litres par semaine",

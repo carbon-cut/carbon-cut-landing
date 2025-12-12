@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & {label?:string}
->(({ className,label, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & { label?: string }
+>(({ className, label, ...props }, ref) => {
   //console.log(label, ": ", props.checked);
   return (
     <SwitchPrimitives.Root

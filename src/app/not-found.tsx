@@ -15,9 +15,7 @@ function NotFound() {
         <p className="text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--chart-1))] via-[hsl(var(--chart-2))] to-[hsl(var(--chart-3))] text-6xl md:text-8xl font-black tracking-tight drop-shadow-sm">
           404
         </p>
-        <h1 className="text-3xl md:text-4xl font-bold drop-shadow-sm">
-          {t("404.title")}
-        </h1>
+        <h1 className="text-3xl md:text-4xl font-bold drop-shadow-sm">{t("404.title")}</h1>
         <p className="text-lg md:text-xl leading-relaxed whitespace-pre-line text-secondary">
           {t("404.description")}
         </p>

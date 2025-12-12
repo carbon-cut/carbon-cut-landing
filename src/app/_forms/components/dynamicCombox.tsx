@@ -1,16 +1,6 @@
 import { Button } from "@/components/ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/forms";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/forms";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import React, { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
@@ -35,13 +25,7 @@ interface props {
   url: (inputField: string) => string;
 }
 
-const DynamicCombox: React.FC<props> = ({
-  form,
-  name,
-  label,
-  mandetory = false,
-  url,
-}) => {
+const DynamicCombox: React.FC<props> = ({ form, name, label, mandetory = false, url }) => {
   const t = useScopedI18n("components.forms.combox");
 
   const mutation = useMutation<{ value: any; label: string }[], Error, string>({
@@ -74,12 +58,11 @@ const DynamicCombox: React.FC<props> = ({
                     type="button"
                     className={cn(
                       "w-[240px] pl-3 text-left font-normal",
-                      !field.value && "text-muted-foreground",
+                      !field.value && "text-muted-foreground"
                     )}
                   >
                     {field.value
-                      ? mutation.data?.find((elem) => elem.value === elem.value)
-                          ?.label
+                      ? mutation.data?.find((elem) => elem.value === elem.value)?.label
                       : t("value", { label })}
                     <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
@@ -109,9 +92,7 @@ const DynamicCombox: React.FC<props> = ({
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            element.value === field.value
-                              ? "opacity-100"
-                              : "opacity-0",
+                            element.value === field.value ? "opacity-100" : "opacity-0"
                           )}
                         />
                         {element.label}

@@ -6,13 +6,7 @@ const car = z.object({
   model: z.string().optional(),
   engine: carType,
   otherEngine: z.string().optional(),
-  secondThermal: union(
-    "Gasoline",
-    "Diesel",
-    "natural Gaz",
-    "other",
-    false
-  ).optional(),
+  secondThermal: union("Gasoline", "Diesel", "natural Gaz", "other", false).optional(),
   otherSecondThermal: z.string().optional(),
   distanceWeekly: z.number().optional(),
   //thermal
@@ -42,8 +36,7 @@ const output = z.preprocess((input, ctx) => {
       })
       .safeParse(input);
     if (thermalParse.success) {
-      const { thermalConsumption, moneyThermalConsumption, thermalPrice } =
-        thermalParse.data;
+      const { thermalConsumption, moneyThermalConsumption, thermalPrice } = thermalParse.data;
       if (!thermalConsumption) {
         if (!moneyThermalConsumption)
           out.push({
@@ -78,8 +71,7 @@ const output = z.preprocess((input, ctx) => {
       })
       .safeParse(input);
     if (electricParse.success) {
-      const { electricConsumption, moneyElectricConsumption, electricPrice } =
-        electricParse.data;
+      const { electricConsumption, moneyElectricConsumption, electricPrice } = electricParse.data;
       if (!electricConsumption) {
         if (!moneyElectricConsumption)
           out.push({
@@ -153,8 +145,7 @@ const output = z.preprocess((input, ctx) => {
     })
     .safeParse(input);
   if (engineParse.success) {
-    const { engine, otherEngine, secondThermal, thermalAvg, electricAvg } =
-      engineParse.data;
+    const { engine, otherEngine, secondThermal, thermalAvg, electricAvg } = engineParse.data;
     if (engine === "other" && !otherEngine) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

@@ -1,9 +1,5 @@
-import Fioul from "./fioul"
-import GasTank from "./gasTank"
-import WoodCharcoal from "./woodCharcoal"
+import Fioul from "./fioul";
+import GasTank from "./gasTank";
+import WoodCharcoal from "./woodCharcoal";
 
-export {
-    Fioul,
-    GasTank,
-    WoodCharcoal
-}
+export { Fioul, GasTank, WoodCharcoal };

@@ -33,9 +33,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const template: StoryFn<typeof FormSelect> = (
-  args: React.ComponentProps<typeof FormSelect>
-) => {
+const template: StoryFn<typeof FormSelect> = (args: React.ComponentProps<typeof FormSelect>) => {
   const formSchema = z.object({
     test: z.string().min(2).max(100),
   });
@@ -51,8 +49,8 @@ export const Default: Story = template.bind({});
 
 export const WithLabel: Story = template.bind({});
 WithLabel.args = {
-    label: "Select Label",
-  };
+  label: "Select Label",
+};
 
 export const WithDescription: Story = template.bind({});
 WithDescription.args = {

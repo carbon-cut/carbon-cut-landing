@@ -36,8 +36,7 @@ function ScrollToTopButton() {
     const handleScroll = () => {
       const doc = document.documentElement;
       const scrollable = doc.scrollHeight - doc.clientHeight;
-      const ratio =
-        scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0;
+      const ratio = scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0;
 
       setProgress(ratio);
       setIsVisible(window.scrollY > SCROLL_TRIGGER && !isFooterVisible);
@@ -61,9 +60,7 @@ function ScrollToTopButton() {
     <div
       aria-hidden={!isVisible}
       className={`fixed bottom-6 right-4 z-50 transition-all duration-1000 ease-out md:bottom-10 md:right-10 ${
-        isVisible
-          ? "translate-y-0 opacity-100"
-          : "pointer-events-none translate-y-6 opacity-0"
+        isVisible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"
       }`}
     >
       <div

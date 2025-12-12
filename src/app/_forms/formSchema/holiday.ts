@@ -25,7 +25,7 @@ const holiday = z.object({
             frequency: z.number(),
             nbPeople: z.number().nullable(),
           })
-          .nullable(),
+          .nullable()
       ),
       train: z.array(
         z
@@ -35,7 +35,7 @@ const holiday = z.object({
             type: union("intercity", "TER", "TGV"),
             nbPeople: z.number(),
           })
-          .nullable(),
+          .nullable()
       ),
       covoiturage: z.array(
         z
@@ -46,7 +46,7 @@ const holiday = z.object({
             pepole: z.number(),
             frequency: z.number(),
           })
-          .nullable(),
+          .nullable()
       ),
     }),
   }),
@@ -69,7 +69,7 @@ const holiday = z.object({
           heatedPool: z.boolean(),
           spa: z.boolean(),
         }),
-      }),
+      })
     ),
   }),
   food: z.object({

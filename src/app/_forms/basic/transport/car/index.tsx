@@ -1,21 +1,15 @@
-import {QCar1, QCar12,  QCar13} from "./qCar1";
+import { QCar1, QCar12, QCar13 } from "./qCar1";
 import { QuestionFC, QuestionProps } from "../../../types";
-import {QCar311, QCar322} from "./qCar3";
+import { QCar311, QCar322 } from "./qCar3";
 import QCar2 from "./qCar2";
 import QCar4 from "./qCar4";
-import {JSX} from "react";
+import { JSX } from "react";
 
-
-const output: (
-  count: number,
-  init?: number,
-) => QuestionFC[] = (count, init = 0) => {
+const output: (count: number, init?: number) => QuestionFC[] = (count, init = 0) => {
   const arr: QuestionFC[] = [];
 
   for (let i = init; i < count + init; i++) {
-    arr.push(QCar1(i), QCar12(i), QCar13(i), QCar2(i), 
-    QCar311(i), QCar322(i),
-    QCar4(i)); //fill(QCar1(i), QCar2(i))
+    arr.push(QCar1(i), QCar12(i), QCar13(i), QCar2(i), QCar311(i), QCar322(i), QCar4(i)); //fill(QCar1(i), QCar2(i))
   }
   return arr;
 };

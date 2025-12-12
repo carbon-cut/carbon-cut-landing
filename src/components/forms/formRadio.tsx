@@ -12,12 +12,7 @@ import {
 } from "@/components/ui/forms";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-type InputType =
-  | React.HTMLInputTypeAttribute
-  | undefined
-  | "calendar"
-  | "combox"
-  | "boolean";
+type InputType = React.HTMLInputTypeAttribute | undefined | "calendar" | "combox" | "boolean";
 
 interface props<FormShema extends FieldValues> {
   form: UseFormReturn<FormShema, undefined>;
@@ -41,7 +36,6 @@ export function FormRadio<FormShema extends FieldValues>({
       control={form.control}
       name={name}
       render={({ field }) => {
-
         return (
           <FormItem className="space-y-3 w-full">
             {label && (
@@ -56,19 +50,14 @@ export function FormRadio<FormShema extends FieldValues>({
                 onValueChange={onChange(name, form, type, field.onChange)}
               >
                 {data.map((element, index) => (
-                  <FormItem
-                    key={index}
-                    className="flex items-center space-x-3 space-y-0"
-                  >
+                  <FormItem key={index} className="flex items-center space-x-3 space-y-0">
                     <FormControl>
                       <RadioGroupItem
                         checked={checked(type, element, field.value)}
                         value={element.value}
                       />
                     </FormControl>
-                    <FormLabel className="font-normal">
-                      {element.label}
-                    </FormLabel>
+                    <FormLabel className="font-normal">{element.label}</FormLabel>
                   </FormItem>
                 ))}
               </RadioGroup>
@@ -84,14 +73,14 @@ export function FormRadio<FormShema extends FieldValues>({
 function checked(
   type: InputType,
   element: { label: string; value: string },
-  fieldValue?: unknown ,
+  fieldValue?: unknown
 ): boolean | undefined {
   switch (type) {
     case "boolean":
-      return (
-        (element.value === "true" && fieldValue) ||
+      return (element.value === "true" && fieldValue) ||
         (element.value === "false" && fieldValue === false)
-      ) ? true : false;
+        ? true
+        : false;
     default:
       return element.value === fieldValue;
   }
@@ -101,7 +90,7 @@ function onChange<FormShema extends FieldValues>(
   name: TName<FormShema>,
   form: UseFormReturn<FormShema, undefined>,
   type: InputType,
-  fieldOnChange: (v: any) => void,
+  fieldOnChange: (v: any) => void
 ): (v: any) => void {
   switch (type) {
     case "boolean":

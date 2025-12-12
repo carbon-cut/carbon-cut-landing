@@ -11,13 +11,7 @@ const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
 >(({ className, ...props }, ref) => {
-  return (
-    <RadioGroupPrimitive.Root
-      className={cn("grid gap-2", className)}
-      {...props}
-      ref={ref}
-    />
-  );
+  return <RadioGroupPrimitive.Root className={cn("grid gap-2", className)} {...props} ref={ref} />;
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
@@ -70,26 +64,16 @@ const RadioGroupItemSwitch = React.forwardRef<
   }
 >(({ className, checked, ...props }, ref) => {
   return (
-    <RadioGroupPrimitive.Item
-      ref={ref}
-      className={cn("h-4 w-8 ", className)}
-      {...props}
-      asChild
-    >
+    <RadioGroupPrimitive.Item ref={ref} className={cn("h-4 w-8 ", className)} {...props} asChild>
       <Switch
-      className="
+        className="
       data-[state=checked]:bg-chart-2 data-[state=unchecked]:bg-input h-4 w-8"
-      checked={checked}
-      data-state={checked ? 'checked' : 'unchecked'}
+        checked={checked}
+        data-state={checked ? "checked" : "unchecked"}
       />
     </RadioGroupPrimitive.Item>
   );
 });
 RadioGroupItemSwitch.displayName = RadioGroupPrimitive.Item.displayName;
 
-export {
-  RadioGroup,
-  RadioGroupItem,
-  RadioGroupItemCheck,
-  RadioGroupItemSwitch,
-};
+export { RadioGroup, RadioGroupItem, RadioGroupItemCheck, RadioGroupItemSwitch };

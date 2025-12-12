@@ -7,11 +7,7 @@ import {
   FormMessage,
   TName,
 } from "@/components/ui/forms";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import React, { useEffect, useState } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
@@ -71,11 +67,7 @@ function FormCombox<T extends FieldValues>({
               data-state={fieldState.error && "error"}
               className={cn(
                 `text-sm font-medium 
-              ${
-                disabled
-                  ? "text-muted-foreground data-[state=error]:text-destructive/60"
-                  : ""
-              }`,
+              ${disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""}`,
                 labelClassName
               )}
             >
@@ -92,11 +84,7 @@ function FormCombox<T extends FieldValues>({
                     className={cn(
                       `w-full pl-3 text-left font-normal rounded-full bg-white disabled:hover:bg-white
                       disabled:hover:text-muted-foreground disabled:cursor-not-allowed disabled:pointer-events-auto
-                      ${
-                        fieldState.error
-                          ? "outline-none ring-1 ring-destructive/60 "
-                          : ""
-                      }
+                      ${fieldState.error ? "outline-none ring-1 ring-destructive/60 " : ""}
                       `,
                       !field.value && "text-muted-foreground"
                     )}
@@ -128,9 +116,7 @@ function FormCombox<T extends FieldValues>({
                         {data.map((element, index) => (
                           <CommandItem
                             className={`${
-                              element.value === field.value
-                                ? "!bg-card-primary-foreground"
-                                : ""
+                              element.value === field.value ? "!bg-card-primary-foreground" : ""
                             }`}
                             value={element.value}
                             key={index}
@@ -142,9 +128,7 @@ function FormCombox<T extends FieldValues>({
                             <Check
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                element.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
+                                element.value === field.value ? "opacity-100" : "opacity-0"
                               )}
                             />
                             {element.label}

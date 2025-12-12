@@ -1,4 +1,2 @@
-import {cn} from "./utils"
-export {
-    cn
-}
+import { cn } from "./utils";
+export { cn };

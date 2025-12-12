@@ -1,4 +1,4 @@
-export default function ArrowLeft({scale = 1}) {
+export default function ArrowLeft({ scale = 1 }) {
   return (
     <>
       <svg

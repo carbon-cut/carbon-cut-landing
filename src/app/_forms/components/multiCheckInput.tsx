@@ -2,14 +2,8 @@
 
 import { FieldValues, UseFormReturn } from "react-hook-form";
 
-import {
-  FormControl,
-  FormField,
-  TName,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/forms";
-import {  useCallback, useState } from "react";
+import { FormControl, FormField, TName, FormItem, FormMessage } from "@/components/ui/forms";
+import { useCallback, useState } from "react";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import SwitchForm from "./switch";
 import { cn } from "@/lib/utils";
@@ -36,37 +30,46 @@ export function MultiCheckInput<
   className?: string;
 }) {
   function checked(value: string) {
-    
     const currentValue = props.form.getValues(`${props.name}.${value}` as TName<T>);
     if (currentValue) return true;
     else return false;
   }
 
-  const  onCheckedChange = useCallback((value: string)=> {
-    return (checked: CheckedState) => {
-      if (checked) {
-        //@ts-ignore
-        props.form.setValue(`${props.name}.${value}`,
-           props.type === 'number' ? 0 : 
-           props.type === 'boolean' ? true : '');
-      } else {
-        //@ts-ignore
-        props.form.setValue(`${props.name}.${value}`, 
-          props.type === 'number' ? null : 
-          props.type === 'boolean' ? false : '')
-      }
-      props.onChange?.(checked);
-    };
-  }, [props.form, props.name, props.type, props.onChange]);
+  const onCheckedChange = useCallback(
+    (value: string) => {
+      return (checked: CheckedState) => {
+        if (checked) {
+          props.form.setValue(
+            //@ts-expect-error cause we know the type is correct
+            `${props.name}.${value}`,
+            props.type === "number" ? 0 : props.type === "boolean" ? true : ""
+          );
+        } else {
+          props.form.setValue(
+            //@ts-expect-error cause we know the type is correct
+            `${props.name}.${value}`,
+            props.type === "number" ? null : props.type === "boolean" ? false : ""
+          );
+        }
+        props.onChange?.(checked);
+      };
+    },
+    [props.form, props.name, props.type, props.onChange]
+  );
 
   return (
-    <div className={cn(`w-full px-20 mx-auto flex flex-row flex-wrap justify-between  gap-y-3`, props.className)}>
+    <div
+      className={cn(
+        `w-full px-20 mx-auto flex flex-row flex-wrap justify-between  gap-y-3`,
+        props.className
+      )}
+    >
       {props.options.map(({ label, value, unit }) => (
         <FormField
           control={props.form.control}
           name={`${props.name}.${value}` as TName<T>}
           key={value}
-          render={({ field}) => {
+          render={({ field }) => {
             const [checkedValue, setChecked] = useState(checked(value));
             return (
               <FormItem className="w-6/12 ">
@@ -74,7 +77,6 @@ export function MultiCheckInput<
                   <SwitchForm
                     disabled={props.disabled}
                     id={value}
-                    
                     checked={checkedValue}
                     onCheckedChange={(v) => {
                       //field.onChange(v);

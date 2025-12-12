@@ -23,8 +23,7 @@ const QuestionCompo3: React.FC<QuestionProps & Props> = ({
 }) => {
   useEffect(() => {
     if (
-      mainForm.getValues(`transport.cars.${index}.engine`) !==
-        "Plug-in Hybrid" &&
+      mainForm.getValues(`transport.cars.${index}.engine`) !== "Plug-in Hybrid" &&
       mainForm.getValues(`transport.cars.${index}.engine`) !== "mild Hybrid"
     ) {
       if (prevAction === "next") next();
@@ -36,7 +35,6 @@ const QuestionCompo3: React.FC<QuestionProps & Props> = ({
   const [secondThermal, setSecondThermal] = useState(
     mainForm.getValues(`transport.cars.${index}.secondThermal`)
   );
-
 
   const t = useScopedI18n("forms.basic.transport.qCar1-3");
   return (
@@ -58,7 +56,7 @@ const QuestionCompo3: React.FC<QuestionProps & Props> = ({
           />
         </div>
         <Input
-        type="text"
+          type="text"
           form={mainForm}
           name={`transport.cars.${index}.otherSecondThermal`}
           label={"Autre"}

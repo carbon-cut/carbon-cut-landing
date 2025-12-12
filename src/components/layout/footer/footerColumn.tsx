@@ -34,7 +34,9 @@ function FooterColumn({
         {items.map((item) => {
           const content = (
             <>
-              {item.Icon ? <item.Icon className="h-5 w-5 text-section-transport/80" aria-hidden /> : null}
+              {item.Icon ? (
+                <item.Icon className="h-5 w-5 text-section-transport/80" aria-hidden />
+              ) : null}
               <span>{item.title}</span>
             </>
           );

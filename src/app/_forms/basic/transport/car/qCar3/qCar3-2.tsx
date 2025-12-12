@@ -7,12 +7,15 @@ import Content from "@/app/_forms/components/content";
 import Input from "@/app/_forms/components/input";
 import SegmentedControl from "@/components/ui/segmentedControl";
 
-function QCarComponent({ mainForm, index, prevAction, next, prev }: QuestionProps & { index: number }) {
+function QCarComponent({
+  mainForm,
+  index,
+  prevAction,
+  next,
+  prev,
+}: QuestionProps & { index: number }) {
   useEffect(() => {
-    if (
-      mainForm.getValues(`transport.cars.${index}.engine`) !==
-        "Plug-in Hybrid" 
-    ) {
+    if (mainForm.getValues(`transport.cars.${index}.engine`) !== "Plug-in Hybrid") {
       if (prevAction === "next") next();
       else if (prevAction === "prev") prev();
       else next();
@@ -23,8 +26,11 @@ function QCarComponent({ mainForm, index, prevAction, next, prev }: QuestionProp
   const ti = useScopedI18n("forms");
 
   const [selectedUnit, setSelectedUnit] = useState<"unit" | "money">(
-    mainForm.getValues(`transport.cars.${index}.electricConsumption`) ? "unit" : 
-    mainForm.getValues(`transport.cars.${index}.moneyElectricConsumption`) ? "money" : 'unit'
+    mainForm.getValues(`transport.cars.${index}.electricConsumption`)
+      ? "unit"
+      : mainForm.getValues(`transport.cars.${index}.moneyElectricConsumption`)
+        ? "money"
+        : "unit"
   );
 
   return (
@@ -36,7 +42,7 @@ function QCarComponent({ mainForm, index, prevAction, next, prev }: QuestionProp
           state={selectedUnit}
           setState={setSelectedUnit}
           options={[
-            { label: ti("unit", { unit: 'kWh' }), value: "unit" },
+            { label: ti("unit", { unit: "kWh" }), value: "unit" },
             { label: "En euros dépensés", value: "money" },
           ]}
           className="mb-4"
@@ -44,13 +50,10 @@ function QCarComponent({ mainForm, index, prevAction, next, prev }: QuestionProp
         <Input
           form={mainForm}
           name={`transport.cars.${index}.${
-            selectedUnit === "unit"  ? "electricConsumption": "moneyElectricConsumption"
+            selectedUnit === "unit" ? "electricConsumption" : "moneyElectricConsumption"
           }`}
           type="number"
-          label={
-            selectedUnit === "unit"
-              ?  t("q1LE") : "Montant dépensé par semaine (€)"
-          }
+          label={selectedUnit === "unit" ? t("q1LE") : "Montant dépensé par semaine (€)"}
         />
         <div className="w-1/2 mt-4">
           <Input

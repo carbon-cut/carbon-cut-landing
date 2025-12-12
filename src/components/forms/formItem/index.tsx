@@ -20,7 +20,7 @@ interface Props<T extends FieldValues> {
   readOnly?: boolean;
 }
 
-function FormComponent<T extends FieldValues> ({
+function FormComponent<T extends FieldValues>({
   form,
   name,
   label,
@@ -28,7 +28,7 @@ function FormComponent<T extends FieldValues> ({
   type = "text",
   children,
   readOnly,
-}:Props<T>)  {
+}: Props<T>) {
   return (
     <FormField
       control={form.control}
@@ -57,6 +57,6 @@ function FormComponent<T extends FieldValues> ({
       )}
     />
   );
-};
+}
 
 export default FormComponent;

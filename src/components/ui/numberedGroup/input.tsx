@@ -19,13 +19,10 @@ type ScopedProps<P> = P & { __scopeInput?: Scope };
 const [createInputContext, createInputScope] = createContextScope(INPUT_NAME);
 
 type InputContextValue = { disabled?: boolean; number: number };
-const [InputsProvider, useRadioContext] =
-  createInputContext<InputContextValue>(INPUT_NAME);
+const [InputsProvider, useRadioContext] = createInputContext<InputContextValue>(INPUT_NAME);
 
 type InputElement = React.ElementRef<typeof Primitive.button>;
-type PrimitiveButtonProps = React.ComponentPropsWithoutRef<
-  typeof Primitive.button
->;
+type PrimitiveButtonProps = React.ComponentPropsWithoutRef<typeof Primitive.button>;
 interface InputsProps extends PrimitiveButtonProps {
   number?: number;
   required?: boolean;
@@ -46,9 +43,7 @@ const Input = React.forwardRef<InputElement, InputsProps>(
       ...inputProps
     } = props;
     const [button, setButton] = React.useState<HTMLButtonElement | null>(null);
-    const composedRefs = useComposedRefs(forwardedRef, (node) =>
-      setButton(node),
-    );
+    const composedRefs = useComposedRefs(forwardedRef, (node) => setButton(node));
     const hasConsumerStoppedPropagationRef = React.useRef(false);
     // We set this to true by default so that events bubble to forms without JS (SSR)
     const isFormControl = button ? form || !!button.closest("form") : true;
@@ -69,13 +64,11 @@ const Input = React.forwardRef<InputElement, InputsProps>(
             // radios cannot be unchecked so we only communicate a checked state
             if (!number) onCheck?.();
             if (isFormControl) {
-              hasConsumerStoppedPropagationRef.current =
-                event.isPropagationStopped();
+              hasConsumerStoppedPropagationRef.current = event.isPropagationStopped();
               // if radio is in a form, stop propagation from the button so that we only propagate
               // one click event (from the input). We propagate changes from an input so that native
               // form validation works and form events reflect radio updates.
-              if (!hasConsumerStoppedPropagationRef.current)
-                event.stopPropagation();
+              if (!hasConsumerStoppedPropagationRef.current) event.stopPropagation();
             }
           })}
         />
@@ -97,7 +90,7 @@ const Input = React.forwardRef<InputElement, InputsProps>(
         )}
       </InputsProvider>
     );
-  },
+  }
 );
 
 Input.displayName = INPUT_NAME;
@@ -118,23 +111,22 @@ export interface NumberedIndicatorProps extends PrimitiveSpanProps {
   forceMount?: true;
 }
 
-const NumberedIndicator = React.forwardRef<
-  NumberedIndicatorElement,
-  NumberedIndicatorProps
->((props: ScopedProps<NumberedIndicatorProps>, forwardedRef) => {
-  const { __scopeInput, forceMount, ...indicatorProps } = props;
-  const context = useRadioContext(INDICATOR_NAME, __scopeInput);
-  return (
-    <Presence present={forceMount || (context.number > 0 ? true : false)}>
-      <Primitive.span
-        data-state={getState(context.number > 0 ? true : false)}
-        data-disabled={context.disabled ? "" : undefined}
-        {...indicatorProps}
-        ref={forwardedRef}
-      />
-    </Presence>
-  );
-});
+const NumberedIndicator = React.forwardRef<NumberedIndicatorElement, NumberedIndicatorProps>(
+  (props: ScopedProps<NumberedIndicatorProps>, forwardedRef) => {
+    const { __scopeInput, forceMount, ...indicatorProps } = props;
+    const context = useRadioContext(INDICATOR_NAME, __scopeInput);
+    return (
+      <Presence present={forceMount || (context.number > 0 ? true : false)}>
+        <Primitive.span
+          data-state={getState(context.number > 0 ? true : false)}
+          data-disabled={context.disabled ? "" : undefined}
+          {...indicatorProps}
+          ref={forwardedRef}
+        />
+      </Presence>
+    );
+  }
+);
 
 NumberedIndicator.displayName = INDICATOR_NAME;
 
@@ -157,10 +149,7 @@ const BubbleInput = (props: BubbleInputProps) => {
   React.useEffect(() => {
     const input = ref.current!;
     const inputProto = window.HTMLInputElement.prototype;
-    const descriptor = Object.getOwnPropertyDescriptor(
-      inputProto,
-      "checked",
-    ) as PropertyDescriptor;
+    const descriptor = Object.getOwnPropertyDescriptor(inputProto, "checked") as PropertyDescriptor;
     const setChecked = descriptor.set;
     if (prevChecked !== checked && setChecked) {
       const event = new Event("click", { bubbles });

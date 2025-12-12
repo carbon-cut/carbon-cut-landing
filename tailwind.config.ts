@@ -115,98 +115,98 @@ export default {
           from: { width: "auto" },
           to: { width: "auto" },
         },
-        "translate-down":{
-          to:{
+        "translate-down": {
+          to: {
             transform: "translateY(-100%)",
-          }
-        },
-        'to-translate-0': {
-          to: { 
-            transform: 'translate(0, 0)',
-            opacity: '1',
-            scale: '1'
           },
         },
-        'fade-in-scale': {
+        "to-translate-0": {
+          to: {
+            transform: "translate(0, 0)",
+            opacity: "1",
+            scale: "1",
+          },
+        },
+        "fade-in-scale": {
           from: {
-            opacity: '0',
-            transform: 'translateY(12px) scale(0.94)',
+            opacity: "0",
+            transform: "translateY(12px) scale(0.94)",
           },
           to: {
-            opacity: '1',
-            transform: 'translateY(0) scale(1)',
+            opacity: "1",
+            transform: "translateY(0) scale(1)",
           },
         },
-        'deblur': {
+        deblur: {
           from: {
-            filter: 'blur(12px)',
-            opacity: '0.4',
+            filter: "blur(12px)",
+            opacity: "0.4",
           },
           to: {
-            filter: 'blur(0px)',
-            opacity: '1',
+            filter: "blur(0px)",
+            opacity: "1",
           },
         },
-        'fade-out-scale': {
+        "fade-out-scale": {
           from: {
-            opacity: '1',
-            transform: 'translateY(0) scale(1)',
+            opacity: "1",
+            transform: "translateY(0) scale(1)",
           },
           to: {
-            opacity: '0.2',
-            transform: 'translateY(12px) scale(0.92)',
+            opacity: "0.2",
+            transform: "translateY(12px) scale(0.92)",
           },
         },
-        'tilt-in-left': {
+        "tilt-in-left": {
           from: {
-            opacity: '0',
-            transform: 'translateY(16px) translateX(-88px) rotate(2deg) scale(0.98)',
+            opacity: "0",
+            transform: "translateY(16px) translateX(-88px) rotate(2deg) scale(0.98)",
           },
           to: {
-            opacity: '1',
-            transform: 'translateY(0) translateX(0) rotate(0deg) scale(1)',
+            opacity: "1",
+            transform: "translateY(0) translateX(0) rotate(0deg) scale(1)",
           },
         },
-        'tilt-in-right': {
+        "tilt-in-right": {
           from: {
-            opacity: '0',
-            transform: 'translateY(16px) translateX(88px) rotate(-2deg) scale(0.98)',
+            opacity: "0",
+            transform: "translateY(16px) translateX(88px) rotate(-2deg) scale(0.98)",
           },
           to: {
-            opacity: '1',
-            transform: 'translateY(0) translateX(0) rotate(0deg) scale(1)',
+            opacity: "1",
+            transform: "translateY(0) translateX(0) rotate(0deg) scale(1)",
           },
         },
-        'blur-in': {
+        "blur-in": {
           from: {
-            opacity: '0',
-            filter: 'blur(10px)',
-            transform: 'translateY(12px)',
+            opacity: "0",
+            filter: "blur(10px)",
+            transform: "translateY(12px)",
           },
           to: {
-            opacity: '1',
-            filter: 'blur(0px)',
-            transform: 'translateY(0)',
+            opacity: "1",
+            filter: "blur(0px)",
+            transform: "translateY(0)",
           },
         },
-        'rise-in': {
+        "rise-in": {
           from: {
-            opacity: '0',
-            transform: 'translateY(24px) scale(0.96)',
+            opacity: "0",
+            transform: "translateY(24px) scale(0.96)",
           },
           to: {
-            opacity: '1',
-            transform: 'translateY(0) scale(1)',
+            opacity: "1",
+            transform: "translateY(0) scale(1)",
           },
         },
-        'parallax-float': {
+        "parallax-float": {
           from: {
-            opacity: '0',
-            transform: 'translateY(40px) scale(1.04)',
+            opacity: "0",
+            transform: "translateY(40px) scale(1.04)",
           },
           to: {
-            opacity: '1',
-            transform: 'translateY(0) scale(1)',
+            opacity: "1",
+            transform: "translateY(0) scale(1)",
           },
         },
       },
@@ -220,15 +220,15 @@ export default {
         "preview-down": "preview-down 0.4s ease-out forwards",
         "translate-down": "3s cubic-bezier(0.65, 0.05, 0.17, 0.99) forwards",
         fit: "fit 0.5s ease-in-out",
-        'to-translate-0': 'to-translate-0 5s ease-in-out forwards',
-        'fade-in-scale': 'fade-in-scale 0.75s ease-out forwards',
-        deblur: 'deblur 0.9s ease-out forwards',
-        'fade-out-scale': 'fade-out-scale 0.6s ease-out forwards',
-        'tilt-in-left': 'tilt-in-left 0.7s ease-out forwards',
-        'tilt-in-right': 'tilt-in-right 0.7s ease-out forwards',
-        'blur-in': 'blur-in 0.6s ease-out forwards',
-        'rise-in': 'rise-in 0.8s ease-out forwards',
-        'parallax-float': 'parallax-float 1s ease-out forwards',
+        "to-translate-0": "to-translate-0 5s ease-in-out forwards",
+        "fade-in-scale": "fade-in-scale 0.75s ease-out forwards",
+        deblur: "deblur 0.9s ease-out forwards",
+        "fade-out-scale": "fade-out-scale 0.6s ease-out forwards",
+        "tilt-in-left": "tilt-in-left 0.7s ease-out forwards",
+        "tilt-in-right": "tilt-in-right 0.7s ease-out forwards",
+        "blur-in": "blur-in 0.6s ease-out forwards",
+        "rise-in": "rise-in 0.8s ease-out forwards",
+        "parallax-float": "parallax-float 1s ease-out forwards",
       },
       fontFamily: {
         manrope_sans: ["var(--font-manrope_sans)"],

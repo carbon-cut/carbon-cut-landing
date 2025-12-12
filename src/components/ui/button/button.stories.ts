@@ -25,7 +25,7 @@ const meta = {
   },
   args: {
     onClick: fn(() => console.log("Button clicked")),
-  }
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;

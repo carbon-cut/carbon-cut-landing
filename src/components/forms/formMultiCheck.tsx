@@ -2,9 +2,7 @@
 
 import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
 
-import {
-  TName,
-} from "@/components/ui/forms";
+import { TName } from "@/components/ui/forms";
 
 type InputType = React.HTMLInputTypeAttribute | undefined;
 

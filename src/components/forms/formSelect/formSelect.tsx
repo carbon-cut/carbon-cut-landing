@@ -7,15 +7,9 @@ import {
   FormLabel,
   FormMessage,
   TName,
-  TValue
+  TValue,
 } from "../../ui/forms";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { useScopedI18n } from "@/locales/client";
 import { cn } from "@/lib/utils";
 
@@ -53,25 +47,34 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
       render={({ field, fieldState }) => (
         <FormItem>
           {label && (
-            <FormLabel data-state={fieldState.error && "error"} className={cn('', labelClassName)}>
+            <FormLabel data-state={fieldState.error && "error"} className={cn("", labelClassName)}>
               {label} {mandetory && <span className="text-red-500">*</span>}
             </FormLabel>
           )}
-          <Select onValueChange={(_) => {console.log(_) ;field.onChange(_)}} defaultValue={field.value}>
+          <Select
+            onValueChange={(_) => {
+              console.log(_);
+              field.onChange(_);
+            }}
+            defaultValue={field.value}
+          >
             <FormControl>
-              <SelectTrigger 
-              data-size={'none'}
-              onClick={e=>{setOpen(true)}}
-              key={`${open}`}
-              className={`rounded-full w-full  
+              <SelectTrigger
+                data-size={"none"}
+                onClick={(e) => {
+                  setOpen(true);
+                }}
+                key={`${open}`}
+                className={`rounded-full w-full  
                 text-left font-normal bg-white text-ellipsis
-                 ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : open ? 'outline-4 ring-1 ring-ring' : ''}
-                 ${size === 'sm' ? 'h-8 [&_span]:text-xs [&_svg]:size-3.5' : 'h-9'}
-                 `} >
-                <SelectValue placeholder={placeholder ?? t("value", { placeholder })}  />
+                 ${fieldState.error ? "outline-none ring-1 ring-destructive/60 " : open ? "outline-4 ring-1 ring-ring" : ""}
+                 ${size === "sm" ? "h-8 [&_span]:text-xs [&_svg]:size-3.5" : "h-9"}
+                 `}
+              >
+                <SelectValue placeholder={placeholder ?? t("value", { placeholder })} />
               </SelectTrigger>
             </FormControl>
-            <SelectContent onFocus={_=>setOpen(true)} onCloseAutoFocus={_=>setOpen(false)}>
+            <SelectContent onFocus={(_) => setOpen(true)} onCloseAutoFocus={(_) => setOpen(false)}>
               {data.map((ele, index) => (
                 <SelectItem key={index} value={ele.value}>
                   {ele.label}

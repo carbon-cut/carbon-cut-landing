@@ -1,10 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/forms";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import React, { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
@@ -66,7 +62,7 @@ const FormMultiCombox: React.FC<props> = ({
       render={({ field, fieldState }) => (
         <FormItem className={cn("", className)}>
           {label && (
-            <FormLabel data-state={fieldState.error && "error"} className={cn('', labelClassName)}>
+            <FormLabel data-state={fieldState.error && "error"} className={cn("", labelClassName)}>
               {label} {mandetory && <span className="text-red-500">*</span>}
             </FormLabel>
           )}
@@ -80,23 +76,34 @@ const FormMultiCombox: React.FC<props> = ({
                 type="button"
                 className={`rounded-full w-full p-3 
                 text-left font-normal bg-white text-ellipsis
-                ${field.value ? '' : 'text-muted-foreground'}
-                 ${fieldState.error ? 'outline-none ring-1 ring-destructive/60 ' : 
-                    open ? 'outline-4 ring-1 ring-ring' : ''}`}
-              ><span className="text-ellipsis  w-10/12 overflow-hidden">
-                {field.value
-                  ? data.find((elem) => field.value === elem.value)?.label
-                  : t("value", { label })}
-                  </span>
+                ${field.value ? "" : "text-muted-foreground"}
+                 ${
+                   fieldState.error
+                     ? "outline-none ring-1 ring-destructive/60 "
+                     : open
+                       ? "outline-4 ring-1 ring-ring"
+                       : ""
+                 }`}
+              >
+                <span className="text-ellipsis  w-10/12 overflow-hidden">
+                  {field.value
+                    ? data.find((elem) => field.value === elem.value)?.label
+                    : t("value", { label })}
+                </span>
                 <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start" onFocus={_=>setOpen(true)} onCloseAutoFocus={_=>setOpen(false)}>
+            <PopoverContent
+              className="w-auto p-0"
+              align="start"
+              onFocus={(_) => setOpen(true)}
+              onCloseAutoFocus={(_) => setOpen(false)}
+            >
               <Command shouldFilter={false}>
-                  <CommandInput
-                    onValueChange={handleSearch}
-                    placeholder={t("placeholder", { label })}
-                  />
+                <CommandInput
+                  onValueChange={handleSearch}
+                  placeholder={t("placeholder", { label })}
+                />
                 {loading ? (
                   <div className="flex items-center gap-2 px-4 py-6 text-sm text-muted-foreground">
                     <Loader2 className="h-4 w-4 animate-spin" />

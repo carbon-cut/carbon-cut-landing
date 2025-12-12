@@ -7,9 +7,7 @@ export interface QuestionProps {
   setQuestions: React.Dispatch<React.SetStateAction<QuestionFC[]>>;
   setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
   //setVerify: React.Dispatch<React.SetStateAction<() => boolean>>;
-  setVerifyFields: React.Dispatch<
-    React.SetStateAction<TName<z.infer<typeof formSchema>>[]>
-  >;
+  setVerifyFields: React.Dispatch<React.SetStateAction<TName<z.infer<typeof formSchema>>[]>>;
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
   currentIndex: number;
   //setIsDirty: React.Dispatch<React.SetStateAction<boolean>>;

@@ -28,91 +28,86 @@ const heating = z.object({
       }),
     })
     .optional(),
-  quantities: z.object({
-    GPL: z
-      .object({
-        types: z.object({
-          big: z.object({
-            butane: z.boolean().default(false).optional(), // 13 Kg
-            propane: z.boolean().default(false).optional(), // 35 Kg
+  quantities: z
+    .object({
+      GPL: z
+        .object({
+          types: z.object({
+            big: z.object({
+              butane: z.boolean().default(false).optional(), // 13 Kg
+              propane: z.boolean().default(false).optional(), // 35 Kg
+            }),
+            small: z.object({
+              butaneSmall: z.boolean().default(false).optional(), // 5.5kg
+              butaneBig: z.boolean().default(false).optional(), // 10 kg
+              propaneSmall: z.boolean().default(false).optional(), // 5 kg
+              propaneBig: z.boolean().default(false).optional(), // 13 kg
+            }),
           }),
-          small: z.object({
-            butaneSmall: z.boolean().default(false).optional(), // 5.5kg
-            butaneBig: z.boolean().default(false).optional(), // 10 kg
-            propaneSmall: z.boolean().default(false).optional(), // 5 kg
-            propaneBig: z.boolean().default(false).optional(), // 13 kg
-          }),
-        }),
-        quantities: z
-          .record(
-            union(
-              "butane",
-              "butaneSmall",
-              "butaneBig",
-              "propane",
-              "propaneSmall",
-              "propaneBig"
-            ),
-            z.object({
-              quantity: z.number().optional(),
-              frequency: union("month", "year").optional(),
-            })
-          )
-          .optional(),
-      })
-      .optional(),
-    fioul: z
-      .object({
-        quantity: z.number().optional(),
-        frequency: union("month", "year").optional(), // monthly
-      })
-      .optional(),
-    gasTank: z
-      .object({
-        capacity: z.number().optional(),
-        frequency: z.number().optional(), // yearly
-      })
-      .optional(),
-    electricalHeating: z
-      .object({
-        energyLabel: union("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"),
-        dailyFrequency: z.number(), // h / day
-        annualFrequency: z.number(), // week / year
-        number: z.number(),
-      })
-      .optional(),
-    electricalCentral: z
-      .object({
-        energyLabel: union("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"),
-        dailyFrequency: z.number(), // h / day
-        annualFrequency: z.number(), // week / year
-      })
-      .optional(),
-    charcoal: z
-      .object({
-        quantity: z.number().optional(),
-        quantityUnit: union("m3" /*³*/, "kg").optional(),
-        frequency: z.number().optional(),
-        frequencyUnit: union("day", "week", "month", "year").optional(),
-      })
-      .optional(),
-    wood: z
-      .object({
-        quantity: z.number().optional(),
-        quantityUnit: union("m3", "kg", "stere").optional(),
-        frequency: z.number().optional(),
-        frequencyUnit: union("day", "week", "month", "year").optional(),
-      })
-      .optional(),
-    heatingNetwork: z
-      .object({
-        total: z.number().optional(),
-        money: z.number().optional(),
-        //price: z.number().optional(),
-        //index: z.number().nullable(),
-      })
-      .optional(),
-  }).optional(),
+          quantities: z
+            .record(
+              union("butane", "butaneSmall", "butaneBig", "propane", "propaneSmall", "propaneBig"),
+              z.object({
+                quantity: z.number().optional(),
+                frequency: union("month", "year").optional(),
+              })
+            )
+            .optional(),
+        })
+        .optional(),
+      fioul: z
+        .object({
+          quantity: z.number().optional(),
+          frequency: union("month", "year").optional(), // monthly
+        })
+        .optional(),
+      gasTank: z
+        .object({
+          capacity: z.number().optional(),
+          frequency: z.number().optional(), // yearly
+        })
+        .optional(),
+      electricalHeating: z
+        .object({
+          energyLabel: union("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"),
+          dailyFrequency: z.number(), // h / day
+          annualFrequency: z.number(), // week / year
+          number: z.number(),
+        })
+        .optional(),
+      electricalCentral: z
+        .object({
+          energyLabel: union("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"),
+          dailyFrequency: z.number(), // h / day
+          annualFrequency: z.number(), // week / year
+        })
+        .optional(),
+      charcoal: z
+        .object({
+          quantity: z.number().optional(),
+          quantityUnit: union("m3" /*³*/, "kg").optional(),
+          frequency: z.number().optional(),
+          frequencyUnit: union("day", "week", "month", "year").optional(),
+        })
+        .optional(),
+      wood: z
+        .object({
+          quantity: z.number().optional(),
+          quantityUnit: union("m3", "kg", "stere").optional(),
+          frequency: z.number().optional(),
+          frequencyUnit: union("day", "week", "month", "year").optional(),
+        })
+        .optional(),
+      heatingNetwork: z
+        .object({
+          total: z.number().optional(),
+          money: z.number().optional(),
+          //price: z.number().optional(),
+          //index: z.number().nullable(),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
 export default heating;

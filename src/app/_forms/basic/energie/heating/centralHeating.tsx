@@ -8,8 +8,8 @@ import React from "react";
 
 const energieLabels = ["A", "B", "C", "D", "E", "F", "G"] as const;
 
-const CentralHeating: QuestionFC = ({mainForm}: QuestionProps) => {
-    const t = useScopedI18n("forms.basic.energie.heating.options.electricalCentralHeating");
+const CentralHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
+  const t = useScopedI18n("forms.basic.energie.heating.options.electricalCentralHeating");
   return (
     <Content className="">
       <Question>{t("label")}</Question>
@@ -42,9 +42,9 @@ const CentralHeating: QuestionFC = ({mainForm}: QuestionProps) => {
   );
 };
 
-CentralHeating['Symbol'] = {
+CentralHeating["Symbol"] = {
   question: "forms.basic.energie.heating.options.electricalCentralHeating.label",
   fields: ["energie.heating.quantities.electricalCentral"],
-}
+};
 
 export default CentralHeating;

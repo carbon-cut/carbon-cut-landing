@@ -56,10 +56,7 @@ TabTrigger.displayName = "TabTrigger";
 
 interface TabCProps {
   setNextTab: () => void;
-  initQuestions: [
-    QuestionFC[],
-    React.Dispatch<React.SetStateAction<QuestionFC[]>>
-  ];
+  initQuestions: [QuestionFC[], React.Dispatch<React.SetStateAction<QuestionFC[]>>];
   mainForm: UseFormReturn<z.infer<typeof formSchema>, any, undefined>;
   questions: QuestionFC[];
   setQuestions: React.Dispatch<React.SetStateAction<QuestionFC[]>>;
@@ -92,8 +89,7 @@ const TabContent = React.forwardRef<
     },
     ref
   ) => {
-    const { tab, currentIndexes, setCurrentIndexes, setVerifyFields } =
-      useContext(FormContext);
+    const { tab, currentIndexes, setCurrentIndexes, setVerifyFields } = useContext(FormContext);
 
     useEffect(() => {
       const currentIndex = currentIndexes[tab];

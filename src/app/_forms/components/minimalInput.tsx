@@ -9,11 +9,7 @@ import {
   TName,
 } from "@/components/ui/forms";
 import { Input as InputRoot } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
 import { Info } from "lucide-react";
@@ -70,9 +66,7 @@ function MinimalInput<FormShema extends FieldValues>({
                     ? {
                         onChange: (event) => {
                           onChange(event.target.value);
-                          return field.onChange?.(
-                            parseInt(event.target.value, 0),
-                          );
+                          return field.onChange?.(parseInt(event.target.value, 0));
                         },
                       }
                     : {

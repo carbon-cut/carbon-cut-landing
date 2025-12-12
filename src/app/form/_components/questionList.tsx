@@ -28,7 +28,7 @@ interface Props {
   list: { [key in TabValues]?: QuestionFC[] };
   mainForm: UseFormReturn<any>;
   dialog: boolean;
-  setDialog: React.Dispatch<React.SetStateAction<boolean>>; 
+  setDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function buttonVariants(tab: TabValues) {
@@ -46,12 +46,11 @@ function buttonVariants(tab: TabValues) {
   }
 }
 
-function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
+function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
   const t = useScopedI18n("forms");
   const tOverview = useScopedI18n("components.forms.overview");
 
-  const { tab, setTab, currentIndexes, setCurrentIndexes } =
-    React.useContext(FormContext);
+  const { tab, setTab, currentIndexes, setCurrentIndexes } = React.useContext(FormContext);
 
   const [error, setError] = React.useState({
     transport: false,
@@ -80,98 +79,82 @@ function QuestionList({ list, mainForm, dialog, setDialog}: Props) {
       </DialogTrigger>
 
       <DialogContent asChild className="h-4/6 overflow-hidden w-11/12 rounded-xl">
-        
-          <DialogHeader className="mb-4 max-w-full">
-            <DialogTitle className="font-extrabold text-section-transport text-2xl">
-              {tOverview("title")}
-            </DialogTitle>
-            <DialogDescription className="text-sm">
-              {
-                tOverview("description")
-              }
-            </DialogDescription>
-          </DialogHeader>
-          <Accordion type="single" collapsible className="w-full">
-            {(Object.keys(list) as TabValues[]).map((key) => {
-              const Icon = getIcon(key);
-              const ColorVariant = {
-                transport: "bg-section-transport",
-                energie: "bg-section-energie",
-                food: "bg-section-food",
-                waste: "bg-section-waste",
-                vacation: "bg-section-vacation",
-              };
+        <DialogHeader className="mb-4 max-w-full">
+          <DialogTitle className="font-extrabold text-section-transport text-2xl">
+            {tOverview("title")}
+          </DialogTitle>
+          <DialogDescription className="text-sm">{tOverview("description")}</DialogDescription>
+        </DialogHeader>
+        <Accordion type="single" collapsible className="w-full">
+          {(Object.keys(list) as TabValues[]).map((key) => {
+            const Icon = getIcon(key);
+            const ColorVariant = {
+              transport: "bg-section-transport",
+              energie: "bg-section-energie",
+              food: "bg-section-food",
+              waste: "bg-section-waste",
+              vacation: "bg-section-vacation",
+            };
 
-              const sectionError = mainForm.getFieldState(key)?.error
+            const sectionError = mainForm.getFieldState(key)?.error;
 
-              return (
-                <AccordionItem
-                  className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 md:px-4
+            return (
+              <AccordionItem
+                className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 md:px-4
                 border-gray-200 hover:border-section-transport transition-colors
                 ${
-                  (error[key] || sectionError)
-                    ? "border-destructive hover:border-destructive/60"
-                    : ""
+                  error[key] || sectionError ? "border-destructive hover:border-destructive/60" : ""
                 } 
                 `}
-                  style={{
-                    //@ts-expect-error interpolateSize is not supported, only in Chrome
-                    interpolateSize: "allow-keywords",
-                  }}
-                  key={key}
-                  value={key}
-                >
-                  <AccordionTrigger
-                    icon="chevron-down"
-                    className="font-extralight hover:no-underline  
+                style={{
+                  //@ts-expect-error interpolateSize is not supported, only in Chrome
+                  interpolateSize: "allow-keywords",
+                }}
+                key={key}
+                value={key}
+              >
+                <AccordionTrigger
+                  icon="chevron-down"
+                  className="font-extralight hover:no-underline  
                  md:px-6 px-3 py-3"
-                  >
-                    <div className="flex flex-row">
-                      <div
-                        className={`p-2 rounded-full h-fit my-auto ${ColorVariant[key]}`}
-                      >
-                        <Icon className="h-5 w-5 text-white" />
-                      </div>
-                      <div className="grid grid-rows-2 ml-3">
-                        <Label className="font-extrabold text-lg">
-                          {getName(key)}
-                        </Label>
-                        <Label className="font-semibold text-sm text-muted-foreground">
-                          {list[key]?.length} questions
-                        </Label>
-                      </div>
+                >
+                  <div className="flex flex-row">
+                    <div className={`p-2 rounded-full h-fit my-auto ${ColorVariant[key]}`}>
+                      <Icon className="h-5 w-5 text-white" />
                     </div>
-                  </AccordionTrigger>
-                  <AccordionContent
-                    forceMount
-                    type="preview"
-                    className="md:px-6 px-3 space-y-3 pt-3"
-                  >
-                    {list[key]?.map(({ Symbol }, index) => (
-                      <Question
-                        setError={setError}
-                        error={error}
-                        index={index}
-                        currentIndex={currentIndexes[key]}
-                        mainForm={mainForm}
-                        Symbol={Symbol}
-                        key={`${key}-${index}`}
-                        section={key}
-                        setInterface={() => {
-                          setCurrentIndexes((p) => ({ ...p, [key]: index }));
-                          setTab(key);
-                        }}
-                      />
-                    ))}
-                  </AccordionContent>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
+                    <div className="grid grid-rows-2 ml-3">
+                      <Label className="font-extrabold text-lg">{getName(key)}</Label>
+                      <Label className="font-semibold text-sm text-muted-foreground">
+                        {list[key]?.length} questions
+                      </Label>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent forceMount type="preview" className="md:px-6 px-3 space-y-3 pt-3">
+                  {list[key]?.map(({ Symbol }, index) => (
+                    <Question
+                      setError={setError}
+                      error={error}
+                      index={index}
+                      currentIndex={currentIndexes[key]}
+                      mainForm={mainForm}
+                      Symbol={Symbol}
+                      key={`${key}-${index}`}
+                      section={key}
+                      setInterface={() => {
+                        setCurrentIndexes((p) => ({ ...p, [key]: index }));
+                        setTab(key);
+                      }}
+                    />
+                  ))}
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
       </DialogContent>
     </Dialog>
   );
 }
 
 export default QuestionList;
-

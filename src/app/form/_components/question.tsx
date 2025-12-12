@@ -14,7 +14,7 @@ const Question = ({
   index,
   setError,
   error,
-  currentIndex
+  currentIndex,
 }: {
   mainForm: UseFormReturn<any>;
   Symbol?: any;
@@ -29,22 +29,21 @@ const Question = ({
 
   const { tab } = useContext(FormContext);
 
-    const [errorc, setErrorc] = useState(false);
+  const [errorc, setErrorc] = useState(false);
 
-    useEffect(() => {
-      for (const field of Symbol?.fields ?? []) {
-        if (!mainForm.getFieldState(field)) throw new Error(`Field: "${field}" not found`);
-        if (mainForm.getFieldState(field)?.error) {
-        
-          if(!error[section]) setError(prev => ({ ...prev, [section]: true }));
-          setErrorc(true);
-          return;
-        }
+  useEffect(() => {
+    for (const field of Symbol?.fields ?? []) {
+      if (!mainForm.getFieldState(field)) throw new Error(`Field: "${field}" not found`);
+      if (mainForm.getFieldState(field)?.error) {
+        if (!error[section]) setError((prev) => ({ ...prev, [section]: true }));
+        setErrorc(true);
+        return;
       }
-      setErrorc(false);
-    }, [mainForm]);
+    }
+    setErrorc(false);
+  }, [mainForm]);
 
-    const isCurrent = currentIndex === index && tab === section;
+  const isCurrent = currentIndex === index && tab === section;
   return (
     <Button
       type="button"
@@ -71,12 +70,16 @@ const Question = ({
         Q{index + 1}
       </Label>
       <Label
-      className={`text-extrabold hover:cursor-pointer max-w-full text-wrap col-span-11
+        className={`text-extrabold hover:cursor-pointer max-w-full text-wrap col-span-11
         data-[current=true]:text-white data-[state=error]:!text-destructive`}
-      data-state={errorc ? "error" : ""}
-      data-current={isCurrent ? "true" : "false"}
+        data-state={errorc ? "error" : ""}
+        data-current={isCurrent ? "true" : "false"}
       >
-        {typeof Symbol?.question === "string" ? t(Symbol.question): Symbol?.question ? t(Symbol.question[0], Symbol.question[1]) : ''}
+        {typeof Symbol?.question === "string"
+          ? t(Symbol.question)
+          : Symbol?.question
+            ? t(Symbol.question[0], Symbol.question[1])
+            : ""}
       </Label>
     </Button>
   );

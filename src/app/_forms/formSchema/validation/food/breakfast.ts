@@ -10,10 +10,16 @@ const breakfastMeals = z.object({
 
 const distributionBreakfast = z
   .object({
-    bread: z.tuple([z.number().optional(), z.number().optional(), z.number().optional()]).optional(),
-    salty: z.tuple([z.number().optional(), z.number().optional(), z.number().optional()]).optional(),
+    bread: z
+      .tuple([z.number().optional(), z.number().optional(), z.number().optional()])
+      .optional(),
+    salty: z
+      .tuple([z.number().optional(), z.number().optional(), z.number().optional()])
+      .optional(),
     milk: z.tuple([z.number().optional(), z.number().optional(), z.number().optional()]).optional(),
-    fruits: z.tuple([z.number().optional(), z.number().optional(), z.number().optional()]).optional(),
+    fruits: z
+      .tuple([z.number().optional(), z.number().optional(), z.number().optional()])
+      .optional(),
   })
   .optional();
 
@@ -33,8 +39,7 @@ const breakfast = z.preprocess((input, ctx) => {
       .forEach((mealKey) => {
         const target = mealValues[mealKey] ?? 0;
         const total =
-          distribution[mealKey]?.reduce((acc: number, curr) => acc + (curr ?? 0), 0) ??
-          0;
+          distribution[mealKey]?.reduce((acc: number, curr) => acc + (curr ?? 0), 0) ?? 0;
         if (total !== target) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,

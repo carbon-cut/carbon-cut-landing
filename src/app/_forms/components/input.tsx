@@ -9,11 +9,7 @@ import {
   TName,
 } from "@/components/ui/forms";
 import { Input as InputRoot } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Info } from "lucide-react";
 import React, { useEffect, useRef } from "react";
@@ -30,7 +26,7 @@ type Props<T extends FieldValues> = {
   unit?: React.ReactNode;
   info?: React.ReactNode;
   onChange?: (v: any) => void;
-  size?: "xl"|"sm";
+  size?: "xl" | "sm";
   disabled?: boolean;
   labelClassName?: string;
   valueControl?: (v: any) => boolean;
@@ -47,35 +43,32 @@ function Input<T extends FieldValues>({
   placeholder,
   description,
   type,
-  unit= <></>,
+  unit = <></>,
   info = undefined,
   size = "xl",
   disabled = false,
   className,
   fallback = false,
   attachedFields = [],
-  valueControl = (v: any) =>{
+  valueControl = (v: any) => {
     if (v >= 0 || v === "") return true;
     return false;
   },
   /** @decapricated **/
   onChange = () => {},
 }: Props<T>) {
-
   const {
     trigger,
-    formState:{
-      isSubmitted
-    }
-  } = form
+    formState: { isSubmitted },
+  } = form;
 
-  const verifyAttachedFields = () =>{
-    if (isSubmitted){
-      trigger(attachedFields)
+  const verifyAttachedFields = () => {
+    if (isSubmitted) {
+      trigger(attachedFields);
     }
-  }
+  };
 
-  const value = form.getValues(name) ? 'y' : 'n'
+  const value = form.getValues(name) ? "y" : "n";
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -83,7 +76,6 @@ function Input<T extends FieldValues>({
     <FormField
       control={form.control}
       name={name}
-
       render={({ field, fieldState }) => {
         return (
           <FormItem>
@@ -92,9 +84,7 @@ function Input<T extends FieldValues>({
                 data-state={fieldState.error && "error"}
                 className={cn(
                   `text-sm font-medium ${
-                    disabled
-                      ? "text-muted-foreground data-[state=error]:text-destructive/60"
-                      : ""
+                    disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""
                   }`,
                   labelClassName
                 )}
@@ -108,32 +98,26 @@ function Input<T extends FieldValues>({
                 <InputRoot
                   disabled={disabled}
                   className={cn(
-                    `w-full ${
-                      size === "xl" ? "h-9" : "h-8 !text-xs"
-                    } rounded-full  bg-white 
-                  ${
-                    fieldState.error
-                      ? "outline-none ring-1 ring-destructive/60 "
-                      : ""
-                  }
+                    `w-full ${size === "xl" ? "h-9" : "h-8 !text-xs"} rounded-full  bg-white 
+                  ${fieldState.error ? "outline-none ring-1 ring-destructive/60 " : ""}
                   `,
                     ""
                   )}
                   placeholder={placeholder}
                   type={type}
                   {...field}
-                  ref={node=>{
+                  ref={(node) => {
                     inputRef.current = node;
-                    field.ref(node)
+                    field.ref(node);
                   }}
-                  value={field.value ?? ''}
+                  value={field.value ?? ""}
                   {...(type === "number"
                     ? {
                         onChange: (event) => {
                           const val = event.target.value;
 
                           if (val === "") {
-                            console.log("empty");                            
+                            console.log("empty");
                             field.onChange(undefined);
                             verifyAttachedFields();
                             return;

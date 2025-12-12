@@ -6,13 +6,6 @@ import Restaurants from "./restaurants";
 import Auxilary from "./auxilary";
 import Market from "./market";
 
-const output: QuestionFC[] = [
-  ...Basic,
-  ...Breakfast,
-  Restaurants,
-  ...Drinks,
-  Auxilary,
-  Market,
-];
+const output: QuestionFC[] = [...Basic, ...Breakfast, Restaurants, ...Drinks, Auxilary, Market];
 
 export default output;

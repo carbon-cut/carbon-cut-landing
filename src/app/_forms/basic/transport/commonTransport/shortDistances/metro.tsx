@@ -18,9 +18,7 @@ type Props = {
 };
 
 const Metro = ({ mainForm, idx }: QuestionProps & Props) => {
-  const t = useScopedI18n(
-    "forms.basic.transport.commonTransport.shortDistances.metro"
-  );
+  const t = useScopedI18n("forms.basic.transport.commonTransport.shortDistances.metro");
 
   return (
     <>

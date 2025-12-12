@@ -24,17 +24,13 @@ function CarTitle({
     return !!carErrors && Object.keys(carErrors).length > 0;
   }, [errors, index]);
 
-  const { make: carMake, model: carModel } =
-    mainForm.getValues(`transport.cars.${index}`) ?? {};
+  const { make: carMake, model: carModel } = mainForm.getValues(`transport.cars.${index}`) ?? {};
 
   const title = useMemo(() => {
     if (carModel && carModel !== "") {
       return (
         <>
-          {carMake}:{" "}
-          <span className="font-medium">
-            {carModel}
-          </span>
+          {carMake}: <span className="font-medium">{carModel}</span>
         </>
       );
     }

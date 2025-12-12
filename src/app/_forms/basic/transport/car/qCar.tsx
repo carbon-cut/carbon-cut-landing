@@ -7,15 +7,10 @@ import carsQuestions from "./index";
 import Input from "../../../components/input";
 import FormContext from "@/app/form/_layout/_formContext";
 
-const QCar: QuestionFC = ({
-  setOnSubmit,
-  setQuestions,
-  mainForm,
-  currentIndex,
-}: QuestionProps) => {
+const QCar: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.qCar");
   const [prevValue] = useState(mainForm.getValues("transport.hasCar") ?? 0);
-  const {tab} = useContext(FormContext)
+  const { tab } = useContext(FormContext);
   useEffect(() => {
     setOnSubmit(() => async () => {
       const hasCar = mainForm.getValues("transport.hasCar") ?? 0;
@@ -35,7 +30,7 @@ const QCar: QuestionFC = ({
           copy.splice(
             currentIndex + hasCar * quesLength + 1,
             0,
-            ...carsQuestions(hasCar - prevValue, prevValue + 1),
+            ...carsQuestions(hasCar - prevValue, prevValue + 1)
           );
           return copy;
         });
@@ -45,10 +40,7 @@ const QCar: QuestionFC = ({
         const quesLength = carsQuestions(1).length;
         setQuestions((prev) => {
           const copy = prev.slice();
-          copy.splice(
-            currentIndex + hasCar * quesLength + 1,
-            quesLength * (prevValue - hasCar),
-          );
+          copy.splice(currentIndex + hasCar * quesLength + 1, quesLength * (prevValue - hasCar));
           return copy;
         });
       }
@@ -61,7 +53,7 @@ const QCar: QuestionFC = ({
   return (
     <div className="space-y-3 mt-6 mb-24">
       <Question>{t("q")}</Question>
-      <Content className="pl-0 " >
+      <Content className="pl-0 ">
         <Input name="transport.hasCar" form={mainForm} type="number" />
       </Content>
     </div>

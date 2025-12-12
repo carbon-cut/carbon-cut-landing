@@ -6,7 +6,7 @@ import Question from "@/app/_forms/components/question";
 import Content from "@/app/_forms/components/content";
 import FormSelect from "@/components/forms/formSelect";
 import { Separator } from "@/components/ui/separator";
-import {  useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 const woodKeys = ["m3", "kg", "stere"] as const;
 
@@ -57,14 +57,14 @@ const WoodCharcoal: QuestionFC = ({ mainForm }: QuestionProps) => {
               </div>
               <div className="grid grid-cols-12 space-x-3">
                 <div className="col-span-7">
-                <Input
-                  labelClassName="text-black/70"
-                  form={mainForm}
-                  name={"energie.heating.quantities.wood.frequency"}
-                  label={t("wood.funits.label")}
-                  placeholder={t("wood.funits.label")}
-                  type="number"
-                />
+                  <Input
+                    labelClassName="text-black/70"
+                    form={mainForm}
+                    name={"energie.heating.quantities.wood.frequency"}
+                    label={t("wood.funits.label")}
+                    placeholder={t("wood.funits.label")}
+                    type="number"
+                  />
                 </div>
                 <div className="col-span-5">
                   <FormSelect
@@ -149,10 +149,7 @@ const WoodCharcoal: QuestionFC = ({ mainForm }: QuestionProps) => {
 
 WoodCharcoal["Symbol"] = {
   question: "forms.basic.energie.heating.options.wood.title",
-  fields: [
-    "energie.heating.quantities.wood",
-    "energie.heating.quantities.charcoal",
-  ],
+  fields: ["energie.heating.quantities.wood", "energie.heating.quantities.charcoal"],
 };
 
 export default WoodCharcoal;

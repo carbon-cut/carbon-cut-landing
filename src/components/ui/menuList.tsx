@@ -1,9 +1,6 @@
 import { FC, useRef } from "react";
 
-import {
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+import { CommandItem, CommandList } from "@/components/ui/command";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -36,7 +33,7 @@ export const MenuList: FC<{
           const element = options[virtualRow.index];
           return (
             <CommandItem
-            className={`h-fit w-full ${element.value === selectedValue ? '!bg-card-primary-foreground':''}`}
+              className={`h-fit w-full ${element.value === selectedValue ? "!bg-card-primary-foreground" : ""}`}
               key={element.value}
               value={element.value}
               onSelect={() => onSelectOption(element)}
@@ -44,7 +41,7 @@ export const MenuList: FC<{
               <Check
                 className={cn(
                   "mr-2 h-4 w-4",
-                  element.value === selectedValue ? "opacity-100" : "opacity-0",
+                  element.value === selectedValue ? "opacity-100" : "opacity-0"
                 )}
               />
               {element.label}
