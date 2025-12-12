@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import Input from "../../../components/input";
 import { FormAlert } from "../../../components/alert";
+import { FormField, FormMessage } from "@/components/ui/forms";
 
 const cols = ["homemade", "quantine", "delivered"] as const;
 const meals = [
@@ -26,7 +27,7 @@ const meals = [
 
 type Meals = (typeof meals)[number];
 
-const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction }: QuestionProps) => {
+const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction, setVerifyFields }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.food");
 
   const [selectedMeals] = useState<{
@@ -41,18 +42,24 @@ const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction }: Question
     return meals.reduce(
       (acc, curr) => ({
         ...acc,
-        ...((rawMeals[curr] ?? 0) > 0 ? { [curr]: rawMeals[curr] } : undefined),
+        ...((rawMeals?.[curr] ?? 0) > 0 ? { [curr]: rawMeals[curr] } : undefined),
       }),
       {},
     );
   });
 
   useEffect(() => {
-    console.log("selectedMeals", selectedMeals);
     if (Object.keys(selectedMeals).length === 0) {
       if (prevAction === "prev") {
         prev();
       } else next();
+    }
+    setVerifyFields([
+      "food.basic.distribution",
+    ]);
+    
+    return () => {
+      setVerifyFields([]);
     }
   }, [next, prev, prevAction, selectedMeals]);
 
@@ -70,37 +77,40 @@ const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction }: Question
               ))}
             </TableRow>
           </TableHeader>
-          <TableBody >
+          <TableBody>
             {(Object.keys(selectedMeals) as Array<Meals>).map((e) => (
-              <TableRow key={e}>
-                <TableCell>
-                  {t(`basic.meals.${e}`)} {'('}{selectedMeals[e]}{')'}
-                </TableCell>
-                {cols.map((c, index) => {
-                  const realIndex = index as 0 | 1 | 2;
-                  return (
-                    <TableCell key={c}>
-                      <Input
-                        form={mainForm}
-                        name={`food.basic.distribution.${e}.${realIndex}`}
-                        type="number"
-                        onChange={(v) => {
-                          const newTotal = mainForm.getValues(`food.basic.distribution.${e}`)?.reduce((acc, curr) => acc + (curr ?? 0), 0);
-                          if (newTotal>(selectedMeals[e] ?? 0)) {
-                            let i = 0 as 0|1|2;
-                            for(i; i<3; i++) mainForm.setError(`food.basic.distribution.${e}.${i}`, {
-                              message: `total must be less than ${selectedMeals[e] ?? 0}`,
-                            })
-                          }else{
-                            let i = 0 as 0|1|2;
-                            for(i; i<3; i++) mainForm.clearErrors(`food.basic.distribution.${e}.${i}`)
-                          }
-                        }}
-                      />
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
+              <FormField
+                key={e}
+                control={mainForm.control}
+                name={`food.basic.distribution.${e}`}
+                render={() => (
+                  <>
+                    <TableRow className="border-t border-b-0">
+                      <TableCell>
+                        {t(`basic.meals.${e}`)} {'('}{selectedMeals[e]}{')'}
+                      </TableCell>
+                      {cols.map((c, index) => {
+                        const realIndex = index as 0 | 1 | 2;
+                        return (
+                          <TableCell key={c}>
+                            <Input
+                              form={mainForm}
+                              name={`food.basic.distribution.${e}.${realIndex}`}
+                              type="number"
+                              attachedFields={[`food.basic.distribution.${e}`]}
+                            />
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                    <TableRow className="border-none">
+                      <TableCell colSpan={cols.length + 1} className="pt-1 pb-3 border-none">
+                        <FormMessage />
+                      </TableCell>
+                    </TableRow>
+                  </>
+                )}
+              />
             ))}
           </TableBody>
         </Table>

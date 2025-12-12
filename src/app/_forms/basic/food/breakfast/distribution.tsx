@@ -18,21 +18,21 @@ const cols = ["homemade", "quantine", "delivered"] as const;
 const meals = ["bread", "salty", "milk", "fruits"] as const;
 
 type Meals = (typeof meals)[number];
-
+type SelectedMeals = {
+    bread?: number | undefined;
+    salty?: number | undefined;
+    milk?: number | undefined;
+    fruits?: number | undefined;
+}
 const Distribution: QuestionFC = ({ mainForm, next, prev, prevAction }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.food");
 
-  const [selectedMeals] = useState<{
-    bread?: number;
-    salty?: number;
-    milk?: number;
-    fruits?: number;
-  }>(() => {
+  const [selectedMeals] = useState<SelectedMeals>(() => {
     const rawMeals = mainForm.getValues("food.breakfast.meals");
     return meals.reduce(
-      (acc, curr) => ({
+      (acc: SelectedMeals, curr) => ({
         ...acc,
-        ...((rawMeals[curr] ?? 0) > 0 ? { [curr]: rawMeals[curr] } : undefined),
+        ...((rawMeals?.[curr] ?? 0) > 0 ? { [curr]: rawMeals[curr] } : undefined),
       }),
       {}
     );

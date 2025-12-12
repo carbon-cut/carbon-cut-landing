@@ -4,7 +4,6 @@ import { useScopedI18n } from "@/locales/client";
 import Question from "../../../components/question";
 import Content from "../../../components/content";
 import Input from "../../../components/input";
-import Select from "../../../components/select";
 import { FormLabel } from "@/components/ui/forms";
 import FormSelect from "@/components/forms/formSelect";
 

@@ -950,6 +950,10 @@ export default {
       Required: "Obligatoire",
       food: {
         minMeals: "Le total des repas doit être au moins de 7.",
+        distributionMismatch: "La répartition doit correspondre au nombre de repas indiqué.",
+      },
+      market: {
+        missingPair: "La fréquence et son unité doivent être renseignées ensemble.",
       },
     },
   },

@@ -41,7 +41,7 @@ const Q2: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
 
 Q2["Symbol"] = {
   question: "forms.basic.energie.q2.title",
-  fields: ["energie.gas.total", "energie.gas.money"],
+  fields: ["energie.gas"],
 };
 
 export default Q2;

@@ -94,6 +94,7 @@ export default function FormPageClient() {
   };
 
   const handleError = (...args: unknown[]) => {
+    console.log(mainForm.getValues());
     console.log(...args);
     setQuestionList(true);
   };
@@ -120,11 +121,11 @@ export default function FormPageClient() {
         case "energie":
           return "food";
         case "food":
-          return "waste";
+          return "food";
         case "waste":
           return "vacation";
         case "vacation":
-          return "transport";
+          return "vacation";
         default:
           return "transport";
       }

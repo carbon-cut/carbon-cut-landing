@@ -1,84 +1,40 @@
 import { z } from "zod";
 import { union } from "./utils";
-import { basicMeals } from "./validation/food";
+import { basic as basicValidator, breakfast as breakfastValidator, market as marketValidator } from "./validation/food";
+
 const food = z.object({
-  basic: z.object({
-    meals: basicMeals,
-    distribution: z.object({
-      // cooked at home, quantine or outside of house, livree a maison
-      redMeat: z.tuple([z.number(), z.number(), z.number()]),
-      whiteMeat: z.tuple([z.number(), z.number(), z.number()]),
-      oilyFish: z.tuple([z.number(), z.number(), z.number()]),
-      whiteFish: z.tuple([z.number(), z.number(), z.number()]),
-      vegan: z.tuple([z.number(), z.number(), z.number()]),
-      vegetarian: z.tuple([z.number(), z.number(), z.number()]),
-    }),
-  }),
-  breakfast: z.object({
-    meals: z.object({
-      bread: z.number().optional(),
-      salty: z.number().optional(),
-      milk: z.number().optional(),
-      fruits: z.number().optional(),
-      no: z.number().optional(),
-    }),
-    distribution: z.object({
-      bread: z.tuple([z.number(), z.number(), z.number()]),
-      salty: z.tuple([z.number(), z.number(), z.number()]),
-      milk: z.tuple([z.number(), z.number(), z.number()]),
-      fruits: z.tuple([z.number(), z.number(), z.number()]),
-    }),
-  }),
+  basic: basicValidator,
+  breakfast: breakfastValidator,
   restaurants: z.object({
     // colection de donnée
-    fastFood: z.number(),
-    bistro: z.number(),
-    classic: z.number(),
-    gastronomic: z.number(),
-    bio: z.number(),
+    fastFood: z.number().optional(),
+    bistro: z.number().optional(),
+    classic: z.number().optional(),
+    gastronomic: z.number().optional(),
+    bio: z.number().optional(), 
   }),
   drinks: z.object({
     // cup per day
-    tea: z.number(),
-    coffee: z.number(),
-    hotChocolate: z.number(),
+    tea: z.number().optional(),
+    coffee: z.number().optional(),
+    hotChocolate: z.number().optional(),
     // L per week
-    soda: z.number(),
-    jus: z.number(),
-    beer: z.number(),
-    alcohol: z.number(),
+    soda: z.number().optional(),
+    jus: z.number().optional(),
+    beer: z.number().optional(),
+    alcohol: z.number().optional(),
   }),
-  water: z.object({
+  //TODO
+  /* water: z.object({
     type: union("tapWater", "tapWaterFilter", "bottle"),
     quantity: z.number(), // bottle per freq
     frequency: union("day", "week", "month"),
-  }),
+  }), */
   auxilary: z.object({
-    seasonProducts: union(0, 20, 40, 60, 80, 100), // percent %
-    localProducts: union(0, 20, 40, 60, 80, 100), // percent %
+    seasonProducts: union(0, 20, 40, 60, 80, 100, false).optional(), // percent %
+    localProducts: union(0, 20, 40, 60, 80, 100, false).optional(), // percent %
   }),
-  market: z.object({
-    hyperMarket: z.object({
-      frequency: z.number(),
-      frequencyUnit: union("year", "month", "week"),
-    }),
-    big_boxStore: z.object({
-      frequency: z.number(),
-      frequencyUnit: union("year", "month", "week"),
-    }),
-    supermarket: z.object({
-      frequency: z.number(),
-      frequencyUnit: union("year", "month", "week"),
-    }),
-    groceryStore: z.object({
-      frequency: z.number(),
-      frequencyUnit: union("year", "month", "week"),
-    }),
-    weeklyMarket: z.object({
-      frequency: z.number(),
-      frequencyUnit: union("year", "month", "week"),
-    }),
-  }),
+  market: marketValidator,
 });
 
 export { food };
