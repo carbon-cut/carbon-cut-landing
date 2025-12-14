@@ -52,14 +52,6 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
 
   const { tab, setTab, currentIndexes, setCurrentIndexes } = React.useContext(FormContext);
 
-  const [error, setError] = React.useState({
-    transport: false,
-    energie: false,
-    food: false,
-    waste: false,
-    vacation: false,
-  });
-
   return (
     <Dialog open={dialog} onOpenChange={setDialog}>
       <DialogTrigger asChild>
@@ -101,10 +93,8 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
             return (
               <AccordionItem
                 className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 md:px-4
-                border-gray-200 hover:border-section-transport transition-colors
-                ${
-                  error[key] || sectionError ? "border-destructive hover:border-destructive/60" : ""
-                } 
+                 hover:border-section-transport transition-colors
+                ${sectionError ? "border-destructive hover:border-destructive/60" : "border-gray-200"}
                 `}
                 style={{
                   //@ts-expect-error interpolateSize is not supported, only in Chrome
@@ -133,8 +123,6 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
                 <AccordionContent forceMount type="preview" className="md:px-6 px-3 space-y-3 pt-3">
                   {list[key]?.map(({ Symbol }, index) => (
                     <Question
-                      setError={setError}
-                      error={error}
                       index={index}
                       currentIndex={currentIndexes[key]}
                       mainForm={mainForm}

@@ -12,8 +12,6 @@ const Question = ({
   section,
   setInterface,
   index,
-  setError,
-  error,
   currentIndex,
 }: {
   mainForm: UseFormReturn<any>;
@@ -21,9 +19,7 @@ const Question = ({
   setInterface: () => void;
   section: TabValues;
   index: number;
-  error: { [key in TabValues]: boolean };
   currentIndex: number;
-  setError: React.Dispatch<React.SetStateAction<{ [key in TabValues]: boolean }>>;
 }) => {
   const t = useScopedI18n();
 
@@ -31,19 +27,23 @@ const Question = ({
 
   const [errorc, setErrorc] = useState(false);
 
+  const isCurrent = currentIndex === index && tab === section;
+
   useEffect(() => {
     for (const field of Symbol?.fields ?? []) {
       if (!mainForm.getFieldState(field)) throw new Error(`Field: "${field}" not found`);
       if (mainForm.getFieldState(field)?.error) {
-        if (!error[section]) setError((prev) => ({ ...prev, [section]: true }));
-        setErrorc(true);
+        mainForm.trigger(field);
+        if (mainForm.getFieldState(field)?.error) {
+          console.log(`Error in field: ${field}`, mainForm.getFieldState(field)?.error);
+          setErrorc(true);
+        }
         return;
       }
     }
     setErrorc(false);
-  }, [mainForm]);
+  }, [mainForm, isCurrent]);
 
-  const isCurrent = currentIndex === index && tab === section;
   return (
     <Button
       type="button"

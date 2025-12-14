@@ -206,7 +206,7 @@ const QHeating: QuestionFC = ({
 
 QHeating["Symbol"] = {
   question: "forms.basic.energie.heating.title",
-  fields: heatingMethods.map((e) => `energie.heating.${e}` as const),
+  fields: ["energie.heating"],
 };
 
 export default QHeating;
