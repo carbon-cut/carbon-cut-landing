@@ -170,7 +170,20 @@ const Container = React.forwardRef<
               setQuestions={initQuestions.food[1]}
               setPrevAction={setPrevAction}
             />
-            <TabsContent value="waste"></TabsContent>
+            <TabContent
+              mainForm={mainForm}
+              initQuestions={initQuestions.waste}
+              setNextTab={setNextTab}
+              value="waste"
+              next={next}
+              prev={prev}
+              setSubmit={setSubmit}
+              setOnSubmit={setOnSubmit}
+              prevAction={prevAction}
+              questions={initQuestions.waste[0]}
+              setQuestions={initQuestions.waste[1]}
+              setPrevAction={setPrevAction}
+            />
             <TabsContent value="vacation"></TabsContent>
           </CardContent>
         </motion.div>

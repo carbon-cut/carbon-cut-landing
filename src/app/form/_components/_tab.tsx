@@ -1,7 +1,7 @@
 import { TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import React, { useCallback, useContext, useEffect } from "react";
-import { QuestionFC, QuestionProps } from "../../_forms/types";
+import React, { useContext, useEffect } from "react";
+import { QuestionFC } from "../../_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "@/app/_forms/formSchema";
@@ -28,10 +28,14 @@ const TabTrigger = React.forwardRef<
     data-[state=active]:bg-linear-food
     data-[state=completed]:bg-section-food/10
     hover:bg-section-food/20 data-[state=completed]:hover:bg-section-food/20`,
-    waste:
-      "data-[state=active]:bg-section-waste hover:bg-section-waste/80 data-[state=completed]:bg-section-waste/40",
-    vacation:
-      "data-[state=active]:bg-section-vacation hover:bg-section-vacation/80 data-[state=completed]:bg-section-vacation/40",
+    waste: `
+    data-[state=active]:bg-linear-waste
+    data-[state=completed]:bg-section-waste/10
+    hover:bg-section-waste/20 data-[state=completed]:hover:bg-section-waste/20`,
+    vacation: `
+    data-[state=active]:bg-linear-vacation
+    data-[state=completed]:bg-section-vacation/10
+    hover:bg-section-vacation/20 data-[state=completed]:hover:bg-section-vacation/20`,
   };
   return (
     <TabsTrigger

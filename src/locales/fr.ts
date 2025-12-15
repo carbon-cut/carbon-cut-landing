@@ -931,6 +931,136 @@ export default {
           },
         },
       },
+      waste: {
+        general: {
+          waste: {
+            title: "Déchets ménagers",
+            q: "Quelle quantité moyenne de déchets ménagers votre foyer produit-il?",
+            amount: "Quantité",
+            amountUnit: {
+              placeholder: "Unité",
+              labels: {
+                bag: "Sac",
+                kg: "Kg",
+              },
+            },
+            frequencyUnit: {
+              placeholder: "Fréquence",
+              labels: {
+                day: "Jour",
+                week: "Semaine",
+              },
+            },
+            bagVolume: {
+              placeholder: "Volume du sac (L)",
+            },
+          },
+        },
+        precise: {
+          title: "Tri sélectif",
+          q: "Si vous effectuez le tri sélectif des déchets, pour lesquels de ces déchets pouvez-vous estimer les quantités :",
+          labels: {
+            recylablePackaging: "Emballages recyclables (plastiques, cartons, métaux)",
+            paper: "Papiers (journaux, magazines)",
+            glass: "Verre (bouteilles et bocaux)",
+            organic: "Déchets organiques",
+          },
+          waste: {
+            amount: "Quantité",
+            amountUnit: {
+              placeholder: "Unité",
+              labels: {
+                bag: "Sac",
+                kg: "Kg",
+              },
+            },
+            frequencyUnit: {
+              placeholder: "Fréquence",
+              labels: {
+                day: "Jour",
+                week: "Semaine",
+              },
+            },
+            bagVolume: {
+              placeholder: "Volume du sac (L)",
+            },
+          },
+        },
+        details: {
+          wasteDestination: {
+            title: "Destination des déchets",
+            q: "Si vous ne pratiquez pas le tri sélectif, avez-vous une idée de la destination finale de vos déchets ménagers ?",
+            placeholder: "Sélectionnez une destination",
+            options: {
+              incineration: "Incinération",
+              recycling: "Recyclage",
+              landfilling: "Enfouissement",
+              composting: "Compostage",
+              biomethanation: "Biométhanisation",
+              idk: "Je ne sais pas",
+            },
+          },
+          personalCompost: {
+            title: "Compost personnel",
+            q: "Préparez-vous votre compost vous-même à domicile pour votre usage personnel ?",
+            yes: "Oui",
+            no: "Non",
+          },
+          biodigest: {
+            q1: {
+              title: "Présence de biodigesteur",
+              q: "Disposez-vous d'un biodigesteur à domicile pour votre usage personnel ?",
+              yes: "Oui",
+              no: "Non",
+            },
+            q2: {
+              title: "Production du biodigesteur",
+              q: "Pouvez-vous indiquer votre production ?",
+              electric: {
+                q: "Électricité",
+                amount: "Quantité",
+                unit: "kWh",
+                frequency: "Fréquence",
+              },
+              biogas: {
+                q: "Biogaz",
+                amount: "Quantité",
+                unit: "m³",
+                frequency: "Fréquence",
+              },
+              frequencies: {
+                month: "mois",
+                year: "an",
+              },
+            },
+          },
+        },
+        water: {
+          q1: {
+            title: "Facture d'assainissement",
+            q: "Indiquez globalement le montant moyen de votre facture relative à l'assainissement :",
+            frequency: {
+              placeholder: "Fréquence",
+              month: "mois",
+              year: "an",
+            },
+          },
+          q2: {
+            title: "Quantité d'eau facturée",
+            q: "Indiquez globalement la quantité moyenne d'eau prise en compte dans la rubrique assainissement de votre facture.",
+            frequency: {
+              placeholder: "Fréquence",
+              month: "mois",
+              year: "an",
+            },
+            unit: "m³",
+          },
+          q3: {
+            title: "Index compteur d'eau",
+            q: "Si possible, indiquez votre index compteur d'eau",
+          },
+        },
+      },
     },
     yes: "oui",
     no: "non",

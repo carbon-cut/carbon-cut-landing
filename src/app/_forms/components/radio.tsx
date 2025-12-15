@@ -6,7 +6,7 @@ import {
   FormMessage,
   TName,
 } from "@/components/ui/forms";
-import { RadioGroup, RadioGroupItemCheck, RadioGroupItemSwitch } from "@/components/ui/radio-group";
+import { RadioGroup, RadioGroupItemSwitch } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
 import React from "react";
@@ -16,7 +16,7 @@ type Props<T extends FieldValues> = {
   form: UseFormReturn<T, undefined>;
   options: {
     label: string;
-    value: string | number;
+    value: string | number | boolean;
   }[];
   name: TName<T>;
   className?: ClassValue;
@@ -31,7 +31,8 @@ function Radio<T extends FieldValues>({
   required = false,
   setState = undefined,
 }: Props<T>) {
-  const selected = (fieldvalue: string | number, value: string | number) => fieldvalue === value;
+  const selected = (fieldvalue: string | number | boolean, value: string | number | boolean) =>
+    fieldvalue === value;
   return (
     <FormField
       control={form.control}
