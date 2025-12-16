@@ -5,27 +5,31 @@ import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/content";
 import Input from "../../../../components/input";
 import FormSelect from "@/components/forms/formSelect";
+import { useSubmit } from "@/lib/hooks/useSubmit";
 
 const contentKeys = ["electric", "biogas"] as const;
 const frequencies = ["month", "year"] as const;
 
 const Detail: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.details.biodigest.q2");
+  useSubmit();
 
   return (
     <div>
       <Question>{t("q")}</Question>
       <Content>
         {contentKeys.map((e) => (
-          <div key={e} className="grid grid-cols-4">
-            <Input
-              name={`waste.details.biodigest.${e}.amount`}
-              form={mainForm}
-              label={`${t(`${e}.q`)}`}
-              type="number"
-              unit={t(`${e}.unit`)}
-            />
-            <div className="ml-3">
+          <div key={e} className="grid grid-cols-4 gap-6 mt-6 md:mt-3">
+            <div className="col-span-2">
+              <Input
+                name={`waste.details.biodigest.${e}.amount`}
+                form={mainForm}
+                label={`${t(`${e}.q`)}`}
+                type="number"
+                placeholder={t(`${e}.unit`)}
+              />
+            </div>
+            <div className="col-span-2 md:col-span-1">
               <FormSelect
                 form={mainForm}
                 name={`waste.details.biodigest.${e}.frequencyUnit`}
@@ -45,13 +49,7 @@ const Detail: QuestionFC = ({ mainForm }: QuestionProps) => {
 
 Detail["Symbol"] = {
   question: "forms.basic.waste.details.biodigest.q2.title",
-  fields: [
-    "waste.details.biodigest",
-    "waste.details.biodigest.electric.amount",
-    "waste.details.biodigest.electric.frequencyUnit",
-    "waste.details.biodigest.biogas.amount",
-    "waste.details.biodigest.biogas.frequencyUnit",
-  ],
+  fields: ["waste.details.biodigest"],
 };
 
 export default Detail;

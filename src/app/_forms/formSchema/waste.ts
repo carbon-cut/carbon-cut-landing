@@ -4,7 +4,7 @@ import { union } from "./utils";
 const wasteGeneral = z.object({
   amount: z.number(),
   amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
+  frequencyUnit: union("day", "week"),
   bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
   destination: z.null(),
 });
@@ -83,10 +83,10 @@ const waste = z.object({
       amount: z.number(), // euro
       frequencyUnit: union("month", "year"),
     }),
-    /*       index: z.object({
-        value: z.number(), // in m3?
-        date: z.date(),
-      }), */
+    index: z.object({
+      value: z.number(), // in m3?
+      date: z.date(),
+    }),
   }),
 });
 

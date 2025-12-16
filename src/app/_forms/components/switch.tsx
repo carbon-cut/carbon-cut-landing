@@ -12,7 +12,7 @@ const SwitchForm = React.forwardRef<
   const { error } = useFormField();
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-2 h-full">
       <Switch ref={ref} {...props} />
       {label && (
         <FormLabel

@@ -47,6 +47,7 @@ const Main: QuestionFC = ({ mainForm, setQuestions, currentIndex, setOnSubmit }:
             { label: t("yes"), value: true },
             { label: t("no"), value: false },
           ]}
+          className="md:w-1/2 w-5/6"
         />
       </Content>
     </div>

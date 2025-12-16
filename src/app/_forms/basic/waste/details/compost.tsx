@@ -20,6 +20,7 @@ const Destination: QuestionFC = ({ mainForm }: QuestionProps) => {
             label: t(`${e}`),
             value: e === "yes" ? true : false,
           }))}
+          className="md:w-1/2 w-5/6"
         />
       </Content>
     </div>

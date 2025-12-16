@@ -4,7 +4,7 @@ import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import Input from "../../../components/input";
-import Select from "../../../components/select";
+import FormSelect from "@/components/forms/formSelect";
 
 const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.general.waste");
@@ -16,38 +16,35 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   return (
     <div>
       <Question>{t("q")}</Question>
-      <Content className="flex justify-start">
-        <Input
-          label="&nbsp;"
-          form={mainForm}
-          name={"waste.general.waste.amount"}
-          type="number"
-          placeholder={t("amount")}
-          half
-          full
-        />
-        <div className="w-[100px] mr-4">
-          <Select
-            label="&nbsp;"
+      <Content className="grid grid-cols-4 gap-4">
+        <div className="col-span-4 md:col-span-2">
+          <Input
+            form={mainForm}
+            name={"waste.general.waste.amount"}
+            type="number"
+            placeholder={t("amount")}
+          />
+        </div>
+        <div className="col-span-2 md:col-span-1">
+          <FormSelect
             form={mainForm}
             name="waste.general.waste.amountUnit"
             placeholder={t("amountUnit.placeholder")}
             onChange={(v) => setIsBag(v === "bag")}
-            options={[
+            data={[
               { label: t("amountUnit.labels.bag"), value: "bag" },
               { label: t("amountUnit.labels.kg"), value: "kg" },
             ]}
           />
         </div>
-        <div className="w-[130px] mr-4">
-          <Select
-            label="&nbsp;"
+        <div className="col-span-2 md:col-span-1">
+          <FormSelect
             form={mainForm}
             name="waste.general.waste.frequencyUnit"
             placeholder={t("frequencyUnit.placeholder")}
-            options={[
-              { label: t("frequencyUnit.labels.day"), value: "daily" },
-              { label: t("frequencyUnit.labels.week"), value: "weekly" },
+            data={[
+              { label: t("frequencyUnit.labels.day"), value: "day" },
+              { label: t("frequencyUnit.labels.week"), value: "week" },
             ]}
           />
         </div>
@@ -61,8 +58,6 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
             type="number"
             label={t("bagVolume.placeholder")}
             placeholder={t("bagVolume.placeholder")}
-            full
-            half
           />
         </div>
       </Content>

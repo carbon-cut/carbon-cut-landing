@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { FieldPath, FieldValues, set, UseFormReturn } from "react-hook-form";
+import React from "react";
+import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -23,6 +23,8 @@ interface Props<T extends FieldValues, E extends FieldPath<T>> {
   labelClassName?: string;
   fallback?: boolean;
   size?: "sm" | "xl";
+  onChange?: (v: string) => void;
+  disabled?: boolean;
 }
 
 function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
@@ -35,6 +37,8 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
   labelClassName,
   fallback = false,
   size = "xl",
+  disabled = false,
+  onChange = () => {},
 }: Props<T, E>) {
   const t = useScopedI18n("components.forms.combox");
 
@@ -47,23 +51,34 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
       render={({ field, fieldState }) => (
         <FormItem>
           {label && (
-            <FormLabel data-state={fieldState.error && "error"} className={cn("", labelClassName)}>
+            <FormLabel
+              data-state={fieldState.error && "error"}
+              className={cn(
+                `text-sm font-medium ${
+                  disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""
+                }`,
+                labelClassName
+              )}
+              data-disabled={disabled}
+            >
               {label} {mandetory && <span className="text-red-500">*</span>}
             </FormLabel>
           )}
           <Select
+            disabled={disabled}
             onValueChange={(_) => {
-              console.log(_);
               field.onChange(_);
+              onChange(_);
             }}
             defaultValue={field.value}
           >
             <FormControl>
               <SelectTrigger
                 data-size={"none"}
-                onClick={(e) => {
+                onClick={() => {
                   setOpen(true);
                 }}
+                disabled={disabled}
                 key={`${open}`}
                 className={`rounded-full w-full  
                 text-left font-normal bg-white text-ellipsis
@@ -82,7 +97,11 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
               ))}
             </SelectContent>
           </Select>
-          <FormMessage fallback={fallback} className={labelClassName} />
+          <FormMessage
+            data-state={disabled && "disabled"}
+            fallback={fallback}
+            className={labelClassName}
+          />
         </FormItem>
       )}
     />

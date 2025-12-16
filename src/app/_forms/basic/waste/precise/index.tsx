@@ -25,7 +25,7 @@ const Precise: QuestionFC = ({ mainForm }: QuestionProps) => {
   return (
     <div>
       <Question>{t("q")}</Question>
-      <Content>
+      <Content className="px-0">
         <MultiCheckInput
           form={mainForm}
           name="waste.precise"
@@ -39,6 +39,7 @@ const Precise: QuestionFC = ({ mainForm }: QuestionProps) => {
             value: e,
             unit: "null",
           }))}
+          className="px-0"
         />
       </Content>
       <WastesTable mainForm={mainForm} wastes={wastes} />

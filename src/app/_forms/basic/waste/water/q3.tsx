@@ -15,7 +15,6 @@ const Q3: QuestionFC = ({ mainForm }: QuestionProps) => {
           form={mainForm}
           name={"waste.water.index.value"}
           type={"number"}
-          full
           onChange={() => {
             mainForm.setValue("waste.water.index.date", new Date());
           }}

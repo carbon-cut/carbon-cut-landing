@@ -984,6 +984,7 @@ export default {
             bagVolume: {
               placeholder: "Volume du sac (L)",
             },
+            type: "Type",
           },
         },
         details: {

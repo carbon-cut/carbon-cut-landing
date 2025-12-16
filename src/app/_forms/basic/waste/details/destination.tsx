@@ -4,6 +4,7 @@ import { useScopedI18n } from "@/locales/client";
 import Question from "../../../components/question";
 import Content from "../../../components/content";
 import Select from "../../../components/select";
+import FormSelect from "@/components/forms/formSelect";
 
 const destinationKeys = [
   "incineration",
@@ -19,12 +20,12 @@ const Destination: QuestionFC = ({ mainForm }: QuestionProps) => {
   return (
     <div>
       <Question>{t("q")}</Question>
-      <Content>
-        <Select
+      <Content className="md:w-1/2">
+        <FormSelect
           form={mainForm}
           name={"waste.details.wasteDestination"}
           placeholder={t("placeholder")}
-          options={destinationKeys.map((e) => ({
+          data={destinationKeys.map((e) => ({
             label: t(`options.${e}`),
             value: e,
           }))}

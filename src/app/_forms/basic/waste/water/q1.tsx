@@ -4,7 +4,7 @@ import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import Input from "../../../components/input";
-import Select from "../../../components/select";
+import FormSelect from "@/components/forms/formSelect";
 
 const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.water.q1");
@@ -12,27 +12,26 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
     <div>
       <Question>{t("q")}</Question>
       <Content>
-        <div className="grid grid-cols-4">
-          <Input
-            label="&nbsp;"
-            form={mainForm}
-            name={"waste.water.money.amount"}
-            type={"number"}
-            unit={"euro"}
-            half
-            full
-          />
-          <Select
-            label="&nbsp;"
-            form={mainForm}
-            name={"waste.water.money.frequencyUnit"}
-            options={[
-              { label: t("frequency.month"), value: "month" },
-              { label: t("frequency.year"), value: "year" },
-            ]}
-            placeholder={t("frequency.placeholder")}
-            className="w-2/3"
-          />
+        <div className="grid grid-cols-4 md:gap-6 gap-3">
+          <div className="col-span-2">
+            <Input
+              form={mainForm}
+              name={"waste.water.money.amount"}
+              type={"number"}
+              placeholder={"Euro"}
+            />
+          </div>
+          <div className="col-span-2 md:col-span-1">
+            <FormSelect
+              form={mainForm}
+              name={"waste.water.money.frequencyUnit"}
+              data={[
+                { label: t("frequency.month"), value: "month" },
+                { label: t("frequency.year"), value: "year" },
+              ]}
+              placeholder={t("frequency.placeholder")}
+            />
+          </div>
         </div>
       </Content>
     </div>
