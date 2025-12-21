@@ -188,7 +188,7 @@ const QHeating: QuestionFC = ({
           </Badge>
         </div>
       )}
-      <Question className="mb-0">{t("q")}</Question>
+      <Question className="mb-6">{t("q")}</Question>
       <MultiCheckInput
         className="md:px-20 px-0"
         type="boolean"

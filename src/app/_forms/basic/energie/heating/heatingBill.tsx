@@ -18,6 +18,7 @@ const HeatingBill: QuestionFC = ({ mainForm }: QuestionProps) => {
           name="energie.heating.quantities.heatingNetwork.total"
           placeholder="kWh"
           type="number"
+          attachedFields={["energie.heating.quantities.heatingNetwork.money"]}
         />
       </Content>
       <SideQuestion
@@ -30,6 +31,7 @@ const HeatingBill: QuestionFC = ({ mainForm }: QuestionProps) => {
             unit=""
             type="number"
             placeholder="€"
+            attachedFields={["energie.heating.quantities.heatingNetwork.total"]}
           />
         }
       />
