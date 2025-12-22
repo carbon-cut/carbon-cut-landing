@@ -20,9 +20,65 @@
 
 .body {
   @apply bg-background text-foreground py-8 px-4 max-w-[100vw] overflow-x-hidden overflow-y-hidden;
-  background:
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="15" fill="rgba(0,162,97,0.03)"/><circle cx="80" cy="80" r="20" fill="rgba(255,96,52,0.02)"/><path d="M10 50 Q25 40 40 50" stroke="rgba(0,162,97,0.04)" stroke-width="2" fill="none"/></svg>'),
-    linear-gradient(135deg, #f0fdf9 0%, #ecfdf5 50%, #e0f2fe 100%);
+  background: linear-gradient(
+    90deg,
+    #d8d6ef 0%,
+    #e3e1f6 25%,
+    #e8e7fa 50%,
+    #dcdff9 75%,
+    #cccff0 100%
+  );
   background-attachment: fixed;
   position: relative;
+}
+
+.backgroundLayers {
+  @apply min-h-[150vh];
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.sky {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: auto;
+  max-width: none;
+}
+
+.sun {
+  position: absolute;
+  top: 16vh;
+  left: 10vw;
+  width: 180px;
+  height: 180px;
+}
+
+.land {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: auto;
+  max-width: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  min-height: 120vh;
+}
+
+@media (max-width: 768px) {
+  .sun {
+    top: 4vh;
+    right: 6vw;
+    width: 120px;
+    height: 120px;
+  }
 }

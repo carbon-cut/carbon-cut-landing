@@ -22,9 +22,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
 
 export default function FormPageClient() {
   const { tab, setTab, currentIndexes, readyToSubmit } = React.useContext(FormContext);
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
   const router = useRouter();
 
@@ -124,97 +126,130 @@ export default function FormPageClient() {
   }, [setTab]);
   return (
     <div className={style.body}>
-      <Form {...mainForm}>
-        <form
-          onSubmit={(e) => {
-            if (!readyToSubmit) {
-              e.preventDefault();
-              e.stopPropagation();
-              console.warn("Prevented unintended submit on mount");
-              return;
-            }
-            return mainForm.handleSubmit(handleSubmit, handleError)(e);
-          }}
-          className="min-h-screen h-full w-full"
-        >
-          <Tabs
-            className="relative md:pt-32 pt-20 px-0 lg:w-[850px] mx-auto"
-            value={tab}
-            //@ts-expect-error because Tabs cannot access to possible values
-            onValueChange={(v) => setTab(v)}
+      <div className={style.backgroundLayers} aria-hidden="true">
+        <div className={style.sky}>
+          <Image
+            src={`${basePath}/form/background/sky.png`}
+            alt=""
+            width={1536}
+            height={1024}
+            priority
+            sizes="100vw"
+            className="h-auto w-full object-cover object-top"
+          />
+        </div>
+        <div className={style.sun}>
+          <Image
+            src={`${basePath}/form/background/sun.png`}
+            alt=""
+            fill
+            className="object-contain"
+          />
+        </div>
+        <div className={style.land}>
+          <Image
+            src={`${basePath}/form/background/land1.png`}
+            alt=""
+            width={1536}
+            height={1024}
+            sizes="100vw"
+            className="h-auto w-full object-cover object-bottom"
+          />
+        </div>
+      </div>
+      <div className={style.content}>
+        <Form {...mainForm}>
+          <form
+            onSubmit={(e) => {
+              if (!readyToSubmit) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.warn("Prevented unintended submit on mount");
+                return;
+              }
+              return mainForm.handleSubmit(handleSubmit, handleError)(e);
+            }}
+            className="min-h-screen h-full w-full"
           >
-            <div>
-              <ProgressBar
-                ref={scrollToRef}
-                tab={tab}
-                dataLengths={dataLengths}
-                currentQuestion={currentIndexes[tab]}
-                currentSectionDataLength={dataLengths[tab]}
-                currentSectionName={getName(tab)}
-              >
-                <QuestionList
-                  mainForm={mainForm}
-                  list={{
-                    transport: transportQuestions[0],
-                    energie: energieQuestions[0],
-                    food: foodQuestions[0],
-                  }}
-                  dialog={questionList}
-                  setDialog={setQuestionList}
-                />
-              </ProgressBar>
-            </div>
-            <div className="flex justify-center mb-8 relative">
-              <TabsList className="flex max-w-full flex-wrap space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
-                <TabTrigger
-                  value="transport"
-                  data-state={
-                    getIndex(tab) > 0 ? "completed" : tab === "transport" ? "active" : "inactive"
-                  }
+            <Tabs
+              className="relative md:pt-32 pt-20 px-0 lg:w-[850px] mx-auto"
+              value={tab}
+              //@ts-expect-error because Tabs cannot access to possible values
+              onValueChange={(v) => setTab(v)}
+            >
+              <div>
+                <ProgressBar
+                  ref={scrollToRef}
+                  tab={tab}
+                  dataLengths={dataLengths}
+                  currentQuestion={currentIndexes[tab]}
+                  currentSectionDataLength={dataLengths[tab]}
+                  currentSectionName={getName(tab)}
                 >
-                  <Car className="w-4 h-4" />
-                </TabTrigger>
-                <TabTrigger
-                  value="energie"
-                  data-state={
-                    getIndex(tab) > 1 ? "completed" : tab === "energie" ? "active" : "inactive"
-                  }
-                >
-                  <Zap className="w-4 h-4" />
-                </TabTrigger>
-                <TabTrigger
-                  value="food"
-                  data-state={
-                    getIndex(tab) > 2 ? "completed" : tab === "food" ? "active" : "inactive"
-                  }
-                >
-                  <UtensilsCrossed className="w-4 h-4" />
-                </TabTrigger>
-                <TabTrigger disabled value="waste">
-                  <Trash2 className="w-4 h-4" />
-                </TabTrigger>
-                <TabTrigger disabled value="vacation">
-                  <Plane className="w-4 h-4" />
-                </TabTrigger>
-              </TabsList>
-            </div>
-            <Container
-              scrollToRef={scrollToRef}
-              mainForm={mainForm}
-              initQuestions={{
-                transport: transportQuestions,
-                energie: energieQuestions,
-                food: foodQuestions,
-                waste: [[], () => {}],
-                vacation: [[], () => {}],
-              }}
-              setNextTab={setNextTab}
-              value="transport"
-              loading={submitMutation.isPending}
-            />
-          </Tabs>
-        </form>
-      </Form>
+                  <QuestionList
+                    mainForm={mainForm}
+                    list={{
+                      transport: transportQuestions[0],
+                      energie: energieQuestions[0],
+                      food: foodQuestions[0],
+                    }}
+                    dialog={questionList}
+                    setDialog={setQuestionList}
+                  />
+                </ProgressBar>
+              </div>
+              <div className="flex justify-center mb-4 relative">
+                <TabsList className="flex max-w-full flex-wrap space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
+                  <TabTrigger
+                    value="transport"
+                    data-state={
+                      getIndex(tab) > 0 ? "completed" : tab === "transport" ? "active" : "inactive"
+                    }
+                  >
+                    <Car className="w-4 h-4" />
+                  </TabTrigger>
+                  <TabTrigger
+                    value="energie"
+                    data-state={
+                      getIndex(tab) > 1 ? "completed" : tab === "energie" ? "active" : "inactive"
+                    }
+                  >
+                    <Zap className="w-4 h-4" />
+                  </TabTrigger>
+                  <TabTrigger
+                    value="food"
+                    data-state={
+                      getIndex(tab) > 2 ? "completed" : tab === "food" ? "active" : "inactive"
+                    }
+                  >
+                    <UtensilsCrossed className="w-4 h-4" />
+                  </TabTrigger>
+                  <TabTrigger disabled value="waste">
+                    <Trash2 className="w-4 h-4" />
+                  </TabTrigger>
+                  <TabTrigger disabled value="vacation">
+                    <Plane className="w-4 h-4" />
+                  </TabTrigger>
+                </TabsList>
+              </div>
+              <Container
+                scrollToRef={scrollToRef}
+                mainForm={mainForm}
+                initQuestions={{
+                  transport: transportQuestions,
+                  energie: energieQuestions,
+                  food: foodQuestions,
+                  waste: [[], () => {}],
+                  vacation: [[], () => {}],
+                }}
+                setNextTab={setNextTab}
+                value="transport"
+                loading={submitMutation.isPending}
+              />
+            </Tabs>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }
