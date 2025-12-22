@@ -95,27 +95,33 @@ const Container = React.forwardRef<
       className=" border-0 mx-4 "
       {...props}
     >
-      <Card className=" border-0 pt-0 relative">
-        <CardHeader className="text-center pt-6 pb-6 bg-gradient-to-t from-white to-[#ECFDF5] relative z-10">
-          <div className="flex justify-center mb-4">
-            {(() => {
-              const Icon = getIcon(tab);
-              const ColorVariant = {
-                transport: "bg-section-transport",
-                energie: "bg-section-energie",
-                food: "bg-section-food",
-                waste: "bg-section-waste",
-                vacation: "bg-section-vacation",
-              };
-              return (
-                <div
-                  className={`p-4 rounded-full ${ColorVariant[tab as keyof typeof ColorVariant]}`}
-                >
-                  <Icon className="h-6 w-6 text-white" />
-                </div>
-              );
-            })()}
-          </div>
+      <div className="flex justify-center mb-4">
+        {(() => {
+          const Icon = getIcon(tab);
+          const ColorVariant = {
+            transport: "bg-section-transport",
+            energie: "bg-section-energie",
+            food: "bg-section-food",
+            waste: "bg-section-waste",
+            vacation: "bg-section-vacation",
+          };
+          return (
+            <div className={`p-4 rounded-full ${ColorVariant[tab as keyof typeof ColorVariant]}`}>
+              <Icon className="h-6 w-6 text-white" />
+            </div>
+          );
+        })()}
+      </div>
+      <Card
+        className=" pt-6 relative
+                    bg-transparent 
+                    bg-gradient-to-br from-white via-white/60 to-white/5 
+                    backdrop-blur-sm
+                    rounded-2xl
+                    shadow-lg
+                    border border-white/30"
+      >
+        <CardHeader className="text-center pt-6 pb-0 relative z-10">
           <CardTitle className="text-2xl font-bold">{getName(tab)}</CardTitle>
           <CardDescription className="text-base">
             Question {currentIndexes[tab] + 1} of {initQuestions[tab][0].length}
@@ -127,7 +133,7 @@ const Container = React.forwardRef<
           animate={{ height }}
           transition={{ duration: 0.09, ease: "linear" }}
         >
-          <CardContent ref={cardRef} className="md:p-12">
+          <CardContent ref={cardRef} className="md:p-12 md:pt-3">
             <TabContent
               mainForm={mainForm}
               initQuestions={initQuestions.transport}
