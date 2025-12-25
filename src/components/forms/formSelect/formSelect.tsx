@@ -23,6 +23,8 @@ interface Props<T extends FieldValues, E extends FieldPath<T>> {
   labelClassName?: string;
   fallback?: boolean;
   size?: "sm" | "xl";
+  attachedFields?: FieldPath<T>[];
+  isError?: boolean;
 }
 
 function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
@@ -35,10 +37,22 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
   labelClassName,
   fallback = false,
   size = "xl",
+  attachedFields = [],
+  isError = false,
 }: Props<T, E>) {
   const t = useScopedI18n("components.forms.combox");
 
   const [open, setOpen] = React.useState(false);
+  const {
+    trigger,
+    formState: { isSubmitted },
+  } = form;
+
+  const verifyAttachedFields = () => {
+    if (isSubmitted || isError) {
+      trigger(attachedFields);
+    }
+  };
 
   return (
     <FormField
@@ -55,6 +69,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
             onValueChange={(_) => {
               console.log(_);
               field.onChange(_);
+              verifyAttachedFields();
             }}
             defaultValue={field.value}
           >
