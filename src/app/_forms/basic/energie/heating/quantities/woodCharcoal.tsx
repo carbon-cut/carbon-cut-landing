@@ -47,69 +47,71 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                         className="pt-4 mb-4 rounded-xl border border-transparent data-[state=error]:border-destructive"
                       >
                         <Content>
-                      <p className="text-sm font-medium text-black/70">{t(`wood.types.${type}`)}</p>
-                      <p className="text-xs text-black/60">
-                        {t(`wood.types.${woodTypeExamples[type]}`)}
-                      </p>
-                      <div className="mt-4 grid md:grid-cols-2 md:space-x-6">
-                        <div className="grid grid-cols-12 space-x-3">
-                          <div className="col-span-7">
-                            <Input
-                              labelClassName="text-black/70"
-                              label={t("wood.quantity")}
-                              form={mainForm}
-                              name={`energie.heating.quantities.wood.${type}.quantity`}
-                              placeholder={t("wood.quantity")}
-                              type="number"
-                              attachedFields={["energie.heating.quantities.wood"]}
-                              isError={Boolean(error)}
-                            />
+                          <p className="text-sm font-medium text-black/70">
+                            {t(`wood.types.${type}`)}
+                          </p>
+                          <p className="text-xs text-black/60">
+                            {t(`wood.types.${woodTypeExamples[type]}`)}
+                          </p>
+                          <div className="mt-4 grid md:grid-cols-2 md:space-x-6">
+                            <div className="grid grid-cols-12 space-x-3">
+                              <div className="col-span-7">
+                                <Input
+                                  labelClassName="text-black/70"
+                                  label={t("wood.quantity")}
+                                  form={mainForm}
+                                  name={`energie.heating.quantities.wood.${type}.quantity`}
+                                  placeholder={t("wood.quantity")}
+                                  type="number"
+                                  attachedFields={["energie.heating.quantities.wood"]}
+                                  isError={Boolean(error)}
+                                />
+                              </div>
+                              <div className="col-span-5">
+                                <FormSelect
+                                  form={mainForm}
+                                  placeholder={t("wood.qunits.label")}
+                                  label="&nbsp;"
+                                  name={`energie.heating.quantities.wood.${type}.quantityUnit`}
+                                  data={woodKeys.map((e) => ({
+                                    label: t(`wood.qunits.${e}`),
+                                    value: e,
+                                  }))}
+                                  attachedFields={["energie.heating.quantities.wood"]}
+                                  isError={Boolean(error)}
+                                />
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-12 space-x-3">
+                              <div className="col-span-7">
+                                <Input
+                                  labelClassName="text-black/70"
+                                  form={mainForm}
+                                  name={`energie.heating.quantities.wood.${type}.frequency`}
+                                  label={t("wood.funits.label")}
+                                  placeholder={t("wood.funits.label")}
+                                  type="number"
+                                  attachedFields={["energie.heating.quantities.wood"]}
+                                  isError={Boolean(error)}
+                                />
+                              </div>
+                              <div className="col-span-5">
+                                <FormSelect
+                                  form={mainForm}
+                                  label="&nbsp;"
+                                  placeholder={t("wood.funits.label")}
+                                  name={`energie.heating.quantities.wood.${type}.frequencyUnit`}
+                                  data={frequencyKeys.map((e) => ({
+                                    label: t(`wood.funits.${e}`),
+                                    value: e,
+                                  }))}
+                                  attachedFields={["energie.heating.quantities.wood"]}
+                                  isError={Boolean(error)}
+                                />
+                              </div>
+                            </div>
                           </div>
-                          <div className="col-span-5">
-                            <FormSelect
-                              form={mainForm}
-                              placeholder={t("wood.qunits.label")}
-                              label="&nbsp;"
-                              name={`energie.heating.quantities.wood.${type}.quantityUnit`}
-                              data={woodKeys.map((e) => ({
-                                label: t(`wood.qunits.${e}`),
-                                value: e,
-                              }))}
-                              attachedFields={["energie.heating.quantities.wood"]}
-                              isError={Boolean(error)}
-                            />
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-12 space-x-3">
-                          <div className="col-span-7">
-                            <Input
-                              labelClassName="text-black/70"
-                              form={mainForm}
-                              name={`energie.heating.quantities.wood.${type}.frequency`}
-                              label={t("wood.funits.label")}
-                              placeholder={t("wood.funits.label")}
-                              type="number"
-                              attachedFields={["energie.heating.quantities.wood"]}
-                              isError={Boolean(error)}
-                            />
-                          </div>
-                          <div className="col-span-5">
-                            <FormSelect
-                              form={mainForm}
-                              label="&nbsp;"
-                              placeholder={t("wood.funits.label")}
-                              name={`energie.heating.quantities.wood.${type}.frequencyUnit`}
-                              data={frequencyKeys.map((e) => ({
-                                label: t(`wood.funits.${e}`),
-                                value: e,
-                              }))}
-                              attachedFields={["energie.heating.quantities.wood"]}
-                              isError={Boolean(error)}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                        <FormMessage />
+                          <FormMessage />
                         </Content>
                       </div>
                     </FormItem>

@@ -12,7 +12,7 @@ type WoodQuantity = {
 const hasAnyValue = (value?: WoodQuantity) =>
   Boolean(
     value &&
-      Object.values(value).some((field) => field !== undefined && field !== null && field !== "")
+    Object.values(value).some((field) => field !== undefined && field !== null && field !== "")
   );
 
 type WoodCheckStatus = "success" | "some" | "full";
