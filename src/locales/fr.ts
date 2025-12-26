@@ -975,6 +975,11 @@ export default {
     categorisation: {
       title: "Répartition par catégorie",
     },
+    woodNotice: {
+      title: "Le bois compte dans votre empreinte",
+      description:
+        "Votre total est plus élevé car il inclut le CO₂ biogénique (scope 1N) du bois. Ce choix reste favorable face aux énergies fossiles.",
+    },
     recommendations: {
       title: "Moyens de réduire votre impact",
       transport: {

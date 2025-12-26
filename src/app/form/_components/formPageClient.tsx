@@ -68,7 +68,7 @@ export default function FormPageClient() {
       if (!response.ok || !data?.id) {
         throw new Error(data?.error?.message ?? "Failed to submit form");
       }
-
+      console.log("result:", data);
       return data;
     },
     onSuccess: (data) => {
