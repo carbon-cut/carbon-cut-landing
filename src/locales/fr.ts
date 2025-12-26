@@ -556,6 +556,12 @@ export default {
               quantity: "Quantité",
               unit: "Kg/",
               frequency: "fréquence",
+              types: {
+                hardwood: "Feuillus durs",
+                hardWoodExemples: "Exemples : chêne, hêtre, frêne",
+                softwood: "Résineux",
+                softWoodExemples: "Exemples : pin, sapin, épicéa",
+              },
               qunits: {
                 label: "unité",
                 kg: "Kg",
@@ -947,6 +953,7 @@ export default {
     submit: "Résultat",
     errors: {
       Required: "Obligatoire",
+      woodTypeRequired: "Sélectionnez au moins un type de bois.",
       food: {
         minMeals: "Le total des repas doit être au moins de 7.",
         distributionMismatch: "La répartition doit correspondre au nombre de repas indiqué.",
@@ -967,6 +974,11 @@ export default {
     },
     categorisation: {
       title: "Répartition par catégorie",
+    },
+    woodNotice: {
+      title: "Le bois compte dans votre empreinte",
+      description:
+        "Votre total est plus élevé car il inclut le CO₂ biogénique (scope 1N) du bois. Ce choix reste favorable face aux énergies fossiles.",
     },
     recommendations: {
       title: "Moyens de réduire votre impact",

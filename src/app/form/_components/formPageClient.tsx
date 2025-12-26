@@ -68,7 +68,7 @@ export default function FormPageClient() {
       if (!response.ok || !data?.id) {
         throw new Error(data?.error?.message ?? "Failed to submit form");
       }
-
+      console.log("result:", data);
       return data;
     },
     onSuccess: (data) => {
@@ -138,6 +138,17 @@ export default function FormPageClient() {
             className="h-auto w-full object-cover object-top"
           />
         </div>
+        <div className={style.skyPhone}>
+          <Image
+            src={`${basePath}/form/background/skyPhone.png`}
+            alt=""
+            width={1536}
+            height={1024}
+            priority
+            sizes="100vw"
+            className="h-auto w-full object-cover object-top"
+          />
+        </div>
         <div className={style.sun}>
           <Image
             src={`${basePath}/form/background/sun.png`}
@@ -149,6 +160,16 @@ export default function FormPageClient() {
         <div className={style.land}>
           <Image
             src={`${basePath}/form/background/land1.png`}
+            alt=""
+            width={1536}
+            height={1024}
+            sizes="100vw"
+            className="h-auto w-full object-cover object-bottom"
+          />
+        </div>
+        <div className={style.landPhone}>
+          <Image
+            src={`${basePath}/form/background/landPhone.png`}
             alt=""
             width={1536}
             height={1024}
@@ -169,7 +190,7 @@ export default function FormPageClient() {
               }
               return mainForm.handleSubmit(handleSubmit, handleError)(e);
             }}
-            className="min-h-screen h-full w-full"
+            className="md:min-h-screen min-h-[93vh] h-full w-full"
           >
             <Tabs
               className="relative md:pt-32 pt-20 px-0 lg:w-[850px] mx-auto"

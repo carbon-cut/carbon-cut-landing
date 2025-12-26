@@ -33,7 +33,7 @@
 }
 
 .backgroundLayers {
-  @apply min-h-[150vh];
+  @apply md:min-h-[150vh];
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -41,8 +41,8 @@
 }
 
 .sky {
+  @apply top-0 opacity-80;
   position: absolute;
-  top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;
@@ -50,15 +50,26 @@
   max-width: none;
 }
 
-.sun {
+.skyPhone {
+  @apply top-0 opacity-80;
   position: absolute;
-  top: 16vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150vw;
+  height: auto;
+  max-width: none;
+  display: none;
+}
+
+.sun {
+  @apply opacity-70 md:size-[180px] size-[120px];
+  position: absolute;
   left: 10vw;
-  width: 180px;
-  height: 180px;
+  top: 16vh;
 }
 
 .land {
+  @apply opacity-30;
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -68,17 +79,49 @@
   max-width: none;
 }
 
+.landPhone {
+  @apply opacity-30;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: auto;
+  max-width: none;
+  display: none;
+}
+
 .content {
+  @apply md:min-h-[120vh];
   position: relative;
   z-index: 1;
-  min-height: 120vh;
 }
 
 @media (max-width: 768px) {
-  .sun {
-    top: 4vh;
-    right: 6vw;
-    width: 120px;
-    height: 120px;
+  .sky {
+    display: none;
+  }
+
+  .skyPhone {
+    display: block;
+  }
+
+  .land {
+    display: none;
+  }
+
+  .landPhone {
+    display: block;
+  }
+
+  .body {
+    background: linear-gradient(
+      90deg,
+      #8a9df2 0%,
+      #8fa1f2 25%,
+      #90a2e8 50%,
+      #8fa1f2 75%,
+      #8a9df2 100%
+    );
   }
 }

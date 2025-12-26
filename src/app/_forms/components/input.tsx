@@ -33,6 +33,7 @@ type Props<T extends FieldValues> = {
   className?: string;
   fallback?: boolean;
   attachedFields?: TName<T>[];
+  isError?: boolean;
 };
 
 function Input<T extends FieldValues>({
@@ -49,13 +50,12 @@ function Input<T extends FieldValues>({
   disabled = false,
   className,
   fallback = false,
+  isError = false,
   attachedFields = [],
   valueControl = (v: any) => {
     if (v >= 0 || v === "") return true;
     return false;
   },
-  /** @decapricated **/
-  onChange = () => {},
 }: Props<T>) {
   const {
     trigger,
@@ -63,12 +63,10 @@ function Input<T extends FieldValues>({
   } = form;
 
   const verifyAttachedFields = () => {
-    if (isSubmitted) {
+    if (isSubmitted || isError) {
       trigger(attachedFields);
     }
   };
-
-  const value = form.getValues(name) ? "y" : "n";
 
   const inputRef = useRef<HTMLInputElement>(null);
 

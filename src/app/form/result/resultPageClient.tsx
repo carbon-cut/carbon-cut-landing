@@ -9,6 +9,9 @@ import dynamic from "next/dynamic";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { EnergieResult, TransportResult } from "@carbon-cut/types";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useScopedI18n } from "@/locales/client";
 
 const Categorisation = dynamic(() => import("./categorisation"), {
   ssr: false,
@@ -18,6 +21,7 @@ export default function ResultPageClient() {
   const [carbonFootprint, setCarbonFootprint] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
   const formId = useSearchParams().get("id");
+  const t = useScopedI18n("result.woodNotice");
 
   const { data: cachedResult, error } = useQuery({
     queryKey: ["basic-form", formId ?? ""],
@@ -25,7 +29,10 @@ export default function ResultPageClient() {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/responses/uid/${formId}`
       ).then((res) => res.json());
-      return response;
+      return response as {
+        transport: TransportResult;
+        energie: EnergieResult;
+      };
     },
     enabled: Boolean(formId),
   });
@@ -56,6 +63,9 @@ export default function ResultPageClient() {
 
     animateCounter();
   }, []);
+
+  const woodScope1N = cachedResult?.energie?.thermal?.wood?.scope1N ?? 0;
+  const shouldShowWoodNotice = woodScope1N > 0;
 
   const breakdownData: {
     name: TabValues;
@@ -102,6 +112,13 @@ export default function ResultPageClient() {
       <div className="max-w-3xl mx-auto">
         {/* Main Result Card */}
         <ResultCard carbonFootprint={carbonFootprint} averageFootprint={averageFootprint} />
+
+        {shouldShowWoodNotice ? (
+          <Alert className="mb-16 border-section-energie/30 bg-section-energie/10">
+            <AlertTitle className="text-primary">{t("title")}</AlertTitle>
+            <AlertDescription className="text-secondary">{t("description")}</AlertDescription>
+          </Alert>
+        ) : null}
 
         <Categorisation data={breakdownData} isAnimating={isAnimating} />
 

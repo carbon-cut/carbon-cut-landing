@@ -85,17 +85,24 @@ const heating = z.object({
       charcoal: z
         .object({
           quantity: z.number().optional(),
-          quantityUnit: union("m3" /*³*/, "kg").optional(),
           frequency: z.number().optional(),
           frequencyUnit: union("day", "week", "month", "year").optional(),
         })
         .optional(),
       wood: z
         .object({
-          quantity: z.number().optional(),
-          quantityUnit: union("m3", "kg", "stere").optional(),
-          frequency: z.number().optional(),
-          frequencyUnit: union("day", "week", "month", "year").optional(),
+          hardwood: z.object({
+            quantity: z.number().optional(),
+            quantityUnit: union("m3", "kg", "stere").optional(),
+            frequency: z.number().optional(),
+            frequencyUnit: union("day", "week", "month", "year").optional(),
+          }),
+          softwood: z.object({
+            quantity: z.number().optional(),
+            quantityUnit: union("m3", "kg", "stere").optional(),
+            frequency: z.number().optional(),
+            frequencyUnit: union("day", "week", "month", "year").optional(),
+          }),
         })
         .optional(),
       heatingNetwork: z

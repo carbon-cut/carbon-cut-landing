@@ -42,7 +42,7 @@ const template: StoryFn<typeof FormSelect> = (args: React.ComponentProps<typeof 
     resolver: zodResolver(formSchema),
   });
 
-  return <FormSelect {...args} form={form} name="test" />;
+  return <FormSelect {...args} form={form} name="test" attachedFields={[]} />;
 };
 
 export const Default: Story = template.bind({});
