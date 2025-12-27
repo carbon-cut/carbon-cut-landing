@@ -18,11 +18,11 @@ const energie = z.object({
     otherValue: z.string().optional(),
   }), */
   housing: z.object({
-    area: z.number().optional(),
+    area: z.coerce.number().optional(),
     category: union("appartment", "house", "villa", "other").optional(),
-    heatedVolume: z.number().optional(),
-    conditionedVolume: z.number().optional(),
-    rooms: z.number().optional(),
+    heatedVolume: z.coerce.number().optional(),
+    conditionedVolume: z.coerce.number().optional(),
+    rooms: z.coerce.number().optional(),
     thermalInsulation: z.boolean().default(false).optional(),
     insulatedGlazing: z.boolean().default(false).optional(),
   }),
@@ -35,8 +35,8 @@ const energie = z.object({
           type: z.union([z.literal("tv"), z.literal("washingMachine"), z.literal("dishwasher")]),
           made: z.string(),
           model: z.string(),
-          power: z.number(),
-          frequency: z.number(),
+          power: z.coerce.number(),
+          frequency: z.coerce.number(),
           label: union("A", "B", "C", "D", "E", "F", "G", ""),
         })
       ),
@@ -45,7 +45,7 @@ const energie = z.object({
           type: z.union([z.literal("iron"), z.literal("electricOven")]),
           made: z.string(),
           model: z.string(),
-          frequency: z.number(),
+          frequency: z.coerce.number(),
           label: union("A", "B", "C", "D", "E", "F", "G", ""),
         })
       ),
@@ -55,24 +55,24 @@ const energie = z.object({
           /* z.union([z.literal("simpleRefrigerator"), z.literal("combinedRefrigerator"), z.literal("freezer"),]), */
           made: z.string(),
           model: z.string(),
-          refrigeratorVolume: z.number().optional(),
-          freezerVolume: z.number().optional(),
+          refrigeratorVolume: z.coerce.number().optional(),
+          freezerVolume: z.coerce.number().optional(),
           label: union("A", "B", "C", "D", "E", "F", "G", ""),
         })
       ),
-      computers: z.number(),
-      smartphones: z.number(),
+      computers: z.coerce.number(),
+      smartphones: z.coerce.number(),
     })
     .optional(),
   electricity: z.object({
-    total: z.number().optional(),
-    money: z.number().optional(),
-    //index: z.number(),
+    total: z.coerce.number().optional(),
+    money: z.coerce.number().optional(),
+    //index: z.coerce.number(),
   }),
   gas: z.object({
-    total: z.number().optional(),
-    money: z.number().optional(),
-    //index: z.number(),
+    total: z.coerce.number().optional(),
+    money: z.coerce.number().optional(),
+    //index: z.coerce.number(),
   }),
 });
 

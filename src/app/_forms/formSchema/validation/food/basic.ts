@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 const baseMeals = z.object({
-  redMeat: z.number().optional(),
-  whiteMeat: z.number().optional(),
-  oilyFish: z.number().optional(),
-  whiteFish: z.number().optional(),
-  vegan: z.number().optional(),
-  vegetarian: z.number().optional(),
+  redMeat: z.coerce.number().optional(),
+  whiteMeat: z.coerce.number().optional(),
+  oilyFish: z.coerce.number().optional(),
+  whiteFish: z.coerce.number().optional(),
+  vegan: z.coerce.number().optional(),
+  vegetarian: z.coerce.number().optional(),
 });
 
 const meals = z.preprocess((input, ctx) => {
@@ -28,9 +28,9 @@ const meals = z.preprocess((input, ctx) => {
   return input;
 }, baseMeals);
 const tupleOfThreeNumbers = z.tuple([
-  z.number().optional(),
-  z.number().optional(),
-  z.number().optional(),
+  z.coerce.number().optional(),
+  z.coerce.number().optional(),
+  z.coerce.number().optional(),
 ]);
 const distributionBasic = z
   .object({

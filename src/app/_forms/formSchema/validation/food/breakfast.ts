@@ -1,24 +1,42 @@
 import { z } from "zod";
 
 const breakfastMeals = z.object({
-  bread: z.number().optional(),
-  salty: z.number().optional(),
-  milk: z.number().optional(),
-  fruits: z.number().optional(),
-  no: z.number().optional(),
+  bread: z.coerce.number().optional(),
+  salty: z.coerce.number().optional(),
+  milk: z.coerce.number().optional(),
+  fruits: z.coerce.number().optional(),
+  no: z.coerce.number().optional(),
 });
 
 const distributionBreakfast = z
   .object({
     bread: z
-      .tuple([z.number().optional(), z.number().optional(), z.number().optional()])
+      .tuple([
+        z.coerce.number().optional(),
+        z.coerce.number().optional(),
+        z.coerce.number().optional(),
+      ])
       .optional(),
     salty: z
-      .tuple([z.number().optional(), z.number().optional(), z.number().optional()])
+      .tuple([
+        z.coerce.number().optional(),
+        z.coerce.number().optional(),
+        z.coerce.number().optional(),
+      ])
       .optional(),
-    milk: z.tuple([z.number().optional(), z.number().optional(), z.number().optional()]).optional(),
+    milk: z
+      .tuple([
+        z.coerce.number().optional(),
+        z.coerce.number().optional(),
+        z.coerce.number().optional(),
+      ])
+      .optional(),
     fruits: z
-      .tuple([z.number().optional(), z.number().optional(), z.number().optional()])
+      .tuple([
+        z.coerce.number().optional(),
+        z.coerce.number().optional(),
+        z.coerce.number().optional(),
+      ])
       .optional(),
   })
   .optional();

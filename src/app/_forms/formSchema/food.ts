@@ -11,27 +11,27 @@ const food = z.object({
   breakfast: breakfastValidator,
   restaurants: z.object({
     // colection de donnée
-    fastFood: z.number().optional(),
-    bistro: z.number().optional(),
-    classic: z.number().optional(),
-    gastronomic: z.number().optional(),
-    bio: z.number().optional(),
+    fastFood: z.coerce.number().optional(),
+    bistro: z.coerce.number().optional(),
+    classic: z.coerce.number().optional(),
+    gastronomic: z.coerce.number().optional(),
+    bio: z.coerce.number().optional(),
   }),
   drinks: z.object({
     // cup per day
-    tea: z.number().optional(),
-    coffee: z.number().optional(),
-    hotChocolate: z.number().optional(),
+    tea: z.coerce.number().optional(),
+    coffee: z.coerce.number().optional(),
+    hotChocolate: z.coerce.number().optional(),
     // L per week
-    soda: z.number().optional(),
-    jus: z.number().optional(),
-    beer: z.number().optional(),
-    alcohol: z.number().optional(),
+    soda: z.coerce.number().optional(),
+    jus: z.coerce.number().optional(),
+    beer: z.coerce.number().optional(),
+    alcohol: z.coerce.number().optional(),
   }),
   //TODO
   /* water: z.object({
     type: union("tapWater", "tapWaterFilter", "bottle"),
-    quantity: z.number(), // bottle per freq
+    quantity: z.coerce.number(), // bottle per freq
     frequency: union("day", "week", "month"),
   }), */
   auxilary: z.object({

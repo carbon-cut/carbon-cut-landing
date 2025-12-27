@@ -116,7 +116,7 @@ function Input<T extends FieldValues>({
 
                           if (val === "") {
                             console.log("empty");
-                            field.onChange(undefined);
+                            field.onChange("");
                             verifyAttachedFields();
                             return;
                           }

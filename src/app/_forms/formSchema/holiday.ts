@@ -3,8 +3,8 @@ import { union, carType } from "./utils";
 
 const holiday = z.object({
   general: z.object({
-    frequency: z.number(),
-    nbPeople: z.number(),
+    frequency: z.coerce.number(),
+    nbPeople: z.coerce.number(),
   }),
   transport: z.object({
     plane: z.boolean(),
@@ -15,25 +15,25 @@ const holiday = z.object({
     ship: z.boolean(),
     other: z.boolean(),
     additional: z.object({
-      car: z.object({ index: z.string(), distance: z.number() }),
-      moto: z.object({ index: z.string(), distance: z.number() }),
+      car: z.object({ index: z.string(), distance: z.coerce.number() }),
+      moto: z.object({ index: z.string(), distance: z.coerce.number() }),
       bus: z.array(
         z
           .object({
             busType: union("electric", "diesel", "hybrid", "naturalGaz"),
-            distance: z.number(),
-            frequency: z.number(),
-            nbPeople: z.number().nullable(),
+            distance: z.coerce.number(),
+            frequency: z.coerce.number(),
+            nbPeople: z.coerce.number().nullable(),
           })
           .nullable()
       ),
       train: z.array(
         z
           .object({
-            distance: z.number(),
-            frequency: z.number(),
+            distance: z.coerce.number(),
+            frequency: z.coerce.number(),
             type: union("intercity", "TER", "TGV"),
-            nbPeople: z.number(),
+            nbPeople: z.coerce.number(),
           })
           .nullable()
       ),
@@ -42,9 +42,9 @@ const holiday = z.object({
           .object({
             make: z.string(),
             engine: carType,
-            distance: z.number(),
-            pepole: z.number(),
-            frequency: z.number(),
+            distance: z.coerce.number(),
+            pepole: z.coerce.number(),
+            frequency: z.coerce.number(),
           })
           .nullable()
       ),
@@ -61,7 +61,7 @@ const holiday = z.object({
     specifics: z.record(
       union("hotel", "ecoHotel", "camping", "rent", "other"),
       z.object({
-        nights: z.number(),
+        nights: z.coerce.number(),
         renewable: z.boolean(),
         equipmints: z.object({
           airconditioner: z.boolean(),
@@ -73,7 +73,7 @@ const holiday = z.object({
     ),
   }),
   food: z.object({
-    frequency: z.number(),
+    frequency: z.coerce.number(),
     type: union("veg", "mix", "carnivore"),
     localProducts: z.boolean(),
     waste: union("weak", "moderate", "high"),

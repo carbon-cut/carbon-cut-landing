@@ -2,7 +2,7 @@ import { z } from "zod";
 import { union } from "../../utils";
 
 const marketEntry = z.object({
-  frequency: z.number().optional(),
+  frequency: z.coerce.number().optional(),
   frequencyUnit: union("year", "month", "week").optional(),
 });
 

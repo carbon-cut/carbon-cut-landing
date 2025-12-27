@@ -8,21 +8,21 @@ const car = z.object({
   otherEngine: z.string().optional(),
   secondThermal: union("Gasoline", "Diesel", "natural Gaz", "other", false).optional(),
   otherSecondThermal: z.string().optional(),
-  distanceWeekly: z.number().optional(),
+  distanceWeekly: z.coerce.number().optional(),
   //thermal
-  thermalAvg: z.number().optional(),
-  thermalConsumption: z.number().optional(),
-  moneyThermalConsumption: z.number().optional(),
+  thermalAvg: z.coerce.number().optional(),
+  thermalConsumption: z.coerce.number().optional(),
+  moneyThermalConsumption: z.coerce.number().optional(),
   //electric
-  electricAvg: z.number().optional(),
-  electricConsumption: z.number().optional(),
-  moneyElectricConsumption: z.number().optional(),
+  electricAvg: z.coerce.number().optional(),
+  electricConsumption: z.coerce.number().optional(),
+  moneyElectricConsumption: z.coerce.number().optional(),
   //prices
-  thermalPrice: z.number().optional(),
-  electricPrice: z.number().optional(),
+  thermalPrice: z.coerce.number().optional(),
+  electricPrice: z.coerce.number().optional(),
 
-  carCalculatedConsumption: z.number().optional(),
-  mileage: z.number(),
+  carCalculatedConsumption: z.coerce.number().optional(),
+  mileage: z.coerce.number(),
 });
 
 const output = z.preprocess((input, ctx) => {

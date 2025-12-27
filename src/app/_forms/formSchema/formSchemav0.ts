@@ -31,14 +31,14 @@ export const formSchema = z.object({
           carType: carType.nullable().optional(),
           carTypeOther: z.string().nullable().optional(),
           carEngine: z.string().nullable().optional(),
-          carConsumption: z.number().nullable().optional(),
-          carCalculatedConsumption: z.number().nullable().optional(),
-          carEConsmption: z.number().nullable().optional(),
-          carLConsumption: z.number().nullable().optional(),
-          carMoneyConsumption: z.number().nullable().optional(),
-          carMoneyEConsumption: z.number().nullable().optional(),
-          carDistanceConsumption: z.number().nullable().optional(),
-          carMileage: z.number().optional(),
+          carConsumption: z.coerce.number().nullable().optional(),
+          carCalculatedConsumption: z.coerce.number().nullable().optional(),
+          carEConsmption: z.coerce.number().nullable().optional(),
+          carLConsumption: z.coerce.number().nullable().optional(),
+          carMoneyConsumption: z.coerce.number().nullable().optional(),
+          carMoneyEConsumption: z.coerce.number().nullable().optional(),
+          carDistanceConsumption: z.coerce.number().nullable().optional(),
+          carMileage: z.coerce.number().optional(),
         })
       )
       .nullable()
@@ -50,23 +50,23 @@ export const formSchema = z.object({
           motoModel: z.string().min(1).nullable().optional(),
           motoType: carType.nullable().optional(),
           motoEngine: z.string().nullable().optional(),
-          motoConsumption: z.number().nullable().optional(),
-          motoCalculatedConsumption: z.number().nullable().optional(),
-          motoEConsmption: z.number().nullable().optional(),
-          motoLConsumption: z.number().nullable().optional(),
-          motoMoneyConsumption: z.number().nullable().optional(),
-          motoMoneyEConsumption: z.number().nullable().optional(),
-          motoDistanceConsumption: z.number().nullable().optional(),
-          motoMileage: z.number().nullable().optional(),
+          motoConsumption: z.coerce.number().nullable().optional(),
+          motoCalculatedConsumption: z.coerce.number().nullable().optional(),
+          motoEConsmption: z.coerce.number().nullable().optional(),
+          motoLConsumption: z.coerce.number().nullable().optional(),
+          motoMoneyConsumption: z.coerce.number().nullable().optional(),
+          motoMoneyEConsumption: z.coerce.number().nullable().optional(),
+          motoDistanceConsumption: z.coerce.number().nullable().optional(),
+          motoMileage: z.coerce.number().nullable().optional(),
         })
       )
       .nullable()
       .optional(),
     auxilary: z
       .object({
-        bicycle: z.number().nullable().optional(),
-        scooter: z.number().nullable().optional(),
-        car: z.number().nullable().optional(),
+        bicycle: z.coerce.number().nullable().optional(),
+        scooter: z.coerce.number().nullable().optional(),
+        car: z.coerce.number().nullable().optional(),
       })
       .nullable()
       .optional(),
@@ -76,8 +76,8 @@ export const formSchema = z.object({
           origin: z.string().nullable().optional(),
           destination: z.string().nullable().optional(),
           stopover: z.string().nullable().optional(),
-          carbonEmissions: z.number().nullable().optional(),
-          distance: z.number().nullable().optional(),
+          carbonEmissions: z.coerce.number().nullable().optional(),
+          distance: z.coerce.number().nullable().optional(),
           aircraftType: z
             .union([
               z.literal("A220"),
@@ -104,7 +104,7 @@ export const formSchema = z.object({
             .nullable()
             .optional(),
           roundTrip: z.boolean().default(false),
-          frequency: z.number().nullable().optional(),
+          frequency: z.coerce.number().nullable().optional(),
         })
       )
       .nullable()
@@ -113,8 +113,8 @@ export const formSchema = z.object({
       .array(
         z
           .object({
-            distance: z.number().nullable().optional(),
-            frequency: z.number().nullable().optional(),
+            distance: z.coerce.number().nullable().optional(),
+            frequency: z.coerce.number().nullable().optional(),
             withCar: z.boolean().nullable().optional(),
             type: z
               .union([z.literal("fluvial"), z.literal("ferry"), z.literal("cruise")])
@@ -136,9 +136,9 @@ export const formSchema = z.object({
                     .union([z.literal("thermique"), z.literal("Electrique")])
                     .nullable()
                     .optional(),
-                  distance: z.number().nullable().optional(),
-                  frequency: z.number().nullable().optional(),
-                  nbPeople: z.number().nullable().optional(),
+                  distance: z.coerce.number().nullable().optional(),
+                  frequency: z.coerce.number().nullable().optional(),
+                  nbPeople: z.coerce.number().nullable().optional(),
                 })
                 .nullable()
                 .optional()
@@ -149,9 +149,9 @@ export const formSchema = z.object({
             .array(
               z
                 .object({
-                  distance: z.number().nullable().optional(),
-                  frequency: z.number().nullable().optional(),
-                  nbPeople: z.number().nullable().optional(),
+                  distance: z.coerce.number().nullable().optional(),
+                  frequency: z.coerce.number().nullable().optional(),
+                  nbPeople: z.coerce.number().nullable().optional(),
                 })
                 .nullable()
                 .optional()
@@ -162,8 +162,8 @@ export const formSchema = z.object({
             .array(
               z
                 .object({
-                  distance: z.number().nullable().optional(),
-                  frequency: z.number().nullable().optional(),
+                  distance: z.coerce.number().nullable().optional(),
+                  frequency: z.coerce.number().nullable().optional(),
                 })
                 .nullable()
                 .optional()
@@ -176,9 +176,9 @@ export const formSchema = z.object({
                 .object({
                   make: z.string().nullable().optional(),
                   carType: carType.nullable().optional(),
-                  distance: z.number().nullable().optional(),
-                  pepole: z.number().nullable().optional(),
-                  frequency: z.number().nullable().optional(),
+                  distance: z.coerce.number().nullable().optional(),
+                  pepole: z.coerce.number().nullable().optional(),
+                  frequency: z.coerce.number().nullable().optional(),
                 })
                 .nullable()
                 .optional()
@@ -195,9 +195,9 @@ export const formSchema = z.object({
                     .union([z.literal("thermique"), z.literal("Electrique")])
                     .nullable()
                     .optional(),
-                  distance: z.number().nullable().optional(),
-                  frequency: z.number(),
-                  nbPeople: z.number().nullable().optional(),
+                  distance: z.coerce.number().nullable().optional(),
+                  frequency: z.coerce.number(),
+                  nbPeople: z.coerce.number().nullable().optional(),
                 })
                 .nullable()
                 .optional()
@@ -205,8 +205,8 @@ export const formSchema = z.object({
             TGV: z.array(
               z
                 .object({
-                  distance: z.number(),
-                  frequency: z.number(),
+                  distance: z.coerce.number(),
+                  frequency: z.coerce.number(),
                 })
                 .nullable()
                 .optional()
@@ -214,8 +214,8 @@ export const formSchema = z.object({
             train: z.array(
               z
                 .object({
-                  distance: z.number(),
-                  frequency: z.number(),
+                  distance: z.coerce.number(),
+                  frequency: z.coerce.number(),
                 })
                 .nullable()
                 .optional()
@@ -225,9 +225,9 @@ export const formSchema = z.object({
                 .object({
                   make: z.string(),
                   carType: carType,
-                  distance: z.number(),
-                  pepole: z.number(),
-                  frequency: z.number(),
+                  distance: z.coerce.number(),
+                  pepole: z.coerce.number(),
+                  frequency: z.coerce.number(),
                 })
                 .nullable()
                 .optional()
@@ -242,24 +242,24 @@ export const formSchema = z.object({
   energie: z.object({
     heating: z
       .object({
-        heatPump: z.number().nullable().optional(),
-        electricity: z.number().nullable().optional(),
-        gazNetwork: z.number().nullable().optional(),
+        heatPump: z.coerce.number().nullable().optional(),
+        electricity: z.coerce.number().nullable().optional(),
+        gazNetwork: z.coerce.number().nullable().optional(),
         heatNetwork: z
           .union([
-            z.number().nullable().optional(),
+            z.coerce.number().nullable().optional(),
             z.object({
-              frequency: z.number().nullable().optional(),
-              volume: z.number().nullable().optional(),
+              frequency: z.coerce.number().nullable().optional(),
+              volume: z.coerce.number().nullable().optional(),
             }),
           ])
           .nullable()
           .optional(),
-        GPL: z.number().nullable().optional(),
-        gazTank: z.number().nullable().optional(),
-        fioul: z.number().nullable().optional(),
-        charcoal: z.number().nullable().optional(),
-        wood: z.number().nullable().optional(),
+        GPL: z.coerce.number().nullable().optional(),
+        gazTank: z.coerce.number().nullable().optional(),
+        fioul: z.coerce.number().nullable().optional(),
+        charcoal: z.coerce.number().nullable().optional(),
+        wood: z.coerce.number().nullable().optional(),
       })
       .nullable()
       .optional(),
@@ -272,13 +272,13 @@ export const formSchema = z.object({
               /^(0?[1-9]|1[0-2])\/\d{4}$/,
               "Key must follow the format monthNumber/year (e.g., 1/2025)"
             ),
-          z.number()
+          z.coerce.number()
         )
         .nullable()
         .optional(),
-      total: z.number().nullable().optional(),
-      money: z.number().nullable().optional(),
-      index: z.number().nullable().optional(),
+      total: z.coerce.number().nullable().optional(),
+      money: z.coerce.number().nullable().optional(),
+      index: z.coerce.number().nullable().optional(),
     }),
     gaz: z.object({
       m: z
@@ -289,13 +289,13 @@ export const formSchema = z.object({
               /^(0?[1-9]|1[0-2])\/\d{4}$/,
               "Key must follow the format monthNumber/year (e.g., 1/2025)"
             ),
-          z.number()
+          z.coerce.number()
         )
         .nullable()
         .optional(),
-      total: z.number().nullable().optional(),
-      money: z.number().nullable().optional(),
-      index: z.number().nullable().optional(),
+      total: z.coerce.number().nullable().optional(),
+      money: z.coerce.number().nullable().optional(),
+      index: z.coerce.number().nullable().optional(),
     }),
   }),
 });
