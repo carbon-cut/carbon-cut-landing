@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/forms";
+import { FormField, FormItem, FormLabel, FormMessage, TName, TValue } from "@/components/ui/forms";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import React, { useEffect } from "react";
-import { UseFormReturn } from "react-hook-form";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { ChevronsUpDown, Loader2 } from "lucide-react";
 import { Command, CommandEmpty, CommandInput } from "@/components/ui/command";
@@ -10,36 +10,38 @@ import { MenuList } from "@/components/ui/menuList";
 import { ClassValue } from "clsx";
 import { useScopedI18n } from "@/locales/client";
 
-interface props {
-  form: UseFormReturn<any, undefined>;
-  name: string;
+interface props<T extends FieldValues, N extends TName<T> = TName<T>> {
+  form: UseFormReturn<T, undefined>;
+  name: N;
   label?: string | undefined;
   mandetory?: boolean;
   type?: React.HTMLInputTypeAttribute | undefined | "calendar" | "combox";
-  data: { value: any; label: string }[];
+  options: { value: TValue<T, N>; label: string }[];
   setValue?: (v: any) => void;
   disabled?: boolean;
   className?: ClassValue;
   labelClassName?: ClassValue;
   fallback?: boolean;
   loading: boolean;
+  bannedOptions?: any[];
 }
 
-const FormMultiCombox: React.FC<props> = ({
+function FormMultiCombox<T extends FieldValues>({
   form,
   name,
   label,
   mandetory = false,
   disabled = false,
-  data,
+  options,
   setValue = () => {},
   className,
   labelClassName,
   fallback = false,
   loading = false,
-}) => {
+  bannedOptions = [],
+}: props<T>) {
   const t = useScopedI18n("components.forms.combox");
-  const [filteredOptions, setFilteredOptions] = React.useState(data);
+  const [filteredOptions, setFilteredOptions] = React.useState(options);
   useEffect(() => {
     if (form && name) form.register(name);
   }, [form, name]);
@@ -47,7 +49,7 @@ const FormMultiCombox: React.FC<props> = ({
 
   const handleSearch = (search: string) => {
     setFilteredOptions(
-      data.filter(
+      options.filter(
         (option) =>
           option.value.toLowerCase().includes(search.toLowerCase() ?? []) ||
           option.label.toLowerCase().includes(search.toLowerCase() ?? [])
@@ -87,7 +89,7 @@ const FormMultiCombox: React.FC<props> = ({
               >
                 <span className="text-ellipsis  w-10/12 overflow-hidden">
                   {field.value
-                    ? data.find((elem) => field.value === elem.value)?.label
+                    ? options.find((elem) => field.value === elem.value)?.label
                     : t("value", { label })}
                 </span>
                 <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
@@ -114,6 +116,7 @@ const FormMultiCombox: React.FC<props> = ({
                     <CommandEmpty>{t("notFound", { label })}</CommandEmpty>
                     <MenuList
                       options={filteredOptions}
+                      bannedOptions={bannedOptions}
                       onSelectOption={(element: any) => {
                         setValue(element.value);
                         form.setValue(name, element.value);
@@ -130,6 +133,6 @@ const FormMultiCombox: React.FC<props> = ({
       )}
     />
   );
-};
+}
 
 export default FormMultiCombox;

@@ -16,6 +16,7 @@ import Question from "@/app/_forms/components/question";
 import Content from "@/app/_forms/components/content";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useFieldArray } from "react-hook-form";
+import { toast } from "sonner";
 
 const aircraftTypes = [
   "A220",
@@ -67,8 +68,6 @@ const QAir: QuestionFC = ({ mainForm }: QuestionProps) => {
     (mainForm.getValues("transport.airs") ?? []).map((e) => (e?.stopover ? true : false))
   );
 
-  const airValues = mainForm.watch("transport.airs") ?? [];
-
   const [parent] = useAutoAnimate({ duration: 100 });
   const handleAdd = () => {
     const scrollY = window.scrollY;
@@ -109,7 +108,6 @@ const QAir: QuestionFC = ({ mainForm }: QuestionProps) => {
             isLoading={isLoading}
             mainForm={mainForm}
             stopoverChecked={!!stopovers[index]}
-            air={airValues[index]}
             onStopoverChange={(value) => {
               setStopovers((prev) => prev.toSpliced(index, 1, value));
               if (!value) {
@@ -156,11 +154,6 @@ type AirTravelItemProps = {
   isLoading: boolean;
   mainForm: QuestionProps["mainForm"];
   stopoverChecked: boolean;
-  air?: {
-    destination?: string | null;
-    origin?: string | null;
-    stopover?: string | null;
-  };
   onStopoverChange: (value: boolean) => void;
   onRemove: () => void;
 };
@@ -172,21 +165,28 @@ function AirTravelItem({
   isLoading,
   mainForm,
   stopoverChecked,
-  air,
   onStopoverChange,
   onRemove,
 }: AirTravelItemProps) {
+  const { destination, origin, stopover } = mainForm.watch(`transport.airs.${index}`);
+
   const distance = useMemo(() => {
     if (!airports?.raw) return undefined;
-    return getDistance(
-      {
-        destination: air?.destination,
-        origin: air?.origin,
-        stopover: air?.stopover,
-      },
-      airports.raw
-    );
-  }, [air?.destination, air?.origin, air?.stopover, airports?.raw]);
+    try {
+      return getDistance(
+        {
+          destination: destination,
+          origin: origin,
+          stopover: stopover,
+        },
+        airports.raw,
+        t("originDestinationError")
+      );
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Unknown error");
+      return 0;
+    }
+  }, [destination, origin, stopover, airports?.raw, t]);
 
   const airportsOptions = airports?.reduced ?? [];
   const distanceKm = Math.floor((distance ?? 0) / 1000);
@@ -209,19 +209,21 @@ function AirTravelItem({
           className="text-primary"
           form={mainForm}
           name={`transport.airs.${index}.origin`}
-          data={airportsOptions}
+          options={airportsOptions}
           label={t("origin")}
           fallback
           loading={isLoading}
+          bannedOptions={[destination]}
         />
         <FormMultiCombox
           labelClassName="text-black/70"
           form={mainForm}
           name={`transport.airs.${index}.destination`}
           label={t("destination")}
-          data={airportsOptions}
+          options={airportsOptions}
           fallback
           loading={isLoading}
+          bannedOptions={[origin]}
         />
         <FormSelect
           labelClassName="text-black/70"
@@ -282,7 +284,7 @@ function AirTravelItem({
           form={mainForm}
           name={`transport.airs.${index}.stopover`}
           label={t("via")}
-          data={airportsOptions}
+          options={airportsOptions}
           fallback
           loading={isLoading}
         />
@@ -295,19 +297,24 @@ function AirTravelItem({
     </li>
   );
 }
-
+type AirportPosition = {
+  code: string;
+  latitude: number;
+  longitude: number;
+};
 function getDistance(
   ele: {
     destination?: string | null;
     origin?: string | null;
     stopover?: string | null;
   },
-  RawAirports: any[]
+  RawAirports: any[],
+  errorMessage: string
 ) {
   if (!ele.destination || !ele.origin) return 0;
-  let origin = null;
-  let destination = null;
-  let stopover = null;
+  let origin: AirportPosition | null = null;
+  let destination: AirportPosition | null = null;
+  let stopover: AirportPosition | null = null;
   let i = 0;
   while (i < RawAirports.length) {
     const v = RawAirports[i];
@@ -317,14 +324,14 @@ function getDistance(
     if (origin && destination && (!ele.stopover || stopover)) break;
     i++;
   }
-  if (!origin || !destination) throw new Error("Airport Not found");
+  if (!origin || !destination) throw new Error(errorMessage);
   if (stopover)
     return CalculateDistance(origin, stopover) + CalculateDistance(stopover, destination);
   return CalculateDistance(origin, destination);
 }
 
 type Point = { latitude: number; longitude: number };
-function CalculateDistance(origin: Point, destination: Point) {
+function CalculateDistance(origin: AirportPosition, destination: AirportPosition) {
   const { latitude: lat1, longitude: lon1 } = origin;
   const { latitude: lat2, longitude: lon2 } = destination;
 

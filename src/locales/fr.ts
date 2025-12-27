@@ -801,6 +801,7 @@ export default {
               roundTrip: "Allez-retour",
               carbonEmissions: "Emissions de Carbon",
               distance: "Distance",
+              originDestinationError: "Origine et destination identiques ou introuvables.",
             },
           },
           qSea: {
