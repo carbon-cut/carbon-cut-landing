@@ -42,7 +42,7 @@ const Question = ({
       }
     }
     setErrorc(false);
-  }, [mainForm, isCurrent]);
+  }, [mainForm, isCurrent, currentIndex]);
 
   return (
     <Button
