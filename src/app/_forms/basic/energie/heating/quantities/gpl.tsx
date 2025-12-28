@@ -183,14 +183,14 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
                                   type="number"
                                   fallback
                                   placeholder={t("unit")}
-                                  labelClassName="text-xs font-medium block text-gray-600"
+                                  labelClassName="text-black/70"
                                   label={t("quantity")}
                                   size="sm"
                                 />
 
                                 <FormSelect
                                   fallback
-                                  labelClassName="text-xs font-medium text-gray-600 block"
+                                  labelClassName="text-black/70"
                                   label={t("frequency.placeholder")}
                                   form={mainForm}
                                   name={`energie.heating.quantities.GPL.quantities.${gasType.id}.frequency`}

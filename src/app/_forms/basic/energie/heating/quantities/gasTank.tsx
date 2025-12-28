@@ -19,6 +19,7 @@ const GasTank: QuestionFC = ({ mainForm }: QuestionProps) => {
             name="energie.heating.quantities.gasTank.frequency"
             placeholder={t("QgasTank.u1")}
             label={t("QgasTank.l1")}
+            labelClassName="text-black/70"
             type="number"
           />
           <div className="">
@@ -28,6 +29,7 @@ const GasTank: QuestionFC = ({ mainForm }: QuestionProps) => {
               name="energie.heating.quantities.gasTank.capacity"
               placeholder={t("QgasTank.l2")}
               label={t("QgasTank.l2")}
+              labelClassName="text-black/70"
               unit={<Unit unit={t("QgasTank.u2")} className="h-9 w-9 mt-auto col-span-2" />}
               className="flex flex-row space-x-2 mt-3 w-full"
             />

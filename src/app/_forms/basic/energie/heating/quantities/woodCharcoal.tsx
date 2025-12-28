@@ -72,6 +72,7 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                                   form={mainForm}
                                   placeholder={t("wood.qunits.label")}
                                   label="&nbsp;"
+                                  labelClassName="text-black/70"
                                   name={`energie.heating.quantities.wood.${type}.quantityUnit`}
                                   data={woodKeys.map((e) => ({
                                     label: t(`wood.qunits.${e}`),
@@ -99,6 +100,7 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                                 <FormSelect
                                   form={mainForm}
                                   label="&nbsp;"
+                                  labelClassName="text-black/70"
                                   placeholder={t("wood.funits.label")}
                                   name={`energie.heating.quantities.wood.${type}.frequencyUnit`}
                                   data={frequencyKeys.map((e) => ({
@@ -155,6 +157,7 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                   <FormSelect
                     form={mainForm}
                     label="&nbsp;"
+                    labelClassName="text-black/70"
                     placeholder={t("charcoal.funits.label")}
                     name={"energie.heating.quantities.charcoal.frequencyUnit"}
                     data={frequencyKeys.map((e) => ({

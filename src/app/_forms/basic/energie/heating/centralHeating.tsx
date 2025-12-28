@@ -16,6 +16,7 @@ const CentralHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
       <div className="grid md:grid-cols-3 md:space-x-4">
         <FormSelect
           label={t("fields.energyLabel")}
+          labelClassName="text-black/70"
           form={mainForm}
           name={"energie.heating.quantities.electricalCentral.energyLabel"}
           data={energieLabels.map((e) => ({
@@ -25,6 +26,7 @@ const CentralHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
         />
         <Input
           label={t("fields.dailyFrequency.label")}
+          labelClassName="text-black/70"
           form={mainForm}
           name={"energie.heating.quantities.electricalCentral.dailyFrequency"}
           placeholder={t("fields.dailyFrequency.unit")}
@@ -32,6 +34,7 @@ const CentralHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
         />
         <Input
           label={t("fields.annualFrequency.label")}
+          labelClassName="text-black/70"
           form={mainForm}
           name={"energie.heating.quantities.electricalCentral.annualFrequency"}
           placeholder={t("fields.annualFrequency.unit")}

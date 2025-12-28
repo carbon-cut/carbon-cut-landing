@@ -27,6 +27,7 @@ const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
               name={"energie.heating.quantities.fioul.quantity"}
               placeholder={t("fioul.placeholder")}
               label={t("fioul.label")}
+              labelClassName="text-black/70"
               type="number"
             />
           </div>
@@ -35,6 +36,7 @@ const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
               form={mainForm}
               name="energie.heating.quantities.fioul.frequency"
               label={t("fioul.frequency.label")}
+              labelClassName="text-black/70"
               data={[
                 { value: "month", label: t("fioul.frequency.month") },
                 { value: "year", label: t("fioul.frequency.year") },
