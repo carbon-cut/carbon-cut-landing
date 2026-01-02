@@ -28,6 +28,8 @@ const useScopedI18n = (scope?: string) => {
     else if (typeof scopedContent === "function") {
       //@ts-ignore
       return scopedContent(keys[1]);
+    } else if (typeof scopedContent === "object") {
+      return scopedContent;
     } else return `Invalid translation type for ${scope}.${keys[0]}`;
   };
 };

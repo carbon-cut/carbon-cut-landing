@@ -421,6 +421,81 @@ export default {
     },
   },
   forms: {
+    preAssessment: {
+      slides: [
+        {
+          title: "Durée & précision",
+          visualLabel: "5-7 minutes",
+          items: [
+            {
+              id: "duration",
+              title: "Durée estimée",
+              description: "5-7 minutes pour compléter l'évaluation",
+            },
+            {
+              id: "measure",
+              title: "Ce que nous mesurons",
+              description: "Estimation de votre empreinte carbone basée sur vos réponses",
+            },
+            {
+              id: "accuracy",
+              title: "Niveau de précision",
+              description: "Résultats indicatifs fondés sur des données déclaratives",
+            },
+          ],
+        },
+        {
+          title: "Sections & données",
+          items: [
+            {
+              id: "transport",
+              title: "Transport",
+              description: "Voiture, transports en commun, vols",
+            },
+            {
+              id: "energie",
+              title: "Énergie",
+              description: "Électricité, gaz, chauffage à domicile",
+            },
+            {
+              id: "food",
+              title: "Alimentation & Déchet",
+              description: "Habitudes alimentaires et gestion des déchets",
+            },
+            {
+              id: "data",
+              title: "Données nécessaires",
+              description: "Factures énergétiques, kilométrage annuel, habitudes de consommation",
+            },
+          ],
+        },
+        {
+          title: "Données & accès",
+          items: [
+            {
+              id: "privacy",
+              title: "Confidentialité",
+              description:
+                "Vos données sont confidentielles et utilisées uniquement pour votre diagnostic",
+            },
+            {
+              id: "save",
+              title: "Sauvegarde",
+              description: "Reprenez votre évaluation à tout moment",
+            },
+            {
+              id: "results",
+              title: "Accès aux résultats",
+              description: "Résultats disponibles pendant X jours avant abonnement",
+            },
+          ],
+        },
+      ],
+      cta: "Commencer",
+      next: "Suivant",
+      stepIndicator: ({ current, total }: { current: number; total: number }) =>
+        `Étape ${current} sur ${total}`,
+    },
     basic: {
       energie: {
         housing: {
