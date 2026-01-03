@@ -1,6 +1,7 @@
 "use client";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 import {
   BarChart3,
@@ -41,6 +42,7 @@ type PreAssessmentItemKey =
 type PreAssessmentSlide = {
   title: string;
   visualLabel?: string;
+  note?: string;
   items: {
     id: PreAssessmentItemKey;
     title: string;
@@ -100,11 +102,21 @@ export default function PreAssessment({ onContinue }: Props) {
               currentStep={currentStep}
               totalSteps={totalSteps}
             />
-            <div className="flex flex-1 flex-col items-center justify-center gap-8 mt-6">
-              <div className="min-h-[100px]">
+            <div className="flex flex-1 flex-col items-center justify-center gap-6 mt-6">
+              <div className="h-[100px]">
                 <PreAssessmentVisual variant={visualVariant} label={activeSlide.visualLabel} />
               </div>
               <PreAssessmentContent items={contentItems} />
+              {activeSlide.note ? (
+                <Typography
+                  asChild
+                  variant="description"
+                  size="default"
+                  className="text-md max-w-md"
+                >
+                  <p>{activeSlide.note}</p>
+                </Typography>
+              ) : null}
             </div>
           </div>
           <PreAssessmentActions

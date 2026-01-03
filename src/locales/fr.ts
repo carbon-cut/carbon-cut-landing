@@ -425,12 +425,13 @@ export default {
       slides: [
         {
           title: "Durée & précision",
-          visualLabel: "5-7 minutes",
+          visualLabel: "15–25 minutes",
+          note: "La longueur du formulaire ainsi que la finesse et le raffinement des questions conditionnent, dans une large mesure, la fiabilité des résultats. C'est notre atout distinctif.",
           items: [
             {
               id: "duration",
               title: "Durée estimée",
-              description: "5-7 minutes pour compléter l'évaluation",
+              description: "15–25 minutes pour compléter l'évaluation",
             },
             {
               id: "measure",
