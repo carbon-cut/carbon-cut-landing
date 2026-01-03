@@ -16,11 +16,9 @@ export default function PreAssessmentTitle({ title, currentStep, totalSteps }: P
         {Array.from({ length: totalSteps }).map((_, index) => (
           <span
             key={`step-dot-${index}`}
-            className={
-              index === currentStep
-                ? "h-2 w-10 rounded-full bg-section-transport"
-                : "h-2 w-2 rounded-full bg-section-transport/20"
-            }
+            className={`rounded-full h-2 transition-all duration-300
+              ${index === currentStep ? "w-10 bg-section-transport" : "w-2 bg-section-transport/20"}
+            `}
           />
         ))}
       </div>
