@@ -102,7 +102,7 @@ export default function PreAssessment({ onContinue }: Props) {
               currentStep={currentStep}
               totalSteps={totalSteps}
             />
-            <div className="flex flex-1 flex-col items-center justify-center gap-6 mt-6">
+            <div className="flex flex-1 flex-col items-center justify-center gap-12 md:gap-6 mt-6">
               <div className="h-[100px]">
                 <PreAssessmentVisual variant={visualVariant} label={activeSlide.visualLabel} />
               </div>

@@ -97,6 +97,7 @@ function Header() {
           className={style.button}
           size={"lg"}
           tabIndex={navHidden ? -1 : 0}
+          onClick={() => setShow(false)}
         >
           <Link href={"/form"}>Commencer</Link>
         </Button>

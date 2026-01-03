@@ -92,7 +92,7 @@
 }
 
 .content {
-  @apply md:min-h-[120vh];
+  @apply md:min-h-[120vh] min-h-[100vh];
   position: relative;
   z-index: 1;
 }
