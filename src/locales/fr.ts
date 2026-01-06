@@ -916,6 +916,10 @@ export default {
           q2: {
             title: "Lieu des repas",
             text: "Pour chaque repas sélectionné, indiquez où votre foyer le consomme approximativement en une semaine?",
+            helper: "La somme des 3 colonnes doit être égale au total indiqué.",
+            note: "Indication que le remplissage est approximative.",
+            enteredLabel: ({ entered, total }: { entered: number; total: number }) =>
+              `Saisi: ${entered} / ${total}`,
           },
           meals: {
             redMeat: "Viande rouge",
@@ -935,6 +939,10 @@ export default {
           q2: {
             title: "Lieu des petits-déjeuners",
             text: "Pour chaque repas sélectionné, indiquez où votre foyer le consomme approximativement en une semaine?",
+            helper: "La somme des 3 colonnes doit être égale au total indiqué.",
+            note: "Indication que le remplissage est approximative.",
+            enteredLabel: ({ entered, total }: { entered: number; total: number }) =>
+              `Saisi: ${entered} / ${total}`,
           },
           meals: {
             bread: "Pain",

@@ -18,7 +18,9 @@ export function FormAlert({ variant, title, description }: Props) {
       <Icon />
       <p className="text-sm text-yellow-800">
         <AlertTitle className="inline-block font-semibold">{title}</AlertTitle>
-        <AlertDescription className="inline-block pl-1">{description}</AlertDescription>
+        <AlertDescription className="inline-block pl-1 whitespace-pre-line">
+          {description}
+        </AlertDescription>
       </p>
     </Alert>
   );

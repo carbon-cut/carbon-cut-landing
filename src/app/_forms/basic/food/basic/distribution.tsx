@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../components/question";
-import Content from "../../../components/content";
 import {
   Table,
   TableBody,
@@ -13,12 +12,86 @@ import {
 } from "@/components/ui/table";
 import Input from "../../../components/input";
 import { FormAlert } from "../../../components/alert";
-import { FormField, FormMessage } from "@/components/ui/forms";
+import { FormField, FormMessage, TName, useFormField } from "@/components/ui/forms";
+import { cn } from "@/lib/utils";
+import { useWatch } from "react-hook-form";
+import { formSchema } from "../../../formSchema";
+import { z } from "zod";
 
 const cols = ["homemade", "quantine", "delivered"] as const;
 const meals = ["redMeat", "whiteMeat", "oilyFish", "whiteFish", "vegan", "vegetarian"] as const;
 
 type Meals = (typeof meals)[number];
+type FormValues = z.infer<typeof formSchema>;
+type NamePrefix = TName<FormValues>;
+
+type DistributionRowProps = {
+  mealLabel: string;
+  enteredLabel: string;
+  matches: boolean;
+  mainForm: QuestionProps["mainForm"];
+  namePrefix: NamePrefix;
+};
+
+const DistributionRow = ({
+  mealLabel,
+  enteredLabel,
+  matches,
+  mainForm,
+  namePrefix,
+}: DistributionRowProps) => {
+  const { error } = useFormField();
+  const [cachedError, setCachedError] = useState(!!error);
+  const attachedFields = [namePrefix] as NamePrefix[];
+
+  useEffect(() => {
+    if (error) setCachedError(true);
+  }, [error]);
+
+  return (
+    <>
+      <TableRow
+        data-state={error ? "error" : "default"}
+        className="border-t border-b-0 data-[state=error]:bg-destructive/10"
+      >
+        <TableCell>
+          <span>{mealLabel}</span>
+          <div
+            className={cn(
+              "mt-1 text-xs font-semibold",
+              matches ? "text-muted-foreground" : "text-destructive"
+            )}
+          >
+            {enteredLabel}
+          </div>
+        </TableCell>
+        {cols.map((c, index) => {
+          const realIndex = index as 0 | 1 | 2;
+          const fieldName = `${namePrefix}.${realIndex}` as NamePrefix;
+          return (
+            <TableCell key={c}>
+              <Input
+                form={mainForm}
+                name={fieldName}
+                type="number"
+                attachedFields={attachedFields}
+                isError={cachedError}
+              />
+            </TableCell>
+          );
+        })}
+      </TableRow>
+      <TableRow
+        data-state={error ? "error" : "default"}
+        className="border-none data-[state=error]:bg-destructive/10"
+      >
+        <TableCell colSpan={cols.length + 1} className="pt-1 pb-3 border-none">
+          <FormMessage />
+        </TableCell>
+      </TableRow>
+    </>
+  );
+};
 
 const Distribution: QuestionFC = ({
   mainForm,
@@ -46,6 +119,10 @@ const Distribution: QuestionFC = ({
       {}
     );
   });
+  const distributionValues = useWatch({
+    control: mainForm.control,
+    name: "food.basic.distribution",
+  });
 
   useEffect(() => {
     if (Object.keys(selectedMeals).length === 0) {
@@ -66,7 +143,7 @@ const Distribution: QuestionFC = ({
       <FormAlert
         variant="note"
         title=""
-        description={"indication que le remplissage est approximative"}
+        description={`${t("basic.q2.note")}\n${t("basic.q2.helper")}`}
       />
       <div className="mt-4">
         <Table>
@@ -86,35 +163,25 @@ const Distribution: QuestionFC = ({
                 key={e}
                 control={mainForm.control}
                 name={`food.basic.distribution.${e}`}
-                render={() => (
-                  <>
-                    <TableRow className="border-t border-b-0">
-                      <TableCell>
-                        {t(`basic.meals.${e}`)} {"("}
-                        {selectedMeals[e]}
-                        {")"}
-                      </TableCell>
-                      {cols.map((c, index) => {
-                        const realIndex = index as 0 | 1 | 2;
-                        return (
-                          <TableCell key={c}>
-                            <Input
-                              form={mainForm}
-                              name={`food.basic.distribution.${e}.${realIndex}`}
-                              type="number"
-                              attachedFields={[`food.basic.distribution.${e}`]}
-                            />
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                    <TableRow className="border-none">
-                      <TableCell colSpan={cols.length + 1} className="pt-1 pb-3 border-none">
-                        <FormMessage />
-                      </TableCell>
-                    </TableRow>
-                  </>
-                )}
+                render={() => {
+                  const rowValues = distributionValues?.[e];
+                  const entered = Array.isArray(rowValues)
+                    ? rowValues.reduce((acc: number, curr) => acc + (Number(curr) || 0), 0)
+                    : 0;
+                  const total = selectedMeals[e] ?? 0;
+                  const matches = entered === total;
+                  const namePrefix = `food.basic.distribution.${e}` as NamePrefix;
+
+                  return (
+                    <DistributionRow
+                      mealLabel={t(`basic.meals.${e}`)}
+                      enteredLabel={t("basic.q2.enteredLabel", { entered, total })}
+                      matches={matches}
+                      mainForm={mainForm}
+                      namePrefix={namePrefix}
+                    />
+                  );
+                }}
               />
             ))}
           </TableBody>
