@@ -763,7 +763,7 @@ export default {
         },
         "qCar1-3": {
           title: ({ index }: { index: number }) => `Voiture ${index + 1} : carburant de voiture`,
-          q: "Quelle est le carburant de votre voiture?",
+          q: "Quel carburant utilise la partie thermique de votre hybride ?",
           Gasoline: "Essence",
           Diesel: "Diesel",
           "natural Gaz": "Bio-gaz",
