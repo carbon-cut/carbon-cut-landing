@@ -4,6 +4,8 @@ import { carType, union } from "../utils";
 const car = z.object({
   make: z.string().optional(),
   model: z.string().optional(),
+  otherMake: z.boolean().default(false),
+  otherModel: z.boolean().default(false),
   engine: carType,
   otherEngine: z.string().optional(),
   secondThermal: union("Gasoline", "Diesel", "natural Gaz", "other", false).optional(),

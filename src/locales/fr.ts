@@ -743,6 +743,12 @@ export default {
           q: "Informations sur la voiture",
           l1: "Marque",
           l2: "Modèle",
+          notListed: "Pas dans la liste ?",
+          backToList: "Revenir à la liste",
+          otherMakeLabel: "Autre marque",
+          otherMakePlaceholder: "Saisissez la marque",
+          otherModelLabel: "Autre modèle",
+          otherModelPlaceholder: "Saisissez le modèle",
         },
         "qCar1-2": {
           title: ({ index }: { index: number }) => `Voiture ${index + 1} : type de voiture`,

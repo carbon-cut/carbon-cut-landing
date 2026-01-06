@@ -5,7 +5,7 @@ import airports from "./data/airports.json";
 import result from "./data/result.json";
 
 export const handlers = [
-  http.get(`http://localhost:1337/api/carbon-footprint/forms/cars/makes`, () => {
+  http.get(`${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/cars/makes`, () => {
     return HttpResponse.json(makes);
   }),
   http.get(

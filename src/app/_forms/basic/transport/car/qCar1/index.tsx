@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import QuestionCompo1 from "./qCar1-1";
 import QuestionCompo2 from "./qCar1-2";
-import Question from "@/app/_forms/components/question";
 import QuestionCompo3 from "./qCar1-3";
 
 function QCar1(index: number) {
   const CarComponent: QuestionFC = (questionProps: QuestionProps) => {
-    const [make, setMake] = useState(() => {
-      return questionProps.mainForm.getValues(`transport.cars.${index}.make`);
-    });
-
     return (
       <>
-        <QuestionCompo1 make={make} setMake={setMake} index={index} {...questionProps} />
+        <QuestionCompo1 index={index} {...questionProps} />
       </>
     );
   };
