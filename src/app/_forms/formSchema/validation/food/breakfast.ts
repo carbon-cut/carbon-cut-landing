@@ -62,7 +62,7 @@ const breakfast = z.preprocess((input, ctx) => {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "food.distributionMismatch",
-            path: ["distribution", mealKey, 0],
+            path: ["distribution", mealKey],
           });
         }
       });

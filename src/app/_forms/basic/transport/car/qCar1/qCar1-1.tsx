@@ -61,7 +61,10 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({ index, mainForm }) =>
     staleTime: Infinity,
   });
 
-  const { data: models, isLoading: modelsLoading } = useQuery<{ value: string; label: string }[], Error>({
+  const { data: models, isLoading: modelsLoading } = useQuery<
+    { value: string; label: string }[],
+    Error
+  >({
     queryKey: ["carModels", make],
     queryFn: async () => {
       return fetch(
