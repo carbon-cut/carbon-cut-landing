@@ -16,7 +16,7 @@ interface props<T extends FieldValues, N extends TName<T> = TName<T>> {
   label?: string | undefined;
   mandetory?: boolean;
   type?: React.HTMLInputTypeAttribute | undefined | "calendar" | "combox";
-  options: { value: TValue<T, N>; label: string }[];
+  options: { value: TValue<T, N>; label: React.ReactNode; labelText?: string }[];
   setValue?: (v: any) => void;
   disabled?: boolean;
   className?: ClassValue;
@@ -45,14 +45,22 @@ function FormMultiCombox<T extends FieldValues>({
   useEffect(() => {
     if (form && name) form.register(name);
   }, [form, name]);
+  useEffect(() => {
+    setFilteredOptions(options);
+  }, [options]);
   const [open, setOpen] = React.useState(false);
 
   const handleSearch = (search: string) => {
+    const normalizedSearch = search.toLowerCase();
     setFilteredOptions(
       options.filter(
         (option) =>
-          option.value.toLowerCase().includes(search.toLowerCase() ?? []) ||
-          option.label.toLowerCase().includes(search.toLowerCase() ?? [])
+          String(option.value ?? "")
+            .toLowerCase()
+            .includes(normalizedSearch) ||
+          (option.labelText ?? (typeof option.label === "string" ? option.label : ""))
+            .toLowerCase()
+            .includes(normalizedSearch)
       )
     );
   };
@@ -87,11 +95,22 @@ function FormMultiCombox<T extends FieldValues>({
                        : ""
                  }`}
               >
-                <span className="text-ellipsis  w-10/12 overflow-hidden">
-                  {field.value
-                    ? options.find((elem) => field.value === elem.value)?.label
-                    : t("value", { label })}
-                </span>
+                {(() => {
+                  const selectedOption = options.find((elem) => field.value === elem.value);
+                  const selectedLabel = selectedOption?.label;
+                  return (
+                    <span
+                      className={cn(
+                        "w-10/12 min-w-0 overflow-hidden",
+                        selectedLabel && typeof selectedLabel !== "string"
+                          ? "whitespace-normal"
+                          : "truncate"
+                      )}
+                    >
+                      {selectedLabel ?? t("value", { label })}
+                    </span>
+                  );
+                })()}
                 <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
               </Button>
             </PopoverTrigger>

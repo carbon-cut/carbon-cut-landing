@@ -17,6 +17,13 @@ import Content from "@/app/_forms/components/content";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useFieldArray } from "react-hook-form";
 import { toast } from "sonner";
+import { AirportsData } from "@carbon-cut/types";
+
+type AirportsReduced = {
+  label: React.ReactNode;
+  labelText: string;
+  value: string;
+}[];
 
 const aircraftTypes = [
   "A220",
@@ -36,24 +43,35 @@ const classes = ["economy", "premium", "business", "first"] as const;
 const QAir: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qAir.q1");
 
-  const { data: airports, isLoading } = useQuery<{ reduced: any[]; raw?: any[] }>({
+  const { data: airports, isLoading } = useQuery<{ reduced: AirportsReduced; raw?: AirportsData }>({
     queryKey: ["airports"],
     queryFn: async () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER}/api/carbon-footprint/forms/airports`
       ).then((r) => r.json());
       if (res.error) throw new Error(res.error.message);
-      const reduced = res.reduce(
-        //@ts-ignore
-        (prev, curr, _) => {
-          return [...prev, { label: curr.name, value: curr.code }];
-        },
-        []
-      );
-      console.log("reduced:", reduced);
+      const typedRes: AirportsData = res;
+      console.log("airports:", typedRes);
+      const reduced = typedRes.reduce<AirportsReduced>((prev, curr, index) => {
+        const { city, country } = curr;
+        const labelText = [city, country].filter(Boolean).join(", ");
+        return [
+          ...prev,
+          {
+            label: (
+              <span className="inline-flex items-baseline gap-1 whitespace-nowrap text-left">
+                <span className="text-sm font-medium text-foreground">{city}</span>
+                <span className="text-xs text-muted-foreground">{country}</span>
+              </span>
+            ),
+            labelText,
+            value: index.toString(),
+          },
+        ];
+      }, []);
       return {
         reduced,
-        raw: res,
+        raw: typedRes,
       };
     },
   });
@@ -150,7 +168,7 @@ export default QAir;
 type AirTravelItemProps = {
   index: number;
   t: ReturnType<typeof useScopedI18n>;
-  airports: { reduced: any[]; raw?: any[] } | undefined;
+  airports: { reduced: AirportsReduced; raw?: AirportsData } | undefined;
   isLoading: boolean;
   mainForm: QuestionProps["mainForm"];
   stopoverChecked: boolean;
@@ -297,34 +315,34 @@ function AirTravelItem({
     </li>
   );
 }
-type AirportPosition = {
-  code: string;
-  latitude: number;
-  longitude: number;
-};
+type AirportPosition = Pick<AirportsData[number], "latitude" | "longitude">;
 function getDistance(
   ele: {
     destination?: string | null;
     origin?: string | null;
     stopover?: string | null;
   },
-  RawAirports: any[],
+  rawAirports: AirportsData,
   errorMessage: string
 ) {
-  if (!ele.destination || !ele.origin) return 0;
-  let origin: AirportPosition | null = null;
-  let destination: AirportPosition | null = null;
-  let stopover: AirportPosition | null = null;
-  let i = 0;
-  while (i < RawAirports.length) {
-    const v = RawAirports[i];
-    if (v.code === ele.origin) origin = v;
-    else if (v.code === ele.destination) destination = v;
-    else if (v.code === ele.stopover) stopover = v;
-    if (origin && destination && (!ele.stopover || stopover)) break;
-    i++;
+  if (
+    ele.destination == null ||
+    ele.destination === "" ||
+    ele.origin == null ||
+    ele.origin === ""
+  ) {
+    return 0;
   }
-  if (!origin || !destination) throw new Error(errorMessage);
+  const getAirportByIndex = (value?: string | null): AirportPosition | null => {
+    if (value == null || value === "") return null;
+    const index = Number(value);
+    if (!Number.isInteger(index) || index < 0 || index >= rawAirports.length) return null;
+    return rawAirports[index] ?? null;
+  };
+  const origin = getAirportByIndex(ele.origin);
+  const destination = getAirportByIndex(ele.destination);
+  const stopover = ele.stopover ? getAirportByIndex(ele.stopover) : null;
+  if (!origin || !destination || (ele.stopover && !stopover)) throw new Error(errorMessage);
   if (stopover)
     return CalculateDistance(origin, stopover) + CalculateDistance(stopover, destination);
   return CalculateDistance(origin, destination);
