@@ -22,6 +22,7 @@ import PreAssessmentActions from "./actions";
 import PreAssessmentContent from "./content";
 import PreAssessmentTitle from "./title";
 import PreAssessmentVisual from "./visual";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 type Props = {
   onContinue: () => void;
@@ -87,6 +88,7 @@ export default function PreAssessment({ onContinue }: Props) {
 
   return (
     <Dialog open>
+      <DialogTitle />
       <DialogContent
         className="h-[85vh] w-[560px] max-w-[90vw]"
         overlayClassName="bg-black/70 backdrop-blur-sm"
