@@ -43,10 +43,8 @@ const QuestionCompo2: React.FC<QuestionProps & { index: number }> = ({
   useEffect(() => {
     setOnSubmit(() => async () => {
       const currentEngine = mainForm.getValues(`transport.cars.${index}.engine`);
-      const prevHybrid =
-        prevEngine === "Plug-in Hybrid" || prevEngine === "mild Hybrid";
-      const nextHybrid =
-        currentEngine === "Plug-in Hybrid" || currentEngine === "mild Hybrid";
+      const prevHybrid = prevEngine === "Plug-in Hybrid" || prevEngine === "mild Hybrid";
+      const nextHybrid = currentEngine === "Plug-in Hybrid" || currentEngine === "mild Hybrid";
       const prevPlugIn = prevEngine === "Plug-in Hybrid";
       const nextPlugIn = currentEngine === "Plug-in Hybrid";
 

@@ -41,7 +41,9 @@ const QCar: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
           out.splice(currentIndex + 1, 0, ...add);
           return out;
         });
-        appendMetaCars(Array.from({ length: hasCar }, () => ({ questionCount: defaultQuestionCount })));
+        appendMetaCars(
+          Array.from({ length: hasCar }, () => ({ questionCount: defaultQuestionCount }))
+        );
       } else if (prevValue < hasCar) {
         setQuestions((prev) => {
           const copy = prev.slice();
