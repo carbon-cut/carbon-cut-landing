@@ -20,10 +20,6 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({ index, mainForm }) =>
     control: mainForm.control,
     name: `transport.cars.${index}.make`,
   });
-  const model = useWatch({
-    control: mainForm.control,
-    name: `transport.cars.${index}.model`,
-  });
 
   const useCustomMake =
     useWatch({
@@ -38,11 +34,11 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({ index, mainForm }) =>
       defaultValue: false,
     }) ?? false;
 
-  const setUseCustomMake = (value: boolean, resetValue = true) => {
+  const setUseCustomMake = (value: boolean) => {
     mainForm.setValue(`transport.cars.${index}.otherMake`, value);
     mainForm.setValue(`transport.cars.${index}.make`, "");
   };
-  const setUseCustomModel = (value: boolean, resetValue = true) => {
+  const setUseCustomModel = (value: boolean) => {
     mainForm.setValue(`transport.cars.${index}.otherModel`, value);
     mainForm.setValue(`transport.cars.${index}.model`, "");
   };

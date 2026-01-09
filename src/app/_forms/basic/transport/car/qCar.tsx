@@ -13,10 +13,16 @@ const QCar: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
   const [prevValue] = useState(mainForm.getValues("transport.hasCar") ?? 0);
   const { tab } = useContext(FormContext);
 
-  const { append: appendCars, remove: removeCars } = useFieldArray({
+  const { append: appendMetaCars, remove: removeMetaCars } = useFieldArray({
     name: "transport.metaCars",
     control: mainForm.control,
   });
+
+  const { remove: removeCars } = useFieldArray({
+    name: "transport.cars",
+    control: mainForm.control,
+  });
+
   const questionCounts = useWatch({
     name: "transport.metaCars",
     control: mainForm.control,
@@ -35,7 +41,7 @@ const QCar: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
           out.splice(currentIndex + 1, 0, ...add);
           return out;
         });
-        appendCars(Array.from({ length: hasCar }, () => ({ questionCount: defaultQuestionCount })));
+        appendMetaCars(Array.from({ length: hasCar }, () => ({ questionCount: defaultQuestionCount })));
       } else if (prevValue < hasCar) {
         setQuestions((prev) => {
           const copy = prev.slice();
@@ -44,13 +50,9 @@ const QCar: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
             0,
             ...carsQuestions(hasCar - prevValue, prevValue)
           );
-          console.log(
-            "start insert from Index:",
-            currentIndex + prevValue * defaultQuestionCount + 1
-          );
           return copy;
         });
-        appendCars(
+        appendMetaCars(
           Array.from({ length: hasCar - prevValue }, () => ({
             questionCount: defaultQuestionCount,
           }))
@@ -58,20 +60,40 @@ const QCar: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
       }
       //remove Car questions
       else if (hasCar < prevValue) {
-        const quesLength = carsQuestions(1).length;
+        if (!questionCounts) throw new Error("questionCounts is undefined");
+        const getQuestionCount = (index: number) =>
+          questionCounts[index]?.questionCount ?? defaultQuestionCount;
+
+        let questionsBefore = 0;
+        for (let i = 0; i < hasCar; i += 1) {
+          questionsBefore += getQuestionCount(i);
+        }
+
+        let removeLength = 0;
+        for (let i = hasCar; i < prevValue; i += 1) {
+          removeLength += getQuestionCount(i);
+        }
+
         setQuestions((prev) => {
           const copy = prev.slice();
-          copy.splice(currentIndex + hasCar * quesLength + 1, quesLength * (prevValue - hasCar));
+          copy.splice(currentIndex + questionsBefore + 1, removeLength);
           return copy;
         });
-        if (!questionCounts) throw new Error("questionCounts is undefined");
-        removeCars(
+        removeMetaCars(
           Array.from({ length: prevValue - hasCar }, (_, i) => {
             return questionCounts.length - 1 - i;
           })
         );
+        const carsCount = mainForm.getValues("transport.cars")?.length ?? 0;
+        const removeCount = Math.min(prevValue - hasCar, carsCount);
+        if (removeCount > 0) {
+          removeCars(
+            Array.from({ length: removeCount }, (_, i) => {
+              return carsCount - 1 - i;
+            })
+          );
+        }
       }
-      console.log("cars:", mainForm.getValues("transport.cars"));
     });
     return () => {
       setOnSubmit(() => async () => {});
@@ -83,7 +105,8 @@ const QCar: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
     setOnSubmit,
     setQuestions,
     tab,
-    appendCars,
+    appendMetaCars,
+    removeMetaCars,
     removeCars,
     questionCounts,
   ]);

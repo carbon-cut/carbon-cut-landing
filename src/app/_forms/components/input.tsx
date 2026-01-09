@@ -115,20 +115,17 @@ function Input<T extends FieldValues>({
                           const val = event.target.value;
 
                           if (val === "") {
-                            console.log("empty");
                             field.onChange("");
                             verifyAttachedFields();
                             return;
                           }
 
                           if (!valueControl(val)) {
-                            console.log("not Value control");
                             return;
                           }
 
                           const parsedValue = Number(val);
                           if (!Number.isNaN(parsedValue)) {
-                            console.log("parsed");
                             field.onChange(parsedValue);
                             verifyAttachedFields();
                           }
