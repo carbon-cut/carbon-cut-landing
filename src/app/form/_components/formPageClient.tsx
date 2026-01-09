@@ -97,6 +97,14 @@ export default function FormPageClient() {
     setQuestionList(true);
   };
 
+  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLFormElement>) => {
+    if (event.key !== "Enter") return;
+    const target = event.target as HTMLElement;
+    if (target.tagName === "TEXTAREA" || target.tagName === "BUTTON") return;
+    event.preventDefault();
+    event.stopPropagation();
+  }, []);
+
   const dataLengths = useMemo(() => {
     return {
       transport: transportQuestions[0].length,
@@ -195,6 +203,7 @@ export default function FormPageClient() {
                 }
                 return mainForm.handleSubmit(handleSubmit, handleError)(e);
               }}
+              onKeyDown={handleKeyDown}
               className="md:min-h-screen min-h-[93vh] h-full w-full"
             >
               <Tabs
