@@ -21,6 +21,7 @@ import { TabValues } from "@/lib/formTabs/types";
 import { TabContent } from "./_tab";
 import { motion } from "framer-motion";
 import { useScopedI18n } from "@/locales/client";
+import { AlertTriangle } from "lucide-react";
 interface ContainerProps {
   setNextTab: () => void;
   initQuestions: {
@@ -40,6 +41,7 @@ const Container = React.forwardRef<
   const [prevAction, setPrevAction] = useState<"next" | "prev" | null>(null);
 
   const t = useScopedI18n("forms");
+  const tOverview = useScopedI18n("components.forms.overview");
 
   const verify = useCallback<() => Promise<boolean>>(async () => {
     if (verifyFields.length === 0) return true;
@@ -63,6 +65,8 @@ const Container = React.forwardRef<
   const cardRef = useRef<HTMLDivElement | null>(null);
 
   const [height, setHeight] = useState<number | "auto">("auto");
+  const showErrorNavigation =
+    mainForm.formState.submitCount > 0 && Object.keys(mainForm.formState.errors ?? {}).length > 0;
 
   useLayoutEffect(() => {
     if (cardRef.current) {
@@ -181,9 +185,10 @@ const Container = React.forwardRef<
           </CardContent>
         </motion.div>
       </Card>
-      <div className="md:flex md:justify-between md:gap-12 gap-6 grid grid-cols-2 mb-8 mt-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 mt-4">
         <Button
-          className={`md:px-8 md:py-3 px-5 py-3 md:w-[175px] w-full rounded-full font-semibold flex items-center gap-2
+          className={`order-1 md:px-3 px-5 py-1 w-full
+            rounded-full font-semibold block gap-2  
             border-2 border-[#00A261] text-[#00A261] bg-white
             hover:bg-[#ECFDF5] 
             hover:shadow-xl hover:scale-105 active:scale-95 transition-all
@@ -195,23 +200,39 @@ const Container = React.forwardRef<
           disabled={currentIndexes[tab] == 0}
           onClick={prev}
         >
-          <span className="flex items-center gap-3">
-            <Image src={"form/utils/arrow-left.svg"} width={16} height={16} alt="arrow-left" />
+          <span className="flex flex-row justify-center items-center gap-3">
+            <Image src={"form/utils/arrow-left.svg"} width={18} height={18} alt="arrow-left" />
             <span className="md:text-base text-sm bg-linear-1 text-transparent bg-clip-text">
               {t("back")}
             </span>
+            <div />
           </span>
         </Button>
+        <div className="order-3 md:order-2 col-span-1 w-full" />
+        {showErrorNavigation ? (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="order-4 ml-auto self-center w-full md:order-2 border-destructive/40 text-destructive hover:bg-destructive/10"
+            onClick={() => {}}
+          >
+            <AlertTriangle />
+            {tOverview("nextErrorButton")}
+          </Button>
+        ) : (
+          <div className="order-3 col-span-1 w-full" />
+        )}
         <Button
-          className={`md:px-8 md:py-3 py-3 md:w-[175px] w-full
-            rounded-full font-semibold flex items-center gap-2 
-            bg-linear-transport
-            data-[state=submit]:bg-linear-energie
-            text-white hover:shadow-xl hover:scale-105
-            active:scale-95 
-            transition-all 
-            duration-200 shadow-lg
-            `}
+          className={`order-2 md:order-4 md:px-3 py-1 px-5 w-full
+              rounded-full font-semibold block gap-2 
+              bg-linear-transport
+              data-[state=submit]:bg-linear-energie
+              text-white hover:shadow-xl hover:scale-105
+              active:scale-95 
+              transition-all 
+              duration-200 shadow-lg
+              `}
           disabled={loading}
           size={"lg"}
           data-state={submit ? "submit" : "next"}
@@ -223,10 +244,12 @@ const Container = React.forwardRef<
             if (ver) next();
           }}
         >
-          <span className="md:text-base text-sm">{submit ? t("submit") : t("next")}</span>
-          {!submit && (
-            <Image src={"form/utils/arrow-right.svg"} width={16} height={16} alt="arrow-right" />
-          )}
+          <span className="flex flex-row justify-center items-center gap-3">
+            <span className="md:text-base text-sm">{submit ? t("submit") : t("next")}</span>
+            {!submit && (
+              <Image src={"form/utils/arrow-right.svg"} width={16} height={16} alt="arrow-right" />
+            )}
+          </span>
         </Button>
       </div>
     </div>

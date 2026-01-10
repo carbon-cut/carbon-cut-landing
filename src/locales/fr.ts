@@ -20,6 +20,7 @@ export default {
         title: "Aperçu du formulaire",
         description:
           "Afficher toutes les sections et questions de cette évaluation de l'empreinte carbone",
+        nextErrorButton: "Prochaine erreur",
       },
     },
     layout: {
