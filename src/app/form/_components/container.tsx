@@ -36,7 +36,7 @@ const Container = React.forwardRef<
   React.ElementRef<typeof TabsContent>,
   React.ComponentPropsWithoutRef<typeof TabsContent> & ContainerProps
 >(({ setNextTab, initQuestions, mainForm, loading, scrollToRef, ...props }, ref) => {
-  const { tab, currentIndexes, setCurrentIndexes, verifyFields } = useContext(FormContext);
+  const { tab, setTab, currentIndexes, setCurrentIndexes, verifyFields } = useContext(FormContext);
   const [onSubmit, setOnSubmit] = useState<() => void>(() => () => {});
   const [prevAction, setPrevAction] = useState<"next" | "prev" | null>(null);
 
@@ -67,6 +67,57 @@ const Container = React.forwardRef<
   const [height, setHeight] = useState<number | "auto">("auto");
   const showErrorNavigation =
     mainForm.formState.submitCount > 0 && Object.keys(mainForm.formState.errors ?? {}).length > 0;
+  const handleNextError = useCallback(() => {
+    const hasFieldError = (fields: TName<z.infer<typeof formSchema>>[]) =>
+      fields.some((field) => mainForm.getFieldState(field)?.error);
+    const tabOrder = ["transport", "energie", "food" /* "waste", "vacation" */] as const;
+    const orderedQuestions = tabOrder.flatMap((tabKey) => {
+      const questions = initQuestions[tabKey][0];
+      const questionEntries = questions.map((question, index) => ({
+        tab: tabKey,
+        index,
+        fields: question.Symbol?.fields ?? [],
+        type: "question" as const,
+      }));
+      const tabHasQuestionError = questionEntries.some((entry) => hasFieldError(entry.fields));
+      const tabHasSectionError = Boolean(mainForm.getFieldState(tabKey)?.error);
+      if (!tabHasQuestionError && tabHasSectionError) {
+        return [
+          ...questionEntries,
+          {
+            tab: tabKey,
+            index: 0,
+            fields: [],
+            type: "section" as const,
+          },
+        ];
+      }
+      return questionEntries;
+    });
+
+    if (orderedQuestions.length === 0) return;
+
+    const currentPosition = orderedQuestions.findIndex(
+      (question) =>
+        question.type === "question" &&
+        question.tab === tab &&
+        question.index === currentIndexes[tab]
+    );
+    const startIndex = currentPosition >= 0 ? currentPosition + 1 : 0;
+
+    const entryHasError = (entry: (typeof orderedQuestions)[number]) =>
+      entry.type === "section" ? true : hasFieldError(entry.fields);
+
+    const findFrom = (start: number, end: number) =>
+      orderedQuestions.slice(start, end).find((question) => entryHasError(question));
+
+    const nextError = findFrom(startIndex, orderedQuestions.length) ?? findFrom(0, startIndex);
+
+    if (!nextError) return;
+
+    setTab(nextError.tab);
+    setCurrentIndexes((prev) => ({ ...prev, [nextError.tab]: nextError.index }));
+  }, [currentIndexes, initQuestions, mainForm, setCurrentIndexes, setTab, tab]);
 
   useLayoutEffect(() => {
     if (cardRef.current) {
@@ -215,7 +266,7 @@ const Container = React.forwardRef<
             variant="outline"
             size="sm"
             className="order-4 ml-auto self-center w-full md:order-2 border-destructive/40 text-destructive hover:bg-destructive/10"
-            onClick={() => {}}
+            onClick={handleNextError}
           >
             <AlertTriangle />
             {tOverview("nextErrorButton")}

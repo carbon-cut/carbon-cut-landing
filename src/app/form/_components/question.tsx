@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { TabValues } from "@/lib/formTabs/types";
 import { useScopedI18n } from "@/locales/client";
-import { useContext, useEffect, useState } from "react";
-import { set, UseFormReturn } from "react-hook-form";
+import { useContext } from "react";
+import { UseFormReturn } from "react-hook-form";
 import FormContext from "../_layout/_formContext";
+import { QuestionFC } from "@/app/_forms/types";
 
 const Question = ({
   mainForm,
@@ -15,7 +16,7 @@ const Question = ({
   currentIndex,
 }: {
   mainForm: UseFormReturn<any>;
-  Symbol?: any;
+  Symbol: QuestionFC["Symbol"];
   setInterface: () => void;
   section: TabValues;
   index: number;
@@ -25,30 +26,15 @@ const Question = ({
 
   const { tab } = useContext(FormContext);
 
-  const [errorc, setErrorc] = useState(false);
-
   const isCurrent = currentIndex === index && tab === section;
 
-  useEffect(() => {
-    for (const field of Symbol?.fields ?? []) {
-      if (!mainForm.getFieldState(field)) throw new Error(`Field: "${field}" not found`);
-      if (mainForm.getFieldState(field)?.error) {
-        mainForm.trigger(field);
-        if (mainForm.getFieldState(field)?.error) {
-          console.log(`Error in field: ${field}`, mainForm.getFieldState(field)?.error);
-          setErrorc(true);
-        }
-        return;
-      }
-    }
-    setErrorc(false);
-  }, [mainForm, isCurrent, currentIndex]);
+  const error = Symbol.fields.some((field) => mainForm.getFieldState(field)?.error);
 
   return (
     <Button
       type="button"
       variant={"outline"}
-      data-state={errorc ? "error" : ""}
+      data-state={error ? "error" : ""}
       data-current={isCurrent ? "true" : "false"}
       className={`
         w-full text-left md:p-3 p-2 rounded-md transition-all
@@ -60,7 +46,7 @@ const Question = ({
       onClick={setInterface}
     >
       <Label
-        data-state={errorc ? "error" : ""}
+        data-state={error ? "error" : ""}
         data-current={isCurrent ? "true" : "false"}
         className={`my-auto font-bold text-section-${section}
          data-[current=true]:text-white hover:cursor-pointer
@@ -72,7 +58,7 @@ const Question = ({
       <Label
         className={`text-extrabold hover:cursor-pointer max-w-full text-wrap col-span-11
         data-[current=true]:text-white data-[state=error]:!text-destructive`}
-        data-state={errorc ? "error" : ""}
+        data-state={error ? "error" : ""}
         data-current={isCurrent ? "true" : "false"}
       >
         {typeof Symbol?.question === "string"
