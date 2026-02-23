@@ -26,6 +26,7 @@ const Precise: QuestionFC = ({ mainForm }: QuestionProps) => {
       <Question>{t("q")}</Question>
       <Content>
         <MultiCheckInput
+          className="px-3"
           form={mainForm}
           name="waste.precise"
           onChange={(checked, key) => {

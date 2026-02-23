@@ -4,62 +4,73 @@ import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import Input from "../../../components/input";
-import Select from "../../../components/select";
+import FormSelect from "@/components/forms/formSelect";
+import { useWatch } from "react-hook-form";
 
 const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.general.waste");
-
-  const [isBag, setIsBag] = React.useState(
-    mainForm.getValues("waste.general.waste.amountUnit") === "bag"
-  );
+  const amountUnit = useWatch({
+    control: mainForm.control,
+    name: "waste.general.waste.amountUnit",
+  });
+  const isBag = amountUnit === "bag";
 
   return (
     <div>
       <Question>{t("q")}</Question>
-      <Content className="flex justify-start">
-        <Input
-          label="&nbsp;"
-          form={mainForm}
-          name={"waste.general.waste.amount"}
-          type="number"
-          placeholder={t("amount")}
-        />
-        <div className="w-[100px] mr-4">
-          <Select
-            label="&nbsp;"
-            form={mainForm}
-            name="waste.general.waste.amountUnit"
-            placeholder={t("amountUnit.placeholder")}
-            onChange={(v) => setIsBag(v === "bag")}
-            options={[
-              { label: t("amountUnit.labels.bag"), value: "bag" },
-              { label: t("amountUnit.labels.kg"), value: "kg" },
-            ]}
-          />
-        </div>
-        <div className="w-[130px] mr-4">
-          <Select
-            label="&nbsp;"
-            form={mainForm}
-            name="waste.general.waste.frequencyUnit"
-            placeholder={t("frequencyUnit.placeholder")}
-            options={[
-              { label: t("frequencyUnit.labels.day"), value: "day" },
-              { label: t("frequencyUnit.labels.week"), value: "week" },
-            ]}
-          />
-        </div>
-      </Content>
       <Content>
-        <div className="w-[200px] mr-4">
-          <Input
-            disabled={!isBag}
-            form={mainForm}
-            name={"waste.general.waste.bagVolume"}
-            type="number"
-            label={t("bagVolume.placeholder")}
-            placeholder={t("bagVolume.placeholder")}
-          />
+        <div className="max-w-3xl space-y-4">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,240px)_110px_auto_160px] md:items-end">
+            <div className="min-w-0">
+              <Input
+                label="&nbsp;"
+                form={mainForm}
+                name={"waste.general.waste.amount"}
+                type="number"
+                placeholder={t("amount")}
+              />
+            </div>
+            <div className="w-full">
+              <FormSelect
+                label="&nbsp;"
+                form={mainForm}
+                name="waste.general.waste.amountUnit"
+                placeholder={t("amountUnit.placeholder")}
+                data={[
+                  { label: t("amountUnit.labels.bag"), value: "bag" },
+                  { label: t("amountUnit.labels.kg"), value: "kg" },
+                ]}
+              />
+            </div>
+            <div className="text-sm md:text-base text-muted-foreground md:pb-2 md:justify-self-center">
+              <div className="py-1">
+              {t("every")}
+              </div>
+            </div>
+            <div className="w-full">
+              <FormSelect
+                label="&nbsp;"
+                form={mainForm}
+                name="waste.general.waste.frequencyUnit"
+                placeholder={t("frequencyUnit.placeholder")}
+                data={[
+                  { label: t("frequencyUnit.labels.day"), value: "day" },
+                  { label: t("frequencyUnit.labels.week"), value: "week" },
+                ]}
+              />
+            </div>
+          </div>
+
+          <div className="w-full md:max-w-[260px]">
+            <Input
+              disabled={!isBag}
+              form={mainForm}
+              name={"waste.general.waste.bagVolume"}
+              type="number"
+              label={t("bagVolume.placeholder")}
+              placeholder={t("bagVolume.placeholder")}
+            />
+          </div>
         </div>
       </Content>
     </div>

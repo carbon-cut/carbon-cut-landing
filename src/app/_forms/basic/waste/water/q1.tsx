@@ -4,27 +4,25 @@ import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import Input from "../../../components/input";
-import Select from "../../../components/select";
+import FormSelect from "@/components/forms/formSelect";
 
 const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.water.q1");
   return (
     <div>
       <Question>{t("q")}</Question>
-      <Content>
-        <div className="grid grid-cols-4">
+      <Content className="mt-3">
+        <div className="grid grid-cols-4 gap-4">
           <Input
-            label="&nbsp;"
             form={mainForm}
             name={"waste.water.money.amount"}
             type={"number"}
-            unit={"euro"}
+            placeholder={t("unit")}
           />
-          <Select
-            label="&nbsp;"
+          <FormSelect
             form={mainForm}
             name={"waste.water.money.frequencyUnit"}
-            options={[
+            data={[
               { label: t("frequency.month"), value: "month" },
               { label: t("frequency.year"), value: "year" },
             ]}

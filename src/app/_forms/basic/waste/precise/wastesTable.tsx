@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/table";
 import { useScopedI18n } from "@/locales/client";
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn, useWatch } from "react-hook-form";
 import { z } from "zod";
-import MinimalInput from "../../../components/minimalInput";
-import Select from "../../../components/select";
+import FormSelect from "@/components/forms/formSelect";
+import Input from "../../../components/input";
 
 const wastesKeys = ["recylablePackaging", "paper", "glass", "organic"] as const;
 
@@ -29,12 +29,16 @@ type Props = {
 
 function WastesTable({ wastes, mainForm }: Props) {
   const t = useScopedI18n("forms.basic.waste.precise");
+  const preciseValues = useWatch({
+    control: mainForm.control,
+    name: "waste.precise",
+  });
 
   return (
-    <Table className="mb-24">
+    <Table className="mb-9 mt-3">
       <TableHeader>
         <TableRow>
-          <TableHead>type</TableHead>
+          <TableHead className="w-60">{t("type")}</TableHead>
           <TableHead>{t("waste.amount")}</TableHead>
           <TableHead>{t("waste.amountUnit.placeholder")}</TableHead>
           <TableHead>{t("waste.frequencyUnit.placeholder")}</TableHead>
@@ -44,27 +48,35 @@ function WastesTable({ wastes, mainForm }: Props) {
       <TableBody>
         {wastesKeys.map((e) => {
           if (wastes[e]) {
+            const isBag = preciseValues?.[e]?.amountUnit === "bag";
             return (
               <TableRow key={e}>
                 <TableCell>{t(`labels.${e}`)}</TableCell>
                 <TableCell>
-                  <MinimalInput type="number" form={mainForm} name={`waste.precise.${e}.amount`} />
+                  <Input
+                  type="number"
+                  form={mainForm}
+                  name={`waste.precise.${e}.amount`}
+                  size="sm"
+                  />
                 </TableCell>
                 <TableCell>
-                  <Select
+                  <FormSelect
                     form={mainForm}
                     name={`waste.precise.${e}.amountUnit`}
-                    options={[
+                    size="sm"
+                    data={[
                       { label: t("waste.amountUnit.labels.bag"), value: "bag" },
                       { label: t("waste.amountUnit.labels.kg"), value: "kg" },
                     ]}
                   />
                 </TableCell>
                 <TableCell>
-                  <Select
+                  <FormSelect
                     form={mainForm}
                     name={`waste.precise.${e}.frequencyUnit`}
-                    options={[
+                    size="sm"
+                    data={[
                       {
                         label: t("waste.frequencyUnit.labels.day"),
                         value: "day",
@@ -77,12 +89,13 @@ function WastesTable({ wastes, mainForm }: Props) {
                   />
                 </TableCell>
                 <TableCell>
-                  <div className="grid grid-cols-2">
-                    <Select
-                      //disabled={amountUnit === "bag"}
+                  <div className="">
+                    <FormSelect
                       form={mainForm}
                       name={`waste.precise.${e}.bagVolume`}
-                      options={[
+                      size="sm"
+                      disabled={!isBag}
+                      data={[
                         { label: "10L", value: "10" },
                         { label: "20L", value: "20" },
                         { label: "30L", value: "30" },

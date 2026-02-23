@@ -6,6 +6,7 @@ const cubiqueMeter = "m³" as const;
 
 const waste = {
   amount: "quantité",
+  every: "Chaque",
   amountUnit: { placeholder: "unité", labels: { bag: "sac", kg: "kg" } },
   frequencyUnit: {
     placeholder: "fréquence",
@@ -1050,6 +1051,7 @@ export default {
         },
         precise: {
           q: "Si vous effectuez le tri sélectif des déchets, pour lesquels de ces déchets pouvez-vous estimer les quantités :",
+          type: "Type",
           labels: {
             recylablePackaging:
               "Emballages recyclables (plastiques, cartons, métaux)",
@@ -1107,6 +1109,7 @@ export default {
         water: {
           q1: {
             q: "indiquez globalement le montant moyen de votre facture relative à l'assainissement:",
+            unit: "€",
             frequency: {
               placeholder: "fréquence",
               month: "mois",

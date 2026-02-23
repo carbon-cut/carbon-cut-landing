@@ -4,7 +4,7 @@ import Question from "../../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/content";
 import Input from "../../../../components/input";
-import Select from "../../../../components/select";
+import FormSelect from "@/components/forms/formSelect";
 
 const contentKeys = ["electric", "biogas"] as const;
 const frequencies = ["month", "year"] as const;
@@ -16,25 +16,23 @@ const Detail: QuestionFC = ({ mainForm }: QuestionProps) => {
       <Question>{t("q")}</Question>
       <Content>
         {contentKeys.map((e) => (
-          <div key={e} className="grid grid-cols-4">
+          <div key={e} className="grid grid-cols-4 gap-4 mt-3">
             <Input
               name={`waste.details.biodigest.${e}.amount`}
               form={mainForm}
               label={`${t(`${e}.q`)}`}
               type="number"
-              unit={t(`${e}.unit`)}
+              placeholder={t(`${e}.unit`)}
             />
-            <div className="ml-3">
-              <Select
-                form={mainForm}
-                name={`waste.details.biodigest.${e}.frequencyUnit`}
-                label={`${t(`${e}.frequency`)}`}
-                options={frequencies.map((fE) => ({
-                  label: t(`frequencies.${fE}`),
-                  value: fE,
-                }))}
-              />
-            </div>
+            <FormSelect
+              form={mainForm}
+              name={`waste.details.biodigest.${e}.frequencyUnit`}
+              label={`${t(`${e}.frequency`)}`}
+              data={frequencies.map((fE) => ({
+                label: t(`frequencies.${fE}`),
+                value: fE,
+              }))}
+            />
           </div>
         ))}
       </Content>
