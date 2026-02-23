@@ -1,12 +1,12 @@
 import React from "react";
-import { QuestionProps } from "../../../types";
+import { QuestionFC, QuestionProps } from "../../../types";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import Input from "../../../components/input";
 import Select from "../../../components/select";
 
-function Q1({ mainForm }: QuestionProps) {
+const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.water.q1");
   return (
     <div>
@@ -19,8 +19,6 @@ function Q1({ mainForm }: QuestionProps) {
             name={"waste.water.money.amount"}
             type={"number"}
             unit={"euro"}
-            half
-            full
           />
           <Select
             label="&nbsp;"
@@ -31,12 +29,16 @@ function Q1({ mainForm }: QuestionProps) {
               { label: t("frequency.year"), value: "year" },
             ]}
             placeholder={t("frequency.placeholder")}
-            className="w-2/3"
           />
         </div>
       </Content>
     </div>
   );
-}
+};
+
+Q1.Symbol = {
+  question: "forms.basic.waste.water.q1.q",
+  fields: ["waste.water.money.amount", "waste.water.money.frequencyUnit"],
+};
 
 export default Q1;

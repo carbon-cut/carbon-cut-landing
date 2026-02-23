@@ -1,12 +1,12 @@
 import React from "react";
-import { QuestionProps } from "../../../types";
+import { QuestionFC, QuestionProps } from "../../../types";
 import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import Input from "../../../components/input";
 import Select from "../../../components/select";
 
-function Q1({ mainForm }: QuestionProps) {
+const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.general.waste");
 
   const [isBag, setIsBag] = React.useState(
@@ -23,8 +23,6 @@ function Q1({ mainForm }: QuestionProps) {
           name={"waste.general.waste.amount"}
           type="number"
           placeholder={t("amount")}
-          half
-          full
         />
         <div className="w-[100px] mr-4">
           <Select
@@ -46,8 +44,8 @@ function Q1({ mainForm }: QuestionProps) {
             name="waste.general.waste.frequencyUnit"
             placeholder={t("frequencyUnit.placeholder")}
             options={[
-              { label: t("frequencyUnit.labels.day"), value: "daily" },
-              { label: t("frequencyUnit.labels.week"), value: "weekly" },
+              { label: t("frequencyUnit.labels.day"), value: "day" },
+              { label: t("frequencyUnit.labels.week"), value: "week" },
             ]}
           />
         </div>
@@ -61,13 +59,21 @@ function Q1({ mainForm }: QuestionProps) {
             type="number"
             label={t("bagVolume.placeholder")}
             placeholder={t("bagVolume.placeholder")}
-            full
-            half
           />
         </div>
       </Content>
     </div>
   );
-}
+};
+
+Q1.Symbol = {
+  question: "forms.basic.waste.general.waste.q",
+  fields: [
+    "waste.general.waste.amount",
+    "waste.general.waste.amountUnit",
+    "waste.general.waste.frequencyUnit",
+    "waste.general.waste.bagVolume",
+  ],
+};
 
 export default Q1;

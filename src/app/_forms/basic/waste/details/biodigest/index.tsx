@@ -1,21 +1,21 @@
 import React, { useEffect } from "react";
-import { QuestionProps } from "../../../../types";
+import { QuestionFC, QuestionProps } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../../components/question";
 import Content from "../../../../components/content";
 import Radio from "../../../../components/radio";
 import Detail from "./detail";
 
-function Main({ mainForm, setQuestions, currentIndex, setOnSubmit }: QuestionProps) {
+const Main: QuestionFC = ({ mainForm, setQuestions, currentIndex, setOnSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.details.biodigest.q1");
 
   const [prevHasBiodigest] = React.useState<boolean>(
-    mainForm.getValues("waste.details.hasBiodigest")
+    Boolean(mainForm.getValues("waste.details.hasBiodigest"))
   );
 
   useEffect(() => {
     setOnSubmit(() => async () => {
-      const hasBiodigest = mainForm.getValues("waste.details.hasBiodigest");
+      const hasBiodigest = Boolean(mainForm.getValues("waste.details.hasBiodigest"));
       if (!prevHasBiodigest && hasBiodigest) {
         setQuestions((prev) => {
           const out = prev.slice();
@@ -51,6 +51,11 @@ function Main({ mainForm, setQuestions, currentIndex, setOnSubmit }: QuestionPro
       </Content>
     </div>
   );
-}
+};
+
+Main.Symbol = {
+  question: "forms.basic.waste.details.biodigest.q1.q",
+  fields: ["waste.details.hasBiodigest"],
+};
 
 export default Main;

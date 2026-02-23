@@ -1,5 +1,5 @@
 import React from "react";
-import { QuestionProps } from "../../../types";
+import { QuestionFC, QuestionProps } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../components/question";
 import Content from "../../../components/content";
@@ -14,7 +14,7 @@ const destinationKeys = [
   "idk",
 ] as const;
 
-function Destination({ mainForm }: QuestionProps) {
+const Destination: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.details.wasteDestination");
   return (
     <div>
@@ -32,6 +32,11 @@ function Destination({ mainForm }: QuestionProps) {
       </Content>
     </div>
   );
-}
+};
+
+Destination.Symbol = {
+  question: "forms.basic.waste.details.wasteDestination.q",
+  fields: ["waste.details.wasteDestination"],
+};
 
 export default Destination;

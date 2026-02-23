@@ -1,5 +1,5 @@
 import React from "react";
-import { QuestionProps } from "../../../types";
+import { QuestionFC, QuestionProps } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../components/question";
 import Content from "../../../components/content";
@@ -7,7 +7,7 @@ import Radio from "../../../components/radio";
 
 const keys = ["yes", "no"] as const;
 
-function Destination({ mainForm }: QuestionProps) {
+const Compost: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.details.personalCompost");
   return (
     <div>
@@ -18,12 +18,17 @@ function Destination({ mainForm }: QuestionProps) {
           name={"waste.details.personalCompost"}
           options={keys.map((e) => ({
             label: t(`${e}`),
-            value: e === "yes" ? true : false,
+            value: e === "yes",
           }))}
         />
       </Content>
     </div>
   );
-}
+};
 
-export default Destination;
+Compost.Symbol = {
+  question: "forms.basic.waste.details.personalCompost.q",
+  fields: ["waste.details.personalCompost"],
+};
+
+export default Compost;

@@ -1,15 +1,14 @@
 import React from "react";
-import { QuestionProps } from "../../../../types";
+import { QuestionFC, QuestionProps } from "../../../../types";
 import Question from "../../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/content";
 import Input from "../../../../components/input";
 import Select from "../../../../components/select";
-import { Label } from "@/components/ui/label";
 
 const contentKeys = ["electric", "biogas"] as const;
 const frequencies = ["month", "year"] as const;
-function Detail({ mainForm }: QuestionProps) {
+const Detail: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.details.biodigest.q2");
 
   return (
@@ -24,8 +23,6 @@ function Detail({ mainForm }: QuestionProps) {
               label={`${t(`${e}.q`)}`}
               type="number"
               unit={t(`${e}.unit`)}
-              half
-              full
             />
             <div className="ml-3">
               <Select
@@ -36,7 +33,6 @@ function Detail({ mainForm }: QuestionProps) {
                   label: t(`frequencies.${fE}`),
                   value: fE,
                 }))}
-                className="w-2/3"
               />
             </div>
           </div>
@@ -44,6 +40,16 @@ function Detail({ mainForm }: QuestionProps) {
       </Content>
     </div>
   );
-}
+};
+
+Detail.Symbol = {
+  question: "forms.basic.waste.details.biodigest.q2.q",
+  fields: [
+    "waste.details.biodigest.electric.amount",
+    "waste.details.biodigest.electric.frequencyUnit",
+    "waste.details.biodigest.biogas.amount",
+    "waste.details.biodigest.biogas.frequencyUnit",
+  ],
+};
 
 export default Detail;

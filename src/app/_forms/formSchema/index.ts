@@ -10,6 +10,6 @@ export const formSchema = z.object({
   transport,
   energie,
   food,
-  //waste,
+  waste: waste.optional(),
   //holiday,
 });

@@ -1,5 +1,4 @@
-import { formSchema } from "@/app/[locale]/dashboard/form/formSchema";
-import { TName } from "@/components/ui/forms";
+import { formSchema } from "../../../formSchema";
 import {
   Table,
   TableBody,
@@ -11,8 +10,8 @@ import {
 } from "@/components/ui/table";
 import { useScopedI18n } from "@/locales/client";
 import React from "react";
-import { FieldValues, UseFormReturn } from "react-hook-form";
-import z from "zod";
+import { UseFormReturn } from "react-hook-form";
+import { z } from "zod";
 import MinimalInput from "../../../components/minimalInput";
 import Select from "../../../components/select";
 
@@ -100,7 +99,8 @@ function WastesTable({ wastes, mainForm }: Props) {
                 </TableCell>
               </TableRow>
             );
-          } else return;
+          }
+          return null;
         })}
       </TableBody>
       <TableFooter></TableFooter>

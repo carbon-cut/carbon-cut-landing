@@ -26,7 +26,7 @@ export function MultiCheckInput<
     unit?: string;
   }[];
   disabled?: boolean;
-  onChange?: (v: CheckedState) => void;
+  onChange?: (v: CheckedState, key?: Value) => void;
   className?: string;
 }) {
   function checked(value: string) {
@@ -51,7 +51,7 @@ export function MultiCheckInput<
             props.type === "number" ? null : props.type === "boolean" ? false : ""
           );
         }
-        props.onChange?.(checked);
+        props.onChange?.(checked, value as Value);
       };
     },
     [props.form, props.name, props.type, props.onChange]

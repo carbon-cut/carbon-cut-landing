@@ -4,21 +4,20 @@ import Question from "../../../components/question";
 import Content from "../../../components/content";
 import { MultiCheckInput } from "../../../components/multiCheckInput";
 import WastesTable from "./wastesTable";
-import { QuestionProps } from "../../../types";
+import { QuestionFC, QuestionProps } from "../../../types";
 
 const wasteTypes = ["recylablePackaging", "paper", "glass", "organic"] as const;
 
-function Precise({ mainForm }: QuestionProps) {
+const Precise: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.precise");
-
   const [wastes, setWastes] = React.useState(() => {
-    const res = mainForm.getValues("waste.precise") ?? {};
+    const preciseValues = mainForm.getValues("waste.precise") ?? {};
 
     return {
-      recylablePackaging: res.recylablePackaging ? true : false,
-      paper: res.paper ? true : false,
-      glass: res.glass ? true : false,
-      organic: res.organic ? true : false,
+      recylablePackaging: Boolean(preciseValues.recylablePackaging),
+      paper: Boolean(preciseValues.paper),
+      glass: Boolean(preciseValues.glass),
+      organic: Boolean(preciseValues.organic),
     };
   });
 
@@ -29,10 +28,9 @@ function Precise({ mainForm }: QuestionProps) {
         <MultiCheckInput
           form={mainForm}
           name="waste.precise"
-          onChange={(v, key) => {
-            if (key) {
-              setWastes((prev) => ({ ...prev, [key]: v }));
-            }
+          onChange={(checked, key) => {
+            if (!key) return;
+            setWastes((prev) => ({ ...prev, [key]: Boolean(checked) }));
           }}
           options={wasteTypes.map((e) => ({
             label: t(`labels.${e}`),
@@ -44,6 +42,11 @@ function Precise({ mainForm }: QuestionProps) {
       <WastesTable mainForm={mainForm} wastes={wastes} />
     </div>
   );
-}
+};
+
+Precise.Symbol = {
+  question: "forms.basic.waste.precise.q",
+  fields: ["waste.precise"],
+};
 
 export default Precise;

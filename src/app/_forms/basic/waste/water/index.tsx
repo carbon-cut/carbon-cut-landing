@@ -1,19 +1,36 @@
 import { Separator } from "@/components/ui/separator";
-import { QuestionProps } from "../../../types";
+import { QuestionFC, QuestionProps } from "../../../types";
 import Q1 from "./q1";
 import Q2 from "./q2";
-import Q3 from "./q3";
-import { FormAlert } from "../../../components/alert";
+import React, { useEffect } from "react";
 
-const output: React.FC<QuestionProps> = (props) => (
-  <div>
-    <FormAlert variant="note" title="" description="on a besoin que les valeurs d'assignissement" />
-    <Q1 {...props} />
-    <Separator />
-    <Q2 {...props} />
-    <Separator />
-    <Q3 {...props} />
-  </div>
-);
+const Water: QuestionFC = ({ setSubmit, ...props }: QuestionProps) => {
+  const questionProps: QuestionProps = { ...props, setSubmit };
 
-export default output;
+  useEffect(() => {
+    setSubmit(true);
+    return () => {
+      setSubmit(false);
+    };
+  }, [setSubmit]);
+
+  return (
+    <div>
+      <Q1 {...questionProps} />
+      <Separator />
+      <Q2 {...questionProps} />
+    </div>
+  );
+};
+
+Water.Symbol = {
+  question: "forms.basic.waste.water.q1.q",
+  fields: [
+    "waste.water.money.amount",
+    "waste.water.money.frequencyUnit",
+    "waste.water.wasteWater.amount",
+    "waste.water.wasteWater.frequencyUnit",
+  ],
+};
+
+export default Water;
