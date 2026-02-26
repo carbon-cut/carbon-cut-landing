@@ -8,7 +8,7 @@ import { z } from "zod";
 type TabValue = "transport" | "energie" | "food" | "waste" | "vacation";
 
 export default function FormLayout({ children }: { children: React.ReactNode }) {
-  const [tab, setTab] = useState<TabValue>("transport");
+  const [tab, setTab] = useState<TabValue>("waste");
   const [currentIndexes, setCurrentIndexes] = useState<{
     [key in TabValue]: number;
   }>({

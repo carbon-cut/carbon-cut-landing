@@ -130,7 +130,7 @@ export default function FormPageClient() {
         case "vacation":
           return "vacation";
         default:
-          return "transport";
+          return "waste";
       }
     });
   }, [setTab]);
