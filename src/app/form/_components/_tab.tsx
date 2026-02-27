@@ -28,8 +28,10 @@ const TabTrigger = React.forwardRef<
     data-[state=active]:bg-linear-food
     data-[state=completed]:bg-section-food/10
     hover:bg-section-food/20 data-[state=completed]:hover:bg-section-food/20`,
-    waste:
-      "data-[state=active]:bg-section-waste hover:bg-section-waste/80 data-[state=completed]:bg-section-waste/40",
+    waste: `
+    data-[state=active]:bg-linear-waste
+    data-[state=completed]:bg-section-waste/10
+    hover:bg-section-waste/20 data-[state=completed]:hover:bg-section-waste/20`,
     vacation:
       "data-[state=active]:bg-section-vacation hover:bg-section-vacation/80 data-[state=completed]:bg-section-vacation/40",
   };

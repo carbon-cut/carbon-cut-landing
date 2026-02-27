@@ -2,6 +2,19 @@ import Unit from "@/app/_forms/components/unit";
 import { title } from "process";
 import { number } from "zod";
 
+const cubiqueMeter = "m³" as const;
+
+const waste = {
+  amount: "quantité",
+  every: "Chaque",
+  amountUnit: { placeholder: "unité", labels: { bag: "sac", kg: "kg" } },
+  frequencyUnit: {
+    placeholder: "fréquence",
+    labels: { day: "jour", week: "semaine" },
+  },
+  bagVolume: { placeholder: "volume du sac" },
+};
+
 export default {
   toast: {
     success: "Succès",
@@ -1026,6 +1039,94 @@ export default {
             month: "mois",
             week: "semaine",
             placeholder: "Sélectionnez une fréquence",
+          },
+        },
+      },
+      waste: {
+        general: {
+          waste: {
+            q: "Quelle est la quantité totale de déchets généré au sein de votre ménage?",
+            ...waste,
+          },
+        },
+        precise: {
+          q: "Si vous effectuez le tri sélectif des déchets, pour lesquels de ces déchets pouvez-vous estimer les quantités :",
+          type: "Type",
+          labels: {
+            recylablePackaging:
+              "Emballages recyclables (plastiques, cartons, métaux)",
+            paper: "Papiers (journaux, magazines)",
+            glass: "Verre (bouteilles et bocaux)",
+            organic: "Déchets organiques",
+          },
+          waste: waste,
+        },
+        details: {
+          wasteDestination: {
+            q: "Si vous ne pratiquez pas le tri sélectif, avez-vous une idée de la destination finale de vos déchets ménagers ?",
+            placeholder: "Sélectionnez une destination",
+            options: {
+              incineration: "Incinération",
+              recycling: "Recyclage",
+              landfilling: "Enfouissement",
+              composting: "Compostage",
+              biomethanation: "Biométhanisation",
+              idk: "Je ne sais pas",
+            },
+          },
+          personalCompost: {
+            q: "Préparez-vous votre compost vous-même à domicile pour votre usage personnel ?",
+            yes: "Oui",
+            no: "Non",
+          },
+          biodigest: {
+            q1: {
+              q: "Disposez-vous d'un biodigesteur à domicile pour votre usage personnel ?",
+              yes: "Oui",
+              no: "Non",
+            },
+            q2: {
+              q: "Pouvez-vous indiquer votre production ?",
+              electric: {
+                q: "Électricité",
+                amount: "Quantité",
+                unit: "kWh",
+                frequency: "Fréquence",
+              },
+              biogas: {
+                q: "Biogaz",
+                amount: "Quantité",
+                unit: "m³",
+                frequency: "Fréquence",
+              },
+              frequencies: {
+                month: "mois",
+                year: "an",
+              },
+            },
+          },
+        },
+        water: {
+          q1: {
+            q: "indiquez globalement le montant moyen de votre facture relative à l'assainissement:",
+            unit: "€",
+            frequency: {
+              placeholder: "fréquence",
+              month: "mois",
+              year: "an",
+            },
+          },
+          q2: {
+            q: "indiquez globalement la quantité moyenne d'eau prise en compte dans la rubrique assainissement de votre facture.",
+            frequency: {
+              placeholder: "fréquence",
+              month: "mois",
+              year: "an",
+            },
+            unit: cubiqueMeter,
+          },
+          q3: {
+            q: "Si possible, indiquez votre index compteur d'eau",
           },
         },
       },

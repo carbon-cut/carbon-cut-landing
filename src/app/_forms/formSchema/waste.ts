@@ -3,40 +3,40 @@ import { union } from "./utils";
 
 const wasteGeneral = z.object({
   amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
+  amountUnit: union("bag", "kg"),
+  frequencyUnit: union("day", "week"),
   bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
   destination: z.null(),
 });
 
 const wasteOrganic = z.object({
   amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
+  amountUnit: union("bag", "kg"),
+  frequencyUnit: union("day", "week"),
   bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
   destination: union("idk", "biomethan", "compost"),
 });
 
 const wasteRecycle = z.object({
   amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
+  amountUnit: union("bag", "kg"),
+  frequencyUnit: union("day", "week"),
   bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
   destination: union("idk", "incineration", "recycling"),
 });
 
 const wastePaper = z.object({
   amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
+  amountUnit: union("bag", "kg"),
+  frequencyUnit: union("day", "week"),
   bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
   destination: union("idk", "incineration", "recycling", "biomethan", "compost"),
 });
 
 const wasteGlass = z.object({
   amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
+  amountUnit: union("bag", "kg"),
+  frequencyUnit: union("day", "week"),
   bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
   destination: union("idk", "recycling", "biomethan", "incineration"),
 });
