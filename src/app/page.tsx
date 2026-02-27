@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main id="content">
-      <HeroSection />
+      
       <ProductPreviewSection />
       <FeaturesSection />
       <TestimonialsSection />
