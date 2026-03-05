@@ -22,6 +22,7 @@ import { TabContent } from "./_tab";
 import { motion } from "framer-motion";
 import { useScopedI18n } from "@/locales/client";
 import { AlertTriangle } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 interface ContainerProps {
   setNextTab: () => void;
   initQuestions: {
@@ -36,6 +37,8 @@ const Container = React.forwardRef<
   React.ElementRef<typeof TabsContent>,
   React.ComponentPropsWithoutRef<typeof TabsContent> & ContainerProps
 >(({ setNextTab, initQuestions, mainForm, loading, scrollToRef, ...props }, ref) => {
+  const searchParams = useSearchParams();
+  const captureMode = searchParams.get("capture") === "1";
   const { tab, setTab, currentIndexes, setCurrentIndexes, verifyFields } = useContext(FormContext);
   const [onSubmit, setOnSubmit] = useState<() => void>(() => () => {});
   const [prevAction, setPrevAction] = useState<"next" | "prev" | null>(null);
@@ -168,13 +171,14 @@ const Container = React.forwardRef<
         })()}
       </div>
       <Card
-        className=" pt-6 relative
+        className={`pt-6 relative
                     bg-transparent 
                     bg-gradient-to-br from-white via-white/60 to-white/5 
                     backdrop-blur-sm
                     rounded-2xl
                     shadow-lg
-                    border border-white/30"
+                    border border-white/30
+                    ${captureMode ? "backdrop-blur-none z-20 isolation-isolate" : ""}`}
       >
         <CardHeader className="text-center pt-6 pb-0 relative z-10">
           <CardTitle className="text-2xl font-bold">{getName(tab)}</CardTitle>
