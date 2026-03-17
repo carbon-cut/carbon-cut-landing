@@ -18,7 +18,6 @@ const waste = z.object({
     glass: wasteGlass.nullable(),
     organic: wasteOrganic.nullable(),
   }),
-
   details: z.object({
     wasteDestination: union(
       "incineration",
@@ -30,16 +29,18 @@ const waste = z.object({
     ),
     personalCompost: z.boolean().default(false),
     hasBiodigest: z.boolean().default(false),
-    biodigest: z.object({
-      electric: z.object({
-        amount: z.coerce.number(), // kWh
-        frequencyUnit: union("month", "year"),
-      }),
-      biogas: z.object({
-        amount: z.coerce.number(), // m3
-        frequencyUnit: union("month", "year"),
-      }),
-    }).optional(),
+    biodigest: z
+      .object({
+        electric: z.object({
+          amount: z.coerce.number(), // kWh
+          frequencyUnit: union("month", "year"),
+        }),
+        biogas: z.object({
+          amount: z.coerce.number(), // m3
+          frequencyUnit: union("month", "year"),
+        }),
+      })
+      .optional(),
   }),
   water: z.object({
     money: z.object({

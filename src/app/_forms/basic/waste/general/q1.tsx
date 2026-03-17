@@ -19,20 +19,19 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
     <div>
       <Question>{t("q")}</Question>
       <Content>
-        <div className="max-w-3xl space-y-4">
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,240px)_110px_auto_160px] md:items-end">
+        <div className="max-w-3xl md:space-y-4">
+          <div className="grid grid-cols-1 md:gap-3 md:grid-cols-[minmax(0,240px)_110px_auto_160px] md:items-end">
             <div className="min-w-0">
               <Input
-                label="&nbsp;"
                 form={mainForm}
                 name={"waste.general.waste.amount"}
                 type="number"
                 placeholder={t("amount")}
+                fallback
               />
             </div>
             <div className="w-full">
               <FormSelect
-                label="&nbsp;"
                 form={mainForm}
                 name="waste.general.waste.amountUnit"
                 placeholder={t("amountUnit.placeholder")}
@@ -40,14 +39,16 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
                   { label: t("amountUnit.labels.bag"), value: "bag" },
                   { label: t("amountUnit.labels.kg"), value: "kg" },
                 ]}
+                fallback
               />
             </div>
             <div className="text-sm md:text-base text-muted-foreground md:pb-2 md:justify-self-center">
-              <div className="py-1">
-              {t("every")}
+              <div className="md:py-1 text-center">
+                {t("every")}
+                <p className="md:h-auto h-0">{"\u00A0"}</p>
               </div>
             </div>
-            <div className="w-full">
+            <div className="w-full ">
               <FormSelect
                 label="&nbsp;"
                 form={mainForm}
@@ -57,6 +58,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
                   { label: t("frequencyUnit.labels.day"), value: "day" },
                   { label: t("frequencyUnit.labels.week"), value: "week" },
                 ]}
+                fallback
               />
             </div>
           </div>
@@ -79,12 +81,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
 
 Q1.Symbol = {
   question: "forms.basic.waste.general.waste.q",
-  fields: [
-    "waste.general.waste.amount",
-    "waste.general.waste.amountUnit",
-    "waste.general.waste.frequencyUnit",
-    "waste.general.waste.bagVolume",
-  ],
+  fields: ["waste.general.waste"],
 };
 
 export default Q1;

@@ -54,10 +54,10 @@ function WastesTable({ wastes, mainForm }: Props) {
                 <TableCell>{t(`labels.${e}`)}</TableCell>
                 <TableCell>
                   <Input
-                  type="number"
-                  form={mainForm}
-                  name={`waste.precise.${e}.amount`}
-                  size="sm"
+                    type="number"
+                    form={mainForm}
+                    name={`waste.precise.${e}.amount`}
+                    size="sm"
                   />
                 </TableCell>
                 <TableCell>
