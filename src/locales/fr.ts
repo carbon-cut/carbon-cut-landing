@@ -1053,8 +1053,7 @@ export default {
           q: "Si vous effectuez le tri sélectif des déchets, pour lesquels de ces déchets pouvez-vous estimer les quantités :",
           type: "Type",
           labels: {
-            recylablePackaging:
-              "Emballages recyclables (plastiques, cartons, métaux)",
+            recylablePackaging: "Emballages recyclables (plastiques, cartons, métaux)",
             paper: "Papiers (journaux, magazines)",
             glass: "Verre (bouteilles et bocaux)",
             organic: "Déchets organiques",
