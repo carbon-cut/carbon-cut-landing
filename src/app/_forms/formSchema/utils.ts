@@ -35,4 +35,17 @@ const carType = z
     }
   });
 
-export { union, carType };
+const requiredNumber = (message = "Required") =>
+  z.preprocess((value) => {
+    if (value === "" || value === null || value === undefined) {
+      return undefined;
+    }
+
+    if (typeof value === "string") {
+      return Number(value);
+    }
+
+    return value;
+  }, z.number({ required_error: message, invalid_type_error: message }));
+
+export { union, carType, requiredNumber };
