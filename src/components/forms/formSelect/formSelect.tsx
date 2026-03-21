@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { FieldPath, FieldValues, set, UseFormReturn } from "react-hook-form";
+import React from "react";
+import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, TValue } from "../../ui/forms";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { useScopedI18n } from "@/locales/client";

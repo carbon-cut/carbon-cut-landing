@@ -33,16 +33,29 @@ function WastesTable({ wastes, mainForm }: Props) {
     control: mainForm.control,
     name: "waste.precise",
   });
+  const columnWidths = {
+    type: "w-[28%]",
+    amount: "w-[18%]",
+    amountUnit: "w-[18%]",
+    frequencyUnit: "w-[18%]",
+    bagVolume: "w-[18%]",
+  };
 
   return (
-    <Table className="mb-9 mt-3">
+    <Table className="mt-3 mb-9 min-w-[36rem] table-fixed md:min-w-full">
       <TableHeader>
         <TableRow>
-          <TableHead className="w-60">{t("type")}</TableHead>
-          <TableHead>{t("waste.amount")}</TableHead>
-          <TableHead>{t("waste.amountUnit.placeholder")}</TableHead>
-          <TableHead>{t("waste.frequencyUnit.placeholder")}</TableHead>
-          <TableHead>{t("waste.bagVolume.placeholder")}</TableHead>
+          <TableHead className={columnWidths.type}>{t("type")}</TableHead>
+          <TableHead className={columnWidths.amount}>{t("waste.amount")}</TableHead>
+          <TableHead className={columnWidths.amountUnit}>
+            {t("waste.amountUnit.placeholder")}
+          </TableHead>
+          <TableHead className={columnWidths.frequencyUnit}>
+            {t("waste.frequencyUnit.placeholder")}
+          </TableHead>
+          <TableHead className={columnWidths.bagVolume}>
+            {t("waste.bagVolume.placeholder")}
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -51,8 +64,8 @@ function WastesTable({ wastes, mainForm }: Props) {
             const isBag = preciseValues?.[e]?.amountUnit === "bag";
             return (
               <TableRow key={e}>
-                <TableCell>{t(`labels.${e}`)}</TableCell>
-                <TableCell>
+                <TableCell className={columnWidths.type}>{t(`labels.${e}`)}</TableCell>
+                <TableCell className={columnWidths.amount}>
                   <Input
                     type="number"
                     form={mainForm}
@@ -60,7 +73,7 @@ function WastesTable({ wastes, mainForm }: Props) {
                     size="sm"
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell className={columnWidths.amountUnit}>
                   <FormSelect
                     form={mainForm}
                     name={`waste.precise.${e}.amountUnit`}
@@ -71,7 +84,7 @@ function WastesTable({ wastes, mainForm }: Props) {
                     ]}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell className={columnWidths.frequencyUnit}>
                   <FormSelect
                     form={mainForm}
                     name={`waste.precise.${e}.frequencyUnit`}
@@ -88,8 +101,8 @@ function WastesTable({ wastes, mainForm }: Props) {
                     ]}
                   />
                 </TableCell>
-                <TableCell>
-                  <div className="">
+                <TableCell className={columnWidths.bagVolume}>
+                  <div>
                     <FormSelect
                       form={mainForm}
                       name={`waste.precise.${e}.bagVolume`}

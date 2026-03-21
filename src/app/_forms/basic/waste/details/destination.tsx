@@ -19,7 +19,7 @@ const Destination: QuestionFC = ({ mainForm }: QuestionProps) => {
   return (
     <div>
       <Question>{t("q")}</Question>
-      <Content>
+      <Content className="mt-8">
         <FormSelect
           form={mainForm}
           name={"waste.details.wasteDestination"}
