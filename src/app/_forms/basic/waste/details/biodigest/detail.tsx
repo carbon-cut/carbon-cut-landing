@@ -16,7 +16,7 @@ const Detail: QuestionFC = ({ mainForm }: QuestionProps) => {
       <Question>{t("q")}</Question>
       <Content>
         {contentKeys.map((e) => (
-          <div key={e} className="grid grid-cols-4 gap-4 mt-3">
+          <div key={e} className="grid  grid-cols-2 gap-4 mt-3">
             <Input
               name={`waste.details.biodigest.${e}.amount`}
               form={mainForm}
