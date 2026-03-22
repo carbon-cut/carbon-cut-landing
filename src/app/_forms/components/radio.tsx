@@ -31,7 +31,11 @@ function Radio<T extends FieldValues>({
   required = false,
   setState = undefined,
 }: Props<T>) {
-  const selected = (fieldvalue: string | number, value: string | number) => fieldvalue === value;
+  void required;
+  const selected = (
+    fieldvalue: string | number | boolean | undefined,
+    value: string | number | boolean
+  ) => fieldvalue !== undefined && String(fieldvalue) === String(value);
   return (
     <FormField
       control={form.control}
@@ -41,11 +45,13 @@ function Radio<T extends FieldValues>({
           <FormControl>
             <RadioGroup
               className={cn("w-3/6 mx-auto flex flex-row flex-wrap justify-between ", className)}
+              value={field.value === undefined ? undefined : String(field.value)}
               onValueChange={(v) => {
                 field.onChange(v);
                 setState?.(v);
               }}
-              {...form.register(name)}
+              onBlur={field.onBlur}
+              name={field.name}
             >
               {options?.map((option, index) => (
                 <FormLabel

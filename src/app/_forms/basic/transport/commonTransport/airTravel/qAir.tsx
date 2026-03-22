@@ -45,8 +45,8 @@ const QAir: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
           form={mainForm}
           name="transport.hasAir"
           options={[
-            { label: t("lT"), value: "true" },
-            { label: t("lF"), value: "false" },
+            { label: t("lT"), value: true },
+            { label: t("lF"), value: false },
           ]}
         />
       </Content>
