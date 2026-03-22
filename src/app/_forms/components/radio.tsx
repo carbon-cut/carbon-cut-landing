@@ -50,7 +50,6 @@ function Radio<T extends FieldValues>({
                 field.onChange(nextValue);
                 setState?.(nextValue);
               }}
-              value={field.value !== undefined ? String(field.value) : undefined}
               {...form.register(name)}
             >
               {options?.map((option, index) => (
