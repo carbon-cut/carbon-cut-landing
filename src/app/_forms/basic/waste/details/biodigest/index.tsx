@@ -5,6 +5,7 @@ import Question from "../../../../components/question";
 import Content from "../../../../components/content";
 import Radio from "../../../../components/radio";
 import Detail from "./detail";
+import { useSubmit } from "@/lib/hooks/useSubmit";
 
 const Main: QuestionFC = ({ mainForm, setQuestions, currentIndex, setOnSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.details.biodigest.q1");
@@ -12,6 +13,8 @@ const Main: QuestionFC = ({ mainForm, setQuestions, currentIndex, setOnSubmit }:
   const [prevHasBiodigest] = React.useState<boolean>(
     Boolean(mainForm.getValues("waste.details.hasBiodigest"))
   );
+
+  useSubmit();
 
   useEffect(() => {
     setOnSubmit(() => async () => {

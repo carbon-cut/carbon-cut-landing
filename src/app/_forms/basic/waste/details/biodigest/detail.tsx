@@ -5,12 +5,13 @@ import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/content";
 import Input from "../../../../components/input";
 import FormSelect from "@/components/forms/formSelect";
+import { useSubmit } from "@/lib/hooks/useSubmit";
 
 const contentKeys = ["electric", "biogas"] as const;
 const frequencies = ["month", "year"] as const;
 const Detail: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.details.biodigest.q2");
-
+  useSubmit();
   return (
     <div>
       <Question>{t("q")}</Question>
