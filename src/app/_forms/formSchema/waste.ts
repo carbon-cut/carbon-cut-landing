@@ -6,6 +6,7 @@ import {
   wasteRecycle,
   wastePaper,
   wasteGlass,
+  water,
 } from "./validation/waste";
 
 const waste = z.object({
@@ -27,7 +28,7 @@ const waste = z.object({
       "biomethanation",
       "idk"
     ),
-    personalCompost: z.boolean().default(false),
+    // personalCompost: z.boolean().default(false),
     hasBiodigest: z.boolean().default(false),
     biodigest: z
       .object({
@@ -42,20 +43,7 @@ const waste = z.object({
       })
       .optional(),
   }),
-  water: z.object({
-    money: z.object({
-      amount: z.coerce.number(), // euro
-      frequencyUnit: union("month", "year"),
-    }),
-    wasteWater: z.object({
-      amount: z.coerce.number(), // euro
-      frequencyUnit: union("month", "year"),
-    }),
-    /*       index: z.object({
-        value: z.coerce.number(), // in m3?
-        date: z.date(),
-      }), */
-  }),
+  water: water,
 });
 
 export { waste };
