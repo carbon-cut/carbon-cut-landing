@@ -12,7 +12,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
     <div>
       <Question>{t("q")}</Question>
       <Content className="mt-3">
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid md:grid-cols-4 grid-cols-2 gap-4">
           <Input
             form={mainForm}
             name={"waste.water.money.amount"}

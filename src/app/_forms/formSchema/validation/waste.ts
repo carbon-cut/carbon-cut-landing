@@ -57,4 +57,50 @@ const wasteGlass = withBagVolumeValidation(
   })
 ).optional();
 
-export { wasteGeneral, wasteOrganic, wasteRecycle, wastePaper, wasteGlass };
+const waterEntry = z.object({
+  amount: z.preprocess((value) => {
+    if (value === "" || value === null || value === undefined) {
+      return undefined;
+    }
+
+    if (typeof value === "string") {
+      return Number(value);
+    }
+
+    return value;
+  }, z.number().optional()),
+  frequencyUnit: union("month", "year").optional(),
+});
+
+const waterShape = z.object({
+  money: waterEntry,
+  wasteWater: waterEntry,
+});
+
+const water = z.preprocess((input, ctx) => {
+  const parsed = waterShape.safeParse(input);
+  if (!parsed.success) return input;
+
+  Object.entries(parsed.data).forEach(([key, value]) => {
+    const hasAmount = value.amount !== undefined;
+    const hasFrequencyUnit = value.frequencyUnit !== undefined;
+
+    if (hasAmount && !hasFrequencyUnit) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Required",
+        path: [key, "frequencyUnit"],
+      });
+    } else if (!hasAmount && hasFrequencyUnit) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Required",
+        path: [key, "amount"],
+      });
+    }
+  });
+
+  return parsed.data;
+}, waterShape);
+
+export { wasteGeneral, wasteOrganic, wasteRecycle, wastePaper, wasteGlass, water };
