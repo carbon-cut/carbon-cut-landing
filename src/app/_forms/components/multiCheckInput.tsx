@@ -49,7 +49,7 @@ export function MultiCheckInput<
           props.form.setValue(
             //@ts-expect-error cause we know the type is correct
             `${props.name}.${value}`,
-            props.type === "number" ? null : props.type === "boolean" ? false :  undefined
+            props.type === "number" ? null : props.type === "boolean" ? false : undefined
           );
         }
         props.onChange?.(checked);
