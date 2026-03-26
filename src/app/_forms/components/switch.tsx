@@ -7,8 +7,11 @@ import { cn } from "@/lib/utils";
 
 const SwitchForm = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & { label?: string }
->(({ className, label, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & {
+    label?: string;
+    disableError?: boolean;
+  }
+>(({ className, label, disableError, ...props }, ref) => {
   const { error } = useFormField();
 
   return (
@@ -16,7 +19,7 @@ const SwitchForm = React.forwardRef<
       <Switch ref={ref} {...props} />
       {label && (
         <FormLabel
-          data-state={error && "error"}
+          data-state={!disableError && error && "error"}
           className={cn(
             `text-sm font-medium ${props.disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""}`,
             ""
