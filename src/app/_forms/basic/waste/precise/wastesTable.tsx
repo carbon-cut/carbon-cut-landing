@@ -71,6 +71,7 @@ function WastesTable({ wastes, mainForm }: Props) {
                     form={mainForm}
                     name={`waste.precise.${e}.amount`}
                     size="sm"
+                    fallback
                   />
                 </TableCell>
                 <TableCell className={columnWidths.amountUnit}>
@@ -82,6 +83,7 @@ function WastesTable({ wastes, mainForm }: Props) {
                       { label: t("waste.amountUnit.labels.bag"), value: "bag" },
                       { label: t("waste.amountUnit.labels.kg"), value: "kg" },
                     ]}
+                    fallback
                   />
                 </TableCell>
                 <TableCell className={columnWidths.frequencyUnit}>
@@ -99,6 +101,7 @@ function WastesTable({ wastes, mainForm }: Props) {
                         value: "week",
                       },
                     ]}
+                    fallback
                   />
                 </TableCell>
                 <TableCell className={columnWidths.bagVolume}>
@@ -120,6 +123,7 @@ function WastesTable({ wastes, mainForm }: Props) {
                         { label: "90L", value: "90" },
                         { label: "100L", value: "100" },
                       ]}
+                      fallback
                     />
                   </div>
                 </TableCell>

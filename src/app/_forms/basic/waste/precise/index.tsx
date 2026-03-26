@@ -38,6 +38,7 @@ const Precise: QuestionFC = ({ mainForm }: QuestionProps) => {
             value: e,
             unit: "null",
           }))}
+          disableError
         />
       </Content>
       <WastesTable mainForm={mainForm} wastes={wastes} />
