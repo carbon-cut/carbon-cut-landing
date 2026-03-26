@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { union } from "./utils";
+import { requiredNumber, union } from "./utils";
 import {
   wasteGeneral,
   wasteOrganic,
@@ -33,11 +33,11 @@ const waste = z.object({
     biodigest: z
       .object({
         electric: z.object({
-          amount: z.coerce.number(), // kWh
+          amount: requiredNumber(), // kWh
           frequencyUnit: union("month", "year"),
         }),
         biogas: z.object({
-          amount: z.coerce.number(), // m3
+          amount: requiredNumber(), // m3
           frequencyUnit: union("month", "year"),
         }),
       })

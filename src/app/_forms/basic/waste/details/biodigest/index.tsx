@@ -26,6 +26,7 @@ const Main: QuestionFC = ({ mainForm, setQuestions, currentIndex, setOnSubmit }:
           return out;
         });
       } else if (prevHasBiodigest && !hasBiodigest) {
+        mainForm.unregister("waste.details.biodigest");
         setQuestions((prev) => {
           const out = prev.slice();
           out.splice(currentIndex + 1, 1);

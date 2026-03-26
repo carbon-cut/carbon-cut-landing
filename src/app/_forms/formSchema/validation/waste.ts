@@ -58,18 +58,8 @@ const wasteGlass = withBagVolumeValidation(
 ).optional();
 
 const waterEntry = z.object({
-  amount: z.preprocess((value) => {
-    if (value === "" || value === null || value === undefined) {
-      return undefined;
-    }
-
-    if (typeof value === "string") {
-      return Number(value);
-    }
-
-    return value;
-  }, z.number().optional()),
-  frequencyUnit: union("month", "year").optional(),
+  amount: requiredNumber(),
+  frequencyUnit: union("month", "year"),
 });
 
 const waterShape = z.object({
