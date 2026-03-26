@@ -28,6 +28,7 @@ export function MultiCheckInput<
   disabled?: boolean;
   onChange?: (v: CheckedState, key?: Value) => void;
   className?: string;
+  disableError?: boolean;
 }) {
   function checked(value: string) {
     const currentValue = props.form.getValues(`${props.name}.${value}` as TName<T>);
@@ -42,13 +43,13 @@ export function MultiCheckInput<
           props.form.setValue(
             //@ts-expect-error cause we know the type is correct
             `${props.name}.${value}`,
-            props.type === "number" ? 0 : props.type === "boolean" ? true : ""
+            props.type === "number" ? 0 : props.type === "boolean" ? true : {}
           );
         } else {
           props.form.setValue(
             //@ts-expect-error cause we know the type is correct
             `${props.name}.${value}`,
-            props.type === "number" ? null : props.type === "boolean" ? false : ""
+            props.type === "number" ? null : props.type === "boolean" ? false :  undefined
           );
         }
         props.onChange?.(checked, value as Value);
@@ -84,19 +85,10 @@ export function MultiCheckInput<
                       setChecked(v ? true : false);
                     }}
                     label={label}
+                    disableError={props.disableError}
                   />
                 </FormControl>
                 <FormMessage />
-                {/*{ unit !== "null" && (
-                  <MinimalInput
-                    disabeled={!checkedValue}
-                    form={props.form}
-                    //@ts-ignore
-                    name={`${props.name}.${value}`}
-                    className="ml-1"
-                    unit={unit}
-                  />
-                )} */}
               </FormItem>
             );
           }}
