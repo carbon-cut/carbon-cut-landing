@@ -111,8 +111,8 @@ export default {
         "Mesurez, réduisez et agissez grâce à un parcours guidé et des recommandations personnalisées.",
       imageAlt: "Image héro principale de Carbon Cut",
       primaryCta: {
-        label: "Commencer",
-        aria: "Commencer le questionnaire empreinte carbone",
+        label: "Test instantané",
+        aria: "Lancer un test instantané sans abonnement",
       },
       secondaryCta: {
         label: "Découvrir les fonctionnalités",
@@ -223,8 +223,8 @@ export default {
       description:
         "Lancez votre audit carbone, partagez des liens directs avec vos équipes et centralisez les données clés pour piloter vos efforts de réduction.",
       primaryCta: {
-        label: "Commencer",
-        aria: "Remplir le formulaire de calcul",
+        label: "Test instantané",
+        aria: "Lancer un test instantané sans abonnement",
       },
       secondaryCta: {
         label: "Voir les offres",

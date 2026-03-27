@@ -16,6 +16,7 @@ type MenuItem = {
 
 function Header() {
   const tNav = useScopedI18n("home.nav");
+  const tPrimaryCta = useScopedI18n("home.hero.primaryCta");
   const menu: MenuItem[] = [
     {
       title: tNav("features"),
@@ -97,9 +98,10 @@ function Header() {
           className={style.button}
           size={"lg"}
           tabIndex={navHidden ? -1 : 0}
+          aria-label={tPrimaryCta("aria")}
           onClick={() => setShow(false)}
         >
-          <Link href={"/form"}>Commencer</Link>
+          <Link href={"/form"}>{tPrimaryCta("label")}</Link>
         </Button>
       </nav>
       <Button
