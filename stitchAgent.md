@@ -120,6 +120,10 @@ Use these exact tokens as the design basis. Do not invent a new palette.
 
 - Page composition
 - Section hierarchy
+- Section order
+- Section count
+- Section grouping and merging
+- Replacing weak sections with stronger alternatives
 - Typography pairing and scale
 - Spacing system
 - Illustration/art direction
@@ -131,7 +135,6 @@ Use these exact tokens as the design basis. Do not invent a new palette.
 ## What Stitch Must Not Change
 
 - Brand palette foundation
-- Core sections on the landing page
 - Primary CTA destination to `/form`
 - Accessibility-first interaction patterns
 - Soft, warm, eco-oriented visual direction
@@ -178,21 +181,17 @@ Existing visual rules:
 - large bold headlines with occasional orange emphasis
 - accessible, calm, trustworthy UI
 
-Required landing-page structure:
+Required landing-page elements:
 - fixed header with logo, nav, and primary CTA
-- hero with strong headline, supporting copy, primary CTA to /form, secondary CTA to features
-- features section
-- testimonials section
-- pricing section
-- FAQ section
-- final CTA section
+- hero with strong headline, supporting copy, primary CTA to /form, secondary CTA to the next relevant section
+- a clear explanation of the product value
+- a trust-building or proof section
+- a pricing or offer section if appropriate
+- a question-handling section such as FAQ if appropriate
+- a strong final CTA section
 - footer
 
-Header/nav labels:
-- Features
-- Testimonials
-- Pricing
-- FAQ
+Navigation can be restructured if the page architecture changes, but it should remain simple, clear, and conversion-oriented.
 
 Hero rules:
 - keep the experience full-screen or near full-screen
@@ -207,6 +206,12 @@ Design constraints:
 - do not use dark cyber, neon, or enterprise dashboard aesthetics
 - preserve mobile-first usability
 - preserve accessibility and readable contrast
+
+Section flexibility:
+- the current home-page sections are not fixed
+- you may change the order, rename sections, merge sections, remove weak sections, or introduce stronger ones
+- any new structure must still support clarity, trust, and conversion toward the `/form` flow
+- prefer a tighter, more intentional narrative over keeping every existing block
 
 Create 3 clearly different visual directions:
 1. Editorial premium
