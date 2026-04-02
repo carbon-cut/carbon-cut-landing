@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "test": "vitest run --config vitest.config.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "install:auth": "bash -lc 'set -a; source .env.local; set +a; npm install'",
     "install:types": "dotenv -e .env -- npm install @carbon-cut/types",
     "start": "next start",

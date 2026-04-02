@@ -1,5 +1,8 @@
 import path from "path";
+import { loadEnvConfig } from "@next/env";
 import { defineConfig } from "vitest/config";
+
+loadEnvConfig(process.cwd());
 
 export default defineConfig({
   resolve: {
@@ -10,11 +13,14 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["test/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
-    exclude: ["test/integration/**/*.test.ts"],
-    setupFiles: ["./test/vitest.setup.ts"],
+    include: ["test/integration/**/*.test.ts"],
     clearMocks: true,
     restoreMocks: true,
     mockReset: true,
+    testTimeout: 20_000,
+    hookTimeout: 20_000,
+    sequence: {
+      concurrent: false,
+    },
   },
 });
