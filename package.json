@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "test": "vitest run --config vitest.config.ts",
     "install:auth": "bash -lc 'set -a; source .env.local; set +a; npm install'",
     "install:types": "dotenv -e .env -- npm install @carbon-cut/types",
     "start": "next start",
@@ -63,6 +64,7 @@
     "@storybook/addon-onboarding": "^9.1.3",
     "@storybook/addon-vitest": "^9.1.3",
     "@storybook/nextjs": "^9.1.3",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -72,6 +74,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "eslint-plugin-storybook": "^9.1.3",
+    "jsdom": "^29.0.1",
     "msw": "^2.11.3",
     "playwright": "^1.54.2",
     "postcss": "^8.5.1",
