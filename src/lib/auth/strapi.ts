@@ -27,6 +27,7 @@ import {
 } from "@/mocks/auth";
 
 type JsonObject = Record<string, unknown>;
+const AUTH_TEST_SUPPORT_HEADER = "x-auth-test-support-key";
 
 export class StrapiAuthError extends Error {
   status: number;
@@ -75,6 +76,18 @@ function getStrapiBaseUrl() {
   return baseUrl.replace(/\/$/, "");
 }
 
+function getAuthTestSupportHeader() {
+  const secret = process.env.AUTH_TEST_SUPPORT_KEY;
+
+  if (!secret) {
+    return null;
+  }
+
+  return {
+    [AUTH_TEST_SUPPORT_HEADER]: secret,
+  };
+}
+
 async function parseResponse<T>(response: Response) {
   const text = await response.text();
   if (!text) return null as T;
@@ -98,6 +111,7 @@ async function request<T>(path: string, init?: RequestInit) {
       ...init,
       headers: {
         "Content-Type": "application/json",
+        ...(getAuthTestSupportHeader() ?? {}),
         ...(init?.headers ?? {}),
       },
       cache: "no-store",

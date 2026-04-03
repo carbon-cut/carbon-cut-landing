@@ -37,15 +37,14 @@ Integration test requirements:
 - Next frontend must already be running
 - Strapi backend must already be running
 - the frontend must be pointed at the real backend, not MSW
-- a confirmed test user must already exist
+- backend auth test support must be enabled
 
 Required env vars for the integration suite:
 
 ```bash
 FRONTEND_URL=http://localhost:3000
 BACKEND_URL=http://localhost:1337
-INTEGRATION_TEST_EMAIL=confirmed-user@example.com
-INTEGRATION_TEST_PASSWORD=Password123!
+AUTH_TEST_SUPPORT_KEY=your-test-support-secret
 ```
 
 If you run the frontend in development mode, disable local mock auth before running integration tests:
@@ -53,6 +52,8 @@ If you run the frontend in development mode, disable local mock auth before runn
 ```bash
 NEXT_PUBLIC_ENABLE_MSW=false
 ```
+
+The integration suite creates and cleans up its own auth users through the backend test-support HTTP surface.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

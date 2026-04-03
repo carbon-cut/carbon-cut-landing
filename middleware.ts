@@ -4,6 +4,7 @@ import { buildSignInRedirect } from "@/lib/auth/redirect";
 import type { AuthSessionResponse } from "@/lib/auth/types";
 import { isMockBackendEnabled } from "@/mocks/config";
 import { mockRotateRefreshToken, MockAuthError } from "@/mocks/auth";
+const AUTH_TEST_SUPPORT_HEADER = "x-auth-test-support-key";
 
 function getStrapiBaseUrl() {
   const baseUrl = process.env.STRAPI_INTERNAL_URL ?? process.env.NEXT_PUBLIC_SERVER;
@@ -13,6 +14,18 @@ function getStrapiBaseUrl() {
   }
 
   return baseUrl.replace(/\/$/, "");
+}
+
+function getAuthTestSupportHeaders() {
+  const secret = process.env.AUTH_TEST_SUPPORT_KEY;
+
+  if (!secret) {
+    return new Headers();
+  }
+
+  return new Headers({
+    [AUTH_TEST_SUPPORT_HEADER]: secret,
+  });
 }
 
 async function rotateSession(refreshToken: string) {
@@ -30,9 +43,10 @@ async function rotateSession(refreshToken: string) {
 
   const response = await fetch(`${getStrapiBaseUrl()}/api/refresh-token-rotation`, {
     method: "POST",
-    headers: {
+    headers: new Headers({
       "Content-Type": "application/json",
-    },
+      ...Object.fromEntries(getAuthTestSupportHeaders().entries()),
+    }),
     body: JSON.stringify({
       refresh_token: refreshToken,
     }),
