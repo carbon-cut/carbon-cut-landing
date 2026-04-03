@@ -41,7 +41,7 @@ export default function RootLayout({
             Skip to main content
           </a>
           <Header />
-          {children}
+          <div className="min-h-screen">{children}</div>
           <Footer />
           <ScrollToTopButton />
         </Providers>

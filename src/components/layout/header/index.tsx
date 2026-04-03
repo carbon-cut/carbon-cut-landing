@@ -4,9 +4,10 @@ import React, { useEffect } from "react";
 import style from "./header.module.css";
 import { Button } from "../../ui/button";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import MenuHamburger from "./_menuHamburger";
 import Image from "next/image";
+import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
 
 type MenuItem = {
@@ -17,6 +18,7 @@ type MenuItem = {
 function Header() {
   const tNav = useScopedI18n("home.nav");
   const tPrimaryCta = useScopedI18n("home.hero.primaryCta");
+  const tAuth = useScopedI18n("(auth).common");
   const menu: MenuItem[] = [
     {
       title: tNav("features"),
@@ -40,6 +42,8 @@ function Header() {
   const [isDesktop, setIsDesktop] = React.useState(false);
 
   const pathName = usePathname();
+  const router = useRouter();
+  const { status, signOut } = useAuth();
 
   useEffect(() => {
     const isHome = pathName === "/";
@@ -59,6 +63,12 @@ function Header() {
   }, []);
 
   const navHidden = !show && !isDesktop;
+
+  async function handleSignOut() {
+    await signOut();
+    setShow(false);
+    router.push("/auth/sign-in");
+  }
 
   return (
     <header /* ref={headerDiv} */ data-state={dataState} className={style.header}>
@@ -91,18 +101,29 @@ function Header() {
             </Link>
           </div>
         ))}
-
-        <Button
-          data-state={dataState}
-          asChild
-          className={style.button}
-          size={"lg"}
-          tabIndex={navHidden ? -1 : 0}
-          aria-label={tPrimaryCta("aria")}
-          onClick={() => setShow(false)}
-        >
-          <Link href={"/form"}>{tPrimaryCta("label")}</Link>
-        </Button>
+        {status === "authenticated" ? (
+          <Button
+            data-state={dataState}
+            className={style.button}
+            size={"lg"}
+            tabIndex={navHidden ? -1 : 0}
+            onClick={handleSignOut}
+          >
+            {tAuth("cta.logout")}
+          </Button>
+        ) : (
+          <Button
+            data-state={dataState}
+            asChild
+            className={style.button}
+            size={"lg"}
+            tabIndex={navHidden ? -1 : 0}
+            aria-label={tPrimaryCta("aria")}
+            onClick={() => setShow(false)}
+          >
+            <Link href={"/form"}>{tPrimaryCta("label")}</Link>
+          </Button>
+        )}
       </nav>
       <Button
         className="md:hidden z-10 hover:bg-transparent flex flex-col items-center justify-center"

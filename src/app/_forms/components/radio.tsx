@@ -16,7 +16,7 @@ type Props<T extends FieldValues> = {
   form: UseFormReturn<T, undefined>;
   options: {
     label: string;
-    value: string | number;
+    value: string | number | boolean;
   }[];
   name: TName<T>;
   className?: ClassValue;

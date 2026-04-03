@@ -339,37 +339,135 @@ export default {
   },
   "(auth)": {
     login: {
-      "form.email": "E-mail",
-      "form.password": "Mot de passe",
-      "form.submit": "Connexion",
-      "message.signup": "Vous n'avez pas de compte?",
-      "message.or": "OU",
-      "link.signup": "S'inscrire",
-      "link.forgetPassword": "Mot de passe oublié?",
+      title: "Se connecter",
+      description: "Connectez-vous pour commencer votre pre-evaluation carbone.",
+      form: {
+        email: "E-mail",
+        password: "Mot de passe",
+        submit: "Connexion",
+      },
+      message: {
+        signup: "Vous n'avez pas de compte?",
+        or: "OU",
+      },
+      link: {
+        signup: "S'inscrire",
+        forgetPassword: "Mot de passe oublié?",
+      },
+      error: {
+        invalidCredentials: "Identifiants invalides.",
+        confirmationRequired: "Veuillez confirmer votre e-mail avant de continuer.",
+        blocked: "Ce compte est bloque. Contactez le support.",
+        providerDisabled: "La connexion locale est indisponible pour le moment.",
+        generic: "Impossible de se connecter pour le moment.",
+      },
     },
     signup: {
-      "form.fullName": "Nom complet",
-      "form.email": "E-mail",
-      "form.password": "Mot de passe",
-      "form.passwordConfirm": "Confirmez le mot de passe",
-      "form.submit": "Créer un compte",
-      "message.login": "Vous avez déjà un compte?",
-      "message.or": "OU",
-      "link.login": "Se connecter",
+      title: "Creer un compte",
+      description: "Créez votre compte avant de commencer le questionnaire.",
+      form: {
+        fullName: "Nom complet",
+        username: "Nom d'utilisateur",
+        email: "E-mail",
+        password: "Mot de passe",
+        passwordConfirm: "Confirmez le mot de passe",
+        submit: "Créer un compte",
+      },
+      message: {
+        login: "Vous avez déjà un compte?",
+        or: "OU",
+      },
+      link: {
+        login: "Se connecter",
+      },
+      error: {
+        identifierTaken: "Cet e-mail ou ce nom d'utilisateur est deja utilise.",
+        disabled: "L'inscription est desactivee pour le moment.",
+        defaultRole: "La configuration d'inscription est incomplete.",
+        passwordMismatch: "Les mots de passe ne correspondent pas.",
+        generic: "Impossible de creer le compte pour le moment.",
+      },
     },
     forgetPassword: {
-      "form.email": "E-mail",
-      "form.submit": "Envoyer",
-      "message.email": "Consultez votre messagerie",
-      "form.password": "Nouveau mot de passe",
-      "form.passwordConfirm": "Confirmez le nouveau mot de passe",
-      "message.code": "Nous avons envoyé un lien de vérification à votre adresse e-mail",
+      title: "Recuperer votre compte",
+      description: "Recevez un code de reinitialisation par e-mail.",
+      form: {
+        email: "E-mail",
+        submit: "Envoyer",
+        password: "Nouveau mot de passe",
+        passwordConfirm: "Confirmez le nouveau mot de passe",
+      },
+      message: {
+        email: "Consultez votre messagerie",
+        code: "Nous avons envoyé un lien de vérification à votre adresse e-mail",
+        success:
+          "Si un compte existe pour cet e-mail, un message de reinitialisation a ete envoye.",
+      },
+      error: {
+        passwordMismatch: "Les mots de passe ne correspondent pas.",
+        invalidCode: "Le code de reinitialisation est invalide.",
+      },
+      link: {
+        login: "Se connecter",
+      },
     },
     verify: {
-      "message.email": "Nous avons envoyé un code de vérification à votre adresse e-mail {email}",
-      "form.submit": "Envoyer",
-      "form.reset": "Renvoyer",
-      "toast.succ": "L'e-mail a été envoyé.",
+      title: "Confirmer votre e-mail",
+      description: "Entrez le code reçu par e-mail pour activer votre session.",
+      message: {
+        email: ({ email }: { email: string }) =>
+          `Nous avons envoyé un code de vérification à ${email}.`,
+        pending:
+          "Votre inscription est en attente. Confirmez votre e-mail pour ouvrir votre session.",
+        sent: "Si le compte existe et n'est pas confirme, un nouvel e-mail a ete envoye.",
+      },
+      form: {
+        submit: "Confirmer l'e-mail",
+        reset: "Renvoyer l'e-mail",
+        code: "Code de confirmation",
+      },
+      toast: {
+        succ: "L'e-mail a été envoyé.",
+      },
+      error: {
+        invalidToken: "Le code de confirmation est invalide.",
+        alreadyConfirmed: "Cet e-mail est deja confirme. Connectez-vous.",
+        blocked: "Ce compte est bloque. Contactez le support.",
+        genericResend: "Impossible de renvoyer l'e-mail de confirmation.",
+        genericConfirm: "Impossible de confirmer l'e-mail pour le moment.",
+      },
+      link: {
+        login: "Se connecter",
+      },
+    },
+    resetPassword: {
+      title: "Definir un nouveau mot de passe",
+      description: "Entrez le code recu et choisissez un nouveau mot de passe.",
+      form: {
+        code: "Code de reinitialisation",
+        password: "Nouveau mot de passe",
+        passwordConfirm: "Confirmez le mot de passe",
+        submit: "Mettre a jour le mot de passe",
+      },
+      error: {
+        generic: "Impossible de reinitialiser le mot de passe pour le moment.",
+      },
+    },
+    common: {
+      cta: {
+        backHome: "Retour a l'accueil",
+        signIn: "Se connecter",
+        signUp: "Creer un compte",
+        retry: "Reessayer",
+        logout: "Deconnexion",
+      },
+      error: {
+        unavailable:
+          "Le service d'authentification est indisponible pour le moment. Veuillez reessayer plus tard.",
+      },
+      message: {
+        loading: "Chargement de la session...",
+      },
     },
   },
   "(user)": {
