@@ -9,7 +9,7 @@ export default function CtaSection() {
   const t = useScopedI18n("home.cta");
 
   return (
-    <section id="cta" aria-labelledby="cta-heading" className="my-6 bg-[#F8F8EC] h-fit">
+    <section id="cta" aria-labelledby="cta-heading" className="my-6 bg-surface-warm h-fit">
       <div className="z-0  md:px-28 md:py-16 w-full xl:px-36 xl:py-24">
         <div className="grid md:grid-cols-2 md:grid-rows-1 grid-rows-2 w-full md:h-fit h-screen">
           <div className="order-2 md:order-1 md:block grid grid-rows-4 gap-4">
@@ -30,27 +30,36 @@ export default function CtaSection() {
               <p>{t("description")}</p>
             </Typography>
             <div className="flex flex-col sm:flex-row gap-4 md:justify-start justify-center mt-4">
-              <Button
-                asChild
-                size={"lg"}
-                className="timeline-view range-on-entry/20vh_40vh bg-linear-2-2 translate-y-4 opacity-0 animate-rise-in motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
+              <div
+                className="timeline-view range-on-entry/20vh_40vh translate-y-4 opacity-0 animate-rise-in motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
                 style={{ animationDelay: "120ms" }}
-                aria-label={t("primaryCta.aria")}
               >
-                <Link href="/form">
-                  {t("primaryCta.label")} <ArrowRight />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
+                <Button
+                  asChild
+                  variant="cta"
+                  size={"lg"}
+                  className="bg-linear-2-2"
+                  aria-label={t("primaryCta.aria")}
+                >
+                  <Link href="/form">
+                    {t("primaryCta.label")} <ArrowRight />
+                  </Link>
+                </Button>
+              </div>
+              <div
                 className="timeline-view range-on-entry/20vh_40vh translate-y-4 opacity-0 animate-rise-in motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
                 style={{ animationDelay: "180ms" }}
-                aria-label={t("secondaryCta.aria")}
               >
-                <Link href="#pricing">{t("secondaryCta.label")}</Link>
-              </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="border-primary/10 bg-white/80 shadow-none hover:bg-white hover:shadow-sm"
+                  aria-label={t("secondaryCta.aria")}
+                >
+                  <Link href="#pricing">{t("secondaryCta.label")}</Link>
+                </Button>
+              </div>
             </div>
           </div>
           <div className="order-1 md:order-2">

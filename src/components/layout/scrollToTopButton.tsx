@@ -99,10 +99,11 @@ function ScrollToTopButton() {
         <Button
           aria-label={t("ariaLabel")}
           onClick={handleClick}
+          variant="none"
           size="lg"
-          className="block h-16 w-16 rounded-full bg-transparent p-0 text-primary-foreground shadow-[0_10px_30px_rgba(18,92,60,0.35)] hover:shadow-[0_16px_40px_rgba(18,92,60,0.35)] [&_svg]:h-7 [&_svg]:w-7"
+          className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-transparent p-0 text-primary-foreground shadow-[0_10px_30px_rgba(18,92,60,0.35)] transition-shadow duration-200 hover:shadow-[0_16px_40px_rgba(18,92,60,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          <ChevronUp className="stroke-section-transport mx-auto" />
+          <ChevronUp className="h-7 w-7 stroke-section-transport" />
           <span className="sr-only">{t("label")}</span>
         </Button>
       </div>

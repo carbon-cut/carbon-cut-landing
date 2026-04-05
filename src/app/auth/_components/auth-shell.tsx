@@ -17,7 +17,7 @@ export default function AuthShell({ title, description, children, footer }: Auth
   return (
     <main
       id="content"
-      className="min-h-screen bg-[linear-gradient(180deg,#F8F8EC_0%,#ffffff_100%)] px-4 py-24"
+      className="min-h-screen bg-[linear-gradient(180deg,hsl(var(--surface-warm))_0%,#ffffff_100%)] px-4 py-24"
     >
       <div className="mx-auto flex w-full max-w-xl flex-col gap-6">
         <div className="space-y-3 text-center">

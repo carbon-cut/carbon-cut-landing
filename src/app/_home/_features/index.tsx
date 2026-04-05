@@ -9,6 +9,7 @@ const plan = "home/features/icon_5";
 const analysis = "home/features/icon_6";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 
 const cardContent: Props[] = [
@@ -91,12 +92,14 @@ const CardComponent: React.FC<Props> = (props) => {
           src={`${props.icon + ".png"}`}
           alt={t(props.altKey)}
         />
-        <CardTitle className={`text-center mt-6 text-primary md:text-xl`}>
-          {t(props.titleKey)}
+        <CardTitle className="mt-6 text-center text-primary">
+          <Typography asChild variant="subtitle" size="md" className="text-center">
+            <span>{t(props.titleKey)}</span>
+          </Typography>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className={`text-muted-foreground text-center`}>
+        <CardDescription className="text-center text-muted-foreground">
           {t(props.descriptionKey)}
         </CardDescription>
       </CardContent>

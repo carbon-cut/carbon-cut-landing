@@ -120,7 +120,7 @@ const CardComponent: React.FC<Props> = (props) => {
         </CardContent>
       </div>
       <CardFooter>
-        <Button size="lg" className={`z-30 mx-auto bg-linear-2`}>
+        <Button size="lg" variant="cta" className="z-30 mx-auto bg-linear-2">
           Learn More
           <ArrowRight />
         </Button>

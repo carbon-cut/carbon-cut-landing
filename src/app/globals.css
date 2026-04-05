@@ -42,6 +42,7 @@
       hsl(var(--section-waste)),
       hsl(var(--section-waste-light))
     );
+    --surface-warm: 60 43% 95%;
     --background: 210 30% 96%;
     --foreground: 227 9% 14%;
     --card: 0 0% 100%;

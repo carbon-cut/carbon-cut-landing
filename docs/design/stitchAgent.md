@@ -1,169 +1,121 @@
-## Design Direction
+# Stitch Agent Notes
 
-Carbon Cut should not look like generic startup SaaS.
+This file is for internal use.
 
-It should feel:
+It explains how Carbon Cut should be communicated to Stitch and how Stitch outputs should be judged.
+
+It is not written as a direct Stitch prompt.
+
+## Purpose
+
+Use this file when preparing prompts, briefs, or uploaded context for Stitch.
+
+The goal is to keep Stitch aligned with Carbon Cut's actual product truth and emotional design direction.
+
+## What Stitch Must Understand
+
+Stitch tends to drift toward:
+
+- generic SaaS layouts
+- climate consulting aesthetics
+- polished enterprise patterns
+- invented features and pseudo-mature product claims
+
+Carbon Cut should resist that drift.
+
+## Core Steering Rules
+
+When using Stitch:
+
+- preserve distinctiveness over generic polish
+- preserve product truth over visual convenience
+- preserve emotional recognition over safe professionalism
+- treat mobile and desktop as the same concept adapted responsively
+- do not allow Stitch to invent product capabilities to make the design feel richer
+
+## Design Feel To Protect
+
+Carbon Cut should feel:
+
 - credible
-- slightly technical
 - climate-serious
-- modern but grounded
-- clear and structured
-
-The visual language should balance:
-- trust
-- action
-- clarity
-- environmental seriousness
-
-Avoid:
-- shiny AI startup aesthetics
-- overly futuristic UI
-- playful eco branding
-- stock-dashboard visuals
-- generic SaaS hero sections
-
-## Core UX Principles
-
-The homepage should communicate:
-1. what Carbon Cut does
-2. who it is for
-3. why it is credible
-4. what action the user should take next
-
-The user should never feel:
-- visually overwhelmed
-- confused about the audience
-- uncertain what the product actually is
-
-## Target Audiences
-
-Carbon Cut serves three distinct audiences:
-- Individuals
-- Restaurant Owners
-- Municipalities
-
-The landing page should unify them under one credible system rather than feel like three unrelated mini-sites.
-
-## Layout Strategy
-
-Use a clear narrative structure:
-- Hero
-- What Carbon Cut does
-- Why trust it
-- Audience pathways / use cases
-- Product or platform explanation
-- Call to action
-
-The page should feel like a guided argument, not a collection of disconnected blocks.
-
-## Color Direction
-
-Primary color: Deep green
-Secondary accent: Warm orange
-
-Guidelines:
-- green should dominate
-- orange should be used strategically, not everywhere
-- backgrounds should feel soft, warm, and breathable
-- avoid cold gray heavy enterprise palettes
-
-## Typography Direction
-
-Typography should feel:
-- confident
-- editorial
-- legible
-- intelligent
-
-Prefer a look that suggests:
-- trust
-- seriousness
-- modern climate infrastructure
-
-Avoid typography that feels:
-- playful
-- trendy for its own sake
-- corporate-slide-deck bland
-
-## Visual References
-
-The best directional territory is:
-- civic-tech
-- climate infrastructure
-- editorial sustainability
-- restrained modern product design
-
-Not:
-- fintech
-- crypto
-- AI-agent dashboards
-- cheerful eco-commerce
-
-## Hero Direction
-
-The hero should immediately communicate:
-- structured climate action
-- credibility
-- clear next step
-
-Possible emotional takeaway:
-"This looks like a real platform for meaningful carbon action."
-
-Hero should avoid:
-- giant dashboard mockup cliché
-- vague buzzword copy
-- over-designed illustration overload
-
-## Components and Styling Notes
-
-Use:
-- strong section spacing
-- restrained card usage
-- clear hierarchy
-- meaningful iconography
-- subtle motion only where useful
-
-Cards should not dominate every screen.
-
-UI should feel calm and deliberate, not crowded.
-
-## Imagery Direction
-
-If imagery is used, it should feel:
-- atmospheric
+- slightly technical
 - grounded
-- environmental
-- operational
+- memorable
+- authored
+- less corporate than competitors
+- human
+- caring
+- approachable
+- gently hopeful
 
-Avoid:
-- random stock office people
-- glossy 3D objects
-- climate clichés without substance
+Carbon Cut should not feel:
 
-## Conversion Strategy
+- generic
+- consultancy-like
+- enterprise-polished
+- emotionally flat
+- like a standard green SaaS template
 
-The homepage should guide the user toward:
-- learning more
-- starting a workflow
-- choosing the right pathway
+## Warning Signs In Stitch Outputs
 
-CTA language should feel:
-- direct
-- practical
-- confident
+Outputs are drifting in the wrong direction when they include:
 
-Not:
-- salesy
-- hype-driven
-- overly aggressive
+- fake enterprise navigation
+- pricing or demo flows without product support
+- dashboards, reporting, analytics, or benchmark claims
+- business, restaurant, or municipality support presented as current
+- generic testimonial sections
+- feature-card overload
+- polished but emotionally flat layouts
+- imagery that feels stock, cliché, or competitor-like
+- imagery or layouts that feel colder than the original Carbon Cut emotional tone
 
-## Overall Brand Tension
+## What To Preserve From Earlier Directions
 
-Carbon Cut is a product that sits between:
-- activism
-- infrastructure
-- software
+The earlier directions felt more right when they had:
 
-The design should hold that tension well.
+- more atmosphere
+- more personality
+- more visual character
+- less template energy
+- stronger separation from competitors
+- more warmth
+- more emotional ease
+- more human presence
 
-It must feel mission-driven without losing clarity or professionalism.
+These qualities should be protected while improving truthfulness and coherence.
+
+## How To Use Supporting Files
+
+Use the design files in this order:
+
+1. `design.md`
+2. `homepage-design.md`
+3. `product-truth.md`
+4. `homepage-implementation.md`
+5. `stitch-brief.md`
+
+The broad rule is:
+
+- `design.md` defines the overall design philosophy
+- `homepage-design.md` narrows it to homepage feel
+- `product-truth.md` defines what can and cannot be claimed
+- `homepage-implementation.md` defines homepage structure and content
+- `stitch-brief.md` is the direct execution brief for Stitch
+
+## Evaluation Question
+
+Always judge a Stitch output with this question:
+
+- does this feel like Carbon Cut, or does it just feel like a decent climate-tech homepage?
+
+If it becomes cleaner but more generic, it is worse.
+
+If it becomes more specific, more emotionally recognizable, and still clear, it is better.
+
+Also ask:
+
+- does this still feel welcoming and human?
+
+If it becomes colder, more severe, or more intimidating, it is worse.

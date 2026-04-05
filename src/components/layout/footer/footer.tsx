@@ -3,10 +3,13 @@ import { Button } from "../../ui/button";
 import { useScopedServerI18n } from "@/locales/server";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import FooterColumn, { FooterItem } from "./footerColumn";
+import Image from "next/image";
+import Typography from "@/components/ui/typography";
 
 function Footer() {
   const tNav = useScopedServerI18n("home.nav");
   const tFooter = useScopedServerI18n("home.footer");
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const quickLinks: FooterItem[] = [
     {
       title: tNav("features"),
@@ -69,14 +72,16 @@ function Footer() {
     <footer id="site-footer" className="bg-card-primary md:p-12 p-6 z-[60]">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8">
         <div className="flex flex-col lg:col-span-3 sm:col-span-2 self-start">
-          <img
-            className=" scroll-m-20  mb-6 scale-125 self-start"
-            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/logo/logoDark.svg`}
+          <Image
+            className="mb-6 self-start scale-125"
+            src={`${basePath}/logo/logoDark.svg`}
             alt={`${tFooter("brand.name")} logo`}
             width={141}
             height={48}
           />
-          <p className="text-card-primary-foreground">{tFooter("brand.description")}</p>
+          <Typography asChild variant="description" className="text-card-primary-foreground">
+            <p>{tFooter("brand.description")}</p>
+          </Typography>
         </div>
         <FooterColumn
           className="lg:col-span-2 sm:col-span-1"
@@ -104,23 +109,37 @@ function Footer() {
           />
         </div>
         <div className="flex flex-col lg:col-span-3 sm:col-span-2 self-start">
-          <h1 className="text-primary-foreground scroll-m-20 text-xl font-sans tracking-tight lg:text-2xl md:mb-6 mb-3">
-            {tFooter("headings.newsletter")}
-          </h1>
-          <p className="text-card-primary-foreground mb-6">{tFooter("newsletter.description")}</p>
+          <Typography
+            asChild
+            variant="default"
+            size="md"
+            className="mb-3 text-primary-foreground font-semibold tracking-tight"
+          >
+            <h2>{tFooter("headings.newsletter")}</h2>
+          </Typography>
+          <Typography asChild variant="description" className="mb-6 text-card-primary-foreground">
+            <p>{tFooter("newsletter.description")}</p>
+          </Typography>
           <div className="relative w-full md:w-11/12">
             <input
               type="email"
               placeholder={tFooter("newsletter.placeholder")}
-              className="rounded-full px-4 py-2 w-full"
+              className="h-12 w-full rounded-full border border-white/10 bg-white px-5 pr-36 text-primary shadow-sm outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-card-primary-muted/70 focus:border-section-transport/30 focus:shadow-[0_0_0_3px_rgba(0,162,97,0.08)]"
             />
-            <Button className="primary absolute z-10 right-0 rounded-full py-5 px-4 text-primary-foreground font-normal">
-              {tFooter("newsletter.cta")}
+            <Button
+              variant="footer"
+              className="absolute right-1 top-1 z-10 h-10 px-5 text-primary-foreground"
+            >
+              <span className="relative z-10">{tFooter("newsletter.cta")}</span>
             </Button>
           </div>
-          <span className="text-card-primary-muted/70 text-sm mt-4 ml-1">
-            {tFooter("newsletter.privacy")}
-          </span>
+          <Typography
+            asChild
+            variant="description"
+            className="mt-4 ml-1 text-sm text-card-primary-muted/70"
+          >
+            <span>{tFooter("newsletter.privacy")}</span>
+          </Typography>
         </div>
       </div>
     </footer>

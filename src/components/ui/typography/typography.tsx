@@ -3,23 +3,20 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
 
-const typographyVariants = cva("tracking-tight", {
+const typographyVariants = cva("", {
   variants: {
     variant: {
-      default: "",
-      title: "font-bold text-primary",
-      subtitle: "font-medium text-primary ",
+      default: "text-foreground leading-normal tracking-normal",
+      title: "font-bold text-primary leading-[0.95] tracking-[-0.04em]",
+      subtitle: "font-medium text-primary leading-[1.25] tracking-[-0.02em]",
       description: "font-light text-secondary",
-      secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-      ghost: "hover:bg-accent hover:text-accent-foreground",
-      link: "text-primary underline-offset-4 hover:underline",
     },
     size: {
       default: "",
       huge: "font-extrabold text-3xl md:text-6xl lg:text-7xl",
-      xl: "text-4xl lg:text-5xl",
-      md: "text-xl lg:text-2xl",
-      sm: "text-sm lg:text-lg",
+      xl: "text-3xl md:text-4xl lg:text-5xl",
+      md: "text-lg md:text-xl lg:text-2xl",
+      sm: "text-sm md:text-base lg:text-lg",
     },
   },
   defaultVariants: {

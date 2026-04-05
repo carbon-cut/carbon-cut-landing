@@ -1,5 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 import Testimonials from "../_testimonials";
 

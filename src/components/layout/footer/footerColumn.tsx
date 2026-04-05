@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { LucideIcon } from "lucide-react";
+import Typography from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 
 type FooterItem = {
   title: string;
@@ -24,12 +26,19 @@ function FooterColumn({
   className = "",
 }: FooterColumnProps) {
   const HeadingTag = headingLevel;
+  const itemClassName =
+    "flex items-center gap-2 rounded-md px-2 py-1 text-base text-card-primary-muted/80 transition-colors duration-200 hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card-primary";
 
   return (
-    <nav className={`flex flex-col self-start ${className}`} aria-label={ariaLabel ?? title}>
-      <HeadingTag className="text-primary-foreground scroll-m-20 text-xl font-sans tracking-tight lg:text-2xl md:mb-3 mb-1">
-        {title}
-      </HeadingTag>
+    <nav className={cn("flex flex-col self-start", className)} aria-label={ariaLabel ?? title}>
+      <Typography
+        asChild
+        variant="default"
+        size="md"
+        className="mb-2 text-primary-foreground font-semibold tracking-tight"
+      >
+        <HeadingTag>{title}</HeadingTag>
+      </Typography>
       <div className="grid grid-cols-1 gap-2">
         {items.map((item) => {
           const content = (
@@ -45,7 +54,7 @@ function FooterColumn({
             return (
               <a
                 key={item.title}
-                className="flex items-center gap-2 text-card-primary-muted/80 text-lg px-2 py-1"
+                className={itemClassName}
                 href={item.url}
                 target="_blank"
                 rel="noreferrer"
@@ -58,7 +67,7 @@ function FooterColumn({
           return (
             <Link
               key={item.title}
-              className="flex items-center gap-2 text-card-primary-muted/80 text-lg px-2 py-1"
+              className={itemClassName}
               href={item.url}
             >
               {content}

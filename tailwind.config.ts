@@ -23,6 +23,9 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         liniar: "var(--liniar)",
+        surface: {
+          warm: "hsl(var(--surface-warm))",
+        },
         section: {
           transport: "hsl(var(--section-transport))",
           food: "hsl(var(--section-food))",

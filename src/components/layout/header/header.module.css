@@ -29,7 +29,7 @@
         transition-all duration-700
         top-0 fixed
         md:static md:h-full md:w-fit md:bg-transparent
-        h-screen  w-screen bg-[#F8F8EC]
+        h-screen  w-screen bg-surface-warm
         md:p-0
         px-12  py-64;
 }

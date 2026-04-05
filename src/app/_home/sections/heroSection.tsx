@@ -56,6 +56,7 @@ export default function HeroSection() {
         <div className="flex flex-col sm:flex-row gap-4 my-4 md:my-6 w-full sm:w-auto justify-center max-w-lg">
           <Button
             asChild
+            variant="cta"
             size="lg"
             className="py-6 rounded-full w-full sm:w-auto justify-center"
             aria-label={t("primaryCta.aria")}
@@ -74,13 +75,13 @@ export default function HeroSection() {
             <Link href="#features">{t("secondaryCta.label")}</Link>
           </Button>
         </div>
-        <nav aria-label={t("quickLinks.ariaLabel")} className="mt-4">
-          <ul className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
+        <nav aria-label={t("quickLinks.ariaLabel")} className="mt-6">
+          <ul className="flex flex-wrap justify-center gap-4 text-sm">
             {quickLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="underline decoration-dotted underline-offset-4 hover:text-primary px-2 py-1"
+                  className="px-2 py-1 text-primary/80 underline decoration-dotted underline-offset-4 transition-colors duration-200 [text-shadow:0_1px_2px_rgba(248,248,236,0.45)] hover:text-primary"
                 >
                   {link.label}
                 </Link>

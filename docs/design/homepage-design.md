@@ -2,39 +2,106 @@
 
 ## Goal
 
-Design a homepage that immediately feels credible, modern, and climate-serious.
+Design a homepage that feels credible, modern, climate-serious, and unmistakably Carbon Cut.
 
-The page should not read like generic SaaS or startup marketing.
+The page should not read like generic SaaS, startup marketing, or climate consulting.
 
 It should make the user feel:
 - these people know what they are doing
 - this product is useful
 - this is real climate action, not vague branding
+- this feels more alive and more specific than competitor websites
+- this feels human and approachable
+
+## Core Correction
+
+The homepage must not become more corporate in the name of looking more professional.
+
+A polished but generic climate-tech website is not the goal.
+
+The right direction is:
+- more distinct
+- more authored
+- more emotionally recognizable
+- still credible
+- still usable
+- still humane
+
+## Feeling Criteria
+
+The homepage should be judged first by feel, not just by neatness.
+
+Ask:
+
+- does this feel like Carbon Cut?
+- does this feel more alive than competitor websites?
+- does this feel authored rather than templated?
+
+If the homepage becomes cleaner but also more generic, the direction is wrong.
+
+## Too Corporate Warning Signs
+
+The homepage is drifting in the wrong direction if it starts to feel like:
+
+- a standard SaaS marketing page
+- a green consulting website
+- a polished enterprise climate-tech product
+- a collection of generic reassurance sections
+
+Common warning signs:
+
+- feature-card overload
+- generic testimonial blocks
+- fake trust sections
+- very neat but emotionally flat layouts
+- standard navigation and conversion patterns that remove personality
+
+## What To Recover From Earlier Directions
+
+The earlier versions felt more right when they had:
+
+- more personality
+- more atmosphere
+- more visual character
+- less template energy
+- a stronger sense of being unlike competitors
+
+Those qualities should be protected in future iterations.
 
 ## Key Tension
 
-Carbon Cut serves multiple user groups:
-- individuals
-- restaurant owners
-- municipalities
+Carbon Cut should feel:
+- serious
+- grounded
+- structured
+- slightly unconventional
+- more memorable than its competitors
+- human
+- gentle without becoming soft-headed
 
-The homepage must unify these audiences under one coherent story.
-
-It should not look fragmented or like three different products fighting for attention.
+It should not feel:
+- random
+- chaotic
+- playful
+- corporate-safe
+- consultancy-like
+- intimidating
+- emotionally cold
 
 ## Positioning
 
 Carbon Cut should sit visually between:
-- civic-tech
-- climate infrastructure
 - editorial sustainability
-- productized software
+- grounded climate product
+- civic seriousness
+- distinctive digital product design
 
 Avoid drifting into:
 - fintech
 - corporate consulting
 - AI startup aesthetics
 - eco-lifestyle branding
+- polished climate-tech sameness
 
 ## Structural Direction
 
@@ -42,17 +109,16 @@ Recommended homepage structure:
 
 1. Hero
 2. Explanation of what Carbon Cut actually does
-3. Trust / proof section
-4. User pathways or audience-specific framing
-5. Product workflow / how it works
+3. Product understanding / product flow
+4. Result or value section
+5. Trust / product status
 6. CTA
 
 Optional sections:
-- testimonials
 - FAQ
-- pricing
+- testimonials
 
-Only include optional sections if they strengthen trust and clarity.
+Only include optional sections if they strengthen clarity and trust without making the page more generic.
 
 ## Hero Direction
 
@@ -60,18 +126,23 @@ The hero should:
 - feel confident
 - feel calm
 - be immediately understandable
-- clearly communicate the value of Carbon Cut
+- clearly communicate value
+- feel like Carbon Cut, not like a climate template
 
 The hero should not:
 - be overloaded with interface chrome
 - rely on generic buzzwords
 - look like a VC-funded software cliché
+- become too neat or too corporate
 
 Preferred hero mood:
-- clean
 - strong
-- slightly editorial
-- atmospheric but structured
+- editorial
+- atmospheric
+- structured
+- slightly surprising
+- humane
+- open
 
 ## Visual Style
 
@@ -81,13 +152,16 @@ The design language should be:
 - restrained
 - modern
 - trustworthy
+- distinctive
+- human
+- emotionally open
 
 The site should use:
 - clear hierarchy
 - generous whitespace
 - disciplined use of cards
 - deliberate iconography
-- evidence-oriented content blocks
+- content blocks with visual identity
 
 It should avoid:
 - excessive gradients
@@ -95,6 +169,7 @@ It should avoid:
 - 3D objects
 - overly playful illustration systems
 - dashboard spam
+- generic climate-tech polish
 
 ## Color
 
@@ -107,6 +182,8 @@ Backgrounds should feel:
 - warm
 - breathable
 
+The palette should preserve the feeling that already resonates with the product owner.
+
 Avoid sterile or overly gray enterprise backgrounds.
 
 ## Typography
@@ -118,6 +195,7 @@ It should feel:
 - serious
 - editorial
 - readable
+- specific
 
 Not:
 - quirky
@@ -126,27 +204,19 @@ Not:
 
 ## Trust Signals
 
-The page needs explicit credibility markers.
+The page needs credibility markers, but they should not become fake authority theater.
 
-This can come from:
-- proof of impact
+Trust can come from:
 - process clarity
-- methodology framing
 - specificity in copy
-- audience relevance
+- clear product scope
+- honest product status
+- grounded presentation
+- emotional sincerity
 
 The goal is not hype.
 
-The goal is confidence through clarity.
-
-## Audience Framing
-
-The page should show that Carbon Cut can work for:
-- a person trying to understand and reduce emissions
-- a restaurant owner managing operational impact
-- a municipality thinking at systems level
-
-This should feel unified, not scattered.
+The goal is confidence through clarity and character.
 
 ## Interaction Notes
 
@@ -157,7 +227,7 @@ Use animation only to:
 - improve rhythm
 - support hierarchy
 
-Avoid motion that feels flashy or ornamental.
+Avoid motion that feels flashy, ornamental, or like generic product polish.
 
 ## Content Tone
 
@@ -166,15 +236,17 @@ Copy should feel:
 - practical
 - measured
 - credible
+- slightly sharper than standard climate-product language
 
 Avoid:
 - exaggerated promises
 - startup hype language
 - abstract climate slogans without product meaning
+- corporate brand-speak
 
 ## Summary
 
 The homepage should feel like:
-"serious climate infrastructure, made usable."
+"serious climate work, made usable, human, and distinct."
 
 That is the core design target.

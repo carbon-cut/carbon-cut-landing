@@ -12,6 +12,7 @@ import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "@/app/_forms/formSchema";
 import { Button } from "@/components/ui/button";
+import Typography from "@/components/ui/typography";
 import FormContext from "../_layout/_formContext";
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -177,9 +178,17 @@ const Container = React.forwardRef<
                     border border-white/30"
       >
         <CardHeader className="text-center pt-6 pb-0 relative z-10">
-          <CardTitle className="text-2xl font-bold">{getName(tab)}</CardTitle>
-          <CardDescription className="text-base">
-            Question {currentIndexes[tab] + 1} of {initQuestions[tab][0].length}
+          <CardTitle>
+            <Typography asChild variant="title" size="md">
+              <h2>{getName(tab)}</h2>
+            </Typography>
+          </CardTitle>
+          <CardDescription>
+            <Typography asChild variant="description" className="text-base">
+              <p>
+                Question {currentIndexes[tab] + 1} of {initQuestions[tab][0].length}
+              </p>
+            </Typography>
           </CardDescription>
         </CardHeader>
         <motion.div
@@ -238,13 +247,7 @@ const Container = React.forwardRef<
       </Card>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 mt-4">
         <Button
-          className={`order-1 md:px-3 px-5 py-1 w-full
-            rounded-full font-semibold block gap-2  
-            border-2 border-[#00A261] text-[#00A261] bg-white
-            hover:bg-[#ECFDF5] 
-            hover:shadow-xl hover:scale-105 active:scale-95 transition-all
-            duration-200 disabled:opacity-50 disabled:cursor-not-allowed
-            disabled:hover:scale-100 disabled:hover:shadow-none`}
+          className="order-1 block w-full gap-2 border-2 border-section-transport bg-white px-5 py-1 text-section-transport hover:bg-section-transport/5 md:px-3"
           variant={"outline"}
           size={"lg"}
           type="button"
@@ -275,15 +278,7 @@ const Container = React.forwardRef<
           <div className="order-3 col-span-1 w-full" />
         )}
         <Button
-          className={`order-2 md:order-4 md:px-3 py-1 px-5 w-full
-              rounded-full font-semibold block gap-2 
-              bg-linear-transport
-              data-[state=submit]:bg-linear-energie
-              text-white hover:shadow-xl hover:scale-105
-              active:scale-95 
-              transition-all 
-              duration-200 shadow-lg
-              `}
+          className="order-2 block w-full gap-2 bg-linear-transport px-5 py-1 text-white shadow-lg data-[state=submit]:bg-linear-energie md:order-4 md:px-3"
           disabled={loading}
           size={"lg"}
           data-state={submit ? "submit" : "next"}

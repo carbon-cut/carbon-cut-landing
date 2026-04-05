@@ -115,6 +115,7 @@ function Header() {
           <Button
             data-state={dataState}
             asChild
+            variant="cta"
             className={style.button}
             size={"lg"}
             tabIndex={navHidden ? -1 : 0}
@@ -126,7 +127,7 @@ function Header() {
         )}
       </nav>
       <Button
-        className="md:hidden z-10 hover:bg-transparent flex flex-col items-center justify-center"
+        className="md:hidden z-10 flex flex-col items-center justify-center hover:bg-transparent"
         variant={"ghost"}
         type="button"
         aria-label={tNav("toggleLabel")}
