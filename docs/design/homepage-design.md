@@ -7,6 +7,7 @@ Design a homepage that feels credible, modern, climate-serious, and unmistakably
 The page should not read like generic SaaS, startup marketing, or climate consulting.
 
 It should make the user feel:
+
 - these people know what they are doing
 - this product is useful
 - this is real climate action, not vague branding
@@ -20,6 +21,7 @@ The homepage must not become more corporate in the name of looking more professi
 A polished but generic climate-tech website is not the goal.
 
 The right direction is:
+
 - more distinct
 - more authored
 - more emotionally recognizable
@@ -71,6 +73,7 @@ Those qualities should be protected in future iterations.
 ## Key Tension
 
 Carbon Cut should feel:
+
 - serious
 - grounded
 - structured
@@ -80,6 +83,7 @@ Carbon Cut should feel:
 - gentle without becoming soft-headed
 
 It should not feel:
+
 - random
 - chaotic
 - playful
@@ -91,12 +95,14 @@ It should not feel:
 ## Positioning
 
 Carbon Cut should sit visually between:
+
 - editorial sustainability
 - grounded climate product
 - civic seriousness
 - distinctive digital product design
 
 Avoid drifting into:
+
 - fintech
 - corporate consulting
 - AI startup aesthetics
@@ -115,6 +121,7 @@ Recommended homepage structure:
 6. CTA
 
 Optional sections:
+
 - FAQ
 - testimonials
 
@@ -123,6 +130,7 @@ Only include optional sections if they strengthen clarity and trust without maki
 ## Hero Direction
 
 The hero should:
+
 - feel confident
 - feel calm
 - be immediately understandable
@@ -130,12 +138,14 @@ The hero should:
 - feel like Carbon Cut, not like a climate template
 
 The hero should not:
+
 - be overloaded with interface chrome
 - rely on generic buzzwords
 - look like a VC-funded software cliché
 - become too neat or too corporate
 
 Preferred hero mood:
+
 - strong
 - editorial
 - atmospheric
@@ -147,6 +157,7 @@ Preferred hero mood:
 ## Visual Style
 
 The design language should be:
+
 - grounded
 - structured
 - restrained
@@ -157,6 +168,7 @@ The design language should be:
 - emotionally open
 
 The site should use:
+
 - clear hierarchy
 - generous whitespace
 - disciplined use of cards
@@ -164,6 +176,7 @@ The site should use:
 - content blocks with visual identity
 
 It should avoid:
+
 - excessive gradients
 - noisy glassmorphism
 - 3D objects
@@ -178,6 +191,7 @@ Use deep green as the primary anchor color.
 Orange can work as an accent but should be used sparingly.
 
 Backgrounds should feel:
+
 - soft
 - warm
 - breathable
@@ -191,6 +205,7 @@ Avoid sterile or overly gray enterprise backgrounds.
 Typography should carry much of the brand feeling.
 
 It should feel:
+
 - confident
 - serious
 - editorial
@@ -198,6 +213,7 @@ It should feel:
 - specific
 
 Not:
+
 - quirky
 - startup-trendy
 - corporate and flat
@@ -207,6 +223,7 @@ Not:
 The page needs credibility markers, but they should not become fake authority theater.
 
 Trust can come from:
+
 - process clarity
 - specificity in copy
 - clear product scope
@@ -223,6 +240,7 @@ The goal is confidence through clarity and character.
 Motion should be subtle and purposeful.
 
 Use animation only to:
+
 - guide attention
 - improve rhythm
 - support hierarchy
@@ -232,6 +250,7 @@ Avoid motion that feels flashy, ornamental, or like generic product polish.
 ## Content Tone
 
 Copy should feel:
+
 - informed
 - practical
 - measured
@@ -239,6 +258,7 @@ Copy should feel:
 - slightly sharper than standard climate-product language
 
 Avoid:
+
 - exaggerated promises
 - startup hype language
 - abstract climate slogans without product meaning

@@ -20,7 +20,7 @@ import { getIcon, getName } from "@/lib/formTabs/geters";
 import { TName } from "@/components/ui/forms";
 import { TabValues } from "@/lib/formTabs/types";
 import { TabContent } from "./_tab";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useScopedI18n } from "@/locales/client";
 import { AlertTriangle } from "lucide-react";
 interface ContainerProps {

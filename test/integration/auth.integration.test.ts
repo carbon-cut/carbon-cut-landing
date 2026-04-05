@@ -28,12 +28,10 @@ describe.sequential("auth integration", () => {
   describe("session and guard flows", () => {
     let confirmedUser: ManagedUser;
     let authenticatedJar: CookieJar;
-    let authenticatedSession:
-      | {
-          user: { email: string };
-          setCookies: string[];
-        }
-      | null = null;
+    let authenticatedSession: {
+      user: { email: string };
+      setCookies: string[];
+    } | null = null;
 
     beforeAll(async () => {
       confirmedUser = await createTestUser({
@@ -410,7 +408,10 @@ describe.sequential("auth integration", () => {
     });
 
     it("changes the password, rotates session cookies, invalidates the old password, and accepts the new one", async () => {
-      const initialSignIn = await signIn(changePasswordUser.user.email, changePasswordUser.password);
+      const initialSignIn = await signIn(
+        changePasswordUser.user.email,
+        changePasswordUser.password
+      );
       const jar = initialSignIn.jar;
       const newPassword = uniquePassword();
 

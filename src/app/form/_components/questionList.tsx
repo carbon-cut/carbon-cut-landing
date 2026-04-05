@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Menu } from "lucide-react";
 import React from "react";
-import { QuestionFC, QuestionProps } from "@/app/_forms/types";
+import { QuestionFC } from "@/app/_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { TabValues } from "@/lib/formTabs/types";
@@ -92,14 +92,11 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
 
             return (
               <AccordionItem
-                className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 md:px-4
+                className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 
                  hover:border-section-transport transition-colors
                 ${sectionError ? "border-destructive hover:border-destructive/60" : "border-gray-200"}
                 `}
-                style={{
-                  //@ts-expect-error interpolateSize is not supported, only in Chrome
-                  interpolateSize: "allow-keywords",
-                }}
+                style={{ interpolateSize: "allow-keywords" } as React.CSSProperties}
                 key={key}
                 value={key}
               >

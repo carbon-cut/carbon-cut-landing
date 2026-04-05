@@ -65,11 +65,7 @@ function FooterColumn({
           }
 
           return (
-            <Link
-              key={item.title}
-              className={itemClassName}
-              href={item.url}
-            >
+            <Link key={item.title} className={itemClassName} href={item.url}>
               {content}
             </Link>
           );
