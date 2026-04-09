@@ -9,7 +9,7 @@ export default function CtaSection() {
   const t = useScopedI18n("home.cta");
 
   return (
-    <section id="cta" aria-labelledby="cta-heading" className="my-6 mb-0 bg-surface-warm">
+    <section id="cta" aria-labelledby="cta-heading" className="home-section my-6 mb-0 bg-surface-warm">
       <div className="z-0 w-full md:px-20 md:py-16 xl:px-32 xl:py-20">
         <div className="grid w-full grid-rows-2 gap-8 md:h-fit md:grid-cols-2 md:grid-rows-1 md:items-center">
           <div className="order-2 grid gap-4 md:order-1 md:block">

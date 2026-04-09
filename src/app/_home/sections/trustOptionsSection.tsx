@@ -57,9 +57,9 @@ export default function TrustOptionsSection() {
     <section
       id="trust"
       aria-labelledby="trust-heading"
-      className="bg-background px-4 py-14 md:px-8 md:py-16"
+      className="home-section bg-background py-14 md:py-16"
     >
-      <div className="mx-auto flex max-w-6xl flex-col items-center">
+      <div className="content-width flex flex-col items-center">
         <Badge variant="default" className={introAnimation}>
           {t("badge")}
         </Badge>

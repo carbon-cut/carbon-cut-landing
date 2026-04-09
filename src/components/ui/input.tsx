@@ -8,7 +8,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
       <input
         type={type}
         className={cn(
-          `flex h-9 w-full rounded-md border border-input bg-transparent 
+          `flex h-9 w-full rounded-full border border-input bg-transparent 
           px-3 py-1 shadow-sm transition-colors file:border-0 
           file:bg-transparent file:text-sm file:font-medium file:text-foreground
           placeholder:text-muted-foreground 
@@ -23,5 +23,27 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   }
 );
 Input.displayName = "Input";
+//className="w-full bg-card px-3 py-2 text-sm text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<"textarea">>(
+  ({ className, ...props }, ref) => {
+    return (
+      <textarea
+        className={cn(
+          `flex w-full rounded-md border border-input bg-transparent 
+          px-3 py-1 shadow-sm transition-colors file:border-0 
+          file:bg-transparent file:text-sm file:font-medium file:text-foreground
+          placeholder:text-muted-foreground 
+          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring 
+          disabled:cursor-not-allowed disabled:opacity-50 text-sm `,
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Textarea.displayName = "Input";
+
 type InputProps = React.ComponentProps<"input">;
-export { Input, type InputProps };
+export { Input, Textarea,type InputProps };

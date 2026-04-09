@@ -20,8 +20,8 @@ export default function TestOfferSection() {
   ];
 
   return (
-    <section aria-labelledby="test-offer-heading" className="px-4 py-6 md:px-8 md:py-8">
-      <div className="mx-auto w-full max-w-6xl">
+    <section aria-labelledby="test-offer-heading" className="home-section py-6 md:py-8">
+      <div className="content-width">
         <div className="grid items-start gap-4 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:gap-8">
           <div className={cn("text-left", introAnimation)}>
             <Badge variant="default">{t("badge")}</Badge>

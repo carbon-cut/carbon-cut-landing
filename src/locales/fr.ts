@@ -91,28 +91,28 @@ export default {
           "plan d'action carbone",
         ],
       },
-      support: {
-        title: "Support | Carbon Cut",
+      contact: {
+        title: "Contact | Carbon Cut",
         description:
-          "Contactez le support Carbon Cut pour signaler un problème de compte, de formulaire ou de résultat pendant la phase de test.",
+          "Contactez l'équipe Carbon Cut pour une question sur le compte, le formulaire ou les résultats pendant la phase de test.",
         keywords: [
-          "support carbon cut",
-          "contact support empreinte carbone",
+          "contact carbon cut",
+          "contact empreinte carbone",
           "aide formulaire carbone",
           "problème compte carbon cut",
-          "assistance carbon cut",
+          "équipe carbon cut",
         ],
       },
       help: {
         title: "Centre d'aide | Carbon Cut",
         description:
-          "Trouvez rapidement des réponses sur le questionnaire, les résultats, le compte et le support Carbon Cut.",
+          "Trouvez rapidement des réponses sur le questionnaire, les résultats, le compte et la page contact Carbon Cut.",
         keywords: [
           "centre d'aide carbon cut",
           "faq empreinte carbone",
           "aide questionnaire carbone",
           "questions résultats carbone",
-          "support utilisateur carbon cut",
+          "contact utilisateur carbon cut",
         ],
       },
     },
@@ -346,13 +346,13 @@ export default {
       },
       headings: {
         quickLinks: "Liens rapides",
-        support: "Support & contact",
+        contact: "Contact & aide",
         social: "Réseaux",
         legal: "Mentions légales",
         newsletter: "Newsletter",
       },
-      support: {
-        email: "Contacter le support",
+      contact: {
+        email: "Contactez-nous",
         helpCenter: "Centre d'aide",
         demo: "Commencer l'évaluation",
       },
@@ -417,7 +417,7 @@ export default {
       searchPlaceholder: "Rechercher dans le centre d'aide...",
       actions: {
         start: "Commencer l'évaluation",
-        support: "Contacter le support",
+        contact: "Contactez-nous",
       },
       categoriesTitle: "Sélectionner une catégorie",
       categories: [
@@ -425,7 +425,7 @@ export default {
         { title: "Résultats", meta: "5 articles" },
         { title: "Questionnaire", meta: "6 articles" },
         { title: "Livraison des emails", meta: "3 articles" },
-        { title: "Support", meta: "4 articles" },
+        { title: "Contact", meta: "4 articles" },
         { title: "Confidentialité", meta: "3 articles" },
         { title: "Compte", meta: "2 articles" },
       ],
@@ -436,7 +436,7 @@ export default {
         "Puis-je reprendre un questionnaire plus tard ?",
         "Comment corriger une réponse déjà envoyée ?",
         "Pourquoi je ne reçois pas l'email attendu ?",
-        "Comment contacter le support avec les bonnes infos ?",
+        "Comment nous contacter avec les bonnes infos ?",
       ],
       featuredArticle: {
         title: "Comment fonctionne l'évaluation Carbon Cut ?",
@@ -457,8 +457,8 @@ export default {
         },
       },
     },
-    support: {
-      badge: "Support",
+    contact: {
+      badge: "Contact",
       title: "Contactez l'équipe Carbon Cut",
       description:
         "Envoyez votre demande via le formulaire ci-dessous. Le traitement se fait par email pendant la phase de test.",

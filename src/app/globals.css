@@ -149,10 +149,6 @@
   a:focus-visible {
     @apply outline-none ring-2 ring-chart-3 ring-offset-2 ring-offset-background rounded-md;
   }
-  section {
-    @apply flex flex-1 justify-center flex-wrap
-           px-3 md:px-24  md:py-8;
-  }
 
   section[aria-label="Notifications alt+T"] {
     all: revert;
@@ -161,6 +157,22 @@
 }
 
 @layer components {
+  .home-section {
+    @apply flex flex-1 flex-wrap justify-center px-3 md:px-24 md:py-8;
+  }
+
+  .content-width {
+    @apply mx-auto w-full max-w-6xl px-4 md:px-8;
+  }
+
+  .section-space {
+    @apply py-10 md:py-14;
+  }
+
+  .section-hero {
+    @apply min-h-[100vh] md:h-screen;
+  }
+
   .primary {
     background: var(--linear-primary-diagonal);
     transition:

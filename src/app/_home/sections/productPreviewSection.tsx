@@ -76,7 +76,7 @@ export default function ProductPreviewSection() {
     <section
       id="features"
       aria-labelledby="what-it-does-heading"
-      className="bg-surface-warm px-4 py-14 md:px-8 md:py-20"
+      className="home-section bg-surface-warm py-14 md:py-20"
     >
       {showObserverDebug && isDesktop ? (
         <div
@@ -93,7 +93,7 @@ export default function ProductPreviewSection() {
         </div>
       ) : null}
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center">
+      <div className="content-width flex flex-col items-center">
         <Badge variant="default" className={introAnimation}>
           {t("badge")}
         </Badge>

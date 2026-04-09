@@ -76,7 +76,7 @@ export default function HelpPage() {
                 return (
                   <Link
                     key={category.title}
-                    href="/support"
+                    href="/contact"
                     className="group rounded-2xl border border-border/15 bg-card/70 p-4 transition-colors hover:bg-surface-warm"
                     aria-label={`${category.title} - ${category.meta}`}
                   >
@@ -126,7 +126,7 @@ export default function HelpPage() {
                   <Link href="/form">{t("actions.start")}</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg">
-                  <Link href="/support">{t("actions.support")}</Link>
+                  <Link href="/contact">{t("actions.contact")}</Link>
                 </Button>
               </div>
             </aside>

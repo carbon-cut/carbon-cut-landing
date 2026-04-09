@@ -24,17 +24,17 @@ function Footer() {
       url: "/#cta",
     },
   ];
-  const supportLinks = [
+  const contactLinks = [
     {
-      title: tFooter("support.email"),
-      url: "/support",
+      title: tFooter("contact.email"),
+      url: "/contact",
     },
     {
-      title: tFooter("support.helpCenter"),
+      title: tFooter("contact.helpCenter"),
       url: "/help",
     },
     {
-      title: tFooter("support.demo"),
+      title: tFooter("contact.demo"),
       url: "/form",
     },
   ];
@@ -87,9 +87,9 @@ function Footer() {
         />
         <FooterColumn
           className="lg:col-span-2 sm:col-span-1"
-          title={tFooter("headings.support")}
-          items={supportLinks}
-          ariaLabel="Support links"
+          title={tFooter("headings.contact")}
+          items={contactLinks}
+          ariaLabel="Contact links"
         />
         <div className="flex flex-col lg:col-span-2 sm:col-span-1 self-start gap-3 lg:gap-6">
           <FooterColumn

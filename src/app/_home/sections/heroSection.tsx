@@ -6,7 +6,7 @@ import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 
 const heroSectionClass =
-  "relative overflow-hidden bg-surface-warm pt-24 pb-0 min-h-[100vh] flex flex-row md:h-screen md:pt-32 md:pb-0";
+  "home-section section-hero relative overflow-hidden bg-surface-warm pt-24 pb-0 flex flex-row md:pt-32 md:pb-0";
 
 const heroOverlayClass =
   "absolute top-0 left-0 z-10 h-[18rem] w-full [background:linear-gradient(180deg,rgba(217,255,249,0.14)_0%,rgba(248,248,236,0.32)_55%,rgba(248,248,236,0.98)_100%)] md:h-full md:[clip-path:none] md:[background:linear-gradient(0deg,rgba(10,41,36,79%)_-30%,rgba(217,255,249,0.34)_100%)]";
