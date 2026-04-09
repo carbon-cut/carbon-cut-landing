@@ -4,11 +4,9 @@ import { useScopedServerI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
 import HeroSection from "./_home/sections/heroSection";
 import ProductPreviewSection from "./_home/sections/productPreviewSection";
-import FeaturesSection from "./_home/sections/featuresSection";
-import TestimonialsSection from "./_home/sections/testimonialsSection";
-import PricingSection from "./_home/sections/pricingSection";
+import TrustOptionsSection from "./_home/sections/trustOptionsSection";
 import CtaSection from "./_home/sections/ctaSection";
-import FaqSection from "./_home/sections/faqSection";
+import TestOfferSection from "./_home/sections/testOfferSection";
 
 const homeSeo = useScopedServerI18n("seo.pages.home");
 
@@ -22,11 +20,9 @@ export default function Home() {
     <main id="content">
       <HeroSection />
       <ProductPreviewSection />
-      <FeaturesSection />
-      <TestimonialsSection />
-      <PricingSection />
+      <TrustOptionsSection />
+      <TestOfferSection />
       <CtaSection />
-      <FaqSection />
     </main>
   );
 }

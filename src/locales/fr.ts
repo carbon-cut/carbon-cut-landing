@@ -91,46 +91,125 @@ export default {
           "plan d'action carbone",
         ],
       },
+      support: {
+        title: "Support | Carbon Cut",
+        description:
+          "Contactez le support Carbon Cut pour signaler un problème de compte, de formulaire ou de résultat pendant la phase de test.",
+        keywords: [
+          "support carbon cut",
+          "contact support empreinte carbone",
+          "aide formulaire carbone",
+          "problème compte carbon cut",
+          "assistance carbon cut",
+        ],
+      },
+      help: {
+        title: "Centre d'aide | Carbon Cut",
+        description:
+          "Trouvez rapidement des réponses sur le questionnaire, les résultats, le compte et le support Carbon Cut.",
+        keywords: [
+          "centre d'aide carbon cut",
+          "faq empreinte carbone",
+          "aide questionnaire carbone",
+          "questions résultats carbone",
+          "support utilisateur carbon cut",
+        ],
+      },
     },
   },
   home: {
     nav: {
       features: "Fonctionnalités",
-      testimonials: "Témoignages",
-      pricing: "Tarifs",
-      faq: "FAQ",
+      trust: "Version test",
+      results: "Résultats",
       toggleLabel: "Basculer la navigation principale",
     },
     hero: {
       title: {
-        line1: "Votre empreinte",
+        line1: "Mesurez votre empreinte",
         highlight: "carbone",
-        line2: "en toute simplicité !",
+        line2: "simplement.",
       },
       description:
-        "Mesurez, réduisez et agissez grâce à un parcours guidé et des recommandations personnalisées.",
+        "Un parcours guidé pour estimer les émissions liées au transport et à l'énergie du foyer, puis découvrir un résultat clair et des recommandations pratiques.",
       imageAlt: "Image héro principale de Carbon Cut",
       primaryCta: {
-        label: "Test instantané",
-        aria: "Lancer un test instantané sans abonnement",
+        label: "Commencer l'évaluation",
+        aria: "Commencer l'évaluation carbone guidée",
       },
       secondaryCta: {
-        label: "Découvrir les fonctionnalités",
-        aria: "Découvrir les fonctionnalités clés",
+        label: "Voir comment ça marche",
+        aria: "Voir comment fonctionne l'évaluation",
       },
       quickLinks: {
         ariaLabel: "Navigation rapide",
         links: {
-          features: "Fonctionnalités",
-          pricing: "Tarifs",
-          testimonials: "Témoignages",
+          features: "Ce que fait Carbon Cut",
           faq: "Questions fréquentes",
         },
       },
     },
-    preview: {
-      ariaLabel: "Aperçu du produit",
-      imageAlt: "Capture d'écran du tableau de bord Carbon Cut",
+    whatItDoes: {
+      badge: "Ce que fait Carbon Cut",
+      title: "Un parcours guidé, centré sur l’essentiel.",
+      description:
+        "Carbon Cut vous aide à comprendre votre empreinte personnelle sans vous noyer dans des catégories inutiles. Le parcours reste volontairement concentré sur ce qui compte aujourd’hui : le transport, l’énergie du foyer et un résultat lisible.",
+      imageAlt:
+        "Illustration du parcours Carbon Cut montrant le questionnaire, les catégories transport et énergie, puis le résultat avec recommandations",
+      items: {
+        guided: {
+          step: "Étape 1",
+          title: "Répondez à un questionnaire guidé, sans jargon.",
+          description:
+            "Le parcours pose des questions simples sur vos habitudes pour lancer l’estimation sans tableur, sans méthode complexe et sans préparation lourde.",
+        },
+        focus: {
+          step: "Étape 2",
+          title: "Concentrez-vous sur le transport et l’énergie du foyer.",
+          description:
+            "La première phase du produit reste volontairement resserrée sur les zones où l’impact personnel est le plus utile à comprendre dès le départ.",
+        },
+        result: {
+          step: "Étape 3",
+          title: "Obtenez un résultat clair avec des recommandations pratiques.",
+          description:
+            "À la fin du parcours, Carbon Cut affiche une estimation structurée avec des repères par catégorie et des pistes concrètes pour commencer à agir.",
+        },
+      },
+    },
+    trust: {
+      badge: "Produit en test",
+      title: "Une première version claire, volontairement ciblée.",
+      description:
+        "Carbon Cut avance par étapes : un périmètre resserré, une lecture simple de l’empreinte personnelle et un produit encore en amélioration.",
+      status: "En phase de test",
+      statement:
+        "Carbon Cut commence par une évaluation personnelle guidée, centrée sur ce qui est le plus utile à comprendre dès aujourd’hui.",
+      points: {
+        testing: {
+          title: "Produit en test",
+          description:
+            "Carbon Cut est encore en phase de test. Le parcours, l’interface et les résultats continuent d’être affinés.",
+        },
+        scope: {
+          title: "Périmètre ciblé",
+          description:
+            "La première version se concentre sur le transport et l’énergie du foyer pour rester claire, utile et lisible.",
+        },
+        firstStep: {
+          title: "Un premier pas utile",
+          description:
+            "Le but est simple : aider à comprendre son empreinte personnelle sans complexité inutile ni promesse excessive.",
+        },
+      },
+    },
+    testOffer: {
+      badge: "Offre de test",
+      title: "Ce que vous testez maintenant",
+      description:
+        "Un parcours guidé, simple et gratuit avec un résultat personnel clair en fin de parcours.",
+      note: "Version en test : périmètre volontairement limité aujourd'hui, extension prévue ensuite.",
+      chips: ["15–25 min", "Accès libre", "Transport + Énergie", "Résultat clair"],
     },
     features: {
       badge: "Fonctionnalités",
@@ -219,18 +298,14 @@ export default {
         "Choisissez le plan adapté à votre maturité carbone et débloquez des fonctionnalités avancées : export des rapports, recommandations ciblées et accompagnement expert.",
     },
     cta: {
-      title: "Passez à l’action avec Carbon Cut dès aujourd’hui",
+      title: "Commencez par une première évaluation guidée.",
       description:
-        "Lancez votre audit carbone, partagez des liens directs avec vos équipes et centralisez les données clés pour piloter vos efforts de réduction.",
+        "Carbon Cut vous propose un premier pas simple pour estimer votre empreinte personnelle et comprendre ce qui compte aujourd’hui dans le transport et l’énergie du foyer.",
       primaryCta: {
-        label: "Test instantané",
-        aria: "Lancer un test instantané sans abonnement",
+        label: "Commencer l’évaluation",
+        aria: "Commencer l’évaluation carbone guidée",
       },
-      secondaryCta: {
-        label: "Voir les offres",
-        aria: "Consulter les offres",
-      },
-      imageAlt: "Image d'une ville polluée pour rappeler l'urgence d'agir",
+      imageAlt: "Illustration de clôture pour inviter à commencer l’évaluation Carbon Cut",
     },
     faq: {
       badge: "Questions fréquentes",
@@ -279,7 +354,7 @@ export default {
       support: {
         email: "Contacter le support",
         helpCenter: "Centre d'aide",
-        demo: "Demander une démo",
+        demo: "Commencer l'évaluation",
       },
       social: {
         linkedin: "LinkedIn",
@@ -332,6 +407,85 @@ export default {
       description:
         "La page que vous recherchez a peut-être été supprimée,\nrenommée ou est temporairement indisponible.",
       button: "Retour à l'accueil",
+    },
+    help: {
+      badge: "Centre d'aide",
+      title: "Comment pouvons-nous vous aider aujourd'hui ?",
+      description:
+        "Parcourez les catégories les plus consultées, puis ouvrez une réponse détaillée en quelques secondes.",
+      searchLabel: "Rechercher dans le centre d'aide",
+      searchPlaceholder: "Rechercher dans le centre d'aide...",
+      actions: {
+        start: "Commencer l'évaluation",
+        support: "Contacter le support",
+      },
+      categoriesTitle: "Sélectionner une catégorie",
+      categories: [
+        { title: "Démarrage", meta: "4 articles" },
+        { title: "Résultats", meta: "5 articles" },
+        { title: "Questionnaire", meta: "6 articles" },
+        { title: "Livraison des emails", meta: "3 articles" },
+        { title: "Support", meta: "4 articles" },
+        { title: "Confidentialité", meta: "3 articles" },
+        { title: "Compte", meta: "2 articles" },
+      ],
+      questionsTitle: "Questions populaires",
+      questions: [
+        "Comment fonctionne l'évaluation pas à pas ?",
+        "Que signifient les scores dans la page résultats ?",
+        "Puis-je reprendre un questionnaire plus tard ?",
+        "Comment corriger une réponse déjà envoyée ?",
+        "Pourquoi je ne reçois pas l'email attendu ?",
+        "Comment contacter le support avec les bonnes infos ?",
+      ],
+      featuredArticle: {
+        title: "Comment fonctionne l'évaluation Carbon Cut ?",
+        intro:
+          "Le parcours est conçu pour rester simple: vous répondez à des questions ciblées, puis vous obtenez un résultat clair avec des recommandations actionnables.",
+        steps: [
+          "Commencez le formulaire et répondez aux sections transport et énergie du foyer.",
+          "Vérifiez l'aperçu avant validation pour corriger les éventuelles erreurs.",
+          "Consultez votre estimation et les recommandations associées à chaque catégorie.",
+          "Revenez plus tard pour refaire l'évaluation après vos premiers changements.",
+        ],
+        noteTitle: "Note",
+        note: "Pendant la phase de test, certaines sections restent volontairement limitées pour garder le parcours rapide et lisible.",
+        helpful: "Cet article vous a-t-il aidé ?",
+        answers: {
+          yes: "Oui",
+          no: "Non",
+        },
+      },
+    },
+    support: {
+      badge: "Support",
+      title: "Contactez l'équipe Carbon Cut",
+      description:
+        "Envoyez votre demande via le formulaire ci-dessous. Le traitement se fait par email pendant la phase de test.",
+      emailLabel: "Contact direct",
+      responseTime: "Réponse généralement sous 24 à 48h ouvrées.",
+      checklistTitle: "Cette page est pour envoyer une demande claire avec :",
+      checklist: [
+        "L'email de votre compte",
+        "Le type de problème (connexion, formulaire, résultat)",
+        "Les étapes pour reproduire le problème",
+        "Une capture d'écran si possible",
+      ],
+      scopeTitle: "Périmètre actuel",
+      scopeDescription:
+        "Cette page est pour les utilisateurs du parcours personnel en test (transport et énergie du foyer).",
+      form: {
+        name: "Nom",
+        email: "Email",
+        topic: "Sujet",
+        message: "Message",
+        submit: "Envoyer la demande",
+        notLive: "Le formulaire est en place, l'envoi sera activé bientôt.",
+      },
+      actions: {
+        goHelp: "Aller au centre d'aide",
+        startForm: "Commencer l'évaluation",
+      },
     },
     Home: { index: "Accueil" },
     Blog: { index: "Blog" },
@@ -553,7 +707,7 @@ export default {
               description: "Voiture, transports en commun, vols",
             },
             {
-              id: "energie",
+              id: "energy",
               title: "Énergie",
               description: "Électricité, gaz, chauffage à domicile",
             },
@@ -597,7 +751,7 @@ export default {
         `Étape ${current} sur ${total}`,
     },
     basic: {
-      energie: {
+      energy: {
         housing: {
           title: "Logement",
           q1: {
@@ -1178,8 +1332,8 @@ export default {
           desc: "Optez pour le transport en commun, le covoiturage ou le vélo",
         },
       },
-      energie: {
-        energie: {
+      energy: {
+        energy: {
           title: "Energie",
           desc: "Passer à des sources renouvelables et améliorer l'isolation",
         },
@@ -1206,7 +1360,7 @@ export default {
   },
   sections: {
     transport: "Transport",
-    energie: "Energie",
+    energy: "Energie",
     waste: "Déchets",
     food: "Alimentation",
     vacation: "Vacances",

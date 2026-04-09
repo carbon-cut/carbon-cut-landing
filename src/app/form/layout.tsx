@@ -5,7 +5,7 @@ import { TName } from "@/components/ui/forms";
 import { formSchema } from "../_forms/formSchema";
 import { z } from "zod";
 
-type TabValue = "transport" | "energie" | "food" | "waste" | "vacation";
+type TabValue = "transport" | "energy" | "food" | "waste" | "vacation";
 
 export default function FormLayout({ children }: { children: React.ReactNode }) {
   const [tab, setTab] = useState<TabValue>("transport");
@@ -13,7 +13,7 @@ export default function FormLayout({ children }: { children: React.ReactNode }) 
     [key in TabValue]: number;
   }>({
     transport: 0,
-    energie: 0,
+    energy: 0,
     food: 0,
     waste: 0,
     vacation: 0,

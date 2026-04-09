@@ -8,7 +8,7 @@ import { plugin } from "@/lib/chartPlugins/ChartJS";
 import { getName } from "@/lib/formTabs/geters";
 import { useScopedI18n } from "@/locales/client";
 
-const tabs: TabValues[] = ["transport", "food", "vacation", "energie", "waste"];
+const tabs: TabValues[] = ["transport", "food", "vacation", "energy", "waste"];
 
 type Props = {
   data: {

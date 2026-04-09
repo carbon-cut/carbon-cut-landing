@@ -8,17 +8,17 @@ import SideQuestion from "@/app/_forms/components/sideQuestion";
 import { Separator } from "@/components/ui/separator";
 
 const HeatingBill: QuestionFC = ({ mainForm }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.heatingBill");
+  const t = useScopedI18n("forms.basic.energy.heatingBill");
   return (
     <div>
       <Question className="md:px-12 px-0">{t("q")}</Question>
       <Content className="md:px-16 mb-6">
         <Input
           form={mainForm}
-          name="energie.heating.quantities.heatingNetwork.total"
+          name="energy.heating.quantities.heatingNetwork.total"
           placeholder="kWh"
           type="number"
-          attachedFields={["energie.heating.quantities.heatingNetwork.money"]}
+          attachedFields={["energy.heating.quantities.heatingNetwork.money"]}
         />
       </Content>
       <SideQuestion
@@ -27,28 +27,28 @@ const HeatingBill: QuestionFC = ({ mainForm }: QuestionProps) => {
         content={
           <Input
             form={mainForm}
-            name="energie.heating.quantities.heatingNetwork.money"
+            name="energy.heating.quantities.heatingNetwork.money"
             unit=""
             type="number"
             placeholder="€"
-            attachedFields={["energie.heating.quantities.heatingNetwork.total"]}
+            attachedFields={["energy.heating.quantities.heatingNetwork.total"]}
           />
         }
       />
       {/* <Separator className="mt-3" />
       <Question>{t("q2")}</Question>
       <Content>
-        <Input form={mainForm} name="energie.electricity.index" type="number" />
+        <Input form={mainForm} name="energy.electricity.index" type="number" />
       </Content> */}
     </div>
   );
 };
 HeatingBill["Symbol"] = {
-  question: "forms.basic.energie.heatingBill.title",
+  question: "forms.basic.energy.heatingBill.title",
   fields: [
-    "energie.heating.quantities.heatingNetwork",
-    "energie.heating.quantities.heatingNetwork.total",
-    "energie.heating.quantities.heatingNetwork.money",
+    "energy.heating.quantities.heatingNetwork",
+    "energy.heating.quantities.heatingNetwork.total",
+    "energy.heating.quantities.heatingNetwork.money",
   ],
 };
 

@@ -98,7 +98,7 @@ const CardComponent: React.FC<Props> = (props) => {
     >
       <div>
         <CardHeader>
-          <CardTitle className="text-center text-primary">
+          <CardTitle className="text-center text-foreground">
             <h1 className="mb-4 text-4xl">{props.title}</h1>
             <div className="flex items-start justify-center ">
               <span className="text-2xl align-text-top mt-1">€</span>
@@ -120,7 +120,7 @@ const CardComponent: React.FC<Props> = (props) => {
         </CardContent>
       </div>
       <CardFooter>
-        <Button size="lg" variant="cta" className="z-30 mx-auto bg-linear-2">
+        <Button size="lg" variant="cta" className="z-30 mx-auto bg-linear-accent-horizontal">
           Learn More
           <ArrowRight />
         </Button>

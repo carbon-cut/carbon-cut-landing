@@ -147,7 +147,7 @@ export default {
   },
   forms: {
     basic: {
-      energie: {
+      energy: {
         housing: {
           q1: {
             q1: "Parlez-nous de votre logement :",
@@ -197,7 +197,7 @@ export default {
             electricHeating: {
               label: "Chauffage électrique",
               fields: {
-                energieLabel: "Etiquettes d'energie",
+                energyLabel: "Etiquettes d'energy",
                 dailyFrequency: {
                   label: "frequence quotidienne",
                   unit: "h/jour",
@@ -211,7 +211,7 @@ export default {
             electricalCentralHeating: {
               label: "Chauffage central electrique",
               fields: {
-                energieLabel: "Etiquettes d'energie",
+                energyLabel: "Etiquettes d'energy",
                 dailyFrequency: {
                   label: "frequence quotidienne",
                   unit: "h/jour",

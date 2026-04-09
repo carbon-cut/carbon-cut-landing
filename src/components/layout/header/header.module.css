@@ -8,10 +8,10 @@
   @apply absolute;
 }
 .header[data-state="small"] {
-  @apply bg-white w-8/12 mt-4 py-4 px-6 translate-y-6 rounded-3xl transition-all duration-700 shadow-md absolute;
+  @apply bg-card w-8/12 mt-4 py-4 px-6 translate-y-6 rounded-3xl transition-all duration-700 shadow-md absolute;
 }
 .header[data-state="scrollOut"] {
-  @apply bg-white;
+  @apply bg-card;
 }
 
 .logo {
@@ -39,7 +39,7 @@
 }
 
 .button {
-  @apply rounded-full py-6 transition-all duration-700 bg-linear-2-2;
+  @apply rounded-full py-6 transition-all duration-700 bg-linear-accent-diagonal text-sm;
 }
 .button[data-state="small"] {
   @apply scale-0 transition-all duration-700  opacity-0;

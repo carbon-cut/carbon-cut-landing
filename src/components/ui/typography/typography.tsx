@@ -3,25 +3,45 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
 
+/**
+ * Product-first typography usage:
+ * - Page heading: variant="title" size="xl"
+ * - Section heading: variant="subtitle" size="lg"
+ * - Body copy: variant="default" | "description" size="md" | "sm"
+ * - Label/meta text: variant="label" | "caption" | "muted" size="xs" | "sm"
+ * - Marketing hero (opt-in): variant="marketingTitle" size="huge"
+ *
+ * Migration note:
+ * - `size="huge"` is deprecated (kept as a compatibility alias for marketing hero usage).
+ * - `variant="marketingTitle" | "marketingSubtitle"` are homepage/marketing-only opt-ins.
+ * - Prefer `size="xl"` + explicit responsive overrides for future page-level headings.
+ */
 const typographyVariants = cva("", {
   variants: {
     variant: {
-      default: "text-foreground leading-normal tracking-normal",
-      title: "font-bold text-primary leading-[0.95] tracking-[-0.04em]",
-      subtitle: "font-medium text-primary leading-[1.25] tracking-[-0.02em]",
-      description: "font-light text-secondary",
+      default: "text-foreground leading-6 tracking-normal",
+      title: "font-semibold text-foreground leading-tight tracking-normal",
+      subtitle: "font-medium text-foreground leading-snug tracking-normal",
+      description: "font-normal text-secondary leading-6 tracking-normal",
+      label: "font-medium text-foreground leading-5 tracking-normal",
+      caption: "font-normal text-secondary leading-5 tracking-normal",
+      muted: "font-normal text-foreground/70 leading-5 tracking-normal",
+      marketingTitle: "font-bold text-foreground leading-[1.02] tracking-[-0.015em]",
+      marketingSubtitle: "font-medium text-foreground leading-[1.2] tracking-[-0.01em]",
     },
     size: {
-      default: "",
+      default: "text-base",
       huge: "font-extrabold text-3xl md:text-6xl lg:text-7xl",
-      xl: "text-3xl md:text-4xl lg:text-5xl",
-      md: "text-lg md:text-xl lg:text-2xl",
-      sm: "text-sm md:text-base lg:text-lg",
+      xl: "text-2xl md:text-3xl",
+      lg: "text-xl md:text-2xl",
+      md: "text-base",
+      sm: "text-sm",
+      xs: "text-xs",
     },
   },
   defaultVariants: {
     variant: "default",
-    size: "default",
+    size: "md",
   },
 });
 interface Props

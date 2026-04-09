@@ -85,7 +85,7 @@ export function SignInPageContent() {
       footer={
         <>
           {t("message.signup")}{" "}
-          <Link href="/auth/sign-up" className="text-primary underline-offset-4 hover:underline">
+          <Link href="/auth/sign-up" className="text-foreground underline-offset-4 hover:underline">
             {t("link.signup")}
           </Link>
         </>
@@ -99,7 +99,7 @@ export function SignInPageContent() {
           </Alert>
         ) : null}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="identifier">
+          <label className="text-sm font-medium text-foreground" htmlFor="identifier">
             {t("form.email")}
           </label>
           <Input
@@ -111,7 +111,7 @@ export function SignInPageContent() {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="password">
+          <label className="text-sm font-medium text-foreground" htmlFor="password">
             {t("form.password")}
           </label>
           <Input
@@ -125,7 +125,7 @@ export function SignInPageContent() {
         <div className="flex items-center justify-between gap-4">
           <Link
             href="/auth/forgot-password"
-            className="text-sm text-primary underline-offset-4 hover:underline"
+            className="text-sm text-foreground underline-offset-4 hover:underline"
           >
             {t("link.forgetPassword")}
           </Link>

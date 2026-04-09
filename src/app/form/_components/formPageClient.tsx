@@ -2,7 +2,7 @@
 
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { TabTrigger } from "./_tab";
-import initEnergieQuestions from "../../_forms/basic/energie";
+import initEnergyQuestions from "../../_forms/basic/energy";
 import initTransportQuestions from "../../_forms/basic/transport";
 import initFoodQuestions from "../../_forms/basic/food";
 import React, { useCallback, useMemo, useState } from "react";
@@ -37,7 +37,7 @@ export default function FormPageClient() {
   const [showPreAssessment, setShowPreAssessment] = useState<boolean>(true);
 
   const transportQuestions = useState(initTransportQuestions);
-  const energieQuestions = useState(initEnergieQuestions);
+  const energyQuestions = useState(initEnergyQuestions);
   const foodQuestions = useState(initFoodQuestions);
 
   const mainForm = useForm<z.infer<typeof formSchema>>({
@@ -108,20 +108,20 @@ export default function FormPageClient() {
   const dataLengths = useMemo(() => {
     return {
       transport: transportQuestions[0].length,
-      energie: energieQuestions[0].length,
+      energy: energyQuestions[0].length,
       food: foodQuestions[0].length,
       waste: 0,
       vacation: 0,
-      total: transportQuestions[0].length + energieQuestions[0].length + foodQuestions[0].length,
+      total: transportQuestions[0].length + energyQuestions[0].length + foodQuestions[0].length,
     };
-  }, [foodQuestions, transportQuestions, energieQuestions]);
+  }, [foodQuestions, transportQuestions, energyQuestions]);
 
   const setNextTab = useCallback(() => {
     setTab((prev) => {
       switch (prev) {
         case "transport":
-          return "energie";
-        case "energie":
+          return "energy";
+        case "energy":
           return "food";
         case "food":
           return "food";
@@ -225,7 +225,7 @@ export default function FormPageClient() {
                       mainForm={mainForm}
                       list={{
                         transport: transportQuestions[0],
-                        energie: energieQuestions[0],
+                        energy: energyQuestions[0],
                         food: foodQuestions[0],
                       }}
                       dialog={questionList}
@@ -248,9 +248,9 @@ export default function FormPageClient() {
                       <Car className="w-4 h-4" />
                     </TabTrigger>
                     <TabTrigger
-                      value="energie"
+                      value="energy"
                       data-state={
-                        getIndex(tab) > 1 ? "completed" : tab === "energie" ? "active" : "inactive"
+                        getIndex(tab) > 1 ? "completed" : tab === "energy" ? "active" : "inactive"
                       }
                     >
                       <Zap className="w-4 h-4" />
@@ -276,7 +276,7 @@ export default function FormPageClient() {
                   mainForm={mainForm}
                   initQuestions={{
                     transport: transportQuestions,
-                    energie: energieQuestions,
+                    energy: energyQuestions,
                     food: foodQuestions,
                     waste: [[], () => {}],
                     vacation: [[], () => {}],

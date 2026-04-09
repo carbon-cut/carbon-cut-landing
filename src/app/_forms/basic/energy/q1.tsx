@@ -8,7 +8,7 @@ import Input from "../../components/input";
 import { useSubmit } from "@/lib/hooks/useSubmit";
 
 const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.q1");
+  const t = useScopedI18n("forms.basic.energy.q1");
 
   useSubmit();
 
@@ -18,10 +18,10 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
       <Content className="md:px-16 mb-6">
         <Input
           form={mainForm}
-          name="energie.electricity.total"
+          name="energy.electricity.total"
           placeholder="kWh"
           type="number"
-          attachedFields={["energie.electricity.money"]}
+          attachedFields={["energy.electricity.money"]}
         />
       </Content>
       <SideQuestion
@@ -30,11 +30,11 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
         content={
           <Input
             form={mainForm}
-            name="energie.electricity.money"
+            name="energy.electricity.money"
             unit=""
             type="number"
             placeholder="€"
-            attachedFields={["energie.electricity.total"]}
+            attachedFields={["energy.electricity.total"]}
           />
         }
       />
@@ -43,8 +43,8 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
 };
 
 Q1["Symbol"] = {
-  question: "forms.basic.energie.q1.title",
-  fields: ["energie.electricity"],
+  question: "forms.basic.energy.q1.title",
+  fields: ["energy.electricity"],
 };
 
 export default Q1;

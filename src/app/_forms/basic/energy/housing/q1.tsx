@@ -10,7 +10,7 @@ import { FormAlert } from "../../../components/alert";
 import FormSelect from "@/components/forms/formSelect";
 
 const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.housing.q1");
+  const t = useScopedI18n("forms.basic.energy.housing.q1");
 
   return (
     <div>
@@ -25,7 +25,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
           <div className="md:w-2/3 md:mt-3">
             <FormSelect
               form={mainForm}
-              name="energie.housing.category"
+              name="energy.housing.category"
               label={t("q1Labels.type")}
               data={[
                 { label: t("options.0"), value: "appartment" },
@@ -40,7 +40,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
               label={t("q1Labels.area")}
               placeholder="m²"
               form={mainForm}
-              name={"energie.housing.area"}
+              name={"energy.housing.area"}
             />
           </div>
         </Content>
@@ -50,7 +50,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
               label={t("q1Labels.heatedVolume")}
               form={mainForm}
               placeholder="m³"
-              name={"energie.housing.heatedVolume"}
+              name={"energy.housing.heatedVolume"}
             />
           </div>
           <div className="md:w-2/3 md:mt-3">
@@ -58,7 +58,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
               label={t("q1Labels.conditionedVolume")}
               form={mainForm}
               placeholder="m³"
-              name={"energie.housing.conditionedVolume"}
+              name={"energy.housing.conditionedVolume"}
             />
           </div>
         </Content>
@@ -66,7 +66,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
       <Question>{t("q2")}</Question>
       <Content>
         <div className=" mt-3">
-          <Input form={mainForm} name={"energie.housing.rooms"} />
+          <Input form={mainForm} name={"energy.housing.rooms"} />
         </div>
       </Content>
       <Question>{t("q3")}</Question>
@@ -75,7 +75,7 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
           type="boolean"
           className="grid md:grid-rows-2 md:grid-cols-1 grid-cols-2 w-full px-0"
           form={mainForm}
-          name={"energie.housing"}
+          name={"energy.housing"}
           options={[
             {
               label: t("q3Labels.thermalInsulation"),
@@ -95,8 +95,8 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
 };
 
 Q1["Symbol"] = {
-  question: "forms.basic.energie.housing.title",
-  fields: ["energie.housing"],
+  question: "forms.basic.energy.housing.title",
+  fields: ["energy.housing"],
 };
 
 export default Q1;

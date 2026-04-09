@@ -13,7 +13,14 @@ Working notes for anyone contributing to this codebase. Keep changes aligned wit
 ## Patterns to reuse
 
 - Prefer the shared UI components for typography, buttons, badges, cards, tabs, form wiring, etc.; follow existing className/variant patterns (`class-variance-authority` + `cn`).
-- Keep styling on the palette: use theme tokens (`text-primary`, `text-secondary`, `text-chart-3`, `bg-card`, `bg-linear-*`) instead of new hex values. Respect the soft background tone (`#F8F8EC`) used on hero/CTA when adding similar blocks.
+- Keep styling on the palette and utility semantics from `globals.css`/`tailwind.config.ts`:
+  - `primary.*` = emphasized interactive/action colors.
+  - `foreground`/`secondary`/`muted-foreground` = text hierarchy.
+  - `border`/`input`/`card`/`background`/`surface-*` = structural UI.
+  - `section-*` and `chart-*` = domain/data accents only.
+- On-action text rule: emphasized action surfaces (solid/accent/gradient intent) use `text-primary-foreground`; non-emphasized variants (`outline`, `ghost`, `link`) do not.
+- Button primitive scope: use primitive variants for repeated patterns. If only background differs but behavior pattern is the same, keep behavior consistent and apply minimal style delta. Add a new variant only when the pattern is reused and stable.
+- `Button` `variant="none"` is restricted to the scroll-to-top button use-case.
 - Maintain the section pattern: `section` with `aria-labelledby`, a heading rendered via `Typography`, and any controls labeled (`aria-label` for buttons/nav).
 - Animations are handled with Tailwind plugins (`timeline-view`, `animate-rise-in`, `animate-tilt-in-*`, etc.); reuse these utility classes to match existing motion.
 - When adding assets, prepend `process.env.NEXT_PUBLIC_BASE_PATH` where applicable to keep preview builds working.
@@ -35,3 +42,4 @@ Working notes for anyone contributing to this codebase. Keep changes aligned wit
 
 - Run `npm run dev` for local work, `npm run lint` before shipping. Storybook is available (`npm run storybook`) for UI verification; add stories when introducing new primitives or layout blocks.
 - Preserve accessibility: meaningful alt text on images, keyboard focus states (already styled in `globals.css`), and `aria-*` labels on controls like carousels or nav toggles.
+- For new UI/page styling tasks, follow `docs/design/workflow.md` before coding. Default behavior is to request design direction first (reference + constraints) and implement section-by-section instead of full-page first-pass redesigns.

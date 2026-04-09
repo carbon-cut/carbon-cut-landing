@@ -10,19 +10,19 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        "linear-1": "var(--linear-1)",
-        "linear-2": "var(--linear-2-1)",
-        "linear-2-2": "var(--linear-2-2)",
-        "linear-transport": "var(--linear-transport)",
-        "linear-food": "var(--linear-food)",
-        "linear-vacation": "var(--linear-vacation)",
-        "linear-energie": "var(--linear-energie)",
-        "linear-waste": "var(--linear-waste)",
+        "linear-primary-diagonal": "var(--linear-primary-diagonal)",
+        "linear-accent-horizontal": "var(--linear-accent-horizontal)",
+        "linear-accent-diagonal": "var(--linear-accent-diagonal)",
+        "linear-section-transport": "var(--linear-section-transport)",
+        "linear-section-transport-hover": "var(--linear-section-transport-hover)",
+        "linear-section-food": "var(--linear-section-food)",
+        "linear-section-vacation": "var(--linear-section-vacation)",
+        "linear-section-energy": "var(--linear-section-energy)",
+        "linear-section-waste": "var(--linear-section-waste)",
       },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        liniar: "var(--liniar)",
         surface: {
           warm: "hsl(var(--surface-warm))",
         },
@@ -30,13 +30,13 @@ export default {
           transport: "hsl(var(--section-transport))",
           food: "hsl(var(--section-food))",
           vacation: "hsl(var(--section-vacation))",
-          energie: "hsl(var(--section-energie))",
+          energy: "hsl(var(--section-energy))",
           waste: "hsl(var(--section-waste))",
           light: {
             transport: "hsl(var(--section-transport-light))",
             food: "hsl(var(--section-food-light))",
             vacation: "hsl(var(--section-vacation-light))",
-            energie: "hsl(var(--section-energie-light))",
+            energy: "hsl(var(--section-energy-light))",
             waste: "hsl(var(--section-waste-light))",
           },
         },
@@ -55,7 +55,20 @@ export default {
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
+          hover: "hsl(var(--primary-hover))",
           foreground: "hsl(var(--primary-foreground))",
+          subtle: "hsl(var(--primary-subtle))",
+          "subtle-hover": "hsl(var(--primary-subtle-hover))",
+          border: "hsl(var(--primary-border))",
+        },
+        focus: {
+          DEFAULT: "hsl(var(--focus))",
+          foreground: "hsl(var(--focus-foreground))",
+        },
+        interactive: {
+          hover: "hsl(var(--interactive-hover))",
+          subtle: "hsl(var(--interactive-subtle))",
+          border: "hsl(var(--interactive-border))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -214,7 +227,7 @@ export default {
         },
       },
       transitionBehavior: {
-        descrete: "allow-descrete",
+        discrete: "allow-discrete",
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

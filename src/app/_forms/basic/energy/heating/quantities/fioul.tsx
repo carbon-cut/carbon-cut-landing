@@ -8,7 +8,7 @@ import { useScopedI18n } from "@/locales/client";
 import React, { useEffect } from "react";
 
 const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.heating.options");
+  const t = useScopedI18n("forms.basic.energy.heating.options");
 
   /*   useEffect(()=>{
     setSubmit(true);
@@ -24,7 +24,7 @@ const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
           <div className="col-span-1">
             <Input
               form={mainForm}
-              name={"energie.heating.quantities.fioul.quantity"}
+              name={"energy.heating.quantities.fioul.quantity"}
               placeholder={t("fioul.placeholder")}
               label={t("fioul.label")}
               labelClassName="text-black/70"
@@ -34,7 +34,7 @@ const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
           <div className="col-span-1 md:w-6/12">
             <FormSelect
               form={mainForm}
-              name="energie.heating.quantities.fioul.frequency"
+              name="energy.heating.quantities.fioul.frequency"
               label={t("fioul.frequency.label")}
               labelClassName="text-black/70"
               data={[
@@ -49,8 +49,8 @@ const Fioul: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
   );
 };
 Fioul["Symbol"] = {
-  question: "forms.basic.energie.heating.options.fioul.label",
-  fields: ["energie.heating.quantities.fioul"],
+  question: "forms.basic.energy.heating.options.fioul.label",
+  fields: ["energy.heating.quantities.fioul"],
 };
 
 export default Fioul;

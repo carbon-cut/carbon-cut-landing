@@ -26,7 +26,7 @@ export default function PricingSection() {
         <Typography
           asChild
           variant="description"
-          size="sm"
+          size="md"
           className="text-center max-w-3xl mb-6 px-6 timeline-view range-on-entry/60px_160px translate-y-6 opacity-0 animate-fade-in-scale motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
         >
           <p>{t("description")}</p>

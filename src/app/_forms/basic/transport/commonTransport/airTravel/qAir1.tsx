@@ -224,7 +224,7 @@ function AirTravelItem({
       <div className="grid md:grid-cols-4 grid-cols-2 md:gap-10 gap-4 items-end">
         <FormMultiCombox
           labelClassName="text-black/70"
-          className="text-primary"
+          className="text-foreground"
           form={mainForm}
           name={`transport.airs.${index}.origin`}
           options={airportsOptions}

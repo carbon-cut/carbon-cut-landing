@@ -82,7 +82,7 @@ export default function SignUpPage() {
       footer={
         <>
           {t("message.login")}{" "}
-          <Link href="/auth/sign-in" className="text-primary underline-offset-4 hover:underline">
+          <Link href="/auth/sign-in" className="text-foreground underline-offset-4 hover:underline">
             {t("link.login")}
           </Link>
         </>
@@ -96,7 +96,7 @@ export default function SignUpPage() {
           </Alert>
         ) : null}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="username">
+          <label className="text-sm font-medium text-foreground" htmlFor="username">
             {t("form.username")}
           </label>
           <Input
@@ -107,7 +107,7 @@ export default function SignUpPage() {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="email">
+          <label className="text-sm font-medium text-foreground" htmlFor="email">
             {t("form.email")}
           </label>
           <Input
@@ -119,7 +119,7 @@ export default function SignUpPage() {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="password">
+          <label className="text-sm font-medium text-foreground" htmlFor="password">
             {t("form.password")}
           </label>
           <Input
@@ -131,7 +131,7 @@ export default function SignUpPage() {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="passwordConfirmation">
+          <label className="text-sm font-medium text-foreground" htmlFor="passwordConfirmation">
             {t("form.passwordConfirm")}
           </label>
           <Input

@@ -25,16 +25,12 @@ function Header() {
       url: "/#features",
     },
     {
-      title: tNav("testimonials"),
-      url: "/#testimonials",
+      title: tNav("trust"),
+      url: "/#trust",
     },
     {
-      title: tNav("pricing"),
-      url: "/#pricing",
-    },
-    {
-      title: tNav("faq"),
-      url: "/#faq",
+      title: tNav("results"),
+      url: "/#cta",
     },
   ];
   const [dataState, setDataState] = React.useState("big");
@@ -113,8 +109,8 @@ function Header() {
           </Button>
         ) : (
           <Button
-            data-state={dataState}
             asChild
+            data-state={dataState}
             variant="cta"
             className={style.button}
             size={"lg"}

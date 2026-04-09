@@ -239,7 +239,7 @@ export const formSchema = z.object({
       .nullable()
       .optional(),
   }),
-  energie: z.object({
+  energy: z.object({
     heating: z
       .object({
         heatPump: z.coerce.number().nullable().optional(),

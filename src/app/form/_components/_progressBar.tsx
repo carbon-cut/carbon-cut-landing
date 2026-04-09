@@ -25,17 +25,17 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressProps>(function Pro
       case "transport":
         sup = 0;
         break;
-      case "energie":
+      case "energy":
         sup = dataLengths.transport;
         break;
       case "food":
-        sup = dataLengths.transport + dataLengths.energie;
+        sup = dataLengths.transport + dataLengths.energy;
         break;
       case "waste":
-        sup = dataLengths.transport + dataLengths.energie + dataLengths.food;
+        sup = dataLengths.transport + dataLengths.energy + dataLengths.food;
         break;
       case "vacation":
-        sup = dataLengths.transport + dataLengths.energie + dataLengths.food + dataLengths.waste;
+        sup = dataLengths.transport + dataLengths.energy + dataLengths.food + dataLengths.waste;
         break;
     }
     return ((sup + currentQuestion) / dataLengths.total) * 100;
@@ -45,7 +45,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressProps>(function Pro
 
   const ColorVariants = {
     transport: { bg: "bg-section-transport/20", main: "bg-section-transport" },
-    energie: { bg: "bg-section-energie/20", main: "bg-section-energie" },
+    energy: { bg: "bg-section-energy/20", main: "bg-section-energy" },
     food: { bg: "bg-section-food/20", main: "bg-section-food" },
     waste: { bg: "bg-section-waste/20", main: "bg-section-waste" },
     vacation: { bg: "bg-section-vacation/20", main: "bg-section-vacation" },

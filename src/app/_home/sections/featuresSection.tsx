@@ -11,7 +11,11 @@ export default function FeaturesSection() {
   const t = useScopedI18n("home.features");
 
   return (
-    <section id="features" aria-labelledby="features-heading" className="py-12 px-4">
+    <section
+      id="features"
+      aria-labelledby="features-heading"
+      className="bg-surface-warm px-4 py-12"
+    >
       <div className="flex flex-col w-full items-center ">
         <Badge className={titleAnimation} variant="default">
           {t("badge")}
@@ -31,7 +35,7 @@ export default function FeaturesSection() {
         <Typography
           asChild
           variant={"description"}
-          size={"sm"}
+          size={"md"}
           className="my-3 text-center px-6 md:px-16 scale-95 animate-to-translate-0
           timeline-view range-on-entry/300px_460px translate-y-[50px] opacity-0 no-animations:translate-y-0 no-animations:opacity-100"
         >

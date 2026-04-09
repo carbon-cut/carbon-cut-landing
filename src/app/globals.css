@@ -4,47 +4,65 @@
 
 @layer base {
   :root {
-    --linear-1: linear-gradient(to bottom right, hsl(var(--chart-1)), hsl(var(--chart-2)));
-    --linear-2-1: linear-gradient(to right, hsl(var(--chart-3)), hsl(17, 100%, 86%));
-    --linear-2-2: linear-gradient(to bottom right, hsl(var(--chart-3)), hsl(17, 100%, 86%));
-    --section-transport: 156 100% 32%;
+    /* Semantic token contract (utility-facing):
+       - `primary.*` = interactive action colors
+       - `foreground.*` = text/neutral foreground colors */
+    --linear-primary-diagonal: linear-gradient(
+      to bottom right,
+      hsl(var(--chart-1)),
+      hsl(var(--chart-2))
+    );
+    --linear-accent-horizontal: linear-gradient(to right, hsl(var(--chart-3)), hsl(17, 100%, 86%));
+    --linear-accent-diagonal: linear-gradient(
+      to bottom right,
+      hsl(var(--chart-3)),
+      hsl(17, 100%, 86%)
+    );
+    --section-transport: var(--primary);
+    --section-transport-hover: var(--primary-hover);
     --section-food: 198 100% 16%;
     --section-vacation: 216 100% 38%;
-    --section-energie: 13 100% 60%;
+    --section-energy: var(--accent);
     --section-waste: 16 66% 48%;
     --section-transport-light: 156, 100%, 38%;
+    --section-transport-light-hover: 156, 100%, 36%;
     --section-food-light: 198, 100%, 22%;
     --section-vacation-light: 216, 100%, 44%;
-    --section-energie-light: 13, 100%, 70%;
+    --section-energy-light: 13, 100%, 70%;
     --section-waste-light: 16, 66%, 54%;
-    --linear-transport: linear-gradient(
+    --linear-section-transport: linear-gradient(
       to right,
       hsl(var(--section-transport)),
       hsl(var(--section-transport-light))
     );
-    --linear-food: linear-gradient(
+    --linear-section-transport-hover: linear-gradient(
+      to right,
+      hsl(var(--section-transport-hover)),
+      hsl(var(--section-transport-light-hover))
+    );
+    --linear-section-food: linear-gradient(
       to right,
       hsl(var(--section-food)),
       hsl(var(--section-food-light))
     );
-    --linear-vacation: linear-gradient(
+    --linear-section-vacation: linear-gradient(
       to right,
       hsl(var(--section-vacation)),
       hsl(var(--section-vacation-light))
     );
-    --linear-energie: linear-gradient(
+    --linear-section-energy: linear-gradient(
       to right,
-      hsl(var(--section-energie)),
-      hsl(var(--section-energie-light))
+      hsl(var(--section-energy)),
+      hsl(var(--section-energy-light))
     );
-    --linear-waste: linear-gradient(
+    --linear-section-waste: linear-gradient(
       to right,
       hsl(var(--section-waste)),
       hsl(var(--section-waste-light))
     );
-    --surface-warm: 60 43% 95%;
+    --surface-warm: 49 41% 95%;
     --background: 210 30% 96%;
-    --foreground: 227 9% 14%;
+    --foreground: 170 61% 10%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --card-primary: 230 8% 14%;
@@ -52,14 +70,23 @@
     --card-primary-muted: 0 0% 62%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 170 61% 10%;
+    --primary: 156 100% 32%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 0 0% 28%;
+    --primary-hover: 156 100% 28%;
+    --primary-subtle: 156 40% 93%;
+    --primary-subtle-hover: 156 35% 88%;
+    --primary-border: 156 45% 64%;
+    --focus: var(--primary);
+    --focus-foreground: var(--primary-foreground);
+    --interactive-hover: var(--primary-hover);
+    --interactive-subtle: var(--primary-subtle);
+    --interactive-border: var(--primary-border);
+    --secondary: 210 8% 36%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 0 0% 45%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 17 100% 60%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
@@ -82,14 +109,23 @@
     --card-primary-muted: 0 0% 62%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
+    --primary: 156 70% 45%;
     --primary-foreground: 222.2 47.4% 11.2%;
+    --primary-hover: 156 70% 52%;
+    --primary-subtle: 156 20% 20%;
+    --primary-subtle-hover: 156 20% 26%;
+    --primary-border: 156 28% 40%;
+    --focus: var(--primary);
+    --focus-foreground: var(--primary-foreground);
+    --interactive-hover: var(--primary-hover);
+    --interactive-subtle: var(--primary-subtle);
+    --interactive-border: var(--primary-border);
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 30 80% 55%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
@@ -126,7 +162,7 @@
 
 @layer components {
   .primary {
-    background: var(--linear);
+    background: var(--linear-primary-diagonal);
     transition:
       transform 0.2s,
       box-shadow 0.2s;
@@ -143,7 +179,7 @@
   }
 
   .gradient-text {
-    background: var(--linear);
+    background: var(--linear-primary-diagonal);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -152,7 +188,7 @@
 }
 
 @layer utilities {
-  .transition-descrete {
-    transition: allow-descrete;
+  .transition-discrete {
+    transition-behavior: allow-discrete;
   }
 }

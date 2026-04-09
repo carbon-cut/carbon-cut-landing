@@ -21,7 +21,7 @@ export const Closed: Story = {
           <QuestionList
             list={{
               transport: initQuestions.transport[0],
-              energie: initQuestions.energie[0],
+              energy: initQuestions.energy[0],
               food: initQuestions.food[0],
             }}
             mainForm={mainForm}
@@ -42,7 +42,7 @@ export const Open: Story = {
           <QuestionList
             list={{
               transport: initQuestions.transport[0],
-              energie: initQuestions.energie[0],
+              energy: initQuestions.energy[0],
               food: initQuestions.food[0],
             }}
             mainForm={mainForm}
@@ -70,7 +70,7 @@ export const WithErrors: Story = {
           <QuestionList
             list={{
               transport: initQuestions.transport[0],
-              energie: initQuestions.energie[0],
+              energy: initQuestions.energy[0],
               food: initQuestions.food[0],
             }}
             mainForm={mainForm}

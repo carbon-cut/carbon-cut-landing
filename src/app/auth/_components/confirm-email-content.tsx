@@ -109,7 +109,7 @@ export function ConfirmEmailPageContent() {
       title={t("title")}
       description={t("description")}
       footer={
-        <Link href="/auth/sign-in" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/auth/sign-in" className="text-foreground underline-offset-4 hover:underline">
           {t("link.login")}
         </Link>
       }
@@ -132,7 +132,7 @@ export function ConfirmEmailPageContent() {
           </Alert>
         ) : null}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="confirmation">
+          <label className="text-sm font-medium text-foreground" htmlFor="confirmation">
             {t("form.code")}
           </label>
           <Input

@@ -7,10 +7,10 @@ import Input from "../../../components/input";
 import { Separator } from "@/components/ui/separator";
 import FormSelect from "@/components/forms/formSelect";
 
-const energieLabels = ["A", "B", "C", "D", "E", "F", "G"] as const;
+const energyLabels = ["A", "B", "C", "D", "E", "F", "G"] as const;
 
 const ElectricalHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.heating.options.electricHeating");
+  const t = useScopedI18n("forms.basic.energy.heating.options.electricHeating");
 
   return (
     <Content className="">
@@ -20,8 +20,8 @@ const ElectricalHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
           label={t("fields.energyLabel")}
           labelClassName="text-black/70"
           form={mainForm}
-          name={"energie.heating.quantities.electricalHeating.energyLabel"}
-          data={energieLabels.map((e) => ({
+          name={"energy.heating.quantities.electricalHeating.energyLabel"}
+          data={energyLabels.map((e) => ({
             label: e,
             value: e,
           }))}
@@ -30,7 +30,7 @@ const ElectricalHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
           label={t("fields.dailyFrequency.label")}
           labelClassName="text-black/70"
           form={mainForm}
-          name={"energie.heating.quantities.electricalHeating.dailyFrequency"}
+          name={"energy.heating.quantities.electricalHeating.dailyFrequency"}
           placeholder={t("fields.dailyFrequency.unit")}
           type="number"
         />
@@ -38,7 +38,7 @@ const ElectricalHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
           label={t("fields.annualFrequency.label")}
           labelClassName="text-black/70"
           form={mainForm}
-          name={"energie.heating.quantities.electricalHeating.annualFrequency"}
+          name={"energy.heating.quantities.electricalHeating.annualFrequency"}
           placeholder={t("fields.annualFrequency.unit")}
           type="number"
         />
@@ -47,7 +47,7 @@ const ElectricalHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
         <Input
           label={t("fields.nbUnit")}
           labelClassName="text-black/70"
-          name="energie.heating.quantities.electricalHeating.number"
+          name="energy.heating.quantities.electricalHeating.number"
           form={mainForm}
           type="number"
         />
@@ -57,8 +57,8 @@ const ElectricalHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
 };
 
 ElectricalHeating["Symbol"] = {
-  question: "forms.basic.energie.heating.options.electricHeating.label",
-  fields: ["energie.heating.quantities.electricalHeating"],
+  question: "forms.basic.energy.heating.options.electricHeating.label",
+  fields: ["energy.heating.quantities.electricalHeating"],
 };
 
 export default ElectricalHeating;

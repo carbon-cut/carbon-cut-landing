@@ -15,12 +15,12 @@ function CarTitle({
 
   if (carModel && carModel != "")
     return (
-      <h3 className="font-semibold text-primary text-center">
+      <h3 className="font-semibold text-foreground text-center">
         {carMake}: <span className="font-medium">{carModel}</span>
       </h3>
     );
   else if (carMake && carMake != "")
-    return <h3 className="font-semibold text-primary text-center">{carMake}</h3>;
+    return <h3 className="font-semibold text-foreground text-center">{carMake}</h3>;
   return <></>;
 }
 

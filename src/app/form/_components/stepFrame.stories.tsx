@@ -24,7 +24,7 @@ function StepFrameCanvas({
   questionIndex = 0,
   withErrors = false,
 }: {
-  tab?: "transport" | "energie" | "food";
+  tab?: "transport" | "energy" | "food";
   questionIndex?: number;
   withErrors?: boolean;
 }) {
@@ -43,13 +43,13 @@ function StepFrameCanvas({
       {({ mainForm, initQuestions, scrollToRef, setNextTab }) => {
         const dataLengths = {
           transport: initQuestions.transport[0].length,
-          energie: initQuestions.energie[0].length,
+          energy: initQuestions.energy[0].length,
           food: initQuestions.food[0].length,
           waste: 0,
           vacation: 0,
           total:
             initQuestions.transport[0].length +
-            initQuestions.energie[0].length +
+            initQuestions.energy[0].length +
             initQuestions.food[0].length,
         };
 
@@ -73,7 +73,7 @@ function StepFrameCanvas({
                     mainForm={mainForm}
                     list={{
                       transport: initQuestions.transport[0],
-                      energie: initQuestions.energie[0],
+                      energy: initQuestions.energy[0],
                       food: initQuestions.food[0],
                     }}
                     dialog={false}
@@ -92,9 +92,9 @@ function StepFrameCanvas({
                     <Car className="h-4 w-4" />
                   </TabTrigger>
                   <TabTrigger
-                    value="energie"
+                    value="energy"
                     data-state={
-                      getIndex(tab) > 1 ? "completed" : tab === "energie" ? "active" : "inactive"
+                      getIndex(tab) > 1 ? "completed" : tab === "energy" ? "active" : "inactive"
                     }
                   >
                     <Zap className="h-4 w-4" />
@@ -136,7 +136,7 @@ export const FirstStep: Story = {
 };
 
 export const MidFlow: Story = {
-  render: () => <StepFrameCanvas tab="energie" questionIndex={1} />,
+  render: () => <StepFrameCanvas tab="energy" questionIndex={1} />,
 };
 
 export const WithErrors: Story = {

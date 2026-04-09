@@ -7,7 +7,7 @@ import Question from "@/app/_forms/components/question";
 import React from "react";
 
 const GasTank: QuestionFC = ({ mainForm }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.heating.options");
+  const t = useScopedI18n("forms.basic.energy.heating.options");
 
   return (
     <>
@@ -16,7 +16,7 @@ const GasTank: QuestionFC = ({ mainForm }: QuestionProps) => {
         <div className="">
           <Input
             form={mainForm}
-            name="energie.heating.quantities.gasTank.frequency"
+            name="energy.heating.quantities.gasTank.frequency"
             placeholder={t("QgasTank.u1")}
             label={t("QgasTank.l1")}
             labelClassName="text-black/70"
@@ -26,7 +26,7 @@ const GasTank: QuestionFC = ({ mainForm }: QuestionProps) => {
             <Input
               type="number"
               form={mainForm}
-              name="energie.heating.quantities.gasTank.capacity"
+              name="energy.heating.quantities.gasTank.capacity"
               placeholder={t("QgasTank.l2")}
               label={t("QgasTank.l2")}
               labelClassName="text-black/70"
@@ -41,11 +41,11 @@ const GasTank: QuestionFC = ({ mainForm }: QuestionProps) => {
 };
 
 GasTank["Symbol"] = {
-  question: "forms.basic.energie.heating.options.QgasTank.title",
+  question: "forms.basic.energy.heating.options.QgasTank.title",
   fields: [
-    "energie.heating.quantities.gasTank",
-    "energie.heating.quantities.gasTank.frequency",
-    "energie.heating.quantities.gasTank.capacity",
+    "energy.heating.quantities.gasTank",
+    "energy.heating.quantities.gasTank.frequency",
+    "energy.heating.quantities.gasTank.capacity",
   ],
 };
 

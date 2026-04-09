@@ -4,7 +4,7 @@
   border: double 0.14em transparent;
   background-image:
     linear-gradient(hsl(var(--background)), hsl(var(--background))),
-    linear-gradient(hsl(var(--background)), hsl(var(--background))), var(--linear-1);
+    linear-gradient(hsl(var(--background)), hsl(var(--background))), var(--linear-primary-diagonal);
   background-origin: content-box, content-box, border-box;
   background-clip: content-box, content-box, border-box;
 }
@@ -15,7 +15,7 @@
       hsl(var(--card-primary-foreground) / 0.2),
       hsl(var(--card-primary-foreground) / 0.2)
     ),
-    linear-gradient(hsl(var(--background)), hsl(var(--background))), var(--linear-1);
+    linear-gradient(hsl(var(--background)), hsl(var(--background))), var(--linear-primary-diagonal);
 }
 
 .body {

@@ -17,15 +17,15 @@ const TabTrigger = React.forwardRef<
   const tab = props.value as keyof typeof colorVariants;
   const colorVariants = {
     transport: `
-    data-[state=active]:bg-linear-transport
+    data-[state=active]:bg-linear-section-transport
     data-[state=completed]:bg-section-transport/10  
     hover:bg-section-transport/20 data-[state=completed]:hover:bg-section-transport/20`,
-    energie: `
-    data-[state=active]:bg-linear-energie
-    data-[state=completed]:bg-section-energie/10
-    hover:bg-section-energie/20 data-[state=completed]:hover:bg-section-energie/20`,
+    energy: `
+    data-[state=active]:bg-linear-section-energy
+    data-[state=completed]:bg-section-energy/10
+    hover:bg-section-energy/20 data-[state=completed]:hover:bg-section-energy/20`,
     food: `
-    data-[state=active]:bg-linear-food
+    data-[state=active]:bg-linear-section-food
     data-[state=completed]:bg-section-food/10
     hover:bg-section-food/20 data-[state=completed]:hover:bg-section-food/20`,
     waste:

@@ -98,14 +98,14 @@ function Testimonials() {
         <Typography asChild variant="title" size="xl" className="text-center">
           <h2 id="testimonials-heading">{t("title")}</h2>
         </Typography>
-        <Typography asChild variant="description" size="sm" className="my-6">
+        <Typography asChild variant="description" size="md" className="my-6">
           <p>{t("description")}</p>
         </Typography>
         <div className="grid grid-cols-2 w-1/4">
           <Button
             size={"icon"}
             variant={"ghost"}
-            className="rounded-full border border-chart-2 bg-white text-chart-2 hover:bg-white/90"
+            className="rounded-full border border-chart-2 bg-card text-chart-2 hover:bg-card/90"
             onClick={handlePrev}
             aria-label={t("controls.prev")}
           >
@@ -114,7 +114,7 @@ function Testimonials() {
           <Button
             size={"icon"}
             variant={"ghost"}
-            className="rounded-full border border-chart-2 bg-white text-chart-2 hover:bg-white/90"
+            className="rounded-full border border-chart-2 bg-card text-chart-2 hover:bg-card/90"
             onClick={handleNext}
             aria-label={t("controls.next")}
           >
@@ -143,14 +143,14 @@ function Testimonials() {
                   alt="Quote icon"
                   src={`${basePath}/home/features/bi_chat-quote-fill.svg`}
                 />
-                <p className="text-primary font-semibold text-xl my-4 leading-relaxed">
+                <p className="text-foreground font-semibold text-xl my-4 leading-relaxed">
                   {item.quote}
                 </p>
                 <p className="text-secondary text-base mb-6 leading-relaxed">{item.detail}</p>
                 <div className="mt-auto flex flex-row justify-start">
                   <Avatar className="h-12 w-12">
                     {item.avatar ? <AvatarImage src={`${basePath}/${item.avatar}`} /> : null}
-                    <AvatarFallback className="bg-chart-3 text-primary-foreground">
+                    <AvatarFallback className="bg-chart-3 text-accent-foreground">
                       {item.initials}
                     </AvatarFallback>
                   </Avatar>

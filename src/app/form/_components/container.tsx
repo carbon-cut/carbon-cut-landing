@@ -7,14 +7,13 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { QuestionFC, QuestionProps } from "../../_forms/types";
+import { QuestionFC } from "../../_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "@/app/_forms/formSchema";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import FormContext from "../_layout/_formContext";
-import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getIcon, getName } from "@/lib/formTabs/geters";
 import { TName } from "@/components/ui/forms";
@@ -22,7 +21,7 @@ import { TabValues } from "@/lib/formTabs/types";
 import { TabContent } from "./_tab";
 import { motion } from "motion/react";
 import { useScopedI18n } from "@/locales/client";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight } from "lucide-react";
 interface ContainerProps {
   setNextTab: () => void;
   initQuestions: {
@@ -71,7 +70,7 @@ const Container = React.forwardRef<
   const handleNextError = useCallback(() => {
     const hasFieldError = (fields: TName<z.infer<typeof formSchema>>[]) =>
       fields.some((field) => mainForm.getFieldState(field)?.error);
-    const tabOrder = ["transport", "energie", "food" /* "waste", "vacation" */] as const;
+    const tabOrder = ["transport", "energy", "food" /* "waste", "vacation" */] as const;
     const orderedQuestions = tabOrder.flatMap((tabKey) => {
       const questions = initQuestions[tabKey][0];
       const questionEntries = questions.map((question, index) => ({
@@ -156,7 +155,7 @@ const Container = React.forwardRef<
           const Icon = getIcon(tab);
           const ColorVariant = {
             transport: "bg-section-transport",
-            energie: "bg-section-energie",
+            energy: "bg-section-energy",
             food: "bg-section-food",
             waste: "bg-section-waste",
             vacation: "bg-section-vacation",
@@ -214,16 +213,16 @@ const Container = React.forwardRef<
             />
             <TabContent
               mainForm={mainForm}
-              initQuestions={initQuestions.energie}
+              initQuestions={initQuestions.energy}
               setNextTab={setNextTab}
-              value="energie"
+              value="energy"
               next={next}
               prev={prev}
               setSubmit={setSubmit}
               setOnSubmit={setOnSubmit}
               prevAction={prevAction}
-              questions={initQuestions.energie[0]}
-              setQuestions={initQuestions.energie[1]}
+              questions={initQuestions.energy[0]}
+              setQuestions={initQuestions.energy[1]}
               setPrevAction={setPrevAction}
             />
             <TabContent
@@ -247,20 +246,15 @@ const Container = React.forwardRef<
       </Card>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 mt-4">
         <Button
-          className="order-1 block w-full gap-2 border-2 border-section-transport bg-white px-5 py-1 text-section-transport hover:bg-section-transport/5 md:px-3"
+          className="order-1"
           variant={"outline"}
           size={"lg"}
           type="button"
           disabled={currentIndexes[tab] == 0}
           onClick={prev}
         >
-          <span className="flex flex-row justify-center items-center gap-3">
-            <Image src={"form/utils/arrow-left.svg"} width={18} height={18} alt="arrow-left" />
-            <span className="md:text-base text-sm bg-linear-1 text-transparent bg-clip-text">
-              {t("back")}
-            </span>
-            <div />
-          </span>
+          <ArrowLeft className="!size-5" />
+          <span className="text-center md:text-base text-sm">{t("back")}</span>
         </Button>
         <div className="order-3 md:order-2 col-span-1 w-full" />
         {showErrorNavigation ? (
@@ -278,7 +272,7 @@ const Container = React.forwardRef<
           <div className="order-3 col-span-1 w-full" />
         )}
         <Button
-          className="order-2 block w-full gap-2 bg-linear-transport px-5 py-1 text-white shadow-lg data-[state=submit]:bg-linear-energie md:order-4 md:px-3"
+          className="order-2 bg-linear-section-transport hover:bg-linear-section-transport-hover data-[state=submit]:bg-linear-section-energy md:order-4"
           disabled={loading}
           size={"lg"}
           data-state={submit ? "submit" : "next"}
@@ -290,12 +284,10 @@ const Container = React.forwardRef<
             if (ver) next();
           }}
         >
-          <span className="flex flex-row justify-center items-center gap-3">
-            <span className="md:text-base text-sm">{submit ? t("submit") : t("next")}</span>
-            {!submit && (
-              <Image src={"form/utils/arrow-right.svg"} width={16} height={16} alt="arrow-right" />
-            )}
+          <span className="text-center md:text-base text-sm">
+            {submit ? t("submit") : t("next")}
           </span>
+          {submit ? <span aria-hidden className="h-4 w-4" /> : <ArrowRight className="!size-5" />}
         </Button>
       </div>
     </div>

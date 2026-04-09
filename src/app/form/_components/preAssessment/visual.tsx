@@ -75,7 +75,7 @@ export default function PreAssessmentVisual({ variant, label }: Props) {
           <Clock className="h-10 w-10 text-section-transport" />
         </div>
       </div>
-      {label ? <span className="text-xs font-semibold text-primary">{label}</span> : null}
+      {label ? <span className="text-xs font-semibold text-foreground">{label}</span> : null}
     </div>
   );
 }

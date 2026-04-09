@@ -24,7 +24,7 @@ function FAQs() {
   }));
 
   return (
-    <Accordion type="single" collapsible className="w-full text-primary-foreground bg-inherit">
+    <Accordion type="single" collapsible className="w-full text-foreground">
       {faqItems.map((e) => (
         <AccordionItem className="md:py-3 py-1" key={e.value} value={e.value}>
           <AccordionTrigger>
@@ -32,7 +32,7 @@ function FAQs() {
               {e.title}
             </Typography>
           </AccordionTrigger>
-          <AccordionContent className="font-medium px-3 pb-2 text text-primary/70">
+          <AccordionContent className="font-medium px-3 pb-2 text text-foreground/70">
             {e.content}
           </AccordionContent>
         </AccordionItem>

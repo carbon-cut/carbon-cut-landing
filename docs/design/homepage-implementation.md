@@ -1,32 +1,41 @@
 # Carbon Cut Homepage Implementation Guide
 
-This document turns the homepage direction into an implementation brief that is aligned with current product truth.
+This document defines the homepage structure Carbon Cut should implement next.
 
-Use this file together with `product-truth.md`.
+Use it together with `product-truth.md`.
 
 If this file conflicts with `product-truth.md`, `product-truth.md` wins.
 
-The goal is to define what the homepage must communicate, in what order, and with what limits.
+This file is for:
 
-## Purpose
+- homepage section planning
+- UI and graphic direction by section
+- content boundaries
+- implementation order
 
-The homepage must:
+This file is not for:
 
-- establish Carbon Cut as credible and climate-serious
-- explain the current product in plain language
-- present Carbon Cut as a guided personal carbon assessment
-- make the next step clear
-- avoid overstating product maturity
+- speculative future product positioning
+- enterprise messaging
+- pricing strategy
+- unsupported trust or proof claims
 
-The homepage must not:
+## Core Goal
 
-- read like generic startup SaaS
-- imply Carbon Cut already supports businesses, restaurants, or municipalities in production
-- imply enterprise infrastructure, integrations, reporting, or compliance workflows
-- overpromise beyond the current testing-stage product
-- rely on hype, vague climate language, or decorative product UI
+The homepage must help a visitor understand, quickly and clearly:
 
-## Product Positioning For The Homepage
+- what Carbon Cut is
+- who it is for right now
+- what the current product does
+- what the user gets after completing the flow
+- why it is worth trying now
+- what to do next
+
+The homepage should feel like a stronger, clearer version of the current Carbon Cut homepage.
+
+It should not feel like a rebrand into another product category.
+
+## Product Positioning
 
 Carbon Cut should currently be presented as:
 
@@ -37,616 +46,418 @@ Carbon Cut should currently be presented as:
 
 Carbon Cut should not currently be presented as:
 
-- a full carbon management platform
 - a business carbon accounting tool
-- a restaurant operations tool
-- a municipality workflow
+- a carbon management platform
 - a reporting or compliance system
+- a team workspace
+- an enterprise workflow
+- a lifestyle or wellness product
 
-## UX Laws To Apply
+## UX Principles To Apply
 
-These laws are the operating constraints for the homepage.
+This homepage should be designed with these Laws of UX in mind: `lawsofux.com`.
 
-### 1. Hick's Law
+### Hick's Law
 
-Too many choices weaken decision-making.
-
-Implementation:
-
-- keep one primary CTA in the hero
-- avoid multiple competing actions in the same section
-- keep navigation concise
-- do not split the homepage into multiple audience entry paths
-
-### 2. Cognitive Load
-
-Users should not have to decode the product from scattered signals.
+Keep decisions simple.
 
 Implementation:
 
-- use fewer, stronger sections
-- keep copy concise and specific
-- avoid redundant visual devices
-- make each section answer one main question
+- one clear primary CTA in the hero
+- avoid multiple competing actions
+- avoid too many parallel section goals
 
-### 3. Chunking
+### Jakob's Law
 
-Information should be grouped into understandable units.
-
-Implementation:
-
-- structure the page into clear narrative blocks
-- keep each section internally cohesive
-- use scannable subheads, bullets, and cards only where they improve understanding
-
-### 4. Jakob's Law
-
-Users expect familiar web patterns even when the brand expression is distinctive.
+Users expect familiar structures.
 
 Implementation:
 
-- maintain recognizable homepage flow
-- use standard CTA placement and readable layout behavior
-- keep the page intuitive even if the visual language is editorial and climate-serious
+- use a recognizable homepage flow
+- keep hero, explanation, process, results, trust, and CTA in a familiar order
+- do not make the page feel experimental or hard to scan
 
-### 5. Von Restorff Effect
+### Law of Proximity and Common Region
 
-Only a small number of items should stand out strongly.
-
-Implementation:
-
-- emphasize one primary CTA
-- make one clear result-oriented message memorable
-- use accent color sparingly so emphasis remains meaningful
-
-### 6. Serial Position Effect
-
-The first and last major moments matter most.
+Users understand grouped information faster when it is visually grouped clearly.
 
 Implementation:
 
-- make the hero immediately clear and credible
-- make the final CTA direct and practical
-- avoid weak filler sections
+- each section should feel self-contained
+- related items should live in the same visual block
+- card groups should be small and intentional
 
-### 7. Fitts's Law
+### Fitts's Law
 
-Important actions must be easy to notice and easy to click.
+Important actions should be obvious and easy to click.
 
 Implementation:
 
-- use clear, comfortably sized CTA buttons
-- maintain strong spacing around interactive elements
-- keep mobile tap targets generous
+- make the primary CTA large and easy to hit
+- keep secondary actions quiet but visible
+- ensure strong spacing around actions
 
-## Content Strategy
+### Aesthetic-Usability Effect
 
-The homepage should feel like an informed argument.
+Clear, well-composed interfaces feel easier to use.
 
-The narrative should move in this order:
+Implementation:
 
-1. Carbon Cut helps people measure and understand their footprint.
-2. The current product is a guided assessment focused on transport and home energy.
-3. Users receive a structured result and practical recommendations.
-4. The next step is to start the assessment.
+- use clean hierarchy
+- use calm spacing
+- reduce visual noise
+- make key content visually trustworthy
 
-Each section should earn its place by improving clarity, trust, or conversion.
+### Peak-End Rule
+
+Users remember the strongest and final moments most.
+
+Implementation:
+
+- make the hero immediately clear
+- make the final CTA calm and decisive
+- avoid weak filler at the end
+
+## Emotional and Visual Direction
+
+The homepage should feel:
+
+- light
+- airy
+- approachable
+- human
+- credible
+- climate-serious
+- emotionally open
+- consumer-facing
+- distinctive without becoming precious
+
+The homepage should not feel:
+
+- corporate
+- consultancy-like
+- enterprise-polished
+- premium editorial
+- boutique lifestyle
+- wellness-oriented
+- dashboard-heavy
+
+## Graphic Language
+
+Keep the homepage in the same visual family as the current Carbon Cut site.
+
+Use:
+
+- illustrated or stylized imagery
+- non-photographic visuals
+- soft, story-like atmospheric scenes
+- simple icons where they improve clarity
+- one main visual idea per section
+
+Avoid:
+
+- glossy renders
+- cinematic product art
+- realistic photography as the main language
+- complex dashboards as hero imagery
+- decorative 3D concept visuals
+
+## Color and Typography
+
+Use the current Carbon Cut palette system:
+
+- pale cool backgrounds
+- dark teal / green-teal text anchor
+- vivid orange accent used sparingly
+- soft white surfaces
+
+Typography should feel:
+
+- clear
+- strong
+- readable
+- human
+
+Avoid:
+
+- editorial luxury styling
+- corporate flatness
+- too many text styles in one section
 
 ## Homepage Structure
 
-The homepage should follow this order:
+The homepage should use this section order:
 
 1. Hero
-2. What Carbon Cut Does
-3. How It Works
-4. Results and Recommendations
-5. Product Status and Trust
-6. Final CTA
+2. Guided Assessment Overview
+3. Results Preview
+4. Testing Stage and Trust
+5. Final CTA
 
-Optional sections like FAQ or testimonials should only appear if they strengthen clarity without implying unsupported maturity.
+Do not include by default:
 
-Do not add pricing unless it reflects a real live offer.
+- pricing
+- testimonials
+- fake trust badges
+- benchmark claims
+- enterprise feature grids
 
-## Section Requirements
+## Section Plan
 
 ### 1. Hero
 
 Primary job:
 
-- communicate what Carbon Cut is
-- establish credibility immediately
-- present a clear next step
+- explain what Carbon Cut is
+- explain who it is for
+- present the next step
 
-The hero must answer:
+What the user should understand:
 
-- what is this product
-- who is it for right now
-- what should I do next
+- this is a guided personal carbon assessment
+- it is meant for individuals
+- I can start now
 
-Content requirements:
+UI:
+
+- two-column layout on desktop
+- text and CTA block on the left
+- one main illustration on the right
+- on mobile, stack cleanly with the CTA staying prominent
+
+Content:
 
 - one strong headline
-- one supporting paragraph
+- one short supporting paragraph
 - one primary CTA
-- one short supporting trust cue
+- one quieter secondary CTA if useful
+- optional light quick links only if they help scanning
 
-Hero tone:
+Graphics:
 
-- confident
-- calm
-- structured
-- climate-serious
+- one large illustrated hero visual
+- human, stylized, non-photographic
+- no dashboard hero
 
-Hero must avoid:
+Notes:
 
-- vague slogans
-- dashboard-heavy mockup clichés
-- multiple equal CTAs
-- broad audience claims that exceed current product truth
+- keep choices low
+- do not introduce multiple product stories here
 
-### 2. What Carbon Cut Does
+### 2. Guided Assessment Overview
 
 Primary job:
 
-- explain the current product in plain language
+- explain the current product clearly without repeating the homepage hero
 
-This section should make the product legible without oversimplifying it.
+What the user should understand:
 
-Content requirements:
+- Carbon Cut guides the user through a footprint questionnaire
+- the current focus is transport and home energy
+- the output is a structured result with recommendations
 
-- short explanatory headline
-- brief supporting copy
-- 3 concise capability points or pillars
+UI:
 
-The three points should clarify current practical value such as:
+- one section only
+- may be static or lightly interactive
+- 3 points or 3 steps maximum
+- each point should stay concise
 
-- measuring emissions through a guided questionnaire
-- focusing on transport and home energy inputs
-- returning a structured result with recommendations
+Suggested content buckets:
 
-This section must feel operational, not abstract.
+- guided questionnaire
+- transport and home energy focus
+- clear result and practical recommendations
 
-### 3. How It Works
+Graphics:
 
-Primary job:
+- small icons, a compact process visual, or one restrained companion illustration
+- no large decorative system diagrams unless they directly support clarity
 
-- show the current assessment flow clearly
+Notes:
 
-This section should reduce uncertainty by making the product feel usable and concrete.
+- this section replaces the old split between "what it does" and "how it works"
+- do not create two separate sections that repeat questionnaire, focus areas, and results
+- this section should clarify, not impress
+- it should feel concrete and operational
 
-Content requirements:
-
-- simple process headline
-- 3 to 4 short steps
-- each step should describe the real current flow
-
-Suitable pattern:
-
-1. Answer a guided set of questions
-2. Enter transport and home energy details
-3. Receive a footprint estimate
-4. Review category visuals and recommendations
-
-Avoid adding steps that imply ongoing tracking, reporting, or team workflows.
-
-### 4. Results and Recommendations
+### 3. Results Preview
 
 Primary job:
 
-- show what users get after completing the assessment
+- show what the user gets at the end
 
-This section should make the value visible without inventing advanced analytics.
+What the user should understand:
 
-Content requirements:
+- I receive a personal estimate
+- I can see where emissions come from
+- I get recommendations after the assessment
 
-- section headline
-- short section intro
-- 2 to 4 outcome blocks
+UI:
 
-Safe outcomes to describe:
+- one main result preview composition
+- one larger result visual plus 2 to 3 explanatory points
+- keep this section visually calm
 
-- a headline carbon-footprint result
-- category-oriented visuals
-- clearer visibility into major emissions areas
-- recommendations after the calculation flow
+What to show:
+
+- a headline footprint number
+- category-oriented visual cues
+- recommendations or next-step guidance
+
+What not to show:
+
+- dense analytics
+- benchmarking claims
+- reporting UI
+- compliance language
+
+Graphics:
+
+- product-adjacent UI preview
+- clean and simplified
+- not a complex dashboard
+
+### 4. Testing Stage and Trust
+
+Primary job:
+
+- build confidence through honesty
+
+What the user should understand:
+
+- Carbon Cut is in testing
+- the current scope is intentionally focused
+- the product is being improved through usage and learning
+
+UI:
+
+- compact section
+- one small status cue
+- short explanatory copy
+- 2 to 3 trust points maximum
+
+Safe trust themes:
+
+- guided clarity
+- focused scope
+- practical first step
+- testing-stage honesty
 
 Avoid:
 
-- audit-ready reporting
-- peer benchmarking claims
-- real-time monitoring language
-- long-term tracking language
+- fake badges
+- inflated proof
+- unverified methodology claims
+- enterprise trust language
 
-### 5. Product Status and Trust
+Graphics:
 
-Primary job:
+- minimal
+- quiet visual treatment
+- trust should come from restraint, not decoration
 
-- build confidence while staying honest about maturity
-
-This section should show that Carbon Cut is a serious product in testing, not a fully mature platform.
-
-Trust can be expressed through:
-
-- step-by-step clarity
-- practical scope
-- structured results
-- conservative product claims
-
-Content requirements:
-
-- section headline focused on trust or clarity
-- 2 to 3 short trust points
-- one point may mention testing-stage status in a calm, credible way
-
-Avoid:
-
-- inflated proof language
-- fake enterprise credibility markers
-- unsupported methodology claims
-- outcome claims without evidence
-
-### 6. Final CTA
+### 5. Final CTA
 
 Primary job:
 
-- convert interest into action
+- close the page with one clear action
 
-This section should feel direct and resolved.
+What the user should understand:
 
-Content requirements:
+- the next step is to start the assessment
+- this is a practical first step, not a heavy commitment
 
-- concise closing headline
-- one short supporting line
-- one primary CTA
+UI:
 
-The CTA should clearly lead to the current assessment flow.
+- one short closing headline
+- one support line
+- one strong primary CTA
 
-The final section should not introduce new concepts.
+Graphics:
 
-## Visual Implementation Rules
+- simple visual echo of the hero mood
+- calmer than the hero
+- no new concepts
 
-The design should feel:
+Notes:
 
-- light
-- airy
-- structured
-- restrained
-- trustworthy
-- specific
-- calm without becoming bland
+- the ending should feel resolved
+- do not reopen complexity here
 
-Use:
-
-- strong hierarchy
-- generous spacing
-- disciplined card usage
-- pale cool light backgrounds
-- dark teal / green-teal as the main text anchor
-- orange only for controlled emphasis
-- soft white surfaces where cards are needed
-
-Avoid:
-
-- excessive gradients
-- glassmorphism
-- glossy 3D motifs
-- crowded UI panels
-- loud enterprise styling
-- startup-polish clichés
-- dark editorial heaviness
-- beige premium-consulting mood
-- infrastructure or architectural enterprise styling
-
-## Typography Rules
-
-Typography should carry authority and clarity.
-
-Use type to create:
-
-- strong section rhythm
-- confident headlines
-- readable body copy
-- identity without looking luxurious or corporate
-
-Avoid:
-
-- quirky display choices
-- overly trendy startup aesthetics
-- flat corporate presentation styles
-- prestige-editorial seriousness that turns the page into consulting branding
-
-## Interaction Rules
-
-Motion should be subtle and functional.
-
-Use motion only to:
-
-- reveal hierarchy
-- guide attention
-- support reading flow
-
-Do not use motion as decorative spectacle.
-
-Buttons and controls should be:
-
-- easy to identify
-- comfortably sized
-- consistent across the page
-
-## Content Rules
+## Copy Rules
 
 Copy should be:
 
-- informed
-- practical
-- measured
 - specific
+- practical
+- calm
+- conservative
 
 Copy should avoid:
 
 - hype
-- buzzwords
+- jargon
+- enterprise phrasing
 - abstract climate slogans
-- exaggerated claims
+- inflated maturity
 
-Every section should answer a real user question:
-
-- What is this?
-- What does it do right now?
-- What do I get from it?
-- Why should I trust it?
-- What do I do next?
-
-## Success Criteria
-
-The homepage is successful if a visitor can quickly understand:
-
-- Carbon Cut is a serious climate product in testing
-- Carbon Cut currently offers a guided personal carbon assessment
-- Carbon Cut focuses on transport and home energy inputs
-- Carbon Cut returns a footprint estimate and recommendations
-- The next step is to start the assessment
-
-The intended overall impression is:
-
-"serious climate infrastructure, made usable."
-
-## Product Truth Constraints
-
-This content must stay within verified product truth.
-
-Do mention:
-
-- guided carbon questionnaire
-- personal carbon-footprint estimation
-- transport and home energy inputs
-- structured result
-- category-oriented visuals
-- recommendations after the assessment
-- testing-stage product status when needed
-
-Do not mention:
-
-- businesses, restaurants, or municipalities as current supported product flows
-- integrations
-- APIs
-- enterprise workflows
-- teams or workspaces
-- ongoing tracking
-- real-time monitoring
-- audit-ready reporting
-- compliance workflows
-- report exports
-- billing or live pricing unless confirmed
-
-Do not use generic SaaS phrases such as:
-
-- seamless integrations
-- connect your systems
-- unify your data
-- automate compliance
-- enterprise-grade workflow engine
-- all-in-one emissions operating system
-- plug into your stack
-
-If a product capability is unclear, describe the current user outcome conservatively.
-
-Prefer:
+Preferred framing:
 
 - measure and understand your footprint
 - get a guided carbon assessment
 - see where your emissions come from
-- receive a footprint estimate and recommendations
+- start with a personal carbon estimate and practical next steps
 
-## Homepage Content Draft
+## Claims To Keep Safe
 
-This section is the content Stitch should use.
+Safe homepage claims include:
 
-It should not rewrite the meaning.
+- guided personal carbon assessment
+- transport and home energy focus
+- structured footprint result
+- category-oriented visuals
+- recommendations after the flow
+- testing-stage product
 
-It may shorten for layout, but it must stay within the same claims and hierarchy.
+Do not claim:
 
-### Hero
+- business support
+- restaurant support
+- municipality support
+- audit-ready reporting
+- exports
+- real-time tracking
+- team collaboration
+- enterprise integrations
+- live subscriptions unless confirmed
 
-Headline:
+## Implementation Order
 
-Measure and understand your carbon footprint with a guided assessment.
+Implement the homepage in this order:
 
-Supporting copy:
+1. Hero
+2. What Carbon Cut Does
+3. How It Works
+4. Results Preview
+5. Testing Stage and Trust
+6. Final CTA
 
-Carbon Cut helps individuals estimate emissions from transport and home energy through a structured questionnaire, then returns a clear result with practical recommendations.
+Do not redesign the whole page at once.
 
-Primary CTA:
+Build section by section on the cleaned design system.
 
-Start your assessment
+## Success Criteria
 
-Secondary trust cue:
+The homepage is successful if a new visitor can quickly understand:
 
-A testing-stage climate product focused on practical carbon awareness and action.
+- Carbon Cut is for individuals
+- Carbon Cut offers a guided personal carbon assessment
+- the current product focuses on transport and home energy
+- the user receives a structured result and recommendations
+- the product is in testing
+- the next step is to start the assessment
 
-### What Carbon Cut Does
+The intended impression is:
 
-Section headline:
-
-Start with a clearer picture of your emissions.
-
-Section copy:
-
-Carbon Cut guides users through a personal carbon assessment so they can understand major emissions areas and see practical next steps. The current flow is focused on transport and home energy.
-
-Pillar 1:
-
-Measure your footprint
-
-Pillar 1 copy:
-
-Answer a guided questionnaire that captures key personal inputs related to emissions.
-
-Pillar 2:
-
-Focus on major sources
-
-Pillar 2 copy:
-
-The current assessment centers on transport and home energy so the result stays grounded in meaningful inputs.
-
-Pillar 3:
-
-Get practical guidance
-
-Pillar 3 copy:
-
-Receive a structured result with category-oriented visuals and recommendations after the calculation flow.
-
-### How It Works
-
-Section headline:
-
-From answers to estimate in a clear flow.
-
-Step 1:
-
-Answer guided questions
-
-Step 1 copy:
-
-Move through a step-by-step questionnaire designed to make the process manageable.
-
-Step 2:
-
-Enter transport and energy details
-
-Step 2 copy:
-
-Provide the current inputs that drive the active personal assessment flow.
-
-Step 3:
-
-Receive your estimate
-
-Step 3 copy:
-
-Get a headline carbon-footprint result in tons of CO2 after submission.
-
-Step 4:
-
-Review results and recommendations
-
-Step 4 copy:
-
-See category-oriented visuals and practical recommendations after the calculation.
-
-### Results And Recommendations
-
-Section headline:
-
-See the result in a clearer way.
-
-Section intro:
-
-After the assessment, Carbon Cut returns a structured result experience that helps users interpret their footprint and identify practical next steps.
-
-Outcome block 1:
-
-Headline footprint result
-
-Outcome block 1 copy:
-
-See a top-level footprint estimate presented clearly after completing the flow.
-
-Outcome block 2:
-
-Category-oriented visuals
-
-Outcome block 2 copy:
-
-Review visual breakdowns that help users understand major emissions areas.
-
-Outcome block 3:
-
-Recommendations after calculation
-
-Outcome block 3 copy:
-
-Get practical guidance intended to help users think about reduction opportunities.
-
-### Product Status And Trust
-
-Section headline:
-
-Built with clarity, not inflated claims.
-
-Section intro:
-
-Carbon Cut is still in testing, so the homepage should reflect the current product honestly: a guided personal footprint assessment with a clear result and recommendations.
-
-Trust point 1:
-
-Guided step by step
-
-Trust point 1 copy:
-
-The product is designed to make footprint estimation easier to follow, not harder to decode.
-
-Trust point 2:
-
-Focused current scope
-
-Trust point 2 copy:
-
-The current active flow is centered on transport and home energy rather than pretending to cover every emissions category.
-
-Trust point 3:
-
-Clear results experience
-
-Trust point 3 copy:
-
-Users receive a structured result interface after submission instead of a vague climate message.
-
-### Final CTA
-
-Closing headline:
-
-Start with a personal carbon estimate.
-
-Closing copy:
-
-Take the guided assessment to measure your footprint, understand the result, and review practical recommendations.
-
-Primary CTA:
-
-Start your assessment
-
-## Stitch Usage Notes
-
-When using this document in Stitch:
-
-- treat the copy above as the source content
-- preserve the section order
-- do not introduce new product capabilities
-- do not add audience segments that are not currently supported
-- do not add feature claims to fill visual gaps
-- keep emphasis on clarity, trust, and practical action
-- if shortening copy for layout, shorten wording without changing meaning
-- keep the visual mood closer to the current lighter Carbon Cut feeling than to later dark green / infrastructure-style experiments
+"A clear, human, testing-stage climate product that helps me take a practical first step."

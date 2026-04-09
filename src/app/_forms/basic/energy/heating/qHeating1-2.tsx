@@ -22,7 +22,7 @@ const bodyKeys = [
 ] as const;
 
 function QHeating2({ mainForm }: QuestionProps) {
-  const t = useScopedI18n("forms.basic.energie.heating.q2");
+  const t = useScopedI18n("forms.basic.energy.heating.q2");
   return (
     <div>
       <Question>{t("q")}</Question>
@@ -43,14 +43,14 @@ function QHeating2({ mainForm }: QuestionProps) {
                   <FormCheckbox
                     id={`wood${n}`}
                     form={mainForm}
-                    name={`energie.heating.system.wood.${l}`}
+                    name={`energy.heating.system.wood.${l}`}
                   />
                 </TableCell>
                 <TableCell>
                   <FormCheckbox
                     id={`charcoal${n}`}
                     form={mainForm}
-                    name={`energie.heating.system.charcoal.${l}`}
+                    name={`energy.heating.system.charcoal.${l}`}
                   />
                 </TableCell>
               </TableRow>

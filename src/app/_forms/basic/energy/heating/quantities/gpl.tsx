@@ -83,7 +83,7 @@ const groupedByFormat = {
   small: gasTypes.filter((g) => g.format === "Petit Format"),
 };
 const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.heating.options.GPL");
+  const t = useScopedI18n("forms.basic.energy.heating.options.GPL");
 
   return (
     <div className="space-y-8">
@@ -102,7 +102,7 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
                   key={gasType.id}
                   control={mainForm.control}
                   //@ts-expect-error
-                  name={`energie.heating.quantities.GPL.types.${format}.${gasType.id}`}
+                  name={`energy.heating.quantities.GPL.types.${format}.${gasType.id}`}
                   render={({ field }) => {
                     const parent = useRef(null);
 
@@ -116,7 +116,7 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
                           ref={parent}
                           className={`p-0  transition-all duration-200 border-2 ${
                             field.value === true
-                              ? "border-section-transport bg-primary/5 shadow-md"
+                              ? "border-section-transport bg-muted/5 shadow-md"
                               : "border-gray-200 hover:border-gray-300"
                           }`}
                         >
@@ -161,7 +161,7 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
                             <FormControl>
                               <div
                                 className={`relative inline-flex items-center h-6 w-11 rounded-full transition-colors ${
-                                  field.value === true ? "bg-section-energie" : "bg-gray-300"
+                                  field.value === true ? "bg-section-energy" : "bg-gray-300"
                                 }`}
                               >
                                 <span
@@ -179,7 +179,7 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
                               <div className="grid grid-cols-2 gap-4 px-4 mb-2">
                                 <Input
                                   form={mainForm}
-                                  name={`energie.heating.quantities.GPL.quantities.${gasType.id}.quantity`}
+                                  name={`energy.heating.quantities.GPL.quantities.${gasType.id}.quantity`}
                                   type="number"
                                   fallback
                                   placeholder={t("unit")}
@@ -193,7 +193,7 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
                                   labelClassName="text-black/70"
                                   label={t("frequency.placeholder")}
                                   form={mainForm}
-                                  name={`energie.heating.quantities.GPL.quantities.${gasType.id}.frequency`}
+                                  name={`energy.heating.quantities.GPL.quantities.${gasType.id}.frequency`}
                                   size="sm"
                                   data={[
                                     {
@@ -224,8 +224,8 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
 };
 
 Gpl["Symbol"] = {
-  question: "forms.basic.energie.heating.options.GPL.title",
-  fields: ["energie.heating.quantities.GPL", "energie.heating.quantities.GPL.quantities"],
+  question: "forms.basic.energy.heating.options.GPL.title",
+  fields: ["energy.heating.quantities.GPL", "energy.heating.quantities.GPL.quantities"],
 };
 
 export default Gpl;

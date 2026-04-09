@@ -7,7 +7,7 @@ import SideQuestion from "../../components/sideQuestion";
 import Input from "../../components/input";
 
 const Q2: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.q2");
+  const t = useScopedI18n("forms.basic.energy.q2");
 
   return (
     <div>
@@ -15,10 +15,10 @@ const Q2: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
       <Content className="md:px-16 mb-6">
         <Input
           form={mainForm}
-          name="energie.gas.total"
+          name="energy.gas.total"
           placeholder="m³"
           type="number"
-          attachedFields={["energie.gas.money"]}
+          attachedFields={["energy.gas.money"]}
         />
       </Content>
       <SideQuestion
@@ -27,10 +27,10 @@ const Q2: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
         content={
           <Input
             form={mainForm}
-            name="energie.gas.money"
+            name="energy.gas.money"
             placeholder="€"
             type="number"
-            attachedFields={["energie.gas.total"]}
+            attachedFields={["energy.gas.total"]}
           />
         }
       />
@@ -39,8 +39,8 @@ const Q2: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
 };
 
 Q2["Symbol"] = {
-  question: "forms.basic.energie.q2.title",
-  fields: ["energie.gas"],
+  question: "forms.basic.energy.q2.title",
+  fields: ["energy.gas"],
 };
 
 export default Q2;

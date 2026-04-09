@@ -16,30 +16,26 @@ function Footer() {
       url: "/#features",
     },
     {
-      title: tNav("testimonials"),
-      url: "/#testimonials",
+      title: tNav("trust"),
+      url: "/#trust",
     },
     {
-      title: tNav("pricing"),
-      url: "/#pricing",
-    },
-    {
-      title: tNav("faq"),
-      url: "/#faq",
+      title: tNav("results"),
+      url: "/#cta",
     },
   ];
   const supportLinks = [
     {
       title: tFooter("support.email"),
-      url: "mailto:support@carboncut.app",
+      url: "/support",
     },
     {
       title: tFooter("support.helpCenter"),
-      url: "/#faq",
+      url: "/help",
     },
     {
       title: tFooter("support.demo"),
-      url: "/#pricing",
+      url: "/form",
     },
   ];
   const socialLinks: FooterItem[] = [
@@ -113,7 +109,7 @@ function Footer() {
             asChild
             variant="default"
             size="md"
-            className="mb-3 text-primary-foreground font-semibold tracking-tight"
+            className="mb-3 text-card-primary-foreground font-semibold tracking-tight"
           >
             <h2>{tFooter("headings.newsletter")}</h2>
           </Typography>
@@ -124,7 +120,7 @@ function Footer() {
             <input
               type="email"
               placeholder={tFooter("newsletter.placeholder")}
-              className="h-12 w-full rounded-full border border-white/10 bg-white px-5 pr-36 text-primary shadow-sm outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-card-primary-muted/70 focus:border-section-transport/30 focus:shadow-[0_0_0_3px_rgba(0,162,97,0.08)]"
+              className="h-12 w-full rounded-full border border-card-primary-foreground/15 bg-card px-5 pr-36 text-foreground shadow-sm outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-card-primary-muted/70 focus:border-primary-border focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-0"
             />
             <Button
               variant="footer"

@@ -19,7 +19,7 @@ function ContainerCanvas({
   questionIndex = 0,
   withErrors = false,
 }: {
-  tab?: "transport" | "energie" | "food";
+  tab?: "transport" | "energy" | "food";
   questionIndex?: number;
   withErrors?: boolean;
 }) {
@@ -58,7 +58,7 @@ export const FirstQuestion: Story = {
 };
 
 export const MidSectionQuestion: Story = {
-  render: () => <ContainerCanvas tab="energie" questionIndex={1} />,
+  render: () => <ContainerCanvas tab="energy" questionIndex={1} />,
 };
 
 export const WithErrors: Story = {

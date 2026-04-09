@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { formSchema } from "@/app/_forms/formSchema";
 import initTransportQuestions from "@/app/_forms/basic/transport";
-import initEnergieQuestions from "@/app/_forms/basic/energie";
+import initEnergyQuestions from "@/app/_forms/basic/energy";
 import initFoodQuestions from "@/app/_forms/basic/food";
 import type { QuestionFC } from "@/app/_forms/types";
 import type { TabValues } from "@/lib/formTabs/types";
@@ -35,7 +35,7 @@ type FormShellStoryHarnessProps = {
 
 const DEFAULT_INDEXES: Record<StoryTabValue, number> = {
   transport: 0,
-  energie: 0,
+  energy: 0,
   food: 0,
   waste: 0,
   vacation: 0,
@@ -64,7 +64,7 @@ export default function FormShellStoryHarness({
   });
 
   const transportQuestions = useState(initTransportQuestions);
-  const energieQuestions = useState(initEnergieQuestions);
+  const energyQuestions = useState(initEnergyQuestions);
   const foodQuestions = useState(initFoodQuestions);
   const scrollToRef = useRef<HTMLDivElement>(null);
   const didRunOnReady = useRef(false);
@@ -73,8 +73,8 @@ export default function FormShellStoryHarness({
     setTab((prev) => {
       switch (prev) {
         case "transport":
-          return "energie";
-        case "energie":
+          return "energy";
+        case "energy":
           return "food";
         case "food":
           return "food";
@@ -94,7 +94,7 @@ export default function FormShellStoryHarness({
         mainForm,
         initQuestions: {
           transport: transportQuestions,
-          energie: energieQuestions,
+          energy: energyQuestions,
           food: foodQuestions,
           waste: [[], () => {}] as unknown as [
             QuestionFC[],
@@ -108,7 +108,7 @@ export default function FormShellStoryHarness({
         scrollToRef,
         setNextTab,
       }) satisfies HarnessRenderProps,
-    [energieQuestions, foodQuestions, mainForm, setNextTab, transportQuestions]
+    [energyQuestions, foodQuestions, mainForm, setNextTab, transportQuestions]
   );
 
   useEffect(() => {

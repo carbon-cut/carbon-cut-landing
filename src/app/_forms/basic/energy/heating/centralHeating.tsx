@@ -6,10 +6,10 @@ import FormSelect from "@/components/forms/formSelect";
 import { useScopedI18n } from "@/locales/client";
 import React from "react";
 
-const energieLabels = ["A", "B", "C", "D", "E", "F", "G"] as const;
+const energyLabels = ["A", "B", "C", "D", "E", "F", "G"] as const;
 
 const CentralHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.heating.options.electricalCentralHeating");
+  const t = useScopedI18n("forms.basic.energy.heating.options.electricalCentralHeating");
   return (
     <Content className="">
       <Question>{t("label")}</Question>
@@ -18,8 +18,8 @@ const CentralHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
           label={t("fields.energyLabel")}
           labelClassName="text-black/70"
           form={mainForm}
-          name={"energie.heating.quantities.electricalCentral.energyLabel"}
-          data={energieLabels.map((e) => ({
+          name={"energy.heating.quantities.electricalCentral.energyLabel"}
+          data={energyLabels.map((e) => ({
             label: e,
             value: e,
           }))}
@@ -28,7 +28,7 @@ const CentralHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
           label={t("fields.dailyFrequency.label")}
           labelClassName="text-black/70"
           form={mainForm}
-          name={"energie.heating.quantities.electricalCentral.dailyFrequency"}
+          name={"energy.heating.quantities.electricalCentral.dailyFrequency"}
           placeholder={t("fields.dailyFrequency.unit")}
           type="number"
         />
@@ -36,7 +36,7 @@ const CentralHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
           label={t("fields.annualFrequency.label")}
           labelClassName="text-black/70"
           form={mainForm}
-          name={"energie.heating.quantities.electricalCentral.annualFrequency"}
+          name={"energy.heating.quantities.electricalCentral.annualFrequency"}
           placeholder={t("fields.annualFrequency.unit")}
           type="number"
         />
@@ -46,8 +46,8 @@ const CentralHeating: QuestionFC = ({ mainForm }: QuestionProps) => {
 };
 
 CentralHeating["Symbol"] = {
-  question: "forms.basic.energie.heating.options.electricalCentralHeating.label",
-  fields: ["energie.heating.quantities.electricalCentral"],
+  question: "forms.basic.energy.heating.options.electricalCentralHeating.label",
+  fields: ["energy.heating.quantities.electricalCentral"],
 };
 
 export default CentralHeating;

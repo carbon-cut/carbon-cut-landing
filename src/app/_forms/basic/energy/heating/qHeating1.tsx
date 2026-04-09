@@ -42,11 +42,11 @@ const QHeating: QuestionFC = ({
   setQuestions,
   currentIndex,
 }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.heating");
+  const t = useScopedI18n("forms.basic.energy.heating");
   const { errors } = useFormState({ control: mainForm.control });
 
   const hasErrors = useMemo(() => {
-    const heatingErrors = (errors as any)?.energie?.heating;
+    const heatingErrors = (errors as any)?.energy?.heating;
     const walk = (err: unknown): boolean => {
       if (!err) return false;
       if (typeof err !== "object") return true;
@@ -81,7 +81,7 @@ const QHeating: QuestionFC = ({
         electricHeating,
         charcoal,
         electricalCentralHeating,
-      } = mainForm.getValues("energie.heating");
+      } = mainForm.getValues("energy.heating");
 
       const heatingMethods: {
         name: heatingQuestions;
@@ -193,7 +193,7 @@ const QHeating: QuestionFC = ({
         className="md:px-20 px-0"
         type="boolean"
         form={mainForm}
-        name="energie.heating"
+        name="energy.heating"
         options={heatingMethods.map((e) => ({
           label: t(`options.${e}.label`),
           value: e,
@@ -205,8 +205,8 @@ const QHeating: QuestionFC = ({
 };
 
 QHeating["Symbol"] = {
-  question: "forms.basic.energie.heating.title",
-  fields: ["energie.heating"],
+  question: "forms.basic.energy.heating.title",
+  fields: ["energy.heating"],
 };
 
 export default QHeating;

@@ -40,7 +40,7 @@ function CarTitle({
 
   return (
     <div className="flex items-center justify-center gap-3">
-      <h3 className="font-semibold text-primary text-center">{title}</h3>
+      <h3 className="font-semibold text-foreground text-center">{title}</h3>
       {hasErrors && (
         <Badge
           variant="destructive"

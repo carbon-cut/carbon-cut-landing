@@ -34,15 +34,15 @@ interface Props {
 function buttonVariants(tab: TabValues) {
   switch (tab) {
     case "transport":
-      return "border-section-transport/50 text-section-transport hover:bg-section-transport/80";
+      return "border-section-transport/50 text-section-transport hover:bg-section-transport/80 hover:border-section-transport";
     case "food":
-      return "border-section-food/50 text-section-food hover:bg-section-food/80";
+      return "border-section-food/50 text-section-food hover:bg-section-food/80 hover:border-section-food";
     case "vacation":
-      return "border-section-vacation/50 text-section-vacation hover:bg-section-vacation/80";
-    case "energie":
-      return "border-section-energie/50 text-section-energie hover:bg-section-energie/80";
+      return "border-section-vacation/50 text-section-vacation hover:bg-section-vacation/80 hover:border-section-vacation";
+    case "energy":
+      return "border-section-energy/50 text-section-energy hover:bg-section-energy/80 hover:border-section-energy";
     case "waste":
-      return "border-section-waste/50 text-section-waste hover:bg-section-waste/80";
+      return "border-section-waste/50 text-section-waste hover:bg-section-waste/80 hover:border-section-waste";
   }
 }
 
@@ -59,9 +59,8 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
           type="button"
           variant="outline"
           className={`
-          w-fit
-          hover:text-accent
-          bg-transparent
+            bg-transparent
+          hover:text-primary-foreground
           ${buttonVariants(tab)}
           `}
         >
@@ -82,7 +81,7 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
             const Icon = getIcon(key);
             const ColorVariant = {
               transport: "bg-section-transport",
-              energie: "bg-section-energie",
+              energy: "bg-section-energy",
               food: "bg-section-food",
               waste: "bg-section-waste",
               vacation: "bg-section-vacation",

@@ -108,7 +108,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({ index, mainForm }) =>
             type="button"
             variant="link"
             size="sm"
-            className="h-auto px-0 text-xs font-semibold text-section-energie/90"
+            className="h-auto px-0 text-xs font-semibold text-section-energy/90"
             onClick={() => {
               if (useCustomMake) {
                 setUseCustomMake(false);
@@ -147,7 +147,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({ index, mainForm }) =>
             type="button"
             variant="link"
             size="sm"
-            className="h-auto px-0 text-xs font-semibold text-section-energie/90"
+            className="h-auto px-0 text-xs font-semibold text-section-energy/90"
             disabled={!make || make == "" || useCustomMake}
             onClick={() => {
               if (useCustomModel) {

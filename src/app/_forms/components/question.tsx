@@ -9,7 +9,9 @@ type Props = {
 
 function Question({ children, className }: Props) {
   return (
-    <h5 className={cn(" font-semibold text-base text-primary/80 my-4", className)}>{children}</h5>
+    <h5 className={cn(" font-semibold text-base text-foreground/80 my-4", className)}>
+      {children}
+    </h5>
   );
 }
 

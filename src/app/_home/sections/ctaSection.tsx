@@ -9,27 +9,27 @@ export default function CtaSection() {
   const t = useScopedI18n("home.cta");
 
   return (
-    <section id="cta" aria-labelledby="cta-heading" className="my-6 bg-surface-warm h-fit">
-      <div className="z-0  md:px-28 md:py-16 w-full xl:px-36 xl:py-24">
-        <div className="grid md:grid-cols-2 md:grid-rows-1 grid-rows-2 w-full md:h-fit h-screen">
-          <div className="order-2 md:order-1 md:block grid grid-rows-4 gap-4">
+    <section id="cta" aria-labelledby="cta-heading" className="my-6 mb-0 bg-surface-warm">
+      <div className="z-0 w-full md:px-20 md:py-16 xl:px-32 xl:py-20">
+        <div className="grid w-full grid-rows-2 gap-8 md:h-fit md:grid-cols-2 md:grid-rows-1 md:items-center">
+          <div className="order-2 grid gap-4 md:order-1 md:block">
             <Typography
               asChild
               variant={"title"}
               size={"xl"}
-              className="md:text-left text-center timeline-view range-on-entry/20vh_60vh translate-y-8 opacity-0 animate-rise-in motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
+              className="text-center timeline-view range-on-entry/20vh_60vh translate-y-8 opacity-0 animate-rise-in md:text-left motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
             >
               <h2 id="cta-heading">{t("title")}</h2>
             </Typography>
             <Typography
               asChild
               variant="description"
-              size="sm"
-              className="text-center md:text-left my-3 timeline-view range-on-entry/20vh_60vh translate-y-8 opacity-0 animate-rise-in motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
+              size="md"
+              className="my-3 text-center timeline-view range-on-entry/20vh_60vh translate-y-8 opacity-0 animate-rise-in md:max-w-xl md:text-left motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
             >
               <p>{t("description")}</p>
             </Typography>
-            <div className="flex flex-col sm:flex-row gap-4 md:justify-start justify-center mt-4">
+            <div className="mt-4 flex justify-center md:justify-start">
               <div
                 className="timeline-view range-on-entry/20vh_40vh translate-y-4 opacity-0 animate-rise-in motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
                 style={{ animationDelay: "120ms" }}
@@ -38,7 +38,7 @@ export default function CtaSection() {
                   asChild
                   variant="cta"
                   size={"lg"}
-                  className="bg-linear-2-2"
+                  className="bg-linear-accent-diagonal"
                   aria-label={t("primaryCta.aria")}
                 >
                   <Link href="/form">
@@ -46,30 +46,16 @@ export default function CtaSection() {
                   </Link>
                 </Button>
               </div>
-              <div
-                className="timeline-view range-on-entry/20vh_40vh translate-y-4 opacity-0 animate-rise-in motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
-                style={{ animationDelay: "180ms" }}
-              >
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="border-primary/10 bg-white/80 shadow-none hover:bg-white hover:shadow-sm"
-                  aria-label={t("secondaryCta.aria")}
-                >
-                  <Link href="#pricing">{t("secondaryCta.label")}</Link>
-                </Button>
-              </div>
             </div>
           </div>
           <div className="order-1 md:order-2">
-            <div className="h-full relative">
+            <div className="relative h-full min-h-[18rem] md:min-h-[24rem]">
               <Image
                 alt={t("imageAlt")}
                 src={"home/image 5.png"}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="absolute top-0 -z-10 md:scale-125 w-full md:mt-0 mt-24 object-contain timeline-view range-on-entry/45vh_70vh translate-y-10 scale-105 opacity-0 animate-parallax-float motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100 no-animations:scale-100"
+                className="absolute top-0 -z-10 mt-8 w-full object-contain opacity-0 timeline-view range-on-entry/45vh_70vh translate-y-10 scale-105 animate-parallax-float md:mt-0 md:scale-110 motion-reduce:animate-none no-animations:translate-y-0 no-animations:scale-100 no-animations:opacity-100"
               />
             </div>
           </div>

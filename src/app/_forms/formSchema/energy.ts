@@ -4,8 +4,8 @@ import { union } from "./utils";
 import heating from "./validation/heating";
 import bills from "./validation/bills";
 
-const energie = z.object({
-  /* energies: z.object({
+const energy = z.object({
+  /* energys: z.object({
     electricity: z.boolean().default(false),
     gasNetwork: z.boolean().default(false),
     heatNetwork: z.boolean().default(false),
@@ -79,6 +79,6 @@ const energie = z.object({
 const out = z.preprocess((input, ctx) => {
   bills(input, ctx);
   return input;
-}, energie);
+}, energy);
 
-export { out as energie, energie as raw };
+export { out as energy, energy as raw };

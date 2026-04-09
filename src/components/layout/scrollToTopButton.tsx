@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { ChevronUp } from "lucide-react";
 
 import { useScopedI18n } from "@/locales/client";
-import { Button } from "../ui/button";
 
 const SCROLL_TRIGGER = 750;
 const BUTTON_SIZE = 64; // Tailwind h-16/w-16 in px
@@ -96,16 +95,15 @@ function ScrollToTopButton() {
           />
         </svg>
 
-        <Button
+        <button
           aria-label={t("ariaLabel")}
           onClick={handleClick}
-          variant="none"
-          size="lg"
-          className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-transparent p-0 text-primary-foreground shadow-[0_10px_30px_rgba(18,92,60,0.35)] transition-shadow duration-200 hover:shadow-[0_16px_40px_rgba(18,92,60,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          type="button"
+          className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-transparent p-0 text-foreground shadow-[0_10px_30px_rgba(18,92,60,0.35)] transition-shadow duration-200 hover:shadow-[0_16px_40px_rgba(18,92,60,0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <ChevronUp className="h-7 w-7 stroke-section-transport" />
           <span className="sr-only">{t("label")}</span>
-        </Button>
+        </button>
       </div>
     </div>
   );

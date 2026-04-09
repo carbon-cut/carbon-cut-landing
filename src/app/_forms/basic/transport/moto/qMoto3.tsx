@@ -71,7 +71,7 @@ const QMoto3 = (index: number) => {
 
     return (
       <div>
-        <h3 className="font-semibold text-primary">
+        <h3 className="font-semibold text-foreground">
           {
             //@ts-ignore
             mainForm.getValues(`transport.motos.${index}.motoMake`)

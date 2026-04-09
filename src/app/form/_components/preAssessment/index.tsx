@@ -33,7 +33,7 @@ type PreAssessmentItemKey =
   | "measure"
   | "accuracy"
   | "transport"
-  | "energie"
+  | "energy"
   | "food"
   | "data"
   | "privacy"
@@ -59,7 +59,7 @@ export default function PreAssessment({ onContinue }: Props) {
     measure: Target,
     accuracy: BarChart3,
     transport: Car,
-    energie: Zap,
+    energy: Zap,
     food: Utensils,
     data: Database,
     privacy: Lock,

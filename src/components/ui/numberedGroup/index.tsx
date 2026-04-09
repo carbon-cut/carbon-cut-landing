@@ -24,7 +24,7 @@ const NumberedGroupItem = React.forwardRef<
     <NumberedGroupPrimitive.Item
       ref={ref}
       className={cn(
-        "aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        "aspect-square h-4 w-4 rounded-full border border-input text-foreground ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
@@ -46,7 +46,7 @@ const NumberedGroupItemCheck = React.forwardRef<
   return (
     <NumberedGroupPrimitive.Item
       ref={ref}
-      className={cn(" h-4 w-4 text-primary disabled:opacity-50", className)}
+      className={cn(" h-4 w-4 text-foreground disabled:opacity-50", className)}
       {...props}
     >
       <p>{fieldValue}</p>

@@ -31,16 +31,11 @@ export default function PreAssessmentActions({
           variant="outline"
           onClick={onBack}
           disabled={backDisabled}
-          className="h-12 w-full text-base font-semibold sm:w-[220px]"
+          className="sm:w-[220px]"
         >
           {backLabel}
         </Button>
-        <Button
-          type="button"
-          size="lg"
-          onClick={onNext}
-          className="h-12 w-full bg-section-transport text-base font-semibold sm:w-[220px]"
-        >
+        <Button type="button" size="lg" onClick={onNext} className="sm:w-[220px]">
           {nextLabel}
         </Button>
       </div>

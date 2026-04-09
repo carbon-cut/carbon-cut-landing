@@ -17,7 +17,7 @@ export default function AuthShell({ title, description, children, footer }: Auth
   return (
     <main
       id="content"
-      className="min-h-screen bg-[linear-gradient(180deg,hsl(var(--surface-warm))_0%,#ffffff_100%)] px-4 py-24"
+      className="min-h-screen bg-[linear-gradient(180deg,hsl(var(--surface-warm))_0%,hsl(var(--card))_100%)] px-4 py-24"
     >
       <div className="mx-auto flex w-full max-w-xl flex-col gap-6">
         <div className="space-y-3 text-center">
@@ -28,7 +28,7 @@ export default function AuthShell({ title, description, children, footer }: Auth
             <p>{description}</p>
           </Typography>
         </div>
-        <Card className="border-primary/10 shadow-lg">
+        <Card className="border-border/10 shadow-lg">
           <CardHeader className="space-y-2 p-6 pb-2">
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
@@ -39,7 +39,7 @@ export default function AuthShell({ title, description, children, footer }: Auth
           <div className="text-center text-sm text-secondary">{footer}</div>
         ) : (
           <div className="text-center text-sm text-secondary">
-            <Link className="text-primary underline-offset-4 hover:underline" href="/">
+            <Link className="text-foreground underline-offset-4 hover:underline" href="/">
               {t("cta.backHome")}
             </Link>
           </div>

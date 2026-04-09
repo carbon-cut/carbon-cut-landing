@@ -19,12 +19,12 @@ const woodTypeExamples = {
 const frequencyKeys = ["day", "week", "month", "year"] as const;
 
 const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) => {
-  const t = useScopedI18n("forms.basic.energie.heating.options");
+  const t = useScopedI18n("forms.basic.energy.heating.options");
 
   const { getValues } = useFormContext();
 
-  const wood = getValues("energie.heating.wood");
-  const charcoal = getValues("energie.heating.charcoal");
+  const wood = getValues("energy.heating.wood");
+  const charcoal = getValues("energy.heating.charcoal");
 
   return (
     <>
@@ -37,7 +37,7 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
             <React.Fragment key={type}>
               <FormField
                 control={mainForm.control}
-                name={`energie.heating.quantities.wood.${type}`}
+                name={`energy.heating.quantities.wood.${type}`}
                 render={() => {
                   const { error } = useFormField();
                   return (
@@ -60,10 +60,10 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                                   labelClassName="text-black/70"
                                   label={t("wood.quantity")}
                                   form={mainForm}
-                                  name={`energie.heating.quantities.wood.${type}.quantity`}
+                                  name={`energy.heating.quantities.wood.${type}.quantity`}
                                   placeholder={t("wood.quantity")}
                                   type="number"
-                                  attachedFields={["energie.heating.quantities.wood"]}
+                                  attachedFields={["energy.heating.quantities.wood"]}
                                   isError={Boolean(error)}
                                 />
                               </div>
@@ -73,12 +73,12 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                                   placeholder={t("wood.qunits.label")}
                                   label="&nbsp;"
                                   labelClassName="text-black/70"
-                                  name={`energie.heating.quantities.wood.${type}.quantityUnit`}
+                                  name={`energy.heating.quantities.wood.${type}.quantityUnit`}
                                   data={woodKeys.map((e) => ({
                                     label: t(`wood.qunits.${e}`),
                                     value: e,
                                   }))}
-                                  attachedFields={["energie.heating.quantities.wood"]}
+                                  attachedFields={["energy.heating.quantities.wood"]}
                                   isError={Boolean(error)}
                                 />
                               </div>
@@ -88,11 +88,11 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                                 <Input
                                   labelClassName="text-black/70"
                                   form={mainForm}
-                                  name={`energie.heating.quantities.wood.${type}.frequency`}
+                                  name={`energy.heating.quantities.wood.${type}.frequency`}
                                   label={t("wood.funits.label")}
                                   placeholder={t("wood.funits.label")}
                                   type="number"
-                                  attachedFields={["energie.heating.quantities.wood"]}
+                                  attachedFields={["energy.heating.quantities.wood"]}
                                   isError={Boolean(error)}
                                 />
                               </div>
@@ -102,12 +102,12 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                                   label="&nbsp;"
                                   labelClassName="text-black/70"
                                   placeholder={t("wood.funits.label")}
-                                  name={`energie.heating.quantities.wood.${type}.frequencyUnit`}
+                                  name={`energy.heating.quantities.wood.${type}.frequencyUnit`}
                                   data={frequencyKeys.map((e) => ({
                                     label: t(`wood.funits.${e}`),
                                     value: e,
                                   }))}
-                                  attachedFields={["energie.heating.quantities.wood"]}
+                                  attachedFields={["energy.heating.quantities.wood"]}
                                   isError={Boolean(error)}
                                 />
                               </div>
@@ -137,7 +137,7 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                   labelClassName="text-black/70"
                   label={t("wood.quantity")}
                   form={mainForm}
-                  name={"energie.heating.quantities.charcoal.quantity"}
+                  name={"energy.heating.quantities.charcoal.quantity"}
                   placeholder={t("wood.quantity")}
                   type="number"
                 />
@@ -147,7 +147,7 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                   <Input
                     labelClassName="text-black/70"
                     form={mainForm}
-                    name={"energie.heating.quantities.charcoal.frequency"}
+                    name={"energy.heating.quantities.charcoal.frequency"}
                     label={t("charcoal.funits.label")}
                     placeholder={t("charcoal.funits.label")}
                     type="number"
@@ -159,7 +159,7 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
                     label="&nbsp;"
                     labelClassName="text-black/70"
                     placeholder={t("charcoal.funits.label")}
-                    name={"energie.heating.quantities.charcoal.frequencyUnit"}
+                    name={"energy.heating.quantities.charcoal.frequencyUnit"}
                     data={frequencyKeys.map((e) => ({
                       label: t(`charcoal.funits.${e}`),
                       value: e,
@@ -176,11 +176,11 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
 };
 
 WoodCharcoal["Symbol"] = {
-  question: "forms.basic.energie.heating.options.wood.title",
+  question: "forms.basic.energy.heating.options.wood.title",
   fields: [
-    "energie.heating.quantities.wood.hardwood",
-    "energie.heating.quantities.wood.softwood",
-    "energie.heating.quantities.charcoal",
+    "energy.heating.quantities.wood.hardwood",
+    "energy.heating.quantities.wood.softwood",
+    "energy.heating.quantities.charcoal",
   ],
 };
 

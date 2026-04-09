@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const dataLengths = {
   transport: 8,
-  energie: 6,
+  energy: 6,
   food: 7,
   waste: 0,
   vacation: 0,
@@ -43,7 +43,7 @@ export const Midway: Story = {
     currentQuestion: 3,
     currentSectionDataLength: 6,
     currentSectionName: "Energie",
-    tab: "energie",
+    tab: "energy",
   },
 };
 

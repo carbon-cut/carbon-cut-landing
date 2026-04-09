@@ -27,7 +27,7 @@ function FooterColumn({
 }: FooterColumnProps) {
   const HeadingTag = headingLevel;
   const itemClassName =
-    "flex items-center gap-2 rounded-md px-2 py-1 text-base text-card-primary-muted/80 transition-colors duration-200 hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card-primary";
+    "flex items-center gap-2 rounded-md px-2 py-1 text-base text-card-primary-muted/80 transition-colors duration-200 hover:text-card-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card-primary";
 
   return (
     <nav className={cn("flex flex-col self-start", className)} aria-label={ariaLabel ?? title}>
@@ -35,7 +35,7 @@ function FooterColumn({
         asChild
         variant="default"
         size="md"
-        className="mb-2 text-primary-foreground font-semibold tracking-tight"
+        className="mb-2 text-card-primary-foreground font-semibold tracking-tight"
       >
         <HeadingTag>{title}</HeadingTag>
       </Typography>

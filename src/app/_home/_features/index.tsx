@@ -92,7 +92,7 @@ const CardComponent: React.FC<Props> = (props) => {
           src={`${props.icon + ".png"}`}
           alt={t(props.altKey)}
         />
-        <CardTitle className="mt-6 text-center text-primary">
+        <CardTitle className="mt-6 text-center text-foreground">
           <Typography asChild variant="subtitle" size="md" className="text-center">
             <span>{t(props.titleKey)}</span>
           </Typography>

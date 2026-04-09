@@ -84,7 +84,7 @@ export function ResetPasswordPageContent() {
           </Alert>
         ) : null}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="code">
+          <label className="text-sm font-medium text-foreground" htmlFor="code">
             {tReset("form.code")}
           </label>
           <Input
@@ -95,7 +95,7 @@ export function ResetPasswordPageContent() {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="password">
+          <label className="text-sm font-medium text-foreground" htmlFor="password">
             {tReset("form.password")}
           </label>
           <Input
@@ -107,7 +107,7 @@ export function ResetPasswordPageContent() {
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium text-primary" htmlFor="passwordConfirmation">
+          <label className="text-sm font-medium text-foreground" htmlFor="passwordConfirmation">
             {tReset("form.passwordConfirm")}
           </label>
           <Input

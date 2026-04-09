@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
       title={t("title")}
       description={t("description")}
       footer={
-        <Link href="/auth/sign-in" className="text-primary underline-offset-4 hover:underline">
+        <Link href="/auth/sign-in" className="text-foreground underline-offset-4 hover:underline">
           {t("link.login")}
         </Link>
       }
@@ -60,7 +60,7 @@ export default function ForgotPasswordPage() {
         ) : null}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-primary" htmlFor="email">
+            <label className="text-sm font-medium text-foreground" htmlFor="email">
               {t("form.email")}
             </label>
             <Input
