@@ -92,7 +92,7 @@ function Footer() {
           ariaLabel="Contact links"
         />
         <div className="flex flex-col lg:col-span-2 sm:col-span-1 self-start gap-3 lg:gap-6">
-          <FooterColumn
+          {/* <FooterColumn
             title={tFooter("headings.social")}
             items={socialLinks}
             ariaLabel="Social media links"
@@ -102,7 +102,7 @@ function Footer() {
             items={legalLinks}
             headingLevel="h2"
             ariaLabel="Legal links"
-          />
+          /> */}
         </div>
         <div className="flex flex-col lg:col-span-3 sm:col-span-2 self-start">
           <Typography

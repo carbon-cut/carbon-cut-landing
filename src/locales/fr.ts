@@ -457,7 +457,7 @@ export default {
         },
       },
     },
-    helpV1: {
+    helpCurrent: {
       badge: "Centre d'aide",
       status: "Version test - support du parcours personnel",
       title: "Aide pratique pour avancer sans blocage",
@@ -557,7 +557,7 @@ export default {
         linkText: "Consultez la page Contact.",
       },
     },
-    helpV1Category: {
+    helpCategory: {
       questionnaire: {
         badge: "Aide questionnaire",
         title: "Questionnaire",
@@ -790,6 +790,10 @@ export default {
         },
         errorMap: {
           title: "Messages d'erreur courants",
+          columns: {
+            message: "Message affiché",
+            meaning: "Ce que cela signifie",
+          },
           items: [
             {
               label: "Identifiants invalides",

@@ -3,10 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useScopedServerI18n } from "@/locales/server";
-import { ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
+import FAQs from "../_components/Faq";
 
 export default function HelpComptePage() {
-  const t = useScopedServerI18n("(pages).helpV1Category.compte");
+  const t = useScopedServerI18n("(pages).helpCategory.compte");
   const quickLinks = t("quickAccess.items") as {
     title: string;
     description: string;
@@ -15,6 +16,7 @@ export default function HelpComptePage() {
   const faqs = t("faqs.items") as { title: string; description: string }[];
   const flowSteps = t("flow.steps") as string[];
   const errorMap = t("errorMap.items") as { label: string; meaning: string }[];
+  const errorColumns = t("errorMap.columns") as { message: string; meaning: string };
   const supportChecklist = t("support.checklist") as string[];
 
   return (
@@ -53,10 +55,10 @@ export default function HelpComptePage() {
             <Typography asChild variant="subtitle" size="md">
               <h2 id="help-account-quick-links">{t("quickAccess.title")}</h2>
             </Typography>
-            <ul className="mt-4 divide-y divide-border/25">
+            <ul className="mt-4 divide-y divide-border/60">
               {quickLinks.map((item) => (
-                <li key={item.href} className="py-3 first:pt-0 last:pb-0">
-                  <Link href={item.href} className="group block">
+                <li key={item.href} className="py-1 first:pt-0 last:pb-0">
+                  <Link href={item.href} className="group block hover:bg-background/60 rounded-md p-3 transition-colors">
                     <div className="flex items-start justify-between gap-2">
                       <Typography asChild variant="subtitle" size="md">
                         <h3>{item.title}</h3>
@@ -77,41 +79,44 @@ export default function HelpComptePage() {
 
           <section
             aria-labelledby="help-account-faq"
-            className="border-b border-border/30 px-5 py-5 md:px-7"
+            className="border-b border-border/30 px-5 py-5 md:px-7 md:w-3/4"
           >
             <Typography asChild variant="subtitle" size="md">
               <h2 id="help-account-faq">{t("faqs.title")}</h2>
             </Typography>
-            <ul className="mt-4 divide-y divide-border/25">
-              {faqs.map((item) => (
-                <li key={item.title} className="py-3 first:pt-0 last:pb-0">
-                  <Typography asChild variant="subtitle" size="md">
-                    <h3>{item.title}</h3>
-                  </Typography>
-                  <Typography asChild variant="description" size="sm" className="mt-1">
-                    <p>{item.description}</p>
-                  </Typography>
-                </li>
-              ))}
-            </ul>
+            <FAQs faqItems={faqs} />
           </section>
 
           <section aria-labelledby="help-account-errors" className="px-5 py-5 md:px-7">
             <Typography asChild variant="subtitle" size="md">
               <h2 id="help-account-errors">{t("errorMap.title")}</h2>
             </Typography>
-            <dl className="mt-4 space-y-3">
-              {errorMap.map((item) => (
-                <div key={item.label}>
-                  <Typography asChild variant="subtitle" size="md">
-                    <dt>{item.label}</dt>
-                  </Typography>
-                  <Typography asChild variant="description" size="sm" className="mt-1">
-                    <dd>{item.meaning}</dd>
-                  </Typography>
-                </div>
-              ))}
-            </dl>
+            <div className="mt-4 overflow-hidden rounded-xl border border-border">
+              <div className="hidden grid-cols-[220px_1fr] border-b border-border bg-surface-warm/60 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground md:grid">
+                <span>{errorColumns.message}</span>
+                <span>{errorColumns.meaning}</span>
+              </div>
+              <div className="divide-y divide-border/80">
+                {errorMap.map((item) => (
+                  <div key={item.label} className="grid gap-1 px-4 py-3 md:grid-cols-[1fr_50px_2fr] md:gap-4">
+                    <Typography asChild variant="caption" size="sm" className="text-muted-foreground md:hidden">
+                      <span>{errorColumns.message}</span>
+                    </Typography>
+                    <Typography className="text-destructive" asChild variant="subtitle" size="sm">
+                      <p>{item.label}</p>
+                    </Typography>
+                    <ArrowRight />
+
+                    <Typography asChild variant="caption" size="sm" className="mt-1 text-muted-foreground md:hidden">
+                      <span>{errorColumns.meaning}</span>
+                    </Typography>
+                    <Typography asChild variant="description"  className="text-foreground" size="sm">
+                      <p>{item.meaning}</p>
+                    </Typography>
+                  </div>
+                ))}
+              </div>
+            </div>
           </section>
         </div>
 

@@ -8,32 +8,23 @@ import {
 } from "@/components/ui/accordion";
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
-
-type FaqEntry = {
-  value: string;
-  title: string;
-  content: string;
-};
+import { useScopedServerI18n } from "@/locales/server";
 
 function FAQs() {
-  const t = useScopedI18n("home.faq");
-  const faqItems: FaqEntry[] = [0, 1, 2, 3, 4].map((idx) => ({
-    value: `item-${idx + 1}`,
-    title: t(`items.${idx}.title`),
-    content: t(`items.${idx}.content`),
-  }));
+  const t = useScopedServerI18n("(pages).helpCurrent");
+  const faqItems = t("faq.items") as { question: string; answer: string }[];
 
   return (
     <Accordion type="single" collapsible className="w-full text-foreground">
       {faqItems.map((e) => (
-        <AccordionItem className="md:py-3 py-1" key={e.value} value={e.value}>
+        <AccordionItem className="md:py-3 py-1" key={e.question} value={e.question}>
           <AccordionTrigger>
-            <Typography variant={"subtitle"} className="md:text-xl text-base">
-              {e.title}
+            <Typography variant={"subtitle"} className=" text-base">
+              {e.question}
             </Typography>
           </AccordionTrigger>
           <AccordionContent className="font-medium px-3 pb-2 text text-foreground/70">
-            {e.content}
+            {e.answer}
           </AccordionContent>
         </AccordionItem>
       ))}

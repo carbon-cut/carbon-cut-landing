@@ -86,7 +86,7 @@ export default function TrustOptionsSection() {
             return (
               <div
                 key={point.title}
-                className="rounded-[1.4rem] border border-border/7 bg-card/62 p-5 shadow-[0_10px_22px_rgba(9,35,31,0.025)]"
+                className="rounded-[1.4rem] border border-border/7 bg-card/65 p-5 shadow-[0_10px_22px_rgba(9,35,31,0.025)]"
               >
                 <div
                   className={cn(

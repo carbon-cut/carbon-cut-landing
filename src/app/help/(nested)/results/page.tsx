@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useScopedServerI18n } from "@/locales/server";
 import { ChevronRight } from "lucide-react";
+import FAQs from "../_components/Faq";
 
 export default function HelpResultatsPage() {
-  const t = useScopedServerI18n("(pages).helpV1Category.resultats");
+  const t = useScopedServerI18n("(pages).helpCategory.resultats");
   const summaryItems = t("summaryItems") as string[];
   const readingSteps = t("readingGuide.steps") as string[];
   const indicators = t("indicators.items") as { title: string; description: string }[];
@@ -94,18 +95,9 @@ export default function HelpResultatsPage() {
             <Typography asChild variant="subtitle" size="md">
               <h2 id="help-results-indicators">{t("indicators.title")}</h2>
             </Typography>
-            <ul className="mt-4 divide-y divide-border/25">
-              {indicators.map((item) => (
-                <li key={item.title} className="py-3 first:pt-0 last:pb-0">
-                  <Typography asChild variant="subtitle" size="sm">
-                    <h3>{item.title}</h3>
-                  </Typography>
-                  <Typography asChild variant="description" size="sm" className="mt-1">
-                    <p>{item.description}</p>
-                  </Typography>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-4 md:w-3/4">
+              <FAQs faqItems={indicators} />
+            </div>
           </section>
 
           <section aria-labelledby="help-results-reco" className="px-5 py-5 md:px-7">

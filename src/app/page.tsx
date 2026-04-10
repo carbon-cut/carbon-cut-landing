@@ -7,6 +7,7 @@ import ProductPreviewSection from "./_home/sections/productPreviewSection";
 import TrustOptionsSection from "./_home/sections/trustOptionsSection";
 import CtaSection from "./_home/sections/ctaSection";
 import TestOfferSection from "./_home/sections/testOfferSection";
+import FaqSection from "./_home/sections/faqSection";
 
 const homeSeo = useScopedServerI18n("seo.pages.home");
 
@@ -23,6 +24,7 @@ export default function Home() {
       <TrustOptionsSection />
       <TestOfferSection />
       <CtaSection />
+      <FaqSection />
     </main>
   );
 }

@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function HelpNestedLayout({ children }: Props) {
-  const t = useScopedServerI18n("(pages).helpV1");
+  const t = useScopedServerI18n("(pages).helpCurrent");
   const categories = t("categories.items") as { title: string; href: string }[];
 
   return (

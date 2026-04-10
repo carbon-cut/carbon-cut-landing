@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useScopedServerI18n } from "@/locales/server";
 import { ChevronRight } from "lucide-react";
+import FAQs from "../_components/Faq";
 
 export default function HelpQuestionnairePage() {
-  const t = useScopedServerI18n("(pages).helpV1Category.questionnaire");
+  const t = useScopedServerI18n("(pages).helpCategory.questionnaire");
   const summaryItems = t("summaryItems") as string[];
   const prepItems = t("prep.items") as string[];
   const flowSteps = t("flow.steps") as string[];
@@ -118,18 +119,9 @@ export default function HelpQuestionnairePage() {
             <Typography asChild variant="subtitle" size="md">
               <h2 id="questionnaire-issues">{t("issues.title")}</h2>
             </Typography>
-            <ul className="mt-4 divide-y divide-border/25">
-              {issues.map((issue) => (
-                <li key={issue.title} className="py-3 first:pt-0 last:pb-0">
-                  <Typography asChild variant="subtitle" size="sm">
-                    <h3>{issue.title}</h3>
-                  </Typography>
-                  <Typography asChild variant="description" size="sm" className="mt-1">
-                    <p>{issue.description}</p>
-                  </Typography>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-4 md:w-3/4">
+              <FAQs faqItems={issues} />
+            </div>
           </section>
         </div>
 
