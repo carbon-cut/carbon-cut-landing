@@ -19,7 +19,7 @@ Carbon Cut currently provides these implemented product behaviors:
 - It submits those answers to a backend carbon-footprint calculation endpoint.
 - It returns the user to a results experience after form submission.
 - It displays a headline carbon-footprint result in tons of CO2.
-- It displays a result interface with category-oriented visuals and recommendations.
+- It displays a result interface with category-oriented visuals.
 - It supports account creation and sign-in.
 - It has a homepage that directs users into the form flow.
 

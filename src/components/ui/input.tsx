@@ -23,7 +23,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   }
 );
 Input.displayName = "Input";
-//className="w-full bg-card px-3 py-2 text-sm text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+
 const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<"textarea">>(
   ({ className, ...props }, ref) => {
     return (
@@ -46,4 +46,4 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<"tex
 Textarea.displayName = "Input";
 
 type InputProps = React.ComponentProps<"input">;
-export { Input, Textarea,type InputProps };
+export { Input, Textarea, type InputProps };

@@ -37,7 +37,10 @@ export default function ContactPage() {
               </Typography>
             </header>
 
-            <section aria-labelledby="contact-direct-title" className="border-l-2 border-primary/40 pl-4">
+            <section
+              aria-labelledby="contact-direct-title"
+              className="border-l-2 border-primary/40 pl-4"
+            >
               <Typography asChild variant="subtitle" size="sm">
                 <h2 id="contact-direct-title">{t("emailLabel")}</h2>
               </Typography>

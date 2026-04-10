@@ -457,6 +457,376 @@ export default {
         },
       },
     },
+    helpV1: {
+      badge: "Centre d'aide",
+      status: "Version test - support du parcours personnel",
+      title: "Aide pratique pour avancer sans blocage",
+      description:
+        "Trouvez rapidement les réponses liées au questionnaire, aux résultats et à l'accès au compte pendant la phase de test.",
+      searchLabel: "Rechercher dans l'aide",
+      searchPlaceholder: "Rechercher un sujet dans l'aide...",
+      topicsLabel: "Sujets les plus consultés :",
+      topicHints: ["Questionnaire", "Résultats", "Compte", "Email", "Contact"],
+      categories: {
+        title: "Sélectionner une catégorie",
+        items: [
+          {
+            title: "Questionnaire",
+            description: "Démarrage, progression et correction des réponses.",
+            href: "/help/form",
+          },
+          {
+            title: "Résultats",
+            description: "Comprendre l'estimation CO2 et les recommandations.",
+            href: "/help/results",
+          },
+          {
+            title: "Compte",
+            description: "Connexion, accès et problèmes liés au compte.",
+            href: "/help/account",
+          },
+        ],
+      },
+      scope: {
+        title: "Périmètre actuel",
+        description:
+          "Ce bloc reprend le périmètre réel du produit en phase de test, tel qu'il est documenté aujourd'hui.",
+        available: {
+          title: "Disponible maintenant",
+          items: [
+            "Parcours guidé d'estimation d'empreinte carbone personnelle.",
+            "Collecte des données sur le transport et l'énergie du foyer.",
+            "Affichage d'un résultat principal en tonnes de CO2 et d'une interface de résultats par catégorie.",
+          ],
+        },
+        unavailable: {
+          title: "Non disponible actuellement",
+          items: [
+            "Workflow opérationnel spécifique restaurant.",
+            "Workflow spécifique municipalité.",
+            "Suivi continu des émissions dans le temps.",
+            "Reporting audit-ready/conformité et export de rapports.",
+            "Compensation carbone/offsetting vérifiée.",
+          ],
+        },
+      },
+      faq: {
+        title: "Questions fréquentes",
+        items: [
+          {
+            question: "Le calcul est-il une estimation ou une mesure exacte ?",
+            answer:
+              "Le calcul carbone ne peut jamais être exact : c'est toujours une estimation. Dans Carbon Cut, nous cherchons à fournir l'estimation la plus précise possible.",
+          },
+          {
+            question: "D'où viennent les facteurs utilisés dans le calcul CO2 ?",
+            answer:
+              "Nous utilisons diverses sources afin de fournir les résultats les plus précis possibles.",
+          },
+          {
+            question: "Les résultats sont-ils comparables d'une personne à une autre ?",
+            answer:
+              "La comparaison entre profils est une direction future, mais ce n'est pas l'objectif principal du parcours actuel.",
+          },
+          {
+            question: "Carbon Cut évalue-t-il aussi l'impact indirect (achats, services, etc.) ?",
+            answer: "Cette couverture plus large est prévue pour le futur.",
+          },
+          {
+            question: "Les recommandations sont-elles personnalisées ou génériques ?",
+            answer:
+              "Aujourd'hui, elles restent limitées. L'objectif est d'aller vers des recommandations personnalisées.",
+          },
+          {
+            question: "Les résultats sont-ils destinés à un usage officiel (audit, conformité) ?",
+            answer: "Non, pas pour le moment.",
+          },
+          {
+            question: "À quelle fréquence refaire l'évaluation ?",
+            answer: "Une fois par an est une bonne base.",
+          },
+          {
+            question: 'Comment interpréter un "bon" ou "mauvais" résultat ?',
+            answer:
+              "Le résultat affiché et son contexte dans l'interface servent de repère principal.",
+          },
+        ],
+      },
+      contactBridge: {
+        text: "Besoin d'aide supplémentaire ?",
+        linkText: "Consultez la page Contact.",
+      },
+    },
+    helpV1Category: {
+      questionnaire: {
+        badge: "Aide questionnaire",
+        title: "Questionnaire",
+        subtitle: "Démarrage, progression et correction des réponses",
+        intro:
+          "Cette page vous aide à compléter l'évaluation pas à pas pendant la phase de test, avec des réponses pratiques aux blocages les plus fréquents.",
+        summaryTitle: "Sur cette page",
+        summaryItems: [
+          "Préparer les informations utiles avant de démarrer",
+          "Suivre le parcours étape par étape",
+          "Corriger une réponse ou reprendre plus tard",
+          "Savoir quand contacter l'équipe",
+        ],
+        prep: {
+          title: "Avant de commencer",
+          items: [
+            "Connectez-vous à votre compte pour accéder au formulaire.",
+            "Prévoyez environ 15 à 25 minutes pour compléter l'évaluation.",
+            "Préparez les informations utiles : déplacements habituels, consommation d'énergie et factures si disponibles.",
+          ],
+        },
+        flow: {
+          title: "Comment le questionnaire se déroule",
+          steps: [
+            "Ouvrez le parcours guidé depuis votre espace utilisateur.",
+            "Répondez aux questions sur le transport.",
+            "Complétez la partie énergie du foyer.",
+            "Validez vos réponses pour accéder à la page résultats.",
+          ],
+        },
+        corrections: {
+          title: "Corriger ou reprendre l'évaluation",
+          resumeQuestion: "Puis-je reprendre plus tard ?",
+          resumeAnswer:
+            "Oui. Vous pouvez revenir à votre session et continuer l'évaluation tant qu'elle n'est pas finalisée.",
+          afterSubmitQuestion: "J'ai envoyé une réponse erronée, que faire ?",
+          afterSubmitAnswer:
+            "Relancez une nouvelle évaluation avec les bonnes données pour obtenir un résultat mis à jour.",
+        },
+        issues: {
+          title: "Problèmes fréquents",
+          items: [
+            {
+              title: "Le bouton suivant ne passe pas",
+              description:
+                "Vérifiez les champs obligatoires et les formats demandés. Un champ manquant ou invalide bloque le passage à l'étape suivante.",
+            },
+            {
+              title: "Je n'ai pas toutes mes factures",
+              description:
+                "Utilisez une estimation raisonnable basée sur vos habitudes. Vous pourrez refaire l'évaluation plus tard avec des données plus précises.",
+            },
+            {
+              title: "Le formulaire ne s'ouvre pas",
+              description:
+                "Assurez-vous d'être connecté avec le bon compte, puis rechargez la page avant de réessayer.",
+            },
+          ],
+        },
+        scope: {
+          title: "Périmètre actuel de ce parcours",
+          current:
+            "Le questionnaire est en phase de test et couvre actuellement le parcours personnel.",
+          limits: [
+            "Portée active : transport et énergie du foyer.",
+            "Non disponible actuellement : workflow équipe/entreprise.",
+            "Non disponible actuellement : reporting audit/compliance.",
+            "Non disponible actuellement : suivi en temps réel, compensation et intégrations externes.",
+          ],
+        },
+        support: {
+          title: "Quand contacter l'équipe",
+          description:
+            "Si le blocage continue après les vérifications ci-dessus, utilisez la page Contact avec un contexte précis.",
+          checklistTitle: "Informations à inclure dans votre message :",
+          checklist: [
+            "L'email de votre compte",
+            "Le type de problème rencontré",
+            "Les étapes pour reproduire le blocage",
+            "Une capture d'écran si possible",
+          ],
+        },
+        actions: {
+          backToCategories: "Retour aux catégories",
+          contact: "Aller à la page Contact",
+          startForm: "Ouvrir le formulaire",
+        },
+      },
+      resultats: {
+        badge: "Aide résultats",
+        title: "Résultats",
+        subtitle: "Comprendre l'estimation CO2 et les recommandations",
+        intro:
+          "Cette page explique comment lire votre estimation, interpréter les catégories affichées et utiliser les recommandations proposées.",
+        summaryTitle: "Sur cette page",
+        summaryItems: [
+          "Lire le résultat principal en tonnes de CO2",
+          "Comprendre la part transport et énergie du foyer",
+          "Utiliser les recommandations comme plan d'action",
+          "Identifier quand refaire une évaluation",
+        ],
+        readingGuide: {
+          title: "Comment lire la page résultats",
+          steps: [
+            "Commencez par le résultat principal affiché en tonnes de CO2.",
+            "Comparez les catégories présentées pour identifier les postes les plus élevés.",
+            "Consultez les recommandations associées à chaque catégorie.",
+            "Définissez 1 à 2 actions prioritaires puis refaites une évaluation après quelques changements.",
+          ],
+        },
+        indicators: {
+          title: "Ce que montrent les résultats",
+          items: [
+            {
+              title: "Résultat principal",
+              description:
+                "Une estimation globale de votre empreinte sur la base des réponses fournies.",
+            },
+            {
+              title: "Répartition par catégorie",
+              description: "Une vue des postes d'émission pour comprendre où agir en priorité.",
+            },
+            {
+              title: "Recommandations",
+              description:
+                "Des pistes d'action pratiques liées à vos catégories les plus impactantes.",
+            },
+          ],
+        },
+        recommendations: {
+          title: "Comment utiliser les recommandations",
+          items: [
+            "Choisissez d'abord les actions réalisables rapidement.",
+            "Conservez les actions à plus long terme comme objectifs de suivi.",
+            "Refaites une estimation pour mesurer l'évolution après vos changements.",
+          ],
+        },
+        limits: {
+          title: "Périmètre actuel des résultats",
+          description:
+            "Pendant la phase de test, les résultats couvrent principalement le parcours personnel.",
+          items: [
+            "Portée active : transport et énergie du foyer.",
+            "Certaines valeurs d'interface restent encore en consolidation.",
+            "Pas de reporting audit/compliance ni d'export de rapports.",
+            "Pas de suivi continu en temps réel.",
+          ],
+        },
+        support: {
+          title: "Quand contacter l'équipe",
+          description:
+            "Si une valeur vous semble incohérente ou si la page résultats ne s'affiche pas correctement.",
+          checklistTitle: "Informations utiles à transmettre :",
+          checklist: [
+            "L'email du compte",
+            "La date/heure approximative de l'évaluation",
+            "Le point jugé incohérent dans les résultats",
+            "Une capture d'écran si possible",
+          ],
+        },
+        actions: {
+          backToCategories: "Retour aux catégories",
+          contact: "Aller à la page Contact",
+          restart: "Refaire une évaluation",
+        },
+      },
+      compte: {
+        badge: "Aide compte",
+        title: "Compte",
+        subtitle: "Connexion, accès et récupération du compte",
+        intro:
+          "Guides rapides pour créer un compte, se connecter, confirmer l'email et récupérer l'accès pendant la phase de test.",
+        quickAccess: {
+          title: "Accès rapide",
+          items: [
+            {
+              title: "Créer un compte",
+              description: "Ouvrir un nouveau compte avant de commencer l'évaluation.",
+              href: "/auth/sign-up",
+            },
+            {
+              title: "Se connecter",
+              description: "Accéder à votre session pour reprendre votre parcours.",
+              href: "/auth/sign-in",
+            },
+            {
+              title: "Mot de passe oublié",
+              description: "Demander un lien de réinitialisation par email.",
+              href: "/auth/forgot-password",
+            },
+          ],
+        },
+        faqs: {
+          title: "Questions fréquentes",
+          items: [
+            {
+              title: "Je n'arrive pas à me connecter",
+              description:
+                "Vérifiez l'email, le mot de passe, puis confirmez que votre adresse email a bien été validée.",
+            },
+            {
+              title: "Je n'ai pas reçu l'email de confirmation",
+              description:
+                "Vérifiez vos dossiers spam/indésirables, puis relancez l'envoi depuis l'écran de confirmation.",
+            },
+            {
+              title: "Mon mot de passe est refusé",
+              description:
+                "Utilisez l'option Mot de passe oublié pour définir un nouveau mot de passe.",
+            },
+            {
+              title: "Le lien ou le code de réinitialisation ne fonctionne pas",
+              description: "Demandez un nouveau code et utilisez le plus récent reçu par email.",
+            },
+            {
+              title: "Mon compte semble bloqué",
+              description:
+                "Contactez l'équipe avec l'email du compte et le contexte exact du blocage.",
+            },
+          ],
+        },
+        flow: {
+          title: "Parcours recommandé",
+          steps: [
+            "Créer le compte.",
+            "Confirmer l'email.",
+            "Se connecter.",
+            "Accéder au questionnaire.",
+          ],
+        },
+        errorMap: {
+          title: "Messages d'erreur courants",
+          items: [
+            {
+              label: "Identifiants invalides",
+              meaning: "L'email ou le mot de passe saisi est incorrect.",
+            },
+            {
+              label: "Confirmation requise",
+              meaning: "L'email du compte n'est pas encore confirmé.",
+            },
+            {
+              label: "Compte bloqué",
+              meaning: "Le compte nécessite une intervention du support.",
+            },
+            {
+              label: "Service indisponible",
+              meaning: "Le service est temporairement indisponible. Réessayez plus tard.",
+            },
+          ],
+        },
+        support: {
+          title: "Quand contacter l'équipe",
+          description:
+            "Si le problème persiste après les vérifications ci-dessus, utilisez la page Contact.",
+          checklistTitle: "Informations à inclure :",
+          checklist: [
+            "L'email du compte",
+            "Le message d'erreur exact affiché",
+            "Les étapes réalisées avant le blocage",
+            "Le navigateur et l'appareil utilisés",
+          ],
+        },
+        actions: {
+          backToCategories: "Retour aux catégories",
+          contact: "Aller à la page Contact",
+        },
+      },
+    },
     contact: {
       badge: "Contact",
       title: "Contactez l'équipe Carbon Cut",
