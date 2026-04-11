@@ -4,11 +4,12 @@ import React from "react";
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import AuthShell from "@/app/auth/_components/auth-shell";
+import AuthBrand from "@/app/auth/_components/auth-brand";
 import { getErrorCode, isUpstreamAuthError, postAuth } from "@/app/auth/_components/auth-api";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
@@ -105,58 +106,68 @@ export function ConfirmEmailPageContent() {
   }
 
   return (
-    <AuthShell
-      title={t("title")}
-      description={t("description")}
-      footer={
-        <Link href="/auth/sign-in" className="text-foreground underline-offset-4 hover:underline">
-          {t("link.login")}
-        </Link>
-      }
-    >
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Alert>
-          <AlertTitle>{t("title")}</AlertTitle>
-          <AlertDescription>{t("message.email", { email })}</AlertDescription>
-        </Alert>
-        {infoMessage ? (
+    <section aria-labelledby="confirm-title" className="mx-auto w-full">
+      <div className="mx-auto mb-7 mt-1 w-fit">
+        <AuthBrand />
+      </div>
+      <div>
+        <Typography asChild variant="title" size="md">
+          <h1 id="confirm-title">{t("title")}</h1>
+        </Typography>
+        <Typography asChild variant="description" size="sm" className="mt-2">
+          <p>{t("description")}</p>
+        </Typography>
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <Alert>
-            <AlertTitle>{t("form.reset")}</AlertTitle>
-            <AlertDescription>{infoMessage}</AlertDescription>
-          </Alert>
-        ) : null}
-        {errorMessage ? (
-          <Alert variant="destructive">
             <AlertTitle>{t("title")}</AlertTitle>
-            <AlertDescription>{errorMessage}</AlertDescription>
+            <AlertDescription>{t("message.email", { email })}</AlertDescription>
           </Alert>
-        ) : null}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground" htmlFor="confirmation">
-            {t("form.code")}
-          </label>
-          <Input
-            id="confirmation"
-            value={confirmation}
-            onChange={(event) => setConfirmation(event.target.value)}
-            required
-          />
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            disabled={submitting !== null}
-            onClick={handleResend}
-          >
-            {t("form.reset")}
-          </Button>
-          <Button type="submit" disabled={submitting !== null} className="flex-1">
-            {t("form.submit")}
-          </Button>
-        </div>
-      </form>
-    </AuthShell>
+          {infoMessage ? (
+            <Alert variant="success">
+              <AlertTitle>{t("form.reset")}</AlertTitle>
+              <AlertDescription>{infoMessage}</AlertDescription>
+            </Alert>
+          ) : null}
+          {errorMessage ? (
+            <Alert variant="destructive">
+              <AlertTitle>{t("title")}</AlertTitle>
+              <AlertDescription>{errorMessage}</AlertDescription>
+            </Alert>
+          ) : null}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground/80" htmlFor="confirmation">
+              {t("form.code")}
+            </label>
+            <Input
+              id="confirmation"
+              value={confirmation}
+              onChange={(event) => setConfirmation(event.target.value)}
+              required
+            />
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={submitting !== null}
+              onClick={handleResend}
+            >
+              {t("form.reset")}
+            </Button>
+            <Button type="submit" disabled={submitting !== null} className="h-11 flex-1">
+              {t("form.submit")}
+            </Button>
+          </div>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-secondary">
+          <Link href="/auth/sign-in" className="text-primary underline-offset-4 hover:underline">
+            {t("link.login")}
+          </Link>
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -164,8 +175,18 @@ export function ConfirmEmailPageFallback() {
   const t = useScopedI18n("(auth).verify");
 
   return (
-    <AuthShell title={t("title")} description={t("description")}>
-      <></>
-    </AuthShell>
+    <section aria-labelledby="confirm-title-fallback" className="mx-auto w-full">
+      <div className="mx-auto mb-7 mt-1 w-fit">
+        <AuthBrand />
+      </div>
+      <div>
+        <Typography asChild variant="title" size="md">
+          <h1 id="confirm-title-fallback">{t("title")}</h1>
+        </Typography>
+        <Typography asChild variant="description" size="sm" className="mt-2">
+          <p>{t("description")}</p>
+        </Typography>
+      </div>
+    </section>
   );
 }

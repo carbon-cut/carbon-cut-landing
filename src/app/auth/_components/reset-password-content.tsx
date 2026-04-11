@@ -3,11 +3,12 @@
 import React from "react";
 import { FormEvent, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import AuthShell from "@/app/auth/_components/auth-shell";
+import AuthBrand from "@/app/auth/_components/auth-brand";
 import { getErrorCode, isUpstreamAuthError, postAuth } from "@/app/auth/_components/auth-api";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
@@ -75,54 +76,66 @@ export function ResetPasswordPageContent() {
   }
 
   return (
-    <AuthShell title={tReset("title")} description={tReset("description")}>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {errorMessage ? (
-          <Alert variant="destructive">
-            <AlertTitle>{tReset("title")}</AlertTitle>
-            <AlertDescription>{errorMessage}</AlertDescription>
-          </Alert>
-        ) : null}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground" htmlFor="code">
-            {tReset("form.code")}
-          </label>
-          <Input
-            id="code"
-            value={code}
-            onChange={(event) => setCode(event.target.value)}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground" htmlFor="password">
-            {tReset("form.password")}
-          </label>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground" htmlFor="passwordConfirmation">
-            {tReset("form.passwordConfirm")}
-          </label>
-          <Input
-            id="passwordConfirmation"
-            type="password"
-            value={passwordConfirmation}
-            onChange={(event) => setPasswordConfirmation(event.target.value)}
-            required
-          />
-        </div>
-        <Button type="submit" disabled={submitting} className="w-full">
-          {tReset("form.submit")}
-        </Button>
-      </form>
-    </AuthShell>
+    <section aria-labelledby="reset-title" className="mx-auto w-full">
+      <div className="mx-auto mb-7 mt-1 w-fit">
+        <AuthBrand />
+      </div>
+      <div>
+        <Typography asChild variant="title" size="md">
+          <h1 id="reset-title">{tReset("title")}</h1>
+        </Typography>
+        <Typography asChild variant="description" size="sm" className="mt-2">
+          <p>{tReset("description")}</p>
+        </Typography>
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          {errorMessage ? (
+            <Alert variant="destructive">
+              <AlertTitle>{tReset("title")}</AlertTitle>
+              <AlertDescription>{errorMessage}</AlertDescription>
+            </Alert>
+          ) : null}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground/80" htmlFor="code">
+              {tReset("form.code")}
+            </label>
+            <Input
+              id="code"
+              value={code}
+              onChange={(event) => setCode(event.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground/80" htmlFor="password">
+              {tReset("form.password")}
+            </label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground/80" htmlFor="passwordConfirmation">
+              {tReset("form.passwordConfirm")}
+            </label>
+            <Input
+              id="passwordConfirmation"
+              type="password"
+              value={passwordConfirmation}
+              onChange={(event) => setPasswordConfirmation(event.target.value)}
+              required
+            />
+          </div>
+          <Button type="submit" disabled={submitting} className="h-11 w-full">
+            {tReset("form.submit")}
+          </Button>
+        </form>
+      </div>
+    </section>
   );
 }
 
@@ -130,8 +143,18 @@ export function ResetPasswordPageFallback() {
   const tReset = useScopedI18n("(auth).resetPassword");
 
   return (
-    <AuthShell title={tReset("title")} description={tReset("description")}>
-      <></>
-    </AuthShell>
+    <section aria-labelledby="reset-title-fallback" className="mx-auto w-full">
+      <div className="mx-auto mb-7 mt-1 w-fit">
+        <AuthBrand />
+      </div>
+      <div>
+        <Typography asChild variant="title" size="md">
+          <h1 id="reset-title-fallback">{tReset("title")}</h1>
+        </Typography>
+        <Typography asChild variant="description" size="sm" className="mt-2">
+          <p>{tReset("description")}</p>
+        </Typography>
+      </div>
+    </section>
   );
 }

@@ -1,14 +1,18 @@
+"use client";
+
 import React from "react";
 import { Button } from "../../ui/button";
-import { useScopedServerI18n } from "@/locales/server";
+import { useScopedI18n } from "@/locales/client";
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import FooterColumn, { FooterItem } from "./footerColumn";
 import Image from "next/image";
 import Typography from "@/components/ui/typography";
+import { usePathname } from "next/navigation";
 
 function Footer() {
-  const tNav = useScopedServerI18n("home.nav");
-  const tFooter = useScopedServerI18n("home.footer");
+  const tNav = useScopedI18n("home.nav");
+  const tFooter = useScopedI18n("home.footer");
+  const pathname = usePathname();
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const quickLinks: FooterItem[] = [
     {
@@ -64,6 +68,10 @@ function Footer() {
     { title: tFooter("legal.terms"), url: "/legal/terms" },
     { title: tFooter("legal.cookies"), url: "/legal/cookies" },
   ];
+  if (pathname.startsWith("/auth")) {
+    return null;
+  }
+
   return (
     <footer id="site-footer" className="bg-card-primary md:p-12 p-6 z-[60]">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8">

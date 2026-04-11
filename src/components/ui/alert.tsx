@@ -9,6 +9,7 @@ const alertVariants = cva(
     variants: {
       variant: {
         default: "bg-background text-foreground",
+        success: "border-primary/30 bg-primary-subtle text-foreground",
         destructive:
           "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
       },
@@ -27,11 +28,11 @@ const Alert = React.forwardRef<
 ));
 Alert.displayName = "Alert";
 
-const AlertTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
+const AlertTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <span
+    <p
       ref={ref}
-      className={cn("mb-1 font-medium leading-none tracking-tight", className)}
+      className={cn("mb-1 block font-medium leading-none tracking-tight", className)}
       {...props}
     />
   )
@@ -42,7 +43,7 @@ const AlertDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <span ref={ref} className={cn("text-sm [&_p]:leading-relaxed", className)} {...props} />
+  <div ref={ref} className={cn("block text-sm [&_p]:leading-relaxed", className)} {...props} />
 ));
 AlertDescription.displayName = "AlertDescription";
 

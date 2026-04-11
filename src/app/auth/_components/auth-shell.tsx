@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
+import AuthBrand from "@/app/auth/_components/auth-brand";
 
 type AuthShellProps = {
   title: string;
@@ -20,6 +21,7 @@ export default function AuthShell({ title, description, children, footer }: Auth
       className="min-h-screen bg-[linear-gradient(180deg,hsl(var(--surface-warm))_0%,hsl(var(--card))_100%)] px-4 py-24"
     >
       <div className="mx-auto flex w-full max-w-xl flex-col gap-6">
+        <AuthBrand />
         <div className="space-y-3 text-center">
           <Typography asChild variant="title" size="xl">
             <h1>{title}</h1>

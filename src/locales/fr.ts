@@ -893,6 +893,26 @@ export default {
     signup: {
       title: "Creer un compte",
       description: "Créez votre compte avant de commencer le questionnaire.",
+      highlights: {
+        ariaLabel: "Points forts Carbon Cut",
+        items: [
+          {
+            title: "Mesurez avec clarté",
+            description:
+              "Commencez par une évaluation guidée de votre empreinte personnelle, avec un parcours simple et progressif.",
+          },
+          {
+            title: "Restez sur l'essentiel",
+            description:
+              "Le flux actuel se concentre sur les postes transport et énergie du foyer pour une première lecture utile.",
+          },
+          {
+            title: "Passez à l'action",
+            description:
+              "Après le calcul, consultez un résultat structuré et des pistes concrètes pour réduire votre impact.",
+          },
+        ],
+      },
       form: {
         fullName: "Nom complet",
         username: "Nom d'utilisateur",
