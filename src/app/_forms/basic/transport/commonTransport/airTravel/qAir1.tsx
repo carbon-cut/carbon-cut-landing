@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Input from "../../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import FormMultiCombox from "../../../../components/multiCombox";
+import { FieldMultiCombobox as FormMultiCombox } from "@/components/forms";
 import { useQuery } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
-import FormSelect from "@/components/forms/formSelect";
-import FormCheckbox from "@/components/forms/formCheckbox";
+import { FieldSelect as FormSelect } from "@/components/forms";
+import { FieldCheckbox as FormCheckbox } from "@/components/forms";
 import { FormLabel } from "@/components/ui/forms";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";

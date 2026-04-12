@@ -3,7 +3,7 @@ import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { QuestionProps, QuestionFC } from "../../../types";
-import Input from "../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import CarTitle from "./components/carTitle";
 
 const QCar4 = (index: number) => {

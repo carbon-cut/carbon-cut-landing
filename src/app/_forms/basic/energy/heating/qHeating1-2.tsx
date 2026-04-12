@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import FormCheckbox from "@/components/forms/formCheckbox";
+import { FieldCheckbox as FormCheckbox } from "@/components/forms";
 
 const headerKeys = [0, 1, 2] as const;
 const bodyKeys = [

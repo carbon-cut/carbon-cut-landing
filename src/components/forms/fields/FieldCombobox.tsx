@@ -23,12 +23,11 @@ import {
 import { useScopedI18n } from "@/locales/client";
 import { type ClassValue } from "clsx";
 
-interface props<T extends FieldValues> {
+interface Props<T extends FieldValues> {
   form: UseFormReturn<T, any>;
   name: TName<T>;
-  label?: string | undefined;
+  label?: string;
   required?: boolean;
-  type?: React.HTMLInputTypeAttribute | undefined | "calendar" | "combox";
   data: { value: any; label: string }[];
   setValue?: (v: any) => void;
   className?: ClassValue;
@@ -37,18 +36,17 @@ interface props<T extends FieldValues> {
   loading: boolean;
 }
 
-function FormCombox<T extends FieldValues>({
+function FieldCombobox<T extends FieldValues>({
   form,
   name,
   label,
-  required = false,
   data,
-  setValue = (v) => {},
+  setValue = () => {},
   className,
   disabled = false,
   labelClassName,
   loading = false,
-}: props<T>) {
+}: Props<T>) {
   const t = useScopedI18n("components.forms.combox");
 
   const [open, setOpen] = useState(false);
@@ -56,6 +54,7 @@ function FormCombox<T extends FieldValues>({
   useEffect(() => {
     if (form && name) form.register(name);
   }, [form, name]);
+
   return (
     <FormField
       control={form.control}
@@ -66,26 +65,26 @@ function FormCombox<T extends FieldValues>({
             <FormLabel
               data-state={fieldState.error && "error"}
               className={cn(
-                `text-sm font-medium 
-              ${disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""}`,
+                `text-sm font-medium ${
+                  disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""
+                }`,
                 labelClassName
               )}
             >
               {label}
             </FormLabel>
           )}
-          <Popover>
+          <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <div>
                 <FormControl>
                   <Button
-                    variant={"outline"}
+                    variant="outline"
                     type="button"
                     className={cn(
-                      `w-full pl-3 text-left font-normal rounded-full bg-white disabled:hover:bg-white
+                      `w-full pl-3 text-left font-normal rounded-full bg-card disabled:hover:bg-card
                       disabled:hover:text-muted-foreground disabled:cursor-not-allowed disabled:pointer-events-auto
-                      ${fieldState.error ? "outline-none ring-1 ring-destructive/60 " : ""}
-                      `,
+                      ${fieldState.error ? "outline-none ring-1 ring-destructive/60" : ""}`,
                       !field.value && "text-muted-foreground"
                     )}
                     disabled={disabled}
@@ -115,14 +114,13 @@ function FormCombox<T extends FieldValues>({
                       <CommandGroup>
                         {data.map((element, index) => (
                           <CommandItem
-                            className={`${
-                              element.value === field.value ? "!bg-card-primary-foreground" : ""
-                            }`}
+                            className={`${element.value === field.value ? "!bg-card-primary-foreground" : ""}`}
                             value={element.value}
                             key={index}
                             onSelect={() => {
                               setValue(element.value);
                               form.setValue(name, element.value);
+                              setOpen(false);
                             }}
                           >
                             <Check
@@ -151,4 +149,4 @@ function FormCombox<T extends FieldValues>({
   );
 }
 
-export default FormCombox;
+export default FieldCombobox;

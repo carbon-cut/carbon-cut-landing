@@ -119,7 +119,10 @@ export function ResetPasswordPageContent() {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground/80" htmlFor="passwordConfirmation">
+            <label
+              className="text-sm font-medium text-foreground/80"
+              htmlFor="passwordConfirmation"
+            >
               {tReset("form.passwordConfirm")}
             </label>
             <Input

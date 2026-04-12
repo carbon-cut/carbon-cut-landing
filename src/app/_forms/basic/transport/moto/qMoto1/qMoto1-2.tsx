@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Question from "../../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/content";
-import Radio from "../../../../components/radio";
+import { FieldRadio as Radio } from "@/components/forms";
 import { FuelTypes, QuestionProps } from "../../../../types";
 
 const fuelTypes: FuelTypes[] = ["Electrique", "mild Hybrid", "Plug-in Hybrid", "Gasoline"];

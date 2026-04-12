@@ -58,7 +58,10 @@ export default function HelpComptePage() {
             <ul className="mt-4 divide-y divide-border/60">
               {quickLinks.map((item) => (
                 <li key={item.href} className="py-1 first:pt-0 last:pb-0">
-                  <Link href={item.href} className="group block hover:bg-background/60 rounded-md p-3 transition-colors">
+                  <Link
+                    href={item.href}
+                    className="group block hover:bg-background/60 rounded-md p-3 transition-colors"
+                  >
                     <div className="flex items-start justify-between gap-2">
                       <Typography asChild variant="subtitle" size="md">
                         <h3>{item.title}</h3>
@@ -98,8 +101,16 @@ export default function HelpComptePage() {
               </div>
               <div className="divide-y divide-border/80">
                 {errorMap.map((item) => (
-                  <div key={item.label} className="grid gap-1 px-4 py-3 md:grid-cols-[1fr_50px_2fr] md:gap-4">
-                    <Typography asChild variant="caption" size="sm" className="text-muted-foreground md:hidden">
+                  <div
+                    key={item.label}
+                    className="grid gap-1 px-4 py-3 md:grid-cols-[1fr_50px_2fr] md:gap-4"
+                  >
+                    <Typography
+                      asChild
+                      variant="caption"
+                      size="sm"
+                      className="text-muted-foreground md:hidden"
+                    >
                       <span>{errorColumns.message}</span>
                     </Typography>
                     <Typography className="text-destructive" asChild variant="subtitle" size="sm">
@@ -107,10 +118,15 @@ export default function HelpComptePage() {
                     </Typography>
                     <ArrowRight />
 
-                    <Typography asChild variant="caption" size="sm" className="mt-1 text-muted-foreground md:hidden">
+                    <Typography
+                      asChild
+                      variant="caption"
+                      size="sm"
+                      className="mt-1 text-muted-foreground md:hidden"
+                    >
                       <span>{errorColumns.meaning}</span>
                     </Typography>
-                    <Typography asChild variant="description"  className="text-foreground" size="sm">
+                    <Typography asChild variant="description" className="text-foreground" size="sm">
                       <p>{item.meaning}</p>
                     </Typography>
                   </div>

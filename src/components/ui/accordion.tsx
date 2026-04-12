@@ -41,7 +41,9 @@ const AccordionTrigger = React.forwardRef<
         <Plus className="h-6 w-6 shrink-0 text-chart-3 transition-transform duration-200" />
       ) : icon === "chevron-down" ? (
         <ChevronDown className="h-6 w-6 shrink-0 text-muted-foreground transition-transform duration-200" />
-      ): icon === "custom" && customIcon  }
+      ) : (
+        icon === "custom" && customIcon
+      )}
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));

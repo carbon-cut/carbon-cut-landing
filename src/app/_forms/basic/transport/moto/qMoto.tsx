@@ -4,7 +4,7 @@ import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { QuestionProps } from "../../../types";
 import carsQuestions from "./index";
-import Input from "../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 
 function QMoto({
   setOnSubmit,

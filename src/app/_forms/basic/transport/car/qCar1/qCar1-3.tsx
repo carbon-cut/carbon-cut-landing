@@ -1,8 +1,8 @@
 import Content from "@/app/_forms/components/content";
 import Question from "@/app/_forms/components/question";
-import Radio from "@/app/_forms/components/radio";
+import { FieldRadio as Radio } from "@/components/forms";
 import { FuelTypes, QuestionProps } from "@/app/_forms/types";
-import Input from "@/app/_forms/components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { useScopedI18n } from "@/locales/client";
 import React, { useEffect, useState } from "react";
 

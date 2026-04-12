@@ -2,7 +2,7 @@ import { useScopedI18n } from "@/locales/client";
 import React from "react";
 import Question from "@/app/_forms/components/question";
 import Content from "@/app/_forms/components/content";
-import Input from "@/app/_forms/components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import SideQuestion from "@/app/_forms/components/sideQuestion";
 import { Separator } from "@/components/ui/separator";

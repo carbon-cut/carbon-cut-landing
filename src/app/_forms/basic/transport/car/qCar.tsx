@@ -4,7 +4,7 @@ import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { QuestionProps, QuestionFC } from "../../../types";
 import carsQuestions from "./index";
-import Input from "../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import FormContext from "@/app/form/_layout/_formContext";
 import { useFieldArray, useWatch } from "react-hook-form";
 

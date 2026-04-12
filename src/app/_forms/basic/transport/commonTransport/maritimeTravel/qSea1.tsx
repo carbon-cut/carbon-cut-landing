@@ -10,11 +10,11 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import { useScopedI18n } from "@/locales/client";
-import Input from "../../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { PlusCircle, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Select from "../../../../components/select";
-import FormCheckbox from "@/components/forms/formCheckbox";
+import { FieldSelect as Select } from "@/components/forms";
+import { FieldCheckbox as FormCheckbox } from "@/components/forms";
 
 const boats = [
   "fluvial",

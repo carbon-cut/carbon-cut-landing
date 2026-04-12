@@ -2,7 +2,7 @@ import React from "react";
 import Question from "../../../components/question";
 import { QuestionProps, QuestionFC } from "../../../types";
 import Content from "../../../components/content";
-import Input from "@/app/_forms/components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { useScopedI18n } from "@/locales/client";
 
 const auxilaryTransport = ["electricBike", "electricScooter"] as const;

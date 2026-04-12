@@ -22,11 +22,11 @@
   @apply bg-background text-foreground py-8 px-4 max-w-[100vw] overflow-x-hidden overflow-y-hidden;
   background: linear-gradient(
     90deg,
-    #d8d6ef 0%,
-    #e3e1f6 25%,
-    #e8e7fa 50%,
-    #dcdff9 75%,
-    #cccff0 100%
+    hsl(var(--background)) 0%,
+    hsl(var(--muted)) 25%,
+    hsl(var(--background)) 50%,
+    hsl(var(--muted)) 75%,
+    hsl(var(--background)) 100%
   );
   background-attachment: fixed;
   position: relative;
@@ -117,11 +117,11 @@
   .body {
     background: linear-gradient(
       90deg,
-      #8a9df2 0%,
-      #8fa1f2 25%,
-      #90a2e8 50%,
-      #8fa1f2 75%,
-      #8a9df2 100%
+      hsl(var(--background)) 0%,
+      hsl(var(--muted)) 25%,
+      hsl(var(--background)) 50%,
+      hsl(var(--muted)) 75%,
+      hsl(var(--background)) 100%
     );
   }
 }

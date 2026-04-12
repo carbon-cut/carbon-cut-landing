@@ -155,7 +155,12 @@ export default function HelpPage() {
             <h2 id="help-faq-title">{t("faq.title")}</h2>
           </Typography>
           <div className="mt-5 md:w-3/4">
-            <FAQs faqItems={faqItems.map((item) => ({ title: item.question, description: item.answer }))} />
+            <FAQs
+              faqItems={faqItems.map((item) => ({
+                title: item.question,
+                description: item.answer,
+              }))}
+            />
           </div>
         </section>
 

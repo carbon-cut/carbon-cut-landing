@@ -3,7 +3,7 @@ import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { QuestionProps, QuestionFC } from "../../../types";
-import Input from "../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 
 const QMoto4 = (index: number) => {
   const MotoComponent: QuestionFC = ({ mainForm, }: QuestionProps) => {

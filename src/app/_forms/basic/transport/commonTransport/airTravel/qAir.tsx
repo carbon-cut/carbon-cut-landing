@@ -4,7 +4,7 @@ import { useScopedI18n } from "@/locales/client";
 import AirQuestions from "./index";
 import Question from "../../../../components/question";
 import Content from "../../../../components/content";
-import Radio from "@/app/_forms/components/radio";
+import { FieldRadio as Radio } from "@/components/forms";
 
 const QAir: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qAir");

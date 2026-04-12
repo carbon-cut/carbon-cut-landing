@@ -6,11 +6,11 @@ type Props = {
   className?: string;
 };
 
-function Unit({ unit, className }: Props) {
+function FieldUnit({ unit, className }: Props) {
   return (
     <div
       className={cn(
-        "flex items-center  px-3 bg-gray-50 rounded-md border border-input text-sm font-medium",
+        "flex items-center rounded-md border border-input bg-muted px-3 text-sm font-medium",
         className
       )}
     >
@@ -19,4 +19,4 @@ function Unit({ unit, className }: Props) {
   );
 }
 
-export default Unit;
+export default FieldUnit;

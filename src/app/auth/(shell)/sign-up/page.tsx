@@ -159,7 +159,10 @@ export default function SignUpPage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="passwordConfirmation">
+              <label
+                className="text-sm font-medium text-foreground/80"
+                htmlFor="passwordConfirmation"
+              >
                 {t("form.passwordConfirm")}
               </label>
               <Input

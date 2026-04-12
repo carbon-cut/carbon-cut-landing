@@ -1,8 +1,8 @@
 import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import { useScopedI18n } from "@/locales/client";
-import Unit from "@/app/_forms/components/unit";
+import { FieldUnit as Unit } from "@/components/forms";
 import Content from "@/app/_forms/components/content";
-import Input from "@/app/_forms/components/input";
+import { FieldInput as Input } from "@/components/forms";
 import Question from "@/app/_forms/components/question";
 import React from "react";
 

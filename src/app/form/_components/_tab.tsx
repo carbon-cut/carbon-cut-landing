@@ -8,8 +8,6 @@ import { formSchema } from "@/app/_forms/formSchema";
 import QuestionRendrer from "./_questionRendere";
 import FormContext from "../_layout/_formContext";
 import { getName } from "@/lib/formTabs/geters";
-
-/* bg-gradient-to-r from-[#00A261] to-[#00c074]  */
 const TabTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsTrigger>,
   React.ComponentPropsWithoutRef<typeof TabsTrigger>
@@ -38,9 +36,9 @@ const TabTrigger = React.forwardRef<
       ref={ref}
       className={cn(
         `flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200  
-      disabled:pointer-events-auto disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:hover:bg-white
-    data-[state=active]:text-white data-[state=active]:shadow-lg
-     bg-gray-200 text-gray-600
+      disabled:pointer-events-auto disabled:cursor-not-allowed disabled:bg-opacity-50 disabled:hover:bg-card
+    data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg
+     bg-muted text-muted-foreground
     ${colorVariants[tab]}
       `,
         className

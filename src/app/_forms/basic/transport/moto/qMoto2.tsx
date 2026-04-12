@@ -3,10 +3,10 @@ import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { QuestionProps } from "../../../types";
-import Input from "../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import CarTitle from "./components/carTitle";
-import Radio from "../../../components/radio";
+import { FieldRadio as Radio } from "@/components/forms";
 import { Label } from "@radix-ui/react-label";
 
 const QMoto2 = (index: number) => {

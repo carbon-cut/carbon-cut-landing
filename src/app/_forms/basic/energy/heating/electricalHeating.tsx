@@ -3,9 +3,9 @@ import { QuestionProps, QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import Question from "../../../components/question";
-import Input from "../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { Separator } from "@/components/ui/separator";
-import FormSelect from "@/components/forms/formSelect";
+import { FieldSelect as FormSelect } from "@/components/forms";
 
 const energyLabels = ["A", "B", "C", "D", "E", "F", "G"] as const;
 

@@ -3,7 +3,7 @@ import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { FuelTypes, QuestionProps } from "../../../types";
-import Input from "../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { TriangleAlert } from "lucide-react";

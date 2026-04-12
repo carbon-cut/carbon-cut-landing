@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { QuestionProps, QuestionFC } from "@/app/_forms/types";
-import Input from "@/app/_forms/components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { useScopedI18n } from "@/locales/client";
 import Question from "@/app/_forms/components/question";
 import Content from "@/app/_forms/components/content";
-import FormSelect from "@/components/forms/formSelect";
+import { FieldSelect as FormSelect } from "@/components/forms";
 import { Separator } from "@/components/ui/separator";
 import { FormField, FormItem, FormMessage, useFormField } from "@/components/ui/forms";
 import { set, useFormContext } from "react-hook-form";

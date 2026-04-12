@@ -3,9 +3,9 @@ import { QuestionProps, QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../components/question";
 import Content from "../../../components/content";
-import Input from "../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { FormLabel } from "@/components/ui/forms";
-import FormSelect from "@/components/forms/formSelect";
+import { FieldSelect as FormSelect } from "@/components/forms";
 import { useSubmit } from "@/lib/hooks/useSubmit";
 
 const markets = [

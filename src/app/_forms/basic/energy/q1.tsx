@@ -4,7 +4,7 @@ import Content from "../../components/content";
 import { useScopedI18n } from "@/locales/client";
 import { QuestionProps, QuestionFC } from "../../types";
 import SideQuestion from "../../components/sideQuestion";
-import Input from "../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { useSubmit } from "@/lib/hooks/useSubmit";
 
 const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {

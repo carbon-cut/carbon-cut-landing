@@ -1,21 +1,21 @@
 import { Button } from "@/components/ui/button";
-import { FormField, FormItem, FormLabel, FormMessage, TName, TValue } from "@/components/ui/forms";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import React, { useEffect } from "react";
-import { FieldValues, UseFormReturn } from "react-hook-form";
-import { cn } from "@/lib/utils";
-import { ChevronsUpDown, Loader2 } from "lucide-react";
 import { Command, CommandEmpty, CommandInput } from "@/components/ui/command";
+import { FormField, FormItem, FormLabel, FormMessage, TName, TValue } from "@/components/ui/forms";
 import { MenuList } from "@/components/ui/menuList";
-import { ClassValue } from "clsx";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { useScopedI18n } from "@/locales/client";
+import { ClassValue } from "clsx";
+import { ChevronsUpDown, Loader2 } from "lucide-react";
+import React from "react";
+import { FieldValues, UseFormReturn } from "react-hook-form";
 
-interface props<T extends FieldValues, N extends TName<T> = TName<T>> {
+interface Props<T extends FieldValues, N extends TName<T> = TName<T>> {
   form: UseFormReturn<T, undefined>;
   name: N;
-  label?: string | undefined;
+  label?: string;
+  required?: boolean;
   mandetory?: boolean;
-  type?: React.HTMLInputTypeAttribute | undefined | "calendar" | "combox";
   options: { value: TValue<T, N>; label: React.ReactNode; labelText?: string }[];
   setValue?: (v: any) => void;
   disabled?: boolean;
@@ -26,11 +26,12 @@ interface props<T extends FieldValues, N extends TName<T> = TName<T>> {
   bannedOptions?: any[];
 }
 
-function FormMultiCombox<T extends FieldValues>({
+function FieldMultiCombobox<T extends FieldValues>({
   form,
   name,
   label,
-  mandetory = false,
+  required,
+  mandetory,
   disabled = false,
   options,
   setValue = () => {},
@@ -39,16 +40,20 @@ function FormMultiCombox<T extends FieldValues>({
   fallback = false,
   loading = false,
   bannedOptions = [],
-}: props<T>) {
+}: Props<T>) {
   const t = useScopedI18n("components.forms.combox");
   const [filteredOptions, setFilteredOptions] = React.useState(options);
-  useEffect(() => {
+  const [open, setOpen] = React.useState(false);
+
+  const isRequired = required ?? mandetory ?? false;
+
+  React.useEffect(() => {
     if (form && name) form.register(name);
   }, [form, name]);
-  useEffect(() => {
+
+  React.useEffect(() => {
     setFilteredOptions(options);
   }, [options]);
-  const [open, setOpen] = React.useState(false);
 
   const handleSearch = (search: string) => {
     const normalizedSearch = search.toLowerCase();
@@ -73,27 +78,25 @@ function FormMultiCombox<T extends FieldValues>({
         <FormItem className={cn("", className)}>
           {label && (
             <FormLabel data-state={fieldState.error && "error"} className={cn("", labelClassName)}>
-              {label} {mandetory && <span className="text-red-500">*</span>}
+              {label} {isRequired && <span className="text-destructive">*</span>}
             </FormLabel>
           )}
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 key={`${open}`}
-                //onClick={e=>{setOpen(true)}}
                 disabled={disabled}
-                variant={"outline"}
+                variant="outline"
                 type="button"
-                className={`rounded-full w-full p-3 
-                text-left font-normal bg-white text-ellipsis
+                className={`w-full rounded-full bg-card p-3 text-left font-normal text-ellipsis
                 ${field.value ? "" : "text-muted-foreground"}
-                 ${
-                   fieldState.error
-                     ? "outline-none ring-1 ring-destructive/60 "
-                     : open
-                       ? "outline-4 ring-1 ring-ring"
-                       : ""
-                 }`}
+                ${
+                  fieldState.error
+                    ? "outline-none ring-1 ring-destructive/60"
+                    : open
+                      ? "outline-4 ring-1 ring-ring"
+                      : ""
+                }`}
               >
                 {(() => {
                   const selectedOption = options.find((elem) => field.value === elem.value);
@@ -117,8 +120,8 @@ function FormMultiCombox<T extends FieldValues>({
             <PopoverContent
               className="w-auto p-0"
               align="start"
-              onFocus={(_) => setOpen(true)}
-              onCloseAutoFocus={(_) => setOpen(false)}
+              onFocus={() => setOpen(true)}
+              onCloseAutoFocus={() => setOpen(false)}
             >
               <Command shouldFilter={false}>
                 <CommandInput
@@ -154,4 +157,4 @@ function FormMultiCombox<T extends FieldValues>({
   );
 }
 
-export default FormMultiCombox;
+export default FieldMultiCombobox;

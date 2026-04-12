@@ -1,30 +1,33 @@
 import React from "react";
-import { FormControl, FormField, FormItem, FormLabel, TName } from "../ui/forms";
 import { FieldValues, UseFormReturn } from "react-hook-form";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
+import { FormControl, FormField, FormItem, FormLabel, TName } from "@/components/ui/forms";
 import { ClassValue } from "clsx";
 import { cn } from "@/lib/utils";
 
 interface Props<T extends FieldValues> {
   form: UseFormReturn<T, any, undefined>;
   name: TName<T>;
-  label?: string | undefined;
+  label?: string;
+  required?: boolean;
   mandetory?: boolean;
-  placeholder?: string;
   id: string;
   className?: ClassValue;
   labelClassName?: ClassValue;
 }
 
-function FormCheckbox<T extends FieldValues>({
+function FieldCheckbox<T extends FieldValues>({
   id,
   form,
   name,
   className,
   label,
+  required,
   mandetory,
   labelClassName,
 }: Props<T>) {
+  const isRequired = required ?? mandetory ?? false;
+
   return (
     <FormField
       control={form.control}
@@ -36,7 +39,7 @@ function FormCheckbox<T extends FieldValues>({
           </FormControl>
           {label && (
             <FormLabel className={cn("", labelClassName)}>
-              {label} {mandetory && <span className="text-red-500">*</span>}
+              {label} {isRequired && <span className="text-destructive">*</span>}
             </FormLabel>
           )}
         </FormItem>
@@ -45,4 +48,4 @@ function FormCheckbox<T extends FieldValues>({
   );
 }
 
-export default FormCheckbox;
+export default FieldCheckbox;

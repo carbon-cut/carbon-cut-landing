@@ -3,9 +3,9 @@ import Question from "../../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/content";
 import { QuestionProps } from "../../../../types";
-import Input from "../../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import FormCombox from "../../../../components/combox";
+import { FieldCombobox as FormCombox } from "@/components/forms";
 
 interface Props {
   index: number;

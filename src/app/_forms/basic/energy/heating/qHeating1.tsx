@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../types";
 import Question from "../../../components/question";
-import { MultiCheckInput } from "../../../components/multiCheckInput";
+import { FieldMultiCheckInput as MultiCheckInput } from "@/components/forms";
 import { useScopedI18n } from "@/locales/client";
 import { Fioul, GasTank, WoodCharcoal } from "./quantities";
 import BasicFormContext from "@/app/form/_components/basicFormContext";

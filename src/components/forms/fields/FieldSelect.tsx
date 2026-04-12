@@ -1,14 +1,28 @@
-import React, { useEffect } from "react";
-import { FieldPath, FieldValues, set, UseFormReturn } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage, TValue } from "../../ui/forms";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
+import React from "react";
+import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  TValue,
+} from "@/components/ui/forms";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useScopedI18n } from "@/locales/client";
 import { cn } from "@/lib/utils";
 
 interface Props<T extends FieldValues, E extends FieldPath<T>> {
   form: UseFormReturn<T, any, undefined>;
   name: E;
-  label?: string | undefined;
+  label?: string;
+  required?: boolean;
   mandetory?: boolean;
   data: { label: string; value: TValue<T, E> }[];
   placeholder?: string;
@@ -19,11 +33,12 @@ interface Props<T extends FieldValues, E extends FieldPath<T>> {
   isError?: boolean;
 }
 
-function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
+function FieldSelect<T extends FieldValues, E extends FieldPath<T>>({
   form,
   name,
   label,
   placeholder,
+  required,
   mandetory,
   data,
   labelClassName,
@@ -40,9 +55,11 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
     formState: { isSubmitted },
   } = form;
 
+  const isRequired = required ?? mandetory ?? false;
+
   const verifyAttachedFields = () => {
     if (isSubmitted || isError) {
-      trigger(attachedFields);
+      void trigger(attachedFields);
     }
   };
 
@@ -54,36 +71,31 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
         <FormItem>
           {label && (
             <FormLabel data-state={fieldState.error && "error"} className={cn("", labelClassName)}>
-              {label} {mandetory && <span className="text-red-500">*</span>}
+              {label} {isRequired && <span className="text-destructive">*</span>}
             </FormLabel>
           )}
           <Select
-            onValueChange={(_) => {
-              console.log(_);
-              field.onChange(_);
+            onValueChange={(value) => {
+              field.onChange(value);
               verifyAttachedFields();
             }}
             defaultValue={field.value}
           >
             <FormControl>
               <SelectTrigger
-                data-size={"none"}
-                onClick={(e) => {
-                  setOpen(true);
-                }}
+                data-size="none"
+                onClick={() => setOpen(true)}
                 key={`${open}`}
-                className={`rounded-full w-full  
-                text-left font-normal bg-white text-ellipsis
-                 ${fieldState.error ? "outline-none ring-1 ring-destructive/60 " : open ? "outline-4 ring-1 ring-ring" : ""}
-                 ${size === "sm" ? "h-8 [&_span]:text-xs [&_svg]:size-3.5" : "h-9"}
-                 `}
+                className={`rounded-full w-full text-left font-normal bg-card text-ellipsis
+                 ${fieldState.error ? "outline-none ring-1 ring-destructive/60" : open ? "outline-4 ring-1 ring-ring" : ""}
+                 ${size === "sm" ? "h-8 [&_span]:text-xs [&_svg]:size-3.5" : "h-9"}`}
               >
                 <SelectValue placeholder={placeholder ?? t("value", { placeholder })} />
               </SelectTrigger>
             </FormControl>
-            <SelectContent onFocus={(_) => setOpen(true)} onCloseAutoFocus={(_) => setOpen(false)}>
+            <SelectContent onFocus={() => setOpen(true)} onCloseAutoFocus={() => setOpen(false)}>
               {data.map((ele, index) => (
-                <SelectItem key={index} value={ele.value}>
+                <SelectItem key={index} value={String(ele.value)}>
                   {ele.label}
                 </SelectItem>
               ))}
@@ -96,4 +108,4 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
   );
 }
 
-export default FormSelect;
+export default FieldSelect;

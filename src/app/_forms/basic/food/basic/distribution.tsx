@@ -10,8 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Input from "../../../components/input";
-import { FormAlert } from "../../../components/alert";
+import { FieldInput as Input } from "@/components/forms";
+import { FieldAlert as FormAlert } from "@/components/forms";
 import { FormField, FormMessage, TName, useFormField } from "@/components/ui/forms";
 import { cn } from "@/lib/utils";
 import { useWatch } from "react-hook-form";

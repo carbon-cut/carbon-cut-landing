@@ -6,7 +6,7 @@ import {
   FormMessage,
   TName,
 } from "@/components/ui/forms";
-import { RadioGroup, RadioGroupItemCheck, RadioGroupItemSwitch } from "@/components/ui/radio-group";
+import { RadioGroup, RadioGroupItemSwitch } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { ClassValue } from "clsx";
 import React from "react";
@@ -23,19 +23,22 @@ type Props<T extends FieldValues> = {
   required?: boolean;
   setState?: (v: any) => void;
 };
-function Radio<T extends FieldValues>({
+
+function FieldRadio<T extends FieldValues>({
   form,
   name,
   options,
   className = "",
   required = false,
-  setState = undefined,
+  setState,
 }: Props<T>) {
   void required;
+
   const selected = (
-    fieldvalue: string | number | boolean | undefined,
+    fieldValue: string | number | boolean | undefined,
     value: string | number | boolean
-  ) => fieldvalue !== undefined && String(fieldvalue) === String(value);
+  ) => fieldValue !== undefined && String(fieldValue) === String(value);
+
   return (
     <FormField
       control={form.control}
@@ -44,11 +47,13 @@ function Radio<T extends FieldValues>({
         <FormItem>
           <FormControl>
             <RadioGroup
-              className={cn("w-3/6 mx-auto flex flex-row flex-wrap justify-between ", className)}
+              className={cn("w-3/6 mx-auto flex flex-row flex-wrap justify-between", className)}
               value={field.value === undefined ? undefined : String(field.value)}
               onValueChange={(v) => {
-                field.onChange(v);
-                setState?.(v);
+                const matched = options.find((option) => String(option.value) === v);
+                const nextValue = matched ? matched.value : v;
+                field.onChange(nextValue);
+                setState?.(nextValue);
               }}
               onBlur={field.onBlur}
               name={field.name}
@@ -57,10 +62,10 @@ function Radio<T extends FieldValues>({
                 <FormLabel
                   key={index}
                   htmlFor={`r${index}`}
-                  className={`flex items-center pl-3 rounded-lg w-5/12 h-14 ${
+                  className={`flex h-14 w-5/12 items-center rounded-lg border pl-3 ${
                     selected(field.value, option.value)
-                      ? "border-slate-600"
-                      : "hover:bg-gray-500/20"
+                      ? "border-primary bg-primary-subtle/50"
+                      : "border-border hover:bg-muted/60"
                   }`}
                 >
                   <FormControl>
@@ -85,4 +90,4 @@ function Radio<T extends FieldValues>({
   );
 }
 
-export default Radio;
+export default FieldRadio;

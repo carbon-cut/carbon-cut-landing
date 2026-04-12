@@ -13,3 +13,6 @@
 - [ ] Align guard behavior with `returnTo` handling.
   - Ensure redirects remain safe and continue using current sanitization rules.
 
+  ## Auth Bugs
+
+- [ ] logout doesn't work?

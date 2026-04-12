@@ -3,11 +3,10 @@ import Question from "../../../components/question";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/content";
 import { QuestionProps, QuestionFC } from "../../../types";
-import Input from "../../../components/input";
-import Select from "../../../components/select";
-import { MultiCheckInput } from "../../../components/multiCheckInput";
-import { FormAlert } from "../../../components/alert";
-import FormSelect from "@/components/forms/formSelect";
+import { FieldInput as Input } from "@/components/forms";
+import { FieldMultiCheckInput as MultiCheckInput } from "@/components/forms";
+import { FieldAlert as FormAlert } from "@/components/forms";
+import { FieldSelect as FormSelect } from "@/components/forms";
 
 const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energy.housing.q1");

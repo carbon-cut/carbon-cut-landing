@@ -162,7 +162,7 @@ const Container = React.forwardRef<
           };
           return (
             <div className={`p-4 rounded-full ${ColorVariant[tab as keyof typeof ColorVariant]}`}>
-              <Icon className="h-6 w-6 text-white" />
+              <Icon className="h-6 w-6 text-primary-foreground" />
             </div>
           );
         })()}
@@ -170,11 +170,11 @@ const Container = React.forwardRef<
       <Card
         className=" pt-6 relative
                     bg-transparent 
-                    bg-gradient-to-br from-white via-white/60 to-white/5 
+                    bg-gradient-to-br from-card via-card/80 to-card/30
                     backdrop-blur-sm
                     rounded-2xl
                     shadow-lg
-                    border border-white/30"
+                    border border-border/70"
       >
         <CardHeader className="text-center pt-6 pb-0 relative z-10">
           <CardTitle>

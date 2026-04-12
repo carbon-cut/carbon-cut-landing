@@ -4,7 +4,7 @@ import { useScopedI18n } from "@/locales/client";
 import SeaQuestions from "./index";
 import Question from "../../../../components/question";
 import Content from "../../../../components/content";
-import { FormRadio } from "@/components/forms/formRadio";
+import { FieldRadio as FormRadio } from "@/components/forms";
 const QSea: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qSea");
   const [prevValue] = useState(mainForm.getValues("transport.hasSea") ?? 0);
@@ -35,12 +35,11 @@ const QSea: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
       <Question>{t("q")}</Question>
       <Content>
         <FormRadio
-          type={"boolean"}
           name="transport.hasSea"
           form={mainForm}
-          data={[
-            { label: t("lT"), value: "true" },
-            { label: t("lF"), value: "false" },
+          options={[
+            { label: t("lT"), value: true },
+            { label: t("lF"), value: false },
           ]}
         />
       </Content>

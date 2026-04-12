@@ -4,8 +4,8 @@ import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/content";
 import { QuestionProps } from "../../../../types";
 import { useQuery } from "@tanstack/react-query";
-import FormCombox from "../../../../components/combox";
-import Input from "@/app/_forms/components/input";
+import { FieldCombobox as FormCombox } from "@/components/forms";
+import { FieldInput as Input } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { useWatch } from "react-hook-form";
 

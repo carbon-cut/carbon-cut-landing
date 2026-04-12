@@ -234,7 +234,7 @@ export default function FormPageClient() {
                   </ProgressBar>
                 </div>
                 <div className="flex justify-center mb-4 relative">
-                  <TabsList className="flex max-w-full flex-wrap space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
+                  <TabsList className="flex max-w-full flex-wrap space-x-2 rounded-full border border-border bg-card p-2 shadow-lg h-fit">
                     <TabTrigger
                       value="transport"
                       data-state={

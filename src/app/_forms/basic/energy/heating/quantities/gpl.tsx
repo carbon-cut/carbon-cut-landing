@@ -2,14 +2,14 @@ import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import { FormControl, FormField, FormItem } from "@/components/ui/forms";
 import { Card } from "@/components/ui/card";
 import React, { useEffect, useRef } from "react";
-import Input from "@/app/_forms/components/input";
+import { FieldInput as Input } from "@/components/forms";
 import autoAnimate from "@formkit/auto-animate";
 import { Separator } from "@/components/ui/separator";
 import { useScopedI18n } from "@/locales/client";
 import FormDescription from "@/app/_forms/components/formDescription";
 import FormTitle from "@/app/_forms/components/formTitle";
 import Question from "@/app/_forms/components/question";
-import FormSelect from "@/components/forms/formSelect/formSelect";
+import { FieldSelect as FormSelect } from "@/components/forms";
 
 const gasTypes: {
   id: "butane" | "propane" | "butaneSmall" | "butaneBig" | "propaneBig" | "propaneSmall";

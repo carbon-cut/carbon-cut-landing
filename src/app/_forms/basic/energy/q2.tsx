@@ -4,7 +4,7 @@ import Content from "../../components/content";
 import { useScopedI18n } from "@/locales/client";
 import { QuestionProps, QuestionFC } from "../../types";
 import SideQuestion from "../../components/sideQuestion";
-import Input from "../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 
 const Q2: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energy.q2");

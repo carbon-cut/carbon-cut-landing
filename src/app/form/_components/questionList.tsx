@@ -93,7 +93,7 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
               <AccordionItem
                 className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 
                  hover:border-section-transport transition-colors
-                ${sectionError ? "border-destructive hover:border-destructive/60" : "border-gray-200"}
+                ${sectionError ? "border-destructive hover:border-destructive/60" : "border-border"}
                 `}
                 style={{ interpolateSize: "allow-keywords" } as React.CSSProperties}
                 key={key}
@@ -106,7 +106,7 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
                 >
                   <div className="flex flex-row">
                     <div className={`p-2 rounded-full h-fit my-auto ${ColorVariant[key]}`}>
-                      <Icon className="h-5 w-5 text-white" />
+                      <Icon className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <div className="grid grid-rows-2 ml-3">
                       <Label className="font-extrabold text-lg">{getName(key)}</Label>
