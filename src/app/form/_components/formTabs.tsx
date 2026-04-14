@@ -1,11 +1,11 @@
 import { TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { QuestionFC, QuestionProps } from "../../_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "@/app/_forms/formSchema";
-import QuestionRendrer from "./_questionRendere";
+import QuestionRenderer from "./questionRenderer";
 import FormContext from "../_layout/_formContext";
 import { getName } from "@/lib/formTabs/geters";
 const TabTrigger = React.forwardRef<
@@ -98,9 +98,9 @@ const TabContent = React.forwardRef<
     }, [currentIndexes, questions, setNextTab, tab]);
 
     return (
-      <TabsContent ref={ref} className=" border-0 mx-4 " {...props}>
+      <TabsContent ref={ref} className="border-0 mx-0 my-0" {...props}>
         {questions[currentIndexes[tab]] && (
-          <QuestionRendrer
+          <QuestionRenderer
             props={{
               currentIndex: currentIndexes[tab],
               setQuestions,

@@ -3,6 +3,8 @@ import React, { useMemo } from "react";
 import { Progress } from "@/components/ui/progress";
 import { TabValues } from "@/lib/formTabs/types";
 import { useScopedI18n } from "@/locales/client";
+import Typography from "@/components/ui/typography";
+import { shellLayout } from "./shellLayout";
 
 type ProgressProps = {
   dataLengths: { [key in TabValues]: number } & { total: number };
@@ -53,20 +55,28 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressProps>(function Pro
 
   return (
     <div ref={ref} className="max-w-6xl mx-auto relative">
-      <div className="mb-8 ">
+      <div className={shellLayout.progressWrap}>
         <div className="flex justify-between items-center mb-2">
-          <div className="md:w-fit flex-col md:flex-row flex text-sm font-medium text-muted-foreground self-end">
-            <span className="inline-block">{currentSectionName}</span>
-            <span className="hidden md:block">&nbsp;-&nbsp;</span>
-            {t("title", {
-              current: currentQuestion + 1,
-              total: currentSectionDataLength,
-            })}
+          <div className="md:w-fit flex-col md:flex-row flex self-end">
+            <Typography asChild variant="description" size="sm" className="inline-block">
+              <span>{currentSectionName}</span>
+            </Typography>
+            <Typography asChild variant="description" size="sm" className="hidden md:block">
+              <span>&nbsp;-&nbsp;</span>
+            </Typography>
+            <Typography asChild variant="description" size="sm">
+              <span>
+                {t("title", {
+                  current: currentQuestion + 1,
+                  total: currentSectionDataLength,
+                })}
+              </span>
+            </Typography>
           </div>
           <div className="flex">
-            <span className="text-sm mr-4 font-medium text-muted-foreground self-end">
-              {t("percentage", { value: roundedProgress })}
-            </span>
+            <Typography asChild variant="description" size="sm" className="mr-4 self-end">
+              <span>{t("percentage", { value: roundedProgress })}</span>
+            </Typography>
             {children}
           </div>
         </div>

@@ -22,7 +22,8 @@ import FormContext from "../_layout/_formContext";
 import { useScopedI18n } from "@/locales/client";
 import { getIcon, getName } from "@/lib/formTabs/geters";
 import { Label } from "@/components/ui/label";
-import Question from "./question";
+import Question from "./QuestionListItem";
+import Typography from "@/components/ui/typography";
 
 interface Props {
   list: { [key in TabValues]?: QuestionFC[] };
@@ -69,12 +70,18 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent asChild className="h-4/6 overflow-hidden w-11/12 rounded-xl">
+      <DialogContent asChild className="h-4/6 w-11/12 overflow-hidden rounded-xl bg-card">
         <DialogHeader className="mb-4 max-w-full">
-          <DialogTitle className="font-extrabold text-section-transport text-2xl">
-            {tOverview("title")}
+          <DialogTitle asChild>
+            <Typography asChild variant="title" size="lg" className="text-section-transport">
+              <h3>{tOverview("title")}</h3>
+            </Typography>
           </DialogTitle>
-          <DialogDescription className="text-sm">{tOverview("description")}</DialogDescription>
+          <DialogDescription asChild>
+            <Typography asChild variant="description" size="sm">
+              <p>{tOverview("description")}</p>
+            </Typography>
+          </DialogDescription>
         </DialogHeader>
         <Accordion type="single" collapsible className="w-full">
           {(Object.keys(list) as TabValues[]).map((key) => {
@@ -109,10 +116,12 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
                       <Icon className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <div className="grid grid-rows-2 ml-3">
-                      <Label className="font-extrabold text-lg">{getName(key)}</Label>
-                      <Label className="font-semibold text-sm text-muted-foreground">
-                        {list[key]?.length} questions
-                      </Label>
+                      <Typography asChild variant="subtitle" size="md">
+                        <Label>{getName(key)}</Label>
+                      </Typography>
+                      <Typography asChild variant="caption" size="sm">
+                        <Label>{list[key]?.length} questions</Label>
+                      </Typography>
                     </div>
                   </div>
                 </AccordionTrigger>

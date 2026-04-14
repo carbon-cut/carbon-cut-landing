@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Question from "../../components/question";
-import Content from "../../components/content";
+import Question from "../../components/QuestionPrompt";
+import Content from "../../components/QuestionContent";
 import { useScopedI18n } from "@/locales/client";
 import { QuestionProps, QuestionFC } from "../../types";
 import SideQuestion from "../../components/sideQuestion";

@@ -1,7 +1,7 @@
 /* import React, { useEffect } from "react";
-import Question from "../../../components/question";
+import Question from "../../../components/QuestionPrompt";
 import { useScopedI18n } from "@/locales/client";
-import Content from "../../../components/content";
+import Content from "../../../components/QuestionContent";
 import { QuestionProps, QuestionFC } from "../../../types";
 import { FieldInput as Input } from "@/components/forms";
 

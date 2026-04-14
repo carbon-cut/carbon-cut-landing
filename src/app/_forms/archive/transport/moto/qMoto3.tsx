@@ -1,7 +1,7 @@
 /* import React, { useCallback, useEffect, useState } from "react";
-import Question from "../../../components/question";
+import Question from "../../../components/QuestionPrompt";
 import { useScopedI18n } from "@/locales/client";
-import Content from "../../../components/content";
+import Content from "../../../components/QuestionContent";
 import { FuelTypes, QuestionProps } from "../../../types";
 import { FieldInput as Input } from "@/components/forms";
 import { Separator } from "@/components/ui/separator";

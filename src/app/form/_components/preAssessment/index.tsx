@@ -90,7 +90,7 @@ export default function PreAssessment({ onContinue }: Props) {
     <Dialog open>
       <DialogTitle />
       <DialogContent
-        className="h-[85vh] w-[560px] max-w-[90vw]"
+        className="h-[90vh] md:h-[85vh] w-[560px] max-w-[90vw]"
         overlayClassName="bg-black/70 backdrop-blur-sm"
         onInteractOutside={(event) => event.preventDefault()}
         onEscapeKeyDown={(event) => event.preventDefault()}

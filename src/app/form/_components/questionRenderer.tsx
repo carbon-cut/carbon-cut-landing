@@ -2,9 +2,8 @@ import { QuestionProps } from "@/app/_forms/types";
 import BasicFormContext from "./basicFormContext";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { get } from "http";
 
-const QuestionRendrer = ({
+const QuestionRenderer = ({
   Question,
   props,
 }: {
@@ -13,7 +12,7 @@ const QuestionRendrer = ({
 }) => {
   const { getValues } = useFormContext();
 
-  const [heatingQuantities, setHaetingQuantities] = useState({
+  const [heatingQuantities, setHeatingQuantities] = useState({
     fioul: getValues("energy.heating.fioul") ?? false,
     gasTank: getValues("energy.heating.gasTank") ?? false,
     woodCharcoal:
@@ -28,13 +27,12 @@ const QuestionRendrer = ({
     <BasicFormContext.Provider
       value={{
         heatingQuantities: heatingQuantities,
-        setHeatingQuantities: setHaetingQuantities,
+        setHeatingQuantities,
       }}
     >
       <Question {...props} />
-      <div className="h-6"></div>
     </BasicFormContext.Provider>
   );
 };
 
-export default QuestionRendrer;
+export default QuestionRenderer;

@@ -3,11 +3,12 @@ import React from "react";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { Car, Plane, Trash2, UtensilsCrossed, Zap } from "lucide-react";
 import { getIndex, getName } from "@/lib/formTabs/geters";
-import { TabTrigger } from "./_tab";
+import { TabTrigger } from "./formTabs";
 import ProgressBar from "./_progressBar";
 import QuestionList from "./questionList";
 import Container from "./container";
 import FormShellStoryHarness from "./formShellStoryHarness";
+import { shellLayout } from "./shellLayout";
 
 const meta = {
   title: "Form/Shell/StepFrame",
@@ -54,9 +55,9 @@ function StepFrameCanvas({
         };
 
         return (
-          <div className="min-h-screen bg-surface-warm px-4 py-10 md:px-8">
+          <div className={shellLayout.canvas}>
             <Tabs
-              className="relative mx-auto px-0 pt-20 md:pt-24 lg:w-[850px]"
+              className={shellLayout.frame}
               value={tab}
               onValueChange={() => {}}
             >
@@ -81,8 +82,8 @@ function StepFrameCanvas({
                   />
                 </ProgressBar>
               </div>
-              <div className="relative mb-4 flex justify-center">
-                <TabsList className="h-fit max-w-full flex-wrap space-x-2 rounded-full bg-white p-2 shadow-lg">
+              <div className={shellLayout.tabsRailWrap}>
+                <TabsList className={shellLayout.tabsRail}>
                   <TabTrigger
                     value="transport"
                     data-state={
@@ -141,4 +142,17 @@ export const MidFlow: Story = {
 
 export const WithErrors: Story = {
   render: () => <StepFrameCanvas tab="transport" questionIndex={0} withErrors />,
+};
+
+export const DenseContent: Story = {
+  render: () => <StepFrameCanvas tab="transport" questionIndex={2} />,
+};
+
+export const Mobile: Story = {
+  render: () => <StepFrameCanvas tab="transport" questionIndex={0} />,
+  parameters: {
+    viewport: {
+      defaultViewport: "mobile1",
+    },
+  },
 };

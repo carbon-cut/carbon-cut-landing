@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import ProgressBar from "./_progressBar";
 import { Button } from "@/components/ui/button";
+import { shellLayout } from "./shellLayout";
 
 const dataLengths = {
   transport: 8,
@@ -19,7 +20,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div className="mx-auto max-w-4xl bg-surface-warm p-6">
+      <div className={`${shellLayout.canvas} mx-auto max-w-4xl`}>
         <Story />
       </div>
     ),

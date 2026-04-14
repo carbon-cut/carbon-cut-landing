@@ -1,8 +1,8 @@
 import React from "react";
 import { QuestionProps, QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Content from "../../../components/content";
-import Question from "../../../components/question";
+import Content from "../../../components/QuestionContent";
+import Question from "../../../components/QuestionPrompt";
 import { FieldInput as Input } from "@/components/forms";
 import { Separator } from "@/components/ui/separator";
 import { FieldSelect as FormSelect } from "@/components/forms";

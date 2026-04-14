@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../../components/question";
+import Question from "../../../../components/QuestionPrompt";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Separator } from "@/components/ui/separator";
 import Covoiturage from "./covoiturage";

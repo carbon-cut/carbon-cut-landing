@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import Question from "../../../../components/question";
+import Question from "../../../../components/QuestionPrompt";
 import { useScopedI18n } from "@/locales/client";
-import Content from "../../../../components/content";
+import Content from "@/app/_forms/components/QuestionContent";
 import { QuestionProps } from "../../../../types";
 import { useQuery } from "@tanstack/react-query";
 import { FieldCombobox as FormCombox } from "@/components/forms";

@@ -6,10 +6,9 @@ import { FieldInput as Input } from "@/components/forms";
 import autoAnimate from "@formkit/auto-animate";
 import { Separator } from "@/components/ui/separator";
 import { useScopedI18n } from "@/locales/client";
-import FormDescription from "@/app/_forms/components/formDescription";
-import FormTitle from "@/app/_forms/components/formTitle";
-import Question from "@/app/_forms/components/question";
+import Question from "@/app/_forms/components/QuestionPrompt";
 import { FieldSelect as FormSelect } from "@/components/forms";
+import Typography from "@/components/ui/typography";
 
 const gasTypes: {
   id: "butane" | "propane" | "butaneSmall" | "butaneBig" | "propaneBig" | "propaneSmall";
@@ -88,8 +87,12 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
   return (
     <div className="space-y-8">
       <div>
-        <FormTitle>{t("title")}</FormTitle>
-        <FormDescription>{t("description")}</FormDescription>
+        <Typography asChild variant="title" size="sm" className="mb-2">
+          <h3>{t("title")}</h3>
+        </Typography>
+        <Typography asChild variant="description" size="sm" className="mb-6">
+          <p>{t("description")}</p>
+        </Typography>
 
         {Object.entries(groupedByFormat).map(([format, items]) => (
           <div key={format} className="mb-8">

@@ -1,6 +1,6 @@
-import Content from "@/app/_forms/components/content";
+import Content from "@/app/_forms/components/QuestionContent";
 import { FieldInput as Input } from "@/components/forms";
-import Question from "@/app/_forms/components/question";
+import Question from "@/app/_forms/components/QuestionPrompt";
 import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import { FieldSelect as FormSelect } from "@/components/forms";
 import { useScopedI18n } from "@/locales/client";

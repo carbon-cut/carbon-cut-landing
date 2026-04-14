@@ -24,18 +24,18 @@ export default function PreAssessmentActions({
 }: Props) {
   return (
     <div className={cn("flex w-full flex-col items-center gap-3", className)}>
-      <div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:justify-between">
+      <div className="flex w-full flex-wrap-reverse flex-row items-center gap-3 sm:justify-between">
         <Button
           type="button"
           size="lg"
           variant="outline"
           onClick={onBack}
           disabled={backDisabled}
-          className="sm:w-[220px]"
+          className="sm:w-[220px] w-full"
         >
           {backLabel}
         </Button>
-        <Button type="button" size="lg" onClick={onNext} className="sm:w-[220px]">
+        <Button type="button" size="lg" onClick={onNext} className="sm:w-[220px] w-full">
           {nextLabel}
         </Button>
       </div>

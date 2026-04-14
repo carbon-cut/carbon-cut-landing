@@ -1,7 +1,6 @@
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import React, { JSX } from "react";
-import Question from "./question";
-import Content from "./content";
+import Question from "./QuestionPrompt";
+import Content from "./QuestionContent";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -9,6 +8,7 @@ interface Props {
   content: JSX.Element | JSX.Element[];
   className?: string;
 }
+
 function SideQuestion({ question, content, className }: Props) {
   return (
     <div className={cn("md:ml-16 ml-3 w-7/12 p-3 bg-slate-500/30 rounded-xl", className)}>

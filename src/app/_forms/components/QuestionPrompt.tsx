@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import Typography from "@/components/ui/typography";
 import { ClassValue } from "clsx";
 import React from "react";
 
@@ -9,9 +10,9 @@ type Props = {
 
 function Question({ children, className }: Props) {
   return (
-    <h5 className={cn(" font-semibold text-base text-foreground/80 my-4", className)}>
-      {children}
-    </h5>
+    <Typography asChild variant="subtitle" size="md" className={cn("mb-4 mt-4 block", className)}>
+      <h5>{children}</h5>
+    </Typography>
   );
 }
 

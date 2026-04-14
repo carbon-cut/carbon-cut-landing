@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { UseFormReturn } from "react-hook-form";
 import FormContext from "../_layout/_formContext";
 import { QuestionFC } from "@/app/_forms/types";
+import Typography from "@/components/ui/typography";
 
 const Question = ({
   mainForm,
@@ -37,27 +38,31 @@ const Question = ({
       data-state={error ? "error" : ""}
       data-current={isCurrent ? "true" : "false"}
       className={`
-        w-full text-left md:p-3 p-2 rounded-md transition-all
-        bg-gray-50 hover:bg-gray-100 text-foreground
+        w-full text-left md:p-3 p-2 rounded-md
+        bg-muted 
         flex justify-start md:grid md:grid-cols-12 shadow-none border-0 h-fit
-        data-[current=true]:bg-section-transport data-[current=true]text-white data-[current=true]shadow-md
+        data-[current=true]:bg-section-transport data-[current=true]:text-primary-foreground data-[current=true]shadow-md
         data-[state=error]:border-2 data-[state=error]:border-destructive
         `}
       onClick={setInterface}
     >
-      <Label
+      <Typography
         data-state={error ? "error" : ""}
         data-current={isCurrent ? "true" : "false"}
-        className={`my-auto font-bold text-section-${section}
-         data-[current=true]:text-white hover:cursor-pointer
+        variant="label"
+        size="sm"
+        className={`my-auto text-section-${section}
+         data-[current=true]:text-primary-foreground hover:cursor-pointer
           data-[state=error]:!text-destructive
          `}
       >
         Q{index + 1}
-      </Label>
-      <Label
-        className={`text-extrabold hover:cursor-pointer max-w-full text-wrap col-span-11
-        data-[current=true]:text-white data-[state=error]:!text-destructive`}
+      </Typography>
+      <Typography
+        variant="label"
+        size="sm"
+        className={`col-span-11 max-w-full text-wrap hover:cursor-pointer
+        data-[current=true]:text-primary-foreground data-[state=error]:!text-destructive`}
         data-state={error ? "error" : ""}
         data-current={isCurrent ? "true" : "false"}
       >
@@ -66,7 +71,7 @@ const Question = ({
           : Symbol?.question
             ? t(Symbol.question[0], Symbol.question[1])
             : ""}
-      </Label>
+      </Typography>
     </Button>
   );
 };

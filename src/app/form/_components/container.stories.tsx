@@ -3,6 +3,7 @@ import React from "react";
 import Container from "./container";
 import FormShellStoryHarness from "./formShellStoryHarness";
 import { Tabs } from "@/components/ui/tabs";
+import { shellLayout } from "./shellLayout";
 
 const meta = {
   title: "Form/Shell/Container",
@@ -36,7 +37,7 @@ function ContainerCanvas({
       }}
     >
       {({ mainForm, initQuestions, scrollToRef, setNextTab }) => (
-        <div className="min-h-screen bg-surface-warm px-4 py-10">
+        <div className={shellLayout.canvas}>
           <Tabs value={tab}>
             <Container
               scrollToRef={scrollToRef}
@@ -63,4 +64,17 @@ export const MidSectionQuestion: Story = {
 
 export const WithErrors: Story = {
   render: () => <ContainerCanvas tab="transport" questionIndex={0} withErrors />,
+};
+
+export const DenseContent: Story = {
+  render: () => <ContainerCanvas tab="transport" questionIndex={2} />,
+};
+
+export const Mobile: Story = {
+  render: () => <ContainerCanvas tab="transport" questionIndex={0} />,
+  parameters: {
+    viewport: {
+      defaultViewport: "mobile1",
+    },
+  },
 };

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import AirQuestions from "./index";
-import Question from "../../../../components/question";
-import Content from "../../../../components/content";
+import Question from "../../../../components/QuestionPrompt";
+import Content from "../../../../components/QuestionContent";
 import { FieldRadio as Radio } from "@/components/forms";
 
 const QAir: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }: QuestionProps) => {

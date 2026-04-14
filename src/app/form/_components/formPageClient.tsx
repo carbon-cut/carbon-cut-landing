@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsList } from "@/components/ui/tabs";
-import { TabTrigger } from "./_tab";
+import { TabTrigger } from "./formTabs";
 import initEnergyQuestions from "../../_forms/basic/energy";
 import initTransportQuestions from "../../_forms/basic/transport";
 import initFoodQuestions from "../../_forms/basic/food";
@@ -24,6 +24,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import PreAssessment from "./preAssessment";
+import { shellLayout } from "./shellLayout";
 
 export default function FormPageClient() {
   const { tab, setTab, currentIndexes, readyToSubmit } = React.useContext(FormContext);
@@ -207,7 +208,7 @@ export default function FormPageClient() {
               className="md:min-h-screen min-h-[93vh] h-full w-full"
             >
               <Tabs
-                className="relative md:pt-32 pt-20 px-0 lg:w-[850px] mx-auto"
+                className={shellLayout.frame}
                 value={tab}
                 //@ts-expect-error because Tabs cannot access to possible values
                 onValueChange={(v) => setTab(v)}
@@ -233,8 +234,8 @@ export default function FormPageClient() {
                     />
                   </ProgressBar>
                 </div>
-                <div className="flex justify-center mb-4 relative">
-                  <TabsList className="flex max-w-full flex-wrap space-x-2 rounded-full border border-border bg-card p-2 shadow-lg h-fit">
+                <div className={shellLayout.tabsRailWrap}>
+                  <TabsList className={shellLayout.tabsRail}>
                     <TabTrigger
                       value="transport"
                       data-state={

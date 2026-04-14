@@ -1,8 +1,8 @@
 import { useScopedI18n } from "@/locales/client";
 import React from "react";
 import { QuestionProps, QuestionFC } from "../../../types";
-import Question from "../../../components/question";
-import Content from "../../../components/content";
+import Question from "../../../components/QuestionPrompt";
+import Content from "../../../components/QuestionContent";
 import { FieldRadio as Radio } from "@/components/forms";
 import { FieldAlert as FormAlert } from "@/components/forms";
 import { useSubmit } from "@/lib/hooks/useSubmit";

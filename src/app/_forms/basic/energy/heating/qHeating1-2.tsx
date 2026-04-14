@@ -1,8 +1,8 @@
 import React from "react";
 import { QuestionProps } from "../../../types";
-import Question from "../../../components/question";
+import Question from "../../../components/QuestionPrompt";
 import { useScopedI18n } from "@/locales/client";
-import Content from "../../../components/content";
+import Content from "../../../components/QuestionContent";
 import {
   Table,
   TableBody,

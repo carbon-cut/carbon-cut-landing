@@ -1,9 +1,9 @@
 import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import { useScopedI18n } from "@/locales/client";
 import { FieldUnit as Unit } from "@/components/forms";
-import Content from "@/app/_forms/components/content";
+import Content from "@/app/_forms/components/QuestionContent";
 import { FieldInput as Input } from "@/components/forms";
-import Question from "@/app/_forms/components/question";
+import Question from "@/app/_forms/components/QuestionPrompt";
 import React from "react";
 
 const GasTank: QuestionFC = ({ mainForm }: QuestionProps) => {

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+/* import React, { useEffect, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import SeaQuestions from "./index";
-import Question from "../../../../components/question";
-import Content from "../../../../components/content";
+import Question from "../../../../components/QuestionPrompt";
+import Content from "../../../../components/QuestionContent";
 import { FieldRadio as FormRadio } from "@/components/forms";
 const QSea: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qSea");
@@ -53,3 +53,4 @@ QSea["Symbol"] = {
 };
 
 export default QSea;
+ */

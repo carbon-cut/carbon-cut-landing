@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../../components/question";
+import Question from "../../../../components/QuestionPrompt";
 import { Container, Title } from "../shortDistances/container";
 import { Separator } from "@/components/ui/separator";
 import Covoiturage from "./covoiturage";

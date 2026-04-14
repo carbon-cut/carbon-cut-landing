@@ -18,10 +18,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getIcon, getName } from "@/lib/formTabs/geters";
 import { TName } from "@/components/ui/forms";
 import { TabValues } from "@/lib/formTabs/types";
-import { TabContent } from "./_tab";
+import { TabContent } from "./formTabs";
 import { motion } from "motion/react";
 import { useScopedI18n } from "@/locales/client";
 import { AlertTriangle, ArrowLeft, ArrowRight } from "lucide-react";
+import { shellLayout } from "./shellLayout";
 interface ContainerProps {
   setNextTab: () => void;
   initQuestions: {
@@ -123,7 +124,10 @@ const Container = React.forwardRef<
     if (cardRef.current) {
       const resizeObserver = new ResizeObserver((entries) => {
         // We only have one entry, so we can use entries[0].
-        const observedHeight = entries[0].contentRect.height + 70;
+        const observedHeight =
+          entries[0].contentRect.height +
+          22 + // correction
+          24; // bottom padding correction
         setHeight(observedHeight);
       });
 
@@ -144,13 +148,8 @@ const Container = React.forwardRef<
   }, [tab, currentIndexes, scrollToRef]);
 
   return (
-    <div
-      //style={{ height: "72vh" }}
-      ref={ref}
-      className=" border-0 mx-4 "
-      {...props}
-    >
-      <div className="flex justify-center mb-4">
+    <div ref={ref} className={shellLayout.cardWrap} {...props}>
+      <div className={shellLayout.sectionIconWrap}>
         {(() => {
           const Icon = getIcon(tab);
           const ColorVariant = {
@@ -161,22 +160,14 @@ const Container = React.forwardRef<
             vacation: "bg-section-vacation",
           };
           return (
-            <div className={`p-4 rounded-full ${ColorVariant[tab as keyof typeof ColorVariant]}`}>
+            <div className={`${shellLayout.sectionIcon} ${ColorVariant[tab as keyof typeof ColorVariant]}`}>
               <Icon className="h-6 w-6 text-primary-foreground" />
             </div>
           );
         })()}
       </div>
-      <Card
-        className=" pt-6 relative
-                    bg-transparent 
-                    bg-gradient-to-br from-card via-card/80 to-card/30
-                    backdrop-blur-sm
-                    rounded-2xl
-                    shadow-lg
-                    border border-border/70"
-      >
-        <CardHeader className="text-center pt-6 pb-0 relative z-10">
+      <Card className={shellLayout.card}>
+        <CardHeader className={shellLayout.cardHeader}>
           <CardTitle>
             <Typography asChild variant="title" size="md">
               <h2>{getName(tab)}</h2>
@@ -196,7 +187,7 @@ const Container = React.forwardRef<
           animate={{ height }}
           transition={{ duration: 0.09, ease: "linear" }}
         >
-          <CardContent ref={cardRef} className="md:p-12 md:pt-3">
+          <CardContent ref={cardRef} className={shellLayout.cardContent}>
             <TabContent
               mainForm={mainForm}
               initQuestions={initQuestions.transport}
@@ -244,7 +235,7 @@ const Container = React.forwardRef<
           </CardContent>
         </motion.div>
       </Card>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 mt-4">
+      <div className={shellLayout.actionRow}>
         <Button
           className="order-1"
           variant={"outline"}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../components/question";
+import Question from "../../../components/QuestionPrompt";
 import { FieldAlert as FormAlert } from "@/components/forms";
 import {
   Table,

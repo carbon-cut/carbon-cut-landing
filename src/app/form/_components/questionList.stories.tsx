@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs";
 import React from "react";
 import QuestionList from "./questionList";
 import FormShellStoryHarness from "./formShellStoryHarness";
+import { shellLayout } from "./shellLayout";
 
 const meta = {
   title: "Form/Shell/QuestionList",
@@ -17,7 +18,7 @@ export const Closed: Story = {
   render: () => (
     <FormShellStoryHarness>
       {({ mainForm, initQuestions }) => (
-        <div className="min-h-screen bg-surface-warm p-10">
+        <div className={shellLayout.canvas}>
           <QuestionList
             list={{
               transport: initQuestions.transport[0],
@@ -38,7 +39,7 @@ export const Open: Story = {
   render: () => (
     <FormShellStoryHarness>
       {({ mainForm, initQuestions }) => (
-        <div className="min-h-screen bg-surface-warm p-10">
+        <div className={shellLayout.canvas}>
           <QuestionList
             list={{
               transport: initQuestions.transport[0],
@@ -66,7 +67,7 @@ export const WithErrors: Story = {
       }}
     >
       {({ mainForm, initQuestions }) => (
-        <div className="min-h-screen bg-surface-warm p-10">
+        <div className={shellLayout.canvas}>
           <QuestionList
             list={{
               transport: initQuestions.transport[0],
@@ -81,4 +82,30 @@ export const WithErrors: Story = {
       )}
     </FormShellStoryHarness>
   ),
+};
+
+export const MobileOpen: Story = {
+  render: () => (
+    <FormShellStoryHarness>
+      {({ mainForm, initQuestions }) => (
+        <div className={shellLayout.canvas}>
+          <QuestionList
+            list={{
+              transport: initQuestions.transport[0],
+              energy: initQuestions.energy[0],
+              food: initQuestions.food[0],
+            }}
+            mainForm={mainForm}
+            dialog
+            setDialog={() => {}}
+          />
+        </div>
+      )}
+    </FormShellStoryHarness>
+  ),
+  parameters: {
+    viewport: {
+      defaultViewport: "mobile1",
+    },
+  },
 };
