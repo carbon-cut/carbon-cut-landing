@@ -22,6 +22,7 @@ export default {
       },
       colors: {
         background: "hsl(var(--background))",
+        workspace: "hsl(var(--workspace-background))",
         foreground: "hsl(var(--foreground))",
         surface: {
           warm: "hsl(var(--surface-warm))",
@@ -86,7 +87,10 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        border: "hsl(var(--border))",
+        border: {
+          DEFAULT: "hsl(var(--border))",
+          light: "hsl(var(--border-light))",
+        },
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         chart: {

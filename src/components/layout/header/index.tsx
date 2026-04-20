@@ -70,6 +70,10 @@ function Header() {
     return null;
   }
 
+  if (pathName.startsWith("/collectivity")) {
+    return null;
+  }
+
   return (
     <header /* ref={headerDiv} */ data-state={dataState} className={style.header}>
       <Link className="z-50" href={"/"} onClick={() => setShow(false)}>

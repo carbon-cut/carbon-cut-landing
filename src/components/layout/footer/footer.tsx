@@ -72,6 +72,10 @@ function Footer() {
     return null;
   }
 
+  if (pathname.startsWith("/collectivity")) {
+    return null;
+  }
+
   return (
     <footer id="site-footer" className="bg-card-primary md:p-12 p-6 z-[60]">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8">

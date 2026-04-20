@@ -111,6 +111,19 @@ export default {
           "contact utilisateur carbon cut",
         ],
       },
+      collectivityDashboard: {
+        title: "Collectivity Inventory (Draft) | Carbon Cut",
+        description:
+          "UI prototype for collecting city data to build a baseline inventory. This is a draft experience.",
+        keywords: [
+          "collectivity inventory",
+          "city baseline",
+          "public lighting",
+          "fleet inventory",
+          "buildings energy data",
+          "territorial data collection",
+        ],
+      },
     },
   },
   home: {
@@ -551,6 +564,371 @@ export default {
       contactBridge: {
         text: "Besoin d'aide supplémentaire ?",
         linkText: "Consultez la page Contact.",
+      },
+    },
+    collectivityDashboard: {
+      header: {
+        badge: "Espace collectivité",
+        status: "Brouillon · Prototype d'interface (sans backend)",
+        title: "Sfax 2023 Baseline",
+        meta: "IRE · 2023 · Sfax, Tunisie",
+      },
+      actions: {
+        switchInventory: "Changer d'inventaire",
+        new: "Nouveau",
+        settings: "Paramètres",
+        import: "Importer des fichiers",
+        addManual: "Ajouter manuellement",
+        downloadTemplate: "Télécharger le modèle",
+        clearAll: "Tout effacer",
+        exportJson: "Exporter en JSON",
+        submitData: "Soumettre les données",
+      },
+      workflow: {
+        eyebrow: "Espace collectivité",
+        title: "Modules du plan",
+        description:
+          "Le plan s'organise autour d'un inventaire, d'une série de référence et de modules de travail reliés entre eux.",
+        currentLabel: "Espace actif",
+        sections: {
+          inventory: {
+            title: "Inventaire",
+            description:
+              "Collecte des données, périmètre, pièces justificatives et préparation de la base.",
+            status: "Actif",
+          },
+          scenarios: {
+            title: "BaC / BaU",
+            description: "Scénarios de référence et trajectoires alimentés par l'inventaire.",
+            status: "À structurer",
+          },
+          planning: {
+            title: "Planification",
+            description: "Organisation des priorités, séquences de travail et horizons d'action.",
+            status: "À structurer",
+          },
+          "action-plan": {
+            title: "Plan d'action",
+            description: "Mesures, responsables, calendrier et suivi de mise en oeuvre.",
+            status: "À structurer",
+          },
+          investments: {
+            title: "Investissements",
+            description: "Coûts, arbitrages et pistes de financement à rattacher aux actions.",
+            status: "À structurer",
+          },
+        },
+      },
+      baseline: {
+        eyebrow: "Série de référence",
+        title: "Base de projection",
+        description:
+          "Un IRE et au moins une autre année sont requis pour lancer les scénarios, construire des comparaisons et alimenter le plan.",
+        requirementsTitle: "Pré-requis communs",
+        requirements: [
+          "1 IRE validé pour l'année de référence.",
+          "1 autre année minimale pour comparer et projeter.",
+          "Données municipales et territoriales cohérentes avant scénarisation.",
+        ],
+        cards: {
+          ire: {
+            title: "IRE 2023",
+            meta: "année de référence validée",
+            status: "Obligatoire",
+          },
+          year2: {
+            title: "Année complémentaire",
+            meta: "ajout requis pour les projections",
+            status: "À compléter",
+          },
+          horizon: {
+            title: "Horizon 2030",
+            meta: "sortie cible des scénarios",
+            status: "Projection",
+          },
+        },
+      },
+      inventory: {
+        eyebrow: "Module actif",
+        title: "Inventaire",
+        description:
+          "L'inventaire reste la base de travail. Les sous-sections ci-dessous servent à structurer la saisie, les preuves et les hypothèses avant les scénarios.",
+        navLabel: "Sous-sections inventaire",
+      },
+      overview: {
+        eyebrow: "Espace d'inventaire",
+        title: "Structure de l'inventaire municipal, périmètre et niveau de preuve",
+        description:
+          "Traitez un domaine à la fois, gardez la même année de référence et rattachez les pièces sources qui justifient chaque jeu de données.",
+        stats: {
+          domains: {
+            label: "Domaines",
+          },
+          completed: {
+            label: "Prêts",
+          },
+          files: {
+            label: "Fichiers",
+            value: "11",
+          },
+          readiness: {
+            label: "État",
+            value: "En revue",
+          },
+        },
+      },
+      rail: {
+        eyebrow: "Carte de l'inventaire",
+        title: "Domaines de collecte",
+        description:
+          "Sélectionnez un domaine pour revoir le périmètre, les jeux de données attendus et les pièces justificatives.",
+      },
+      validation: {
+        title: "Points manquants",
+        description:
+          "La base est exploitable, mais certains éléments doivent encore être justifiés avant la soumission.",
+        missing: [
+          "Les totaux de carburant de la flotte manquent encore pour le service mobilité.",
+          "Aucun dossier de preuves n'est encore joint pour les notes méthodologiques.",
+        ],
+      },
+      priority: {
+        mandatory: "Obligatoire",
+        recommended: "Recommandé",
+        advanced: "Avancé",
+      },
+      status: {
+        complete: "Complet",
+        inProgress: "En cours",
+        missing: "Manquant",
+      },
+      workspace: {
+        eyebrow: "Domaine actif",
+        scopeTitle: "Note de périmètre",
+        readinessTitle: "Niveau de préparation",
+        readinessHint:
+          "Gardez les fichiers bruts, les hypothèses de travail et les saisies manuelles rattachés au même domaine pour que l'inventaire reste vérifiable.",
+        requirementsTitle: "Jeux de données requis",
+        fieldsTitle: "Saisie de travail",
+        ownerLabel: "Unité responsable",
+        ownerPlaceholder: "ex. Services techniques municipaux",
+        summaryLabel: "Résumé actuel de la collecte",
+        notesTitle: "Notes de méthode",
+        notesPlaceholder:
+          "Notez ici les valeurs manquantes, la logique de proxy ou les questions à traiter lors de la prochaine passe de collecte.",
+        summaryTitle: "État actuel",
+        evidenceTitle: "Pièces justificatives",
+        qaTitle: "Contrôle qualité",
+        qaDescription:
+          "Avant la soumission, vérifiez que chaque jeu de données peut être relié à un export opérateur, une facture, un tableur ou une note d'estimation documentée.",
+      },
+      tray: {
+        title: "Préparation à la soumission",
+        description: ({ count }: { count: string }) =>
+          `${count} domaines doivent encore être revus avant de figer la base.`,
+      },
+      workspacePanels: {
+        scenarios: {
+          eyebrow: "Module actif",
+          title: "Scénarios BaU / BaC",
+          description:
+            "Ce module transformera la série de référence en trajectoires d'émissions à horizon 2030, avec un scénario tendanciel et un scénario de transition.",
+          dependenciesTitle: "Ce module dépend de",
+          dependencies: [
+            "Un IRE validé et une année complémentaire pour comparer les tendances.",
+            "Des hypothèses de croissance, d'activité et de périmètre par secteur.",
+            "Une base inventaire suffisamment propre pour distinguer municipal et territorial.",
+          ],
+          outputsTitle: "Ce module produira",
+          outputs: [
+            "Une trajectoire BaU par secteur et par année.",
+            "Une trajectoire BaC fondée sur les hypothèses de transition.",
+            "Un écart de réduction mobilisable pour le plan d'action.",
+          ],
+        },
+        planning: {
+          eyebrow: "Module actif",
+          title: "Planification",
+          description:
+            "La planification organisera les priorités, les dépendances et l'enchaînement des travaux à partir des scénarios et des actions retenues.",
+          dependenciesTitle: "Ce module dépend de",
+          dependencies: [
+            "Des actions déjà structurées par secteur ou par levier.",
+            "Une lecture claire des priorités et des contraintes de mise en oeuvre.",
+            "Des responsables identifiés et un horizon temporel partagé.",
+          ],
+          outputsTitle: "Ce module produira",
+          outputs: [
+            "Une séquence de déploiement par période.",
+            "Des jalons et dépendances entre actions.",
+            "Une feuille de route exploitable par la collectivité.",
+          ],
+        },
+        "action-plan": {
+          eyebrow: "Module actif",
+          title: "Plan d'action",
+          description:
+            "Le plan d'action traduira les scénarios en fiches opérationnelles avec objectifs, acteurs, impacts, coûts et statuts.",
+          dependenciesTitle: "Ce module dépend de",
+          dependencies: [
+            "Des scénarios BaU / BaC suffisamment stabilisés.",
+            "Des secteurs et leviers d'atténuation priorisés.",
+            "Une base gouvernance pour désigner les porteurs et partenaires.",
+          ],
+          outputsTitle: "Ce module produira",
+          outputs: [
+            "Un portefeuille structuré de fiches actions.",
+            "Des impacts carbone attendus par action.",
+            "Des responsables, calendriers et indicateurs de suivi.",
+          ],
+        },
+        investments: {
+          eyebrow: "Module actif",
+          title: "Investissements",
+          description:
+            "Le module investissements rassemblera les coûts, arbitrages, financements et phasages associés aux actions retenues.",
+          dependenciesTitle: "Ce module dépend de",
+          dependencies: [
+            "Un plan d'action déjà structuré avec mesures identifiées.",
+            "Des volumes d'investissement estimés par action ou par secteur.",
+            "Une logique de phasage annuel ou pluriannuel.",
+          ],
+          outputsTitle: "Ce module produira",
+          outputs: [
+            "Une ventilation des investissements par secteur.",
+            "Un échelonnement annuel des besoins financiers.",
+            "Des regroupements par commune, action ou programme.",
+          ],
+        },
+      },
+      modules: {
+        items: {
+          "city-profile": {
+            title: "Profil de la ville",
+            description: "Informations de base pour cadrer l'inventaire.",
+            count: "4 champs de cadrage confirmés",
+            scope:
+              "Utilisez ce domaine pour fixer l'identité de la collectivité, le contexte de périmètre et l'année de référence avant d'examiner les jeux de données patrimoniaux ou territoriaux.",
+            readiness: "Le périmètre et l'année de référence sont déjà alignés.",
+            summary:
+              "L'inventaire est actuellement cadré autour de Sfax, en Tunisie, avec 2023 comme année de référence et une population de cadrage fixée.",
+            checklist: [
+              "Nom officiel de la collectivité et périmètre géographique.",
+              "Année de référence utilisée dans tous les domaines de collecte.",
+              "Valeur de population ou proxy démographique le plus récent.",
+              "Courte note de gouvernance pour le porteur de l'inventaire.",
+            ],
+            evidence: [
+              "Note d'identification de la collectivité et référence de périmètre administratif.",
+              "Note de décision sur l'année de référence partagée pour l'ensemble de l'inventaire.",
+              "Source de population ou document de planification utilisé pour le cadrage.",
+            ],
+            fields: {
+              cityName: "Nom de la ville",
+              country: "Pays",
+              population: "Population",
+              referenceYear: "Année de référence",
+            },
+            placeholders: {
+              cityName: "ex. Sfax",
+              country: "ex. Tunisie",
+              population: "ex. 330000",
+              referenceYear: "ex. 2026",
+            },
+            helper:
+              "Conseil : gardez la même année de référence dans tous les modules pour conserver une base comparable.",
+          },
+          "collectivity-assets": {
+            title: "Patrimoine de la collectivité",
+            description:
+              "Niveau 1 — Obligatoire : bâtiments, éclairage public, flotte, espaces verts.",
+            count: "3 jeux de données assemblés, flotte encore partielle",
+            scope:
+              "Rassemblez les actifs que la collectivité possède ou exploite directement. Ce domaine doit rester centré sur les infrastructures maîtrisées et les équipements de service.",
+            readiness:
+              "Les bâtiments et l'éclairage sont exploitables ; les données flotte doivent encore être consolidées.",
+            summary:
+              "Les bâtiments et l'éclairage public disposent déjà de relevés structurés. Les totaux carburant de la flotte et les notes sur la gestion des espaces verts restent incomplets.",
+            checklist: [
+              "Bâtiments par usage, surface et consommations annuelles d'électricité, de gaz ou de carburant si disponibles.",
+              "Points d'éclairage public, types de lampes, puissance installée et consommation annuelle d'électricité.",
+              "Inventaire de flotte par type de véhicule, carburant, kilométrage annuel et service propriétaire.",
+              "Espaces verts, arbres et gestion des déchets verts pour les zones gérées par la collectivité.",
+            ],
+            evidence: [
+              "Factures d'électricité et de gaz des bâtiments municipaux.",
+              "Inventaire de maintenance de l'éclairage ou tableur opérateur.",
+              "Export du parc roulant avec kilométrage annuel ou journaux carburant.",
+            ],
+          },
+          "territorial-data": {
+            title: "Données territoriales",
+            description:
+              "Scopes 2 et 3 : énergie à l'échelle de la ville, transport, déchets, eaux usées.",
+            count: "2 lots de sources reliés",
+            scope:
+              "Utilisez ce domaine pour les jeux de données à l'échelle de la ville qui décrivent le territoire dans son ensemble, et pas seulement les opérations municipales. Gardez visibles les sources opérateurs et les méthodes de proxy.",
+            readiness:
+              "Le cadrage énergie et déchets est en place ; les proxies transport demandent encore une passe.",
+            summary:
+              "Les références de demande d'électricité et de traitement des déchets sont déjà reliées. L'activité transport repose encore sur des proxies provisoires.",
+            checklist: [
+              "Demande d'électricité par secteur sur l'ensemble du territoire communal.",
+              "Proxies carburant ou mobilité pour le trafic routier, les transports publics et l'offre de service.",
+              "Tonnages de déchets ménagers et d'eaux usées, modes de traitement et références d'installations.",
+              "Hypothèses de population, de ménages ou de croissance utilisées pour cadrer les données territoriales.",
+            ],
+            evidence: [
+              "Export d'opérateur ou de distributeur pour la demande d'électricité.",
+              "Rapport d'activité de station d'épuration et relevé des tonnages de déchets ménagers.",
+              "Comptages trafic, études transport ou estimations régionales de mobilité.",
+            ],
+          },
+          documents: {
+            title: "Documents et preuves",
+            description: "Recommandé : joindre les fichiers qui soutiennent l'inventaire.",
+            count: "0 dossier de preuves joint",
+            scope:
+              "Gardez les documents sources groupés par domaine afin que les relecteurs puissent rattacher rapidement chaque valeur à un fichier, une note ou un export opérateur.",
+            readiness: "La structure de preuve existe, mais le dépôt est encore vide.",
+            summary:
+              "Aucun dossier de preuve partagé n'est encore joint. C'est aujourd'hui le principal frein à la relecture, même lorsque les valeurs sont déjà saisies.",
+            checklist: [
+              "Factures, relevés et exports opérateurs en CSV, Excel ou PDF.",
+              "Inventaires techniques, audits ou feuilles de maintenance utilisés pour les calculs.",
+              "Contrats, pièces de commande et notes projet qui justifient les hypothèses.",
+              "Une arborescence qui rattache clairement chaque fichier à un domaine de collecte.",
+            ],
+            evidence: [
+              "Factures d'énergie ou exports opérateurs pour chaque famille d'actifs municipaux.",
+              "Rapports de planification ou audits cités dans les estimations territoriales.",
+              "Note méthodologique expliquant les endroits où des proxies sont utilisés.",
+            ],
+          },
+          assumptions: {
+            title: "Hypothèses et proxies",
+            description:
+              "Avancé : suivre les estimations, le niveau de confiance et les méthodes pour les données manquantes.",
+            count: "1 note de méthode commencée",
+            scope:
+              "Utilisez ce domaine pour documenter chaque proxy, chaque étape d'estimation et chaque réserve de confiance qui doit accompagner la base pendant la revue.",
+            readiness:
+              "Une première note de méthode existe, mais la cotation de confiance est encore absente.",
+            summary:
+              "Une note brouillon décrit déjà la logique de proxy pour le transport, mais l'inventaire manque encore de niveaux de confiance et d'une liste claire de suites à donner par jeu de données.",
+            checklist: [
+              "Notes sur les données manquantes et méthode d'estimation appliquée à chaque manque.",
+              "Niveau de confiance ou drapeau de revue pour chaque jeu de données majeur.",
+              "Note d'attribution pour la source ou l'institution derrière chaque estimation.",
+              "Courte liste d'améliorations pour la prochaine itération de l'inventaire.",
+            ],
+            evidence: [
+              "Note de méthode sur les hypothèses proxy du transport.",
+              "Justification du niveau de confiance pour la qualité des données électricité et déchets.",
+              "Checklist de revue pour les écarts de données non résolus avant soumission.",
+            ],
+          },
+        },
       },
     },
     helpCategory: {
