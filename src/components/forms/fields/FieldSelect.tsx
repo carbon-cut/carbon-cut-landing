@@ -22,6 +22,13 @@ interface Props<T extends FieldValues, E extends FieldPath<T>> {
   form: UseFormReturn<T, any, undefined>;
   name: E;
   label?: string;
+  /**
+   * Controls visual rendering of the label while keeping the accessibility label.
+   * - "visible": normal label
+   * - "hidden": takes up space but is visually hidden (keeps grid alignment)
+   * - "srOnly": screen-reader only (no layout space)
+   */
+  labelVisibility?: "visible" | "hidden" | "srOnly";
   required?: boolean;
   mandetory?: boolean;
   data: { label: string; value: TValue<T, E> }[];
@@ -37,6 +44,7 @@ function FieldSelect<T extends FieldValues, E extends FieldPath<T>>({
   form,
   name,
   label,
+  labelVisibility = "visible",
   placeholder,
   required,
   mandetory,
@@ -70,7 +78,14 @@ function FieldSelect<T extends FieldValues, E extends FieldPath<T>>({
       render={({ field, fieldState }) => (
         <FormItem>
           {label && (
-            <FormLabel data-state={fieldState.error && "error"} className={cn("", labelClassName)}>
+            <FormLabel
+              data-state={fieldState.error && "error"}
+              className={cn(
+                labelVisibility === "hidden" ? "opacity-0 select-none" : "",
+                labelVisibility === "srOnly" ? "sr-only" : "",
+                labelClassName
+              )}
+            >
               {label} {isRequired && <span className="text-destructive">*</span>}
             </FormLabel>
           )}

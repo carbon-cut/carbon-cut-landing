@@ -16,6 +16,29 @@ const preview: Preview = {
       // 'off' - skip a11y checks entirely
       test: "todo",
     },
+
+    // Our project relies heavily on responsive Tailwind breakpoints.
+    // The viewport addon makes "mobile" stories actually behave like mobile.
+    viewport: {
+      // Storybook 9+ uses `options` (not `viewports`) for the viewport tool.
+      options: {
+        mobile1: {
+          name: "Mobile 1",
+          styles: { width: "390px", height: "844px" },
+          type: "mobile",
+        },
+        tablet: {
+          name: "Tablet",
+          styles: { width: "768px", height: "1024px" },
+          type: "tablet",
+        },
+        desktop: {
+          name: "Desktop",
+          styles: { width: "1280px", height: "720px" },
+          type: "desktop",
+        },
+      },
+    },
   },
 };
 

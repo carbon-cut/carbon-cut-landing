@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Question from "../../components/QuestionPrompt";
 import Content from "../../components/QuestionContent";
+import QuestionFrame from "../../components/QuestionFrame";
+import QuestionSection from "../../components/QuestionSection";
 import { useScopedI18n } from "@/locales/client";
 import { QuestionProps, QuestionFC } from "../../types";
 import SideQuestion from "../../components/sideQuestion";
@@ -10,31 +12,33 @@ const Q2: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energy.q2");
 
   return (
-    <div>
-      <Question className="md:px-12 px-0">{t("q1")}</Question>
-      <Content className="md:px-16 mb-6">
-        <Input
-          form={mainForm}
-          name="energy.gas.total"
-          placeholder="m³"
-          type="number"
-          attachedFields={["energy.gas.money"]}
-        />
-      </Content>
-      <SideQuestion
-        className="py-1 md:w-2/4 w-11/12  bg-section-transport/20"
-        question={t("q3")}
-        content={
+    <QuestionFrame>
+      <QuestionSection title={t("q1")}>
+        <Content className="mb-6">
           <Input
             form={mainForm}
-            name="energy.gas.money"
-            placeholder="€"
+            name="energy.gas.total"
             type="number"
-            attachedFields={["energy.gas.total"]}
+            unitAdornment="m³"
+            unitAdornmentPlacement="end"
+            attachedFields={["energy.gas.money"]}
           />
-        }
-      />
-    </div>
+        </Content>
+        <SideQuestion
+          question={t("q3")}
+          content={
+            <Input
+              form={mainForm}
+              name="energy.gas.money"
+              type="number"
+              unitAdornment="€"
+              unitAdornmentPlacement="end"
+              attachedFields={["energy.gas.total"]}
+            />
+          }
+        />
+      </QuestionSection>
+    </QuestionFrame>
   );
 };
 

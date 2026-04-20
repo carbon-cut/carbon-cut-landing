@@ -1,11 +1,10 @@
 import React from "react";
-import Question from "../../../components/QuestionPrompt";
 import { useScopedI18n } from "@/locales/client";
-import Content from "../../../components/QuestionContent";
 import { QuestionProps, QuestionFC } from "../../../types";
 import { FieldInput as Input } from "@/components/forms";
 import { useQuery } from "@tanstack/react-query";
 import CarTitle from "./components/carTitle";
+import QuestionPromptStack from "@/app/_forms/components/QuestionPromptStack";
 
 const QCarComponent2 = ({ mainForm, index }: QuestionProps & { index: number }) => {
   const t = useScopedI18n("forms.basic.transport.qCar2");
@@ -19,40 +18,38 @@ const QCarComponent2 = ({ mainForm, index }: QuestionProps & { index: number }) 
   return (
     <div className="py-2">
       <CarTitle mainForm={mainForm} index={index} />
-      <Question className="mb-12">{t("q")}</Question>
-      <Content className="mb-0">
-        <>
-          {isCombustion && (
-            <Input
-              name={`transport.cars.${index}.thermalAvg`}
-              label={t("l11")}
-              placeholder={t("l12")}
-              form={mainForm}
-              type="number"
-            />
-          )}
-        </>
-        <>
-          {isElectric && (
-            <Input
-              name={`transport.cars.${index}.electricAvg`}
-              label={t("l21")}
-              placeholder={t("l22")}
-              form={mainForm}
-              type="number"
-            />
-          )}
-        </>
-        <div className="mb-8" />
+      <QuestionPromptStack prompt={t("q")}>
+        {isCombustion ? (
+          <Input
+            name={`transport.cars.${index}.thermalAvg`}
+            label={t("l11")}
+            unitAdornment={t("l12")}
+            unitAdornmentPlacement="end"
+            form={mainForm}
+            type="number"
+          />
+        ) : null}
+
+        {isElectric ? (
+          <Input
+            name={`transport.cars.${index}.electricAvg`}
+            label={t("l21")}
+            unitAdornment={t("l22")}
+            unitAdornmentPlacement="end"
+            form={mainForm}
+            type="number"
+          />
+        ) : null}
+
         <Input
           name={`transport.cars.${index}.distanceWeekly`}
-          //label={t("l5")}
-          placeholder={"km"}
           form={mainForm}
           type="number"
-          label={"Distance parcourue par semaine (km)"}
+          label={t("l5")}
+          unitAdornment={t("u5")}
+          unitAdornmentPlacement="end"
         />
-      </Content>
+      </QuestionPromptStack>
     </div>
   );
 };

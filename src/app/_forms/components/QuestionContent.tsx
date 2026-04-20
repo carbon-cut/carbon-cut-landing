@@ -7,7 +7,7 @@ type Props = {
 };
 
 function Content({ children, className }: Props) {
-  return <div className={cn("mb-5 px-0 md:px-6", className)}>{children}</div>;
+  return <div className={cn("mb-5", className)}>{children}</div>;
 }
 
 export default Content;

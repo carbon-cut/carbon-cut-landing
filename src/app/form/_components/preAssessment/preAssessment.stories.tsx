@@ -19,9 +19,12 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Mobile: Story = {
+  globals: {
+    viewport: { value: "mobile1" },
+  },
   parameters: {
-    viewport: {
-      defaultViewport: "mobile1",
+    options: {
+      showPanel: false,
     },
   },
 };

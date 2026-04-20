@@ -56,11 +56,7 @@ function StepFrameCanvas({
 
         return (
           <div className={shellLayout.canvas}>
-            <Tabs
-              className={shellLayout.frame}
-              value={tab}
-              onValueChange={() => {}}
-            >
+            <Tabs className={shellLayout.frame} value={tab} onValueChange={() => {}}>
               <div>
                 <ProgressBar
                   ref={scrollToRef}
@@ -150,9 +146,12 @@ export const DenseContent: Story = {
 
 export const Mobile: Story = {
   render: () => <StepFrameCanvas tab="transport" questionIndex={0} />,
+  globals: {
+    viewport: { value: "mobile1" },
+  },
   parameters: {
-    viewport: {
-      defaultViewport: "mobile1",
+    options: {
+      showPanel: false,
     },
   },
 };

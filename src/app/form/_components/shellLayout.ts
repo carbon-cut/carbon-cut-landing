@@ -8,10 +8,9 @@ export const shellLayout = {
   cardWrap: "mx-4 border-0",
   sectionIconWrap: "mb-4 flex justify-center",
   sectionIcon: "rounded-full p-4",
-  card:
-    "relative rounded-2xl border border-border/70 bg-transparent bg-gradient-to-br from-card via-card/80 to-card/30 pt-6 shadow-lg backdrop-blur-sm",
+  card: "relative rounded-2xl border border-border/70 bg-transparent bg-gradient-to-br from-card via-card/80 to-card/30 pt-6 shadow-lg backdrop-blur-sm",
   cardHeader: "relative z-10 pb-0 pt-6 text-center",
-  cardContent: "",
+  // Owns horizontal padding so prompt + fields share one left edge.
+  cardContent: "p-8 pt-3 md:p-[3.5rem] md:pt-3",
   actionRow: "mt-4 mb-8 grid grid-cols-2 gap-3 md:grid-cols-4",
 } as const;
-

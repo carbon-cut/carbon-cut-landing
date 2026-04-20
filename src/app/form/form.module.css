@@ -20,7 +20,7 @@
 
 .body {
   @apply bg-background text-foreground py-8 px-4 max-w-[100vw] overflow-x-hidden overflow-y-hidden;
-  background: linear-gradient(
+  --form-backdrop: linear-gradient(
     90deg,
     hsl(var(--background)) 0%,
     hsl(var(--muted)) 25%,
@@ -28,6 +28,7 @@
     hsl(var(--muted)) 75%,
     hsl(var(--background)) 100%
   );
+  background: var(--form-backdrop);
   background-attachment: fixed;
   position: relative;
 }
@@ -58,6 +59,45 @@
   width: 150vw;
   height: auto;
   max-width: none;
+  display: none;
+}
+
+.landSkyMask {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  aspect-ratio: 1536 / 1024;
+  background: var(--form-backdrop);
+  background-attachment: fixed;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  mask-position: center bottom;
+  mask-mode: alpha;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: center bottom;
+  -webkit-mask-mode: alpha;
+}
+
+.landSkyMaskPhone {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  aspect-ratio: 1536 / 1024;
+  background: var(--form-backdrop);
+  background-attachment: fixed;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  mask-position: center bottom;
+  mask-mode: alpha;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: center bottom;
+  -webkit-mask-mode: alpha;
   display: none;
 }
 
@@ -106,6 +146,15 @@
     display: block;
   }
 
+  .landSkyMask {
+    display: none;
+  }
+
+  .landSkyMaskPhone {
+    display: block;
+    background-attachment: scroll;
+  }
+
   .land {
     display: none;
   }
@@ -115,13 +164,7 @@
   }
 
   .body {
-    background: linear-gradient(
-      90deg,
-      hsl(var(--background)) 0%,
-      hsl(var(--muted)) 25%,
-      hsl(var(--background)) 50%,
-      hsl(var(--muted)) 75%,
-      hsl(var(--background)) 100%
-    );
+    background: var(--form-backdrop);
+    background-attachment: scroll;
   }
 }

@@ -6,6 +6,7 @@ import Question from "@/app/_forms/components/QuestionPrompt";
 import Content from "@/app/_forms/components/QuestionContent";
 import { FieldInput as Input } from "@/components/forms";
 import SegmentedControl from "@/components/ui/segmentedControl";
+import QuestionModeSwitch from "@/app/_forms/components/QuestionModeSwitch";
 
 function QCar31({ mainForm, index }: QuestionProps & { index: number }) {
   const t = useScopedI18n("forms.basic.transport.qCar3");
@@ -52,42 +53,56 @@ function QCar31({ mainForm, index }: QuestionProps & { index: number }) {
       <CarTitle mainForm={mainForm} index={index} />
       <Question>{carType === "Electrique" ? t("q1E") : t("q1L")}</Question>
       <Content>
-        <SegmentedControl
-          state={selectedUnit}
-          setState={setSelectedUnit}
-          options={[
-            { label: ti("unit", { unit: unit }), value: "unit" },
-            { label: "En euros dépensés", value: "money" },
-          ]}
-          className="mb-4"
-        />
-        <Input
-          key={selectedUnit}
-          form={mainForm}
-          name={consumptionFieldName}
-          type="number"
-          label={
-            selectedUnit === "unit"
-              ? carType === "Electrique"
-                ? t("q1LE")
-                : t("q1LL")
-              : "Montant dépensé par semaine (€)"
+        <QuestionModeSwitch
+          note={{
+            title: t("note.title"),
+            description: t("q2"),
+          }}
+          switchControl={
+            <SegmentedControl
+              state={selectedUnit}
+              setState={setSelectedUnit}
+              options={[
+                { label: ti("unit", { unit: unit }), value: "unit" },
+                { label: t("modes.money"), value: "money" },
+              ]}
+              tone="transport"
+            />
           }
-          attachedFields={[
-            priceFieldName,
-            selectedUnit === "unit" ? moneyConsumptionFieldName : unitConsumptionFieldName,
-          ]}
+          primaryField={
+            <Input
+              key={selectedUnit}
+              form={mainForm}
+              name={consumptionFieldName}
+              type="number"
+              label={
+                selectedUnit === "unit"
+                  ? carType === "Electrique"
+                    ? t("q1LE")
+                    : t("q1LL")
+                  : t("labels.moneySpent")
+              }
+              unitAdornment={selectedUnit === "unit" ? unit : "€"}
+              unitAdornmentPlacement="end"
+              attachedFields={[
+                priceFieldName,
+                selectedUnit === "unit" ? moneyConsumptionFieldName : unitConsumptionFieldName,
+              ]}
+            />
+          }
+          secondaryField={
+            <Input
+              form={mainForm}
+              name={priceFieldName}
+              type="number"
+              label={t("labels.price", { unit })}
+              unitAdornment="€"
+              unitAdornmentPlacement="end"
+              disabled={selectedUnit === "unit"}
+              attachedFields={[unitConsumptionFieldName, moneyConsumptionFieldName]}
+            />
+          }
         />
-        <div className="w-1/2 mt-4">
-          <Input
-            form={mainForm}
-            name={priceFieldName}
-            type="number"
-            label={`Prix de ${unit} (€)`}
-            disabled={selectedUnit === "unit"}
-            attachedFields={[unitConsumptionFieldName, moneyConsumptionFieldName]}
-          />
-        </div>
       </Content>
     </div>
   );

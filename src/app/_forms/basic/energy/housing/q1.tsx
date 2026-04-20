@@ -1,5 +1,6 @@
 import React from "react";
-import Question from "../../../components/QuestionPrompt";
+import QuestionFrame from "../../../components/QuestionFrame";
+import QuestionSection from "../../../components/QuestionSection";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../components/QuestionContent";
 import { QuestionProps, QuestionFC } from "../../../types";
@@ -12,84 +13,95 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energy.housing.q1");
 
   return (
-    <div>
+    <QuestionFrame>
       <FormAlert
         title={`${t("alert.title")}:`}
         description={t("alert.description")}
         variant="note"
       />
-      <Question>{t("q1")}</Question>
-      <div className="grid md:grid-cols-2">
-        <Content className="mb-0">
-          <div className="md:w-2/3 md:mt-3">
-            <FormSelect
-              form={mainForm}
-              name="energy.housing.category"
-              label={t("q1Labels.type")}
-              data={[
-                { label: t("options.0"), value: "appartment" },
-                { label: t("options.1"), value: "house" },
-                { label: t("options.2"), value: "villa" },
-                { label: t("options.3"), value: "other" },
-              ]}
-            />
-          </div>
-          <div className="md:w-2/3 md:mt-3">
-            <Input
-              label={t("q1Labels.area")}
-              placeholder="m²"
-              form={mainForm}
-              name={"energy.housing.area"}
-            />
-          </div>
-        </Content>
-        <Content className="mb-0">
-          <div className="md:w-2/3 md:mt-3">
-            <Input
-              label={t("q1Labels.heatedVolume")}
-              form={mainForm}
-              placeholder="m³"
-              name={"energy.housing.heatedVolume"}
-            />
-          </div>
-          <div className="md:w-2/3 md:mt-3">
-            <Input
-              label={t("q1Labels.conditionedVolume")}
-              form={mainForm}
-              placeholder="m³"
-              name={"energy.housing.conditionedVolume"}
-            />
-          </div>
-        </Content>
-      </div>
-      <Question>{t("q2")}</Question>
-      <Content>
-        <div className=" mt-3">
-          <Input form={mainForm} name={"energy.housing.rooms"} />
+      <QuestionSection title={t("q1")}>
+        <div className="grid md:grid-cols-2">
+          <Content className="mb-0">
+            <div className="md:w-2/3 md:mt-3">
+              <FormSelect
+                form={mainForm}
+                name="energy.housing.category"
+                label={t("q1Labels.type")}
+                data={[
+                  { label: t("options.0"), value: "appartment" },
+                  { label: t("options.1"), value: "house" },
+                  { label: t("options.2"), value: "villa" },
+                  { label: t("options.3"), value: "other" },
+                ]}
+              />
+            </div>
+            <div className="md:w-2/3 md:mt-3">
+              <Input
+                label={t("q1Labels.area")}
+                form={mainForm}
+                name={"energy.housing.area"}
+                unitAdornment="m²"
+                unitAdornmentPlacement="end"
+                type="number"
+              />
+            </div>
+          </Content>
+          <Content className="mb-0">
+            <div className="md:w-2/3 md:mt-3">
+              <Input
+                label={t("q1Labels.heatedVolume")}
+                form={mainForm}
+                name={"energy.housing.heatedVolume"}
+                unitAdornment="m³"
+                unitAdornmentPlacement="end"
+                type="number"
+              />
+            </div>
+            <div className="md:w-2/3 md:mt-3">
+              <Input
+                label={t("q1Labels.conditionedVolume")}
+                form={mainForm}
+                name={"energy.housing.conditionedVolume"}
+                unitAdornment="m³"
+                unitAdornmentPlacement="end"
+                type="number"
+              />
+            </div>
+          </Content>
         </div>
-      </Content>
-      <Question>{t("q3")}</Question>
-      <Content className="px-0">
-        <MultiCheckInput
-          type="boolean"
-          className="grid md:grid-rows-2 md:grid-cols-1 grid-cols-2 w-full px-0"
-          form={mainForm}
-          name={"energy.housing"}
-          options={[
-            {
-              label: t("q3Labels.thermalInsulation"),
-              value: "thermalInsulation",
-              unit: "null",
-            },
-            {
-              label: t("q3Labels.insulatedGlazing"),
-              value: "insulatedGlazing",
-              unit: "null",
-            },
-          ]}
-        />
-      </Content>
-    </div>
+      </QuestionSection>
+
+      <QuestionSection title={t("q2")}>
+        <Content>
+          <div className=" mt-3">
+            <Input form={mainForm} name={"energy.housing.rooms"} />
+          </div>
+        </Content>
+      </QuestionSection>
+
+      <QuestionSection title={t("q3")}>
+        <Content className="px-0">
+          <MultiCheckInput
+            type="boolean"
+            className="grid md:grid-rows-2 md:grid-cols-1 grid-cols-2 w-full px-0"
+            form={mainForm}
+            name={"energy.housing"}
+            options={[
+              {
+                label: t("q3Labels.thermalInsulation"),
+                value: "thermalInsulation",
+                unit: "null",
+              },
+              {
+                label: t("q3Labels.insulatedGlazing"),
+                value: "insulatedGlazing",
+                unit: "null",
+              },
+            ]}
+          />
+        </Content>
+      </QuestionSection>
+    </QuestionFrame>
   );
 };
 

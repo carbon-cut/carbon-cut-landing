@@ -1,9 +1,10 @@
 import React from "react";
-import Question from "../../components/QuestionPrompt";
 import Content from "../../components/QuestionContent";
+import QuestionFrame from "../../components/QuestionFrame";
+import QuestionSection from "../../components/QuestionSection";
 import { useScopedI18n } from "@/locales/client";
 import { QuestionProps, QuestionFC } from "../../types";
-import SideQuestion from "../../components/sideQuestion";
+import QuestionFallbackRow from "../../components/QuestionFallbackRow";
 import { FieldInput as Input } from "@/components/forms";
 import { useSubmit } from "@/lib/hooks/useSubmit";
 
@@ -13,32 +14,37 @@ const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {
   useSubmit();
 
   return (
-    <div>
-      <Question className="md:px-12 px-0">{t("q1")}</Question>
-      <Content className="md:px-16 mb-6">
-        <Input
-          form={mainForm}
-          name="energy.electricity.total"
-          placeholder="kWh"
-          type="number"
-          attachedFields={["energy.electricity.money"]}
-        />
-      </Content>
-      <SideQuestion
-        className="py-1 md:w-2/4 w-11/12  bg-section-transport/20"
-        question={t("q3")}
-        content={
-          <Input
-            form={mainForm}
-            name="energy.electricity.money"
-            unit=""
-            type="number"
-            placeholder="€"
-            attachedFields={["energy.electricity.total"]}
+    <QuestionFrame>
+      <QuestionSection title={t("q1")}>
+        <Content className="mb-0">
+          <QuestionFallbackRow
+            note={{ title: t("note.title"), description: t("note.description") }}
+            primary={
+              <Input
+                form={mainForm}
+                name="energy.electricity.total"
+                type="number"
+                label={t("labels.preferred")}
+                unitAdornment="kWh"
+                unitAdornmentPlacement="end"
+                attachedFields={["energy.electricity.money"]}
+              />
+            }
+            fallback={
+              <Input
+                form={mainForm}
+                name="energy.electricity.money"
+                type="number"
+                label={t("labels.fallback")}
+                unitAdornment="€"
+                unitAdornmentPlacement="end"
+                attachedFields={["energy.electricity.total"]}
+              />
+            }
           />
-        }
-      />
-    </div>
+        </Content>
+      </QuestionSection>
+    </QuestionFrame>
   );
 };
 

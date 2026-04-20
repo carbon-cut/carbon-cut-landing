@@ -1,91 +1,111 @@
+import React from "react";
+import Image from "next/image";
 import { QuestionProps, QuestionFC } from "@/app/_forms/types";
-import { FormControl, FormField, FormItem } from "@/components/ui/forms";
-import { Card } from "@/components/ui/card";
-import React, { useEffect, useRef } from "react";
-import { FieldInput as Input } from "@/components/forms";
-import autoAnimate from "@formkit/auto-animate";
-import { Separator } from "@/components/ui/separator";
-import { useScopedI18n } from "@/locales/client";
-import Question from "@/app/_forms/components/QuestionPrompt";
-import { FieldSelect as FormSelect } from "@/components/forms";
+import { FormField, FormItem } from "@/components/ui/forms";
 import Typography from "@/components/ui/typography";
+import { useScopedI18n } from "@/locales/client";
+import { FieldInput as Input, FieldSelect as FormSelect } from "@/components/forms";
+import { cn } from "@/lib/utils";
+import QuestionFrame from "@/app/_forms/components/QuestionFrame";
+import QuestionSelectableCard from "@/app/_forms/components/QuestionSelectableCard";
+import QuestionSubheading from "@/app/_forms/components/QuestionSubheading";
 
-const gasTypes: {
-  id: "butane" | "propane" | "butaneSmall" | "butaneBig" | "propaneBig" | "propaneSmall";
-  name: string;
+type GasTypeId = "butane" | "propane" | "butaneSmall" | "butaneBig" | "propaneBig" | "propaneSmall";
+
+type GasType = {
+  id: GasTypeId;
   format: "Grand Format" | "Petit Format";
   color: string;
-  icon: React.ReactNode;
-  className?: string;
-  url: string;
-  url2: string;
-}[] = [
+  icon: { src: string; src2?: string; className?: string };
+};
+
+const gasTypes: GasType[] = [
   {
     id: "butane",
-    name: "Butane bleu foncé/rouge",
     format: "Grand Format",
     color: "from-green-400 to-teal-500",
-    icon: null,
-    url: "./icons/gpl/butane13kg.png",
-    url2: "",
+    icon: { src: "/icons/gpl/butane13kg.png" },
   },
   {
     id: "propane",
-    name: "Propane: vert/doré",
     format: "Grand Format",
     color: "from-green-400 to-teal-500",
-    icon: null,
-    url: "./icons/gpl/Propane35kg.png",
-    className: "h-8 w-8",
-    url2: "",
+    icon: { src: "/icons/gpl/Propane35kg.png", className: "h-8 w-8" },
   },
   {
     id: "butaneSmall",
-    name: "Butane 5.5kg rouge",
     format: "Petit Format",
     color: "from-blue-300 to-blue-400",
-    icon: null,
-    url: "./icons/gpl/butane5 5.png",
-    url2: "",
+    icon: { src: "/icons/gpl/butane5 5.png" },
   },
   {
     id: "butaneBig",
-    name: "Butane 10kg rouge/bleu",
     format: "Petit Format",
     color: "from-blue-300 to-blue-400",
-    icon: null,
-    url: "./icons/gpl/butane10kg.png",
-    url2: "",
+    icon: { src: "/icons/gpl/butane10kg.png" },
   },
   {
     id: "propaneBig",
-    name: "Propane: 13kg vert/doré",
     format: "Petit Format",
     color: "from-teal-300 to-teal-400",
-    icon: null,
-    url: "./icons/gpl/Frame 1.svg",
-    url2: "./icons/gpl/Frame 2.svg",
+    icon: { src: "/icons/gpl/Frame 1.svg", src2: "/icons/gpl/Frame 2.svg" },
   },
   {
     id: "propaneSmall",
-    name: "Propane: 5kg jaune",
     format: "Petit Format",
     color: "from-teal-300 to-teal-400",
-    icon: null,
-    url: "./icons/gpl/propane 5kg.png",
-    url2: "",
+    icon: { src: "/icons/gpl/propane 5kg.png" },
   },
 ] as const;
 
 const groupedByFormat = {
   big: gasTypes.filter((g) => g.format === "Grand Format"),
   small: gasTypes.filter((g) => g.format === "Petit Format"),
-};
+} as const;
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const assetSrc = (path: string) => `${basePath}${encodeURI(path)}`;
+
+function GasIcon({ type, alt }: { type: GasType; alt: string }) {
+  const src = assetSrc(type.icon.src);
+  const src2 = type.icon.src2 ? assetSrc(type.icon.src2) : null;
+  return (
+    <div
+      className={cn(
+        "w-10 h-10 rounded-lg bg-gradient-to-br flex items-center justify-center",
+        type.color
+      )}
+      aria-hidden="true"
+    >
+      {src2 ? (
+        <div className="grid grid-cols-2 gap-1">
+          <Image
+            src={src}
+            alt={alt}
+            width={24}
+            height={24}
+            className={type.icon.className ? type.icon.className : "h-6 w-6"}
+          />
+          <Image src={src2} alt={alt} width={24} height={24} className="h-6 w-6" />
+        </div>
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          width={24}
+          height={24}
+          className={type.icon.className ? type.icon.className : "h-6 w-6"}
+        />
+      )}
+    </div>
+  );
+}
+
 const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.energy.heating.options.GPL");
 
   return (
-    <div className="space-y-8">
+    <QuestionFrame className="space-y-8">
       <div>
         <Typography asChild variant="title" size="sm" className="mb-2">
           <h3>{t("title")}</h3>
@@ -96,123 +116,56 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
 
         {Object.entries(groupedByFormat).map(([format, items]) => (
           <div key={format} className="mb-8">
-            <Question className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">
-              {t(format)}
-            </Question>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="mb-4">
+              <QuestionSubheading>{t(format)}</QuestionSubheading>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {items.map((gasType) => (
                 <FormField
                   key={gasType.id}
                   control={mainForm.control}
-                  //@ts-expect-error
+                  // @ts-expect-error dynamic field path (schema typed elsewhere)
                   name={`energy.heating.quantities.GPL.types.${format}.${gasType.id}`}
                   render={({ field }) => {
-                    const parent = useRef(null);
-
-                    useEffect(() => {
-                      if (parent.current) autoAnimate(parent.current, { duration: 200 });
-                    }, [parent]);
+                    const label = t(`types.${gasType.id}`);
+                    const checked = field.value === true;
 
                     return (
                       <FormItem>
-                        <Card
-                          ref={parent}
-                          className={`p-0  transition-all duration-200 border-2 ${
-                            field.value === true
-                              ? "border-section-transport bg-muted/5 shadow-md"
-                              : "border-gray-200 hover:border-gray-300"
-                          }`}
+                        <QuestionSelectableCard
+                          tone="energy"
+                          checked={checked}
+                          onToggle={() => field.onChange(!checked)}
+                          leading={<GasIcon type={gasType} alt={label} />}
+                          title={label}
                         >
-                          <div
-                            onClick={() => {
-                              field.onChange(!field.value);
-                            }}
-                            className="p-4 flex items-center justify-between cursor-pointer"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div
-                                className={`w-10 h-10 rounded-lg bg-gradient-to-br ${gasType.color} flex items-center justify-center text-xl`}
-                              >
-                                {gasType.icon ? (
-                                  gasType.icon
-                                ) : gasType.url2 ? (
-                                  <div className="grid grid-cols-2">
-                                    <img
-                                      src={gasType.url}
-                                      alt={gasType.name}
-                                      className={gasType.className ? gasType.className : "w-6 h-6"}
-                                    />
-                                    <img
-                                      src={gasType.url2}
-                                      alt={gasType.name}
-                                      className="w-6 h-6"
-                                    />
-                                  </div>
-                                ) : (
-                                  <img
-                                    src={gasType.url}
-                                    alt={gasType.name}
-                                    className={gasType.className ? gasType.className : "w-6 h-6"}
-                                  />
-                                )}
-                              </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <Input
+                              form={mainForm}
+                              name={`energy.heating.quantities.GPL.quantities.${gasType.id}.quantity`}
+                              type="number"
+                              fallback
+                              unitAdornment={t("unit")}
+                              unitAdornmentPlacement="end"
+                              label={t("quantity")}
+                              size="sm"
+                            />
 
-                              <div>
-                                <p className="font-medium text-sm">{t(`types.${gasType.id}`)}</p>
-                              </div>
-                            </div>
-                            <FormControl>
-                              <div
-                                className={`relative inline-flex items-center h-6 w-11 rounded-full transition-colors ${
-                                  field.value === true ? "bg-section-energy" : "bg-gray-300"
-                                }`}
-                              >
-                                <span
-                                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                                    field.value === true ? "translate-x-6" : "translate-x-1"
-                                  }`}
-                                />
-                              </div>
-                            </FormControl>
+                            <FormSelect
+                              fallback
+                              label={t("frequency.placeholder")}
+                              form={mainForm}
+                              name={`energy.heating.quantities.GPL.quantities.${gasType.id}.frequency`}
+                              placeholder={t("frequency.placeholder")}
+                              size="sm"
+                              data={[
+                                { value: "month", label: t("frequency.month") },
+                                { value: "year", label: t("frequency.year") },
+                              ]}
+                            />
                           </div>
-
-                          {field.value === true && (
-                            <>
-                              <Separator className="mb-4 " />
-                              <div className="grid grid-cols-2 gap-4 px-4 mb-2">
-                                <Input
-                                  form={mainForm}
-                                  name={`energy.heating.quantities.GPL.quantities.${gasType.id}.quantity`}
-                                  type="number"
-                                  fallback
-                                  placeholder={t("unit")}
-                                  labelClassName="text-black/70"
-                                  label={t("quantity")}
-                                  size="sm"
-                                />
-
-                                <FormSelect
-                                  fallback
-                                  labelClassName="text-black/70"
-                                  label={t("frequency.placeholder")}
-                                  form={mainForm}
-                                  name={`energy.heating.quantities.GPL.quantities.${gasType.id}.frequency`}
-                                  size="sm"
-                                  data={[
-                                    {
-                                      value: "month",
-                                      label: t("frequency.month"),
-                                    },
-                                    {
-                                      value: "year",
-                                      label: t("frequency.year"),
-                                    },
-                                  ]}
-                                />
-                              </div>
-                            </>
-                          )}
-                        </Card>
+                        </QuestionSelectableCard>
                       </FormItem>
                     );
                   }}
@@ -222,7 +175,7 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
           </div>
         ))}
       </div>
-    </div>
+    </QuestionFrame>
   );
 };
 

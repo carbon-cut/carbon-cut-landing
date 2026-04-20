@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { QuestionProps, QuestionFC } from "@/app/_forms/types";
 import { FieldInput as Input } from "@/components/forms";
 import { useScopedI18n } from "@/locales/client";
-import Question from "@/app/_forms/components/QuestionPrompt";
-import Content from "@/app/_forms/components/QuestionContent";
 import { FieldSelect as FormSelect } from "@/components/forms";
 import { Separator } from "@/components/ui/separator";
 import { FormField, FormItem, FormMessage, useFormField } from "@/components/ui/forms";
-import { set, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
+import QuestionFrame from "@/app/_forms/components/QuestionFrame";
+import QuestionSection from "@/app/_forms/components/QuestionSection";
+import QuestionMatrixBlock from "@/app/_forms/components/QuestionMatrixBlock";
+import QuestionFieldPair from "@/app/_forms/components/QuestionFieldPair";
 
 const woodKeys = ["m3", "kg", "stere"] as const;
 const woodTypes = ["hardwood", "softwood"] as const;
@@ -26,152 +28,139 @@ const WoodCharcoal: QuestionFC = ({ mainForm, setVerifyFields }: QuestionProps) 
   const wood = getValues("energy.heating.wood");
   const charcoal = getValues("energy.heating.charcoal");
 
+  // Keep `setVerifyFields` in the signature for parity with other questions.
+  void setVerifyFields;
+
   return (
-    <>
-      {wood && (
-        <>
-          <Question className="w-full">
-            <p className="">{t("wood.label")}</p>
-          </Question>
-          {woodTypes.map((type, index) => (
-            <React.Fragment key={type}>
+    <QuestionFrame>
+      {wood ? (
+        <QuestionSection title={t("wood.label")}>
+          <div className="space-y-4">
+            {woodTypes.map((type) => (
               <FormField
+                key={type}
                 control={mainForm.control}
                 name={`energy.heating.quantities.wood.${type}`}
                 render={() => {
                   const { error } = useFormField();
+                  const isError = Boolean(error);
                   return (
                     <FormItem>
-                      <div
-                        data-state={error ? "error" : "default"}
-                        className="pt-4 mb-4 rounded-xl border border-transparent data-[state=error]:border-destructive"
+                      <QuestionMatrixBlock
+                        error={isError}
+                        title={t(`wood.types.${type}`)}
+                        description={t(`wood.types.${woodTypeExamples[type]}`)}
                       >
-                        <Content>
-                          <p className="text-sm font-medium text-black/70">
-                            {t(`wood.types.${type}`)}
-                          </p>
-                          <p className="text-xs text-black/60">
-                            {t(`wood.types.${woodTypeExamples[type]}`)}
-                          </p>
-                          <div className="mt-4 grid md:grid-cols-2 md:space-x-6">
-                            <div className="grid grid-cols-12 space-x-3">
-                              <div className="col-span-7">
-                                <Input
-                                  labelClassName="text-black/70"
-                                  label={t("wood.quantity")}
-                                  form={mainForm}
-                                  name={`energy.heating.quantities.wood.${type}.quantity`}
-                                  placeholder={t("wood.quantity")}
-                                  type="number"
-                                  attachedFields={["energy.heating.quantities.wood"]}
-                                  isError={Boolean(error)}
-                                />
-                              </div>
-                              <div className="col-span-5">
-                                <FormSelect
-                                  form={mainForm}
-                                  placeholder={t("wood.qunits.label")}
-                                  label="&nbsp;"
-                                  labelClassName="text-black/70"
-                                  name={`energy.heating.quantities.wood.${type}.quantityUnit`}
-                                  data={woodKeys.map((e) => ({
-                                    label: t(`wood.qunits.${e}`),
-                                    value: e,
-                                  }))}
-                                  attachedFields={["energy.heating.quantities.wood"]}
-                                  isError={Boolean(error)}
-                                />
-                              </div>
-                            </div>
-                            <div className="grid grid-cols-12 space-x-3">
-                              <div className="col-span-7">
-                                <Input
-                                  labelClassName="text-black/70"
-                                  form={mainForm}
-                                  name={`energy.heating.quantities.wood.${type}.frequency`}
-                                  label={t("wood.funits.label")}
-                                  placeholder={t("wood.funits.label")}
-                                  type="number"
-                                  attachedFields={["energy.heating.quantities.wood"]}
-                                  isError={Boolean(error)}
-                                />
-                              </div>
-                              <div className="col-span-5">
-                                <FormSelect
-                                  form={mainForm}
-                                  label="&nbsp;"
-                                  labelClassName="text-black/70"
-                                  placeholder={t("wood.funits.label")}
-                                  name={`energy.heating.quantities.wood.${type}.frequencyUnit`}
-                                  data={frequencyKeys.map((e) => ({
-                                    label: t(`wood.funits.${e}`),
-                                    value: e,
-                                  }))}
-                                  attachedFields={["energy.heating.quantities.wood"]}
-                                  isError={Boolean(error)}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <FormMessage />
-                        </Content>
-                      </div>
+                        <div className="grid gap-6 md:grid-cols-2">
+                          <QuestionFieldPair
+                            primary={
+                              <Input
+                                label={t("wood.quantity")}
+                                form={mainForm}
+                                name={`energy.heating.quantities.wood.${type}.quantity`}
+                                type="number"
+                                attachedFields={["energy.heating.quantities.wood"]}
+                                isError={isError}
+                              />
+                            }
+                            secondary={
+                              <FormSelect
+                                form={mainForm}
+                                label={t("wood.qunits.label")}
+                                labelVisibility="hidden"
+                                placeholder={t("wood.qunits.label")}
+                                name={`energy.heating.quantities.wood.${type}.quantityUnit`}
+                                data={woodKeys.map((e) => ({
+                                  label: t(`wood.qunits.${e}`),
+                                  value: e,
+                                }))}
+                                attachedFields={["energy.heating.quantities.wood"]}
+                                isError={isError}
+                              />
+                            }
+                          />
+
+                          <QuestionFieldPair
+                            primary={
+                              <Input
+                                form={mainForm}
+                                name={`energy.heating.quantities.wood.${type}.frequency`}
+                                label={t("wood.funits.label")}
+                                type="number"
+                                attachedFields={["energy.heating.quantities.wood"]}
+                                isError={isError}
+                              />
+                            }
+                            secondary={
+                              <FormSelect
+                                form={mainForm}
+                                label={t("wood.funits.label")}
+                                labelVisibility="hidden"
+                                placeholder={t("wood.funits.label")}
+                                name={`energy.heating.quantities.wood.${type}.frequencyUnit`}
+                                data={frequencyKeys.map((e) => ({
+                                  label: t(`wood.funits.${e}`),
+                                  value: e,
+                                }))}
+                                attachedFields={["energy.heating.quantities.wood"]}
+                                isError={isError}
+                              />
+                            }
+                          />
+                        </div>
+
+                        <FormMessage />
+                      </QuestionMatrixBlock>
                     </FormItem>
                   );
                 }}
               />
-            </React.Fragment>
-          ))}
-        </>
-      )}
-      {wood && charcoal && <Separator className="mb-3 mt-10" />}
-      {charcoal && (
-        <>
-          <Question>
-            <p>{t("charcoal.label")}</p>
-          </Question>
-          <Content>
-            <div className="grid md:grid-cols-2 md:space-x-6">
-              <div className="col-span-1">
+            ))}
+          </div>
+        </QuestionSection>
+      ) : null}
+
+      {wood && charcoal ? <Separator className="my-6" /> : null}
+
+      {charcoal ? (
+        <QuestionSection title={t("charcoal.label")}>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="col-span-1">
+              <Input
+                label={t("wood.quantity")}
+                form={mainForm}
+                name={"energy.heating.quantities.charcoal.quantity"}
+                type="number"
+              />
+            </div>
+
+            <QuestionFieldPair
+              primary={
                 <Input
-                  labelClassName="text-black/70"
-                  label={t("wood.quantity")}
                   form={mainForm}
-                  name={"energy.heating.quantities.charcoal.quantity"}
-                  placeholder={t("wood.quantity")}
+                  name={"energy.heating.quantities.charcoal.frequency"}
+                  label={t("charcoal.funits.label")}
                   type="number"
                 />
-              </div>
-              <div className="grid grid-cols-12 space-x-3">
-                <div className="col-span-7">
-                  <Input
-                    labelClassName="text-black/70"
-                    form={mainForm}
-                    name={"energy.heating.quantities.charcoal.frequency"}
-                    label={t("charcoal.funits.label")}
-                    placeholder={t("charcoal.funits.label")}
-                    type="number"
-                  />
-                </div>
-                <div className="col-span-5">
-                  <FormSelect
-                    form={mainForm}
-                    label="&nbsp;"
-                    labelClassName="text-black/70"
-                    placeholder={t("charcoal.funits.label")}
-                    name={"energy.heating.quantities.charcoal.frequencyUnit"}
-                    data={frequencyKeys.map((e) => ({
-                      label: t(`charcoal.funits.${e}`),
-                      value: e,
-                    }))}
-                  />
-                </div>
-              </div>
-            </div>
-          </Content>
-        </>
-      )}
-    </>
+              }
+              secondary={
+                <FormSelect
+                  form={mainForm}
+                  label={t("charcoal.funits.label")}
+                  labelVisibility="hidden"
+                  placeholder={t("charcoal.funits.label")}
+                  name={"energy.heating.quantities.charcoal.frequencyUnit"}
+                  data={frequencyKeys.map((e) => ({
+                    label: t(`charcoal.funits.${e}`),
+                    value: e,
+                  }))}
+                />
+              }
+            />
+          </div>
+        </QuestionSection>
+      ) : null}
+    </QuestionFrame>
   );
 };
 

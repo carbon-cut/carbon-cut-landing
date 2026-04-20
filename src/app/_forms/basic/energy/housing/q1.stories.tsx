@@ -1,15 +1,15 @@
 import { StoryObj, Meta } from "@storybook/nextjs";
 import { fn } from "storybook/test";
-import QCar31 from "./qCar3-1";
+import Q1 from "./q1";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/forms";
 import { shellLayout } from "@/app/form/_components/shellLayout";
 import { Card, CardContent } from "@/components/ui/card";
 
-const Component = QCar31;
+const Component = Q1;
 
 const meta = {
-  title: "Forms/Transport/QCar3-1",
+  title: "Forms/Energy/Housing/Q1",
   component: Component,
   parameters: {
     layout: "fullscreen",
@@ -17,13 +17,7 @@ const meta = {
   tags: ["autodocs"],
   decorators: [
     (Story, context) => {
-      const form = useForm({
-        defaultValues: {
-          transport: {
-            cars: [{ engine: "Electrique" }],
-          },
-        },
-      });
+      const form = useForm({});
 
       return (
         <div className={shellLayout.canvas}>
@@ -45,22 +39,22 @@ const meta = {
   args: {
     // Provided by decorator at runtime; this placeholder keeps TS/next build happy.
     mainForm: undefined as any,
-    setSubmit: fn(() => console.log("setSubmit")),
-    next: fn(() => console.log("next")),
-    prev: fn(() => console.log("prev")),
+    setSubmit: fn(() => {}),
+    next: fn(() => {}),
+    prev: fn(() => {}),
     prevAction: null,
-    setOnSubmit: fn(() => console.log("setOnSubmit")),
-    setQuestions: fn(() => console.log("setQuestions")),
-    setVerifyFields: fn(() => console.log("setVerifyFields")),
+    setOnSubmit: fn(() => {}),
+    setQuestions: fn(() => {}),
+    setVerifyFields: fn(() => {}),
     currentIndex: 0,
-    index: 0,
   },
 } satisfies Meta<typeof Component>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-//TODO type
-//@ts-ignore
+
+// TODO: tighten story typing across question modules.
+// @ts-ignore
 export const MainStory = (args, context) => <Component {...args} mainForm={context.mainForm} />;
 
 export const Mobile: Story = {

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import AirQuestions from "./index";
-import Question from "../../../../components/QuestionPrompt";
-import Content from "../../../../components/QuestionContent";
 import { FieldRadio as Radio } from "@/components/forms";
+import QuestionPromptStack from "@/app/_forms/components/QuestionPromptStack";
 
 const QAir: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.qAir");
@@ -37,20 +36,17 @@ const QAir: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
   }, [currentIndex, mainForm, prevValue, setOnSubmit, setQuestions]);
 
   return (
-    <div>
-      <Question>{t("q")}</Question>
-      <Content>
-        <Radio
-          className="w-4/6 md:w-3/6"
-          form={mainForm}
-          name="transport.hasAir"
-          options={[
-            { label: t("lT"), value: true },
-            { label: t("lF"), value: false },
-          ]}
-        />
-      </Content>
-    </div>
+    <QuestionPromptStack prompt={t("q")}>
+      <Radio
+        className="w-4/6 md:w-3/6"
+        form={mainForm}
+        name="transport.hasAir"
+        options={[
+          { label: t("lT"), value: true },
+          { label: t("lF"), value: false },
+        ]}
+      />
+    </QuestionPromptStack>
   );
 };
 

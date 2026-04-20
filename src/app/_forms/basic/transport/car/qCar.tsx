@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import Question from "../../../components/QuestionPrompt";
 import { useScopedI18n } from "@/locales/client";
-import Content from "../../../components/QuestionContent";
 import { QuestionProps, QuestionFC } from "../../../types";
 import carsQuestions from "./index";
 import { FieldInput as Input } from "@/components/forms";
 import FormContext from "@/app/form/_layout/_formContext";
 import { useFieldArray, useWatch } from "react-hook-form";
+import QuestionPromptStack from "@/app/_forms/components/QuestionPromptStack";
 
 const QCar: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.qCar");
@@ -114,12 +113,9 @@ const QCar: QuestionFC = ({ setOnSubmit, setQuestions, mainForm, currentIndex }:
   ]);
 
   return (
-    <div className="space-y-3 mt-6 mb-24">
-      <Question>{t("q")}</Question>
-      <Content className="pl-0 ">
-        <Input name="transport.hasCar" form={mainForm} type="number" />
-      </Content>
-    </div>
+    <QuestionPromptStack prompt={t("q")}>
+      <Input name="transport.hasCar" form={mainForm} type="number" />
+    </QuestionPromptStack>
   );
 };
 

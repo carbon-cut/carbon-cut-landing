@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
 import Question from "../../../../components/QuestionPrompt";
@@ -8,10 +8,12 @@ import Covoiturage from "./covoiturage";
 import Bus from "./bus";
 import Metro from "./metro";
 import { useFieldArray } from "react-hook-form";
-import { Container, Title } from "./container";
+import QuestionRepeaterSection from "@/app/_forms/components/QuestionRepeaterSection";
+import QuestionRepeaterItem from "@/app/_forms/components/QuestionRepeaterItem";
 
 const QShortDistances: QuestionFC = (props: QuestionProps) => {
   const t = useScopedI18n("forms.basic.transport.commonTransport.shortDistances");
+  const tTitles = useScopedI18n("forms.basic.transport.commonTransport.shortDistances.titles");
 
   const {
     fields: fieldsCovoiturage,
@@ -39,62 +41,107 @@ const QShortDistances: QuestionFC = (props: QuestionProps) => {
     name: "transport.commonTransport.shortDistances.metro",
   });
 
+  const sectionStyle = {
+    bus: {
+      card: "bg-orange-50 border-orange-200",
+      badge: "text-[#FF6034]",
+    },
+    covoiturage: {
+      card: "bg-blue-50 border-blue-200",
+      badge: "text-[#004DC2]",
+    },
+    metro: {
+      card: "bg-green-50 border-green-200",
+      badge: "text-[#00A261]",
+    },
+  } as const;
+
+  const addDefaults = {
+    bus: () => ({ busType: undefined, distance: "", nbPeople: "", frequency: "" }),
+    metro: () => ({ distance: "", nbPeople: "", frequency: "" }),
+    covoiturage: () => ({ engine: undefined, distance: "", people: "", frequency: "" }),
+  } as const;
+
   return (
     <div>
       <Question>{t("q")}</Question>
       <Separator className="my-3" />
       {/* Covoiturage */}
       <div className="space-y-3 mb-3">
-        <Title append={appendCovoiturage} type="covoiturage" />
-        <ul className="space-y-2" ref={parentCovoiturage}>
-          {fieldsCovoiturage?.map((fieldCov, idx) => (
-            <Container
-              section="covoiturage"
-              idx={idx}
-              id={fieldCov.id}
-              key={fieldCov.id}
-              remove={removeCovoiturage}
-            >
-              <Covoiturage {...props} idx={idx} />
-            </Container>
-          ))}
-        </ul>
+        <QuestionRepeaterSection
+          icon="🚗"
+          title={tTitles("covoiturage")}
+          addLabel={tTitles("add")}
+          onAdd={() => appendCovoiturage(addDefaults.covoiturage())}
+          addButtonClassName="border-[#00A261] text-[#00A261] hover:bg-[#ECFDF5]"
+        >
+          <ul className="space-y-2" ref={parentCovoiturage}>
+            {fieldsCovoiturage?.map((fieldCov, idx) => (
+              <QuestionRepeaterItem
+                key={fieldCov.id}
+                badge={`${tTitles("trip")} ${idx + 1}`}
+                className={sectionStyle.covoiturage.card}
+                badgeClassName={sectionStyle.covoiturage.badge}
+                removeButtonClassName="text-red-500 hover:text-red-700 hover:bg-red-50"
+                onRemove={() => removeCovoiturage(idx)}
+              >
+                <Covoiturage {...props} idx={idx} />
+              </QuestionRepeaterItem>
+            ))}
+          </ul>
+        </QuestionRepeaterSection>
       </div>
       <Separator className="my-3" />
       {/* Bus */}
       <div className="space-y-3 mb-3">
-        <Title type="bus" append={appendBus} />
-        <ul className="space-y-2" ref={parentBus}>
-          {fieldsBus?.map((fieldBus, idx) => (
-            <Container
-              section="bus"
-              idx={idx}
-              key={fieldBus.id}
-              id={fieldBus.id}
-              remove={removeBus}
-            >
-              <Bus {...props} idx={idx} />
-            </Container>
-          ))}
-        </ul>
+        <QuestionRepeaterSection
+          icon="🚌"
+          title={tTitles("bus")}
+          addLabel={tTitles("add")}
+          onAdd={() => appendBus(addDefaults.bus())}
+          addButtonClassName="border-[#00A261] text-[#00A261] hover:bg-[#ECFDF5]"
+        >
+          <ul className="space-y-2" ref={parentBus}>
+            {fieldsBus?.map((fieldBus, idx) => (
+              <QuestionRepeaterItem
+                key={fieldBus.id}
+                badge={`${tTitles("trip")} ${idx + 1}`}
+                className={sectionStyle.bus.card}
+                badgeClassName={sectionStyle.bus.badge}
+                removeButtonClassName="text-red-500 hover:text-red-700 hover:bg-red-50"
+                onRemove={() => removeBus(idx)}
+              >
+                <Bus {...props} idx={idx} />
+              </QuestionRepeaterItem>
+            ))}
+          </ul>
+        </QuestionRepeaterSection>
       </div>
       <Separator className="my-3" />
       {/* Metro */}
       <div className="space-y-3">
-        <Title type="metro" append={appendMetro} />
-        <ul className="space-y-2" ref={parentMetro}>
-          {fieldsMetro?.map((fieldMetro, idx) => (
-            <Container
-              section="metro"
-              idx={idx}
-              key={fieldMetro.id}
-              id={fieldMetro.id}
-              remove={removeMetro}
-            >
-              <Metro {...props} idx={idx} />
-            </Container>
-          ))}
-        </ul>
+        <QuestionRepeaterSection
+          icon="🚇"
+          title={tTitles("metro")}
+          addLabel={tTitles("add")}
+          onAdd={() => appendMetro(addDefaults.metro())}
+          addButtonClassName="border-[#00A261] text-[#00A261] hover:bg-[#ECFDF5]"
+        >
+          <ul className="space-y-2" ref={parentMetro}>
+            {fieldsMetro?.map((fieldMetro, idx) => (
+              <QuestionRepeaterItem
+                key={fieldMetro.id}
+                badge={`${tTitles("trip")} ${idx + 1}`}
+                className={sectionStyle.metro.card}
+                badgeClassName={sectionStyle.metro.badge}
+                removeButtonClassName="text-red-500 hover:text-red-700 hover:bg-red-50"
+                onRemove={() => removeMetro(idx)}
+              >
+                <Metro {...props} idx={idx} />
+              </QuestionRepeaterItem>
+            ))}
+          </ul>
+        </QuestionRepeaterSection>
       </div>
       <div className="h-2" />
     </div>

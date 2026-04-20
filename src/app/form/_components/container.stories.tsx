@@ -72,9 +72,12 @@ export const DenseContent: Story = {
 
 export const Mobile: Story = {
   render: () => <ContainerCanvas tab="transport" questionIndex={0} />,
+  globals: {
+    viewport: { value: "mobile1" },
+  },
   parameters: {
-    viewport: {
-      defaultViewport: "mobile1",
+    options: {
+      showPanel: false,
     },
   },
 };

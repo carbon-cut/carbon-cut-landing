@@ -9,6 +9,8 @@ const config: StorybookConfig = {
     "@storybook/addon-onboarding",
     "@storybook/addon-a11y",
     "@storybook/addon-vitest",
+    // Storybook 9+: viewport tool is part of the consolidated `storybook/*` package.
+    "storybook/viewport",
   ],
   framework: {
     name: "@storybook/nextjs",

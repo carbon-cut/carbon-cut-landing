@@ -1,6 +1,7 @@
 import { formSchema } from "@/app/_forms/formSchema";
 import { Badge } from "@/components/ui/badge";
 import { useScopedI18n } from "@/locales/client";
+import Typography from "@/components/ui/typography";
 import { AlertTriangle } from "lucide-react";
 import React, { useMemo } from "react";
 import { UseFormReturn, useFormState } from "react-hook-form";
@@ -40,7 +41,9 @@ function CarTitle({
 
   return (
     <div className="flex items-center justify-center gap-3">
-      <h3 className="font-semibold text-foreground text-center">{title}</h3>
+      <Typography asChild variant="subtitle" size="sm" className="text-center">
+        <h3>{title}</h3>
+      </Typography>
       {hasErrors && (
         <Badge
           variant="destructive"

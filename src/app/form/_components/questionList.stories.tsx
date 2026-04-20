@@ -103,9 +103,12 @@ export const MobileOpen: Story = {
       )}
     </FormShellStoryHarness>
   ),
+  globals: {
+    viewport: { value: "mobile1" },
+  },
   parameters: {
-    viewport: {
-      defaultViewport: "mobile1",
+    options: {
+      showPanel: false,
     },
   },
 };

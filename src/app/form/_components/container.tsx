@@ -160,7 +160,9 @@ const Container = React.forwardRef<
             vacation: "bg-section-vacation",
           };
           return (
-            <div className={`${shellLayout.sectionIcon} ${ColorVariant[tab as keyof typeof ColorVariant]}`}>
+            <div
+              className={`${shellLayout.sectionIcon} ${ColorVariant[tab as keyof typeof ColorVariant]}`}
+            >
               <Icon className="h-6 w-6 text-primary-foreground" />
             </div>
           );

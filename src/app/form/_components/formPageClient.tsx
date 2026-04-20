@@ -159,7 +159,22 @@ export default function FormPageClient() {
             sizes="100vw"
             className="h-auto w-full object-cover object-top"
           />
+          <div className="bg-[#7e94ef] h-fit object-bottom opacity-80 border-2 border-[#7e94ef]"></div>
         </div>
+        <div
+          className={style.landSkyMask}
+          style={{
+            WebkitMaskImage: `url(${basePath}/form/background/land1.png)`,
+            maskImage: `url(${basePath}/form/background/land1.png)`,
+          }}
+        />
+        <div
+          className={style.landSkyMaskPhone}
+          style={{
+            WebkitMaskImage: `url(${basePath}/form/background/landPhone.png)`,
+            maskImage: `url(${basePath}/form/background/landPhone.png)`,
+          }}
+        />
         <div className={style.sun}>
           <Image
             src={`${basePath}/form/background/sun.png`}

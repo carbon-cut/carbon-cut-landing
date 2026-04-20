@@ -1,7 +1,3 @@
-import Unit from "@/app/_forms/components/unit";
-import { title } from "process";
-import { number } from "zod";
-
 export default {
   toast: {
     success: "Succès",
@@ -1316,6 +1312,15 @@ export default {
           q1: "En utilisant votre facture d'électricité comme référence, quelle a été votre consommation d'électricité au cours des 12 derniers mois?",
           q2: "Quel est l'index de votre compteur d'électricité?",
           q3: "Si vous n'avez pas votre facture, quelle a été votre dépense mensuelle en électricité pendant cette année?",
+          note: {
+            title: "Astuce",
+            description:
+              "Si vous avez la consommation, indiquez-la en kWh. Sinon, indiquez votre dépense en €. Vous pouvez remplir les deux.",
+          },
+          labels: {
+            preferred: "Consommation (préféré)",
+            fallback: "Dépense mensuelle",
+          },
           Total: "Totale",
         },
         q2: {
@@ -1426,6 +1431,8 @@ export default {
           l12: "L / 100 km",
           l21: "Consommation électrique (kWh par 100 km)",
           l22: "kWh / 100 km",
+          l5: "Distance parcourue par semaine",
+          u5: "km",
         },
         qCar3: {
           title: ({ index }: { index: number }) => `Voiture ${index + 1} : Consommation de voiture`,
@@ -1434,6 +1441,16 @@ export default {
           q1LL: "Litres par semaine",
           q1LE: "kWh par semaine",
           q2: "Si vous ne connaissez pas la consommation, vous pouvez fournir vos dépenses hebdomadaires.",
+          note: {
+            title: "Astuce",
+          },
+          modes: {
+            money: "En euros dépensés",
+          },
+          labels: {
+            moneySpent: "Montant dépensé par semaine",
+            price: ({ unit }: { unit: string }) => `Prix de ${unit}`,
+          },
           q3: "Quelle est la distance parcourue par votre voiture chaque semaine?",
         },
         qCar4: {

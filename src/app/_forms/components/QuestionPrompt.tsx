@@ -4,7 +4,7 @@ import { ClassValue } from "clsx";
 import React from "react";
 
 type Props = {
-  children: string | React.JSX.Element;
+  children: React.ReactNode;
   className?: ClassValue;
 };
 

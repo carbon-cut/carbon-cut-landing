@@ -15,21 +15,21 @@ const HeatingBill: QuestionFC = ({ mainForm }: QuestionProps) => {
         <Input
           form={mainForm}
           name="energy.heating.quantities.heatingNetwork.total"
-          placeholder="kWh"
           type="number"
+          unitAdornment="kWh"
+          unitAdornmentPlacement="end"
           attachedFields={["energy.heating.quantities.heatingNetwork.money"]}
         />
       </Content>
       <SideQuestion
-        className="py-1 md:w-2/4 w-11/12  bg-section-transport/20"
         question={t("q3.q")}
         content={
           <Input
             form={mainForm}
             name="energy.heating.quantities.heatingNetwork.money"
-            unit=""
             type="number"
-            placeholder="€"
+            unitAdornment="€"
+            unitAdornmentPlacement="end"
             attachedFields={["energy.heating.quantities.heatingNetwork.total"]}
           />
         }
