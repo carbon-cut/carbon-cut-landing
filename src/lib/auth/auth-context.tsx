@@ -12,6 +12,8 @@ import {
 } from "react";
 import type { AuthUser, SessionState } from "@/lib/auth/types";
 
+const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
+
 type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 
 type AuthContextValue = {
@@ -24,6 +26,13 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 async function readSession(): Promise<SessionState> {
+  if (isStaticExport) {
+    return {
+      authenticated: false,
+      user: null,
+    };
+  }
+
   const response = await fetch("/api/auth/session", {
     credentials: "same-origin",
     cache: "no-store",
@@ -66,6 +75,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [applySession]);
 
   const signOut = useCallback(async () => {
+    if (isStaticExport) {
+      startTransition(() => {
+        setStatus("unauthenticated");
+        setUser(null);
+      });
+      return;
+    }
+
     await fetch("/api/auth/logout", {
       method: "POST",
       credentials: "same-origin",

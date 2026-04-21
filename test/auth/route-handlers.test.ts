@@ -85,7 +85,7 @@ describe("auth route handlers", () => {
 
   it("sign-in returns a browser-safe authenticated session and sets cookies", async () => {
     mockSignIn.mockResolvedValue(session);
-    const { POST } = await import("@/app/api/auth/sign-in/route");
+    const { POST } = await import("@/server/app-api/auth/sign-in/route");
 
     const response = await POST(
       new Request("http://localhost/api/auth/sign-in", {
@@ -112,7 +112,7 @@ describe("auth route handlers", () => {
       confirmation_email_sent: true,
     });
 
-    const { POST } = await import("@/app/api/auth/sign-up/route");
+    const { POST } = await import("@/server/app-api/auth/sign-up/route");
     const response = await POST(
       new Request("http://localhost/api/auth/sign-up", {
         method: "POST",
@@ -144,7 +144,7 @@ describe("auth route handlers", () => {
     );
     mockRefreshSessionFromCookies.mockResolvedValue(session);
 
-    const { GET } = await import("@/app/api/auth/session/route");
+    const { GET } = await import("@/server/app-api/auth/session/route");
     const response = await GET();
 
     expect(response.status).toBe(200);
@@ -159,7 +159,7 @@ describe("auth route handlers", () => {
     mockCookies.mockResolvedValue(createCookieStore());
     mockRefreshSessionFromCookies.mockResolvedValue(null);
 
-    const { POST } = await import("@/app/api/auth/change-password/route");
+    const { POST } = await import("@/server/app-api/auth/change-password/route");
     const response = await POST(
       new Request("http://localhost/api/auth/change-password", {
         method: "POST",
@@ -183,7 +183,7 @@ describe("auth route handlers", () => {
   });
 
   it("logout route always returns ok after clearing session state", async () => {
-    const { POST } = await import("@/app/api/auth/logout/route");
+    const { POST } = await import("@/server/app-api/auth/logout/route");
     const response = await POST();
 
     expect(mockLogoutAndClearSession).toHaveBeenCalled();

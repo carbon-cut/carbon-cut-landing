@@ -17,10 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
-import {
-  getCollectivityModuleRoute,
-  type CollectivityModuleSlug,
-} from "../_lib/routing";
+import { getCollectivityModuleRoute, type CollectivityModuleSlug } from "../_lib/routing";
 import { cn } from "@/lib/utils";
 import { useScopedI18n } from "@/locales/client";
 
@@ -120,7 +117,7 @@ export default function WorkspaceShell({
                     >
                       <Icon className="mt-0.5 h-4 w-4" />
                       <span className="min-w-0 truncate text-sm font-medium">{route.title}</span>
-{/*                       <Badge
+                      {/*                       <Badge
                         variant="ghost"
                         size="micro"
                         className="text-card-primary-foreground/50 focus-visible:ring-offset-card-primary"

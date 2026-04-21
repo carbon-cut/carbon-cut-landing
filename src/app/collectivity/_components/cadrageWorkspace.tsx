@@ -6,20 +6,11 @@ import { Plus, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
-import {
-  CollectivityCheckbox,
-  CollectivityInput,
-  CollectivitySelect,
-} from "./fields";
+import { CollectivityCheckbox, CollectivityInput, CollectivitySelect } from "./fields";
 import { CollectivityBulletList } from "./lists";
 import { useScopedI18n } from "@/locales/client";
 
-type CompletionKey =
-  | "identity"
-  | "communes"
-  | "perimeter"
-  | "sectorsScopes"
-  | "temporality";
+type CompletionKey = "identity" | "communes" | "perimeter" | "sectorsScopes" | "temporality";
 
 function yearOptions(from: number, to: number) {
   return Array.from({ length: to - from + 1 }, (_, index) => {
@@ -65,8 +56,7 @@ export default function CadrageWorkspace() {
       communes: selectedCommunes.length > 0,
       perimeter: selectedOrganizational.length > 0 && selectedOperational.length > 0,
       sectorsScopes: selectedSectors.length > 0 && selectedScopes.length > 0,
-      temporality:
-        Boolean(referenceYear) && Boolean(targetHorizon) && comparisonYears.length > 0,
+      temporality: Boolean(referenceYear) && Boolean(targetHorizon) && comparisonYears.length > 0,
     }),
     [
       comparisonYears.length,
@@ -179,7 +169,9 @@ export default function CadrageWorkspace() {
                 className="mt-2"
                 value={territoryName}
                 onChange={(event) => setTerritoryName(event.target.value)}
-                placeholder={t("cadrageWorkspace.sections.identity.placeholders.territory") as string}
+                placeholder={
+                  t("cadrageWorkspace.sections.identity.placeholders.territory") as string
+                }
               />
             </div>
           </section>

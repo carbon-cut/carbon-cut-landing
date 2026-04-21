@@ -583,6 +583,8 @@ export default {
         clearAll: "Tout effacer",
         exportJson: "Exporter en JSON",
         submitData: "Soumettre les données",
+        openWorkspace: "Ouvrir l'espace collectivité",
+        openPlanOverview: "Ouvrir la vue d'ensemble du plan",
       },
       workflow: {
         eyebrow: "Espace collectivité",
@@ -627,7 +629,8 @@ export default {
             },
             {
               title: "Territoire et communes",
-              description: "Communes incluses dans le plan et lecture de leur place dans le périmètre.",
+              description:
+                "Communes incluses dans le plan et lecture de leur place dans le périmètre.",
             },
             {
               title: "Périmètre",
@@ -636,7 +639,8 @@ export default {
             },
             {
               title: "Secteurs et scopes",
-              description: "Secteurs couverts par le plan et scopes pris en compte dans le cadre méthodologique.",
+              description:
+                "Secteurs couverts par le plan et scopes pris en compte dans le cadre méthodologique.",
             },
             {
               title: "Temporalité",
@@ -644,29 +648,35 @@ export default {
             },
             {
               title: "État de complétude",
-              description: "Vue synthétique de ce qui est déjà cadré et de ce qui manque encore avant l'inventaire.",
+              description:
+                "Vue synthétique de ce qui est déjà cadré et de ce qui manque encore avant l'inventaire.",
             },
           ],
           inventaire: [
             {
               title: "Collecte des données",
-              description: "Jeux de données d'activité, imports et saisies nécessaires pour construire l'inventaire.",
+              description:
+                "Jeux de données d'activité, imports et saisies nécessaires pour construire l'inventaire.",
             },
             {
               title: "Preuves et sources",
-              description: "Pièces justificatives, exports opérateurs et sources documentaires liées aux datasets.",
+              description:
+                "Pièces justificatives, exports opérateurs et sources documentaires liées aux datasets.",
             },
             {
               title: "Hypothèses et méthode",
-              description: "Hypothèses, proxys, méthode de calcul et limites de qualité des données.",
+              description:
+                "Hypothèses, proxys, méthode de calcul et limites de qualité des données.",
             },
             {
               title: "Résultats d'inventaire",
-              description: "Émissions calculées, ventilations, état de complétude et restitution des sorties.",
+              description:
+                "Émissions calculées, ventilations, état de complétude et restitution des sorties.",
             },
             {
               title: "Lecture territoire",
-              description: "Vue agrégée du Grand Sfax au niveau territorial dans le même espace de travail.",
+              description:
+                "Vue agrégée du Grand Sfax au niveau territorial dans le même espace de travail.",
             },
             {
               title: "Lecture patrimoine municipal",
@@ -680,11 +690,13 @@ export default {
             },
             {
               title: "BaC",
-              description: "Scénario de transition bas-carbone construit à partir des leviers d'atténuation.",
+              description:
+                "Scénario de transition bas-carbone construit à partir des leviers d'atténuation.",
             },
             {
               title: "Hypothèses sectorielles",
-              description: "Hypothèses par secteur utilisées pour projeter les activités et les émissions.",
+              description:
+                "Hypothèses par secteur utilisées pour projeter les activités et les émissions.",
             },
             {
               title: "Trajectoires d'activité",
@@ -702,7 +714,8 @@ export default {
           actions: [
             {
               title: "Contexte et justificatif",
-              description: "Pourquoi l'action existe, sur quel diagnostic elle repose et quel besoin elle couvre.",
+              description:
+                "Pourquoi l'action existe, sur quel diagnostic elle repose et quel besoin elle couvre.",
             },
             {
               title: "Objectifs",
@@ -710,15 +723,18 @@ export default {
             },
             {
               title: "Description de l'action",
-              description: "Contenu opérationnel de la fiche action et périmètre de mise en oeuvre.",
+              description:
+                "Contenu opérationnel de la fiche action et périmètre de mise en oeuvre.",
             },
             {
               title: "Acteurs",
-              description: "Responsables, partenaires et parties mobilisées dans la mise en oeuvre.",
+              description:
+                "Responsables, partenaires et parties mobilisées dans la mise en oeuvre.",
             },
             {
               title: "Impacts",
-              description: "Effets attendus, notamment sur les émissions et le déploiement territorial.",
+              description:
+                "Effets attendus, notamment sur les émissions et le déploiement territorial.",
             },
             {
               title: "Investissement, calendrier et suivi",
@@ -784,8 +800,7 @@ export default {
             description:
               "Ajoutez les communes ou sous-territoires inclus dans le plan puis relisez la liste avant de passer à l'inventaire.",
             communesLabel: "Communes incluses",
-            communesPlaceholder:
-              "ex. Commune ou sous-territoire à ajouter",
+            communesPlaceholder: "ex. Commune ou sous-territoire à ajouter",
             addCommune: "Ajouter",
             removeCommune: "Retirer",
             emptyState: "Aucune commune n'est encore ajoutée au périmètre du plan.",
@@ -811,7 +826,8 @@ export default {
               "Postes indirects retenus pour le plan",
             ],
             noteLabel: "Note courte sur les exclusions ou limites",
-            notePlaceholder: "ex. Hors aviation, hors industrie lourde ou autre limite méthodologique",
+            notePlaceholder:
+              "ex. Hors aviation, hors industrie lourde ou autre limite méthodologique",
             helper:
               "Utilisez cette note seulement pour signaler une limite claire. Le périmètre principal doit rester lisible via les options cochées.",
           },
@@ -2237,6 +2253,7 @@ export default {
         signUp: "Creer un compte",
         retry: "Reessayer",
         logout: "Deconnexion",
+        continueEmailConfirmation: "Continuer vers la confirmation de l'e-mail",
       },
       error: {
         unavailable:

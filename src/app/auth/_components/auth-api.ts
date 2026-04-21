@@ -2,6 +2,8 @@
 
 import type { AuthErrorPayload } from "@/lib/auth/types";
 
+const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
+
 export type ApiResult<T> =
   | { ok: true; data: T }
   | { ok: false; status: number; error: AuthErrorPayload };
@@ -21,6 +23,22 @@ async function parseResponseBody(response: Response) {
 }
 
 export async function postAuth<T>(url: string, body: unknown): Promise<ApiResult<T>> {
+  if (isStaticExport) {
+    return {
+      ok: false,
+      status: 503,
+      error: {
+        error: {
+          status: 503,
+          message: "Authentication is unavailable in the static build",
+          details: {
+            code: "AUTH_UPSTREAM_UNAVAILABLE",
+          },
+        },
+      },
+    };
+  }
+
   let response: Response;
 
   try {

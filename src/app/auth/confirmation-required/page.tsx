@@ -1,17 +1,26 @@
-import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import Link from "next/link";
+import ConfirmationRequiredRedirect from "@/app/auth/_components/confirmation-required-redirect";
+import { useScopedServerI18n } from "@/locales/server";
 
-export default async function ConfirmationRequiredPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const params = await searchParams;
-  const nextParams = new URLSearchParams();
-  const email = typeof params.email === "string" ? params.email : "";
-  const returnTo = typeof params.returnTo === "string" ? params.returnTo : "";
-
-  if (email) nextParams.set("email", email);
-  if (returnTo) nextParams.set("returnTo", returnTo);
-
-  redirect(`/auth/confirm-email${nextParams.toString() ? `?${nextParams.toString()}` : ""}`);
+export default function ConfirmationRequiredPage() {
+  const t = useScopedServerI18n("(auth).common");
+  return (
+    <Suspense
+      fallback={
+        <main id="content" className="px-4 py-32 text-center">
+          <p className="text-sm text-secondary">
+            <Link
+              href="/auth/confirm-email"
+              className="font-semibold text-foreground underline underline-offset-4"
+            >
+              {t("cta.continueEmailConfirmation")}
+            </Link>
+          </p>
+        </main>
+      }
+    >
+      <ConfirmationRequiredRedirect />
+    </Suspense>
+  );
 }

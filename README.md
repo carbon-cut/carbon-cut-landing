@@ -16,6 +16,15 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Static export
+
+This branch is configured for GitHub Pages and builds as a static export.
+
+- `next build` emits the site into `out/`
+- `NEXT_PUBLIC_BASE_PATH` should match the repository path used on Pages
+- `NEXT_PUBLIC_SERVER` must point to a real public backend for form submission and results; do not use `localhost` in deployed builds
+- Auth API routes and middleware are preserved under `src/server/` for reference and tests, but they are not part of the exported app
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 ## Tests

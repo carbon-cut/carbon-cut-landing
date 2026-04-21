@@ -165,8 +165,7 @@ export default function InventoryWorkspace() {
   const [activeDomainKey, setActiveDomainKey] = useState(copy.domains[0]?.key ?? "");
   const [activeLens, setActiveLens] = useState<InventoryLensKey>("territorial");
 
-  const selectedYearData =
-    copy.years.find((year) => year.value === selectedYear) ?? copy.years[0];
+  const selectedYearData = copy.years.find((year) => year.value === selectedYear) ?? copy.years[0];
   const activeDomain =
     copy.domains.find((domain) => domain.key === activeDomainKey) ?? copy.domains[0];
   const activeResults =
@@ -560,7 +559,10 @@ export default function InventoryWorkspace() {
 
                     <div className="mt-4 space-y-4">
                       {metrics.map((metric) => (
-                        <div key={metric.label} className="border-t border-border pt-4 first:border-t-0 first:pt-0">
+                        <div
+                          key={metric.label}
+                          className="border-t border-border pt-4 first:border-t-0 first:pt-0"
+                        >
                           <Typography asChild variant="label" size="sm">
                             <p>{metric.label}</p>
                           </Typography>

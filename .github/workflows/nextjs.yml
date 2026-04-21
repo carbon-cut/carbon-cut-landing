@@ -5,9 +5,9 @@
 name: Deploy Next.js site to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes targeting the GitHub Pages branch
   push:
-    branches: ["main"]
+    branches: ["develop-gitPages"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -36,7 +36,8 @@ jobs:
         run: |
           cat > .env.local <<EOF
           NEXT_PUBLIC_BASE_PATH=/carbon-cut-landing
-          NEXT_PUBLIC_SERVER=http://localhost:1337
+          NEXT_PUBLIC_STATIC_EXPORT=true
+          NEXT_PUBLIC_SERVER=${{ vars.NEXT_PUBLIC_SERVER }}
           EOF
         # do not print secret values; GitHub masks secrets in logs
         shell: bash

@@ -24,7 +24,7 @@ describe("auth middleware", () => {
   });
 
   it("allows requests that already have an access token and user cookie", async () => {
-    const { middleware } = await import("../../middleware");
+    const { middleware } = await import("@/server/middleware");
     const request = new NextRequest("http://localhost/form", {
       headers: {
         cookie: `cc_access_token=${session.access_token}; cc_auth_user=${encodeURIComponent(JSON.stringify(session.user))}`,
@@ -47,7 +47,7 @@ describe("auth middleware", () => {
         })
     ) as typeof fetch;
 
-    const { middleware } = await import("../../middleware");
+    const { middleware } = await import("@/server/middleware");
     const request = new NextRequest("http://localhost/form/questions", {
       headers: {
         cookie: "cc_refresh_token=refresh-token",
@@ -68,7 +68,7 @@ describe("auth middleware", () => {
 
   it("redirects to sign-in and preserves returnTo when unauthenticated", async () => {
     global.fetch = originalFetch;
-    const { middleware } = await import("../../middleware");
+    const { middleware } = await import("@/server/middleware");
     const request = new NextRequest("http://localhost/form/result?id=123");
     const response = await middleware(request);
 
