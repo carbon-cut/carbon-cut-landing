@@ -24,29 +24,39 @@ Il décrit une chaîne complète de transformation territoriale :
 8. organiser la gouvernance
 9. décliner le plan au niveau de chaque commune
 
-En une phrase, le rapport suit cette logique :
+En une phrase, le rapport suit cette logique générale :
 
 `mesurer -> comprendre -> projeter -> décider -> chiffrer -> planifier -> piloter`
 
-## Structure réelle du rapport
+Mais pour le produit, la partie `mesurer` n'est pas un bloc simple.
+
+Elle recouvre au minimum :
+
+`cadrer -> collecter -> rattacher les preuves -> calculer -> restituer les résultats d'inventaire`
+
+## Ce que le rapport établit explicitement
+
+### Structure réelle du rapport
 
 Les grandes parties lues dans le document sont :
 
-1. `Contexte`
-2. `Approche de développement du PAEDC`
-3. `Périmètre`
-4. `Inventaire des émissions de GES`
-5. `Scénarios et cible d’atténuation`
-6. `Plan d’action`
-7. `Annexes`
+1. `Avant-propos`
+2. `Introduction`
+3. `Contexte`
+4. `Approche de développement du PAEDC`
+5. `Périmètre` comme sous-partie de cette approche
+6. `Inventaire des émissions de GES`
+7. `Scénarios et cible d’atténuation`
+8. `Plan d’action`
+9. `Annexes`
 
 Les annexes sont importantes pour le produit, car elles ne sont pas accessoires :
 
 - `Annexe 1` : canevas de collecte des données
-- `Annexe 2` : plans d’action individuels des 7 communes du Grand Sfax
+- `Annexe 2` : plans d’action individuels ciblant les `patrimoines municipaux` respectifs des 7 communes du Grand Sfax
 - `Annexe 3` : perspectives d’évolution de la population du Grand Sfax par commune
 
-## Ce que le produit doit reproduire
+## Ce que le rapport implique pour le produit
 
 Le produit `collectivity` doit reprendre la même colonne vertébrale que le rapport.
 
@@ -65,6 +75,19 @@ Le produit doit donc pouvoir représenter au minimum :
 - les scopes couverts
 - la distinction entre `patrimoine municipal` et `territoire`
 
+Le rapport montre aussi que le bon niveau d'organisation n'est ni :
+
+- `un inventaire totalement séparé par commune`
+- `un inventaire unique où les communes disparaissent complètement dans l'agrégat`
+
+La structure la plus fidèle au document est plutôt la suivante :
+
+- un `plan climat` porté à l'échelle du `Grand Sfax`
+- un `territoire` de référence : `Grand Sfax`
+- un cadre d'inventaire unique à l'échelle de ce territoire
+- à l'intérieur de cet inventaire, des vues ou découpes explicites par `patrimoine municipal` de commune
+- en parallèle, une lecture territoriale agrégée couvrant les émissions du Grand Sfax hors seuls patrimoines municipaux
+
 ### 2. Inventaire
 
 Le rapport présente un inventaire GES structuré par :
@@ -78,13 +101,24 @@ Le rapport présente un inventaire GES structuré par :
 - résultats patrimoines municipaux
 - analyses par source
 
-Le produit doit donc permettre :
+Pour le produit, l'`Inventaire` doit être pensé comme un pipeline unique, et non comme une page uniforme.
 
-- de saisir ou importer les données d'activité
-- de documenter les hypothèses
-- de rattacher les preuves et sources
-- de calculer les résultats par périmètre, source et scope
+Ce pipeline doit au minimum permettre :
+
+- de collecter ou importer les données d'activité
+- de rattacher les preuves et sources aux jeux de données
+- de signaler les hypothèses ou manques lorsqu'une donnée n'est pas directement disponible
+- de calculer en interne les émissions par périmètre, source et scope
+- de restituer à l'utilisateur les résultats d'inventaire : émissions, catégorisation, ventilations et état de complétude
 - de distinguer clairement le municipal du territorial
+
+Le rapport montre également que l'inventaire ne repose pas sur une seule année isolée.
+
+Le produit doit donc pouvoir gérer plusieurs années d'inventaire au sein du même cadre territorial, avec au minimum :
+
+- une année marquée comme `Inventaire de Référence des Emissions (IRE)`
+- au moins une autre année de comparaison pour lire l'évolution observée
+- des comparaisons entre années servant de base plus solide aux travaux prospectifs
 
 ### 3. Scénarios
 
@@ -143,7 +177,7 @@ Exemples observés :
 - besoins par année
 - besoins par commune
 
-Le produit doit donc pouvoir gérer :
+Le produit doit donc au minimum permettre :
 
 - un coût total par action
 - un phasage annuel
@@ -173,19 +207,25 @@ Le rapport ne s'arrête pas au niveau `Grand Sfax`.
 
 Il prévoit des déclinaisons par commune, avec au moins :
 
-- rappel des résultats d'inventaire de la commune
-- scénario `BaU` communal
-- scénario `BaC` communal
-- actions adaptées à la commune
-- investissements requis
+- rappel des résultats d'inventaire du `patrimoine municipal` de la commune
+- scénario `BaU` appliqué au `patrimoine municipal` communal
+- scénario `BaC` appliqué au `patrimoine municipal` communal
+- actions adaptées au `patrimoine municipal` de la commune
+- investissements requis pour cette déclinaison municipale
 
 Le produit doit donc être pensé comme :
 
 - un cadre méthodologique commun
 - une couche territoriale agrégée
-- une couche communale réplicable
+- une lecture communale ciblant d'abord le `patrimoine municipal` de chaque commune à l'intérieur du même cadre produit
 
-## Données et objets métier implicites
+## Ce que nous inférons pour le produit
+
+Les points ci-dessous ne sont pas toujours nommés comme tels dans le rapport.
+
+Ils servent à transformer la lecture du document en structure produit exploitable.
+
+### Objets métier utiles
 
 La lecture du rapport fait apparaître les objets métier suivants.
 
@@ -201,9 +241,14 @@ La lecture du rapport fait apparaître les objets métier suivants.
 
 ### Objets inventaire
 
+- `Cadre d'inventaire territorial`
+- `Année d'inventaire`
+- `Rôle d'année` (`IRE`, `comparaison`, autre)
 - `Secteur`
 - `Source d'émission`
 - `Scope`
+- `Découpe communale`
+- `Patrimoine municipal communal`
 - `Jeu de données`
 - `Indicateur d'activité`
 - `Hypothèse`
@@ -232,13 +277,15 @@ La lecture du rapport fait apparaître les objets métier suivants.
 - `Échéance`
 - `Jalon`
 
-### Objets pilotage
+### Capacités transverses utiles
 
-- `Preuve d'avancement`
-- `Commentaire de suivi`
-- `Risque`
-- `Besoin de financement`
-- `Décision`
+Ces éléments apparaissent comme besoins probables du produit, mais le rapport ne les établit pas encore comme domaine autonome de premier niveau :
+
+- traçabilité des sources et revues documentaires
+- commentaires de suivi
+- besoins de financement
+- décisions et arbitrages
+- signaux de risque ou de blocage
 
 ## Ce que l'annexe de collecte implique pour l'interface
 
@@ -264,10 +311,14 @@ Le rapport prévoit des canevas spécifiques pour :
 Implication produit :
 
 - l'inventaire ne doit pas être conçu comme une seule page uniforme
+- l'inventaire doit être conçu comme un workflow avec navigation interne
+- l'inventaire doit permettre de lire plusieurs années dans le même espace de travail sans changer de contexte produit global
 - il faut des sous-modules de collecte spécialisés
 - certains jeux de données seront tabulaires
 - certains jeux de données devront accepter import et preuves
 - les hypothèses et méthodes doivent être visibles au niveau de chaque dataset
+- les résultats d'inventaire doivent être visibles comme sortie de ce workflow
+- les résultats doivent pouvoir être lus à la fois au niveau `Grand Sfax` et au niveau `patrimoine municipal` de chaque commune
 
 ## Ce que les fiches actions impliquent pour le produit
 
@@ -300,12 +351,14 @@ Implication produit :
 - le produit doit supporter un niveau `territoire` et un niveau `commune`
 - les modèles, hypothèses ou coefficients doivent pouvoir être hérités puis ajustés
 - il faut probablement un mécanisme de `template -> adaptation locale`
+- cette déclinaison communale vise d'abord le `patrimoine municipal` de chaque commune, pas une copie complète du PAEDC territorial
+- cette déclinaison communale peut être portée par des règles de portée, de filtre et de permission dans les mêmes modules, sans créer une branche de routes dédiée
 
-## Conséquences pour l'architecture produit
+## Choix de produit retenus pour commencer l'implémentation
 
 Le produit `collectivity` ne doit pas être pensé comme un `dashboard`.
 
-Il doit être pensé comme un `moteur de plan climat territorial`.
+Il est plus sûr de le démarrer comme un petit noyau produit centré sur quatre routes majeures.
 
 ### Modules produit recommandés
 
@@ -313,10 +366,10 @@ Il doit être pensé comme un `moteur de plan climat territorial`.
 2. `Inventaire`
 3. `Scénarios`
 4. `Plan d'action`
-5. `Investissements`
-6. `Feuille de route`
-7. `Pilotage`
-8. `Reporting`
+
+Ces quatre éléments sont les `modules visibles` du produit au démarrage.
+
+Ils ne doivent pas être confondus avec les routes d'entrée techniques ou contextuelles.
 
 ### Rôle de chaque module
 
@@ -326,7 +379,7 @@ Il doit être pensé comme un `moteur de plan climat territorial`.
 
 #### Inventaire
 
-- collecte, import, preuves, hypothèses, résultats de base
+- workflow de collecte, import, hypothèses, calcul interne et restitution des résultats d'inventaire, avec plusieurs années dans un même espace de travail et lecture territoriale/communale
 
 #### Scénarios
 
@@ -334,54 +387,131 @@ Il doit être pensé comme un `moteur de plan climat territorial`.
 
 #### Plan d'action
 
-- fiches actions, secteurs, acteurs, impact, statut
+- fiches actions, secteurs, acteurs, impact, statut, avec investissements, feuille de route et pilotage traités comme sous-espaces ou sections internes plutôt que comme routes majeures au départ
 
-#### Investissements
+### Descriptions courtes des routes
 
-- coûts, ventilation annuelle, ventilation communale, financement
+- `/collectivity/[planId]/cadrage` : définir le périmètre, les communes, les secteurs, les scopes, l'année de référence et l'horizon.
+- `/collectivity/[planId]/inventaire` : gérer la collecte, les années couvertes et les résultats d'inventaire dans un même espace de travail.
+- `/collectivity/[planId]/scenarios` : comparer les trajectoires prospectives et construire les hypothèses `BaU` / `BaC`.
+- `/collectivity/[planId]/actions` : gérer le portefeuille des fiches actions, avec les coûts, le calendrier et le suivi dans ce même module.
 
-#### Feuille de route
+### Routes d'entrée non modulaires
 
-- séquencement, jalons, dépendances, calendrier
+- `/collectivity` : point d'accès global ou de redirection vers un plan.
+- `/collectivity/[planId]` : point d'entrée contextuel du plan avant d'entrer dans un module.
 
-#### Pilotage
+Ces routes ne sont pas des modules produit supplémentaires.
 
-- gouvernance, responsables, suivi, preuves d'avancement
+Au démarrage, elles peuvent rester très légères :
 
-#### Reporting
+- redirection
+- sélecteur de plan
+- résumé minimal de contexte
 
-- export du plan, synthèses par territoire, synthèses par commune
+## Conclusions de routage utiles pour commencer l'implémentation
 
-## Proposition de squelette de routes
+À ce stade, le document permet de conclure de manière suffisamment solide les points suivants :
 
-Ce n'est pas encore une décision finale, mais le rapport pousse naturellement vers un arborescence de ce type :
+- il faut un contexte racine pour un `plan climat`
+- ce plan est rattaché à un `territoire`
+- l'application doit exposer un petit nombre de routes alignées avec les grands modules métier
+- l'`Inventaire` peut être traité comme un espace unique couvrant plusieurs années, plutôt que comme une famille d'instances déjà figées
+- la `commune` peut être traitée comme une portée d'accès et de lecture dans les mêmes routes
+- les sous-écrans fins de l'inventaire existent probablement, mais leur statut exact de route n'est pas encore tous confirmé par le rapport
+
+### Routes majeures retenues pour démarrer
+
+Les routes ci-dessous constituent un choix de produit volontairement resserré pour commencer l'implémentation :
+
+```txt
+/collectivity/[planId]/cadrage
+/collectivity/[planId]/inventaire
+/collectivity/[planId]/scenarios
+/collectivity/[planId]/actions
+```
+
+Les routes d'entrée suivantes existent aussi, mais ne comptent pas comme modules visibles :
+
+```txt
+/collectivity
+/collectivity/[planId]
+```
+
+### Inventaire : un espace multi-années
+
+Le point le plus important pour commencer correctement est le suivant :
+
+- le rapport prouve que l'inventaire couvre plusieurs années
+- il ne prouve pas encore qu'il faut modéliser plusieurs objets d'inventaire routables dès le départ
+
+Le choix retenu pour démarrer est donc :
+
+```txt
+/collectivity/[planId]/inventaire
+```
+
+avec l'idée métier suivante :
+
+- un même espace d'inventaire peut exposer plusieurs années couvertes
+- l'une de ces années est marquée comme `IRE`
+- au moins une autre année peut servir de comparaison
+- le changement d'année est un changement de vue ou de tranche de travail, pas forcément un changement de route
+
+### Sous-routes inventaire : probables, mais encore ouvertes
+
+Le rapport prouve que ces fonctions doivent exister dans l'expérience :
+
+- collecte des données
+- preuves / sources
+- hypothèses et éléments méthodologiques
+- résultats d'inventaire
+- lecture patrimoine municipal / lecture territoriale
+
+En revanche, le rapport ne force pas encore chacune de ces fonctions à devenir une URL dédiée.
+
+Pour démarrer l'implémentation, on peut donc traiter, dans un premier temps, ces dimensions comme :
+
+- navigation interne
+- tabs
+- panneaux secondaires
+- vues dépendantes du contexte de collecte
+
+### Déclinaison communale : portée d'accès plutôt que branche dédiée
+
+Le rapport justifie clairement des vues et usages au niveau `commune`.
+
+Le choix retenu pour démarrer est le suivant :
+
+- les routes restent les mêmes pour tous les utilisateurs
+- la différence se fait par portée d'accès, filtrage et permissions
+- le compte `municipalité / Grand Sfax` voit l'ensemble du périmètre
+- le compte `commune` ne voit que les données, actions et vues pertinentes pour son `patrimoine municipal`
+
+Autrement dit, la déclinaison communale devient d'abord un problème de visibilité et d'autorisation, pas un problème de navigation.
+
+En version très simple :
+
+- `Grand Sfax` voit tout le plan
+- une `commune` ne voit pas tout le territoire
+- une `commune` voit surtout ce qui concerne son propre `patrimoine municipal`
+
+### Décision pratique pour démarrer
+
+Si l'objectif est de commencer à implémenter maintenant, la structure la plus sûre est :
 
 ```txt
 /collectivity
 /collectivity/[planId]
 /collectivity/[planId]/cadrage
 /collectivity/[planId]/inventaire
-/collectivity/[planId]/inventaire/perimetre
-/collectivity/[planId]/inventaire/patrimoine
-/collectivity/[planId]/inventaire/territoire
-/collectivity/[planId]/inventaire/hypotheses
-/collectivity/[planId]/inventaire/preuves
 /collectivity/[planId]/scenarios
-/collectivity/[planId]/scenarios/bau
-/collectivity/[planId]/scenarios/bac
 /collectivity/[planId]/actions
-/collectivity/[planId]/actions/[actionId]
-/collectivity/[planId]/investissements
-/collectivity/[planId]/feuille-de-route
-/collectivity/[planId]/pilotage
-/collectivity/[planId]/reporting
-/collectivity/[planId]/communes
-/collectivity/[planId]/communes/[communeId]
-/collectivity/[planId]/communes/[communeId]/inventaire
-/collectivity/[planId]/communes/[communeId]/scenarios
-/collectivity/[planId]/communes/[communeId]/actions
-/collectivity/[planId]/communes/[communeId]/investissements
 ```
+
+Cette structure ne prétend pas être prouvée intégralement par le rapport.
+
+Elle constitue un choix de produit simple pour commencer à implémenter sans figer trop tôt des découpages encore ouverts.
 
 ## Implication immédiate pour l'écran que nous concevons maintenant
 
@@ -398,6 +528,12 @@ L'écran d'inventaire doit d'abord répondre à quatre questions :
 3. quelles données dois-je saisir maintenant ?
 4. qu'est-ce qui manque encore pour rendre la base exploitable ?
 
+Il doit aussi rendre visibles les résultats produits par l'inventaire, sans confondre ces résultats avec le mécanisme interne de calcul.
+
+Il ne doit pas non plus faire croire que l'utilisateur change d'application ou de plan lorsqu'il passe d'une année d'inventaire à une autre.
+
+Le changement d'année d'inventaire reste un changement de contexte de travail à l'intérieur du même `plan climat` et du même `territoire`.
+
 Conséquences UI :
 
 - en-tête compact
@@ -409,9 +545,11 @@ Conséquences UI :
 ## Points de vigilance
 
 - Le rapport mêle niveau `territoire` et niveau `patrimoine municipal`, donc l'UI doit les séparer clairement.
+- Le rapport ne pousse pas vers `un inventaire autonome par commune`, mais vers un inventaire territorial qui garde des découpes communales explicites.
 - Le rapport accorde un rôle central à la gouvernance ; il ne faut pas la réduire à une simple note.
 - Les investissements et le calendrier ne sont pas des annexes visuelles, mais des sorties majeures.
 - Les déclinaisons communales sont structurelles, pas accessoires.
+- Les années d'inventaire sont multiples ; l'`IRE` est une année de référence, pas l'identité complète du shell.
 - Certaines données proviennent d'audits réels, d'autres d'approximations ou de transpositions ; le produit doit garder la traçabilité de cette différence.
 
 ## À faire ensuite

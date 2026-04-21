@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-import WorkspaceShell from "./_components/workspaceShell";
 import { toKeywordArray } from "@/lib/seo";
 import { useScopedServerI18n } from "@/locales/server";
 
@@ -14,5 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function CollectivityLayout({ children }: { children: ReactNode }) {
-  return <WorkspaceShell>{children}</WorkspaceShell>;
+  return children;
 }

@@ -2,55 +2,86 @@
 
 import type { ComponentType, ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  CalendarDays,
   ChevronDown,
   ClipboardList,
   FileSpreadsheet,
-  Landmark,
   Plus,
   Settings,
+  SlidersHorizontal,
   Target,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
+import {
+  getCollectivityModuleRoute,
+  type CollectivityModuleSlug,
+} from "../_lib/routing";
 import { cn } from "@/lib/utils";
 import { useScopedI18n } from "@/locales/client";
 
-type WorkspaceRoute = "inventory" | "scenarios" | "planning" | "action-plan" | "investments";
-
 const routes: Array<{
-  href: string;
-  key: WorkspaceRoute;
+  key: CollectivityModuleSlug;
   icon: ComponentType<{ className?: string }>;
 }> = [
-  { href: "/collectivity/inventory", key: "inventory", icon: FileSpreadsheet },
-  { href: "/collectivity/scenarios", key: "scenarios", icon: Target },
-  { href: "/collectivity/planning", key: "planning", icon: CalendarDays },
-  { href: "/collectivity/action-plan", key: "action-plan", icon: ClipboardList },
-  { href: "/collectivity/investments", key: "investments", icon: Landmark },
+  { key: "cadrage", icon: SlidersHorizontal },
+  { key: "inventaire", icon: FileSpreadsheet },
+  { key: "scenarios", icon: Target },
+  { key: "actions", icon: ClipboardList },
 ];
 
-export default function WorkspaceShell({ children }: { children: ReactNode }) {
+export default function WorkspaceShell({
+  children,
+  planId,
+}: {
+  children: ReactNode;
+  planId: string;
+}) {
   const t = useScopedI18n("(pages).collectivityDashboard");
   const pathname = usePathname();
-  const activeRoute = routes.find((route) => pathname === route.href) ?? routes[0];
-  const requirements = t("baseline.requirements") as string[];
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const routeItems = routes.map((route) => {
+    const routeKey = `workflow.sections.${route.key}` as const;
+
+    return {
+      ...route,
+      href: getCollectivityModuleRoute(planId, route.key),
+      title: t(`${routeKey}.title`) as string,
+      status: t(`${routeKey}.status`) as string,
+    };
+  });
+  const activeRoute = routeItems.find((route) => pathname === route.href);
+  const planMarkers = [
+    t("planMarkers.territory") as string,
+    t("planMarkers.communes") as string,
+    t("planMarkers.horizon") as string,
+  ];
 
   return (
     <main id="content" className="min-h-screen bg-workspace text-foreground">
       <div className="min-h-screen lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
         <aside className="sticky top-0 hidden h-screen flex-col border-r border-border-light bg-card-primary text-card-primary-foreground lg:flex">
           <div className="border-b border-border-light px-5 py-5">
-            <Badge
-              variant="outline"
-              className="border-card-primary-foreground/18 bg-card-primary-foreground/6 uppercase tracking-[0.2em] text-card-primary-foreground/78 focus-visible:ring-offset-card-primary"
-            >
-              {t("header.badge") as string}
-            </Badge>
+            <Image
+              className="mx-auto"
+              src={`${basePath}/logo/logoDark.svg`}
+              alt="Carbon Cut logo"
+              width={141}
+              height={48}
+            />
+            <div className="mx-auto mb-5 w-fit">
+              <Badge
+                variant="outline"
+                size="micro"
+                className="px-2 py-1 text-card-primary-foreground/78"
+              >
+                {t("header.badge") as string}
+              </Badge>
+            </div>
             <Typography
               asChild
               variant="title"
@@ -71,13 +102,12 @@ export default function WorkspaceShell({ children }: { children: ReactNode }) {
 
           <nav aria-label={t("workflow.title") as string} className="flex-1 px-3 py-4">
             <ul className="space-y-1.5">
-              {routes.map((route) => {
-                const routeKey = `workflow.sections.${route.key}` as const;
+              {routeItems.map((route) => {
                 const Icon = route.icon;
                 const isActive = pathname === route.href;
 
                 return (
-                  <li key={route.href}>
+                  <li key={route.key}>
                     <Link
                       href={route.href}
                       aria-current={isActive ? "page" : undefined}
@@ -89,16 +119,14 @@ export default function WorkspaceShell({ children }: { children: ReactNode }) {
                       )}
                     >
                       <Icon className="mt-0.5 h-4 w-4" />
-                      <span className="min-w-0 truncate text-sm font-medium">
-                        {t(`${routeKey}.title`) as string}
-                      </span>
-                      <Badge
+                      <span className="min-w-0 truncate text-sm font-medium">{route.title}</span>
+{/*                       <Badge
                         variant="ghost"
                         size="micro"
                         className="text-card-primary-foreground/50 focus-visible:ring-offset-card-primary"
                       >
-                        {t(`${routeKey}.status`) as string}
-                      </Badge>
+                        {route.status}
+                      </Badge> */}
                     </Link>
                   </li>
                 );
@@ -113,7 +141,7 @@ export default function WorkspaceShell({ children }: { children: ReactNode }) {
               size="xxs"
               className="text-card-primary-foreground/48"
             >
-              <p>{t("baseline.requirementsTitle") as string}</p>
+              <p>{t("planSidebar.title") as string}</p>
             </Typography>
             <Typography
               asChild
@@ -121,7 +149,7 @@ export default function WorkspaceShell({ children }: { children: ReactNode }) {
               size="sm"
               className="mt-2 text-card-primary-foreground/74"
             >
-              <p>{requirements[1]}</p>
+              <p>{t("planSidebar.description") as string}</p>
             </Typography>
           </div>
         </aside>
@@ -132,13 +160,12 @@ export default function WorkspaceShell({ children }: { children: ReactNode }) {
               aria-label={t("workflow.title") as string}
               className="flex gap-5 overflow-x-auto px-4 py-3"
             >
-              {routes.map((route) => {
-                const routeKey = `workflow.sections.${route.key}` as const;
+              {routeItems.map((route) => {
                 const isActive = pathname === route.href;
 
                 return (
                   <Link
-                    key={route.href}
+                    key={route.key}
                     href={route.href}
                     className={cn(
                       "whitespace-nowrap border-b-2 pb-2 text-sm font-medium",
@@ -147,7 +174,7 @@ export default function WorkspaceShell({ children }: { children: ReactNode }) {
                         : "border-transparent text-secondary hover:text-foreground"
                     )}
                   >
-                    {t(`${routeKey}.title`) as string}
+                    {route.title}
                   </Link>
                 );
               })}
@@ -159,7 +186,7 @@ export default function WorkspaceShell({ children }: { children: ReactNode }) {
               <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                 <div className="min-w-0">
                   <Typography asChild variant="eyebrow" size="xxs" className="text-secondary">
-                    <p>{t(`workflow.sections.${activeRoute.key}.title`) as string}</p>
+                    <p>{t(`workflow.sections.${activeRoute?.key ?? "cadrage"}.title`) as string}</p>
                   </Typography>
                   <Typography asChild variant="title" size="xl" className="mt-1">
                     <h1>{t("header.title") as string}</h1>
@@ -206,24 +233,21 @@ export default function WorkspaceShell({ children }: { children: ReactNode }) {
                 <Typography asChild variant="label" size="sm">
                   <span>
                     {t("workflow.currentLabel") as string}:{" "}
-                    {t(`workflow.sections.${activeRoute.key}.title`) as string}
+                    {activeRoute?.title ?? routeItems[0]?.title}
                   </span>
                 </Typography>
-                <Typography asChild variant="caption" size="sm">
-                  <span>{t("baseline.cards.ire.title") as string}</span>
-                </Typography>
-                <Typography asChild variant="caption" size="sm" className="text-border">
-                  <span>/</span>
-                </Typography>
-                <Typography asChild variant="caption" size="sm">
-                  <span>{t("baseline.cards.year2.title") as string}</span>
-                </Typography>
-                <Typography asChild variant="caption" size="sm" className="text-border">
-                  <span>/</span>
-                </Typography>
-                <Typography asChild variant="caption" size="sm">
-                  <span>{t("baseline.cards.horizon.title") as string}</span>
-                </Typography>
+                {planMarkers.map((marker, index) => (
+                  <div key={marker} className="flex items-center gap-x-4">
+                    {index > 0 ? (
+                      <Typography asChild variant="caption" size="sm" className="text-border">
+                        <span>/</span>
+                      </Typography>
+                    ) : null}
+                    <Typography asChild variant="caption" size="sm">
+                      <span>{marker}</span>
+                    </Typography>
+                  </div>
+                ))}
               </div>
             </div>
           </header>

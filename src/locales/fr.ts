@@ -570,12 +570,12 @@ export default {
       header: {
         badge: "Espace collectivité",
         status: "Brouillon · Prototype d'interface (sans backend)",
-        title: "Sfax 2023 Baseline",
-        meta: "IRE · 2023 · Sfax, Tunisie",
+        title: "Plan climat collectivité",
+        meta: "Territoire à définir · Cadrage en cours · Horizon à fixer",
       },
       actions: {
-        switchInventory: "Changer d'inventaire",
-        new: "Nouveau",
+        switchInventory: "Changer de plan",
+        new: "Nouveau plan",
         settings: "Paramètres",
         import: "Importer des fichiers",
         addManual: "Ajouter manuellement",
@@ -588,36 +588,274 @@ export default {
         eyebrow: "Espace collectivité",
         title: "Modules du plan",
         description:
-          "Le plan s'organise autour d'un inventaire, d'une série de référence et de modules de travail reliés entre eux.",
+          "Le plan suit la progression du rapport : cadrage, inventaire, scénarios et plan d'action.",
         currentLabel: "Espace actif",
         sections: {
-          inventory: {
+          cadrage: {
+            title: "Cadrage",
+            description:
+              "Définir le périmètre, les communes, les secteurs, les scopes, l'année de référence et l'horizon.",
+            status: "À cadrer",
+          },
+          inventaire: {
             title: "Inventaire",
             description:
-              "Collecte des données, périmètre, pièces justificatives et préparation de la base.",
+              "Gérer la collecte, les années couvertes et les résultats d'inventaire dans un même espace de travail.",
             status: "Actif",
           },
           scenarios: {
-            title: "BaC / BaU",
-            description: "Scénarios de référence et trajectoires alimentés par l'inventaire.",
+            title: "Scénarios",
+            description:
+              "Comparer les trajectoires prospectives et construire les hypothèses BaU / BaC.",
             status: "À structurer",
           },
-          planning: {
-            title: "Planification",
-            description: "Organisation des priorités, séquences de travail et horizons d'action.",
-            status: "À structurer",
-          },
-          "action-plan": {
+          actions: {
             title: "Plan d'action",
-            description: "Mesures, responsables, calendrier et suivi de mise en oeuvre.",
-            status: "À structurer",
-          },
-          investments: {
-            title: "Investissements",
-            description: "Coûts, arbitrages et pistes de financement à rattacher aux actions.",
+            description:
+              "Gérer le portefeuille des fiches actions, avec les coûts, le calendrier et le suivi dans ce même module.",
             status: "À structurer",
           },
         },
+      },
+      moduleStructure: {
+        title: "Sections majeures",
+        sections: {
+          cadrage: [
+            {
+              title: "Identité du plan",
+              description: "Nom du plan, territoire de référence et cadre général partagé.",
+            },
+            {
+              title: "Territoire et communes",
+              description: "Communes incluses dans le plan et lecture de leur place dans le périmètre.",
+            },
+            {
+              title: "Périmètre",
+              description:
+                "Périmètre organisationnel, périmètre opérationnel et distinction entre territoire et patrimoine municipal.",
+            },
+            {
+              title: "Secteurs et scopes",
+              description: "Secteurs couverts par le plan et scopes pris en compte dans le cadre méthodologique.",
+            },
+            {
+              title: "Temporalité",
+              description: "Année de référence, années de comparaison et horizon cible du plan.",
+            },
+            {
+              title: "État de complétude",
+              description: "Vue synthétique de ce qui est déjà cadré et de ce qui manque encore avant l'inventaire.",
+            },
+          ],
+          inventaire: [
+            {
+              title: "Collecte des données",
+              description: "Jeux de données d'activité, imports et saisies nécessaires pour construire l'inventaire.",
+            },
+            {
+              title: "Preuves et sources",
+              description: "Pièces justificatives, exports opérateurs et sources documentaires liées aux datasets.",
+            },
+            {
+              title: "Hypothèses et méthode",
+              description: "Hypothèses, proxys, méthode de calcul et limites de qualité des données.",
+            },
+            {
+              title: "Résultats d'inventaire",
+              description: "Émissions calculées, ventilations, état de complétude et restitution des sorties.",
+            },
+            {
+              title: "Lecture territoire",
+              description: "Vue agrégée du Grand Sfax au niveau territorial dans le même espace de travail.",
+            },
+            {
+              title: "Lecture patrimoine municipal",
+              description: "Découpes communales ciblant le patrimoine municipal de chaque commune.",
+            },
+          ],
+          scenarios: [
+            {
+              title: "BaU",
+              description: "Scénario tendanciel fondé sur la poursuite des dynamiques observées.",
+            },
+            {
+              title: "BaC",
+              description: "Scénario de transition bas-carbone construit à partir des leviers d'atténuation.",
+            },
+            {
+              title: "Hypothèses sectorielles",
+              description: "Hypothèses par secteur utilisées pour projeter les activités et les émissions.",
+            },
+            {
+              title: "Trajectoires d'activité",
+              description: "Évolution projetée des données d'activité selon les scénarios retenus.",
+            },
+            {
+              title: "Trajectoires d'émissions",
+              description: "Comparaison des émissions projetées entre BaU et BaC à horizon 2030.",
+            },
+            {
+              title: "Cible 2030",
+              description: "Cible climatique et potentiel de réduction dégagés par les scénarios.",
+            },
+          ],
+          actions: [
+            {
+              title: "Contexte et justificatif",
+              description: "Pourquoi l'action existe, sur quel diagnostic elle repose et quel besoin elle couvre.",
+            },
+            {
+              title: "Objectifs",
+              description: "Résultat attendu, cap poursuivi et contribution au plan climat.",
+            },
+            {
+              title: "Description de l'action",
+              description: "Contenu opérationnel de la fiche action et périmètre de mise en oeuvre.",
+            },
+            {
+              title: "Acteurs",
+              description: "Responsables, partenaires et parties mobilisées dans la mise en oeuvre.",
+            },
+            {
+              title: "Impacts",
+              description: "Effets attendus, notamment sur les émissions et le déploiement territorial.",
+            },
+            {
+              title: "Investissement, calendrier et suivi",
+              description: "Coûts, phasage, échéances et pilotage intégrés dans ce même module.",
+            },
+          ],
+        },
+      },
+      cadrageWorkspace: {
+        eyebrow: "Module actif",
+        title: "Cadrage du plan",
+        description:
+          "Définissez ici le cadre commun du plan avant l'inventaire, les scénarios et les actions. Tout le reste s'appuiera sur ce périmètre partagé.",
+        account: {
+          title: "Règle de lecture",
+          description:
+            "Le compte collectivité pilote le cadrage commun du plan. Un compte commune n'agit que sur ce qui concerne son patrimoine municipal, sans reprendre la main sur l'ensemble du cadre territorial.",
+        },
+        output: {
+          title: "Sortie attendue",
+          items: [
+            "Un périmètre stable pour lancer l'inventaire sans ambiguïté.",
+            "Une base commune pour comparer les années et lire les écarts.",
+            "Un cadre exploitable pour les scénarios BaU / BaC et le plan d'action.",
+          ],
+        },
+        completion: {
+          title: "État de complétude",
+          ready: "Prêt pour l'inventaire",
+          incomplete: "À compléter",
+          progressSuffix: "blocs cadrés",
+          items: {
+            identity: "Identité du plan",
+            communes: "Communes incluses",
+            perimeter: "Périmètre du plan",
+            sectorsScopes: "Secteurs et scopes",
+            temporality: "Temporalité",
+          },
+        },
+        sections: {
+          identity: {
+            title: "Identité du plan",
+            description:
+              "Vérifiez l'identité du plan et définissez le niveau territorial de référence sur lequel tout le reste va s'appuyer.",
+            fields: {
+              planIdentity: "Identité du plan",
+              territoryLevel: "Niveau territorial principal",
+              territory: "Territoire de référence",
+            },
+            planIdentityHint:
+              "Le nom du plan est défini au niveau du dossier. Cette section sert à verrouiller le territoire de référence et le niveau de lecture utilisé dans les modules suivants.",
+            territoryLevels: [
+              { value: "municipalite", label: "Municipalité" },
+              { value: "intercommunalite", label: "Intercommunalité" },
+              { value: "territoire-elargi", label: "Territoire élargi" },
+            ],
+            placeholders: {
+              territory: "ex. Agglomération concernée, intercommunalité ou municipalité porteuse",
+            },
+          },
+          territory: {
+            title: "Territoire et communes",
+            description:
+              "Ajoutez les communes ou sous-territoires inclus dans le plan puis relisez la liste avant de passer à l'inventaire.",
+            communesLabel: "Communes incluses",
+            communesPlaceholder:
+              "ex. Commune ou sous-territoire à ajouter",
+            addCommune: "Ajouter",
+            removeCommune: "Retirer",
+            emptyState: "Aucune commune n'est encore ajoutée au périmètre du plan.",
+            helper:
+              "Cette liste sert ensuite de base aux lectures territoriales et aux déclinaisons patrimoniales.",
+          },
+          perimeter: {
+            title: "Périmètre",
+            description:
+              "Définissez ce qui entre dans le plan au niveau organisationnel et au niveau opérationnel sans passer par des notes longues et floues.",
+            organizationalLabel: "Périmètre organisationnel",
+            organizationalOptions: [
+              "Collectivité porteuse du plan",
+              "Communes membres incluses dans la gouvernance",
+              "Services municipaux contributeurs",
+              "Structure intercommunale ou dispositif de pilotage",
+            ],
+            operationalLabel: "Périmètre opérationnel",
+            operationalOptions: [
+              "Patrimoine municipal",
+              "Territoire au sens large",
+              "Infrastructures ou services mutualisés",
+              "Postes indirects retenus pour le plan",
+            ],
+            noteLabel: "Note courte sur les exclusions ou limites",
+            notePlaceholder: "ex. Hors aviation, hors industrie lourde ou autre limite méthodologique",
+            helper:
+              "Utilisez cette note seulement pour signaler une limite claire. Le périmètre principal doit rester lisible via les options cochées.",
+          },
+          sectorsScopes: {
+            title: "Secteurs et scopes",
+            description:
+              "Confirmez les secteurs couverts par le plan ainsi que les scopes retenus dans le cadre méthodologique.",
+            sectorsTitle: "Secteurs couverts",
+            sectors: [
+              "Énergie stationnaire",
+              "Transport",
+              "Déchets",
+              "Eaux usées",
+              "Espaces verts et AFAT",
+              "Tertiaire et industrie",
+            ],
+            scopesTitle: "Scopes couverts",
+            scopes: ["Scope 1", "Scope 2", "Scope 3"],
+          },
+          temporality: {
+            title: "Temporalité",
+            description:
+              "Fixez l'année de référence, l'horizon cible et ajoutez une ou plusieurs années de comparaison avant scénarisation.",
+            referenceYear: "Année de référence",
+            horizon: "Horizon cible",
+            comparisonYears: "Années de comparaison",
+            comparisonYearsPlaceholder: "Choisir une année",
+            addYear: "Ajouter",
+            removeYear: "Retirer",
+            emptyState: "Aucune année de comparaison n'est encore ajoutée.",
+            helper:
+              "Ajoutez autant d'années que nécessaire pour comparer les trajectoires et alimenter les scénarios.",
+          },
+        },
+      },
+      planSidebar: {
+        title: "Lecture du rapport",
+        description:
+          "Quatre modules visibles au démarrage : cadrage, inventaire, scénarios et plan d'action. Les routes d'entrée restent non modulaires.",
+      },
+      planMarkers: {
+        territory: "Territoire de référence",
+        communes: "Communes incluses",
+        horizon: "Horizon cible",
       },
       baseline: {
         eyebrow: "Série de référence",
@@ -654,6 +892,623 @@ export default {
         description:
           "L'inventaire reste la base de travail. Les sous-sections ci-dessous servent à structurer la saisie, les preuves et les hypothèses avant les scénarios.",
         navLabel: "Sous-sections inventaire",
+      },
+      inventoryWorkspace: {
+        eyebrow: "Module actif",
+        title: "Base d'inventaire du plan",
+        description:
+          "Construisez ici la base d'émissions du plan en suivant les années couvertes, les domaines de collecte, les pièces justificatives, les hypothèses et les premiers résultats déjà lisibles.",
+        controls: {
+          yearLabel: "Année consultée",
+          yearPlaceholder: "Choisir une année d'inventaire",
+          lensLabel: "Lecture active",
+          lensPlaceholder: "Choisir une lecture",
+          lenses: {
+            territorial: "Territorial",
+            municipal: "Patrimoine municipal",
+          },
+        },
+        readingRule: {
+          title: "Règle de lecture",
+          territorial:
+            "Le compte Grand Sfax / municipalité voit l'ensemble de l'inventaire territorial et ses découpes par périmètre, source ou catégorie.",
+          municipal:
+            "Un compte commune ne voit que les données utiles à son patrimoine municipal, sans accès à toute la lecture territoriale.",
+        },
+        sections: {
+          years: {
+            title: "Années d'inventaire",
+            description:
+              "L'inventaire doit garder visible l'IRE ainsi qu'au moins une autre année de comparaison si elle est disponible. La lecture courante change le détail affiché dans les résultats et la collecte.",
+          },
+          domains: {
+            title: "Domaines de collecte",
+            description:
+              "Chaque domaine regroupe les jeux de données attendus, les sources mobilisées et les manques restant à lever avant de figer la base.",
+            scopeTitle: "Périmètre du domaine",
+            datasetsTitle: "Jeux de données attendus",
+          },
+          entry: {
+            title: "Saisie et import",
+            description:
+              "Choisissez le jeu de données en cours, rattachez le dernier import disponible et gardez une note courte sur l'état réel de la saisie.",
+            ownerLabel: "Unité responsable",
+            datasetLabel: "Jeu de données suivi",
+            importLabel: "Dernier import ou fichier",
+            summaryLabel: "État de saisie",
+            notesLabel: "Note de saisie",
+          },
+          sources: {
+            title: "Sources et justificatifs",
+            description:
+              "Chaque valeur importante doit pouvoir être reliée à une facture, un export, un tableur opérateur ou une note d'estimation explicitement documentée.",
+          },
+          assumptions: {
+            title: "Hypothèses et manques",
+            description:
+              "Signalez ici ce qui manque encore, les proxys retenus et les points qui devront être revus avant la validation finale de l'inventaire.",
+            textareaLabel: "Journal des hypothèses",
+          },
+          results: {
+            title: "Résultats d'inventaire",
+            description:
+              "Les résultats doivent rester lisibles par périmètre, par source et par catégorie afin de vérifier que la base est déjà exploitable avant la phase scénarios.",
+            summaryLabel: "Lecture courante",
+            groups: {
+              perimeter: "Par périmètre",
+              source: "Par source",
+              category: "Par catégorie",
+            },
+          },
+          completeness: {
+            title: "État de complétude",
+            description:
+              "La base n'est exploitable que si les années, les domaines, les justificatifs et les hypothèses sont suffisamment documentés pour soutenir la lecture des résultats.",
+            progressLabel: "Progression globale",
+            domainAverageLabel: "Maturité moyenne des domaines",
+            checksLabel: "Contrôles à lever",
+            ready: "Base exploitable",
+            pending: "À lever",
+          },
+        },
+        aside: {
+          currentTitle: "Point de lecture",
+          currentYear: "Année",
+          currentDomain: "Domaine",
+          currentLens: "Lecture",
+          signalTitle: "Repères",
+          signalItems: {
+            years: "années couvertes",
+            domains: "domaines suivis",
+            ire: "IRE actif",
+          },
+        },
+        years: [
+          {
+            value: "2023",
+            title: "IRE 2023",
+            badge: "IRE",
+            status: "Base consolidée",
+            summary:
+              "Année de référence déjà structurée pour le calcul, la restitution et les premières comparaisons.",
+            coverage: "Territorial + patrimoine municipal",
+          },
+          {
+            value: "2022",
+            title: "2022",
+            badge: "Comparaison",
+            status: "Comparaison disponible",
+            summary:
+              "Année antérieure conservée pour lire les écarts sur l'énergie, les déchets et la dynamique d'activité.",
+            coverage: "Transport encore partiellement estimé",
+          },
+          {
+            value: "2024",
+            title: "2024",
+            badge: "Complément",
+            status: "Collecte en cours",
+            summary:
+              "Année récente encore incomplète, utilisée pour préparer les prochaines lectures comparatives après l'IRE.",
+            coverage: "Priorité au patrimoine municipal",
+          },
+        ],
+        domains: [
+          {
+            key: "batiments-patrimoine",
+            title: "Bâtiments et patrimoine",
+            description:
+              "Bâtiments municipaux, équipements sportifs, sites administratifs et consommations d'énergie associées.",
+            scope:
+              "Ce domaine couvre les actifs exploités directement par la collectivité. Il doit distinguer clairement les sites rattachés au patrimoine municipal et les bâtiments encore hors périmètre consolidé.",
+            status: "Quasi complet",
+            completion: 88,
+            completionLabel: "88 % des jeux attendus reliés",
+            expectedDatasets: [
+              "Consommations d'électricité par bâtiment et par année.",
+              "Consommations de gaz, GPL ou combustibles pour les sites concernés.",
+              "Surfaces utiles, usages et regroupements de compteurs par site.",
+              "Liste des bâtiments fermés, rénovés ou temporairement hors service.",
+            ],
+            sources: [
+              "Factures d'énergie et relevés opérateurs par bâtiment.",
+              "Inventaire patrimonial de la collectivité et tableau des surfaces.",
+              "Historique des fermetures de sites ou transferts de services.",
+            ],
+            gaps: [
+              "Quatre bâtiments restent sans historique complet de facturation.",
+              "Deux compteurs partagés doivent encore être ventilés entre usages.",
+              "Les surfaces de trois équipements sportifs sont encore estimées.",
+            ],
+            entry: {
+              ownerPlaceholder: "ex. Direction du patrimoine bati",
+              datasetPlaceholder: "ex. Consommations d'electricite par batiment",
+              importPlaceholder: "ex. export_operateur_batiments_2023.xlsx",
+              summaryPlaceholder: "ex. 41/45 sites consolides, 4 factures manquantes",
+              notesPlaceholder:
+                "Documentez ici les ecarts de facturation, les regroupements de compteurs et les sites encore hors consolidation.",
+            },
+          },
+          {
+            key: "eclairage-flotte",
+            title: "Eclairage public et flotte",
+            description:
+              "Reseau d'eclairage public, parc roulant municipal, carburants et kilometrages de service.",
+            scope:
+              "Le domaine couvre les actifs municipaux techniques fortement relies aux services urbains. Les donnees doivent rester lisibles par parc, service et type d'usage.",
+            status: "En consolidation",
+            completion: 72,
+            completionLabel: "72 % des jeux attendus relies",
+            expectedDatasets: [
+              "Nombre de points lumineux, puissances et durees d'allumage.",
+              "Consommation d'electricite du reseau d'eclairage public.",
+              "Inventaire de flotte par type de vehicule, carburant et service.",
+              "Kilometrages annuels et volumes de carburant par segment de flotte.",
+            ],
+            sources: [
+              "Tableau de maintenance de l'eclairage et inventaire technique du reseau.",
+              "Factures ou abonnements electriques rattaches a l'eclairage public.",
+              "Journaux carburant, carnets de bord et export du parc roulant.",
+            ],
+            gaps: [
+              "Les totaux carburant de deux services techniques ne sont pas encore consolides.",
+              "Une partie du reseau LED n'est pas reliee a son historique de puissance.",
+              "Les kilometrages des engins speciaux restent encore approximatifs.",
+            ],
+            entry: {
+              ownerPlaceholder: "ex. Direction de l'eclairage et parc auto",
+              datasetPlaceholder: "ex. Carburants flotte legere",
+              importPlaceholder: "ex. flotte_2023_services.xlsx",
+              summaryPlaceholder: "ex. Eclairage stable, flotte encore incomplete",
+              notesPlaceholder:
+                "Notez ici les differences entre journaux carburant, kilometrages et perimetre reel du parc municipal.",
+            },
+          },
+          {
+            key: "energie-territoriale",
+            title: "Energie territoriale",
+            description:
+              "Consommations d'electricite et d'energie a l'echelle du territoire, tous usages confondus.",
+            scope:
+              "Ce domaine decrit l'activite energetique du territoire au-dela du seul patrimoine municipal. Il doit rendre visibles les sources operateurs, les secteurs couverts et les zones encore estimees.",
+            status: "Structuré",
+            completion: 81,
+            completionLabel: "81 % des jeux attendus relies",
+            expectedDatasets: [
+              "Demande d'electricite territoriale par secteur d'usage.",
+              "Consommations d'energie des menages si la source existe.",
+              "Repartition territoriale des usages tertiaires et industriels.",
+              "References de population ou de menages utiles pour les ratios.",
+            ],
+            sources: [
+              "Exports operateurs ou distributeurs d'electricite.",
+              "Rapports d'activite energetique sectoriels ou institutionnels.",
+              "Donnees de population ou d'habitat utilisees pour les ajustements.",
+            ],
+            gaps: [
+              "Les usages tertiaires prives sont encore agreges sans detail fin.",
+              "Un jeu de donnees menages doit encore etre confirme pour 2024.",
+              "Les facteurs de ventilation par secteur doivent etre stabilises.",
+            ],
+            entry: {
+              ownerPlaceholder: "ex. Cellule energie territoriale",
+              datasetPlaceholder: "ex. Demande d'electricite par secteur",
+              importPlaceholder: "ex. energie_territoriale_2023.csv",
+              summaryPlaceholder: "ex. Base operateur chargee, ventilation sectorielle en revue",
+              notesPlaceholder:
+                "Consignez ici les regroupements sectoriels, les ratios appliques et les portions encore estimees.",
+            },
+          },
+          {
+            key: "mobilite-transport",
+            title: "Mobilite et transport",
+            description:
+              "Trafic routier, transport public, proxies de mobilite et donnees d'activite pour le secteur transport.",
+            scope:
+              "Le domaine regroupe les donnees territoriales les plus incertaines. Il doit faire apparaitre explicitement les proxys retenus, les ruptures de serie et le niveau de confiance des differentes sources.",
+            status: "Partiel",
+            completion: 58,
+            completionLabel: "58 % des jeux attendus relies",
+            expectedDatasets: [
+              "Comptages ou estimations de trafic routier par axe ou secteur.",
+              "Donnees d'offre et d'usage des transports publics.",
+              "Proxys carburant ou mobilite pour les vehicules particuliers.",
+              "Hypotheses de report modal et de croissance du trafic.",
+            ],
+            sources: [
+              "Etudes de mobilite, comptages et rapports trafic existants.",
+              "Donnees d'exploitation des transports publics.",
+              "Notes methodologiques justifiant les proxys carburant utilises.",
+            ],
+            gaps: [
+              "Le transport individuel reste principalement alimente par des proxys.",
+              "Les donnees transport public n'ont pas encore la meme maille temporelle que l'IRE.",
+              "Le lien entre trafic, carburant et kilometres parcourus reste a normaliser.",
+            ],
+            entry: {
+              ownerPlaceholder: "ex. Pole mobilite territoriale",
+              datasetPlaceholder: "ex. Proxy carburant trafic routier",
+              importPlaceholder: "ex. transport_proxys_2023.xlsx",
+              summaryPlaceholder: "ex. Comptages charges, conversion activite toujours en revue",
+              notesPlaceholder:
+                "Expliquez ici les hypotheses de trafic, de kilometrage et les arbitrages retenus pour convertir l'activite en emissions.",
+            },
+          },
+          {
+            key: "dechets-eaux-usees",
+            title: "Dechets et eaux usees",
+            description:
+              "Tonnages de dechets, modes de traitement, boues, eaux usees et references d'installations.",
+            scope:
+              "Ce domaine doit relier les flux physiques aux installations concernees afin de rendre lisibles les emissions directes et indirectes associees au traitement.",
+            status: "En revue",
+            completion: 76,
+            completionLabel: "76 % des jeux attendus relies",
+            expectedDatasets: [
+              "Tonnages de dechets menagers par filiere de traitement.",
+              "Volumes ou charges des eaux usees traitees par installation.",
+              "Donnees sur les boues, residus et traitements secondaires si disponibles.",
+              "Hypotheses de couverture territoriale et population desservie.",
+            ],
+            sources: [
+              "Rapports d'exploitation des installations de traitement.",
+              "Bordereaux, tableurs de tonnages et suivi des filieres.",
+              "Documents techniques sur les stations d'epuration et leur capacite.",
+            ],
+            gaps: [
+              "Les filieres de valorisation ne sont pas encore toutes documentees.",
+              "Une station secondaire manque encore d'historique complet sur l'annee 2022.",
+              "La population reellement desservie doit etre confirmee pour certains secteurs.",
+            ],
+            entry: {
+              ownerPlaceholder: "ex. Direction de la proprete et assainissement",
+              datasetPlaceholder: "ex. Tonnages dechets menagers par filiere",
+              importPlaceholder: "ex. dechets_epuration_2023.xlsx",
+              summaryPlaceholder: "ex. Tonnages consolides, population desservie a confirmer",
+              notesPlaceholder:
+                "Gardez ici la trace des filieres absentes, des installations secondaires et des estimations de couverture territoriale.",
+            },
+          },
+        ],
+        results: {
+          territorial: {
+            "2023": {
+              summary:
+                "Lecture territoriale consolidee sur l'IRE. L'energie territoriale domine encore, tandis que le transport reste interpretable avec prudence a cause des proxys.",
+              metrics: {
+                perimeter: [
+                  {
+                    label: "Territoire consolide",
+                    value: "128 ktCO2e",
+                    note: "Lecture agregée de l'IRE sur l'ensemble du perimetre territorial.",
+                  },
+                  {
+                    label: "Patrimoine municipal",
+                    value: "8.6 ktCO2e",
+                    note: "Sous-ensemble municipal lisible dans la meme base.",
+                  },
+                ],
+                source: [
+                  {
+                    label: "Donnees observees",
+                    value: "74 %",
+                    note: "Part des emissions issues de jeux documentes par source directe.",
+                  },
+                  {
+                    label: "Estimations et proxys",
+                    value: "26 %",
+                    note: "Part encore soutenue par hypotheses ou reconstructions d'activite.",
+                  },
+                ],
+                category: [
+                  {
+                    label: "Energie",
+                    value: "61 %",
+                    note: "Premier poste lisible a l'echelle territoriale.",
+                  },
+                  {
+                    label: "Transport",
+                    value: "24 %",
+                    note: "Lecture disponible, mais encore fragile sur certaines branches.",
+                  },
+                  {
+                    label: "Dechets et eaux usees",
+                    value: "15 %",
+                    note: "Poste deja exploitable pour la comparaison d'annee.",
+                  },
+                ],
+              },
+            },
+            "2022": {
+              summary:
+                "Lecture de comparaison utile pour verifier les evolutions avant l'IRE. Les grandes masses sont comparables, mais le transport reste moins robuste que l'energie et les dechets.",
+              metrics: {
+                perimeter: [
+                  {
+                    label: "Territoire consolide",
+                    value: "121 ktCO2e",
+                    note: "Base de comparaison retenue pour lire l'evolution pre-IRE.",
+                  },
+                  {
+                    label: "Patrimoine municipal",
+                    value: "8.9 ktCO2e",
+                    note: "Base municipale utile pour lire l'effet des fermetures ou travaux.",
+                  },
+                ],
+                source: [
+                  {
+                    label: "Donnees observees",
+                    value: "70 %",
+                    note: "Part couverte par des jeux deja relies a une source stable.",
+                  },
+                  {
+                    label: "Estimations et proxys",
+                    value: "30 %",
+                    note: "Niveau d'estimation legerement plus eleve qu'en 2023.",
+                  },
+                ],
+                category: [
+                  {
+                    label: "Energie",
+                    value: "59 %",
+                    note: "Part dominante deja comparable a l'IRE.",
+                  },
+                  {
+                    label: "Transport",
+                    value: "26 %",
+                    note: "Part encore fortement dependante des proxys de mobilite.",
+                  },
+                  {
+                    label: "Dechets et eaux usees",
+                    value: "15 %",
+                    note: "Serie globalement cohérente sur la periode.",
+                  },
+                ],
+              },
+            },
+            "2024": {
+              summary:
+                "Lecture encore partielle. Les resultats sont suffisants pour une revue interne, mais pas encore pour figer une comparaison complete avec l'IRE.",
+              metrics: {
+                perimeter: [
+                  {
+                    label: "Territoire consolide",
+                    value: "119 ktCO2e",
+                    note: "Valeur provisoire en attente de transport et d'une partie des menages.",
+                  },
+                  {
+                    label: "Patrimoine municipal",
+                    value: "7.8 ktCO2e",
+                    note: "Lecture municipale deja plus stable que la lecture territoriale.",
+                  },
+                ],
+                source: [
+                  {
+                    label: "Donnees observees",
+                    value: "67 %",
+                    note: "Plusieurs branches restent encore en attente de consolidation.",
+                  },
+                  {
+                    label: "Estimations et proxys",
+                    value: "33 %",
+                    note: "Part provisoire encore trop elevee pour une validation finale.",
+                  },
+                ],
+                category: [
+                  {
+                    label: "Energie",
+                    value: "58 %",
+                    note: "Lecture partielle mais deja utile pour le pilotage.",
+                  },
+                  {
+                    label: "Transport",
+                    value: "27 %",
+                    note: "Encore tributaire des imports en attente.",
+                  },
+                  {
+                    label: "Dechets et eaux usees",
+                    value: "15 %",
+                    note: "Serie presque stabilisee.",
+                  },
+                ],
+              },
+            },
+          },
+          municipal: {
+            "2023": {
+              summary:
+                "Lecture resserree sur le patrimoine municipal. Les batiments et l'eclairage sont deja lisibles; la flotte reste le principal poste encore a consolider finement.",
+              metrics: {
+                perimeter: [
+                  {
+                    label: "Patrimoine bati",
+                    value: "4.2 ktCO2e",
+                    note: "Batiments administratifs, sportifs et equipements de service.",
+                  },
+                  {
+                    label: "Services techniques",
+                    value: "4.4 ktCO2e",
+                    note: "Eclairage public, flotte et autres actifs operationnels.",
+                  },
+                ],
+                source: [
+                  {
+                    label: "Factures et relevés",
+                    value: "81 %",
+                    note: "Part du patrimoine appuyee sur des justificatifs directs.",
+                  },
+                  {
+                    label: "Estimations internes",
+                    value: "19 %",
+                    note: "Part encore reconstruite a partir de notes de service.",
+                  },
+                ],
+                category: [
+                  {
+                    label: "Batiments",
+                    value: "49 %",
+                    note: "Premier poste municipal deja stable.",
+                  },
+                  {
+                    label: "Eclairage public",
+                    value: "28 %",
+                    note: "Serie largement documentee.",
+                  },
+                  {
+                    label: "Flotte",
+                    value: "23 %",
+                    note: "Lecture exploitable, mais carburants encore a finir.",
+                  },
+                ],
+              },
+            },
+            "2022": {
+              summary:
+                "Lecture municipale de comparaison. Les tendances batiments et eclairage sont lisibles, tandis que la flotte garde encore plus d'incertitude que sur l'IRE.",
+              metrics: {
+                perimeter: [
+                  {
+                    label: "Patrimoine bati",
+                    value: "4.4 ktCO2e",
+                    note: "Base utile pour lire les evolutions de consommation.",
+                  },
+                  {
+                    label: "Services techniques",
+                    value: "4.5 ktCO2e",
+                    note: "Lecture encore plus prudente sur la flotte et les engins.",
+                  },
+                ],
+                source: [
+                  {
+                    label: "Factures et relevés",
+                    value: "77 %",
+                    note: "Base documentaire deja large mais moins complete qu'en 2023.",
+                  },
+                  {
+                    label: "Estimations internes",
+                    value: "23 %",
+                    note: "Part plus forte d'approximations pour les actifs mobiles.",
+                  },
+                ],
+                category: [
+                  {
+                    label: "Batiments",
+                    value: "48 %",
+                    note: "Serie relativement stable d'une annee a l'autre.",
+                  },
+                  {
+                    label: "Eclairage public",
+                    value: "27 %",
+                    note: "Structure de preuve deja en place.",
+                  },
+                  {
+                    label: "Flotte",
+                    value: "25 %",
+                    note: "Poste encore plus expose aux manques de journaux carburant.",
+                  },
+                ],
+              },
+            },
+            "2024": {
+              summary:
+                "Lecture municipale provisoire. Les batiments sont presque consolidés, mais la flotte et certaines pieces justificatives empechent encore une validation complete.",
+              metrics: {
+                perimeter: [
+                  {
+                    label: "Patrimoine bati",
+                    value: "3.9 ktCO2e",
+                    note: "Serie provisoire quasi complete pour la revue interne.",
+                  },
+                  {
+                    label: "Services techniques",
+                    value: "3.9 ktCO2e",
+                    note: "Encore sensible aux imports carburant manquants.",
+                  },
+                ],
+                source: [
+                  {
+                    label: "Factures et relevés",
+                    value: "75 %",
+                    note: "Couverture deja solide sur le bati et l'eclairage.",
+                  },
+                  {
+                    label: "Estimations internes",
+                    value: "25 %",
+                    note: "Part encore elevee pour les actifs mobiles.",
+                  },
+                ],
+                category: [
+                  {
+                    label: "Batiments",
+                    value: "50 %",
+                    note: "Poste le plus avance pour la nouvelle annee.",
+                  },
+                  {
+                    label: "Eclairage public",
+                    value: "29 %",
+                    note: "Reseau presque entierement couvert.",
+                  },
+                  {
+                    label: "Flotte",
+                    value: "21 %",
+                    note: "Serie encore partielle.",
+                  },
+                ],
+              },
+            },
+          },
+        },
+        completeness: {
+          checks: [
+            {
+              label: "Une IRE est identifiee et lisible dans la base.",
+              done: true,
+            },
+            {
+              label: "Au moins une autre annee de comparaison reste consultable.",
+              done: true,
+            },
+            {
+              label: "Chaque domaine de collecte a une liste de jeux de donnees attendus.",
+              done: true,
+            },
+            {
+              label: "Les sources et pieces justificatives sont rattachees aux donnees clefs.",
+              done: false,
+            },
+            {
+              label: "Les hypotheses et manques majeurs sont explicitement signales.",
+              done: true,
+            },
+            {
+              label: "Les resultats sont deja lisibles par perimetre, source et categorie.",
+              done: true,
+            },
+            {
+              label: "Le transport dispose d'un niveau de confiance documente.",
+              done: false,
+            },
+          ],
+        },
       },
       overview: {
         eyebrow: "Espace d'inventaire",
