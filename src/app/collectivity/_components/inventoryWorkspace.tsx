@@ -1,748 +1,621 @@
 "use client";
 
-import { useState } from "react";
-import {
-  AlertTriangle,
-  BarChart3,
-  Building2,
-  CalendarRange,
-  CheckCircle2,
-  Database,
-  FileText,
-  Map,
-  Upload,
-} from "lucide-react";
+import { type ReactNode, useMemo, useState } from "react";
 
-import { CollectivityInput, CollectivitySelect, CollectivityTextarea } from "./fields";
-import { CollectivityBulletList } from "./lists";
+import { CollectivityInput } from "./fields";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import Typography from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { useScopedI18n } from "@/locales/client";
-
-type InventoryLensKey = "territorial" | "municipal";
 
 type InventoryYear = {
   value: string;
   title: string;
   badge: string;
-  status: string;
-  summary: string;
-  coverage: string;
 };
 
-type InventoryDomain = {
+type InventoryDatasetKind = "fleet" | "publicLighting" | "placeholder";
+
+type InventoryDataset = {
+  key: string;
+  familyKey: string;
+  kind: InventoryDatasetKind;
+  title: string;
+  status: string;
+  description: string;
+  sourceMode: string;
+  yearMode: string;
+  implementationNote: string;
+};
+
+type InventoryFamily = {
   key: string;
   title: string;
-  description: string;
-  scope: string;
-  status: string;
-  completion: number;
-  completionLabel: string;
-  expectedDatasets: string[];
-  sources: string[];
-  gaps: string[];
-  entry: {
-    ownerPlaceholder: string;
-    datasetPlaceholder: string;
-    importPlaceholder: string;
-    summaryPlaceholder: string;
-    notesPlaceholder: string;
-  };
 };
 
-type InventoryMetric = {
+type InventoryRowLabel = {
+  key: string;
   label: string;
-  value: string;
-  note: string;
-};
-
-type InventoryResultGroupKey = "perimeter" | "source" | "category";
-
-type InventoryResultsYear = {
-  summary: string;
-  metrics: Record<InventoryResultGroupKey, InventoryMetric[]>;
 };
 
 type InventoryWorkspaceCopy = {
-  eyebrow: string;
-  title: string;
-  description: string;
   controls: {
-    yearLabel: string;
-    yearPlaceholder: string;
-    lensLabel: string;
-    lensPlaceholder: string;
-    lenses: Record<InventoryLensKey, string>;
+    familyLabel: string;
+    datasetLabel: string;
   };
-  readingRule: {
-    title: string;
-    territorial: string;
-    municipal: string;
+  hints: {
+    sourceFirst: string;
+    multiYear: string;
+    todoLabel: string;
+    provenanceTodo: string;
+    progressTodo: string;
+    placeholderTitle: string;
   };
   sections: {
-    years: {
-      title: string;
-      description: string;
-    };
-    domains: {
-      title: string;
-      description: string;
-      scopeTitle: string;
-      datasetsTitle: string;
-    };
     entry: {
-      title: string;
-      description: string;
-      ownerLabel: string;
-      datasetLabel: string;
-      importLabel: string;
-      summaryLabel: string;
-      notesLabel: string;
-    };
-    sources: {
-      title: string;
-      description: string;
-    };
-    assumptions: {
-      title: string;
-      description: string;
-      textareaLabel: string;
-    };
-    results: {
-      title: string;
-      description: string;
-      summaryLabel: string;
-      groups: Record<InventoryResultGroupKey, string>;
-    };
-    completeness: {
-      title: string;
-      description: string;
-      progressLabel: string;
-      domainAverageLabel: string;
-      checksLabel: string;
-      ready: string;
-      pending: string;
-    };
-  };
-  aside: {
-    currentTitle: string;
-    currentYear: string;
-    currentDomain: string;
-    currentLens: string;
-    signalTitle: string;
-    signalItems: {
-      years: string;
-      domains: string;
-      ire: string;
+      fleet: {
+        compositionTitle: string;
+        compositionDescription: string;
+        categories: InventoryRowLabel[];
+        compositionColumns: string[];
+        yearlyVehiclesTitle: string;
+        yearlyVehiclesRows: InventoryRowLabel[];
+        yearlyEnergyTitle: string;
+        yearlyEnergyRows: InventoryRowLabel[];
+        yearlySpendTitle: string;
+        yearlySpendRows: InventoryRowLabel[];
+      };
+      lighting: {
+        infrastructureTitle: string;
+        infrastructureDescription: string;
+        infrastructureRows: InventoryRowLabel[];
+        valueColumn: string;
+        lampsTitle: string;
+        lampsDescription: string;
+        lampRows: InventoryRowLabel[];
+        lampsColumns: string[];
+        yearlyTitle: string;
+        yearlyRows: InventoryRowLabel[];
+      };
     };
   };
   years: InventoryYear[];
-  domains: InventoryDomain[];
-  results: Record<InventoryLensKey, Record<string, InventoryResultsYear>>;
-  completeness: {
-    checks: Array<{
-      label: string;
-      done: boolean;
-    }>;
-  };
+  families: InventoryFamily[];
+  datasets: InventoryDataset[];
 };
 
-const metricGroupIcons: Record<InventoryResultGroupKey, typeof Building2> = {
-  perimeter: Building2,
-  source: FileText,
-  category: Database,
+const fleetCompositionSample: Record<string, string[]> = {
+  fonction: ["8", "12", "2", "3", "0", "25"],
+  service: ["4", "17", "1", "2", "0", "24"],
+  engins: ["1", "9", "0", "1", "2", "13"],
+  autres: ["2", "6", "0", "0", "0", "8"],
 };
+
+const fleetYearlySample: Record<
+  string,
+  {
+    vehicles: Record<string, string>;
+    energy: Record<string, string>;
+    spend: Record<string, string>;
+  }
+> = {
+  "2023": {
+    vehicles: {
+      petrol: "15",
+      diesel: "44",
+      electric: "3",
+      hybrid: "6",
+      gnv: "2",
+      total: "70",
+    },
+    energy: {
+      petrol: "12 400 L",
+      diesel: "33 900 L",
+      electricity: "6 800 kWh",
+      gnv: "2 300 Nm3",
+    },
+    spend: {
+      petrol: "31 000 TND",
+      diesel: "94 000 TND",
+      electricity: "2 900 TND",
+      gnv: "5 400 TND",
+    },
+  },
+  "2022": {
+    vehicles: {
+      petrol: "16",
+      diesel: "46",
+      electric: "2",
+      hybrid: "4",
+      gnv: "1",
+      total: "69",
+    },
+    energy: {
+      petrol: "13 100 L",
+      diesel: "35 700 L",
+      electricity: "4 400 kWh",
+      gnv: "1 100 Nm3",
+    },
+    spend: {
+      petrol: "29 800 TND",
+      diesel: "88 600 TND",
+      electricity: "1 700 TND",
+      gnv: "2 900 TND",
+    },
+  },
+  "2024": {
+    vehicles: {
+      petrol: "14",
+      diesel: "41",
+      electric: "5",
+      hybrid: "7",
+      gnv: "2",
+      total: "69",
+    },
+    energy: {
+      petrol: "11 700 L",
+      diesel: "30 800 L",
+      electricity: "9 200 kWh",
+      gnv: "2 500 Nm3",
+    },
+    spend: {
+      petrol: "30 500 TND",
+      diesel: "91 300 TND",
+      electricity: "4 200 TND",
+      gnv: "5 900 TND",
+    },
+  },
+};
+
+const lightingInfrastructureSample: Record<string, string> = {
+  cabinets: "184",
+  meters: "196",
+  dimmers: "38",
+  power: "1 420 kW",
+};
+
+const lightingLampsSample: Record<string, string[]> = {
+  shp: ["250", "1 180"],
+  hpl: ["125", "640"],
+  led: ["70", "2 460"],
+};
+
+const lightingYearlySample: Record<string, Record<string, string>> = {
+  "2023": {
+    consumption: "2 480 000 kWh",
+    bill: "1 210 000 TND",
+  },
+  "2022": {
+    consumption: "2 690 000 kWh",
+    bill: "1 180 000 TND",
+  },
+  "2024": {
+    consumption: "2 210 000 kWh",
+    bill: "1 090 000 TND",
+  },
+};
+
+function TableInput({ defaultValue }: { defaultValue: string }) {
+  return (
+    <CollectivityInput
+      className="h-11 rounded-xl border-border/20 bg-background/85 shadow-none"
+      defaultValue={defaultValue}
+    />
+  );
+}
+
+function SurfaceToggle({
+  active,
+  children,
+  onClick,
+  tone = "default",
+}: {
+  active: boolean;
+  children: ReactNode;
+  onClick: () => void;
+  tone?: "default" | "muted";
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        active
+          ? "border-primary/28 bg-primary/12 text-foreground shadow-[0_10px_24px_rgba(10,73,54,0.08)]"
+          : "border-border/18 bg-card/65 text-secondary hover:bg-card/82 hover:text-foreground",
+        tone === "muted" ? "border-dashed" : ""
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
+function MatrixTable({
+  title,
+  rows,
+  years,
+  getValue,
+}: {
+  title: string;
+  rows: InventoryRowLabel[];
+  years: InventoryYear[];
+  getValue: (rowKey: string, yearValue: string) => string;
+}) {
+  return (
+    <section className="space-y-4">
+      <Typography asChild variant="sectionTitle" size="sm">
+        <h4>{title}</h4>
+      </Typography>
+
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-border/10">
+              <TableHead className="min-w-[220px] pl-5 text-foreground" />
+              {years.map((year) => (
+                <TableHead key={year.value} className="min-w-[170px] text-foreground">
+                  <div className="flex items-center gap-2">
+                    <span>{year.title}</span>
+                    <span className="rounded-full border border-border/18 px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-secondary">
+                      {year.badge}
+                    </span>
+                  </div>
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.key} className="border-border/8">
+                <TableCell className="pl-5 font-medium text-foreground">{row.label}</TableCell>
+                {years.map((year) => (
+                  <TableCell key={`${row.key}-${year.value}`} className="py-3">
+                    <TableInput defaultValue={getValue(row.key, year.value)} />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </section>
+  );
+}
+
+function FleetSurface({
+  copy,
+  years,
+}: {
+  copy: InventoryWorkspaceCopy["sections"]["entry"]["fleet"];
+  years: InventoryYear[];
+}) {
+  return (
+    <div className="space-y-8">
+      <section className="space-y-4">
+        <div>
+          <Typography asChild variant="sectionTitle" size="sm">
+            <h4>{copy.compositionTitle}</h4>
+          </Typography>
+          <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl text-secondary">
+            <p>{copy.compositionDescription}</p>
+          </Typography>
+        </div>
+
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-border/10">
+                <TableHead className="min-w-[220px] pl-5 text-foreground" />
+                {copy.compositionColumns.map((column) => (
+                  <TableHead key={column} className="min-w-[120px] text-foreground">
+                    {column}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {copy.categories.map((category) => (
+                <TableRow key={category.key} className="border-border/8">
+                  <TableCell className="pl-5 font-medium text-foreground">
+                    {category.label}
+                  </TableCell>
+                  {(fleetCompositionSample[category.key] ?? []).map((value, index) => (
+                    <TableCell key={`${category.key}-${index}`} className="py-3">
+                      <TableInput defaultValue={value} />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </section>
+
+      <div className="space-y-8 border-t border-border/10 pt-8">
+        <MatrixTable
+          title={copy.yearlyVehiclesTitle}
+          rows={copy.yearlyVehiclesRows}
+          years={years}
+          getValue={(rowKey, yearValue) => fleetYearlySample[yearValue]?.vehicles[rowKey] ?? ""}
+        />
+        <MatrixTable
+          title={copy.yearlyEnergyTitle}
+          rows={copy.yearlyEnergyRows}
+          years={years}
+          getValue={(rowKey, yearValue) => fleetYearlySample[yearValue]?.energy[rowKey] ?? ""}
+        />
+        <MatrixTable
+          title={copy.yearlySpendTitle}
+          rows={copy.yearlySpendRows}
+          years={years}
+          getValue={(rowKey, yearValue) => fleetYearlySample[yearValue]?.spend[rowKey] ?? ""}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PublicLightingSurface({
+  copy,
+  years,
+}: {
+  copy: InventoryWorkspaceCopy["sections"]["entry"]["lighting"];
+  years: InventoryYear[];
+}) {
+  return (
+    <div className="space-y-8">
+      <section className="space-y-4">
+        <div>
+          <Typography asChild variant="sectionTitle" size="sm">
+            <h4>{copy.infrastructureTitle}</h4>
+          </Typography>
+          <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl text-secondary">
+            <p>{copy.infrastructureDescription}</p>
+          </Typography>
+        </div>
+
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-border/10">
+                <TableHead className="min-w-[220px] pl-5 text-foreground" />
+                <TableHead className="min-w-[180px] text-foreground">{copy.valueColumn}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {copy.infrastructureRows.map((row) => (
+                <TableRow key={row.key} className="border-border/8">
+                  <TableCell className="pl-5 font-medium text-foreground">{row.label}</TableCell>
+                  <TableCell className="py-3">
+                    <TableInput defaultValue={lightingInfrastructureSample[row.key] ?? ""} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </section>
+
+      <section className="space-y-4 border-t border-border/10 pt-8">
+        <div>
+          <Typography asChild variant="sectionTitle" size="sm">
+            <h4>{copy.lampsTitle}</h4>
+          </Typography>
+          <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl text-secondary">
+            <p>{copy.lampsDescription}</p>
+          </Typography>
+        </div>
+
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-border/10">
+                <TableHead className="min-w-[180px] pl-5 text-foreground" />
+                {copy.lampsColumns.map((column) => (
+                  <TableHead key={column} className="min-w-[140px] text-foreground">
+                    {column}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {copy.lampRows.map((row) => (
+                <TableRow key={row.key} className="border-border/8">
+                  <TableCell className="pl-5 font-medium text-foreground">{row.label}</TableCell>
+                  {(lightingLampsSample[row.key] ?? []).map((value, index) => (
+                    <TableCell key={`${row.key}-${index}`} className="py-3">
+                      <TableInput defaultValue={value} />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </section>
+
+      <div className="border-t border-border/10 pt-8">
+        <MatrixTable
+          title={copy.yearlyTitle}
+          rows={copy.yearlyRows}
+          years={years}
+          getValue={(rowKey, yearValue) => lightingYearlySample[yearValue]?.[rowKey] ?? ""}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PlaceholderSurface({
+  copy,
+  dataset,
+}: {
+  copy: InventoryWorkspaceCopy["hints"];
+  dataset: InventoryDataset;
+}) {
+  return (
+    <section className="space-y-3 border-t border-dashed border-border/20 pt-6">
+      <div className="flex flex-wrap items-center gap-2">
+        <Badge variant="outline">{copy.todoLabel}</Badge>
+        <Typography asChild variant="label" size="sm" className="text-secondary">
+          <p>{copy.placeholderTitle}</p>
+        </Typography>
+      </div>
+
+      <Typography asChild variant="body" size="body" className="mt-4 max-w-3xl">
+        <p>{dataset.description}</p>
+      </Typography>
+      <Typography asChild variant="body" size="body" className="mt-3 max-w-3xl text-secondary">
+        <p>{dataset.implementationNote}</p>
+      </Typography>
+      <Typography asChild variant="caption" size="sm" className="mt-4 text-secondary">
+        <p>{dataset.sourceMode}</p>
+      </Typography>
+      <Typography asChild variant="caption" size="sm" className="mt-2 text-secondary">
+        <p>{dataset.yearMode}</p>
+      </Typography>
+    </section>
+  );
+}
 
 export default function InventoryWorkspace() {
   const t = useScopedI18n("(pages).collectivityDashboard");
   const copy = t("inventoryWorkspace") as unknown as InventoryWorkspaceCopy;
 
-  const [selectedYear, setSelectedYear] = useState(copy.years[0]?.value ?? "");
-  const [activeDomainKey, setActiveDomainKey] = useState(copy.domains[0]?.key ?? "");
-  const [activeLens, setActiveLens] = useState<InventoryLensKey>("territorial");
+  const defaultFamily = useMemo(() => copy.families[0]?.key ?? "", [copy.families]);
+  const [activeFamilyKey, setActiveFamilyKey] = useState(defaultFamily);
 
-  const selectedYearData =
-    copy.years.find((year) => year.value === selectedYear) ?? copy.years[0];
-  const activeDomain =
-    copy.domains.find((domain) => domain.key === activeDomainKey) ?? copy.domains[0];
-  const activeResults =
-    copy.results[activeLens]?.[selectedYearData?.value ?? ""] ??
-    copy.results.territorial[copy.years[0]?.value ?? ""];
+  const datasetsInFamily = useMemo(
+    () => copy.datasets.filter((dataset) => dataset.familyKey === activeFamilyKey),
+    [activeFamilyKey, copy.datasets]
+  );
 
-  const completedChecks = copy.completeness.checks.filter((item) => item.done).length;
-  const completionPercent =
-    copy.completeness.checks.length > 0
-      ? Math.round((completedChecks / copy.completeness.checks.length) * 100)
-      : 0;
-  const domainAverage =
-    copy.domains.length > 0
-      ? Math.round(
-          copy.domains.reduce((total, domain) => total + domain.completion, 0) / copy.domains.length
-        )
-      : 0;
-  const lensOptions = (
-    Object.entries(copy.controls.lenses) as Array<[InventoryLensKey, string]>
-  ).map(([value, label]) => ({
-    value,
-    label,
-  }));
+  const defaultDataset = useMemo(
+    () => datasetsInFamily.find((dataset) => dataset.kind !== "placeholder") ?? datasetsInFamily[0],
+    [datasetsInFamily]
+  );
+
+  const [activeDatasetKey, setActiveDatasetKey] = useState(defaultDataset?.key ?? "");
+
+  const activeDataset =
+    datasetsInFamily.find((dataset) => dataset.key === activeDatasetKey) ?? defaultDataset;
+
+  const activeFamily =
+    copy.families.find((family) => family.key === activeFamilyKey) ?? copy.families[0];
+
+  const handleFamilyChange = (familyKey: string) => {
+    setActiveFamilyKey(familyKey);
+    const nextDatasets = copy.datasets.filter((dataset) => dataset.familyKey === familyKey);
+    const nextDataset =
+      nextDatasets.find((dataset) => dataset.kind !== "placeholder") ?? nextDatasets[0];
+    setActiveDatasetKey(nextDataset?.key ?? "");
+  };
 
   return (
-    <section className="border border-border bg-card">
-      <header className="border-b border-border px-5 py-5 md:px-6">
-        <Typography asChild variant="eyebrow" size="xxs" className="text-secondary">
-          <p>{copy.eyebrow}</p>
-        </Typography>
-        <Typography asChild variant="title" size="2xl" className="mt-2">
-          <h2>{copy.title}</h2>
-        </Typography>
-        <Typography asChild variant="body" size="body" className="mt-3 max-w-4xl">
-          <p>{copy.description}</p>
-        </Typography>
-
-        <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-[220px_220px_minmax(0,1fr)]">
-          <div>
-            <label className="text-sm font-medium text-foreground">{copy.controls.yearLabel}</label>
-            <CollectivitySelect
-              className="mt-2"
-              value={selectedYearData?.value}
-              onValueChange={setSelectedYear}
-              placeholder={copy.controls.yearPlaceholder}
-              options={copy.years.map((year) => ({
-                value: year.value,
-                label: year.title,
-              }))}
-            />
-          </div>
-
-          <div>
-            <label className="text-sm font-medium text-foreground">{copy.controls.lensLabel}</label>
-            <CollectivitySelect
-              className="mt-2"
-              value={activeLens}
-              onValueChange={(value) => setActiveLens(value as InventoryLensKey)}
-              placeholder={copy.controls.lensPlaceholder}
-              options={lensOptions}
-            />
-          </div>
-
-          <div className="rounded-lg border border-border bg-background px-4 py-4">
-            <div className="flex items-start gap-3">
-              <Map aria-hidden="true" className="mt-0.5 h-4 w-4 text-secondary" />
-              <div className="min-w-0">
-                <Typography asChild variant="sectionTitle" size="sm">
-                  <h3>{copy.readingRule.title}</h3>
-                </Typography>
-                <Typography asChild variant="body" size="body" className="mt-2">
-                  <p>
-                    {activeLens === "territorial"
-                      ? copy.readingRule.territorial
-                      : copy.readingRule.municipal}
-                  </p>
-                </Typography>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <div className="grid xl:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="min-w-0">
-          <section className="border-b border-border px-5 py-5 md:px-6">
-            <div className="flex items-start gap-3">
-              <CalendarRange aria-hidden="true" className="mt-1 h-4 w-4 text-secondary" />
-              <div className="min-w-0">
-                <Typography asChild variant="sectionTitle" size="sm">
-                  <h3>{copy.sections.years.title}</h3>
-                </Typography>
-                <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl">
-                  <p>{copy.sections.years.description}</p>
-                </Typography>
-              </div>
-            </div>
-
-            <div className="mt-5 grid gap-4 lg:grid-cols-3">
-              {copy.years.map((year) => {
-                const isActive = year.value === selectedYearData?.value;
-
-                return (
-                  <button
-                    key={year.value}
-                    type="button"
-                    onClick={() => setSelectedYear(year.value)}
-                    className={cn(
-                      "rounded-lg border px-4 py-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2",
-                      isActive
-                        ? "border-primary bg-primary-subtle"
-                        : "border-border bg-background hover:border-primary/40 hover:bg-primary/5"
-                    )}
-                    aria-pressed={isActive}
-                  >
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Typography asChild variant="sectionTitle" size="sm">
-                        <span>{year.title}</span>
-                      </Typography>
-                      <Badge variant={isActive ? "accent" : "outline"}>{year.badge}</Badge>
-                    </div>
-                    <Typography asChild variant="caption" size="sm" className="mt-2">
-                      <p>{year.status}</p>
-                    </Typography>
-                    <Typography asChild variant="body" size="body" className="mt-3">
-                      <p>{year.summary}</p>
-                    </Typography>
-                    <Typography asChild variant="caption" size="sm" className="mt-3">
-                      <p>{year.coverage}</p>
-                    </Typography>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-
-          <section className="border-b border-border px-5 py-5 md:px-6">
-            <div className="flex items-start gap-3">
-              <Database aria-hidden="true" className="mt-1 h-4 w-4 text-secondary" />
-              <div className="min-w-0">
-                <Typography asChild variant="sectionTitle" size="sm">
-                  <h3>{copy.sections.domains.title}</h3>
-                </Typography>
-                <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl">
-                  <p>{copy.sections.domains.description}</p>
-                </Typography>
-              </div>
-            </div>
-
-            <div className="mt-5 grid gap-4 lg:grid-cols-2">
-              {copy.domains.map((domain) => {
-                const isActive = domain.key === activeDomain.key;
-
-                return (
-                  <button
-                    key={domain.key}
-                    type="button"
-                    onClick={() => setActiveDomainKey(domain.key)}
-                    className={cn(
-                      "rounded-lg border px-4 py-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-chart-3 focus-visible:ring-offset-2",
-                      isActive
-                        ? "border-primary bg-primary-subtle"
-                        : "border-border bg-background hover:border-primary/40 hover:bg-primary/5"
-                    )}
-                    aria-pressed={isActive}
-                  >
-                    <div className="flex items-center justify-between gap-3">
-                      <Typography asChild variant="sectionTitle" size="sm">
-                        <span>{domain.title}</span>
-                      </Typography>
-                      <Badge variant={domain.completion >= 80 ? "accent" : "outline"}>
-                        {domain.status}
-                      </Badge>
-                    </div>
-                    <Typography asChild variant="body" size="body" className="mt-3">
-                      <p>{domain.description}</p>
-                    </Typography>
-                    <Typography asChild variant="caption" size="sm" className="mt-3">
-                      <p>{domain.completionLabel}</p>
-                    </Typography>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="mt-6 grid gap-6 rounded-lg border border-border bg-background px-4 py-4 md:grid-cols-2">
-              <div>
-                <Typography asChild variant="label" size="sm">
-                  <p>{copy.sections.domains.scopeTitle}</p>
-                </Typography>
-                <Typography asChild variant="body" size="body" className="mt-3">
-                  <p>{activeDomain.scope}</p>
-                </Typography>
-              </div>
-              <div>
-                <Typography asChild variant="label" size="sm">
-                  <p>{copy.sections.domains.datasetsTitle}</p>
-                </Typography>
-                <CollectivityBulletList
-                  className="mt-4"
-                  items={activeDomain.expectedDatasets}
-                  tone="primary"
-                />
-              </div>
-            </div>
-          </section>
-
-          <section className="border-b border-border px-5 py-5 md:px-6">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-start gap-3">
-                <Upload aria-hidden="true" className="mt-1 h-4 w-4 text-secondary" />
-                <div className="min-w-0">
-                  <Typography asChild variant="sectionTitle" size="sm">
-                    <h3>{copy.sections.entry.title}</h3>
-                  </Typography>
-                  <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl">
-                    <p>{copy.sections.entry.description}</p>
-                  </Typography>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 rounded-md px-2.5 text-xs font-medium shadow-none"
-                  type="button"
-                >
-                  <Upload aria-hidden="true" className="h-3.5 w-3.5" />
-                  {t("actions.import") as string}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 rounded-md px-2.5 text-xs font-medium shadow-none"
-                  type="button"
-                >
-                  {t("actions.addManual") as string}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 rounded-md px-2.5 text-xs font-medium shadow-none"
-                  type="button"
-                >
-                  {t("actions.downloadTemplate") as string}
-                </Button>
-              </div>
-            </div>
-
-            <div className="mt-5 grid gap-6 md:grid-cols-2">
-              <div>
-                <label className="text-sm font-medium text-foreground">
-                  {copy.sections.entry.ownerLabel}
-                </label>
-                <CollectivityInput
-                  className="mt-2"
-                  placeholder={activeDomain.entry.ownerPlaceholder}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-foreground">
-                  {copy.sections.entry.datasetLabel}
-                </label>
-                <CollectivityInput
-                  className="mt-2"
-                  placeholder={activeDomain.entry.datasetPlaceholder}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-foreground">
-                  {copy.sections.entry.importLabel}
-                </label>
-                <CollectivityInput
-                  className="mt-2"
-                  placeholder={activeDomain.entry.importPlaceholder}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-foreground">
-                  {copy.sections.entry.summaryLabel}
-                </label>
-                <CollectivityInput
-                  className="mt-2"
-                  placeholder={activeDomain.entry.summaryPlaceholder}
-                />
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <label className="text-sm font-medium text-foreground">
-                {copy.sections.entry.notesLabel}
-              </label>
-              <CollectivityTextarea
-                className="mt-2 min-h-[132px]"
-                placeholder={activeDomain.entry.notesPlaceholder}
-              />
-            </div>
-          </section>
-
-          <section className="border-b border-border px-5 py-5 md:px-6">
-            <div className="flex items-start gap-3">
-              <FileText aria-hidden="true" className="mt-1 h-4 w-4 text-secondary" />
-              <div className="min-w-0">
-                <Typography asChild variant="sectionTitle" size="sm">
-                  <h3>{copy.sections.sources.title}</h3>
-                </Typography>
-                <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl">
-                  <p>{copy.sections.sources.description}</p>
-                </Typography>
-              </div>
-            </div>
-
-            <CollectivityBulletList className="mt-5" items={activeDomain.sources} tone="accent" />
-          </section>
-
-          <section className="border-b border-border px-5 py-5 md:px-6">
-            <div className="flex items-start gap-3">
-              <AlertTriangle aria-hidden="true" className="mt-1 h-4 w-4 text-secondary" />
-              <div className="min-w-0">
-                <Typography asChild variant="sectionTitle" size="sm">
-                  <h3>{copy.sections.assumptions.title}</h3>
-                </Typography>
-                <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl">
-                  <p>{copy.sections.assumptions.description}</p>
-                </Typography>
-              </div>
-            </div>
-
-            <CollectivityBulletList className="mt-5" items={activeDomain.gaps} tone="muted" />
-
-            <div className="mt-6">
-              <label className="text-sm font-medium text-foreground">
-                {copy.sections.assumptions.textareaLabel}
-              </label>
-              <CollectivityTextarea
-                className="mt-2 min-h-[132px]"
-                placeholder={activeDomain.entry.notesPlaceholder}
-              />
-            </div>
-          </section>
-
-          <section className="border-b border-border px-5 py-5 md:px-6">
-            <div className="flex items-start gap-3">
-              <BarChart3 aria-hidden="true" className="mt-1 h-4 w-4 text-secondary" />
-              <div className="min-w-0">
-                <Typography asChild variant="sectionTitle" size="sm">
-                  <h3>{copy.sections.results.title}</h3>
-                </Typography>
-                <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl">
-                  <p>{copy.sections.results.description}</p>
-                </Typography>
-              </div>
-            </div>
-
-            <div className="mt-5 flex flex-wrap items-center gap-2">
-              <Badge variant="accent">{selectedYearData?.title}</Badge>
-              <Badge variant="outline">{copy.controls.lenses[activeLens]}</Badge>
-              <Badge variant="outline">{activeDomain.title}</Badge>
-            </div>
-
-            <div className="mt-5 rounded-lg border border-border bg-background px-4 py-4">
-              <Typography asChild variant="label" size="sm">
-                <p>{copy.sections.results.summaryLabel}</p>
-              </Typography>
-              <Typography asChild variant="body" size="body" className="mt-3">
-                <p>{activeResults.summary}</p>
-              </Typography>
-            </div>
-
-            <div className="mt-6 grid gap-4 xl:grid-cols-3">
-              {(
-                Object.entries(copy.sections.results.groups) as Array<
-                  [InventoryResultGroupKey, string]
-                >
-              ).map(([groupKey, groupTitle]) => {
-                const Icon = metricGroupIcons[groupKey];
-                const metrics = activeResults.metrics[groupKey];
-
-                return (
-                  <section
-                    key={groupKey}
-                    className="rounded-lg border border-border bg-background px-4 py-4"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Icon aria-hidden="true" className="h-4 w-4 text-secondary" />
-                      <Typography asChild variant="sectionTitle" size="sm">
-                        <h4>{groupTitle}</h4>
-                      </Typography>
-                    </div>
-
-                    <div className="mt-4 space-y-4">
-                      {metrics.map((metric) => (
-                        <div key={metric.label} className="border-t border-border pt-4 first:border-t-0 first:pt-0">
-                          <Typography asChild variant="label" size="sm">
-                            <p>{metric.label}</p>
-                          </Typography>
-                          <Typography asChild variant="title" size="xl" className="mt-2">
-                            <p>{metric.value}</p>
-                          </Typography>
-                          <Typography asChild variant="caption" size="sm" className="mt-2">
-                            <p>{metric.note}</p>
-                          </Typography>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                );
-              })}
-            </div>
-          </section>
-
-          <section className="px-5 py-5 md:px-6">
-            <div className="flex items-start gap-3">
-              <CheckCircle2 aria-hidden="true" className="mt-1 h-4 w-4 text-secondary" />
-              <div className="min-w-0">
-                <Typography asChild variant="sectionTitle" size="sm">
-                  <h3>{copy.sections.completeness.title}</h3>
-                </Typography>
-                <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl">
-                  <p>{copy.sections.completeness.description}</p>
-                </Typography>
-              </div>
-            </div>
-
-            <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_220px]">
-              <div className="rounded-lg border border-border bg-background px-4 py-4">
-                <div className="flex items-center justify-between gap-3">
-                  <Typography asChild variant="label" size="sm">
-                    <p>{copy.sections.completeness.progressLabel}</p>
-                  </Typography>
-                  <Typography asChild variant="sectionTitle" size="sm">
-                    <span>
-                      {completedChecks}/{copy.completeness.checks.length}
-                    </span>
-                  </Typography>
-                </div>
-                <Progress
-                  className="mt-4"
-                  value={completionPercent}
-                  color="bg-primary"
-                  bg="bg-primary/10"
-                />
-                <Typography asChild variant="caption" size="sm" className="mt-3">
-                  <p>{completionPercent}%</p>
-                </Typography>
-              </div>
-
-              <div className="rounded-lg border border-border bg-background px-4 py-4">
-                <Typography asChild variant="label" size="sm">
-                  <p>{copy.sections.completeness.domainAverageLabel}</p>
-                </Typography>
-                <Typography asChild variant="title" size="xl" className="mt-3">
-                  <p>{domainAverage}%</p>
-                </Typography>
-                <Typography asChild variant="caption" size="sm" className="mt-2">
-                  <p>{activeDomain.completionLabel}</p>
-                </Typography>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <Typography asChild variant="label" size="sm">
-                <p>{copy.sections.completeness.checksLabel}</p>
-              </Typography>
-
-              <div className="mt-4 grid gap-4 md:grid-cols-2">
-                {copy.completeness.checks.map((check) => (
-                  <div
-                    key={check.label}
-                    className="rounded-lg border border-border bg-background px-4 py-4"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <Typography asChild variant="body" size="body">
-                        <p>{check.label}</p>
-                      </Typography>
-                      <Badge variant={check.done ? "accent" : "outline"}>
-                        {check.done
-                          ? copy.sections.completeness.ready
-                          : copy.sections.completeness.pending}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
+    <section className="space-y-6">
+      <div className="space-y-3 border-b border-border/10 pb-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <Typography asChild variant="label" size="sm" className="text-secondary">
+            <p>{copy.controls.familyLabel}</p>
+          </Typography>
+          {copy.families.map((family) => (
+            <SurfaceToggle
+              key={family.key}
+              active={family.key === activeFamily?.key}
+              onClick={() => handleFamilyChange(family.key)}
+            >
+              <span>{family.title}</span>
+            </SurfaceToggle>
+          ))}
         </div>
 
-        <aside className="border-t border-border xl:border-l xl:border-t-0">
-          <section className="px-5 py-5 md:px-6">
-            <Typography asChild variant="sectionTitle" size="sm">
-              <h3>{copy.aside.currentTitle}</h3>
-            </Typography>
-
-            <div className="mt-4 space-y-4">
-              <div className="rounded-lg border border-border bg-background px-4 py-4">
-                <Typography asChild variant="caption" size="sm">
-                  <p>{copy.aside.currentYear}</p>
-                </Typography>
-                <Typography asChild variant="sectionTitle" size="sm" className="mt-2">
-                  <p>{selectedYearData?.title}</p>
-                </Typography>
-              </div>
-
-              <div className="rounded-lg border border-border bg-background px-4 py-4">
-                <Typography asChild variant="caption" size="sm">
-                  <p>{copy.aside.currentDomain}</p>
-                </Typography>
-                <Typography asChild variant="sectionTitle" size="sm" className="mt-2">
-                  <p>{activeDomain.title}</p>
-                </Typography>
-              </div>
-
-              <div className="rounded-lg border border-border bg-background px-4 py-4">
-                <Typography asChild variant="caption" size="sm">
-                  <p>{copy.aside.currentLens}</p>
-                </Typography>
-                <Typography asChild variant="sectionTitle" size="sm" className="mt-2">
-                  <p>{copy.controls.lenses[activeLens]}</p>
-                </Typography>
-              </div>
-            </div>
-          </section>
-
-          <section className="border-t border-border px-5 py-5 md:px-6">
-            <Typography asChild variant="sectionTitle" size="sm">
-              <h3>{copy.aside.signalTitle}</h3>
-            </Typography>
-
-            <div className="mt-4 space-y-4">
-              <div className="rounded-lg border border-border bg-background px-4 py-4">
-                <div className="flex items-center gap-3">
-                  <CalendarRange aria-hidden="true" className="h-4 w-4 text-secondary" />
-                  <div>
-                    <Typography asChild variant="caption" size="sm">
-                      <p>{copy.aside.signalItems.years}</p>
-                    </Typography>
-                    <Typography asChild variant="sectionTitle" size="sm" className="mt-1">
-                      <p>{copy.years.length}</p>
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-lg border border-border bg-background px-4 py-4">
-                <div className="flex items-center gap-3">
-                  <Database aria-hidden="true" className="h-4 w-4 text-secondary" />
-                  <div>
-                    <Typography asChild variant="caption" size="sm">
-                      <p>{copy.aside.signalItems.domains}</p>
-                    </Typography>
-                    <Typography asChild variant="sectionTitle" size="sm" className="mt-1">
-                      <p>{copy.domains.length}</p>
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-lg border border-border bg-background px-4 py-4">
-                <div className="flex items-center gap-3">
-                  <Building2 aria-hidden="true" className="h-4 w-4 text-secondary" />
-                  <div>
-                    <Typography asChild variant="caption" size="sm">
-                      <p>{copy.aside.signalItems.ire}</p>
-                    </Typography>
-                    <Typography asChild variant="sectionTitle" size="sm" className="mt-1">
-                      <p>{copy.years.find((year) => year.badge === "IRE")?.title ?? "IRE"}</p>
-                    </Typography>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </aside>
+        <div className="flex flex-wrap items-center gap-2">
+          <Typography asChild variant="label" size="sm" className="text-secondary">
+            <p>{copy.controls.datasetLabel}</p>
+          </Typography>
+          {datasetsInFamily.map((dataset) => (
+            <SurfaceToggle
+              key={dataset.key}
+              active={dataset.key === activeDataset?.key}
+              onClick={() => setActiveDatasetKey(dataset.key)}
+              tone={dataset.kind === "placeholder" ? "muted" : "default"}
+            >
+              <span>{dataset.title}</span>
+              {dataset.kind === "placeholder" ? (
+                <span className="rounded-full border border-border/18 px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-secondary">
+                  {copy.hints.todoLabel}
+                </span>
+              ) : null}
+            </SurfaceToggle>
+          ))}
+        </div>
       </div>
+
+      <section className="rounded-[1.6rem] border border-border/10 bg-card/50 px-5 py-5 shadow-[0_14px_30px_rgba(9,35,31,0.03)] md:px-6 md:py-6">
+        <div className="space-y-6">
+          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <Typography asChild variant="sectionTitle" size="sm">
+                  <h3>{activeDataset?.title}</h3>
+                </Typography>
+                <Badge variant={activeDataset?.kind === "placeholder" ? "outline" : "accent"}>
+                  {activeDataset?.status}
+                </Badge>
+              </div>
+              <Typography
+                asChild
+                variant="body"
+                size="body"
+                className="mt-2 max-w-3xl text-secondary"
+              >
+                <p>{activeDataset?.description}</p>
+              </Typography>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {activeDataset?.kind !== "placeholder" ? (
+                <>
+                  <Badge variant="outline">{copy.hints.sourceFirst}</Badge>
+                  <Badge variant="outline">{copy.hints.multiYear}</Badge>
+                </>
+              ) : (
+                <Badge variant="outline">{copy.hints.todoLabel}</Badge>
+              )}
+            </div>
+          </div>
+
+          {activeDataset?.kind === "fleet" ? (
+            <FleetSurface copy={copy.sections.entry.fleet} years={copy.years} />
+          ) : null}
+          {activeDataset?.kind === "publicLighting" ? (
+            <PublicLightingSurface copy={copy.sections.entry.lighting} years={copy.years} />
+          ) : null}
+          {activeDataset?.kind === "placeholder" ? (
+            <PlaceholderSurface copy={copy.hints} dataset={activeDataset} />
+          ) : null}
+
+          <div className="grid gap-3 border-t border-border/10 pt-4 md:grid-cols-2">
+            <Typography asChild variant="caption" size="sm" className="text-secondary">
+              <p>{copy.hints.provenanceTodo}</p>
+            </Typography>
+            <Typography asChild variant="caption" size="sm" className="text-secondary">
+              <p>{copy.hints.progressTodo}</p>
+            </Typography>
+          </div>
+        </div>
+      </section>
     </section>
   );
 }
