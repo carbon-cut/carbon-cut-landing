@@ -1073,8 +1073,8 @@ export default {
         years: [
           {
             value: "2023",
-            title: "IRE 2023",
-            badge: "IRE",
+            title: "2023",
+            badge: "Référence",
             status: "Base consolidee",
             note: "Annee de reference deja structurante pour la collecte et les premiers calculs.",
           },
@@ -1088,7 +1088,7 @@ export default {
           {
             value: "2024",
             title: "2024",
-            badge: "Complement",
+            badge: "Complément",
             status: "Collecte en cours",
             note: "Annee plus recente encore incomplete, surtout utile pour poursuivre la collecte.",
           },

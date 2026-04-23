@@ -1,5 +1,5 @@
-import InventoryWorkspace from "../../_components/inventoryWorkspace";
+import InventoryRouteClient from "../../_inventaire/InventoryRouteClient";
 
 export default function CollectivityPlanInventairePage() {
-  return <InventoryWorkspace />;
+  return <InventoryRouteClient />;
 }

@@ -1,5 +1,9 @@
 # Route Spec: Cadrage
 
+Before changing this route spec, read `docs/collectivity/00-product-truth.md`.
+
+This route spec must follow product truth and must not invent product structure on its own.
+
 Ce document décrit le premier grand écran à implémenter :
 
 `/collectivity/[planId]/cadrage`
