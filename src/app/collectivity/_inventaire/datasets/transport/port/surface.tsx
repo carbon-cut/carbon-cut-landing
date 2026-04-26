@@ -16,15 +16,21 @@ const portsSection: InventoryTableSectionData = {
     { key: "port-4", label: "Port 4", values: ["Port artisanal"] },
     { key: "port-5", label: "Port 5", values: ["Darse secondaire"] },
   ],
+  editableRows: {
+    addLabel: "Ajouter un port",
+    rowLabelPrefix: "Port",
+    minRows: 1,
+    newRowValues: [""],
+  },
 };
 
-const vesselSample = {
+const vesselSample: Record<number, Record<string, string>> = {
   "2022": { leisure: "84", fishing: "212", other: "18" },
   "2023": { leisure: "89", fishing: "219", other: "20" },
   "2024": { leisure: "92", fishing: "224", other: "23" },
 };
 
-const fuelSample = {
+const fuelSample: Record<number, Record<string, string>> = {
   "2022": { leisure: "41000", fishing: "620000", other: "95000" },
   "2023": { leisure: "43800", fishing: "655000", other: "101000" },
   "2024": { leisure: "45200", fishing: "672000", other: "108000" },
@@ -40,11 +46,7 @@ export default function PortSurface() {
           { key: "fishing", label: "Peche" },
           { key: "other", label: "Autre" },
         ]}
-        getValue={(rowKey, yearValue) =>
-          vesselSample[yearValue as keyof typeof vesselSample]?.[
-            rowKey as "leisure" | "fishing" | "other"
-          ] ?? ""
-        }
+        getValue={(rowKey, yearValue) => vesselSample[yearValue]?.[rowKey] ?? ""}
       />
       <div className="border-t border-border/10 pt-8">
         <MatrixTable
@@ -54,11 +56,7 @@ export default function PortSurface() {
             { key: "fishing", label: "Peche" },
             { key: "other", label: "Autre" },
           ]}
-          getValue={(rowKey, yearValue) =>
-            fuelSample[yearValue as keyof typeof fuelSample]?.[
-              rowKey as "leisure" | "fishing" | "other"
-            ] ?? ""
-          }
+          getValue={(rowKey, yearValue) => fuelSample[yearValue]?.[rowKey] ?? ""}
         />
       </div>
       <div className="border-t border-border/10 pt-8">

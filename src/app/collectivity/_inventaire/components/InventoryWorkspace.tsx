@@ -63,11 +63,7 @@ function renderDatasetSurface(
     case "vehicleCounts":
       return <VehicleCountsSurface />;
     case "perennialPlantationStock":
-      return (
-        <PerennialPlantationStockSurface
-          mode={dataset.key === "olive-groves" ? "olive" : "fruit"}
-        />
-      );
+      return <PerennialPlantationStockSurface />;
     case "livestock":
       return <LivestockSurface />;
     case "fertilizers":

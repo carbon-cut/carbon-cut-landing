@@ -20,7 +20,7 @@ export default function MatrixTable({
 }: {
   title: string;
   rows: InventoryRowLabel[];
-  getValue: (rowKey: string, yearValue: string) => string;
+  getValue: (rowKey: string, yearValue: number) => string;
 }) {
   const { years } = useInventoryContext();
 
@@ -35,10 +35,9 @@ export default function MatrixTable({
           <InventoryDataTableHeaderRow
             stickySrLabel="Ligne"
             cells={years.map((year) => ({
-              key: year.value,
+              key: String(year),
               className: "min-w-[142px]",
-              label: year.title,
-              badge: year.badge,
+              label: String(year),
             }))}
           />
         </TableHeader>
@@ -48,8 +47,8 @@ export default function MatrixTable({
               key={row.key}
               label={row.label}
               cells={years.map((year) => ({
-                key: `${row.key}-${year.value}`,
-                content: <InventoryTableInput defaultValue={getValue(row.key, year.value)} />,
+                key: `${row.key}-${year}`,
+                content: <InventoryTableInput defaultValue={getValue(row.key, year)} />,
               }))}
             />
           ))}

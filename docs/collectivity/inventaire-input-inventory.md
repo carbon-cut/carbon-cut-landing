@@ -447,11 +447,15 @@ Structure:
   - haute tension
     - editable columns
     - user can add, remove, and rename columns
-    - total
+    - final total column
 - rows inside each voltage block:
   - consumption (GWh)
   - number of subscribers
-  - total
+- total handling:
+  - total is a final, calculated, non-editable column in each voltage block, not a metric row
+  - the user does not enter total values
+  - the total column sums the sector / editable columns for the same metric row
+  - do not total consumption and subscriber counts together
 
 Year model:
 
@@ -526,11 +530,15 @@ Structure:
   - haute pression
     - editable columns
     - user can add, remove, and rename columns
-    - total
+    - final total column
 - rows inside each pressure block:
   - consumption (Nm3)
   - number of subscribers
-  - total
+- total handling:
+  - total is a final, calculated, non-editable column in each pressure block, not a metric row
+  - the user does not enter total values
+  - the total column sums the sector / editable columns for the same metric row
+  - do not total consumption and subscriber counts together
 
 Year model:
 
@@ -694,6 +702,62 @@ Structure:
 
 - aircraft movement sub-table:
   - one row per aircraft model
+  - aircraft model rows from the source table:
+    - A300
+    - A310
+    - A319
+    - A320
+    - A321
+    - A330-200/300
+    - A340-200
+    - A340-300
+    - A340-500/600
+    - 707
+    - 717
+    - 727
+    - 727-100
+    - 727-200
+    - 737-100/200
+    - 737-300/400/500
+    - 737-600
+    - 737-700
+    - 737-800/900
+    - 747-100
+    - 747-200
+    - 747-300
+    - 747-400
+    - 757-200
+    - 757-300
+    - 767-200
+    - 767-300
+    - 767-400
+    - 777-200/300
+    - DC-10
+    - DC-8-50/60/70
+    - DC-9
+    - L-1011
+    - MD-11
+    - MD-80
+    - MD-90
+    - TU-134
+    - TU-154M
+    - TU-154 B
+    - RJ-RJ85
+    - BAE 146
+    - CRJ-100ER
+    - RJ-145
+    - Fokker 100/70/28
+    - BAC111
+    - Dornier 328Jet
+    - Gulfstream IV
+    - Gulfstream V
+    - Yak-42M
+    - Cessna 525/560
+    - Beech King Air
+    - DHCS100
+    - ATR72-500
+    - ATR42
+    - B700
   - columns by year
   - columns inside each year:
     - international flights
@@ -767,8 +831,7 @@ Provenance:
 
 ### Known
 
-- olive grove data
-- fruit tree data
+- perennial plantation / tree stock data
 - livestock data
 - fertilizer data
 - agricultural production data
@@ -780,9 +843,11 @@ Based on `Tableau 87` and `Tableau 89` from the report's data collection annex.
 - entry responsibility:
   - city / main establishment-entered
 
-- report example:
+- report-local examples only:
   - olive groves
   - fruit tree stock
+- do not model olive groves or fruit trees as separate product-level datasets
+- product-level template is one generic perennial plantation stock input where the user names the tree / plant row groups
 - perennial plantation stock is `both`
 - source-native because the user can work from one plantation-stock table
 - year-native because each plant / tree row carries reference and comparison year lines

@@ -18,7 +18,7 @@ export default function InventoryGroupedYearTable({
   getValue,
 }: {
   section: InventoryGroupedYearTableData;
-  getValue: (rowKey: string, yearValue: string, subcolumnKey: string) => string;
+  getValue: (rowKey: string, yearValue: number, subcolumnKey: string) => string;
 }) {
   const { years } = useInventoryContext();
 
@@ -40,12 +40,11 @@ export default function InventoryGroupedYearTable({
           <InventoryDataTableHeaderRow
             stickySrLabel="Ligne"
             cells={years.map((year) => ({
-              key: year.value,
+              key: String(year),
               colSpan: section.subcolumns.length,
               className: "min-w-[220px]",
               align: "center",
-              label: year.title,
-              badge: year.badge,
+              label: String(year),
             }))}
             className="z-20"
           />
@@ -53,7 +52,7 @@ export default function InventoryGroupedYearTable({
             stickySrLabel="Ligne"
             cells={years.flatMap((year) =>
               section.subcolumns.map((subcolumn) => ({
-                key: `${year.value}-${subcolumn.key}`,
+                key: `${year}-${subcolumn.key}`,
                 className: "min-w-[110px] py-2",
                 label: subcolumn.label,
                 tone: "secondary" as const,
@@ -69,11 +68,9 @@ export default function InventoryGroupedYearTable({
               label={row.label}
               cells={years.flatMap((year) =>
                 section.subcolumns.map((subcolumn) => ({
-                  key: `${row.key}-${year.value}-${subcolumn.key}`,
+                  key: `${row.key}-${year}-${subcolumn.key}`,
                   content: (
-                    <InventoryTableInput
-                      defaultValue={getValue(row.key, year.value, subcolumn.key)}
-                    />
+                    <InventoryTableInput defaultValue={getValue(row.key, year, subcolumn.key)} />
                   ),
                 }))
               )}

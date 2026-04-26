@@ -56,13 +56,10 @@ export default function PublicLightingSurface({ copy }: { copy: PublicLightingSu
   };
 
   return (
-    <div className="space-y-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
       <InventoryTableSection section={infrastructureSection} />
 
-      <InventoryTableSection
-        section={lampSection}
-        className="space-y-4 border-t border-border/10 pt-8"
-      />
+      <InventoryTableSection section={lampSection} />
 
       <div className="border-t border-border/10 pt-8">
         <MatrixTable

@@ -36,7 +36,7 @@ export default function LivestockSurface() {
     title: "Cheptel",
     description:
       "Le dernier champ garde le parametre de temps annuel passe en etable ou espace confine.",
-    columns: [...years.map((year) => year.title), "Part du temps annuel en etable"],
+    columns: [...years.map((year) => String(year)), "Part du temps annuel en etable"],
     rows: rowMap.map((row) => ({
       key: row.key,
       label: row.label,

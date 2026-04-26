@@ -1,8 +1,4 @@
-export type InventoryYear = {
-  value: string;
-  title: string;
-  badge: string;
-};
+export type InventoryYear = number;
 
 export type InventoryFamily = {
   key: string;
@@ -50,6 +46,9 @@ export type InventoryRowLabel = {
 export type InventoryColumnLabel = {
   key: string;
   label: string;
+  calculated?: "sum";
+  editable?: boolean;
+  className?: string;
 };
 
 export type InventoryTableRow = {
@@ -63,6 +62,12 @@ export type InventoryTableSectionData = {
   description?: string;
   columns: string[];
   rows: InventoryTableRow[];
+  editableRows?: {
+    addLabel: string;
+    rowLabelPrefix: string;
+    minRows?: number;
+    newRowValues?: string[];
+  };
 };
 
 export type InventoryYearBlockTableBlock = {
@@ -71,6 +76,7 @@ export type InventoryYearBlockTableBlock = {
   columns: InventoryColumnLabel[];
   rows: InventoryRowLabel[];
   note?: string;
+  editableColumns?: boolean;
 };
 
 export type InventoryGroupedYearTableData = {

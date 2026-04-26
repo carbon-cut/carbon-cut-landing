@@ -102,8 +102,7 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
   return (
     <div className="space-y-8">
       <InventoryTableSection section={compositionSection} />
-
-      <div className="space-y-8 border-t border-border/10 pt-8">
+      <div className="border-t border-border/10 pt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         <MatrixTable
           title={copy.yearlyVehiclesTitle}
           rows={copy.yearlyVehiclesRows}

@@ -109,13 +109,17 @@ export function InventoryDataTableHead({
       )}
     >
       <span className={cn("flex items-center gap-2", align === "center" ? "justify-center" : "")}>
-        <Typography
-          variant={tone === "secondary" ? "caption" : "label"}
-          size="sm"
-          className={tone === "secondary" ? "text-secondary" : "text-foreground"}
-        >
-          {children}
-        </Typography>
+        {typeof children === "string" ? (
+          <Typography
+            variant={tone === "secondary" ? "caption" : "label"}
+            size="sm"
+            className={tone === "secondary" ? "text-secondary" : "text-foreground"}
+          >
+            {children}
+          </Typography>
+        ) : (
+          children
+        )}
         {badge ? (
           <Badge variant="accent" size="default" className="px-2 py-0.5">
             {badge}

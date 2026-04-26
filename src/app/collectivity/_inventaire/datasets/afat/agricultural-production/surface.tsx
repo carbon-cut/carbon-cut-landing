@@ -2,7 +2,7 @@
 
 import MatrixTable from "../../../components/MatrixTable";
 
-const harvestedArea = {
+const harvestedArea: Record<number, Record<string, string>> = {
   "2022": {
     wheat: "12 400",
     barley: "5 900",
@@ -29,7 +29,7 @@ const harvestedArea = {
   },
 };
 
-const production = {
+const production: Record<number, Record<string, string>> = {
   "2022": {
     wheat: "31 000",
     barley: "12 200",
@@ -71,21 +71,13 @@ export default function AgriculturalProductionSurface() {
       <MatrixTable
         title="Surface recoltee (ha)"
         rows={rows}
-        getValue={(rowKey, yearValue) =>
-          harvestedArea[yearValue as keyof typeof harvestedArea]?.[
-            rowKey as keyof (typeof harvestedArea)["2022"]
-          ] ?? ""
-        }
+        getValue={(rowKey, yearValue) => harvestedArea[yearValue]?.[rowKey] ?? ""}
       />
       <div className="border-t border-border/10 pt-8">
         <MatrixTable
           title="Production (t)"
           rows={rows}
-          getValue={(rowKey, yearValue) =>
-            production[yearValue as keyof typeof production]?.[
-              rowKey as keyof (typeof production)["2022"]
-            ] ?? ""
-          }
+          getValue={(rowKey, yearValue) => production[yearValue]?.[rowKey] ?? ""}
         />
       </div>
     </div>

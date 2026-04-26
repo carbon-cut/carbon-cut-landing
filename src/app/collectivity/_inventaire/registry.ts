@@ -8,10 +8,16 @@ import type {
   PublicLightingSurfaceCopy,
 } from "./types";
 
+type InventoryLocaleYear = {
+  value: string;
+  title: string;
+  badge: string;
+};
+
 export type InventoryWorkspaceLocale = {
   controls: InventoryWorkspaceConfig["controls"];
   hints: InventoryWorkspaceConfig["hints"];
-  years: InventoryYear[];
+  years: InventoryLocaleYear[];
   families: InventoryFamily[];
   datasets: Array<
     Omit<InventoryDataset, "surfaceKind"> & {
@@ -73,7 +79,7 @@ const datasetOverrides: Record<
       "Source-native: une source energie peut couvrir plusieurs annees dans la meme logique de blocs.",
     yearMode: "Year-native: chaque annee garde son propre tableau par niveau de tension.",
     implementationNote:
-      "La structure initiale preserve les blocs BT / MT / HT et laisse la haute tension editable plus tard.",
+      "La structure preserve les blocs BT / MT / HT et rend les colonnes haute tension editables.",
   },
   photovoltaic: {
     surfaceKind: "photovoltaic",
@@ -94,7 +100,7 @@ const datasetOverrides: Record<
       "Source-native: un export gaz peut couvrir plusieurs annees avec la meme structure.",
     yearMode: "Year-native: chaque annee conserve son bloc BP / MP / HP.",
     implementationNote:
-      "La structure initiale preserve les niveaux de pression et laisse la haute pression editable plus tard.",
+      "La structure preserve les niveaux de pression et rend les colonnes haute pression editables.",
   },
   "solar-water-heating": {
     surfaceKind: "solarWaterHeating",
@@ -144,22 +150,15 @@ const datasetOverrides: Record<
     implementationNote:
       "La structure initiale fusionne les categories du rapport dans un seul tableau de comptage.",
   },
-  "olive-groves": {
-    surfaceKind: "perennialPlantationStock",
-    status: "Structure initiale",
-    description: "Jeu AFAT oliveraies avec lignes annuelles et double lecture hectares / arbres.",
-    sourceMode: "Source-native: un tableau de stock plantation peut couvrir plusieurs annees.",
-    yearMode: "Year-native: chaque culture garde une ligne par annee.",
-    implementationNote: "Le premier panneau rend un groupe de plantation directement editable.",
-  },
-  "fruit-trees": {
+  "perennial-plantation-stock": {
     surfaceKind: "perennialPlantationStock",
     status: "Structure initiale",
     description:
-      "Jeu AFAT arbres fruitiers avec lignes annuelles et double lecture hectares / arbres.",
+      "Jeu AFAT de stock de plantations perennes avec lignes annuelles et double lecture hectares / arbres.",
     sourceMode: "Source-native: un tableau de stock plantation peut couvrir plusieurs annees.",
-    yearMode: "Year-native: chaque culture garde une ligne par annee.",
-    implementationNote: "Le premier panneau rend un groupe de plantation directement editable.",
+    yearMode: "Year-native: chaque groupe de plantation garde ses valeurs annuelles.",
+    implementationNote:
+      "Le panneau propose des types de plantation selectionnables avec saisie libre et lignes ajoutables.",
   },
   livestock: {
     surfaceKind: "livestock",
@@ -234,6 +233,6 @@ export function buildInventoryRegistry(locale: InventoryWorkspaceLocale): {
       fleet: locale.sections.entry.fleet,
       publicLighting: locale.sections.entry.lighting,
     },
-    years: locale.years,
+    years: locale.years.map((year) => Number(year.value)),
   };
 }

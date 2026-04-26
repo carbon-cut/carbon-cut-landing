@@ -5,16 +5,19 @@ import InventoryTableSection from "../../../components/InventoryTableSection";
 import type { InventoryTableSectionData } from "../../../types";
 
 const operatorSection: InventoryTableSectionData = {
-  title: "Operateur 1",
-  description:
-    "La structure initiale garde un premier operateur; la repetition multi-operateurs viendra ensuite.",
-  columns: ["Valeur"],
-  rows: [
-    { key: "operator-name", label: "Nom de l'operateur", values: ["Regie bus metropolitaine"] },
-  ],
+  title: "Operateurs",
+  description: "La structure initiale garde les operateurs visibles comme metadonnees de travail.",
+  columns: ["Operateur"],
+  rows: [{ key: "operator-1", label: "Operateur 1", values: ["Regie bus metropolitaine"] }],
+  editableRows: {
+    addLabel: "Ajouter un operateur",
+    rowLabelPrefix: "Operateur",
+    minRows: 1,
+    newRowValues: [""],
+  },
 };
 
-const operations = {
+const operations: Record<number, Record<string, string>> = {
   "2022": {
     buses: "324",
     fuelConsumption: "5 820 000 L",
@@ -44,13 +47,13 @@ const operations = {
   },
 };
 
-const renewal = {
+const renewal: Record<number, Record<string, string>> = {
   "2022": { scrapped: "14", purchased: "20", purchaseCost: "6 200 000 TND" },
   "2023": { scrapped: "18", purchased: "24", purchaseCost: "7 900 000 TND" },
   "2024": { scrapped: "10", purchased: "16", purchaseCost: "5 600 000 TND" },
 };
 
-const age = {
+const age: Record<number, Record<string, string>> = {
   "2022": { age0to5: "98", age6to10: "115", age10plus: "111" },
   "2023": { age0to5: "116", age6to10: "109", age10plus: "111" },
   "2024": { age0to5: "124", age6to10: "112", age10plus: "108" },
@@ -82,11 +85,7 @@ export default function PublicTransportSurface() {
             { key: "passengerKm", label: "Passagers-km" },
             { key: "passengers", label: "Nombre de passagers" },
           ]}
-          getValue={(rowKey, yearValue) =>
-            operations[yearValue as keyof typeof operations]?.[
-              rowKey as keyof (typeof operations)["2022"]
-            ] ?? ""
-          }
+          getValue={(rowKey, yearValue) => operations[yearValue]?.[rowKey] ?? ""}
         />
       </div>
       <div className="border-t border-border/10 pt-8">
@@ -97,11 +96,7 @@ export default function PublicTransportSurface() {
             { key: "purchased", label: "Bus achetes" },
             { key: "purchaseCost", label: "Cout d'achat" },
           ]}
-          getValue={(rowKey, yearValue) =>
-            renewal[yearValue as keyof typeof renewal]?.[
-              rowKey as keyof (typeof renewal)["2022"]
-            ] ?? ""
-          }
+          getValue={(rowKey, yearValue) => renewal[yearValue]?.[rowKey] ?? ""}
         />
       </div>
       <div className="border-t border-border/10 pt-8">
@@ -112,9 +107,7 @@ export default function PublicTransportSurface() {
             { key: "age6to10", label: "6-10 ans" },
             { key: "age10plus", label: "Plus de 10 ans" },
           ]}
-          getValue={(rowKey, yearValue) =>
-            age[yearValue as keyof typeof age]?.[rowKey as keyof (typeof age)["2022"]] ?? ""
-          }
+          getValue={(rowKey, yearValue) => age[yearValue]?.[rowKey] ?? ""}
         />
       </div>
       <div className="border-t border-border/10 pt-8">

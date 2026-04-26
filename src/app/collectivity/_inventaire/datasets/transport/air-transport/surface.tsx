@@ -4,6 +4,64 @@ import InventoryGroupedYearTable from "../../../components/InventoryGroupedYearT
 import MatrixTable from "../../../components/MatrixTable";
 import type { InventoryGroupedYearTableData } from "../../../types";
 
+const aircraftModels = [
+  "A300",
+  "A310",
+  "A319",
+  "A320",
+  "A321",
+  "A330-200/300",
+  "A340-200",
+  "A340-300",
+  "A340-500/600",
+  "707",
+  "717",
+  "727",
+  "727-100",
+  "727-200",
+  "737-100/200",
+  "737-300/400/500",
+  "737-600",
+  "737-700",
+  "737-800/900",
+  "747-100",
+  "747-200",
+  "747-300",
+  "747-400",
+  "757-200",
+  "757-300",
+  "767-200",
+  "767-300",
+  "767-400",
+  "777-200/300",
+  "DC-10",
+  "DC-8-50/60/70",
+  "DC-9",
+  "L-1011",
+  "MD-11",
+  "MD-80",
+  "MD-90",
+  "TU-134",
+  "TU-154M",
+  "TU-154 B",
+  "RJ-RJ85",
+  "BAE 146",
+  "CRJ-100ER",
+  "RJ-145",
+  "Fokker 100/70/28",
+  "BAC111",
+  "Dornier 328Jet",
+  "Gulfstream IV",
+  "Gulfstream V",
+  "Yak-42M",
+  "Cessna 525/560",
+  "Beech King Air",
+  "DHCS100",
+  "ATR72-500",
+  "ATR42",
+  "B700",
+];
+
 const movementSection: InventoryGroupedYearTableData = {
   title: "Mouvements d'aeronefs",
   description:
@@ -12,38 +70,29 @@ const movementSection: InventoryGroupedYearTableData = {
     { key: "international", label: "International" },
     { key: "national", label: "National" },
   ],
-  rows: [
-    { key: "a320", label: "Airbus A320" },
-    { key: "b737", label: "Boeing 737" },
-    { key: "atr72", label: "ATR 72" },
-    { key: "businessJet", label: "Jet d'affaires" },
-  ],
+  rows: aircraftModels.map((model) => ({
+    key: model
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, ""),
+    label: model,
+  })),
 };
 
-const movementSample: Record<string, Record<string, Record<string, string>>> = {
+const movementSample: Record<string, Record<number, Record<string, string>>> = {
   a320: {
     "2022": { international: "620", national: "180" },
     "2023": { international: "710", national: "190" },
     "2024": { international: "760", national: "205" },
   },
-  b737: {
-    "2022": { international: "540", national: "120" },
-    "2023": { international: "580", national: "124" },
-    "2024": { international: "612", national: "131" },
-  },
-  atr72: {
+  "atr72-500": {
     "2022": { international: "0", national: "240" },
     "2023": { international: "0", national: "266" },
     "2024": { international: "0", national: "284" },
   },
-  businessJet: {
-    "2022": { international: "94", national: "22" },
-    "2023": { international: "101", national: "25" },
-    "2024": { international: "108", national: "29" },
-  },
 };
 
-const energySample = {
+const energySample: Record<number, Record<string, string>> = {
   "2022": {
     electricity: "3 200 000 kWh",
     diesel: "126 000 L",
@@ -82,11 +131,7 @@ export default function AirTransportSurface() {
             { key: "petrol", label: "Consommation flotte essence" },
             { key: "kerosene", label: "Kerosene servi aux avions" },
           ]}
-          getValue={(rowKey, yearValue) =>
-            energySample[yearValue as keyof typeof energySample]?.[
-              rowKey as keyof (typeof energySample)["2022"]
-            ] ?? ""
-          }
+          getValue={(rowKey, yearValue) => energySample[yearValue]?.[rowKey] ?? ""}
         />
       </div>
     </div>
