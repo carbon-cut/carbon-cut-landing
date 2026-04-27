@@ -93,16 +93,16 @@ function MetadataField({
 }) {
   return (
     <div className={cn("space-y-2", className)}>
-      <Label className="text-xs font-medium uppercase tracking-wide text-secondary">
-        {label}
-      </Label>
+      <Label className="text-xs font-medium uppercase tracking-wide text-secondary">{label}</Label>
       {children}
     </div>
   );
 }
 
 function formatTrendLabel(value: string) {
-  return trendDirectionLabels[value] ?? trendAnomalyLabels[value] ?? trendMethodLabels[value] ?? value;
+  return (
+    trendDirectionLabels[value] ?? trendAnomalyLabels[value] ?? trendMethodLabels[value] ?? value
+  );
 }
 
 export default function CollectivityMetadataDrawer({
@@ -171,208 +171,230 @@ export default function CollectivityMetadataDrawer({
             <ScrollArea className="h-[50vh]">
               <div className="pr-4 mx-1">
                 <div className="space-y-6 ">
-            <section className="space-y-4">
-              <div className="space-y-1">
-                <h4 className="text-sm font-medium text-foreground">{labels.provenanceTitle}</h4>
-                <p className="text-xs text-secondary">
-                  Renseignez la source qui soutient ce jeu de données.
-                </p>
-              </div>
+                  <section className="space-y-4">
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-medium text-foreground">
+                        {labels.provenanceTitle}
+                      </h4>
+                      <p className="text-xs text-secondary">
+                        Renseignez la source qui soutient ce jeu de données.
+                      </p>
+                    </div>
 
-              <div className="grid gap-4 md:grid-cols-2">
-                <MetadataField label="Organisation">
-                  <CollectivityInput
-                    value={draft.organization}
-                    onChange={(event) =>
-                      setDraft((current) => ({ ...current, organization: event.target.value }))
-                    }
-                    placeholder="Ex. STEG"
-                  />
-                </MetadataField>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <MetadataField label="Organisation">
+                        <CollectivityInput
+                          value={draft.organization}
+                          onChange={(event) =>
+                            setDraft((current) => ({
+                              ...current,
+                              organization: event.target.value,
+                            }))
+                          }
+                          placeholder="Ex. STEG"
+                        />
+                      </MetadataField>
 
-                <MetadataField label="Document">
-                  <CollectivityInput
-                    value={draft.documentName}
-                    onChange={(event) =>
-                      setDraft((current) => ({ ...current, documentName: event.target.value }))
-                    }
-                    placeholder="Ex. Export électricité 2024"
-                  />
-                </MetadataField>
+                      <MetadataField label="Document">
+                        <CollectivityInput
+                          value={draft.documentName}
+                          onChange={(event) =>
+                            setDraft((current) => ({
+                              ...current,
+                              documentName: event.target.value,
+                            }))
+                          }
+                          placeholder="Ex. Export électricité 2024"
+                        />
+                      </MetadataField>
 
-                <MetadataField label="Contact">
-                  <CollectivityInput
-                    value={draft.contactPerson}
-                    onChange={(event) =>
-                      setDraft((current) => ({ ...current, contactPerson: event.target.value }))
-                    }
-                    placeholder="Ex. cellule énergie"
-                  />
-                </MetadataField>
+                      <MetadataField label="Contact">
+                        <CollectivityInput
+                          value={draft.contactPerson}
+                          onChange={(event) =>
+                            setDraft((current) => ({
+                              ...current,
+                              contactPerson: event.target.value,
+                            }))
+                          }
+                          placeholder="Ex. cellule énergie"
+                        />
+                      </MetadataField>
 
-                <MetadataField label="Date de collecte">
-                  <CollectivityInput
-                    type="date"
-                    value={draft.collectionDate}
-                    onChange={(event) =>
-                      setDraft((current) => ({ ...current, collectionDate: event.target.value }))
-                    }
-                  />
-                </MetadataField>
+                      <MetadataField label="Date de collecte">
+                        <CollectivityInput
+                          type="date"
+                          value={draft.collectionDate}
+                          onChange={(event) =>
+                            setDraft((current) => ({
+                              ...current,
+                              collectionDate: event.target.value,
+                            }))
+                          }
+                        />
+                      </MetadataField>
 
-                <MetadataField label="Type de source" className="md:col-span-2">
-                  <CollectivitySelect
-                    value={draft.sourceType}
-                    onValueChange={(nextValue) =>
-                      setDraft((current) => ({
-                        ...current,
-                        sourceType: nextValue as CollectivityMetadataDraft["sourceType"],
-                      }))
-                    }
-                    placeholder="Choisir un type de source"
-                    options={sourceTypeOptions}
-                    className="w-full"
-                  />
-                </MetadataField>
-              </div>
-            </section>
+                      <MetadataField label="Type de source" className="md:col-span-2">
+                        <CollectivitySelect
+                          value={draft.sourceType}
+                          onValueChange={(nextValue) =>
+                            setDraft((current) => ({
+                              ...current,
+                              sourceType: nextValue as CollectivityMetadataDraft["sourceType"],
+                            }))
+                          }
+                          placeholder="Choisir un type de source"
+                          options={sourceTypeOptions}
+                          className="w-full"
+                        />
+                      </MetadataField>
+                    </div>
+                  </section>
 
-            <section className="space-y-4">
-              <div className="space-y-1">
-                <h4 className="text-sm font-medium text-foreground">{labels.qualityTitle}</h4>
-                <p className="text-xs text-secondary">
-                  Indiquez le niveau de fiabilité attaché à cette collecte.
-                </p>
-              </div>
+                  <section className="space-y-4">
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-medium text-foreground">{labels.qualityTitle}</h4>
+                      <p className="text-xs text-secondary">
+                        Indiquez le niveau de fiabilité attaché à cette collecte.
+                      </p>
+                    </div>
 
-              <div className="grid gap-4 md:grid-cols-2">
-                <MetadataField label="Statut">
-                  <CollectivitySelect
-                    value={draft.status}
-                    onValueChange={(nextValue) =>
-                      setDraft((current) => ({
-                        ...current,
-                        status: nextValue as CollectivityMetadataDraft["status"],
-                      }))
-                    }
-                    placeholder="Choisir un statut"
-                    options={qualityStatusOptions}
-                    className="w-full"
-                  />
-                </MetadataField>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <MetadataField label="Statut">
+                        <CollectivitySelect
+                          value={draft.status}
+                          onValueChange={(nextValue) =>
+                            setDraft((current) => ({
+                              ...current,
+                              status: nextValue as CollectivityMetadataDraft["status"],
+                            }))
+                          }
+                          placeholder="Choisir un statut"
+                          options={qualityStatusOptions}
+                          className="w-full"
+                        />
+                      </MetadataField>
 
-                <MetadataField label="Confiance">
-                  <CollectivitySelect
-                    value={draft.confidence}
-                    onValueChange={(nextValue) =>
-                      setDraft((current) => ({
-                        ...current,
-                        confidence: nextValue as CollectivityMetadataDraft["confidence"],
-                      }))
-                    }
-                    placeholder="Choisir une confiance"
-                    options={confidenceOptions}
-                    className="w-full"
-                  />
-                </MetadataField>
+                      <MetadataField label="Confiance">
+                        <CollectivitySelect
+                          value={draft.confidence}
+                          onValueChange={(nextValue) =>
+                            setDraft((current) => ({
+                              ...current,
+                              confidence: nextValue as CollectivityMetadataDraft["confidence"],
+                            }))
+                          }
+                          placeholder="Choisir une confiance"
+                          options={confidenceOptions}
+                          className="w-full"
+                        />
+                      </MetadataField>
 
-                <MetadataField label="Commentaire" className="md:col-span-2">
-                  <CollectivityTextarea
-                    value={draft.comment}
-                    onChange={(event) =>
-                      setDraft((current) => ({ ...current, comment: event.target.value }))
-                    }
-                    placeholder="Ajouter un commentaire sur la qualité ou les limites de la source."
-                  />
-                </MetadataField>
-              </div>
-            </section>
+                      <MetadataField label="Commentaire" className="md:col-span-2">
+                        <CollectivityTextarea
+                          value={draft.comment}
+                          onChange={(event) =>
+                            setDraft((current) => ({ ...current, comment: event.target.value }))
+                          }
+                          placeholder="Ajouter un commentaire sur la qualité ou les limites de la source."
+                        />
+                      </MetadataField>
+                    </div>
+                  </section>
 
-            {trendAssessment ? (
-              <section className="space-y-4">
-                <div className="space-y-1">
-                  <h4 className="text-sm font-medium text-foreground">{labels.trendTitle}</h4>
-                  <p className="text-xs text-secondary">{labels.trendDescription}</p>
+                  {trendAssessment ? (
+                    <section className="space-y-4">
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-medium text-foreground">{labels.trendTitle}</h4>
+                        <p className="text-xs text-secondary">{labels.trendDescription}</p>
+                      </div>
+
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
+                          <p className="text-xs uppercase tracking-wide text-secondary">
+                            Tendance historique
+                          </p>
+                          <p className="mt-1 text-sm font-medium text-foreground">
+                            {formatTrendLabel(trendAssessment.historicalTrend)}
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
+                          <p className="text-xs uppercase tracking-wide text-secondary">
+                            Tendance récente
+                          </p>
+                          <p className="mt-1 text-sm font-medium text-foreground">
+                            {formatTrendLabel(trendAssessment.recentTrend)}
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
+                          <p className="text-xs uppercase tracking-wide text-secondary">
+                            État du signal
+                          </p>
+                          <p className="mt-1 text-sm font-medium text-foreground">
+                            {formatTrendLabel(trendAssessment.anomalyStatus)}
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
+                          <p className="text-xs uppercase tracking-wide text-secondary">
+                            Méthode sélectionnée
+                          </p>
+                          <p className="mt-1 text-sm font-medium text-foreground">
+                            {formatTrendLabel(trendAssessment.selectedMethod)}
+                          </p>
+                        </div>
+                      </div>
+
+                      {trendAssessment.reasonCode ? (
+                        <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
+                          <p className="text-xs uppercase tracking-wide text-secondary">
+                            Code raison
+                          </p>
+                          <p className="mt-1 text-sm font-medium text-foreground">
+                            {trendAssessment.reasonCode}
+                          </p>
+                        </div>
+                      ) : null}
+
+                      {trendAssessment.expertNote ? (
+                        <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
+                          <p className="text-xs uppercase tracking-wide text-secondary">Note</p>
+                          <p className="mt-1 text-sm font-medium text-foreground">
+                            {trendAssessment.expertNote}
+                          </p>
+                        </div>
+                      ) : null}
+
+                      {showTrendReview ? (
+                        <div className="space-y-3 rounded-2xl border border-border/10 bg-surface-warm/30 px-3 py-3">
+                          <p className="text-sm font-medium text-foreground">
+                            {labels.trendPrompt}
+                          </p>
+                          <RadioGroup
+                            value={activeTrendDecision}
+                            onValueChange={(nextValue) => {
+                              const nextDecision = nextValue as CollectivityTrendReviewDecision;
+                              setLocalTrendDecision(nextDecision);
+                              onTrendDecisionChange?.(nextDecision);
+                            }}
+                            className="grid gap-2"
+                          >
+                            {trendReviewOptions.map((option) => (
+                              <label
+                                key={option.value}
+                                className="flex cursor-pointer items-center gap-3 rounded-xl border border-border/10 bg-card px-3 py-2 text-sm transition-colors hover:bg-surface-warm/40"
+                              >
+                                <RadioGroupItem value={option.value} />
+                                <span>{option.label}</span>
+                              </label>
+                            ))}
+                          </RadioGroup>
+                        </div>
+                      ) : null}
+                    </section>
+                  ) : null}
                 </div>
-
-                <div className="grid gap-3 md:grid-cols-2">
-                  <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
-                    <p className="text-xs uppercase tracking-wide text-secondary">
-                      Tendance historique
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-foreground">
-                      {formatTrendLabel(trendAssessment.historicalTrend)}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
-                    <p className="text-xs uppercase tracking-wide text-secondary">Tendance récente</p>
-                    <p className="mt-1 text-sm font-medium text-foreground">
-                      {formatTrendLabel(trendAssessment.recentTrend)}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
-                    <p className="text-xs uppercase tracking-wide text-secondary">État du signal</p>
-                    <p className="mt-1 text-sm font-medium text-foreground">
-                      {formatTrendLabel(trendAssessment.anomalyStatus)}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
-                    <p className="text-xs uppercase tracking-wide text-secondary">
-                      Méthode sélectionnée
-                    </p>
-                    <p className="mt-1 text-sm font-medium text-foreground">
-                      {formatTrendLabel(trendAssessment.selectedMethod)}
-                    </p>
-                  </div>
-                </div>
-
-                {trendAssessment.reasonCode ? (
-                  <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
-                    <p className="text-xs uppercase tracking-wide text-secondary">Code raison</p>
-                    <p className="mt-1 text-sm font-medium text-foreground">
-                      {trendAssessment.reasonCode}
-                    </p>
-                  </div>
-                ) : null}
-
-                {trendAssessment.expertNote ? (
-                  <div className="rounded-2xl border border-border/10 bg-surface-warm/45 px-3 py-3">
-                    <p className="text-xs uppercase tracking-wide text-secondary">Note</p>
-                    <p className="mt-1 text-sm font-medium text-foreground">
-                      {trendAssessment.expertNote}
-                    </p>
-                  </div>
-                ) : null}
-
-                {showTrendReview ? (
-                  <div className="space-y-3 rounded-2xl border border-border/10 bg-surface-warm/30 px-3 py-3">
-                    <p className="text-sm font-medium text-foreground">{labels.trendPrompt}</p>
-                    <RadioGroup
-                      value={activeTrendDecision}
-                      onValueChange={(nextValue) => {
-                        const nextDecision = nextValue as CollectivityTrendReviewDecision;
-                        setLocalTrendDecision(nextDecision);
-                        onTrendDecisionChange?.(nextDecision);
-                      }}
-                      className="grid gap-2"
-                    >
-                      {trendReviewOptions.map((option) => (
-                        <label
-                          key={option.value}
-                          className="flex cursor-pointer items-center gap-3 rounded-xl border border-border/10 bg-card px-3 py-2 text-sm transition-colors hover:bg-surface-warm/40"
-                        >
-                          <RadioGroupItem value={option.value} />
-                          <span>{option.label}</span>
-                        </label>
-                      ))}
-                    </RadioGroup>
-                  </div>
-                ) : null}
-              </section>
-            ) : null}
-            </div>
-            <div className="h-[1px] " />
-            </div>
+                <div className="h-[1px] " />
+              </div>
             </ScrollArea>
           </div>
 

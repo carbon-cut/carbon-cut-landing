@@ -14,44 +14,24 @@ It must not copy report-specific literals as if they were universal product defa
 
 ### 1. Primary Product Unit
 
-For now, assume the product is centered on one `municipality-scale territory`.
+For now, assume the product is centered on one `municipality`.
 
-This means the main product object is not an isolated commune.
+The municipality has one defined territory.
 
-It is a larger city or territorial plan that can contain multiple communes inside it.
-
-### 2. Account Structure
-
-For now, assume there is:
-
-- one main `territory-level` account responsible for the whole city-level plan
-- multiple `commune-level` accounts related to communes inside that territory
-
-This matches the current pattern extracted from the report structure.
-
-### 3. Product Relationship Between Territory And Communes
-
-For now, assume:
-
-- the territory-level plan is the main shared plan
-- commune accounts exist inside that plan context
-- commune accounts do not define a separate top-level product by default
-
-The commune layer is therefore a subordinate layer of the larger territorial plan, not a parallel standalone product model.
-
-### 4. Product Framing Boundary
+### 2. Product Framing Boundary
 
 For now, `collectivity` should be framed as:
 
-- a product for building and managing a city-level climate plan
-- with commune-level participation and municipal sub-readings inside it
+- an inventory workspace for one municipality and its territory
+- a product focused on inventory data entry, evidence, hypotheses, and results
 
 It should not yet be framed as:
 
-- a generic multi-tenant public-sector platform for any government shape
-- a commune-first product where every commune is treated as a separate independent root object
+- a municipality network product for multiple local authorities
+- a general public-sector platform for any government shape
+- a climate planning product with scenarios or action planning as current scope
 
-### 5. Primary User
+### 3. Primary User
 
 For now, assume the primary day-to-day user is:
 
@@ -71,18 +51,18 @@ This user is not the product's climate expert.
 
 This user is also not the person who should manually design the plan logic from scratch.
 
-### 6. Primary User Job In The Product
+### 4. Primary User Job In The Product
 
 For now, assume the primary user's job is to:
 
 - enter and maintain the required information in the app
-- keep the plan data current over time
+- keep the inventory data current over time
 - review enough of the output to understand what the app produced
-- present the app's outputs to executives
+- present the inventory outputs to stakeholders
 
 For now, assume the app carries most of the methodological burden.
 
-That means the app should structure the plan, generate the outputs, and guide the user through what is needed.
+That means the app should structure the inventory, generate the outputs, and guide the user through what is needed.
 
 The primary user should not be expected to:
 
@@ -91,7 +71,7 @@ The primary user should not be expected to:
 - construct scenarios intellectually without product guidance
 - infer the meaning of fields from expert shorthand
 
-### 7. UX Consequence Of This User Assumption
+### 5. UX Consequence Of This User Assumption
 
 Until this assumption changes, UX decisions should optimize for:
 
@@ -109,54 +89,50 @@ UX decisions should not optimize first for:
 - unexplained acronyms
 - flows that assume the user knows the methodology already
 
-### 8. Executives
+### 6. Reviewers
 
-For now, assume executives are not the primary data-entry users of the product.
+For now, assume reviewers are not the primary data-entry users of the product.
 
-For now, assume executives mainly need the product's outputs in a form that supports reading, validation, prioritization, and decision-making.
+For now, assume review stakeholders mainly need the product's outputs in a form that supports reading and validation.
 
-The product should therefore be able to present executives with:
+The product should therefore be able to present reviewers with:
 
-- a clear summary of the plan
-- the target direction and planning horizon
-- a comparison between the reference trajectory and the transition trajectory
-- the main action priorities
-- the expected impacts of those actions
-- the required investments
-- the implementation sequence or calendar
-- the governance, responsibility, and follow-up structure around execution
+- a clear summary of the inventory
+- the territory and covered years
+- the current inventory completeness state
+- the main results by source, category, or perimeter
+- the missing data or hypotheses that still shape the output
 
-Executives should not need to read raw collection details in order to understand the plan.
+Reviewers should not need to read raw collection details in order to understand the inventory.
 
-Executives should not need to interpret technical methodology before they can understand the strategic output.
+Reviewers should not need to interpret technical methodology before they can understand the output.
 
 The product should therefore distinguish between:
 
 - operator-facing input and maintenance views
-- executive-facing output and decision views
+- inventory output and review views
 
 Current decision:
 
-- collectivity should produce one shared output / document for all decision-makers
-- the product should not assume different executive-specific output documents in first scope
+- collectivity should produce inventory outputs and result views for the municipality
+- the product should not assume scenario, action-plan, or decision documents in first scope
 
 What remains open:
 
-- the exact executive roles
-- the exact format in which they prefer to consume the outputs
+- the exact review roles
+- the exact format in which they prefer to consume the inventory outputs
 - how much detail should be visible by default versus collapsed
 
-TODO: Confirm what "keeping the app updated" should mean in product terms, and whether ongoing post-plan updates are part of the first product scope at all.
+TODO: Confirm what "keeping the app updated" should mean in product terms, and whether ongoing post-inventory updates are part of the first product scope at all.
 
 ## Open Product Questions
 
 These are still open and must not be guessed in implementation:
 
-- what commune accounts are allowed to edit versus only read
-- whether commune workflows are full sub-plans or limited municipal declinations
-- what the final output of the product is for territory users versus commune users
-- whether the product is mainly for plan creation, coordination, reporting, execution, or all of them
-- the exact executive audience and their preferred output format
+- what municipality users are allowed to edit versus only read
+- what the final inventory output is for different user roles
+- whether the product later expands into planning, coordination, reporting, or execution
+- the exact review audience and their preferred output format
 
 ## Implementation Guardrail
 

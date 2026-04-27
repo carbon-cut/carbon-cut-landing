@@ -39,7 +39,9 @@ function createCollectivityMetadataDraft(value?: CollectivityMetadataValue | nul
   };
 }
 
-function normalizeCollectivityMetadataDraft(draft: CollectivityMetadataDraft): CollectivityMetadataValue | null {
+function normalizeCollectivityMetadataDraft(
+  draft: CollectivityMetadataDraft
+): CollectivityMetadataValue | null {
   const entries = Object.entries(draft).filter(([, value]) => String(value).trim() !== "");
 
   if (!entries.length) {
@@ -57,9 +59,9 @@ function summarizeCollectivityMetadata(value: CollectivityMetadataValue | null) 
   const summaryParts = [
     value.organization,
     value.documentName,
-    value.sourceType ? sourceTypeLabels[value.sourceType] ?? value.sourceType : "",
-    value.status ? qualityStatusLabels[value.status] ?? value.status : "",
-    value.confidence ? confidenceLabels[value.confidence] ?? value.confidence : "",
+    value.sourceType ? (sourceTypeLabels[value.sourceType] ?? value.sourceType) : "",
+    value.status ? (qualityStatusLabels[value.status] ?? value.status) : "",
+    value.confidence ? (confidenceLabels[value.confidence] ?? value.confidence) : "",
   ].filter((part): part is string => Boolean(part && part.trim()));
 
   if (summaryParts.length) {

@@ -52,8 +52,8 @@ function parseNumber(value: string) {
 function formatTrendAssessment(
   yearlyValues: Array<{ year: number; value: number | null }>
 ): CollectivityTrendAssessment | null {
-  const validValues = yearlyValues.filter((item): item is { year: number; value: number } =>
-    item.value !== null
+  const validValues = yearlyValues.filter(
+    (item): item is { year: number; value: number } => item.value !== null
   );
 
   if (validValues.length < 2) {
@@ -68,11 +68,7 @@ function formatTrendAssessment(
     last.value > first.value ? "increase" : last.value < first.value ? "decrease" : "stable";
 
   const recentTrend =
-    last.value > previous.value
-      ? "increase"
-      : last.value < previous.value
-        ? "decrease"
-        : "stable";
+    last.value > previous.value ? "increase" : last.value < previous.value ? "decrease" : "stable";
 
   if (historicalTrend === "decrease" && recentTrend === "increase") {
     return {
@@ -149,7 +145,10 @@ export default function ElectricityMetadataPilot({
   const { years } = useInventoryContext();
 
   const trendAssessmentByScope = useMemo(() => {
-    const assessmentByScope: Record<ElectricityMetadataScopeKey, CollectivityTrendAssessment | null> = {
+    const assessmentByScope: Record<
+      ElectricityMetadataScopeKey,
+      CollectivityTrendAssessment | null
+    > = {
       tab: null,
       bt: null,
       mt: null,
@@ -189,7 +188,10 @@ export default function ElectricityMetadataPilot({
     return assessmentByScope;
   }, [blocks, getValue, years]);
 
-  const updateScope = (scopeKey: ElectricityMetadataScopeKey, value: CollectivityMetadataValue | null) => {
+  const updateScope = (
+    scopeKey: ElectricityMetadataScopeKey,
+    value: CollectivityMetadataValue | null
+  ) => {
     setMetadataByScope((current) => ({
       ...current,
       [scopeKey]: value,
@@ -225,8 +227,7 @@ export default function ElectricityMetadataPilot({
       <InventoryYearBlockTables
         title="Demande d'électricité"
         description={
-          description ??
-          "Chaque année garde sa propre lecture, avec un bloc par niveau de tension."
+          description ?? "Chaque année garde sa propre lecture, avec un bloc par niveau de tension."
         }
         blocks={blocks}
         getValue={getValue}

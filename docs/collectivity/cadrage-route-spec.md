@@ -10,59 +10,36 @@ Ce document décrit le premier grand écran à implémenter :
 
 ## Rôle
 
-La route `cadrage` sert à définir le cadre commun du plan avant l'inventaire, les scénarios et les actions.
+La route `cadrage` sert à définir le territoire et les années du cadrage.
 
 Il répond à une question simple :
 
-`quel est le périmètre exact du plan sur lequel tout le reste va s'appuyer ?`
+`quel est le territoire du plan, et quelles années seront utilisées pour l'inventaire ?`
 
 ## Ce que cette route doit contenir
 
-- identité du plan
 - territoire de référence
-- communes incluses
-- périmètre organisationnel
-- périmètre opérationnel
-- secteurs couverts
-- scopes couverts
 - année de référence
-- horizon cible
+- années d'appoint
 
 ## Ce que l'utilisateur fait ici
 
 - renseigner ou vérifier le territoire concerné
-- choisir les communes incluses dans le plan
-- confirmer ce qui entre dans le périmètre du plan
-- fixer l'année de référence et l'horizon cible
-- vérifier que le cadre est assez clair pour lancer l'inventaire
-
-## Ce que cette route ne fait pas
-
-- il ne sert pas à saisir les données d'activité détaillées
-- il ne sert pas à calculer les émissions
-- il ne sert pas à construire les scénarios
-- il ne sert pas à gérer les fiches actions
+- fixer l'année de référence
+- ajouter une ou plusieurs années d'appoint
 
 ## Sortie attendue
 
-À la fin du `cadrage`, le produit doit disposer d'un cadre stable et partagé pour :
+À la fin du `cadrage`, le produit doit disposer d'un cadre stable pour :
 
-- l'inventaire
-- les comparaisons entre années
-- les scénarios `BaU` / `BaC`
-- les actions et leurs investissements
+- le territoire
+- les années de travail de l'inventaire
 
 ## Sections minimales recommandées
 
-1. `Identité du plan`
-2. `Territoire et communes`
-3. `Périmètre`
-4. `Secteurs et scopes`
-5. `Temporalité`
-6. `État de complétude`
+1. `Territoire`
+2. `Temporalité`
 
 ## Règle de lecture
 
-Le compte `Grand Sfax / municipalité` peut voir et modifier l'ensemble du cadrage.
-
-Un compte `commune` ne voit que ce qui est pertinent pour son `patrimoine municipal`, sans reprendre la main sur tout le cadre territorial.
+Le compte `municipality` peut voir et modifier le cadrage.

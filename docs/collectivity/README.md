@@ -5,10 +5,12 @@ This folder contains the active product thinking for the `collectivity` work.
 Use these docs in this order:
 
 1. `00-product-truth.md`
-2. `inventaire-result-input-map.md` when working on inventory data-entry and result logic
-3. `inventaire-input-inventory.md` when turning report outputs into explicit input families
-4. route specs such as `cadrage-route-spec.md` and `inventaire-route-spec.md`
-5. report-reading notes and source report files as reference only
+2. `routes.md` for the current route map
+3. `result-route-spec.md` for the result route
+4. `inventaire-result-input-map.md` when working on inventory result logic
+5. `inventaire-input-inventory.md` when turning report outputs into explicit input families
+6. route specs such as `inventaire-route-spec.md`
+7. report-reading notes and source report files as reference only
 
 ## Rules
 
@@ -19,4 +21,4 @@ Use these docs in this order:
 
 ## Current Focus
 
-The current goal is to define the `collectivity` product itself before tightening route contracts or UI behavior.
+The current goal is to define `collectivity` as an inventory workspace for one municipality before tightening route contracts or UI behavior.

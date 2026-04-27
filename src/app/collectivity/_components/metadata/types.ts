@@ -1,8 +1,19 @@
 export type CollectivityMetadataScopeKind = "tab" | "block" | "row";
 
-export type CollectivityMetadataSourceType = "invoice" | "report" | "excel" | "manual" | "estimate" | "";
+export type CollectivityMetadataSourceType =
+  | "invoice"
+  | "report"
+  | "excel"
+  | "manual"
+  | "estimate"
+  | "";
 
-export type CollectivityMetadataQualityStatus = "missing" | "provided" | "estimated" | "verified" | "";
+export type CollectivityMetadataQualityStatus =
+  | "missing"
+  | "provided"
+  | "estimated"
+  | "verified"
+  | "";
 
 export type CollectivityMetadataConfidence = "low" | "medium" | "high" | "";
 
@@ -22,11 +33,7 @@ export type CollectivityTrendMethod =
   | "constant_value_stagnation"
   | "expert_assumption";
 
-export type CollectivityTrendReviewDecision =
-  | "confirm"
-  | "deny"
-  | "expert_review"
-  | "ai_review";
+export type CollectivityTrendReviewDecision = "confirm" | "deny" | "expert_review" | "ai_review";
 
 export type CollectivityTrendAssessment = {
   historicalTrend: CollectivityTrendDirection;

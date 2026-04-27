@@ -6,10 +6,7 @@ import CollectivityMetadataDrawer from "./CollectivityMetadataDrawer";
 import CollectivityMetadataScopeControl, {
   defaultDrawerLabels,
 } from "./CollectivityMetadataScopeControl";
-import type {
-  CollectivityMetadataValue,
-  CollectivityTrendAssessment,
-} from "./types";
+import type { CollectivityMetadataValue, CollectivityTrendAssessment } from "./types";
 
 const meta = {
   title: "Collectivity/Metadata/ScopeControl",
