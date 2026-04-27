@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Plus, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -51,6 +51,7 @@ function BlockTable({
   year,
   yearLabel,
   values,
+  headerAddon,
   onAddColumn,
   onRemoveColumn,
   onColumnLabelChange,
@@ -61,6 +62,7 @@ function BlockTable({
   year: InventoryYear;
   yearLabel: string;
   values: InventoryTableValues;
+  headerAddon?: ReactNode;
   onAddColumn: (blockKey: string) => void;
   onRemoveColumn: (blockKey: string, columnKey: string) => void;
   onColumnLabelChange: (blockKey: string, columnKey: string, label: string) => void;
@@ -99,15 +101,18 @@ function BlockTable({
           <Button
             type="button"
             variant="outline"
-            size="icon"
+            size="sm"
             title="Ajouter une colonne"
             aria-label={`Ajouter une colonne ${block.title}`}
+            className="h-8 rounded-full px-3 shadow-none"
             onClick={() => onAddColumn(block.key)}
           >
             <Plus aria-hidden="true" />
+            Ajouter une colonne
           </Button>
         ) : null}
       </div>
+      {headerAddon ? <div>{headerAddon}</div> : null}
       {block.note ? (
         <Typography asChild variant="caption" size="sm" className="text-secondary">
           <p>{block.note}</p>
@@ -191,11 +196,13 @@ export default function InventoryYearBlockTables({
   description,
   blocks,
   getValue,
+  renderBlockHeaderAddon,
 }: {
   title: string;
   description?: string;
   blocks: InventoryYearBlockTableBlock[];
   getValue: (blockKey: string, rowKey: string, columnKey: string, yearValue: number) => string;
+  renderBlockHeaderAddon?: (block: InventoryYearBlockTableBlock) => ReactNode;
 }) {
   const { years } = useInventoryContext();
   const [selectedYearValue, setSelectedYearValue] = useState(years[0] ?? 0);
@@ -367,6 +374,7 @@ export default function InventoryYearBlockTables({
               year={selectedYear}
               yearLabel={String(selectedYear)}
               values={values}
+              headerAddon={renderBlockHeaderAddon?.(block)}
               onAddColumn={handleAddColumn}
               onRemoveColumn={handleRemoveColumn}
               onColumnLabelChange={handleColumnLabelChange}

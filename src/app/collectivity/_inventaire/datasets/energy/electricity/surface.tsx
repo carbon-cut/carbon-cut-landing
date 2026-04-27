@@ -1,7 +1,7 @@
 "use client";
 
-import InventoryYearBlockTables from "../../../components/InventoryYearBlockTables";
 import type { InventoryYearBlockTableBlock } from "../../../types";
+import ElectricityMetadataPilot from "./metadata";
 
 const blocks: InventoryYearBlockTableBlock[] = [
   {
@@ -210,10 +210,9 @@ const sample: Record<string, Record<string, Record<string, string>>> = {
 
 export default function ElectricitySurface() {
   return (
-    <InventoryYearBlockTables
-      title="Demande d'electricite"
-      description="Chaque annee garde sa propre lecture, avec un bloc par niveau de tension."
+    <ElectricityMetadataPilot
       blocks={blocks}
+      description="Chaque annee garde sa propre lecture, avec un bloc par niveau de tension."
       getValue={(blockKey, rowKey, columnKey, yearValue) =>
         sample[yearValue]?.[blockKey]?.[`${rowKey}_${columnKey}`] ?? ""
       }
