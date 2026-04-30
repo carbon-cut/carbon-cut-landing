@@ -13,8 +13,8 @@ import {
   TableBody,
   TableCell,
   TableHeader,
-} from "./InventoryDataTable";
-import InventoryTableInput from "./InventoryTableInput";
+} from "@/components/table/InventoryDataTable";
+import InventoryTableInput from "@/components/table/InventoryTableInput";
 import type { InventoryTableRow, InventoryTableSectionData } from "../types";
 
 export default function InventoryTableSection({

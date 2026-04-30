@@ -593,8 +593,7 @@ export default {
         sections: {
           cadrage: {
             title: "Cadrage",
-            description:
-              "Définir le périmètre, les communes, les secteurs, les scopes, l'année de référence et l'horizon.",
+            description: "Définir le territoire de référence et les années du cadrage.",
             status: "À cadrer",
           },
           inventaire: {
@@ -622,32 +621,12 @@ export default {
         sections: {
           cadrage: [
             {
-              title: "Identité du plan",
-              description: "Nom du plan, territoire de référence et cadre général partagé.",
-            },
-            {
-              title: "Territoire et communes",
-              description:
-                "Communes incluses dans le plan et lecture de leur place dans le périmètre.",
-            },
-            {
-              title: "Périmètre",
-              description:
-                "Périmètre organisationnel, périmètre opérationnel et distinction entre territoire et patrimoine municipal.",
-            },
-            {
-              title: "Secteurs et scopes",
-              description:
-                "Secteurs couverts par le plan et scopes pris en compte dans le cadre méthodologique.",
+              title: "Territoire",
+              description: "Vérification du territoire de référence utilisé par le plan.",
             },
             {
               title: "Temporalité",
-              description: "Année de référence, années de comparaison et horizon cible du plan.",
-            },
-            {
-              title: "État de complétude",
-              description:
-                "Vue synthétique de ce qui est déjà cadré et de ce qui manque encore avant l'inventaire.",
+              description: "Année de référence et année(s) d'appoint du cadrage.",
             },
           ],
           inventaire: [
@@ -745,18 +724,13 @@ export default {
         eyebrow: "Module actif",
         title: "Cadrage du plan",
         description:
-          "Définissez ici le cadre commun du plan avant l'inventaire, les scénarios et les actions. Tout le reste s'appuiera sur ce périmètre partagé.",
-        account: {
-          title: "Règle de lecture",
-          description:
-            "Le compte collectivité pilote le cadrage commun du plan. Un compte commune n'agit que sur ce qui concerne son patrimoine municipal, sans reprendre la main sur l'ensemble du cadre territorial.",
-        },
+          "Définissez le territoire de référence et les années de travail avant d'ouvrir l'inventaire.",
         output: {
           title: "Sortie attendue",
           items: [
-            "Un périmètre stable pour lancer l'inventaire sans ambiguïté.",
-            "Une base commune pour comparer les années et lire les écarts.",
-            "Un cadre exploitable pour les scénarios BaU / BaC et le plan d'action.",
+            "Un territoire de référence confirmé pour le plan.",
+            "Une année de référence clairement fixée.",
+            "Une ou plusieurs année(s) d'appoint prêtes pour l'inventaire.",
           ],
         },
         completion: {
@@ -765,99 +739,34 @@ export default {
           incomplete: "À compléter",
           progressSuffix: "blocs cadrés",
           items: {
-            identity: "Identité du plan",
-            communes: "Communes incluses",
-            perimeter: "Périmètre du plan",
-            sectorsScopes: "Secteurs et scopes",
-            temporality: "Temporalité",
+            territory: "Territoire",
+            referenceYear: "Année de référence",
+            supportYears: "Année(s) d'appoint",
           },
         },
         sections: {
-          identity: {
-            title: "Identité du plan",
-            description:
-              "Vérifiez l'identité du plan et définissez le niveau territorial de référence sur lequel tout le reste va s'appuyer.",
-            fields: {
-              planIdentity: "Identité du plan",
-              territoryLevel: "Niveau territorial principal",
-              territory: "Territoire de référence",
-            },
-            planIdentityHint:
-              "Le nom du plan est défini au niveau du dossier. Cette section sert à verrouiller le territoire de référence et le niveau de lecture utilisé dans les modules suivants.",
-            territoryLevels: [
-              { value: "municipalite", label: "Municipalité" },
-              { value: "intercommunalite", label: "Intercommunalité" },
-              { value: "territoire-elargi", label: "Territoire élargi" },
-            ],
-            placeholders: {
-              territory: "ex. Agglomération concernée, intercommunalité ou municipalité porteuse",
-            },
-          },
           territory: {
-            title: "Territoire et communes",
-            description:
-              "Ajoutez les communes ou sous-territoires inclus dans le plan puis relisez la liste avant de passer à l'inventaire.",
-            communesLabel: "Communes incluses",
-            communesPlaceholder: "ex. Commune ou sous-territoire à ajouter",
-            addCommune: "Ajouter",
-            removeCommune: "Retirer",
-            emptyState: "Aucune commune n'est encore ajoutée au périmètre du plan.",
-            helper:
-              "Cette liste sert ensuite de base aux lectures territoriales et aux déclinaisons patrimoniales.",
-          },
-          perimeter: {
-            title: "Périmètre",
-            description:
-              "Définissez ce qui entre dans le plan au niveau organisationnel et au niveau opérationnel sans passer par des notes longues et floues.",
-            organizationalLabel: "Périmètre organisationnel",
-            organizationalOptions: [
-              "Collectivité porteuse du plan",
-              "Communes membres incluses dans la gouvernance",
-              "Services municipaux contributeurs",
-              "Structure intercommunale ou dispositif de pilotage",
-            ],
-            operationalLabel: "Périmètre opérationnel",
-            operationalOptions: [
-              "Patrimoine municipal",
-              "Territoire au sens large",
-              "Infrastructures ou services mutualisés",
-              "Postes indirects retenus pour le plan",
-            ],
-            noteLabel: "Note courte sur les exclusions ou limites",
-            notePlaceholder:
-              "ex. Hors aviation, hors industrie lourde ou autre limite méthodologique",
-            helper:
-              "Utilisez cette note seulement pour signaler une limite claire. Le périmètre principal doit rester lisible via les options cochées.",
-          },
-          sectorsScopes: {
-            title: "Secteurs et scopes",
-            description:
-              "Confirmez les secteurs couverts par le plan ainsi que les scopes retenus dans le cadre méthodologique.",
-            sectorsTitle: "Secteurs couverts",
-            sectors: [
-              "Énergie stationnaire",
-              "Transport",
-              "Déchets",
-              "Eaux usées",
-              "Espaces verts et AFAT",
-              "Tertiaire et industrie",
-            ],
-            scopesTitle: "Scopes couverts",
-            scopes: ["Scope 1", "Scope 2", "Scope 3"],
+            title: "Territoire",
+            description: "Vérifiez le territoire principal du plan avant d'ouvrir l'inventaire.",
+            label: "Territoire de référence",
+            placeholder: "ex. Commune porteuse, territoire ou agglomération",
+            helper: "Cette valeur sert ensuite de base commune à tous les modules du plan.",
           },
           temporality: {
             title: "Temporalité",
             description:
-              "Fixez l'année de référence, l'horizon cible et ajoutez une ou plusieurs années de comparaison avant scénarisation.",
-            referenceYear: "Année de référence",
-            horizon: "Horizon cible",
-            comparisonYears: "Années de comparaison",
-            comparisonYearsPlaceholder: "Choisir une année",
+              "Fixez l'année de référence et ajoutez une ou plusieurs année(s) d'appoint pour le travail d'inventaire.",
+            referenceYearLabel: "Année de référence",
+            referenceYearPlaceholder: "Choisir une année",
+            referenceYearHelper:
+              "Cette année sert de point d'ancrage pour la lecture de l'inventaire.",
+            supportYearsLabel: "Année(s) d'appoint",
+            supportYearsPlaceholder: "Choisir une année",
             addYear: "Ajouter",
             removeYear: "Retirer",
-            emptyState: "Aucune année de comparaison n'est encore ajoutée.",
+            emptyState: "Aucune année d'appoint n'est encore ajoutée.",
             helper:
-              "Ajoutez autant d'années que nécessaire pour comparer les trajectoires et alimenter les scénarios.",
+              "Ajoutez autant d'années que nécessaire pour comparer les données et stabiliser l'inventaire.",
           },
         },
       },
@@ -868,8 +777,8 @@ export default {
       },
       planMarkers: {
         territory: "Territoire de référence",
-        communes: "Communes incluses",
-        horizon: "Horizon cible",
+        referenceYear: "Année de référence",
+        supportYears: "Année(s) d'appoint",
       },
       baseline: {
         eyebrow: "Série de référence",
@@ -913,7 +822,7 @@ export default {
         description:
           "Ouvrir la route doit amener directement sur un jeu de donnees a renseigner, avec les champs utiles visibles sans structure de navigation envahissante.",
         controls: {
-          familyLabel: "Groupe",
+          sourceLabel: "Source",
           datasetLabel: "Jeu de donnees",
           datasetPlaceholder: "Choisir un jeu de donnees",
           yearLabel: "Annee consultee",
@@ -942,9 +851,9 @@ export default {
               "Choisir d'abord l'annee sur laquelle vous travaillez. Les blocs de saisie finished se calent ensuite sur cette annee.",
           },
           families: {
-            title: "Familles et jeux de donnees",
+            title: "Sources et jeux de donnees",
             description:
-              "L'utilisateur avance par famille de collecte puis par jeu de donnees. Les jeux finis ont une vraie structure; les autres restent visibles en placeholder sous dev.",
+              "L'utilisateur avance par source de collecte puis par jeu de donnees. Les jeux finis ont une vraie structure; les autres restent visibles en placeholder sous dev.",
             datasetsLabel: "jeux de donnees",
           },
           entry: {
@@ -984,12 +893,21 @@ export default {
                 { key: "engins", label: "Vehicules et engins de service" },
                 { key: "autres", label: "Autres" },
               ],
-              compositionColumns: ["Essence", "Diesel", "Electrique", "Hybride", "GNV", "Total"],
+              compositionColumns: [
+                "Essence",
+                "Diesel",
+                "GPL",
+                "Electrique",
+                "Hybride",
+                "GNV",
+                "Total",
+              ],
               yearlyTitle: "Bloc annuel fleet",
               yearlyVehiclesTitle: "Nombre de vehicules",
               yearlyVehiclesRows: [
                 { key: "petrol", label: "Vehicules essence" },
                 { key: "diesel", label: "Vehicules diesel" },
+                { key: "gpl", label: "Vehicules GPL" },
                 { key: "electric", label: "Vehicules electriques" },
                 { key: "hybrid", label: "Vehicules hybrides" },
                 { key: "gnv", label: "Vehicules GNV" },
@@ -999,6 +917,7 @@ export default {
               yearlyEnergyRows: [
                 { key: "petrol", label: "Essence" },
                 { key: "diesel", label: "Diesel" },
+                { key: "gpl", label: "GPL" },
                 { key: "electricity", label: "Electricite" },
                 { key: "gnv", label: "GNV" },
               ],
@@ -1006,6 +925,7 @@ export default {
               yearlySpendRows: [
                 { key: "petrol", label: "Essence" },
                 { key: "diesel", label: "Diesel" },
+                { key: "gpl", label: "GPL" },
                 { key: "electricity", label: "Electricite" },
                 { key: "gnv", label: "GNV" },
               ],
@@ -1115,10 +1035,24 @@ export default {
             status: "Sous cadrage",
           },
           {
-            key: "sanitation-afat",
-            title: "Assainissement et AFAT",
+            key: "afat",
+            title: "AFAT",
             description:
-              "Sanitation et AFAT encore sans structure de saisie stabilisee dans le fichier d'entree.",
+              "AFAT encore sans structure de saisie stabilisee dans le fichier d'entree.",
+            status: "Sous cadrage",
+          },
+          {
+            key: "waste",
+            title: "Déchets",
+            description:
+              "Dechets et flux associes encore sans structure de saisie stabilisee dans le fichier d'entree.",
+            status: "Sous cadrage",
+          },
+          {
+            key: "wastewater",
+            title: "Assainissement",
+            description:
+              "Assainissement et sous-jeux encore sans structure de saisie stabilisee dans le fichier d'entree.",
             status: "Sous cadrage",
           },
         ],
@@ -1188,8 +1122,7 @@ export default {
             kind: "placeholder",
             title: "Trees / Parks / Municipal Waste",
             status: "Sous dev",
-            description:
-              "Le rapport mentionne cette famille municipale, mais l'entree produit reste ouverte.",
+            description: "Le rapport mentionne cette famille, mais l'entree produit reste ouverte.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO blocs annuels et perimetre exact.",
             implementationNote: "Bloc provisoire pour garder visible toute la famille municipale.",
@@ -1311,7 +1244,7 @@ export default {
           },
           {
             key: "sanitation",
-            familyKey: "sanitation-afat",
+            familyKey: "wastewater",
             kind: "placeholder",
             title: "Sanitation",
             status: "Sous dev",
@@ -1325,7 +1258,7 @@ export default {
           },
           {
             key: "sanitation-continuation",
-            familyKey: "sanitation-afat",
+            familyKey: "wastewater",
             kind: "placeholder",
             title: "Sanitation Continuation",
             status: "Sous dev",
@@ -1338,7 +1271,7 @@ export default {
           },
           {
             key: "sanitation-ch4",
-            familyKey: "sanitation-afat",
+            familyKey: "wastewater",
             kind: "placeholder",
             title: "Sanitation CH4",
             status: "Sous dev",
@@ -1351,7 +1284,7 @@ export default {
           },
           {
             key: "sanitation-n2o",
-            familyKey: "sanitation-afat",
+            familyKey: "wastewater",
             kind: "placeholder",
             title: "Sanitation N2O",
             status: "Sous dev",
@@ -1364,7 +1297,7 @@ export default {
           },
           {
             key: "perennial-plantation-stock",
-            familyKey: "sanitation-afat",
+            familyKey: "afat",
             kind: "placeholder",
             title: "Plantations perennes",
             status: "Sous dev",
@@ -1378,7 +1311,7 @@ export default {
           },
           {
             key: "livestock",
-            familyKey: "sanitation-afat",
+            familyKey: "afat",
             kind: "placeholder",
             title: "Livestock",
             status: "Sous dev",
@@ -1391,7 +1324,7 @@ export default {
           },
           {
             key: "fertilizers",
-            familyKey: "sanitation-afat",
+            familyKey: "afat",
             kind: "placeholder",
             title: "Fertilizers",
             status: "Sous dev",
@@ -1404,7 +1337,7 @@ export default {
           },
           {
             key: "agricultural-production",
-            familyKey: "sanitation-afat",
+            familyKey: "afat",
             kind: "placeholder",
             title: "Agricultural Production",
             status: "Sous dev",

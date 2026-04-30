@@ -15,7 +15,7 @@ import {
   TableBody,
   TableCell,
   TableHeader,
-} from "../../../components/InventoryDataTable";
+} from "@/components/table/InventoryDataTable";
 import { InventoryFieldInput } from "@/app/collectivity/_components/fields";
 import { useInventoryContext } from "../../../context/inventory-context";
 import { customPlantValue, createPerennialPlantationRow, columns, plantOptions } from "./constants";
@@ -45,7 +45,7 @@ function PlantationRow({
   const { mainForm } = useInventoryContext();
   const row = useWatch({
     control: mainForm.control,
-    name: `perennialPlantationStock.rows.${index}` as const,
+    name: `afat.perennialPlantationStock.rows.${index}` as const,
   });
 
   const plantType = row?.plantType ?? "";
@@ -70,7 +70,7 @@ function PlantationRow({
         <div className="min-w-[190px] space-y-2">
           <FormSelect
             form={mainForm}
-            name={`perennialPlantationStock.rows.${index}.plantType` as const}
+            name={`afat.perennialPlantationStock.rows.${index}.plantType` as const}
             placeholder="Type de plantation"
             data={plantOptions
               .map((option) => ({
@@ -83,7 +83,7 @@ function PlantationRow({
           {plantType === customPlantValue ? (
             <InventoryFieldInput
               form={mainForm}
-              name={`perennialPlantationStock.rows.${index}.customName` as const}
+              name={`afat.perennialPlantationStock.rows.${index}.customName` as const}
               placeholder="Nom de la plantation"
               className="w-full"
               size="sm"
@@ -109,7 +109,7 @@ function PlantationRow({
               <InventoryFieldInput
                 form={mainForm}
                 name={
-                  `perennialPlantationStock.rows.${index}.values.${yearValue}.${column.key}` as const
+                  `afat.perennialPlantationStock.rows.${index}.values.${yearValue}.${column.key}` as const
                 }
                 type="number"
                 className="w-full"
@@ -142,7 +142,7 @@ export default function PerennialPlantationStockSurface() {
   const yearValues = years;
   const { fields, append, remove } = useFieldArray({
     control: mainForm.control,
-    name: "perennialPlantationStock.rows",
+    name: "afat.perennialPlantationStock.rows",
   });
 
   return (

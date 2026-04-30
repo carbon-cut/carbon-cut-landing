@@ -1,7 +1,7 @@
 "use client";
 
-import InventoryGroupedYearTable from "../../../components/InventoryGroupedYearTable";
-import MatrixTable from "../../../components/MatrixTable";
+import InventoryGroupedYearTable from "@/components/table/grouped-year";
+import MatrixTable from "@/components/table/matrix";
 import type { InventoryGroupedYearTableData } from "../../../types";
 
 const aircraftModels = [

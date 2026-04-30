@@ -28,7 +28,7 @@ export default function InventoryDatasetSwitcher({
     <div className="space-y-3 border-b border-border/10 pb-4">
       <div className="flex flex-wrap items-center gap-2">
         <Typography asChild variant="label" size="sm" className="text-secondary">
-          <p>{controls.familyLabel}</p>
+          <p>{controls.sourceLabel}</p>
         </Typography>
         {families.map((family) => (
           <SurfaceToggle

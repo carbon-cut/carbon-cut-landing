@@ -1,6 +1,6 @@
 "use client";
 
-import MatrixTable from "../../../components/MatrixTable";
+import MatrixTable from "@/components/table/matrix";
 import InventoryTableSection from "../../../components/InventoryTableSection";
 import type { InventoryTableSectionData } from "../../../types";
 

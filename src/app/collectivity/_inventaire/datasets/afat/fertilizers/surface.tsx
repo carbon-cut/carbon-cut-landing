@@ -1,6 +1,6 @@
 "use client";
 
-import MatrixTable from "../../../components/MatrixTable";
+import MatrixTable from "@/components/table/matrix";
 
 const sample: Record<string, Record<string, string>> = {
   "2022": {

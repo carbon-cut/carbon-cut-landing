@@ -4,7 +4,7 @@ import { createContext, useContext, type ReactNode } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 
-import { inventorySchema } from "../schema";
+import { inventorySchema } from "../InventorySchema";
 import type { InventoryYear } from "../types";
 
 export type InventoryFormValues = z.infer<typeof inventorySchema>;

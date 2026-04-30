@@ -1,6 +1,6 @@
 "use client";
 
-import MatrixTable from "../../../components/MatrixTable";
+import MatrixTable from "@/components/table/matrix";
 
 const residentialSample: Record<number, Record<string, string>> = {
   "2022": { households: "1 800", area: "16 200 m2" },

@@ -54,8 +54,8 @@ export default function WorkspaceShell({
   const activeRoute = routeItems.find((route) => pathname === route.href);
   const planMarkers = [
     t("planMarkers.territory") as string,
-    t("planMarkers.communes") as string,
-    t("planMarkers.horizon") as string,
+    t("planMarkers.referenceYear") as string,
+    t("planMarkers.supportYears") as string,
   ];
 
   return (

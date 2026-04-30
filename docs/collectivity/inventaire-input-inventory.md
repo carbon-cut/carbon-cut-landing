@@ -1,6 +1,6 @@
 # Inventaire Input Inventory
 
-This document lists the `inventaire` inputs based on the reference report.
+This document lists the current `inventaire` inputs and working table shapes based on the reference report.
 
 It is intentionally conservative, but it may generalize report patterns where needed so the product can work beyond one territory.
 
@@ -130,7 +130,8 @@ Working group examples:
 - Energie territoire
 - Transport
 - AFAT
-- Dechets / assainissement
+- Dechets
+  -assainissement
 
 Inside `Patrimoine municipal`:
 
@@ -211,6 +212,8 @@ These families also support the current product direction:
 - entry should likely be organized by source-oriented dataset families
 - multilayer inventory classification should likely happen underneath, not as the user's first mental model
 
+The table shapes below are current working shapes only. If a source table changes, keep the same family and update the local structure.
+
 ## 4.1 Municipal Patrimoine Templates
 
 - vehicle fleet data
@@ -240,6 +243,7 @@ Structure:
 - fleet composition columns:
   - number of petrol vehicles
   - number of diesel vehicles
+  - number of GPL vehicles
   - number of electric vehicles
   - number of hybrid vehicles
   - number of natural gas / GNV vehicles
@@ -248,6 +252,7 @@ Structure:
   - number of vehicles per year
     - petrol vehicles
     - diesel vehicles
+    - GPL vehicles
     - electric vehicles
     - hybrid vehicles
     - natural gas / GNV vehicles
@@ -255,11 +260,13 @@ Structure:
   - energy consumption per year
     - petrol
     - diesel
+    - GPL
     - electricity
     - natural gas / GNV
   - energy expenditure per year
     - petrol
     - diesel
+    - GPL
     - electricity
     - natural gas / GNV
 
@@ -334,6 +341,10 @@ Structure:
 
 - scope:
   - total of all patrimoine buildings
+- yearly blocks:
+  - number of buildings per year
+  - square meter of open surface per year
+  - square meter of closed surface per year
 - source blocks:
   - electricity
     - electricity consumption
@@ -1007,6 +1018,10 @@ Provenance:
 - exact field structure for the sanitation families
 - whether the CH4 / N2O breakdown should be exposed directly to the user or handled by the app layer
 
+## 4.6 Waste
+
+### TODO
+
 ## 5. Provenance Inputs
 
 The report clearly shows that data collection is template-based and actor-based.
@@ -1072,6 +1087,7 @@ This file does not yet define:
 - the minimum usable dataset set
 - the smallest unit of entry
 - the exact boundary between user-facing source grouping and app-facing inventory classification
+- exact row / column geometry when a source table changes
 
 ## 9. Next Step
 

@@ -8,7 +8,7 @@ import { useScopedI18n } from "@/locales/client";
 
 import InventoryWorkspace from "./components/InventoryWorkspace";
 import { InventoryProvider, type InventoryFormValues } from "./context/inventory-context";
-import { inventorySchema } from "./schema";
+import { inventorySchema } from "./InventorySchema";
 import { buildInventoryRegistry, type InventoryWorkspaceLocale } from "./registry";
 import { createPerennialPlantationRow } from "./datasets/afat/perennial-plantation-stock/constants";
 
@@ -26,10 +26,34 @@ export default function InventoryRouteClient() {
     resolver: zodResolver(inventorySchema),
     defaultValues: {
       years: inventoryYearPlan,
-      workspace,
-      perennialPlantationStock: {
-        rows: [createPerennialPlantationRow(0)],
+      municipal: {
+        fleet: {},
+        publicLighting: {},
+        buildings: {},
+        treesParksWaste: {},
       },
+      energy: {
+        electricity: {},
+        photovoltaic: {},
+        naturalGas: {},
+        solarWaterHeating: {},
+      },
+      transport: {
+        publicTransport: {},
+        airTransport: {},
+        port: {},
+        vehicleCounts: {},
+      },
+      afat: {
+        perennialPlantationStock: {
+          rows: [createPerennialPlantationRow(0)],
+        },
+        livestock: {},
+        fertilizers: {},
+        agriculturalProduction: {},
+      },
+      wastewaterSanitation: {},
+      waste: {},
     },
   });
 

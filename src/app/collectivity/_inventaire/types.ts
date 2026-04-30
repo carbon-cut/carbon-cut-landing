@@ -7,24 +7,27 @@ export type InventoryFamily = {
 
 export type InventoryDatasetStatus = string;
 
-export type InventoryDatasetSurfaceKind =
-  | "fleet"
-  | "publicLighting"
-  | "buildings"
-  | "treesParksWaste"
-  | "electricity"
-  | "photovoltaic"
-  | "naturalGas"
-  | "solarWaterHeating"
-  | "port"
-  | "publicTransport"
-  | "airTransport"
-  | "vehicleCounts"
-  | "perennialPlantationStock"
-  | "livestock"
-  | "fertilizers"
-  | "agriculturalProduction"
-  | "placeholder";
+export const inventoryDatasetSurfaceKindValues = [
+  "fleet",
+  "publicLighting",
+  "buildings",
+  "treesParksWaste",
+  "electricity",
+  "photovoltaic",
+  "naturalGas",
+  "solarWaterHeating",
+  "port",
+  "publicTransport",
+  "airTransport",
+  "vehicleCounts",
+  "perennialPlantationStock",
+  "livestock",
+  "fertilizers",
+  "agriculturalProduction",
+  "placeholder",
+] as const;
+
+export type InventoryDatasetSurfaceKind = (typeof inventoryDatasetSurfaceKindValues)[number];
 
 export type InventoryDataset = {
   key: string;
@@ -114,7 +117,7 @@ export type PublicLightingSurfaceCopy = {
 
 export type InventoryWorkspaceConfig = {
   controls: {
-    familyLabel: string;
+    sourceLabel: string;
     datasetLabel: string;
   };
   hints: {

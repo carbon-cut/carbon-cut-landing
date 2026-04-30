@@ -1,6 +1,6 @@
 "use client";
 
-import InventoryYearBlockTables from "../../../components/InventoryYearBlockTables";
+import InventoryYearBlockTables from "@/components/table/year-block";
 import type { InventoryYearBlockTableBlock } from "../../../types";
 
 const blocks: InventoryYearBlockTableBlock[] = [

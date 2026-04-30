@@ -13,7 +13,7 @@ The current product is an inventory workspace for one municipality and its terri
 The route structure should reflect three things:
 
 - a root entry that summarizes workspace status
-- a cadrage route that sets the municipality and inventory frame
+- a cadrage route that sets the territory and the inventory years
 - an inventory entry route for data input and import
 - a separate inventory result route for reading outputs
 
@@ -59,8 +59,8 @@ Evidence and hypotheses are embedded in the input flow and are not separate top-
 
 Role:
 
-- define the municipality frame for the inventory
-- confirm the inventory perimeter before data entry
+- define the territory of reference for the inventory
+- confirm the reference year and support years before data entry
 
 This route is part of the current product scope.
 

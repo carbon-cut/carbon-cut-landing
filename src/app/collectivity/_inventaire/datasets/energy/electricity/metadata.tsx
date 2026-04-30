@@ -8,7 +8,7 @@ import type {
   CollectivityTrendAssessment,
   CollectivityTrendReviewDecision,
 } from "@/app/collectivity/_components/metadata";
-import InventoryYearBlockTables from "../../../components/InventoryYearBlockTables";
+import InventoryYearBlockTables from "@/components/table/year-block";
 import { useInventoryContext } from "../../../context/inventory-context";
 import type { InventoryYearBlockTableBlock } from "../../../types";
 
