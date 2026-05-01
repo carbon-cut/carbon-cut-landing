@@ -1,23 +1,28 @@
 "use client";
 
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
+import type { FieldValues } from "react-hook-form";
 
-import InventoryTableInput from "../InventoryTableInput";
+import { renderGroupedYearInputCell } from "./cells";
 import type { GroupedYearTableProps } from "./types";
 import type { InventoryRowLabel } from "@/app/collectivity/_inventaire/types";
 
 type GroupedYearCellContext = CellContext<InventoryRowLabel, unknown>;
 
-type CreateGroupedYearColumnsArgs = Pick<GroupedYearTableProps, "getValue"> & {
+type CreateGroupedYearColumnsArgs<T extends FieldValues> = Pick<
+  GroupedYearTableProps<T>,
+  "form" | "baseName"
+> & {
   years: number[];
   subcolumns: { key: string; label: string }[];
 };
 
-export function createGroupedYearColumns({
+export function createGroupedYearColumns<T extends FieldValues>({
   years,
   subcolumns,
-  getValue,
-}: CreateGroupedYearColumnsArgs) {
+  form,
+  baseName,
+}: CreateGroupedYearColumnsArgs<T>) {
   const columns: ColumnDef<InventoryRowLabel>[] = [
     {
       id: "label",
@@ -39,9 +44,14 @@ export function createGroupedYearColumns({
           tone: "secondary" as const,
           className: "min-w-[110px] py-2",
         },
-        cell: ({ row }: GroupedYearCellContext) => (
-          <InventoryTableInput defaultValue={getValue(row.original.key, year, subcolumn.key)} />
-        ),
+        cell: ({ row }: GroupedYearCellContext) =>
+          renderGroupedYearInputCell({
+            form,
+            baseName,
+            rowKey: row.original.key,
+            year,
+            subcolumnKey: subcolumn.key,
+          }),
       })),
     })),
   ];

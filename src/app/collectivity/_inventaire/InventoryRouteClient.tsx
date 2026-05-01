@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -21,7 +23,11 @@ const inventoryYearPlan = {
 export default function InventoryRouteClient() {
   const t = useScopedI18n("(pages).collectivityDashboard");
   const inventoryLocale = t("inventoryWorkspace") as InventoryWorkspaceLocale;
-  const { workspace, surfaces } = buildInventoryRegistry(inventoryLocale);
+  const { workspace, surfaces } = useMemo(
+    () => buildInventoryRegistry(inventoryLocale),
+    [inventoryLocale]
+  );
+  const years = useMemo(() => [inventoryYearPlan.reference, ...inventoryYearPlan.comparisons], []);
   const mainForm = useForm<InventoryFormValues>({
     resolver: zodResolver(inventorySchema),
     defaultValues: {
@@ -59,10 +65,7 @@ export default function InventoryRouteClient() {
 
   return (
     <Form {...mainForm}>
-      <InventoryProvider
-        years={[inventoryYearPlan.reference, ...inventoryYearPlan.comparisons]}
-        mainForm={mainForm}
-      >
+      <InventoryProvider years={years} mainForm={mainForm}>
         <InventoryWorkspace workspace={workspace} surfaces={surfaces} />
       </InventoryProvider>
     </Form>

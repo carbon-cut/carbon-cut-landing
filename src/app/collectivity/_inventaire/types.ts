@@ -46,6 +46,8 @@ export type InventoryRowLabel = {
   label: string;
 };
 
+export type InventoryTableGridColumn = string | { key: string; label: string; className?: string };
+
 export type InventoryColumnLabel = {
   key: string;
   label: string;
@@ -57,14 +59,19 @@ export type InventoryColumnLabel = {
 export type InventoryTableRow = {
   key: string;
   label: string;
-  values: string[];
+  values?: string[];
 };
 
 export type InventoryTableSectionData = {
   title: string;
   description?: string;
-  columns: string[];
+  fieldBaseName?: string;
+  columns: InventoryTableGridColumn[];
   rows: InventoryTableRow[];
+  yearSelector?: {
+    initialYear?: number;
+    ariaLabel?: string;
+  };
   editableRows?: {
     addLabel: string;
     rowLabelPrefix: string;
@@ -92,14 +99,9 @@ export type InventoryGroupedYearTableData = {
 export type FleetSurfaceCopy = {
   compositionTitle: string;
   compositionDescription: string;
-  categories: InventoryRowLabel[];
-  compositionColumns: string[];
   yearlyVehiclesTitle: string;
-  yearlyVehiclesRows: InventoryRowLabel[];
   yearlyEnergyTitle: string;
-  yearlyEnergyRows: InventoryRowLabel[];
   yearlySpendTitle: string;
-  yearlySpendRows: InventoryRowLabel[];
 };
 
 export type PublicLightingSurfaceCopy = {

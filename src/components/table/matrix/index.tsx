@@ -14,12 +14,13 @@ export default function MatrixTable<T extends FieldValues>({
   rows,
   form,
   baseName,
+  renderYearCell,
 }: MatrixTableProps<T>) {
   const { years } = useInventoryContext();
 
   const columns = useMemo(
-    () => createMatrixTableColumns({ years, baseName, form }),
-    [baseName, form, years]
+    () => createMatrixTableColumns({ years, baseName, form, renderYearCell }),
+    [baseName, form, renderYearCell, years]
   );
 
   return (

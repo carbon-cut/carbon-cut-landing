@@ -1,5 +1,6 @@
 "use client";
 
+import { useInventoryContext } from "@/app/collectivity/_inventaire/context/inventory-context";
 import InventoryGroupedYearTable from "@/components/table/grouped-year";
 import MatrixTable from "@/components/table/matrix";
 import type { InventoryGroupedYearTableData } from "../../../types";
@@ -79,19 +80,6 @@ const movementSection: InventoryGroupedYearTableData = {
   })),
 };
 
-const movementSample: Record<string, Record<number, Record<string, string>>> = {
-  a320: {
-    "2022": { international: "620", national: "180" },
-    "2023": { international: "710", national: "190" },
-    "2024": { international: "760", national: "205" },
-  },
-  "atr72-500": {
-    "2022": { international: "0", national: "240" },
-    "2023": { international: "0", national: "266" },
-    "2024": { international: "0", national: "284" },
-  },
-};
-
 const energySample: Record<number, Record<string, string>> = {
   "2022": {
     electricity: "3 200 000 kWh",
@@ -114,13 +102,14 @@ const energySample: Record<number, Record<string, string>> = {
 };
 
 export default function AirTransportSurface() {
+  const { mainForm } = useInventoryContext();
+
   return (
     <div className="space-y-8">
       <InventoryGroupedYearTable
         section={movementSection}
-        getValue={(rowKey, yearValue, subcolumnKey) =>
-          movementSample[rowKey]?.[yearValue]?.[subcolumnKey] ?? ""
-        }
+        form={mainForm}
+        baseName={"transport.airTransport.movement" as const}
       />
       <div className="border-t border-border/10 pt-8">
         <MatrixTable

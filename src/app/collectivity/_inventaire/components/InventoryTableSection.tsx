@@ -1,20 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import Typography from "@/components/ui/typography";
-
-import {
-  InventoryDataTable,
-  InventoryDataTableHeaderRow,
-  InventoryDataTableRow,
-  TableBody,
-  TableCell,
-  TableHeader,
-} from "@/components/table/InventoryDataTable";
-import InventoryTableInput from "@/components/table/InventoryTableInput";
+import { useInventoryContext } from "../context/inventory-context";
+import type { InventoryFormValues } from "../context/inventory-context";
+import { TName } from "@/components/ui/forms";
+import TableGrid from "@/components/table/table-grid";
 import type { InventoryTableRow, InventoryTableSectionData } from "../types";
 
 export default function InventoryTableSection({
@@ -24,6 +15,7 @@ export default function InventoryTableSection({
   section: InventoryTableSectionData;
   className?: string;
 }) {
+  const { mainForm, years } = useInventoryContext();
   const [rows, setRows] = useState(section.rows);
   const editableRows = section.editableRows;
   const minRows = editableRows?.minRows ?? 1;
@@ -40,7 +32,6 @@ export default function InventoryTableSection({
       const newRow: InventoryTableRow = {
         key: `${editableRows.rowLabelPrefix.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`,
         label: `${editableRows.rowLabelPrefix} ${nextNumber}`,
-        values: editableRows.newRowValues ?? section.columns.map(() => ""),
       };
 
       return [...currentRows, newRow];
@@ -55,74 +46,45 @@ export default function InventoryTableSection({
     );
   };
 
-  return (
-    <section className={className ?? "space-y-4"}>
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <Typography asChild variant="sectionTitle" size="sm">
-            <h4>{section.title}</h4>
-          </Typography>
-          {section.description ? (
-            <Typography asChild variant="body" size="body" className="mt-2">
-              <p>{section.description}</p>
-            </Typography>
-          ) : null}
-        </div>
-        {editableRows ? (
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            aria-label={editableRows.addLabel}
-            onClick={handleAddRow}
-          >
-            <Plus aria-hidden="true" />
-            {editableRows.addLabel}
-          </Button>
-        ) : null}
-      </div>
+  const fieldBaseName = (section.fieldBaseName ?? section.title)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 
-      <InventoryDataTable>
-        <TableHeader>
-          <InventoryDataTableHeaderRow
-            stickySrLabel="Categorie"
-            cells={section.columns.map((column) => ({
-              key: column,
-              label: column,
-            }))}
-          >
-            {editableRows ? <TableCell className="w-12 px-3 py-3" /> : null}
-          </InventoryDataTableHeaderRow>
-        </TableHeader>
-        <TableBody>
-          {rows.map((row) => (
-            <InventoryDataTableRow
-              key={row.key}
-              label={row.label}
-              cells={row.values.map((value, index) => ({
-                key: `${row.key}-${index}`,
-                content: <InventoryTableInput defaultValue={value} />,
-              }))}
-            >
-              {editableRows ? (
-                <TableCell className="px-3 py-2.5">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    title="Supprimer"
-                    aria-label={`Supprimer ${row.label}`}
-                    disabled={rows.length <= minRows}
-                    onClick={() => handleRemoveRow(row.key)}
-                  >
-                    <Trash2 aria-hidden="true" />
-                  </Button>
-                </TableCell>
-              ) : null}
-            </InventoryDataTableRow>
-          ))}
-        </TableBody>
-      </InventoryDataTable>
-    </section>
+  return (
+    <TableGrid
+      className={className}
+      title={section.title}
+      description={section.description}
+      rows={rows}
+      columns={section.columns}
+      form={mainForm}
+      baseName={fieldBaseName as TName<InventoryFormValues>}
+      yearSelector={
+        section.yearSelector
+          ? {
+              years,
+              initialYear: section.yearSelector.initialYear,
+              ariaLabel: section.yearSelector.ariaLabel,
+            }
+          : undefined
+      }
+      addRow={
+        editableRows
+          ? {
+              label: editableRows.addLabel,
+              onAdd: handleAddRow,
+            }
+          : undefined
+      }
+      editableRows={
+        editableRows
+          ? {
+              minRows,
+              onRemoveRow: handleRemoveRow,
+            }
+          : undefined
+      }
+    />
   );
 }

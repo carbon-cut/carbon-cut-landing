@@ -3,9 +3,13 @@
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import InventoryTableInput from "../InventoryTableInput";
 import type { BlockTableProps } from "./types";
 import { Trash2 } from "lucide-react";
+import {
+  renderYearBlockCalculatedCell,
+  renderYearBlockEditableCell,
+  renderYearBlockReadonlyCell,
+} from "./cells";
 
 type BlockTableRow = { key: string; label: string };
 type BlockTableCellContext = CellContext<BlockTableRow, unknown>;
@@ -73,25 +77,25 @@ export function createYearBlockColumns({
         tone: column.calculated ? ("secondary" as const) : ("default" as const),
       },
       cell: ({ row }: BlockTableCellContext) =>
-        column.calculated ? (
-          <div
-            aria-label={`${row.original.label} ${yearLabel} ${column.label}`}
-            className="flex h-9 min-w-[40px] items-center justify-end rounded-lg border border-border/15 bg-yellow-200 px-3 text-sm font-semibold text-foreground"
-          >
-            {getCalculatedValue(row.original.key)}
-          </div>
-        ) : column.editable === false ? (
-          <div className="flex h-9 min-w-[40px] items-center rounded-lg border border-border/15 bg-muted/40 px-3 text-sm text-secondary">
-            {getValue(row.original.key, column.key)}
-          </div>
-        ) : (
-          <InventoryTableInput
-            value={getValue(row.original.key, column.key)}
-            onValueChange={(value) =>
-              onValueChange(year, block.key, row.original.key, column.key, value)
-            }
-          />
-        ),
+        column.calculated
+          ? renderYearBlockCalculatedCell({
+              value: getCalculatedValue(row.original.key),
+              rowLabel: row.original.label,
+              yearLabel,
+              columnLabel: column.label,
+            })
+          : column.editable === false
+            ? renderYearBlockReadonlyCell({
+                value: getValue(row.original.key, column.key),
+              })
+            : renderYearBlockEditableCell({
+                value: getValue(row.original.key, column.key),
+                year,
+                blockKey: block.key,
+                rowKey: row.original.key,
+                columnKey: column.key,
+                onValueChange,
+              }),
     })),
   ];
 }

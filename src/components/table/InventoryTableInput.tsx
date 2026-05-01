@@ -53,7 +53,6 @@ function InventoryTableInput<T extends FieldValues>({
   type,
   unitAdornment,
   unitAdornmentPlacement = "end",
-  unit = <></>,
   info,
   onChange,
   size = "sm",
@@ -67,7 +66,6 @@ function InventoryTableInput<T extends FieldValues>({
   const inputRef = useRef<HTMLInputElement>(null);
   const unitRef = useRef<HTMLSpanElement>(null);
   const [unitPx, setUnitPx] = useState<number>(0);
-  const hasUnitBelow = React.Children.toArray(unit).length > 0;
 
   // Measure unit chip width so padding always matches, regardless of token length.
   useLayoutEffect(() => {
@@ -201,9 +199,8 @@ function InventoryTableInput<T extends FieldValues>({
               </div>
             </FormControl>
 
-            {(hasUnitBelow || info) && (
+            {info && (
               <div className="grid grid-cols-2 h-fit">
-                {hasUnitBelow ? unit : null}
                 {info && (
                   <Popover>
                     <PopoverTrigger asChild>

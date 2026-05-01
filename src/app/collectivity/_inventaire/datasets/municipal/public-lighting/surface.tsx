@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import MatrixTable from "@/components/table/matrix";
 import InventoryTableSection from "../../../components/InventoryTableSection";
 import type { InventoryTableSectionData, PublicLightingSurfaceCopy } from "../../../types";
@@ -33,27 +35,38 @@ const lightingYearlySample: Record<string, Record<string, string>> = {
 };
 
 export default function PublicLightingSurface({ copy }: { copy: PublicLightingSurfaceCopy }) {
-  const infrastructureSection: InventoryTableSectionData = {
-    title: copy.infrastructureTitle,
-    description: copy.infrastructureDescription,
-    columns: [copy.valueColumn],
-    rows: copy.infrastructureRows.map((row) => ({
-      key: row.key,
-      label: row.label,
-      values: [lightingInfrastructureSample[row.key] ?? ""],
-    })),
-  };
+  const infrastructureSection = useMemo<InventoryTableSectionData>(
+    () => ({
+      title: copy.infrastructureTitle,
+      description: copy.infrastructureDescription,
+      columns: [copy.valueColumn],
+      rows: copy.infrastructureRows.map((row) => ({
+        key: row.key,
+        label: row.label,
+        values: [lightingInfrastructureSample[row.key] ?? ""],
+      })),
+    }),
+    [
+      copy.infrastructureDescription,
+      copy.infrastructureRows,
+      copy.infrastructureTitle,
+      copy.valueColumn,
+    ]
+  );
 
-  const lampSection: InventoryTableSectionData = {
-    title: copy.lampsTitle,
-    description: copy.lampsDescription,
-    columns: copy.lampsColumns,
-    rows: copy.lampRows.map((row) => ({
-      key: row.key,
-      label: row.label,
-      values: lightingLampsSample[row.key] ?? [],
-    })),
-  };
+  const lampSection = useMemo<InventoryTableSectionData>(
+    () => ({
+      title: copy.lampsTitle,
+      description: copy.lampsDescription,
+      columns: copy.lampsColumns,
+      rows: copy.lampRows.map((row) => ({
+        key: row.key,
+        label: row.label,
+        values: lightingLampsSample[row.key] ?? [],
+      })),
+    }),
+    [copy.lampRows, copy.lampsColumns, copy.lampsDescription, copy.lampsTitle]
+  );
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
-
+import YearSelector from "../year-selector";
 import BlockTable from "./block-table";
 import { YearBlockHeader } from "./header";
 import { useYearBlockTables } from "./useYearBlockTables";
@@ -26,35 +25,18 @@ export default function InventoryYearBlockTables({
     setSelectedYearValue,
   } = useYearBlockTables({ blocks, getValue });
 
-  const yearTabs = useMemo(
-    () =>
-      years.map((year) => (
-        <button
-          key={year}
-          type="button"
-          role="tab"
-          aria-selected={year === selectedYear}
-          className={
-            "text-sm font-semibold text-secondary underline-offset-4 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" +
-            (year === selectedYear ? " text-foreground underline" : "")
-          }
-          onClick={() => setSelectedYearValue(year)}
-        >
-          {year}
-        </button>
-      )),
-    [selectedYear, setSelectedYearValue, years]
-  );
-
   return (
     <section className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <YearBlockHeader title={title} description={description} />
         </div>
-        <div role="tablist" aria-label="Annees" className="flex flex-wrap justify-end gap-3">
-          {yearTabs}
-        </div>
+        <YearSelector
+          years={years}
+          selectedYear={selectedYear}
+          onSelectYear={setSelectedYearValue}
+          className="flex flex-wrap justify-end gap-3"
+        />
       </div>
 
       {selectedYear ? (
