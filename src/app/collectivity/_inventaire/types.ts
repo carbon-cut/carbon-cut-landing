@@ -41,11 +41,6 @@ export type InventoryDataset = {
   implementationNote: string;
 };
 
-export type InventoryRowLabel = {
-  key: string;
-  label: string;
-};
-
 export type InventoryTableGridColumn = string | { key: string; label: string; className?: string };
 
 export type InventoryColumnLabel = {
@@ -59,7 +54,7 @@ export type InventoryColumnLabel = {
 export type InventoryTableRow = {
   key: string;
   label: string;
-  values?: string[];
+  unit: string | null;
 };
 
 export type InventoryTableSectionData = {
@@ -84,7 +79,7 @@ export type InventoryYearBlockTableBlock = {
   key: string;
   title: string;
   columns: InventoryColumnLabel[];
-  rows: InventoryRowLabel[];
+  rows: InventoryTableRow[];
   note?: string;
   editableColumns?: boolean;
 };
@@ -93,7 +88,7 @@ export type InventoryGroupedYearTableData = {
   title: string;
   description?: string;
   subcolumns: InventoryColumnLabel[];
-  rows: InventoryRowLabel[];
+  rows: InventoryTableRow[];
 };
 
 export type FleetSurfaceCopy = {
@@ -107,14 +102,14 @@ export type FleetSurfaceCopy = {
 export type PublicLightingSurfaceCopy = {
   infrastructureTitle: string;
   infrastructureDescription: string;
-  infrastructureRows: InventoryRowLabel[];
+  infrastructureRows: InventoryTableRow[];
   valueColumn: string;
   lampsTitle: string;
   lampsDescription: string;
-  lampRows: InventoryRowLabel[];
+  lampRows: InventoryTableRow[];
   lampsColumns: string[];
   yearlyTitle: string;
-  yearlyRows: InventoryRowLabel[];
+  yearlyRows: InventoryTableRow[];
 };
 
 export type InventoryWorkspaceConfig = {

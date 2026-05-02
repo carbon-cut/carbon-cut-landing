@@ -10,12 +10,14 @@ export function renderMatrixYearInputCell<T extends FieldValues>({
   row,
   year,
 }: MatrixYearCellRendererArgs<T>) {
+  const fieldName = `${baseName}.${row.key}.value.${year}` as TName<T>;
+  const fieldUnitPath = `${baseName}.${row.key}.unit` as TName<T>;
+  let fieldUnit = form.getValues(fieldUnitPath);
+  if (fieldUnit === undefined) {
+    form.setValue(fieldUnitPath, row.unit);
+    fieldUnit = row.unit;
+  }
   return (
-    <InventoryTableInput
-      unitAdornment={"wew"}
-      type={"number"}
-      form={form}
-      name={`${baseName}.${row.key}.${year}` as TName<T>}
-    />
+    <InventoryTableInput unitAdornment={fieldUnit} type={"number"} form={form} name={fieldName} />
   );
 }

@@ -2,8 +2,9 @@ import {
   fleetFuelKeys,
   fleetCategoryKeys,
   fleetCarEngineKeys,
-} from "../../../InventorySchema/municipal";
-import type { InventoryRowLabel } from "../../../types";
+  fleetUnits,
+} from "../../../InventorySchema/municipal/config";
+import type { InventoryTableRow } from "../../../types";
 
 export function buildFleetCompositionColumns(labelFunc: (key: string) => string) {
   return fleetFuelKeys.map((key) => ({ key, label: labelFunc(`fuel.${key}`) }));
@@ -12,14 +13,26 @@ export function buildFleetCompositionColumns(labelFunc: (key: string) => string)
 export function buildFleetRows(
   input: string,
   labelFunc: (key: string) => string
-): InventoryRowLabel[] {
+): InventoryTableRow[] {
   switch (input) {
     case "category":
-      return fleetCategoryKeys.map((key) => ({ key, label: labelFunc(`category.${key}`) }));
+      return fleetCategoryKeys.map((key) => ({
+        key,
+        label: labelFunc(`category.${key}`),
+        unit: fleetUnits.composition.default[0],
+      }));
     case "fuel":
-      return fleetFuelKeys.map((key) => ({ key, label: labelFunc(`fuel.${key}`) }));
+      return fleetFuelKeys.map((key) => ({
+        key,
+        label: labelFunc(`fuel.${key}`),
+        unit: fleetUnits.consumption[key][0],
+      }));
     case "engine":
-      return fleetCarEngineKeys.map((key) => ({ key, label: labelFunc(`engine.${key}`) }));
+      return fleetCarEngineKeys.map((key) => ({
+        key,
+        label: labelFunc(`engine.${key}`),
+        unit: fleetUnits.vehicles.default[0],
+      }));
     default:
       return [];
   }

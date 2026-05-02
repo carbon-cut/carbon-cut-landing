@@ -6,9 +6,7 @@ import InventoryTableSection from "../../../components/InventoryTableSection";
 import { useInventoryContext } from "../../../context/inventory-context";
 import type { FleetSurfaceCopy, InventoryTableSectionData } from "../../../types";
 import { buildFleetCompositionColumns, buildFleetRows } from "./config";
-import InventoryTableInput from "@/components/table/InventoryTableInput";
-import { useMemo, useState } from "react";
-import { columns } from "../../afat/perennial-plantation-stock/constants";
+import { useState } from "react";
 
 export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
   const { mainForm } = useInventoryContext();
@@ -39,19 +37,19 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
           title={copy.yearlyVehiclesTitle}
           rows={rows.engine}
           form={mainForm}
-          baseName={"municipal.fleet.vehicles"}
+          baseName={"municipal.fleet.dataSet.vehicles"}
         />
         <MatrixTable
           title={copy.yearlyEnergyTitle}
           rows={rows.fuel}
           form={mainForm}
-          baseName={"municipal.fleet.consumption"}
+          baseName={"municipal.fleet.dataSet.consumption"}
         />
         <MatrixTable
           title={copy.yearlySpendTitle}
           rows={rows.fuel}
           form={mainForm}
-          baseName={"municipal.fleet.spend"}
+          baseName={"municipal.fleet.dataSet.spend"}
         />
       </div>
     </div>
