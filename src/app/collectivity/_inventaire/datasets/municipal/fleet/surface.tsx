@@ -1,6 +1,7 @@
 "use client";
 
 import { useScopedI18n } from "@/locales/client";
+import CollectivityMetadataScopeControl from "@/app/collectivity/_components/metadata/CollectivityMetadataScopeControl";
 import MatrixTable from "@/components/table/matrix";
 import InventoryTableSection from "../../../components/InventoryTableSection";
 import { useInventoryContext } from "../../../context/inventory-context";
@@ -31,6 +32,12 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
 
   return (
     <div className="space-y-8">
+      {/*       <CollectivityMetadataScopeControl
+        form={mainForm}
+        name={"municipal.fleet.metadata"}
+        drawerTitle="Métadonnées de flotte"
+        drawerDescription="Renseignez la provenance et la qualité pour la flotte municipale."
+      /> */}
       <InventoryTableSection section={compositionSection} />
       <div className="border-t border-border/10 pt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
         <MatrixTable

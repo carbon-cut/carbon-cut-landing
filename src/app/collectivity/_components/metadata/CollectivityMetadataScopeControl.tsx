@@ -2,26 +2,24 @@
 
 import { useState } from "react";
 
+import type { FieldValues } from "react-hook-form";
+import { useWatch } from "react-hook-form";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import CollectivityMetadataDrawer from "./CollectivityMetadataDrawer";
 import { summarizeCollectivityMetadata } from "./utils";
 import type {
+  CollectivityMetadataControlProps,
   CollectivityMetadataDrawerLabels,
-  CollectivityMetadataScopeSummaryProps,
   CollectivityMetadataValue,
-  CollectivityTrendAssessment,
-  CollectivityTrendReviewDecision,
 } from "./types";
 
 const defaultDrawerLabels: CollectivityMetadataDrawerLabels = {
   description: "Renseignez uniquement ce qui est utile pour cette portée.",
   provenanceTitle: "Provenance",
   qualityTitle: "Qualité",
-  trendTitle: "BaU / tendance",
-  trendDescription: "Le système détecte la tendance et propose une méthode de projection.",
-  trendPrompt: "La situation est potentiellement exceptionnelle. Choisissez la suite.",
   addLabel: "Ajouter",
   editLabel: "Modifier",
   clearLabel: "Effacer les métadonnées",
@@ -30,33 +28,23 @@ const defaultDrawerLabels: CollectivityMetadataDrawerLabels = {
   emptyLabel: "Aucune métadonnée",
 };
 
-type Props = CollectivityMetadataScopeSummaryProps & {
+type Props<TFieldValues extends FieldValues> = CollectivityMetadataControlProps<TFieldValues> & {
   drawerTitle: string;
   drawerDescription?: string;
   labels?: Partial<CollectivityMetadataDrawerLabels>;
-  trendAssessment?: CollectivityTrendAssessment | null;
-  trendDecision?: CollectivityTrendReviewDecision | null;
-  onTrendDecisionChange?: (value: CollectivityTrendReviewDecision | null) => void;
-  onSave: (value: CollectivityMetadataValue | null) => void;
-  onClear: () => void;
+  className?: string;
 };
 
-export default function CollectivityMetadataScopeControl({
+export default function CollectivityMetadataScopeControl<TFieldValues extends FieldValues>({
   drawerTitle,
   drawerDescription,
-  value,
-  onSave,
-  onClear,
-  addLabel,
-  editLabel,
-  emptyLabel,
+  form,
+  name,
   className,
   labels,
-  trendAssessment,
-  trendDecision,
-  onTrendDecisionChange,
-}: Props) {
+}: Props<TFieldValues>) {
   const [open, setOpen] = useState(false);
+  const value = useWatch({ control: form.control, name }) as CollectivityMetadataValue | undefined;
   const summaryText = summarizeCollectivityMetadata(value);
   const hasValue = Boolean(summaryText);
   const drawerLabels = {
@@ -71,7 +59,7 @@ export default function CollectivityMetadataScopeControl({
           {hasValue ? (
             <span className="font-medium text-foreground">{summaryText}</span>
           ) : (
-            <span>{emptyLabel}</span>
+            <span>{drawerLabels.emptyLabel}</span>
           )}
         </div>
 
@@ -82,7 +70,7 @@ export default function CollectivityMetadataScopeControl({
           className="h-8 rounded-full px-3 text-xs shadow-none"
           onClick={() => setOpen(true)}
         >
-          {hasValue ? editLabel : addLabel}
+          {hasValue ? drawerLabels.editLabel : drawerLabels.addLabel}
         </Button>
       </div>
 
@@ -91,19 +79,9 @@ export default function CollectivityMetadataScopeControl({
         onOpenChange={setOpen}
         title={drawerTitle}
         description={drawerDescription ?? drawerLabels.description}
-        value={value}
-        trendAssessment={trendAssessment}
-        trendDecision={trendDecision}
-        onTrendDecisionChange={onTrendDecisionChange}
+        form={form}
+        name={name}
         labels={drawerLabels}
-        onSave={(nextValue) => {
-          onSave(nextValue);
-          setOpen(false);
-        }}
-        onClear={() => {
-          onClear();
-          setOpen(false);
-        }}
       />
     </div>
   );

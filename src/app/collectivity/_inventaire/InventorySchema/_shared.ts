@@ -4,18 +4,35 @@ type Year = `${number}${number}${number}${number}`;
 const yearSchema = z.string().regex(/^\d{4}$/) as z.ZodType<Year>;
 const numberByYearSchema = z.record(yearSchema, z.number());
 
+export const metadataSourceTypeValues = [
+  "invoice",
+  "report",
+  "excel",
+  "manual",
+  "estimate",
+] as const;
+
+export const metadataQualityStatusValues = [
+  "missing",
+  "provided",
+  "estimated",
+  "verified",
+] as const;
+
+export const metadataConfidenceValues = ["low", "medium", "high"] as const;
+
 const metadata = z.object({
   source: z.object({
     organization: z.string().optional(),
     documentName: z.string().optional(),
     contactPerson: z.string().optional(),
     collectionDate: z.string().optional(),
-    sourceType: z.enum(["invoice", "report", "excel", "manual", "estimate"]).optional(),
+    sourceType: z.enum(metadataSourceTypeValues).optional(),
     documents: z.array(z.instanceof(File)).optional(),
   }),
   quality: z.object({
-    status: z.enum(["missing", "provided", "estimated", "verified"]).optional(), // "missing" | "provided" | "estimated" | "verified";
-    confidence: z.enum(["low", "medium", "high"]).optional(),
+    status: z.enum(metadataQualityStatusValues).optional(),
+    confidence: z.enum(metadataConfidenceValues).optional(),
     comment: z.string().optional(),
   }),
 });

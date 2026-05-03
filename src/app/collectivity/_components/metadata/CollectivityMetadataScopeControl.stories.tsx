@@ -1,12 +1,18 @@
-import { useState } from "react";
-
 import type { Meta, StoryObj } from "@storybook/nextjs";
+import { useForm } from "react-hook-form";
+
+import { Form } from "@/components/ui/forms";
 
 import CollectivityMetadataDrawer from "./CollectivityMetadataDrawer";
 import CollectivityMetadataScopeControl, {
   defaultDrawerLabels,
 } from "./CollectivityMetadataScopeControl";
-import type { CollectivityMetadataValue, CollectivityTrendAssessment } from "./types";
+import type { CollectivityMetadataValue } from "./types";
+import type { CollectivityTrendAssessment } from "./CollectivityMetadataTrendSection";
+
+type DemoFormValues = {
+  metadata: CollectivityMetadataValue;
+};
 
 const meta = {
   title: "Collectivity/Metadata/ScopeControl",
@@ -15,16 +21,21 @@ const meta = {
     layout: "padded",
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof CollectivityMetadataScopeControl>;
+} satisfies Meta<any>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<any>;
 
 const filledValue: CollectivityMetadataValue = {
-  organization: "STEG",
-  documentName: "Export électricité 2024",
-  status: "verified",
-  confidence: "high",
+  source: {
+    organization: "STEG",
+    documentName: "Export électricité 2024",
+    sourceType: "report",
+  },
+  quality: {
+    status: "verified",
+    confidence: "high",
+  },
 };
 
 const possibleAnomalyTrend: CollectivityTrendAssessment = {
@@ -36,19 +47,29 @@ const possibleAnomalyTrend: CollectivityTrendAssessment = {
   expertNote: "La tendance récente suggère un contexte exceptionnel à confirmer.",
 };
 
+function StoryShell({ metadata }: { metadata: CollectivityMetadataValue }) {
+  const form = useForm<DemoFormValues>({
+    defaultValues: {
+      metadata,
+    },
+  });
+
+  return (
+    <Form {...form}>
+      <CollectivityMetadataScopeControl
+        form={form}
+        name="metadata"
+        drawerTitle="Métadonnées"
+        drawerDescription="Renseignez uniquement ce qui est utile pour cette portée."
+      />
+    </Form>
+  );
+}
+
 export const EmptyScopeState: Story = {
   render: () => (
     <div className="mx-auto max-w-2xl">
-      <CollectivityMetadataScopeControl
-        drawerTitle="Métadonnées"
-        drawerDescription="Renseignez uniquement ce qui est utile pour cette portée."
-        value={null}
-        onSave={() => undefined}
-        onClear={() => undefined}
-        addLabel="Ajouter"
-        editLabel="Modifier"
-        emptyLabel="Aucune métadonnée"
-      />
+      <StoryShell metadata={{ source: {}, quality: {} }} />
     </div>
   ),
 };
@@ -56,53 +77,53 @@ export const EmptyScopeState: Story = {
 export const FilledScopeSummary: Story = {
   render: () => (
     <div className="mx-auto max-w-2xl">
-      <CollectivityMetadataScopeControl
-        drawerTitle="Métadonnées"
-        drawerDescription="Renseignez uniquement ce qui est utile pour cette portée."
-        value={filledValue}
-        onSave={() => undefined}
-        onClear={() => undefined}
-        addLabel="Ajouter"
-        editLabel="Modifier"
-        emptyLabel="Aucune métadonnée"
-      />
+      <StoryShell metadata={filledValue} />
     </div>
   ),
 };
 
 export const DrawerOpenEditState: Story = {
-  render: () => (
-    <div className="mx-auto max-w-2xl">
-      <CollectivityMetadataDrawer
-        open
-        onOpenChange={() => undefined}
-        title="Demande d'électricité"
-        description="Renseignez la provenance et la qualité pour la demande d'électricité."
-        value={filledValue}
-        labels={defaultDrawerLabels}
-        onSave={() => undefined}
-        onClear={() => undefined}
-      />
-    </div>
-  ),
+  render: () => {
+    function DrawerOpenStory() {
+      const form = useForm<DemoFormValues>({
+        defaultValues: {
+          metadata: filledValue,
+        },
+      });
+
+      return (
+        <Form {...form}>
+          <CollectivityMetadataDrawer
+            open
+            onOpenChange={() => undefined}
+            title="Demande d'électricité"
+            description="Renseignez la provenance et la qualité pour la demande d'électricité."
+            form={form}
+            name="metadata"
+            labels={defaultDrawerLabels}
+          />
+        </Form>
+      );
+    }
+
+    return (
+      <div className="mx-auto max-w-2xl">
+        <DrawerOpenStory />
+      </div>
+    );
+  },
 };
 
 export const DrawerPossibleAnomalyState: Story = {
   render: () => (
     <div className="mx-auto max-w-2xl">
-      <CollectivityMetadataDrawer
-        open
-        onOpenChange={() => undefined}
-        title="Demande d'électricité"
-        description="Renseignez la provenance et la qualité pour la demande d'électricité."
-        value={filledValue}
-        trendAssessment={possibleAnomalyTrend}
-        trendDecision={null}
-        onTrendDecisionChange={() => undefined}
-        labels={defaultDrawerLabels}
-        onSave={() => undefined}
-        onClear={() => undefined}
-      />
+      <p className="mb-3 text-sm text-secondary">
+        Le composant trend reste séparé pour plus tard, mais il n’est pas monté dans le drawer.
+      </p>
+      <StoryShell metadata={filledValue} />
+      <div className="mt-4 rounded-xl border border-dashed border-border/40 p-4 text-sm text-secondary">
+        Trend demo: {possibleAnomalyTrend.reasonCode}
+      </div>
     </div>
   ),
 };
@@ -110,24 +131,26 @@ export const DrawerPossibleAnomalyState: Story = {
 export const ClearResetState: Story = {
   render: () => {
     function ClearResetStory() {
-      const [value, setValue] = useState<CollectivityMetadataValue | null>(filledValue);
+      const form = useForm<DemoFormValues>({
+        defaultValues: {
+          metadata: filledValue,
+        },
+      });
 
       return (
         <div className="mx-auto flex max-w-2xl flex-col gap-4">
-          <CollectivityMetadataScopeControl
-            drawerTitle="Métadonnées"
-            drawerDescription="Renseignez uniquement ce qui est utile pour cette portée."
-            value={value}
-            onSave={(nextValue) => setValue(nextValue)}
-            onClear={() => setValue(null)}
-            addLabel="Ajouter"
-            editLabel="Modifier"
-            emptyLabel="Aucune métadonnée"
-          />
+          <Form {...form}>
+            <CollectivityMetadataScopeControl
+              form={form}
+              name="metadata"
+              drawerTitle="Métadonnées"
+              drawerDescription="Renseignez uniquement ce qui est utile pour cette portée."
+            />
+          </Form>
           <button
             type="button"
             className="w-fit rounded-full border border-border px-3 py-1 text-xs"
-            onClick={() => setValue(null)}
+            onClick={() => form.reset({ metadata: { source: {}, quality: {} } })}
           >
             Réinitialiser
           </button>

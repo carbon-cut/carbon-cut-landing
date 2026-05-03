@@ -1,4 +1,8 @@
-import type { CollectivityMetadataDraft, CollectivityMetadataValue } from "./types";
+import type {
+  CollectivityMetadataQualityValue,
+  CollectivityMetadataSourceValue,
+  CollectivityMetadataValue,
+} from "./types";
 
 const sourceTypeLabels: Record<string, string> = {
   invoice: "Facture",
@@ -21,63 +25,65 @@ const confidenceLabels: Record<string, string> = {
   high: "Élevée",
 };
 
-const EMPTY_METADATA_DRAFT: CollectivityMetadataDraft = {
-  organization: "",
-  documentName: "",
-  contactPerson: "",
-  collectionDate: "",
-  sourceType: "",
-  status: "",
-  confidence: "",
-  comment: "",
+const EMPTY_METADATA_VALUE: CollectivityMetadataValue = {
+  source: {},
+  quality: {},
 };
 
-function createCollectivityMetadataDraft(value?: CollectivityMetadataValue | null) {
-  return {
-    ...EMPTY_METADATA_DRAFT,
-    ...(value ?? {}),
-  };
-}
-
-function normalizeCollectivityMetadataDraft(
-  draft: CollectivityMetadataDraft
-): CollectivityMetadataValue | null {
-  const entries = Object.entries(draft).filter(([, value]) => String(value).trim() !== "");
-
-  if (!entries.length) {
+function cloneCollectivityMetadataValue(value?: CollectivityMetadataValue | null) {
+  if (!value) {
     return null;
   }
 
-  return Object.fromEntries(entries) as CollectivityMetadataValue;
+  return structuredClone(value);
 }
 
-function summarizeCollectivityMetadata(value: CollectivityMetadataValue | null) {
+function summarizeCollectivitySection(
+  section?: CollectivityMetadataSourceValue | CollectivityMetadataQualityValue | null
+) {
+  if (!section) {
+    return null;
+  }
+
+  const summaryParts = [
+    "organization" in section ? section.organization : "",
+    "documentName" in section ? section.documentName : "",
+    "sourceType" in section && section.sourceType
+      ? (sourceTypeLabels[section.sourceType] ?? section.sourceType)
+      : "",
+    "status" in section && section.status
+      ? (qualityStatusLabels[section.status] ?? section.status)
+      : "",
+    "confidence" in section && section.confidence
+      ? (confidenceLabels[section.confidence] ?? section.confidence)
+      : "",
+    "documents" in section && section.documents?.length
+      ? `${section.documents.length} fichier${section.documents.length > 1 ? "s" : ""}`
+      : "",
+  ].filter((part): part is string => Boolean(part && part.trim()));
+
+  return summaryParts.length ? summaryParts.join(" · ") : null;
+}
+
+function summarizeCollectivityMetadata(value: CollectivityMetadataValue | null | undefined) {
   if (!value) {
     return null;
   }
 
   const summaryParts = [
-    value.organization,
-    value.documentName,
-    value.sourceType ? (sourceTypeLabels[value.sourceType] ?? value.sourceType) : "",
-    value.status ? (qualityStatusLabels[value.status] ?? value.status) : "",
-    value.confidence ? (confidenceLabels[value.confidence] ?? value.confidence) : "",
+    summarizeCollectivitySection(value.source),
+    summarizeCollectivitySection(value.quality),
   ].filter((part): part is string => Boolean(part && part.trim()));
 
   if (summaryParts.length) {
     return summaryParts.join(" · ");
   }
 
-  if (value.comment?.trim()) {
+  if (value.quality?.comment?.trim()) {
     return "Commentaire renseigné";
   }
 
   return null;
 }
 
-export {
-  EMPTY_METADATA_DRAFT,
-  createCollectivityMetadataDraft,
-  normalizeCollectivityMetadataDraft,
-  summarizeCollectivityMetadata,
-};
+export { EMPTY_METADATA_VALUE, cloneCollectivityMetadataValue, summarizeCollectivityMetadata };

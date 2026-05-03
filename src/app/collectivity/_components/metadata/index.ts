@@ -2,25 +2,14 @@ export { default as CollectivityMetadataDrawer } from "./CollectivityMetadataDra
 export { default as CollectivityMetadataScopeControl } from "./CollectivityMetadataScopeControl";
 export { defaultDrawerLabels } from "./CollectivityMetadataScopeControl";
 export {
-  EMPTY_METADATA_DRAFT,
-  createCollectivityMetadataDraft,
-  normalizeCollectivityMetadataDraft,
+  EMPTY_METADATA_VALUE,
+  cloneCollectivityMetadataValue,
   summarizeCollectivityMetadata,
 } from "./utils";
 export type {
-  CollectivityMetadataConfidence,
-  CollectivityMetadataDraft,
+  CollectivityMetadataControlProps,
   CollectivityMetadataDrawerLabels,
-  CollectivityMetadataFieldOption,
-  CollectivityTrendAssessment,
-  CollectivityTrendAnomalyStatus,
-  CollectivityTrendDirection,
-  CollectivityTrendMethod,
-  CollectivityTrendRecentDirection,
-  CollectivityTrendReviewDecision,
-  CollectivityMetadataQualityStatus,
-  CollectivityMetadataScopeKind,
-  CollectivityMetadataScopeSummaryProps,
-  CollectivityMetadataSourceType,
+  CollectivityMetadataQualityValue,
+  CollectivityMetadataSourceValue,
   CollectivityMetadataValue,
 } from "./types";
