@@ -27,7 +27,7 @@ export type InventoryWorkspaceLocale = {
   sections: {
     entry: {
       fleet: FleetSurfaceCopy;
-      lighting: PublicLightingSurfaceCopy;
+      publicLighting: PublicLightingSurfaceCopy;
     };
   };
 };
@@ -231,7 +231,7 @@ export function buildInventoryRegistry(locale: InventoryWorkspaceLocale): {
     },
     surfaces: {
       fleet: locale.sections.entry.fleet,
-      publicLighting: locale.sections.entry.lighting,
+      publicLighting: locale.sections.entry.publicLighting,
     },
     years: locale.years.map((year) => Number(year.value)),
   };

@@ -1,14 +1,5 @@
-import {
-  fleetFuelKeys,
-  fleetCategoryKeys,
-  fleetCarEngineKeys,
-  fleetUnits,
-} from "../../../InventorySchema/municipal/config";
+import { fleet } from "../../../InventorySchema/municipal/config";
 import type { InventoryTableRow } from "../../../types";
-
-export function buildFleetCompositionColumns(labelFunc: (key: string) => string) {
-  return fleetFuelKeys.map((key) => ({ key, label: labelFunc(`fuel.${key}`) }));
-}
 
 export function buildFleetRows(
   input: string,
@@ -16,22 +7,28 @@ export function buildFleetRows(
 ): InventoryTableRow[] {
   switch (input) {
     case "category":
-      return fleetCategoryKeys.map((key) => ({
+      return fleet.categoryKeys.map((key) => ({
         key,
         label: labelFunc(`category.${key}`),
-        unit: fleetUnits.composition.default[0],
+        unit: fleet.units.composition.default[0],
       }));
     case "fuel":
-      return fleetFuelKeys.map((key) => ({
+      return fleet.fuelKeys.map((key) => ({
         key,
         label: labelFunc(`fuel.${key}`),
-        unit: fleetUnits.consumption[key][0],
+        unit: fleet.units.consumption[key][0],
       }));
     case "engine":
-      return fleetCarEngineKeys.map((key) => ({
+      return fleet.carEngineKeys.map((key) => ({
         key,
         label: labelFunc(`engine.${key}`),
-        unit: fleetUnits.vehicles.default[0],
+        unit: fleet.units.vehicles.default[0],
+      }));
+    case "spend":
+      return fleet.fuelKeys.map((key) => ({
+        key,
+        label: labelFunc(`fuel.${key}`),
+        unit: fleet.units.spend.default[0],
       }));
     default:
       return [];

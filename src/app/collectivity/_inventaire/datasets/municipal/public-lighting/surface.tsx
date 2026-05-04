@@ -1,86 +1,50 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState } from "react";
 
+import { useScopedI18n } from "@/locales/client";
 import MatrixTable from "@/components/table/matrix";
-import InventoryTableSection from "../../../components/InventoryTableSection";
-import type { InventoryTableSectionData, PublicLightingSurfaceCopy } from "../../../types";
+import TableGrid from "@/components/table/table-grid";
 
-const lightingInfrastructureSample: Record<string, string> = {
-  cabinets: "184",
-  meters: "196",
-  dimmers: "38",
-  power: "1 420 kW",
-};
-
-const lightingLampsSample: Record<string, string[]> = {
-  shp: ["250", "1 180"],
-  hpl: ["125", "640"],
-  led: ["70", "2 460"],
-};
-
-const lightingYearlySample: Record<string, Record<string, string>> = {
-  "2022": {
-    consumption: "2 690 000 kWh",
-    bill: "1 180 000 TND",
-  },
-  "2023": {
-    consumption: "2 480 000 kWh",
-    bill: "1 210 000 TND",
-  },
-  "2024": {
-    consumption: "2 210 000 kWh",
-    bill: "1 090 000 TND",
-  },
-};
+import { useInventoryContext } from "../../../context/inventory-context";
+import type { PublicLightingSurfaceCopy } from "../../../types";
+import { buildPublicLightingRows, buildPublicLightingColumns } from "./config";
 
 export default function PublicLightingSurface({ copy }: { copy: PublicLightingSurfaceCopy }) {
-  const infrastructureSection = useMemo<InventoryTableSectionData>(
-    () => ({
-      title: copy.infrastructureTitle,
-      description: copy.infrastructureDescription,
-      columns: [copy.valueColumn],
-      rows: copy.infrastructureRows.map((row) => ({
-        key: row.key,
-        label: row.label,
-        values: [lightingInfrastructureSample[row.key] ?? ""],
-      })),
-    }),
-    [
-      copy.infrastructureDescription,
-      copy.infrastructureRows,
-      copy.infrastructureTitle,
-      copy.valueColumn,
-    ]
+  const { mainForm } = useInventoryContext();
+  const tFleet = useScopedI18n(
+    "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.publicLighting"
   );
 
-  const lampSection = useMemo<InventoryTableSectionData>(
-    () => ({
-      title: copy.lampsTitle,
-      description: copy.lampsDescription,
-      columns: copy.lampsColumns,
-      rows: copy.lampRows.map((row) => ({
-        key: row.key,
-        label: row.label,
-        values: lightingLampsSample[row.key] ?? [],
-      })),
-    }),
-    [copy.lampRows, copy.lampsColumns, copy.lampsDescription, copy.lampsTitle]
-  );
+  const [rows] = useState(() => ({
+    infrastructure: buildPublicLightingRows("infrastructure", tFleet),
+    lamps: buildPublicLightingRows("lamps", tFleet),
+    yearly: buildPublicLightingRows("yearly", tFleet),
+    lampsColumns: buildPublicLightingColumns("lamps", tFleet),
+  }));
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <InventoryTableSection section={infrastructureSection} />
-
-      <InventoryTableSection section={lampSection} />
-
-      <div className="border-t border-border/10 pt-8">
-        <MatrixTable
-          title={copy.yearlyTitle}
-          rows={copy.yearlyRows}
-          getValue={(rowKey, yearValue) => lightingYearlySample[yearValue]?.[rowKey] ?? ""}
-        />
-      </div>
+    <div className="space-y-8">
+      <MatrixTable
+        title={copy.infrastructureTitle}
+        rows={rows.infrastructure}
+        form={mainForm}
+        baseName={"municipal.publicLighting.dataSet.infrastructure"}
+      />
+      <TableGrid
+        title={copy.lampsTitle}
+        description={copy.lampsDescription}
+        rows={rows.lamps}
+        columns={rows.lampsColumns}
+        form={mainForm}
+        baseName={"municipal.publicLighting.dataSet.lamps"}
+      />
+      <MatrixTable
+        title={copy.yearlyTitle}
+        rows={rows.yearly}
+        form={mainForm}
+        baseName={"municipal.publicLighting.dataSet.yearly"}
+      />
     </div>
   );
 }

@@ -824,6 +824,7 @@ export default {
         controls: {
           sourceLabel: "Source",
           datasetLabel: "Jeu de donnees",
+          submitLabel: "Soumettre les données",
           datasetPlaceholder: "Choisir un jeu de donnees",
           yearLabel: "Annee consultee",
           yearPlaceholder: "Choisir une annee d'inventaire",
@@ -913,31 +914,33 @@ export default {
               yearlyEnergyTitle: "Consommation energetique",
               yearlySpendTitle: "Depense energetique",
             },
-            lighting: {
+            publicLighting: {
               infrastructureTitle: "Infrastructure d'eclairage public",
               infrastructureDescription:
-                "Structure report-backed issue du document d'entree: infrastructure reseau, points lumineux par type, puis bloc annuel pour l'annee active.",
-              infrastructureRows: [
-                { key: "cabinets", label: "Nombre d'armoires" },
-                { key: "meters", label: "Nombre de compteurs" },
-                { key: "dimmers", label: "Nombre de variateurs operationnels" },
-                { key: "power", label: "Puissance si applicable" },
-              ],
-              lampsTitle: "Points lumineux",
+                "Structure issue du document d'entree: reseau, points lumineux par type, puis bloc annuel pour l'annee active.",
+              infrastructure: {
+                cabinets: "Nombre d'armoires",
+                meters: "Nombre de compteurs",
+                dimmers: "Nombre de variateurs operationnels",
+                power: "Puissance si applicable",
+              },
+              lampsTitle: "Points lumineux par type",
               lampsDescription:
-                "Chaque ligne reprend le type de lampe mentionne dans le rapport avec puissance et total de points.",
-              lampRows: [
-                { key: "shp", label: "SHP" },
-                { key: "hpl", label: "HPL" },
-                { key: "led", label: "LED" },
-              ],
-              lampsColumns: ["Puissance unitaire", "Total de points"],
-              yearlyTitle: "Bloc annuel public lighting",
-              yearlyRows: [
-                { key: "consumption", label: "Consommation electrique annuelle" },
-                { key: "bill", label: "Facture electrique annuelle" },
-              ],
-              valueColumn: "Valeur",
+                "Chaque ligne reprend le type de lampe du rapport avec sa puissance unitaire et son total.",
+              lamps: {
+                shp: "SHP",
+                hpl: "HPL",
+                led: "LED",
+              },
+              lampColumns: {
+                unitPower: "Puissance unitaire",
+                number: "Total de points lumineux",
+              },
+              yearlyTitle: "Bloc annuel d'eclairage public",
+              yearly: {
+                consumption: "Consommation electrique annuelle",
+                bill: "Facture electrique annuelle",
+              },
             },
           },
           evidence: {

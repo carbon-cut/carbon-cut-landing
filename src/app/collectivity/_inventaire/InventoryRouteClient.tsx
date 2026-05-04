@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "@/components/ui/forms";
@@ -12,7 +12,7 @@ import InventoryWorkspace from "./components/InventoryWorkspace";
 import { InventoryProvider, type InventoryFormValues } from "./context/inventory-context";
 import { inventorySchema } from "./InventorySchema";
 import { buildInventoryRegistry, type InventoryWorkspaceLocale } from "./registry";
-import { createPerennialPlantationRow } from "./datasets/afat/perennial-plantation-stock/constants";
+import { z } from "zod";
 
 const inventoryYears = [2019, 2023] as const;
 const inventoryYearPlan = {
@@ -32,42 +32,22 @@ export default function InventoryRouteClient() {
     resolver: zodResolver(inventorySchema),
     defaultValues: {
       years: inventoryYearPlan,
-      municipal: {
-        fleet: {},
-        publicLighting: {},
-        buildings: {},
-        treesParksWaste: {},
-      },
-      energy: {
-        electricity: {},
-        photovoltaic: {},
-        naturalGas: {},
-        solarWaterHeating: {},
-      },
-      transport: {
-        publicTransport: {},
-        airTransport: {},
-        port: {},
-        vehicleCounts: {},
-      },
-      afat: {
-        perennialPlantationStock: {
-          rows: [createPerennialPlantationRow(0)],
-        },
-        livestock: {},
-        fertilizers: {},
-        agriculturalProduction: {},
-      },
-      wastewaterSanitation: {},
-      waste: {},
     },
   });
+  const handleSubmit: SubmitHandler<z.infer<typeof inventorySchema>> = (data) => {
+    console.log("Inventory submitted data:", data);
+  };
+  const handleError = (...args: unknown[]) => {
+    console.log(mainForm.getValues(`municipal.fleet.dataSet`));
+  };
 
   return (
     <Form {...mainForm}>
-      <InventoryProvider years={years} mainForm={mainForm}>
-        <InventoryWorkspace workspace={workspace} surfaces={surfaces} />
-      </InventoryProvider>
+      <form onSubmit={mainForm.handleSubmit(handleSubmit, handleError)}>
+        <InventoryProvider years={years} mainForm={mainForm}>
+          <InventoryWorkspace workspace={workspace} surfaces={surfaces} />
+        </InventoryProvider>
+      </form>
     </Form>
   );
 }

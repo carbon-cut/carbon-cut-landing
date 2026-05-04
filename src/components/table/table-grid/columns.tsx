@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
 import { TName } from "@/components/ui/forms";
-import { getTableGridFieldName, renderTableGridInputCell } from "./cells";
+import { renderTableGridInputCell } from "./cells";
 import type { TableGridRow, TableGridCellRenderer } from "./types";
 
 type CreateTableGridColumnsArgs<T extends FieldValues> = {
@@ -48,15 +48,8 @@ export function createTableGridColumns<T extends FieldValues>({
           form,
           baseName,
           row: row.original,
-          columnKey: column.key,
-          columnLabel: column.label,
-          columnIndex,
-          name: getTableGridFieldName({
-            baseName,
-            rowKey: row.original.key,
-            columnKey: column.key,
-            selectedYear,
-          }),
+          column: column,
+          name: baseName,
           selectedYear,
         }),
     })),

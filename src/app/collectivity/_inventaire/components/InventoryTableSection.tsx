@@ -32,6 +32,7 @@ export default function InventoryTableSection({
       const newRow: InventoryTableRow = {
         key: `${editableRows.rowLabelPrefix.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`,
         label: `${editableRows.rowLabelPrefix} ${nextNumber}`,
+        unit: "",
       };
 
       return [...currentRows, newRow];
@@ -46,11 +47,6 @@ export default function InventoryTableSection({
     );
   };
 
-  const fieldBaseName = (section.fieldBaseName ?? section.title)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
   return (
     <TableGrid
       className={className}
@@ -59,7 +55,7 @@ export default function InventoryTableSection({
       rows={rows}
       columns={section.columns}
       form={mainForm}
-      baseName={fieldBaseName as TName<InventoryFormValues>}
+      baseName={section.fieldBaseName as TName<InventoryFormValues>}
       yearSelector={
         section.yearSelector
           ? {

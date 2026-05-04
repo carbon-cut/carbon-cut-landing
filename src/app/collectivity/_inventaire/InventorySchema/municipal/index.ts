@@ -3,23 +3,41 @@ import {
   datasetPlaceholderSchema,
   metadata,
   createMatrixSchema,
+  createGridSchema,
 } from "../_shared";
 import { z } from "zod";
-import { fleetUnits, fleetFuelKeys, fleetCategoryKeys, fleetCarEngineKeys } from "./config";
+import { fleet, publicLighting } from "./config";
 
 const fleetSchema = z.object({
   dataSet: z.object({
-    vehicles: createMatrixSchema(fleetCarEngineKeys, { unit: fleetUnits.vehicles.default }),
-    consumption: createMatrixSchema(fleetFuelKeys, { unitsByKeys: fleetUnits.consumption }),
-    spend: createMatrixSchema(fleetFuelKeys, { unit: fleetUnits.spend.default }),
-    composition: createMatrixSchema(fleetCategoryKeys, { unit: fleetUnits.composition.default }),
+    vehicles: createMatrixSchema(fleet.carEngineKeys, { unit: fleet.units.vehicles.default }),
+    consumption: createMatrixSchema(fleet.fuelKeys, { unitsByKeys: fleet.units.consumption }),
+    spend: createMatrixSchema(fleet.fuelKeys, { unit: fleet.units.spend.default }),
+    composition: createGridSchema(fleet.categoryKeys, fleet.carEngineKeys, {
+      unit: fleet.units.composition.default,
+    }),
+  }),
+  metadata: metadata,
+});
+
+const publicLightingSchema = z.object({
+  dataSet: z.object({
+    infrastructure: createMatrixSchema(publicLighting.infrastructureKeys, {
+      unitsByKeys: publicLighting.units.infrastructure,
+    }),
+    lamps: createGridSchema(publicLighting.lampKeys, publicLighting.lampCols, {
+      unitsByCols: publicLighting.units.lamps,
+    }),
+    yearly: createMatrixSchema(publicLighting.yearlyKeys, {
+      unitsByKeys: publicLighting.units.yearly,
+    }),
   }),
   metadata: metadata,
 });
 
 const municipalSchema = createGroupSchema({
   fleet: fleetSchema,
-  publicLighting: datasetPlaceholderSchema,
+  publicLighting: publicLightingSchema,
   buildings: datasetPlaceholderSchema,
   treesParksWaste: datasetPlaceholderSchema,
 });

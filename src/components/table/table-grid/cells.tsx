@@ -8,22 +8,15 @@ import type { TableGridCellRendererArgs } from "./types";
 
 export function renderTableGridInputCell<T extends FieldValues>({
   form,
-  name,
-}: TableGridCellRendererArgs<T>) {
-  return <InventoryTableInput form={form} name={name} type="number" unit="t" />;
-}
-
-export function getTableGridFieldName<T extends FieldValues>({
   baseName,
-  rowKey,
-  columnKey,
+  row,
+  column,
   selectedYear,
-}: {
-  baseName: TName<T>;
-  rowKey: string;
-  columnKey: string;
-  selectedYear?: number;
-}) {
-  const yearSegment = selectedYear === undefined ? "" : `.${selectedYear}`;
-  return `${baseName}.${rowKey}.${columnKey}${yearSegment}` as TName<T>;
+}: TableGridCellRendererArgs<T>) {
+  const yearSegment = selectedYear === undefined ? "" : `.y-${selectedYear}`;
+  const fieldName = `${baseName}.${row.key}.${column.key}.value${yearSegment}` as TName<T>;
+
+  return (
+    <InventoryTableInput form={form} name={fieldName} type="number" unitAdornment={column.unit} />
+  );
 }

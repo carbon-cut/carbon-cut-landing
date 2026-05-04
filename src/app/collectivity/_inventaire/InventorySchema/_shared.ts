@@ -1,7 +1,7 @@
 import { z, type ZodRawShape, type ZodTypeAny } from "zod";
 
-type Year = `${number}${number}${number}${number}`;
-const yearSchema = z.string().regex(/^\d{4}$/) as z.ZodType<Year>;
+type Year = `y-${number}${number}${number}${number}`;
+const yearSchema = z.string().regex(/^y-\d{4}$/) as z.ZodType<Year>;
 const numberByYearSchema = z.record(yearSchema, z.number());
 
 export const metadataSourceTypeValues = [
@@ -46,10 +46,19 @@ type MatrixSchemaOptions =
   | {
       unit: NonEmptyStringArray;
       unitsByKeys?: never;
+      unitsByCols?: never;
     }
   | {
       unit?: never;
       unitsByKeys: Record<string, NonEmptyStringArray>;
+      unitsByCols?: never;
+    };
+type GridSchemaOptions =
+  | MatrixSchemaOptions
+  | {
+      unit?: never;
+      unitsByKeys?: never;
+      unitsByCols: Record<string, NonEmptyStringArray>;
     };
 
 export function createMatrixSchema(
@@ -65,6 +74,32 @@ export function createMatrixSchema(
           value: numberByYearSchema,
           unit: constructUnit(unit ?? unitsByKeys![key]),
         }),
+      ])
+    )
+  );
+}
+
+export function createGridSchema(
+  keys: readonly string[],
+  nestedKeys: readonly string[],
+  GridSchemaOptions: GridSchemaOptions
+) {
+  const { unit, unitsByKeys, unitsByCols } = GridSchemaOptions;
+  return z.object(
+    Object.fromEntries(
+      keys.map((key) => [
+        key,
+        z.object(
+          Object.fromEntries(
+            nestedKeys.map((nestedKey) => [
+              nestedKey,
+              z.object({
+                value: numberByYearSchema,
+                unit: constructUnit(unit ?? unitsByKeys?.[key] ?? unitsByCols![nestedKey]),
+              }),
+            ])
+          )
+        ),
       ])
     )
   );

@@ -43,9 +43,7 @@ export default function TableGrid<T extends FieldValues>({
   const tableColumns = useMemo(
     () =>
       createTableGridColumns({
-        columns: columns.map((column) =>
-          typeof column === "string" ? { key: column, label: column } : column
-        ),
+        columns: columns,
         form,
         baseName,
         editableRows: editableRows

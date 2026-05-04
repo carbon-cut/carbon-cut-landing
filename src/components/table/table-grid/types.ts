@@ -3,21 +3,15 @@ import type { ReactNode } from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 
 import type { TName } from "@/components/ui/forms";
-import type {
-  InventoryTableGridColumn,
-  InventoryTableRow,
-} from "@/app/collectivity/_inventaire/types";
+import type { InventoryTableColumn, InventoryTableRow } from "@/app/collectivity/_inventaire/types";
 
 export type TableGridRow = InventoryTableRow;
-export type TableGridColumn = InventoryTableGridColumn;
 
 export type TableGridCellRendererArgs<T extends FieldValues> = {
   form: UseFormReturn<T, undefined>;
   baseName: TName<T>;
   row: TableGridRow;
-  columnKey: string;
-  columnLabel: string;
-  columnIndex: number;
+  column: InventoryTableColumn;
   name: TName<T>;
   selectedYear?: number;
 };
@@ -31,7 +25,7 @@ export type TableGridProps<T extends FieldValues> = {
   description?: string;
   className?: string;
   rows: TableGridRow[];
-  columns: TableGridColumn[];
+  columns: InventoryTableColumn[];
   form: UseFormReturn<T, undefined>;
   baseName: TName<T>;
   yearSelector?: {

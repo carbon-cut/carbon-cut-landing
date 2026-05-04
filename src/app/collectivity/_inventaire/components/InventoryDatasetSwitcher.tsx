@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 
 import SurfaceToggle from "./SurfaceToggle";
@@ -26,19 +27,25 @@ export default function InventoryDatasetSwitcher({
 }) {
   return (
     <div className="space-y-3 border-b border-border/10 pb-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <Typography asChild variant="label" size="sm" className="text-secondary">
-          <p>{controls.sourceLabel}</p>
-        </Typography>
-        {families.map((family) => (
-          <SurfaceToggle
-            key={family.key}
-            active={family.key === activeFamily?.key}
-            onClick={() => onFamilyChange(family.key)}
-          >
-            <span>{family.title}</span>
-          </SurfaceToggle>
-        ))}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <Typography asChild variant="label" size="sm" className="text-secondary">
+            <p>{controls.sourceLabel}</p>
+          </Typography>
+          {families.map((family) => (
+            <SurfaceToggle
+              key={family.key}
+              active={family.key === activeFamily?.key}
+              onClick={() => onFamilyChange(family.key)}
+            >
+              <span>{family.title}</span>
+            </SurfaceToggle>
+          ))}
+        </div>
+
+        <Button type="submit" variant="outline" size="sm" className="ml-auto shrink-0">
+          {controls.submitLabel}
+        </Button>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">

@@ -6,7 +6,7 @@ import MatrixTable from "@/components/table/matrix";
 import InventoryTableSection from "../../../components/InventoryTableSection";
 import { useInventoryContext } from "../../../context/inventory-context";
 import type { FleetSurfaceCopy, InventoryTableSectionData } from "../../../types";
-import { buildFleetCompositionColumns, buildFleetRows } from "./config";
+import { buildFleetRows } from "./config";
 import { useState } from "react";
 
 export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
@@ -19,14 +19,14 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
     category: buildFleetRows("category", tFleet),
     fuel: buildFleetRows("fuel", tFleet),
     engine: buildFleetRows("engine", tFleet),
-    columns: buildFleetCompositionColumns(tFleet),
+    spend: buildFleetRows("spend", tFleet),
   }));
   const compositionSection: InventoryTableSectionData = {
     title: copy.compositionTitle,
     description: copy.compositionDescription,
-    fieldBaseName: "municipal.fleet.composition",
+    fieldBaseName: "municipal.fleet.dataSet.composition",
     yearSelector: {},
-    columns: rows.columns,
+    columns: rows.engine,
     rows: rows.category,
   };
 
@@ -54,7 +54,7 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
         />
         <MatrixTable
           title={copy.yearlySpendTitle}
-          rows={rows.fuel}
+          rows={rows.spend}
           form={mainForm}
           baseName={"municipal.fleet.dataSet.spend"}
         />
