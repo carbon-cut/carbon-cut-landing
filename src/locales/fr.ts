@@ -942,6 +942,41 @@ export default {
                 bill: "Facture electrique annuelle",
               },
             },
+            buildings: {
+              areasTitle: "Patrimoine batimentaire",
+              areasDescription:
+                "Structure issue du document d'entree: total batiments, surface ouverte et surface couverte.",
+              areas: {
+                building: "Batiments",
+                openSurface: "Surface ouverte",
+                closedSurface: "Surface couverte",
+              },
+              consumptionTitle: "Flux energetiques des batiments",
+              consumptionDescription:
+                "Les consommations et factures restent organisees par source energetique.",
+              consumption: {
+                electricityConsumption: "Consommation electrique",
+                electricityBill: "Facture electrique",
+                gasConsumption: "Consommation gaz naturel",
+                gasBill: "Facture gaz naturel",
+                dieselConsumption: "Consommation diesel",
+                dieselBill: "Facture diesel",
+                otherConsumption: "Autre consommation",
+                otherBill: "Autre facture",
+              },
+            },
+            treesParksWaste: {
+              yearlyTitle: "Arbres / parcs / dechets verts urbains",
+              yearlyDescription:
+                "Structure issue du document d'entree: arbres urbains, dechets verts et destinations annuelles.",
+              yearly: {
+                urbanTrees: "Nombre d'arbres urbains",
+                greenWaste: "Quantite de dechets verts urbains",
+                composting: "Destination compostage",
+                controlledLandfill: "Destination décharge contrôlée",
+                uncontrolledLandfill: "Destination décharge décontrôlée",
+              },
+            },
           },
           evidence: {
             title: "Preuves, notes et manques",

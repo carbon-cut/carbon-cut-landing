@@ -31,14 +31,6 @@ export default function PublicLightingSurface({ copy }: { copy: PublicLightingSu
         form={mainForm}
         baseName={"municipal.publicLighting.dataSet.infrastructure"}
       />
-      {/* <TableGrid
-        title={copy.lampsTitle}
-        description={copy.lampsDescription}
-        rows={rows.lamps}
-        columns={rows.lampsColumns}
-        form={mainForm}
-        baseName={"municipal.publicLighting.dataSet.lamps"}
-      /> */}
       <GroupedYear
         title={copy.lampsTitle}
         description={copy.lampsDescription}

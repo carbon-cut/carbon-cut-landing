@@ -10,7 +10,8 @@ Use these docs in this order:
 4. `inventaire-result-input-map.md` when working on inventory result logic
 5. `inventaire-input-inventory.md` when turning report outputs into explicit input families
 6. route specs such as `inventaire-route-spec.md`
-7. report-reading notes and source report files as reference only
+7. `inventaire-schema-contract.md` for the inventory schema and yearly/unit contract
+8. report-reading notes and source report files as reference only
 
 ## Rules
 

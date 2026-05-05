@@ -58,3 +58,63 @@ export const publicLighting = {
   yearlyKeys: publicLightingYearlyKeys,
   units: publicLightingUnits,
 };
+
+const buildingsAreaKeys = ["building", "openSurface", "closedSurface"] as const;
+
+const buildingsConsumptionKeys = [
+  "electricityConsumption",
+  "electricityBill",
+  "gasConsumption",
+  "gasBill",
+  "dieselConsumption",
+  "dieselBill",
+  //"otherConsumption",
+  //"otherBill",
+] as const;
+
+const buildingsUnits: UnitConf = {
+  areas: {
+    building: [""],
+    openSurface: ["m²"],
+    closedSurface: ["m²"],
+  },
+  consumption: {
+    electricityConsumption: ["kWh"],
+    electricityBill: ["$"],
+    gasConsumption: ["Nm3"],
+    gasBill: ["$"],
+    dieselConsumption: ["L"],
+    dieselBill: ["$"],
+    //otherConsumption: [""],
+    //otherBill: ["TND"],
+  },
+} as const;
+
+export const buildings = {
+  areaKeys: buildingsAreaKeys,
+  consumptionKeys: buildingsConsumptionKeys,
+  units: buildingsUnits,
+};
+
+const treesParksWasteYearlyKeys = [
+  "urbanTrees",
+  "greenWaste",
+  "composting",
+  "controlledLandfill",
+  "uncontrolledLandfill",
+] as const;
+
+const treesParksWasteUnits: UnitConf = {
+  yearly: {
+    urbanTrees: [""],
+    greenWaste: ["t"],
+    composting: ["t"],
+    controlledLandfill: ["t"],
+    uncontrolledLandfill: ["t"],
+  },
+} as const;
+
+export const treesParksWaste = {
+  yearlyKeys: treesParksWasteYearlyKeys,
+  units: treesParksWasteUnits,
+};

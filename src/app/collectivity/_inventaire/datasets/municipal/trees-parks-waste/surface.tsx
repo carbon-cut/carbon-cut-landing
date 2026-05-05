@@ -1,41 +1,26 @@
 "use client";
 
+import { useState } from "react";
+
+import { useScopedI18n } from "@/locales/client";
 import MatrixTable from "@/components/table/matrix";
-
-const sample: Record<string, Record<string, string>> = {
-  "2022": {
-    urbanTrees: "18 400",
-    greenWaste: "1 320 t",
-    composting: "780 t",
-    controlledLandfill: "540 t",
-  },
-  "2023": {
-    urbanTrees: "18 950",
-    greenWaste: "1 410 t",
-    composting: "860 t",
-    controlledLandfill: "550 t",
-  },
-  "2024": {
-    urbanTrees: "19 200",
-    greenWaste: "1 370 t",
-    composting: "900 t",
-    controlledLandfill: "470 t",
-  },
-};
-
-const rows = [
-  { key: "urbanTrees", label: "Nombre d'arbres urbains" },
-  { key: "greenWaste", label: "Dechets verts urbains" },
-  { key: "composting", label: "Destination compostage" },
-  { key: "controlledLandfill", label: "Destination decharge controlee" },
-];
+import { useInventoryContext } from "../../../context/inventory-context";
+import { buildTreesParksWasteRows } from "./config";
 
 export default function TreesParksWasteSurface() {
+  const { mainForm } = useInventoryContext();
+  const tTrees = useScopedI18n(
+    "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.treesParksWaste"
+  );
+
+  const [rows] = useState(() => buildTreesParksWasteRows(tTrees));
+
   return (
     <MatrixTable
-      title="Arbres, parcs et dechets verts urbains"
+      title={tTrees("yearlyTitle")}
       rows={rows}
-      getValue={(rowKey, yearValue) => sample[yearValue]?.[rowKey] ?? ""}
+      form={mainForm}
+      baseName="municipal.treesParksWaste.dataSet"
     />
   );
 }
