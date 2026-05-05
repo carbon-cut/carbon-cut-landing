@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { useScopedI18n } from "@/locales/client";
 import MatrixTable from "@/components/table/matrix";
-import TableGrid from "@/components/table/table-grid";
+import GroupedYear from "@/components/table/grouped-year";
 
 import { useInventoryContext } from "../../../context/inventory-context";
 import type { PublicLightingSurfaceCopy } from "../../../types";
@@ -31,11 +31,19 @@ export default function PublicLightingSurface({ copy }: { copy: PublicLightingSu
         form={mainForm}
         baseName={"municipal.publicLighting.dataSet.infrastructure"}
       />
-      <TableGrid
+      {/* <TableGrid
         title={copy.lampsTitle}
         description={copy.lampsDescription}
         rows={rows.lamps}
         columns={rows.lampsColumns}
+        form={mainForm}
+        baseName={"municipal.publicLighting.dataSet.lamps"}
+      /> */}
+      <GroupedYear
+        title={copy.lampsTitle}
+        description={copy.lampsDescription}
+        rows={rows.lamps}
+        subcolumns={rows.lampsColumns}
         form={mainForm}
         baseName={"municipal.publicLighting.dataSet.lamps"}
       />

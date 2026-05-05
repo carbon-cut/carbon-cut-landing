@@ -14,7 +14,7 @@ export function getGroupedYearFieldName<T extends FieldValues>({
   year: number;
   subcolumnKey: string;
 }) {
-  return `${baseName}.${rowKey}.${year}.${subcolumnKey}` as TName<T>;
+  return `${baseName}.${rowKey}.${subcolumnKey}.value.y-${year}` as TName<T>;
 }
 
 export function renderGroupedYearInputCell<T extends FieldValues>({
