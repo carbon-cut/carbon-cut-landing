@@ -32,15 +32,6 @@ export default function ElectricityMetadataPilot({
 
   return (
     <section className="space-y-4">
-      <Form {...demoForm}>
-        <CollectivityMetadataScopeControl
-          form={demoForm}
-          name="metadata"
-          drawerTitle="Demande d'électricité"
-          drawerDescription="Renseignez la provenance et la qualité pour la demande d'électricité."
-        />
-      </Form>
-
       <InventoryYearBlockTables
         title="Demande d'électricité"
         description={

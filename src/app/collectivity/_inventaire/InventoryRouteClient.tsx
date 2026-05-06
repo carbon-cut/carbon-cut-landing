@@ -38,7 +38,7 @@ export default function InventoryRouteClient() {
     console.log("Inventory submitted data:", data);
   };
   const handleError = (...args: unknown[]) => {
-    console.log(mainForm.getValues(`municipal.publicLighting.dataSet`));
+    console.log(mainForm.getValues(`energy.electricity.dataSet`));
   };
 
   return (

@@ -14,7 +14,12 @@ export function renderMatrixYearInputCell<T extends FieldValues>({
   const fieldUnitPath = `${baseName}.${row.key}.unit` as TName<T>;
   let fieldUnit = form.getValues(fieldUnitPath);
   if (fieldUnit === undefined) {
-    form.setValue(fieldUnitPath, row.unit);
+    form.setValue(
+      fieldUnitPath,
+      //@ts-expect-error - initialization of unit field value
+      row.unit
+    );
+    //@ts-expect-error - get value after initialization
     fieldUnit = row.unit;
   }
   return (

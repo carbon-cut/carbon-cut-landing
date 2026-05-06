@@ -1,8 +1,11 @@
-import { z, type ZodRawShape, type ZodTypeAny } from "zod";
+import { z, ZodAny, ZodEnum, ZodString, type ZodRawShape, type ZodTypeAny } from "zod";
 
 type Year = `y-${number}${number}${number}${number}`;
 const yearSchema = z.string().regex(/^y-\d{4}$/) as z.ZodType<Year>;
-const numberByYearSchema = z.record(yearSchema, z.number());
+const numberByYearSchema = z.record(
+  yearSchema,
+  z.coerce.number({ errorMap: () => ({ message: "Required" }) })
+);
 
 export const metadataSourceTypeValues = [
   "invoice",
@@ -60,6 +63,7 @@ type GridSchemaOptions =
       unitsByKeys?: never;
       unitsByCols: Record<string, NonEmptyStringArray>;
     };
+type RecordGridSchemaOptions = MatrixSchemaOptions;
 
 export function createMatrixSchema(
   keys: readonly string[],
@@ -102,6 +106,31 @@ export function createGridSchema(
         ),
       ])
     )
+  );
+}
+
+export function createRecordGridSchema(
+  keys: readonly [string, ...string[]],
+  nestedKeys: ZodString | ZodEnum<[string, ...string[]]>,
+  GridSchemaOptions: RecordGridSchemaOptions
+) {
+  const { unit, unitsByKeys } = GridSchemaOptions;
+
+  return z.array(
+    z.object({
+      key: nestedKeys,
+      value: z.object(
+        Object.fromEntries(
+          keys.map((key) => [
+            key,
+            z.object({
+              value: numberByYearSchema,
+              unit: constructUnit(unit ?? unitsByKeys?.[key]),
+            }),
+          ])
+        )
+      ),
+    })
   );
 }
 

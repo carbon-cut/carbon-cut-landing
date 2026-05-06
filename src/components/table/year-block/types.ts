@@ -1,37 +1,39 @@
 import type { ReactNode } from "react";
 
 import type {
-  InventoryColumnLabel,
+  InventoryTableColumn,
   InventoryYear,
   InventoryYearBlockTableBlock,
 } from "@/app/collectivity/_inventaire/types";
+import { FieldValues, UseFormReturn } from "react-hook-form";
+import { TName } from "@/components/ui/forms";
 
-export type InventoryTableValues = Record<string, string>;
-export type InventoryBlockColumns = Record<string, InventoryColumnLabel[]>;
+export type InventoryBlockColumns = Record<string, InventoryTableColumn[]>;
 
 export type YearBlockTableProps = {
   title: string;
   description?: string;
   blocks: InventoryYearBlockTableBlock[];
-  getValue: (blockKey: string, rowKey: string, columnKey: string, yearValue: number) => string;
   renderBlockHeaderAddon?: (block: InventoryYearBlockTableBlock) => ReactNode;
+};
+
+export type YearBlockTableFormProps<T extends FieldValues> = YearBlockTableProps & {
+  form: UseFormReturn<T, any>;
+  baseName: TName<T>;
 };
 
 export type BlockTableProps = {
   block: InventoryYearBlockTableBlock;
-  columns: InventoryColumnLabel[];
+  columns: InventoryTableColumn[];
   year: InventoryYear;
   yearLabel: string;
-  values: InventoryTableValues;
   headerAddon?: ReactNode;
   onAddColumn: (blockKey: string) => void;
   onRemoveColumn: (blockKey: string, columnKey: string) => void;
   onColumnLabelChange: (blockKey: string, columnKey: string, label: string) => void;
-  onValueChange: (
-    yearValue: number,
-    blockKey: string,
-    rowKey: string,
-    columnKey: string,
-    value: string
-  ) => void;
+};
+
+export type BlockTableFormProps<T extends FieldValues> = BlockTableProps & {
+  form: UseFormReturn<T, any>;
+  baseName: TName<T>;
 };

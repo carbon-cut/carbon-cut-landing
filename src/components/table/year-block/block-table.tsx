@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -8,72 +8,52 @@ import Typography from "@/components/ui/typography";
 
 import InventoryTanstackTable from "../tanstack";
 import { createYearBlockColumns } from "./columns";
-import { formatTableNumber, parseTableNumber } from "./helpers";
-import type { BlockTableProps } from "./types";
+import type { BlockTableFormProps } from "./types";
+import { ArrayPath, FieldValues, useFieldArray } from "react-hook-form";
+import { TName } from "@/components/ui/forms";
 
-export default function BlockTable({
+export default function BlockTable<T extends FieldValues>({
   block,
   columns,
   year,
-  yearLabel,
-  values,
   headerAddon,
-  onAddColumn,
-  onRemoveColumn,
-  onColumnLabelChange,
-  onValueChange,
-}: BlockTableProps) {
-  const editableColumnCount = columns.filter((column) => !column.calculated).length;
-  const getValue = useCallback(
-    (rowKey: string, columnKey: string) =>
-      values[`${year}::${block.key}::${rowKey}::${columnKey}`] ?? "",
-    [block.key, values, year]
-  );
+  form,
+  baseName,
+}: BlockTableFormProps<T>) {
+  const [initCols, setInitCols] = useState(false);
 
-  const getCalculatedValue = useCallback(
-    (rowKey: string) => {
-      const total = columns.reduce<number | null>((sum, column) => {
-        if (column.calculated) return sum;
+  const tableName = `${baseName}.${block.key}` as TName<T>;
 
-        const parsedValue = parseTableNumber(getValue(rowKey, column.key));
-        if (parsedValue === null) return sum;
+  useEffect(() => {
+    const array = form.getValues(tableName);
+    if (array === undefined) {
+      setInitCols(true);
+    }
+  }, [columns, form, tableName]);
 
-        return (sum ?? 0) + parsedValue;
-      }, null);
-
-      return total === null ? "" : formatTableNumber(total);
-    },
-    [columns, getValue]
-  );
+  const { fields, append, remove } = useFieldArray({
+    name: tableName as ArrayPath<T>,
+    control: form.control,
+  });
+  useEffect(() => {
+    if (initCols) {
+      // @ts-expect-error - initialization of field array value
+      append(block.columns.map(({ key }) => ({ key, value: {} })));
+      setInitCols(false);
+    }
+  }, [append, block.columns, initCols]);
 
   const tableColumns = useMemo(
     () =>
       createYearBlockColumns({
         block,
-        columns,
-        yearLabel,
-        editableColumnCount,
-        getValue,
-        getCalculatedValue,
-        onAddColumn,
-        onRemoveColumn,
-        onColumnLabelChange,
-        onValueChange,
         year,
+        onRemoveColumn: remove,
+        form,
+        tableName,
+        fields,
       }),
-    [
-      block,
-      columns,
-      editableColumnCount,
-      getCalculatedValue,
-      getValue,
-      onAddColumn,
-      onColumnLabelChange,
-      onRemoveColumn,
-      onValueChange,
-      year,
-      yearLabel,
-    ]
+    [block, year, form, tableName, fields, remove]
   );
 
   return (
@@ -90,7 +70,10 @@ export default function BlockTable({
             title="Ajouter une colonne"
             aria-label={`Ajouter une colonne ${block.title}`}
             className="h-8 rounded-full px-3 shadow-none"
-            onClick={() => onAddColumn(block.key)}
+            onClick={() =>
+              // @ts-expect-error - append new column with empty key and value
+              append({ key: "", value: {} })
+            }
           >
             <Plus aria-hidden="true" />
             Ajouter une colonne

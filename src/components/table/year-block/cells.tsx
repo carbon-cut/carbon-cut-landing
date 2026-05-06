@@ -1,15 +1,15 @@
 "use client";
 
+import { FieldValues, UseFormReturn } from "react-hook-form";
 import InventoryTableInput from "../InventoryTableInput";
-import type { BlockTableProps } from "./types";
+import type { InventoryTableColumn, InventoryTableRow } from "@/app/collectivity/_inventaire/types";
+import { TName } from "@/components/ui/forms";
 
-type YearBlockEditableCellArgs = {
-  value: string;
-  year: BlockTableProps["year"];
-  blockKey: string;
-  rowKey: string;
-  columnKey: string;
-  onValueChange: BlockTableProps["onValueChange"];
+export type YearBlockEditableCellArgs<T extends FieldValues> = {
+  form: UseFormReturn<T, undefined>;
+  baseName: TName<T>;
+  row: InventoryTableRow;
+  selectedYear: number;
 };
 
 type YearBlockReadonlyCellArgs = {
@@ -23,42 +23,27 @@ type YearBlockCalculatedCellArgs = {
   columnLabel: string;
 };
 
-export function renderYearBlockEditableCell({
-  value,
-  year,
-  blockKey,
-  rowKey,
-  columnKey,
-  onValueChange,
-}: YearBlockEditableCellArgs) {
-  return (
-    <InventoryTableInput
-      value={value}
-      onValueChange={(nextValue) => onValueChange(year, blockKey, rowKey, columnKey, nextValue)}
-    />
-  );
-}
+export function renderYearBlockEditableCell<T extends FieldValues>({
+  form,
+  baseName,
+  row,
+  selectedYear,
+}: YearBlockEditableCellArgs<T>) {
+  const yearSegment = selectedYear === undefined ? "" : `.y-${selectedYear}`;
+  const fieldName = `${baseName}.value.${row.key}.value${yearSegment}` as TName<T>;
 
-export function renderYearBlockReadonlyCell({ value }: YearBlockReadonlyCellArgs) {
+  const fieldUnitPath = `${baseName}.value.${row.key}.unit` as TName<T>;
+  let fieldUnit = form.getValues(fieldUnitPath);
+  if (fieldUnit === undefined) {
+    form.setValue(
+      fieldUnitPath,
+      //@ts-expect-error - initialization of unit field value
+      row.unit
+    );
+    //@ts-expect-error - get value after initialization
+    fieldUnit = row.unit;
+  }
   return (
-    <div className="flex h-9 min-w-[40px] items-center rounded-lg border border-border/15 bg-muted/40 px-3 text-sm text-secondary">
-      {value}
-    </div>
-  );
-}
-
-export function renderYearBlockCalculatedCell({
-  value,
-  rowLabel,
-  yearLabel,
-  columnLabel,
-}: YearBlockCalculatedCellArgs) {
-  return (
-    <div
-      aria-label={`${rowLabel} ${yearLabel} ${columnLabel}`}
-      className="flex h-9 min-w-[40px] items-center justify-end rounded-lg border border-border/15 bg-yellow-200 px-3 text-sm font-semibold text-foreground"
-    >
-      {value}
-    </div>
+    <InventoryTableInput form={form} name={fieldName} unitAdornment={fieldUnit} type="number" />
   );
 }

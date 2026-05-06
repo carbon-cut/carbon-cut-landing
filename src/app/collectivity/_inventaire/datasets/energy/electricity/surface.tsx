@@ -1,221 +1,40 @@
 "use client";
 
+import InventoryYearBlockTables from "@/components/table/year-block";
 import type { InventoryYearBlockTableBlock } from "../../../types";
-import ElectricityMetadataPilot from "./metadata";
+import { useInventoryContext } from "../../../context/inventory-context";
+import { useScopedI18n } from "@/locales/client";
+import { buildElectricityColumns, buildElectricityRows } from "./config";
+import { useState } from "react";
 
-const blocks: InventoryYearBlockTableBlock[] = [
-  {
-    key: "bt",
-    title: "Basse tension",
-    columns: [
-      { key: "domestic", label: "Domestique" },
-      { key: "commercial", label: "Commercial" },
-      { key: "administration", label: "Administration" },
-      { key: "publicLighting", label: "Eclairage public" },
-      { key: "agriculture", label: "Agricole" },
-      { key: "smallIndustry", label: "Petites industries" },
-      { key: "workshops", label: "Ateliers" },
-      { key: "industries", label: "Industries" },
-      { key: "total", label: "Total", calculated: "sum", className: "bg-yellow-100/70" },
-    ],
-    rows: [
-      { key: "consumption", label: "Consommation (GWh)" },
-      { key: "subscribers", label: "Nombre d'abonnes" },
-    ],
-  },
-  {
-    key: "mt",
-    title: "Moyenne tension",
-    columns: [
-      { key: "extractive", label: "Industrie extractive" },
-      { key: "chemical", label: "Industrie chimique" },
-      { key: "textile", label: "Industrie textile et habillement" },
-      { key: "food", label: "Industrie alimentaire" },
-      { key: "misc", label: "Industries diverses" },
-      { key: "agriculture", label: "Agriculture" },
-      { key: "pumping", label: "Pompage" },
-      { key: "tourism", label: "Tourisme" },
-      { key: "transportTelco", label: "Transport et telecom" },
-      { key: "total", label: "Total", calculated: "sum", className: "bg-yellow-100/70" },
-    ],
-    rows: [
-      { key: "consumption", label: "Consommation (GWh)" },
-      { key: "subscribers", label: "Nombre d'abonnes" },
-    ],
-  },
-  {
-    key: "ht",
-    title: "Haute tension",
-    note: "Les colonnes haute tension peuvent etre ajoutees, renommees ou supprimees.",
-    editableColumns: true,
-    columns: [
-      { key: "cement", label: "Cimenterie" },
-      { key: "water", label: "Pompage eau" },
-      { key: "industrialZone", label: "Zone industrielle" },
-      { key: "total", label: "Total", calculated: "sum", className: "bg-yellow-100/70" },
-    ],
-    rows: [
-      { key: "consumption", label: "Consommation (GWh)" },
-      { key: "subscribers", label: "Nombre d'abonnes" },
-    ],
-  },
-];
-
-const sample: Record<string, Record<string, Record<string, string>>> = {
-  "2022": {
-    bt: {
-      consumption_domestic: "820",
-      subscribers_domestic: "132000",
-      consumption_commercial: "210",
-      subscribers_commercial: "14800",
-      consumption_administration: "63",
-      subscribers_administration: "410",
-      consumption_publicLighting: "41",
-      subscribers_publicLighting: "196",
-      consumption_agriculture: "28",
-      subscribers_agriculture: "1700",
-      consumption_smallIndustry: "76",
-      subscribers_smallIndustry: "960",
-      consumption_workshops: "55",
-      subscribers_workshops: "880",
-      consumption_industries: "189",
-      subscribers_industries: "340",
-    },
-    mt: {
-      consumption_extractive: "44",
-      subscribers_extractive: "12",
-      consumption_chemical: "38",
-      subscribers_chemical: "10",
-      consumption_textile: "95",
-      subscribers_textile: "28",
-      consumption_food: "54",
-      subscribers_food: "22",
-      consumption_misc: "67",
-      subscribers_misc: "31",
-      consumption_agriculture: "29",
-      subscribers_agriculture: "40",
-      consumption_pumping: "82",
-      subscribers_pumping: "7",
-      consumption_tourism: "14",
-      subscribers_tourism: "18",
-      consumption_transportTelco: "23",
-      subscribers_transportTelco: "11",
-    },
-    ht: {
-      consumption_cement: "120",
-      subscribers_cement: "1",
-      consumption_water: "44",
-      subscribers_water: "2",
-      consumption_industrialZone: "78",
-      subscribers_industrialZone: "4",
-    },
-  },
-  "2023": {
-    bt: {
-      consumption_domestic: "844",
-      subscribers_domestic: "134100",
-      consumption_commercial: "218",
-      subscribers_commercial: "14990",
-      consumption_administration: "65",
-      subscribers_administration: "423",
-      consumption_publicLighting: "39",
-      subscribers_publicLighting: "196",
-      consumption_agriculture: "31",
-      subscribers_agriculture: "1740",
-      consumption_smallIndustry: "74",
-      subscribers_smallIndustry: "973",
-      consumption_workshops: "52",
-      subscribers_workshops: "892",
-      consumption_industries: "195",
-      subscribers_industries: "349",
-    },
-    mt: {
-      consumption_extractive: "46",
-      subscribers_extractive: "12",
-      consumption_chemical: "41",
-      subscribers_chemical: "10",
-      consumption_textile: "97",
-      subscribers_textile: "29",
-      consumption_food: "57",
-      subscribers_food: "23",
-      consumption_misc: "69",
-      subscribers_misc: "32",
-      consumption_agriculture: "30",
-      subscribers_agriculture: "42",
-      consumption_pumping: "85",
-      subscribers_pumping: "7",
-      consumption_tourism: "16",
-      subscribers_tourism: "18",
-      consumption_transportTelco: "25",
-      subscribers_transportTelco: "12",
-    },
-    ht: {
-      consumption_cement: "126",
-      subscribers_cement: "1",
-      consumption_water: "47",
-      subscribers_water: "2",
-      consumption_industrialZone: "82",
-      subscribers_industrialZone: "4",
-    },
-  },
-  "2024": {
-    bt: {
-      consumption_domestic: "861",
-      subscribers_domestic: "135500",
-      consumption_commercial: "224",
-      subscribers_commercial: "15120",
-      consumption_administration: "67",
-      subscribers_administration: "430",
-      consumption_publicLighting: "38",
-      subscribers_publicLighting: "196",
-      consumption_agriculture: "33",
-      subscribers_agriculture: "1780",
-      consumption_smallIndustry: "79",
-      subscribers_smallIndustry: "984",
-      consumption_workshops: "54",
-      subscribers_workshops: "910",
-      consumption_industries: "201",
-      subscribers_industries: "355",
-    },
-    mt: {
-      consumption_extractive: "48",
-      subscribers_extractive: "12",
-      consumption_chemical: "43",
-      subscribers_chemical: "10",
-      consumption_textile: "101",
-      subscribers_textile: "29",
-      consumption_food: "59",
-      subscribers_food: "23",
-      consumption_misc: "72",
-      subscribers_misc: "33",
-      consumption_agriculture: "31",
-      subscribers_agriculture: "43",
-      consumption_pumping: "88",
-      subscribers_pumping: "7",
-      consumption_tourism: "17",
-      subscribers_tourism: "19",
-      consumption_transportTelco: "27",
-      subscribers_transportTelco: "12",
-    },
-    ht: {
-      consumption_cement: "129",
-      subscribers_cement: "1",
-      consumption_water: "48",
-      subscribers_water: "2",
-      consumption_industrialZone: "85",
-      subscribers_industrialZone: "4",
-    },
-  },
-};
+const blocksKeys = ["lt", "mt", "ht"] as const;
 
 export default function ElectricitySurface() {
+  const { mainForm } = useInventoryContext();
+
+  const tElectricity = useScopedI18n(
+    "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.electricity"
+  );
+  const realBlocks: InventoryYearBlockTableBlock[] = useState(() =>
+    blocksKeys.map((key) => {
+      return {
+        key,
+        title: tElectricity(`${key}.title`),
+        columns: buildElectricityColumns(key, tElectricity),
+        rows: buildElectricityRows(key, tElectricity),
+        editableColumns: true,
+      };
+    })
+  )[0];
+
   return (
-    <ElectricityMetadataPilot
-      blocks={blocks}
-      description="Chaque annee garde sa propre lecture, avec un bloc par niveau de tension."
-      getValue={(blockKey, rowKey, columnKey, yearValue) =>
-        sample[yearValue]?.[blockKey]?.[`${rowKey}_${columnKey}`] ?? ""
-      }
-    />
+    <section className="space-y-4">
+      <InventoryYearBlockTables
+        title={tElectricity("surface.title")}
+        blocks={realBlocks}
+        form={mainForm}
+        baseName="energy.electricity.dataSet"
+      />
+    </section>
   );
 }

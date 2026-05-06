@@ -4,15 +4,17 @@ import YearSelector from "../year-selector";
 import BlockTable from "./block-table";
 import { YearBlockHeader } from "./header";
 import { useYearBlockTables } from "./useYearBlockTables";
-import type { YearBlockTableProps } from "./types";
+import type { YearBlockTableFormProps } from "./types";
+import { FieldValues } from "react-hook-form";
 
-export default function InventoryYearBlockTables({
+export default function InventoryYearBlockTables<T extends FieldValues>({
   title,
   description,
   blocks,
-  getValue,
   renderBlockHeaderAddon,
-}: YearBlockTableProps) {
+  form,
+  baseName,
+}: YearBlockTableFormProps<T>) {
   const {
     years,
     selectedYear,
@@ -23,7 +25,7 @@ export default function InventoryYearBlockTables({
     handleColumnLabelChange,
     handleValueChange,
     setSelectedYearValue,
-  } = useYearBlockTables({ blocks, getValue });
+  } = useYearBlockTables({ blocks });
 
   return (
     <section className="space-y-6">
@@ -48,12 +50,12 @@ export default function InventoryYearBlockTables({
               columns={columnsByBlock[block.key] ?? block.columns}
               year={selectedYear}
               yearLabel={String(selectedYear)}
-              values={values}
               headerAddon={renderBlockHeaderAddon?.(block)}
               onAddColumn={handleAddColumn}
               onRemoveColumn={handleRemoveColumn}
               onColumnLabelChange={handleColumnLabelChange}
-              onValueChange={handleValueChange}
+              form={form}
+              baseName={baseName}
             />
           ))}
         </section>

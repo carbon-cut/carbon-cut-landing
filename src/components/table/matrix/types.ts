@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 
 import type { TName } from "@/components/ui/forms";
 
-import type { InventoryRowLabel } from "@/app/collectivity/_inventaire/types";
+import type { InventoryTableRow } from "@/app/collectivity/_inventaire/types";
 
-export type MatrixTableRow = InventoryRowLabel;
+export type MatrixTableRow = InventoryTableRow;
 
 export type MatrixYearCellRendererArgs<T extends FieldValues> = {
   year: number;

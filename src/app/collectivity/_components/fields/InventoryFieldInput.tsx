@@ -95,7 +95,7 @@ function InventoryFieldInput<T extends FieldValues>({
             </FormLabel>
           ) : null}
 
-          <div className={cn("w-full inline-block", className)}>
+          <div className={cn("w-full inline-block")}>
             <FormControl>
               <div className="relative">
                 <InputRoot

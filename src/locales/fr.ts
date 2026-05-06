@@ -965,6 +965,47 @@ export default {
                 otherBill: "Autre facture",
               },
             },
+            electricity: {
+              surface: {
+                title: "Demande d'électricité",
+              },
+              lt: {
+                title: "Basse tension",
+                domestic: "Domestique",
+                commercial: "Commercial",
+                administration: "Administration",
+                publicLighting: "Eclairage public",
+                agriculture: "Agricole",
+                smallIndustry: "Petites industries",
+                workshops: "Ateliers",
+                industries: "Industries",
+                total: "Total",
+              },
+              mt: {
+                title: "Moyenne tension",
+                extractive: "Industrie extractive",
+                chemical: "Industrie chimique",
+                textile: "Industrie textile et habillement",
+                food: "Industrie alimentaire",
+                misc: "Industries diverses",
+                agriculture: "Agriculture",
+                pumping: "Pompage",
+                tourism: "Tourisme",
+                transportTelco: "Transport et telecom",
+                total: "Total",
+              },
+              ht: {
+                title: "Haute tension",
+                cement: "Cimenterie",
+                water: "Pompage eau",
+                industrialZone: "Zone industrielle",
+                total: "Total",
+              },
+              rows: {
+                consumption: "Consommation (GWh)",
+                subscribers: "Nombre d'abonnes",
+              },
+            },
             treesParksWaste: {
               yearlyTitle: "Arbres / parcs / dechets verts urbains",
               yearlyDescription:

@@ -6,10 +6,7 @@ import { useInventoryContext } from "@/app/collectivity/_inventaire/context/inve
 import type { YearBlockTableProps } from "./types";
 import { createInitialColumns, getCellKey } from "./helpers";
 
-export function useYearBlockTables({
-  blocks,
-  getValue,
-}: Pick<YearBlockTableProps, "blocks" | "getValue">) {
+export function useYearBlockTables({ blocks }: Pick<YearBlockTableProps, "blocks">) {
   const { years } = useInventoryContext();
   const [selectedYearValue, setSelectedYearValue] = useState(years[0] ?? 0);
   const selectedYear = years.find((year) => year === selectedYearValue) ?? years[0];
@@ -49,19 +46,19 @@ export function useYearBlockTables({
           for (const column of block.columns) {
             if (column.calculated) continue;
 
-            nextValues[getCellKey(year, block.key, row.key, column.key)] = getValue(
+            /*  nextValues[getCellKey(year, block.key, row.key, column.key)] = getValue(
               block.key,
               row.key,
               column.key,
               year
-            );
+            ); */
           }
         }
       }
     }
 
     return nextValues;
-  }, [blocks, getValue, years]);
+  }, [blocks /* getValue */, , years]);
   const [values, setValues] = useState(initialValues);
 
   useEffect(() => {
