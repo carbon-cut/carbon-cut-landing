@@ -1006,6 +1006,69 @@ export default {
                 subscribers: "Nombre d'abonnes",
               },
             },
+            photovoltaic: {
+              bt: {
+                title: "Photovoltaique BT",
+                subscribers: "Nombre d'abonnes BT",
+                capacity: "Puissance installee (kWc)",
+                production: "Production (MWh)",
+                balance: "Solde annuel de transaction",
+              },
+              mt: {
+                title: "Photovoltaique MT",
+                subscribers: "Nombre d'abonnes MT",
+                capacity: "Puissance installee (kWc)",
+                production: "Production (MWh)",
+                balance: "Solde annuel de transaction",
+              },
+            },
+            naturalGas: {
+              surface: {
+                title: "Gaz naturel",
+              },
+              bp: {
+                title: "Basse pression",
+                households: "Menages",
+                commerce: "Commerce",
+                services: "Services",
+                total: "Total",
+              },
+              mp: {
+                title: "Moyenne pression",
+                industry: "Industrie",
+                tourism: "Tourisme",
+                agriculture: "Agriculture",
+                total: "Total",
+              },
+              hp: {
+                title: "Haute pression",
+                note: "Les colonnes haute pression peuvent etre ajoutees, renommees ou supprimees.",
+                powerPlant: "Centrale",
+                industrialHub: "Pole industriel",
+                total: "Total",
+              },
+              rows: {
+                consumption: "Consommation (Nm3)",
+                subscribers: "Nombre d'abonnes",
+              },
+            },
+            solarWaterHeating: {
+              residential: {
+                title: "Residentiel",
+                number: "Nombre de menages",
+                area: "Surface installée (m²)",
+              },
+              tertiary: {
+                title: "Tertiaire",
+                number: "Nombre d'entites tertiaires",
+                area: "Surface installée (m²)",
+              },
+              industrial: {
+                title: "Industriel",
+                number: "Nombre d'entites industrielles",
+                area: "Surface installée (m²)",
+              },
+            },
             treesParksWaste: {
               yearlyTitle: "Arbres / parcs / dechets verts urbains",
               yearlyDescription:

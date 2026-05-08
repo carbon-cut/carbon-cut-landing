@@ -12,9 +12,9 @@ export function renderMatrixYearInputCell<T extends FieldValues>({
 }: MatrixYearCellRendererArgs<T>) {
   const fieldName = `${baseName}.${row.key}.value.y-${year}` as TName<T>;
   const fieldUnitPath = `${baseName}.${row.key}.unit` as TName<T>;
-  let fieldUnit = form.getValues(fieldUnitPath);
+  let fieldUnit = form?.getValues(fieldUnitPath);
   if (fieldUnit === undefined) {
-    form.setValue(
+    form?.setValue(
       fieldUnitPath,
       //@ts-expect-error - initialization of unit field value
       row.unit

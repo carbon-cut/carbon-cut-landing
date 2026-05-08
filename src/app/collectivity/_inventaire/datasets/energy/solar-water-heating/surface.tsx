@@ -1,54 +1,42 @@
 "use client";
 
 import MatrixTable from "@/components/table/matrix";
-
-const residentialSample: Record<number, Record<string, string>> = {
-  "2022": { households: "1 800", area: "16 200 m2" },
-  "2023": { households: "2 060", area: "18 900 m2" },
-  "2024": { households: "2 320", area: "21 300 m2" },
-};
-
-const tertiarySample: Record<number, Record<string, string>> = {
-  "2022": { entities: "44", area: "3 400 m2" },
-  "2023": { entities: "51", area: "3 920 m2" },
-  "2024": { entities: "58", area: "4 430 m2" },
-};
-
-const industrialSample: Record<number, Record<string, string>> = {
-  "2022": { entities: "11", area: "2 100 m2" },
-  "2023": { entities: "13", area: "2 420 m2" },
-  "2024": { entities: "15", area: "2 740 m2" },
-};
+import { useInventoryContext } from "../../../context/inventory-context";
+import { useScopedI18n } from "@/locales/client";
+import { buildSolarWaterHeatingRows } from "./config";
 
 export default function SolarWaterHeatingSurface() {
+  const { mainForm } = useInventoryContext();
+  const tSolarWaterHeating = useScopedI18n(
+    "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.solarWaterHeating"
+  );
+
+  const residentialRows = buildSolarWaterHeatingRows("residential", tSolarWaterHeating);
+  const tertiaryRows = buildSolarWaterHeatingRows("tertiary", tSolarWaterHeating);
+  const industrialRows = buildSolarWaterHeatingRows("industrial", tSolarWaterHeating);
+
   return (
     <div className="space-y-8">
       <MatrixTable
-        title="Residentiel"
-        rows={[
-          { key: "households", label: "Nombre de menages" },
-          { key: "area", label: "Nombre de m2" },
-        ]}
-        getValue={(rowKey, yearValue) => residentialSample[yearValue]?.[rowKey] ?? ""}
+        title={tSolarWaterHeating("residential.title")}
+        rows={residentialRows}
+        form={mainForm}
+        baseName="energy.solarWaterHeating.dataSet.residential"
       />
       <div className="border-t border-border/10 pt-8">
         <MatrixTable
-          title="Tertiaire"
-          rows={[
-            { key: "entities", label: "Nombre d'entites tertiaires" },
-            { key: "area", label: "Nombre de m2" },
-          ]}
-          getValue={(rowKey, yearValue) => tertiarySample[yearValue]?.[rowKey] ?? ""}
+          title={tSolarWaterHeating("tertiary.title")}
+          rows={tertiaryRows}
+          form={mainForm}
+          baseName="energy.solarWaterHeating.dataSet.tertiary"
         />
       </div>
       <div className="border-t border-border/10 pt-8">
         <MatrixTable
-          title="Industriel"
-          rows={[
-            { key: "entities", label: "Nombre d'entites industrielles" },
-            { key: "area", label: "Nombre de m2" },
-          ]}
-          getValue={(rowKey, yearValue) => industrialSample[yearValue]?.[rowKey] ?? ""}
+          title={tSolarWaterHeating("industrial.title")}
+          rows={industrialRows}
+          form={mainForm}
+          baseName="energy.solarWaterHeating.dataSet.industrial"
         />
       </div>
     </div>
