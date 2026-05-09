@@ -1069,6 +1069,27 @@ export default {
                 area: "Surface installée (m²)",
               },
             },
+            port: {
+              vesselCount: {
+                title: "Nombre de bateaux / barges",
+              },
+              fuelConsumption: {
+                title: "Consommation de carburant dans le perimetre (L)",
+              },
+              rows: {
+                leisure: "Plaisance",
+                fishing: "Peche",
+                other: "Autre",
+              },
+              concernedPorts: {
+                title: "Ports concernes",
+                description:
+                  "Le rapport source liste les ports concernes; la structure initiale les garde visibles comme metadonnees de travail.",
+                column: "Port",
+                addLabel: "Ajouter un port",
+                rowLabelPrefix: "Port",
+              },
+            },
             treesParksWaste: {
               yearlyTitle: "Arbres / parcs / dechets verts urbains",
               yearlyDescription:

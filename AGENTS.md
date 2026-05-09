@@ -17,6 +17,8 @@ Working notes for contributors to this codebase.
 - Preserve accessibility (`aria-*`, alt text, keyboard focus visibility).
 - Keep sections semantic and data-driven where possible.
 - Run `npm run lint` before shipping UI changes.
+- Only change files or code the user explicitly asked you to change.
+- Do not overreach; if the task is simple, do the simple task and do not go wild.
 
 ## Localization
 

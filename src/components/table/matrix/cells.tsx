@@ -9,18 +9,22 @@ export function renderMatrixYearInputCell<T extends FieldValues>({
   baseName,
   row,
   year,
+  editableRows = false,
 }: MatrixYearCellRendererArgs<T>) {
-  const fieldName = `${baseName}.${row.key}.value.y-${year}` as TName<T>;
-  const fieldUnitPath = `${baseName}.${row.key}.unit` as TName<T>;
+  const fieldName =
+    `${baseName}.${editableRows ? `${row.index}.value` : row.original.key}.value.y-${year}` as TName<T>;
+  const fieldUnitPath =
+    `${baseName}.${editableRows ? `${row.index}.value` : row.original.key}.unit` as TName<T>;
+
   let fieldUnit = form?.getValues(fieldUnitPath);
   if (fieldUnit === undefined) {
     form?.setValue(
       fieldUnitPath,
       //@ts-expect-error - initialization of unit field value
-      row.unit
+      row.original.unit
     );
     //@ts-expect-error - get value after initialization
-    fieldUnit = row.unit;
+    fieldUnit = row.original.unit;
   }
   return (
     <InventoryTableInput unitAdornment={fieldUnit} type={"number"} form={form} name={fieldName} />

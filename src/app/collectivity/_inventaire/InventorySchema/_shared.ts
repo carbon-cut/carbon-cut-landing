@@ -65,24 +65,6 @@ type GridSchemaOptions =
     };
 type RecordGridSchemaOptions = MatrixSchemaOptions;
 
-export function createMatrixSchema(
-  keys: readonly string[],
-  MatrixSchemaOptions: MatrixSchemaOptions
-) {
-  const { unit, unitsByKeys } = MatrixSchemaOptions;
-  return z.object(
-    Object.fromEntries(
-      keys.map((key) => [
-        key,
-        z.object({
-          value: numberByYearSchema,
-          unit: constructUnit(unit ?? unitsByKeys![key]),
-        }),
-      ])
-    )
-  );
-}
-
 export function createGridSchema(
   keys: readonly string[],
   nestedKeys: readonly string[],
@@ -131,6 +113,44 @@ export function createRecordGridSchema(
         )
       ),
     })
+  );
+}
+
+function createRecordMatrix(
+  keys: ZodString | ZodEnum<[string, ...string[]]>,
+  MatrixSchemaOptions: MatrixSchemaOptions
+) {
+  const { unit, unitsByKeys } = MatrixSchemaOptions;
+  return z.object({
+    key: keys,
+    value: z.object({
+      value: numberByYearSchema,
+      unit: constructUnit(unit ?? ["null"]),
+    }),
+  });
+}
+export function createRecordMatrixSchema(
+  keys: ZodString | ZodEnum<[string, ...string[]]>,
+  MatrixSchemaOptions: MatrixSchemaOptions
+) {
+  return z.array(createRecordMatrix(keys, MatrixSchemaOptions));
+}
+export type RecordMatrixSchema = z.output<ReturnType<typeof createRecordMatrixSchema>>;
+export function createMatrixSchema(
+  keys: readonly string[],
+  MatrixSchemaOptions: MatrixSchemaOptions
+) {
+  const { unit, unitsByKeys } = MatrixSchemaOptions;
+  return z.object(
+    Object.fromEntries(
+      keys.map((key) => [
+        key,
+        z.object({
+          value: numberByYearSchema,
+          unit: constructUnit(unit ?? unitsByKeys![key]),
+        }),
+      ])
+    )
   );
 }
 
