@@ -1,18 +1,9 @@
-import type {
-  ArrayPath,
-  Field,
-  FieldArray,
-  FieldArrayPath,
-  FieldArrayPathValue,
-  FieldValues,
-  UseFormReturn,
-} from "react-hook-form";
 import type { ReactNode } from "react";
 
-import type { TName } from "@/components/ui/forms";
+import type { FieldValues, UseFormReturn } from "react-hook-form";
 
+import type { TName } from "@/components/ui/forms";
 import type { InventoryTableRow } from "@/app/collectivity/_inventaire/types";
-import { RecordMatrixSchema } from "@/app/collectivity/_inventaire/InventorySchema/_shared";
 import { Row } from "@tanstack/react-table";
 
 export type MatrixTableRow = InventoryTableRow;
@@ -20,7 +11,7 @@ export type MatrixTableRow = InventoryTableRow;
 export type MatrixEditableRows = {
   addLabel: string;
   minRows?: number;
-  unremovableRowKeys: string[];
+  unremovableRowKeys: readonly string[];
   unit: string;
 };
 
@@ -41,6 +32,7 @@ export type MatrixTableProps<T extends FieldValues> = {
   rows: MatrixTableRow[];
   form: UseFormReturn<T, undefined>;
   baseName: TName<T>;
+  years?: number[];
   renderYearCell?: MatrixYearCellRenderer<T>;
   editableRows?: MatrixEditableRows;
 };

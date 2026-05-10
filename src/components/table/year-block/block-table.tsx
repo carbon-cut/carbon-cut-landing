@@ -38,7 +38,10 @@ export default function BlockTable<T extends FieldValues>({
   useEffect(() => {
     if (initCols) {
       // @ts-expect-error - initialization of field array value
-      append(block.columns.map(({ key }) => ({ key, value: {} })));
+      append(
+        block.columns.map(({ key }) => ({ key, value: {} })),
+        { shouldFocus: false }
+      );
       setInitCols(false);
     }
   }, [append, block.columns, initCols]);

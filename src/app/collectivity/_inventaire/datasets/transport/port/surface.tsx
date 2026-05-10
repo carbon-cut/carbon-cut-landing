@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import MatrixTable from "@/components/table/matrix";
 import { useInventoryContext } from "../../../context/inventory-context";
 import { useScopedI18n } from "@/locales/client";
@@ -12,11 +14,19 @@ export default function PortSurface() {
     "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.port"
   );
 
-  const vesselCountRows = buildPortRows("vesselCount", tPort);
-  const fuelConsumptionRows = buildPortRows("fuelConsumption", tPort);
-  const vesselCountEditableRows = buildPortEditableRows("vesselCount", tPort);
-  const fuelConsumptionEditableRows = buildPortEditableRows("fuelConsumption", tPort);
-  const portsSection = buildPortSection(tPort);
+  const {
+    vesselCountRows,
+    fuelConsumptionRows,
+    vesselCountEditableRows,
+    fuelConsumptionEditableRows,
+    portsSection,
+  } = useState(() => ({
+    vesselCountRows: buildPortRows("vesselCount", tPort),
+    fuelConsumptionRows: buildPortRows("fuelConsumption", tPort),
+    vesselCountEditableRows: buildPortEditableRows("vesselCount", tPort),
+    fuelConsumptionEditableRows: buildPortEditableRows("fuelConsumption", tPort),
+    portsSection: buildPortSection(tPort),
+  }))[0];
 
   return (
     <div className="space-y-8">

@@ -4,14 +4,15 @@ import type { FieldValues, UseFormReturn } from "react-hook-form";
 
 import type { TName } from "@/components/ui/forms";
 import type { InventoryTableColumn, InventoryTableRow } from "@/app/collectivity/_inventaire/types";
+import { Row } from "@tanstack/react-table";
 
-export type TableGridRow = InventoryTableRow;
-
+export type TableGridRow = InventoryTableRow & { id?: string };
+export type TableGridColumn = InventoryTableColumn & { type?: "number" | "text"; id?: string };
 export type TableGridCellRendererArgs<T extends FieldValues> = {
   form: UseFormReturn<T, undefined>;
   baseName: TName<T>;
-  row: TableGridRow;
-  column: InventoryTableColumn;
+  row: Row<TableGridRow>;
+  column: TableGridColumn;
   name: TName<T>;
   selectedYear?: number;
 };
@@ -25,7 +26,7 @@ export type TableGridProps<T extends FieldValues> = {
   description?: string;
   className?: string;
   rows: TableGridRow[];
-  columns: InventoryTableColumn[];
+  columns: TableGridColumn[];
   form: UseFormReturn<T, undefined>;
   baseName: TName<T>;
   yearSelector?: {
@@ -36,7 +37,7 @@ export type TableGridProps<T extends FieldValues> = {
   };
   editableRows?: {
     minRows: number;
-    onRemoveRow: (rowKey: string) => void;
+    onRemoveRow: (index: number) => void;
   };
   addRow?: {
     label: string;

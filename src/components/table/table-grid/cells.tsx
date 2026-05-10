@@ -6,7 +6,7 @@ import type { TName } from "@/components/ui/forms";
 import InventoryTableInput from "../InventoryTableInput";
 import type { TableGridCellRendererArgs } from "./types";
 
-export function renderTableGridInputCell<T extends FieldValues>({
+export function NumberInputCell<T extends FieldValues>({
   form,
   baseName,
   row,
@@ -14,9 +14,19 @@ export function renderTableGridInputCell<T extends FieldValues>({
   selectedYear,
 }: TableGridCellRendererArgs<T>) {
   const yearSegment = selectedYear === undefined ? "" : `.y-${selectedYear}`;
-  const fieldName = `${baseName}.${row.key}.${column.key}.value${yearSegment}` as TName<T>;
-
+  const fieldName = `${baseName}.${row.original.key}.${column.key}.value${yearSegment}` as TName<T>;
   return (
     <InventoryTableInput form={form} name={fieldName} type="number" unitAdornment={column.unit} />
+  );
+}
+export function TextInputCell<T extends FieldValues>({
+  form,
+  baseName,
+  row,
+  column,
+}: TableGridCellRendererArgs<T>) {
+  const fieldName = `${baseName}.${row.index}.key` as TName<T>;
+  return (
+    <InventoryTableInput form={form} name={fieldName} type="text" unitAdornment={column.unit} />
   );
 }

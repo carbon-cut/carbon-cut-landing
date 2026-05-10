@@ -175,7 +175,10 @@ function InventoryTableInput<T extends FieldValues>({
                           //verifyAttachedFields();
                         },
                       })}
-                  onBlur={field.onBlur}
+                  onBlur={() => {
+                    console.log("blur");
+                    field.onBlur();
+                  }}
                 />
 
                 {unitAdornment && (

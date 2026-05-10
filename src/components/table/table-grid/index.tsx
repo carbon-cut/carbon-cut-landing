@@ -87,7 +87,15 @@ export default function TableGrid<T extends FieldValues>({
             ) : null}
 
             {addRow ? (
-              <Button type="button" variant="outline" size="sm" onClick={addRow.onAdd}>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                /* onClick={addRow.onAdd} */ onPointerDown={(event) => {
+                  event.preventDefault();
+                  addRow.onAdd();
+                }}
+              >
                 <Plus aria-hidden="true" />
                 {addRow.label}
               </Button>
@@ -98,7 +106,7 @@ export default function TableGrid<T extends FieldValues>({
       <InventoryTanstackTable
         rows={rows}
         columns={tableColumns}
-        getRowId={(row) => row.key}
+        getRowId={(row) => row.id ?? row.key}
         stickyColumnIds={["label"]}
       />
     </section>

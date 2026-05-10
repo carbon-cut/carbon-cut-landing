@@ -1,12 +1,13 @@
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
-import type { FieldValues, UseFormReturn } from "react-hook-form";
+import type { FieldArrayPath, FieldValues, UseFormReturn } from "react-hook-form";
 
-import { TName } from "@/components/ui/forms";
+import { InventoryFieldInput } from "@/app/collectivity/_components/fields";
 import { Button } from "@/components/ui/button";
 import { renderMatrixYearInputCell } from "./cells";
 import type { MatrixEditableRows, MatrixTableRow } from "./types";
 import type { MatrixYearCellRenderer } from "./types";
+import { TName } from "@/components/ui/forms";
 
 type MatrixCellContext = CellContext<MatrixTableRow, unknown>;
 
@@ -33,7 +34,21 @@ export function createMatrixTableColumns<T extends FieldValues>({
     {
       id: "label",
       header: () => <span className="sr-only">Ligne</span>,
-      cell: ({ row }: MatrixCellContext) => row.original.label,
+      cell: ({ row }: MatrixCellContext) =>
+        editableRows ? (
+          editableRows.unremovableRowKeys.includes(row.original.key) ? (
+            <span className="px-2 text-sm font-semibold">{row.original.label}</span>
+          ) : (
+            <InventoryFieldInput
+              aria-label={`Nom de ligne ${row.original.label}`}
+              className="h-8 min-w-[9rem] rounded-lg bg-background px-2 text-sm font-semibold"
+              form={form}
+              name={`${baseName}.${row.index}.key` as TName<T>}
+            />
+          )
+        ) : (
+          row.original.label
+        ),
     },
     ...years.map((year) => ({
       id: String(year),

@@ -22,7 +22,7 @@ export function buildPortEditableRows(
   return {
     addLabel: labelFunc("concernedPorts.addLabel"),
     minRows: 0,
-    unremovableRowKeys: [],
+    unremovableRowKeys: portRowKeys,
     unit: units[input].default[0],
   };
 }

@@ -1,3 +1,7 @@
+import { TName } from "@/components/ui/forms";
+import { InventoryFormValues } from "./context/inventory-context";
+import type { TableGridProps } from "@/components/table/table-grid/types";
+
 export type InventoryYear = number;
 
 export type InventoryFamily = {
@@ -56,16 +60,15 @@ export type InventoryTableRow = {
   unit: string | null;
 };
 
-export type InventoryTableSectionData = {
-  title: string;
-  description?: string;
-  fieldBaseName?: string;
-  columns: InventoryTableColumn[];
-  rows: InventoryTableRow[];
-  yearSelector?: {
-    initialYear?: number;
-    ariaLabel?: string;
-  };
+export type InventoryTableSectionData = Pick<
+  TableGridProps<InventoryFormValues>,
+  "title" | "description" | "rows" | "columns"
+> & {
+  fieldBaseName: TName<InventoryFormValues>;
+  yearSelector?: Pick<
+    NonNullable<TableGridProps<InventoryFormValues>["yearSelector"]>,
+    "initialYear" | "ariaLabel"
+  >;
   editableRows?: {
     addLabel: string;
     rowLabelPrefix: string;

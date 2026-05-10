@@ -1,11 +1,20 @@
-import { z, ZodAny, ZodEnum, ZodString, type ZodRawShape, type ZodTypeAny } from "zod";
+import { number, z, ZodAny, ZodEnum, ZodString, type ZodRawShape, type ZodTypeAny } from "zod";
 
 type Year = `y-${number}${number}${number}${number}`;
 const yearSchema = z.string().regex(/^y-\d{4}$/) as z.ZodType<Year>;
-const numberByYearSchema = z.record(
-  yearSchema,
-  z.coerce.number({ errorMap: () => ({ message: "Required" }) })
+const currentYear = new Date().getFullYear();
+export const futureYearSchema = yearSchema.refine(
+  (value) => Number(value.slice(2)) >= currentYear,
+  {
+    message: "Year cannot be later than the current year",
+  }
 );
+
+const numberSchema = z.coerce.number({ errorMap: () => ({ message: "Required" }) });
+
+export const numberFutureSchema = z.record(futureYearSchema, numberSchema);
+
+export const numberByYearSchema = z.record(yearSchema, numberSchema);
 
 export const metadataSourceTypeValues = [
   "invoice",
@@ -40,7 +49,7 @@ const metadata = z.object({
   }),
 });
 
-const constructUnit = (input: [string, ...string[]]) => {
+export const constructUnit = (input: [string, ...string[]]) => {
   return z.enum(input).default(input[0]);
 };
 
@@ -135,7 +144,7 @@ export function createRecordMatrixSchema(
 ) {
   return z.array(createRecordMatrix(keys, MatrixSchemaOptions));
 }
-export type RecordMatrixSchema = z.output<ReturnType<typeof createRecordMatrixSchema>>;
+export type RecordMatrixSchema = z.infer<ReturnType<typeof createRecordMatrixSchema>>;
 export function createMatrixSchema(
   keys: readonly string[],
   MatrixSchemaOptions: MatrixSchemaOptions

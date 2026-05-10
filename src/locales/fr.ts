@@ -1090,6 +1090,44 @@ export default {
                 rowLabelPrefix: "Port",
               },
             },
+            publicTransport: {
+              operators: {
+                title: "Operateurs",
+                description:
+                  "La structure initiale garde l'unique operateur visible comme metadonnees de travail.",
+                column: "Operateur",
+                default: "Regie bus metropolitaine",
+                addLabel: "Ajouter un operateur",
+                rowPrefix: "Operateur",
+              },
+              exploitation: {
+                title: "Exploitation",
+                buses: "Nombre de bus exploites",
+                fuelConsumption: "Consommation carburant",
+                fuelSpend: "Depense carburant",
+                kmTravelled: "Km parcourus",
+                staff: "Nombre d'agents",
+                passengerKm: "Passagers-km",
+                passengers: "Nombre de passagers",
+              },
+              renewal: {
+                title: "Renouvellement de flotte",
+                scrapped: "Bus reformes / vendus",
+                purchased: "Bus achetes",
+                purchaseCost: "Cout d'achat",
+              },
+              age: {
+                title: "Age de flotte",
+                age0to5: "0-5 ans",
+                age6to10: "6-10 ans",
+                age10plus: "Plus de 10 ans",
+              },
+              future: {
+                title: "Acquisitions / renouvellements prevus",
+                column: "Bus prevus",
+                renewalFuture: "Renouvellement futur",
+              },
+            },
             treesParksWaste: {
               yearlyTitle: "Arbres / parcs / dechets verts urbains",
               yearlyDescription:

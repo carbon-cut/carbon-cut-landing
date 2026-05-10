@@ -6,7 +6,7 @@ import { useInventoryContext } from "../context/inventory-context";
 import type { InventoryFormValues } from "../context/inventory-context";
 import { TName } from "@/components/ui/forms";
 import TableGrid from "@/components/table/table-grid";
-import type { InventoryTableRow, InventoryTableSectionData } from "../types";
+import type { InventoryTableSectionData } from "../types";
 
 export default function InventoryTableSection({
   section,
@@ -16,46 +16,18 @@ export default function InventoryTableSection({
   className?: string;
 }) {
   const { mainForm, years } = useInventoryContext();
-  const [rows, setRows] = useState(section.rows);
   const editableRows = section.editableRows;
   const minRows = editableRows?.minRows ?? 1;
-
-  useEffect(() => {
-    setRows(section.rows);
-  }, [section.rows]);
-
-  const handleAddRow = () => {
-    if (!editableRows) return;
-
-    setRows((currentRows) => {
-      const nextNumber = currentRows.length + 1;
-      const newRow: InventoryTableRow = {
-        key: `${editableRows.rowLabelPrefix.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`,
-        label: `${editableRows.rowLabelPrefix} ${nextNumber}`,
-        unit: "",
-      };
-
-      return [...currentRows, newRow];
-    });
-  };
-
-  const handleRemoveRow = (rowKey: string) => {
-    if (!editableRows) return;
-
-    setRows((currentRows) =>
-      currentRows.length <= minRows ? currentRows : currentRows.filter((row) => row.key !== rowKey)
-    );
-  };
 
   return (
     <TableGrid
       className={className}
       title={section.title}
       description={section.description}
-      rows={rows}
+      rows={/* rows */ []}
       columns={section.columns}
       form={mainForm}
-      baseName={section.fieldBaseName as TName<InventoryFormValues>}
+      baseName={section.fieldBaseName}
       yearSelector={
         section.yearSelector
           ? {
@@ -69,7 +41,7 @@ export default function InventoryTableSection({
         editableRows
           ? {
               label: editableRows.addLabel,
-              onAdd: handleAddRow,
+              onAdd: /* handleAddRow */ () => {},
             }
           : undefined
       }
@@ -77,7 +49,7 @@ export default function InventoryTableSection({
         editableRows
           ? {
               minRows,
-              onRemoveRow: handleRemoveRow,
+              onRemoveRow: /* handleRemoveRow */ () => {},
             }
           : undefined
       }

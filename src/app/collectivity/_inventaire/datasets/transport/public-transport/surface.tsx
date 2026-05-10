@@ -1,118 +1,152 @@
 "use client";
 
+import { useMemo, useState } from "react";
+
 import MatrixTable from "@/components/table/matrix";
 import InventoryTableSection from "../../../components/InventoryTableSection";
-import type { InventoryTableSectionData } from "../../../types";
-
-const operatorSection: InventoryTableSectionData = {
-  title: "Operateurs",
-  description: "La structure initiale garde les operateurs visibles comme metadonnees de travail.",
-  columns: ["Operateur"],
-  rows: [{ key: "operator-1", label: "Operateur 1", values: ["Regie bus metropolitaine"] }],
-  editableRows: {
-    addLabel: "Ajouter un operateur",
-    rowLabelPrefix: "Operateur",
-    minRows: 1,
-    newRowValues: [""],
-  },
-};
-
-const operations: Record<number, Record<string, string>> = {
-  "2022": {
-    buses: "324",
-    fuelConsumption: "5 820 000 L",
-    fuelSpend: "14 600 000 TND",
-    kmTravelled: "24 800 000 km",
-    staff: "1410",
-    passengerKm: "452 000 000",
-    passengers: "47 500 000",
-  },
-  "2023": {
-    buses: "336",
-    fuelConsumption: "5 910 000 L",
-    fuelSpend: "15 880 000 TND",
-    kmTravelled: "25 100 000 km",
-    staff: "1440",
-    passengerKm: "463 000 000",
-    passengers: "48 900 000",
-  },
-  "2024": {
-    buses: "344",
-    fuelConsumption: "5 760 000 L",
-    fuelSpend: "15 400 000 TND",
-    kmTravelled: "25 700 000 km",
-    staff: "1465",
-    passengerKm: "475 000 000",
-    passengers: "50 400 000",
-  },
-};
-
-const renewal: Record<number, Record<string, string>> = {
-  "2022": { scrapped: "14", purchased: "20", purchaseCost: "6 200 000 TND" },
-  "2023": { scrapped: "18", purchased: "24", purchaseCost: "7 900 000 TND" },
-  "2024": { scrapped: "10", purchased: "16", purchaseCost: "5 600 000 TND" },
-};
-
-const age: Record<number, Record<string, string>> = {
-  "2022": { age0to5: "98", age6to10: "115", age10plus: "111" },
-  "2023": { age0to5: "116", age6to10: "109", age10plus: "111" },
-  "2024": { age0to5: "124", age6to10: "112", age10plus: "108" },
-};
-
-const futureSection: InventoryTableSectionData = {
-  title: "Acquisitions / renouvellements prevus",
-  columns: ["Bus prevus"],
-  rows: [
-    { key: "2025", label: "2025", values: ["18"] },
-    { key: "2026", label: "2026", values: ["24"] },
-    { key: "2027", label: "2027", values: ["20"] },
-  ],
-};
+import { useInventoryContext } from "../../../context/inventory-context";
+import { useScopedI18n } from "@/locales/client";
+import Typography from "@/components/ui/typography";
+import {
+  buildPublicTransportFutureYears,
+  buildPublicTransportOperatorsSection,
+  buildPublicTransportRenewalFutureRows,
+  buildPublicTransportRows,
+} from "./config";
+import { useFieldArray, useWatch } from "react-hook-form";
+import TableGrid from "@/components/table/table-grid";
+import { Separator } from "@/components/ui/separator";
 
 export default function PublicTransportSurface() {
+  const { mainForm, years } = useInventoryContext();
+  const tPublicTransport = useScopedI18n(
+    "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.publicTransport"
+  );
+
+  const { futureYears, exploitationRows, renewalRows, ageRows, renewalFutureRows } = useState(
+    () => ({
+      operatorSection: buildPublicTransportOperatorsSection(tPublicTransport),
+      futureYears: buildPublicTransportFutureYears(),
+      exploitationRows: buildPublicTransportRows("exploitation", tPublicTransport),
+      renewalRows: buildPublicTransportRows("renewal", tPublicTransport),
+      ageRows: buildPublicTransportRows("age", tPublicTransport),
+      renewalFutureRows: buildPublicTransportRenewalFutureRows(tPublicTransport),
+    })
+  )[0];
+
+  const { fields, append, remove } = useFieldArray({
+    control: mainForm.control,
+    name: "transport.publicTransport.dataSet",
+  });
+
+  const operatorRows = useMemo(() => {
+    return fields.map((field, index) => ({
+      id: field.id,
+      key: field.key,
+      label: `${tPublicTransport("operators.rowPrefix")} ${index + 1}`,
+      unit: "",
+    }));
+  }, [fields]);
+
+  const fieldValues = useWatch({
+    control: mainForm.control,
+    name: "transport.publicTransport.dataSet",
+  });
+
+  const operatorSection = useMemo(
+    () => ({
+      ...buildPublicTransportOperatorsSection(tPublicTransport),
+    }),
+    [tPublicTransport, fields]
+  );
+
+  const editableRows = useMemo(
+    () => ({
+      minRows: 0,
+      onRemoveRow: remove,
+    }),
+    [remove]
+  );
   return (
     <div className="space-y-8">
-      <InventoryTableSection section={operatorSection} />
-      <div className="border-t border-border/10 pt-8">
-        <MatrixTable
-          title="Exploitation"
-          rows={[
-            { key: "buses", label: "Nombre de bus exploites" },
-            { key: "fuelConsumption", label: "Consommation carburant" },
-            { key: "fuelSpend", label: "Depense carburant" },
-            { key: "kmTravelled", label: "Km parcourus" },
-            { key: "staff", label: "Nombre d'agents" },
-            { key: "passengerKm", label: "Passagers-km" },
-            { key: "passengers", label: "Nombre de passagers" },
-          ]}
-          getValue={(rowKey, yearValue) => operations[yearValue]?.[rowKey] ?? ""}
-        />
-      </div>
-      <div className="border-t border-border/10 pt-8">
-        <MatrixTable
-          title="Renouvellement de flotte"
-          rows={[
-            { key: "scrapped", label: "Bus reformes / vendus" },
-            { key: "purchased", label: "Bus achetes" },
-            { key: "purchaseCost", label: "Cout d'achat" },
-          ]}
-          getValue={(rowKey, yearValue) => renewal[yearValue]?.[rowKey] ?? ""}
-        />
-      </div>
-      <div className="border-t border-border/10 pt-8">
-        <MatrixTable
-          title="Age de flotte"
-          rows={[
-            { key: "age0to5", label: "0-5 ans" },
-            { key: "age6to10", label: "6-10 ans" },
-            { key: "age10plus", label: "Plus de 10 ans" },
-          ]}
-          getValue={(rowKey, yearValue) => age[yearValue]?.[rowKey] ?? ""}
-        />
-      </div>
-      <div className="border-t border-border/10 pt-8">
-        <InventoryTableSection section={futureSection} />
-      </div>
+      <TableGrid
+        title={operatorSection.title}
+        description={operatorSection.description}
+        rows={operatorRows}
+        columns={operatorSection.columns}
+        form={mainForm}
+        baseName={operatorSection.fieldBaseName}
+        yearSelector={
+          operatorSection.yearSelector
+            ? {
+                years,
+                initialYear: operatorSection.yearSelector.initialYear,
+                ariaLabel: operatorSection.yearSelector.ariaLabel,
+              }
+            : undefined
+        }
+        addRow={{
+          label: operatorSection.editableRows?.addLabel ?? "",
+          onAdd: () =>
+            requestAnimationFrame(() =>
+              append(
+                //@ts-expect-error - initialization of unit field value
+                { key: "" },
+                {
+                  shouldFocus: true,
+                  //focusName: `${operatorSection.fieldBaseName}.${fields.length}.dk`,
+                }
+              )
+            ),
+        }}
+        editableRows={editableRows}
+      />
+      {fields.map((field, index) => {
+        const operatorBaseName = fieldValues?.[index]?.key || tPublicTransport("operators.default");
+        return (
+          <div key={field.id} className="space-y-4 group">
+            <div className="rounded-2xl border border-border/10 bg-surface-warm/40 px-4 py-3">
+              <Typography className="text-center" asChild variant="sectionTitle" size="xl">
+                <h4>{operatorBaseName}</h4>
+              </Typography>
+            </div>
+            <div className="border-t border-border/10 pt-8">
+              <MatrixTable
+                title={tPublicTransport("exploitation.title")}
+                rows={exploitationRows}
+                form={mainForm}
+                baseName={`transport.publicTransport.dataSet.${index}.exploitation`}
+              />
+            </div>
+            <div className="border-t border-border/10 pt-8">
+              <MatrixTable
+                title={tPublicTransport("renewal.title")}
+                rows={renewalRows}
+                form={mainForm}
+                baseName={`transport.publicTransport.dataSet.${index}.renewal`}
+              />
+            </div>
+            <div className="border-t border-border/10 pt-8">
+              <MatrixTable
+                title={tPublicTransport("age.title")}
+                rows={ageRows}
+                form={mainForm}
+                baseName={`transport.publicTransport.dataSet.${index}.age`}
+              />
+            </div>
+            <div className="border-t border-border/10 pt-8">
+              <MatrixTable
+                title={tPublicTransport("future.title")}
+                rows={renewalFutureRows}
+                form={mainForm}
+                baseName={`transport.publicTransport.dataSet.${index}`}
+                years={futureYears}
+              />
+            </div>
+            <Separator className="group-last:hidden" />
+          </div>
+        );
+      })}
     </div>
   );
 }

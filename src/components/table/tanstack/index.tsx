@@ -125,34 +125,38 @@ export default function InventoryTanstackTable<TData>({
         </TableHeader>
 
         <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id} className={cn("border-border/60", rowClassName)}>
-              {row.getVisibleCells().map((cell) => {
-                const meta = cell.column.columnDef.meta as InventoryTanstackColumnMeta | undefined;
-                const isStickyColumn = stickyColumnIds.includes(cell.column.id);
+          {table.getRowModel().rows.map((row) => {
+            return (
+              <TableRow key={row.id} className={cn("border-border/60", rowClassName)}>
+                {row.getVisibleCells().map((cell) => {
+                  const meta = cell.column.columnDef.meta as
+                    | InventoryTanstackColumnMeta
+                    | undefined;
+                  const isStickyColumn = stickyColumnIds.includes(cell.column.id);
 
-                if (isStickyColumn) {
+                  if (isStickyColumn) {
+                    return (
+                      <InventoryDataTableRowLabel
+                        key={cell.id}
+                        className={cn(meta?.className, stickyCellClassName)}
+                      >
+                        {renderCell(cell)}
+                      </InventoryDataTableRowLabel>
+                    );
+                  }
+
                   return (
-                    <InventoryDataTableRowLabel
+                    <TableCell
                       key={cell.id}
-                      className={cn(meta?.className, stickyCellClassName)}
+                      className={cn("px-3 py-2.5 align-middle", meta?.className, dataCellClassName)}
                     >
                       {renderCell(cell)}
-                    </InventoryDataTableRowLabel>
+                    </TableCell>
                   );
-                }
-
-                return (
-                  <TableCell
-                    key={cell.id}
-                    className={cn("px-3 py-2.5 align-middle", meta?.className, dataCellClassName)}
-                  >
-                    {renderCell(cell)}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
+                })}
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </section>
