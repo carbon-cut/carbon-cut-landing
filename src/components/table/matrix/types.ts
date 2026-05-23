@@ -15,6 +15,14 @@ export type MatrixEditableRows = {
   unit: string;
 };
 
+export type MatrixRowField = {
+  key: string;
+  label: string;
+  type: "select";
+  placeholder?: string;
+  options: Array<{ value: string; label: string; unit?: string }>;
+};
+
 export type MatrixYearCellRendererArgs<T extends FieldValues> = {
   year: number;
   row: Row<MatrixTableRow>;
@@ -35,4 +43,5 @@ export type MatrixTableProps<T extends FieldValues> = {
   years?: number[];
   renderYearCell?: MatrixYearCellRenderer<T>;
   editableRows?: MatrixEditableRows;
+  rowFields?: MatrixRowField[];
 };

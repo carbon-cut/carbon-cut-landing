@@ -5,6 +5,7 @@ import { number, z, ZodEnum, ZodString, type ZodRawShape, type ZodTypeAny } from
   - _shared helpers
   - municipal schema
   - energy schema
+  - transport port schema
 
   This file is intentionally separate from the production schema modules.
 */
@@ -93,7 +94,11 @@ const createGridSchema = (
   );
 };
 
-const createMatrixSchema = (keys: readonly string[], MatrixSchemaOptions: MatrixSchemaOptions) => {
+const createMatrixSchema = (
+  keys: readonly string[],
+  MatrixSchemaOptions: MatrixSchemaOptions,
+  type: ZodEnum<[string, ...string[]]> | ZodString | undefined = undefined
+) => {
   const { unit, unitsByKeys } = MatrixSchemaOptions;
   return z.object(
     Object.fromEntries(
@@ -102,9 +107,29 @@ const createMatrixSchema = (keys: readonly string[], MatrixSchemaOptions: Matrix
         z.object({
           value: numberByYearSchema,
           unit: constructUnit(unit ?? unitsByKeys![key]),
+          type: type ?? z.undefined(),
         }),
       ])
     )
+  );
+};
+
+const createRecordMatrixSchema = (
+  keys: ZodString | ZodEnum<[string, ...string[]]>,
+  MatrixSchemaOptions: MatrixSchemaOptions,
+  type: ZodEnum<[string, ...string[]]> | ZodString | undefined = undefined
+) => {
+  const { unit } = MatrixSchemaOptions;
+
+  return z.array(
+    z.object({
+      key: keys,
+      value: z.object({
+        value: numberByYearSchema,
+        unit: constructUnit(unit ?? ["null"]),
+        type: type ?? z.undefined(),
+      }),
+    })
   );
 };
 
@@ -225,6 +250,28 @@ const treesParksWaste = {
   units: treesParksWasteUnits,
 };
 
+/*
+  Port rows are dynamic in the app: users can add custom rows.
+  The UI initializes and protects these default vessel category rows.
+*/
+const portDefaultRowKeys = ["leisure", "fishing", "other"] as const;
+const portFuelValues = ["diesel", "marineDiesel", "heavyFuelOil", "LNG", "electricity"] as const;
+
+const portUnits: UnitConf = {
+  vesselCount: {
+    default: [""],
+  },
+  fuelConsumption: {
+    default: ["L"],
+  },
+} as const;
+
+const port = {
+  defaultRowKeys: portDefaultRowKeys,
+  fuels: portFuelValues,
+  units: portUnits,
+};
+
 const fleetSchema = z.object({
   dataSet: z.object({
     vehicles: createMatrixSchema(fleet.carEngineKeys, { unit: fleet.units.vehicles.default }),
@@ -265,6 +312,25 @@ const buildingsSchema = z.object({
 const treesParksWasteSchema = z.object({
   dataSet: createMatrixSchema(treesParksWaste.yearlyKeys, {
     unitsByKeys: treesParksWaste.units.yearly,
+  }),
+  metadata,
+});
+
+const portSchema = z.object({
+  dataSet: z.object({
+    concernedPorts: z.array(
+      z.object({
+        key: z.string(),
+      })
+    ),
+    vesselCount: createRecordMatrixSchema(z.string(), { unit: port.units.vesselCount.default }),
+    fuelConsumption: createRecordMatrixSchema(
+      z.string(),
+      {
+        unit: port.units.fuelConsumption.default,
+      },
+      z.enum(port.fuels)
+    ),
   }),
   metadata,
 });
@@ -426,6 +492,10 @@ const energySchema = createGroupSchema({
   solarWaterHeating: solarWaterHeatingSchema,
 });
 
+const transportSchema = createGroupSchema({
+  port: portSchema,
+});
+
 export {
   yearSchema,
   futureYearSchema,
@@ -434,11 +504,16 @@ export {
   createGroupSchema,
   createGridSchema,
   createMatrixSchema,
+  createRecordMatrixSchema,
+  port,
+  portSchema,
   municipalSchema,
   energySchema,
+  transportSchema,
 };
 
 export const inventoryMunicipalEnergySchemaReference = createGroupSchema({
   municipal: municipalSchema,
   energy: energySchema,
+  transport: transportSchema,
 });

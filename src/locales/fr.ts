@@ -1075,6 +1075,15 @@ export default {
               },
               fuelConsumption: {
                 title: "Consommation de carburant dans le perimetre (L)",
+                fuelType: "Carburant",
+                fuelPlaceholder: "Choisir un carburant",
+                fuels: {
+                  diesel: "Diesel",
+                  marineDiesel: "Diesel marin",
+                  heavyFuelOil: "Fioul lourd",
+                  LNG: "GNL",
+                  electricity: "Electricite",
+                },
               },
               rows: {
                 leisure: "Plaisance",

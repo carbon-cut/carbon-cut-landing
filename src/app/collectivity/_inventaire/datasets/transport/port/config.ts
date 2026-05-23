@@ -1,8 +1,12 @@
 import type { InventoryTableSectionData, InventoryTableRow } from "../../../types";
-import type { MatrixEditableRows } from "@/components/table/matrix/types";
+import type { MatrixEditableRows, MatrixRowField } from "@/components/table/matrix/types";
 import { port } from "../../../InventorySchema/transport/config";
 
-const { rowKeys: portRowKeys, units } = port;
+const { rowKeys: portRowKeys, units, fuels } = port;
+
+function getDefaultUnit(input: "vesselCount" | "fuelConsumption") {
+  return "default" in units[input] ? units[input].default[0] : "";
+}
 
 export function buildPortRows(
   input: "vesselCount" | "fuelConsumption",
@@ -11,7 +15,7 @@ export function buildPortRows(
   return portRowKeys.map((key) => ({
     key,
     label: labelFunc(`rows.${key}`),
-    unit: units[input].default[0],
+    unit: getDefaultUnit(input),
   }));
 }
 
@@ -23,20 +27,38 @@ export function buildPortEditableRows(
     addLabel: labelFunc("concernedPorts.addLabel"),
     minRows: 0,
     unremovableRowKeys: portRowKeys,
-    unit: units[input].default[0],
+    unit: getDefaultUnit(input),
   };
 }
 
-export function buildPortSection(labelFunc: (key: string) => string): InventoryTableSectionData {
+export function buildPortFuelRowFields(labelFunc: (key: string) => string): MatrixRowField[] {
+  return [
+    {
+      key: "type",
+      label: labelFunc("fuelConsumption.fuelType"),
+      type: "select",
+      placeholder: labelFunc("fuelConsumption.fuelPlaceholder"),
+      options: fuels.map((fuel) => ({
+        value: fuel,
+        label: labelFunc(`fuelConsumption.fuels.${fuel}`),
+        unit: units.fuelConsumption[fuel][0],
+      })),
+    },
+  ];
+}
+
+export function buildPortSection(
+  labelFunc: (key: string) => string
+): Omit<InventoryTableSectionData, "rows"> {
   return {
     title: labelFunc("concernedPorts.title"),
     description: labelFunc("concernedPorts.description"),
-    columns: [{ key: "port", label: labelFunc("concernedPorts.column") }],
-    rows: [],
+    fieldBaseName: "transport.port.dataSet.concernedPorts",
+    columns: [{ key: "port", label: labelFunc("concernedPorts.column"), type: "text" }],
     editableRows: {
       addLabel: labelFunc("concernedPorts.addLabel"),
       minRows: 0,
-      rowLabelPrefix: "",
+      rowLabelPrefix: labelFunc("concernedPorts.rowLabelPrefix"),
     },
   };
 }

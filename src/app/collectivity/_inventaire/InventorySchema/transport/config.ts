@@ -22,9 +22,15 @@ const portUnits: UnitConf = {
     default: [""],
   },
   fuelConsumption: {
-    default: ["L"],
+    diesel: ["L"],
+    marineDiesel: ["L"],
+    heavyFuelOil: ["L"],
+    LNG: ["Nm3"],
+    electricity: ["kWh"],
   },
 } as const;
+
+const portFuels = ["diesel", "marineDiesel", "heavyFuelOil", "LNG", "electricity"] as const;
 
 const publicTransportUnits: UnitConf = {
   exploitation: {
@@ -54,6 +60,7 @@ const publicTransportUnits: UnitConf = {
 export const port = {
   rowKeys: portRowKeys,
   units: portUnits,
+  fuels: portFuels,
 };
 
 export const publicTransport = {

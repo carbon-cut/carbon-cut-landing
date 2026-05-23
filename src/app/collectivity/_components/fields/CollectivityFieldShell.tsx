@@ -6,14 +6,21 @@ export function FieldShell({
   label,
   children,
   className,
+  labelVisibility = "visible",
 }: {
   label: string;
   children: ReactNode;
   className?: string;
+  labelVisibility?: "visible" | "srOnly";
 }) {
   return (
     <FormItem className={cn("space-y-2", className)}>
-      <FormLabel className="text-xs font-medium uppercase tracking-wide text-secondary">
+      <FormLabel
+        className={cn(
+          "text-xs font-medium uppercase tracking-wide text-secondary",
+          labelVisibility === "srOnly" && "sr-only"
+        )}
+      >
         {label}
       </FormLabel>
       {children}

@@ -36,10 +36,19 @@ const publicTransportSchema = z.object({
 
 const portSchema = z.object({
   dataSet: z.object({
+    concernedPorts: z.array(
+      z.object({
+        key: z.string(),
+      })
+    ),
     vesselCount: createRecordMatrixSchema(z.string(), { unit: port.units.vesselCount.default }),
-    fuelConsumption: createRecordMatrixSchema(z.string(), {
-      unit: port.units.fuelConsumption.default,
-    }),
+    fuelConsumption: createRecordMatrixSchema(
+      z.string(),
+      {
+        unitsByKeys: port.units.fuelConsumption,
+      },
+      z.enum(port.fuels)
+    ),
   }),
   metadata,
 });

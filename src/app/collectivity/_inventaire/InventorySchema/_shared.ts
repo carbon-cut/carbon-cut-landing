@@ -1,4 +1,13 @@
-import { number, z, ZodAny, ZodEnum, ZodString, type ZodRawShape, type ZodTypeAny } from "zod";
+import {
+  number,
+  z,
+  ZodAny,
+  ZodEnum,
+  ZodString,
+  ZodUndefined,
+  type ZodRawShape,
+  type ZodTypeAny,
+} from "zod";
 
 type Year = `y-${number}${number}${number}${number}`;
 const yearSchema = z.string().regex(/^y-\d{4}$/) as z.ZodType<Year>;
@@ -127,27 +136,54 @@ export function createRecordGridSchema(
 
 function createRecordMatrix(
   keys: ZodString | ZodEnum<[string, ...string[]]>,
-  MatrixSchemaOptions: MatrixSchemaOptions
+  MatrixSchemaOptions: MatrixSchemaOptions,
+  type: ZodEnum<[string, ...string[]]> | ZodString | ZodUndefined = z.undefined()
 ) {
   const { unit, unitsByKeys } = MatrixSchemaOptions;
+  const dynamicUnitSchema = unitsByKeys
+    ? z
+        .object({
+          type: z.enum(Object.keys(unitsByKeys) as [string, ...string[]]),
+          unit: z.string(),
+          value: numberByYearSchema,
+        })
+        .superRefine((value, ctx) => {
+          const validUnits = unitsByKeys[value.type];
+          if (!validUnits.includes(value.unit)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ["unit"],
+              message: `Unit must match selected type (${validUnits.join(" or ")})`,
+            });
+          }
+        })
+    : undefined;
+
   return z.object({
     key: keys,
-    value: z.object({
-      value: numberByYearSchema,
-      unit: constructUnit(unit ?? ["null"]),
-    }),
+    value: unit
+      ? z.object({
+          value: numberByYearSchema,
+          unit: constructUnit(unit),
+          type,
+        })
+      : dynamicUnitSchema
+        ? dynamicUnitSchema
+        : z.object({}).strict(),
   });
 }
 export function createRecordMatrixSchema(
   keys: ZodString | ZodEnum<[string, ...string[]]>,
-  MatrixSchemaOptions: MatrixSchemaOptions
+  MatrixSchemaOptions: MatrixSchemaOptions,
+  type: ZodEnum<[string, ...string[]]> | ZodString | ZodUndefined = z.undefined()
 ) {
-  return z.array(createRecordMatrix(keys, MatrixSchemaOptions));
+  return z.array(createRecordMatrix(keys, MatrixSchemaOptions, type));
 }
 export type RecordMatrixSchema = z.infer<ReturnType<typeof createRecordMatrixSchema>>;
 export function createMatrixSchema(
   keys: readonly string[],
-  MatrixSchemaOptions: MatrixSchemaOptions
+  MatrixSchemaOptions: MatrixSchemaOptions,
+  type: ZodEnum<[string, ...string[]]> | ZodString | ZodUndefined = z.undefined()
 ) {
   const { unit, unitsByKeys } = MatrixSchemaOptions;
   return z.object(
@@ -156,6 +192,7 @@ export function createMatrixSchema(
         key,
         z.object({
           value: numberByYearSchema,
+          type,
           unit: constructUnit(unit ?? unitsByKeys![key]),
         }),
       ])
