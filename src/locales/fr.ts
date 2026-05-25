@@ -1152,6 +1152,41 @@ export default {
                 renewalFuture: "Renouvellement futur",
               },
             },
+            airTransport: {
+              movements: {
+                title: "Mouvements d'aeronefs",
+                description:
+                  "Une ligne par type d'aeronef, avec la distinction international / national dans chaque annee.",
+                columns: {
+                  international: "International",
+                  national: "National",
+                },
+              },
+              aircraft: {
+                a220: "A220",
+                a319: "A319",
+                a320: "A320",
+                a321: "A321",
+                a330: "A330",
+                a350: "A350",
+                boeing737: "Boeing 737",
+                boeing757: "Boeing 757",
+                boeing767: "Boeing 767",
+                boeing777: "Boeing 777",
+                boeing787: "Boeing 787",
+                regionalTurboprop: "Regional turbopropulseur",
+                regionalJet: "Jet regional",
+                other: "Autre",
+              },
+              energy: {
+                title: "Energie / carburants aeroport",
+                buildingElectricity: "Consommation electrique des batiments",
+                diesel: "Consommation flotte diesel",
+                petrol: "Consommation flotte essence",
+                electricFleet: "Consommation flotte electrique",
+                kerosene: "Kerosene servi aux avions",
+              },
+            },
             treesParksWaste: {
               yearlyTitle: "Arbres / parcs / dechets verts urbains",
               yearlyDescription:

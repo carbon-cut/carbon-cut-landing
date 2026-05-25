@@ -14,6 +14,30 @@ const publicTransportExploitationRowKeys = [
 const publicTransportRenewalRowKeys = ["scrapped", "purchased", "purchaseCost"] as const;
 const publicTransportAgeRowKeys = ["age0to5", "age6to10", "age10plus"] as const;
 const publicTransportFuelKeys = ["diesel", "petrol", "gpl", "gnv", "electricity"] as const;
+const airTransportAircraftModelKeys = [
+  "a220",
+  "a319",
+  "a320",
+  "a321",
+  "a330",
+  "a350",
+  "boeing737",
+  "boeing757",
+  "boeing767",
+  "boeing777",
+  "boeing787",
+  "regionalTurboprop",
+  "regionalJet",
+  "other",
+] as const;
+const airTransportMovementColumnKeys = ["international", "national"] as const;
+const airTransportEnergyKeys = [
+  "buildingElectricity",
+  "diesel",
+  "petrol",
+  "electricFleet",
+  "kerosene",
+] as const;
 
 const portUnits: UnitConf = {
   vesselCount: {
@@ -65,6 +89,19 @@ const publicTransportUnits: UnitConf = {
   },
 } as const;
 
+const airTransportUnits: UnitConf = {
+  movements: {
+    default: [""],
+  },
+  energy: {
+    buildingElectricity: ["kWh"],
+    diesel: ["L"],
+    petrol: ["L"],
+    electricFleet: ["kWh"],
+    kerosene: ["L"],
+  },
+} as const;
+
 export const port = {
   rowKeys: portRowKeys,
   units: portUnits,
@@ -77,4 +114,11 @@ export const publicTransport = {
   renewalRowKeys: publicTransportRenewalRowKeys,
   ageRowKeys: publicTransportAgeRowKeys,
   units: publicTransportUnits,
+};
+
+export const airTransport = {
+  aircraftModelKeys: airTransportAircraftModelKeys,
+  movementColumnKeys: airTransportMovementColumnKeys,
+  energyKeys: airTransportEnergyKeys,
+  units: airTransportUnits,
 };

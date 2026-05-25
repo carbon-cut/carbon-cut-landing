@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
   constructUnit,
+  createGridSchema,
   createGroupSchema,
   createMatrixSchema,
   createRecordMatrixSchema,
@@ -10,7 +11,7 @@ import {
   metadata,
   numberFutureSchema,
 } from "../_shared";
-import { port, publicTransport } from "./config";
+import { airTransport, port, publicTransport } from "./config";
 
 const publicTransportSchema = z.object({
   dataSet: z.array(
@@ -62,9 +63,21 @@ const portSchema = z.object({
   metadata,
 });
 
+const airTransportSchema = z.object({
+  dataSet: z.object({
+    movements: createGridSchema(airTransport.aircraftModelKeys, airTransport.movementColumnKeys, {
+      unit: airTransport.units.movements.default,
+    }),
+    energy: createMatrixSchema(airTransport.energyKeys, {
+      unitsByKeys: airTransport.units.energy,
+    }),
+  }),
+  metadata,
+});
+
 const transportSchema = createGroupSchema({
   publicTransport: publicTransportSchema,
-  airTransport: datasetPlaceholderSchema,
+  airTransport: airTransportSchema,
   port: portSchema,
   vehicleCounts: datasetPlaceholderSchema,
 });
