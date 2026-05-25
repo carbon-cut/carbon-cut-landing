@@ -1,4 +1,8 @@
-import type { InventoryTableRow, InventoryTableSectionData } from "../../../types";
+import type {
+  InventoryGroupedYearTableData,
+  InventoryTableRow,
+  InventoryTableSectionData,
+} from "../../../types";
 import { publicTransport } from "../../../InventorySchema/transport/config";
 
 export function buildPublicTransportFutureYears(): number[] {
@@ -22,6 +26,47 @@ export function buildPublicTransportRows(
     label: labelFunc(`${input}.${key}`),
     unit: publicTransport.units[input][key][0],
   }));
+}
+
+export function buildPublicTransportExploitationRowsWithoutFuel(
+  labelFunc: (key: string) => string
+): InventoryTableRow[] {
+  return buildPublicTransportRows("exploitation", labelFunc);
+}
+
+export function buildPublicTransportEnergyRows(
+  labelFunc: (key: string) => string
+): InventoryTableRow[] {
+  return publicTransport.fuelKeys.map((key) => ({
+    key,
+    label: labelFunc(`energyConsumption.${key}`),
+    unit: publicTransport.units.consumption[key][0],
+  }));
+}
+
+export function buildPublicTransportEnergyByFuelSection(
+  labelFunc: (key: string) => string
+): InventoryGroupedYearTableData {
+  return {
+    title: labelFunc("energyByFuel.title"),
+    rows: buildPublicTransportEnergyRows(labelFunc),
+    subcolumns: [
+      {
+        key: "buses",
+        label: labelFunc("energyByFuel.buses"),
+        unit: publicTransport.units.buses.default[0],
+      },
+      {
+        key: "consumption",
+        label: labelFunc("energyByFuel.consumption"),
+      },
+      {
+        key: "spend",
+        label: labelFunc("energyByFuel.spend"),
+        unit: publicTransport.units.spend.default[0],
+      },
+    ],
+  };
 }
 
 export function buildPublicTransportOperatorsSection(

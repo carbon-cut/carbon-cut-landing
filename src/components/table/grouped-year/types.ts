@@ -5,5 +5,6 @@ import type { InventoryGroupedYearTableData } from "@/app/collectivity/_inventai
 
 export type GroupedYearTableProps<T extends FieldValues> = InventoryGroupedYearTableData & {
   form: UseFormReturn<T, undefined>;
-  baseName: TName<T>;
+  baseName?: TName<T>;
+  baseNameBySubcolumn?: Record<string, TName<T>>;
 };

@@ -126,11 +126,11 @@ const datasetOverrides: Record<
     surfaceKind: "publicTransport",
     status: "Structure initiale",
     description:
-      "Jeu transport public par operateur avec exploitation, renouvellement, age de flotte et plan futur.",
+      "Jeu transport public par operateur avec exploitation, parc et energie par motorisation, renouvellement, age de flotte et plan futur.",
     sourceMode: "Source-native: un tableau operateur peut couvrir plusieurs annees.",
     yearMode: "Year-native: les indicateurs d'exploitation et de flotte restent annuels.",
     implementationNote:
-      "Le premier panneau garde un operateur par defaut, sans encore implementer la repetition multi-operateurs.",
+      "Le panneau garde les operateurs repetables et regroupe nombre de bus, consommation et depense par motorisation.",
   },
   "air-transport": {
     surfaceKind: "airTransport",

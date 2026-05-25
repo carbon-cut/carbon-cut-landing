@@ -16,12 +16,13 @@ export default function InventoryGroupedYearTable<T extends FieldValues>({
   subcolumns,
   form,
   baseName,
+  baseNameBySubcolumn,
 }: GroupedYearTableProps<T>) {
   const { years } = useInventoryContext();
 
   const columns = useMemo(
-    () => createGroupedYearColumns({ years, subcolumns, form, baseName }),
-    [baseName, form, subcolumns, years]
+    () => createGroupedYearColumns({ years, subcolumns, form, baseName, baseNameBySubcolumn }),
+    [baseName, baseNameBySubcolumn, form, subcolumns, years]
   );
 
   return (

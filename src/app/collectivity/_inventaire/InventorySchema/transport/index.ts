@@ -19,6 +19,15 @@ const publicTransportSchema = z.object({
       exploitation: createMatrixSchema(publicTransport.exploitationRowKeys, {
         unitsByKeys: publicTransport.units.exploitation,
       }),
+      buses: createMatrixSchema(publicTransport.fuelKeys, {
+        unit: publicTransport.units.buses.default,
+      }),
+      consumption: createMatrixSchema(publicTransport.fuelKeys, {
+        unitsByKeys: publicTransport.units.consumption,
+      }),
+      spend: createMatrixSchema(publicTransport.fuelKeys, {
+        unit: publicTransport.units.spend.default,
+      }),
       renewal: createMatrixSchema(publicTransport.renewalRowKeys, {
         unitsByKeys: publicTransport.units.renewal,
       }),

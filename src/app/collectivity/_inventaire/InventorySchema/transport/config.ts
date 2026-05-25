@@ -6,9 +6,6 @@ type UnitConf = {
 
 const portRowKeys = ["leisure", "fishing", "other"] as const;
 const publicTransportExploitationRowKeys = [
-  "buses",
-  "fuelConsumption",
-  "fuelSpend",
   "kmTravelled",
   "staff",
   "passengerKm",
@@ -16,6 +13,7 @@ const publicTransportExploitationRowKeys = [
 ] as const;
 const publicTransportRenewalRowKeys = ["scrapped", "purchased", "purchaseCost"] as const;
 const publicTransportAgeRowKeys = ["age0to5", "age6to10", "age10plus"] as const;
+const publicTransportFuelKeys = ["diesel", "petrol", "gpl", "gnv", "electricity"] as const;
 
 const portUnits: UnitConf = {
   vesselCount: {
@@ -34,13 +32,23 @@ const portFuels = ["diesel", "marineDiesel", "heavyFuelOil", "LNG", "electricity
 
 const publicTransportUnits: UnitConf = {
   exploitation: {
-    buses: [""],
-    fuelConsumption: ["L"],
-    fuelSpend: ["TND"],
     kmTravelled: ["km"],
     staff: [""],
     passengerKm: ["p/km"],
     passengers: [""],
+  },
+  buses: {
+    default: [""],
+  },
+  consumption: {
+    diesel: ["L"],
+    petrol: ["L"],
+    gpl: ["L"],
+    gnv: ["Nm3"],
+    electricity: ["kWh"],
+  },
+  spend: {
+    default: ["TND"],
   },
   renewal: {
     scrapped: [""],
@@ -65,6 +73,7 @@ export const port = {
 
 export const publicTransport = {
   exploitationRowKeys: publicTransportExploitationRowKeys,
+  fuelKeys: publicTransportFuelKeys,
   renewalRowKeys: publicTransportRenewalRowKeys,
   ageRowKeys: publicTransportAgeRowKeys,
   units: publicTransportUnits,

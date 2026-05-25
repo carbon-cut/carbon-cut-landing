@@ -5,7 +5,7 @@ import { number, z, ZodEnum, ZodString, type ZodRawShape, type ZodTypeAny } from
   - _shared helpers
   - municipal schema
   - energy schema
-  - transport port schema
+  - transport schema
 
   This file is intentionally separate from the production schema modules.
 */
@@ -18,6 +18,7 @@ const futureYearSchema = yearSchema.refine((value) => Number(value.slice(2)) >= 
 });
 
 const numberSchema = z.coerce.number({ errorMap: () => ({ message: "Required" }) });
+const numberFutureSchema = z.record(futureYearSchema, numberSchema);
 const numberByYearSchema = z.record(yearSchema, numberSchema);
 
 const metadataSourceTypeValues = ["invoice", "report", "excel", "manual", "estimate"] as const;
@@ -256,6 +257,15 @@ const treesParksWaste = {
 */
 const portDefaultRowKeys = ["leisure", "fishing", "other"] as const;
 const portFuelValues = ["diesel", "marineDiesel", "heavyFuelOil", "LNG", "electricity"] as const;
+const publicTransportExploitationRowKeys = [
+  "kmTravelled",
+  "staff",
+  "passengerKm",
+  "passengers",
+] as const;
+const publicTransportRenewalRowKeys = ["scrapped", "purchased", "purchaseCost"] as const;
+const publicTransportAgeRowKeys = ["age0to5", "age6to10", "age10plus"] as const;
+const publicTransportFuelKeys = ["diesel", "petrol", "gpl", "gnv", "electricity"] as const;
 
 const portUnits: UnitConf = {
   vesselCount: {
@@ -270,6 +280,49 @@ const port = {
   defaultRowKeys: portDefaultRowKeys,
   fuels: portFuelValues,
   units: portUnits,
+};
+
+const publicTransportUnits: UnitConf = {
+  exploitation: {
+    kmTravelled: ["km"],
+    staff: [""],
+    passengerKm: ["p/km"],
+    passengers: [""],
+  },
+  buses: {
+    default: [""],
+  },
+  consumption: {
+    diesel: ["L"],
+    petrol: ["L"],
+    gpl: ["L"],
+    gnv: ["Nm3"],
+    electricity: ["kWh"],
+  },
+  spend: {
+    default: ["TND"],
+  },
+  renewal: {
+    scrapped: [""],
+    purchased: [""],
+    purchaseCost: ["TND"],
+  },
+  age: {
+    age0to5: [""],
+    age6to10: [""],
+    age10plus: [""],
+  },
+  future: {
+    default: [""],
+  },
+} as const;
+
+const publicTransport = {
+  exploitationRowKeys: publicTransportExploitationRowKeys,
+  fuelKeys: publicTransportFuelKeys,
+  renewalRowKeys: publicTransportRenewalRowKeys,
+  ageRowKeys: publicTransportAgeRowKeys,
+  units: publicTransportUnits,
 };
 
 const fleetSchema = z.object({
@@ -332,6 +385,37 @@ const portSchema = z.object({
       z.enum(port.fuels)
     ),
   }),
+  metadata,
+});
+
+const publicTransportSchema = z.object({
+  dataSet: z.array(
+    z.object({
+      key: z.string(),
+      exploitation: createMatrixSchema(publicTransport.exploitationRowKeys, {
+        unitsByKeys: publicTransport.units.exploitation,
+      }),
+      buses: createMatrixSchema(publicTransport.fuelKeys, {
+        unit: publicTransport.units.buses.default,
+      }),
+      consumption: createMatrixSchema(publicTransport.fuelKeys, {
+        unitsByKeys: publicTransport.units.consumption,
+      }),
+      spend: createMatrixSchema(publicTransport.fuelKeys, {
+        unit: publicTransport.units.spend.default,
+      }),
+      renewal: createMatrixSchema(publicTransport.renewalRowKeys, {
+        unitsByKeys: publicTransport.units.renewal,
+      }),
+      age: createMatrixSchema(publicTransport.ageRowKeys, {
+        unitsByKeys: publicTransport.units.age,
+      }),
+      renewalFuture: z.object({
+        value: numberFutureSchema,
+        unit: constructUnit(publicTransport.units.future.default),
+      }),
+    })
+  ),
   metadata,
 });
 
@@ -493,6 +577,7 @@ const energySchema = createGroupSchema({
 });
 
 const transportSchema = createGroupSchema({
+  publicTransport: publicTransportSchema,
   port: portSchema,
 });
 
@@ -500,6 +585,7 @@ export {
   yearSchema,
   futureYearSchema,
   numberByYearSchema,
+  numberFutureSchema,
   metadata,
   createGroupSchema,
   createGridSchema,
@@ -507,6 +593,8 @@ export {
   createRecordMatrixSchema,
   port,
   portSchema,
+  publicTransport,
+  publicTransportSchema,
   municipalSchema,
   energySchema,
   transportSchema,

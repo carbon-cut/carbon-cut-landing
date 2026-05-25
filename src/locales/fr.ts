@@ -131,6 +131,7 @@ export default {
       features: "Fonctionnalités",
       trust: "Version test",
       results: "Résultats",
+      faq: "Questions fréquentes",
       toggleLabel: "Basculer la navigation principale",
     },
     hero: {
@@ -1118,6 +1119,20 @@ export default {
                 staff: "Nombre d'agents",
                 passengerKm: "Passagers-km",
                 passengers: "Nombre de passagers",
+              },
+              energyConsumption: {
+                title: "Consommation par energie",
+                diesel: "Diesel",
+                petrol: "Essence",
+                gpl: "GPL",
+                gnv: "GNV",
+                electricity: "Electricite",
+              },
+              energyByFuel: {
+                title: "Parc et energie par motorisation",
+                buses: "Nombre de bus",
+                consumption: "Consommation",
+                spend: "Depense",
               },
               renewal: {
                 title: "Renouvellement de flotte",

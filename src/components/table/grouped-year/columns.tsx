@@ -5,16 +5,16 @@ import type { FieldValues } from "react-hook-form";
 
 import { renderGroupedYearInputCell } from "./cells";
 import type { GroupedYearTableProps } from "./types";
-import type { InventoryRowLabel } from "@/app/collectivity/_inventaire/types";
+import type { InventoryTableColumn, InventoryTableRow } from "@/app/collectivity/_inventaire/types";
 
-type GroupedYearCellContext = CellContext<InventoryRowLabel, unknown>;
+type GroupedYearCellContext = CellContext<InventoryTableRow, unknown>;
 
 type CreateGroupedYearColumnsArgs<T extends FieldValues> = Pick<
   GroupedYearTableProps<T>,
-  "form" | "baseName"
+  "form" | "baseName" | "baseNameBySubcolumn"
 > & {
   years: number[];
-  subcolumns: { key: string; label: string }[];
+  subcolumns: InventoryTableColumn[];
 };
 
 export function createGroupedYearColumns<T extends FieldValues>({
@@ -22,8 +22,9 @@ export function createGroupedYearColumns<T extends FieldValues>({
   subcolumns,
   form,
   baseName,
+  baseNameBySubcolumn,
 }: CreateGroupedYearColumnsArgs<T>) {
-  const columns: ColumnDef<InventoryRowLabel>[] = [
+  const columns: ColumnDef<InventoryTableRow>[] = [
     {
       id: "label",
       header: () => <span className="sr-only">Ligne</span>,
@@ -47,10 +48,11 @@ export function createGroupedYearColumns<T extends FieldValues>({
         cell: ({ row }: GroupedYearCellContext) =>
           renderGroupedYearInputCell({
             form,
-            baseName,
+            baseName: baseNameBySubcolumn?.[subcolumn.key] ?? baseName!,
             rowKey: row.original.key,
             year,
-            subcolumnKey: subcolumn.key,
+            subcolumnKey: baseNameBySubcolumn ? undefined : subcolumn.key,
+            unit: subcolumn.unit ?? row.original.unit,
           }),
       })),
     })),
