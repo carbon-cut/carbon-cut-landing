@@ -109,16 +109,18 @@ export function createGridSchema(
   );
 }
 
-export function createRecordGridSchema(
+export function createRecordGridSchema<RowFields extends ZodRawShape = Record<string, never>>(
   keys: readonly [string, ...string[]],
   nestedKeys: ZodString | ZodEnum<[string, ...string[]]>,
-  GridSchemaOptions: RecordGridSchemaOptions
+  GridSchemaOptions: RecordGridSchemaOptions,
+  rowFields?: RowFields
 ) {
   const { unit, unitsByKeys } = GridSchemaOptions;
 
   return z.array(
     z.object({
       key: nestedKeys,
+      ...(rowFields ?? {}),
       value: z.object(
         Object.fromEntries(
           keys.map((key) => [

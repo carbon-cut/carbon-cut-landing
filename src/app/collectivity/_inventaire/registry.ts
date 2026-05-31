@@ -142,13 +142,14 @@ const datasetOverrides: Record<
     implementationNote: "Le premier panneau rend visibles les deux sous-tableaux du rapport.",
   },
   transport: {
-    surfaceKind: "vehicleCounts",
+    surfaceKind: "territoryVehicles",
     status: "Structure initiale",
-    description: "Jeu transport vehicules avec comptage par categorie et comparaison annuelle.",
+    description:
+      "Jeu vehicules du territoire avec type, carburant, volumes, consommation moyenne et kilometrage.",
     sourceMode: "Source-native: un tableau vehicules peut couvrir plusieurs annees.",
-    yearMode: "Year-native: les volumes de parc restent annuels.",
+    yearMode: "Year-native: les volumes et hypotheses d'activite restent annuels.",
     implementationNote:
-      "La structure initiale fusionne les categories du rapport dans un seul tableau de comptage.",
+      "Le panneau utilise des lignes repetables type vehicule / carburant avec mesures annuelles.",
   },
   "perennial-plantation-stock": {
     surfaceKind: "perennialPlantationStock",

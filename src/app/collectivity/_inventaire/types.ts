@@ -23,7 +23,7 @@ export const inventoryDatasetSurfaceKindValues = [
   "port",
   "publicTransport",
   "airTransport",
-  "vehicleCounts",
+  "territoryVehicles",
   "perennialPlantationStock",
   "livestock",
   "fertilizers",

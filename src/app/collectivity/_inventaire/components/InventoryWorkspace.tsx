@@ -22,7 +22,7 @@ import TreesParksWasteSurface from "../datasets/municipal/trees-parks-waste/surf
 import AirTransportSurface from "../datasets/transport/air-transport/surface";
 import PortSurface from "../datasets/transport/port/surface";
 import PublicTransportSurface from "../datasets/transport/public-transport/surface";
-import VehicleCountsSurface from "../datasets/transport/vehicle-counts/surface";
+import TerritoryVehiclesSurface from "../datasets/transport/territory-vehicles/surface";
 import type { InventoryDataset, InventoryWorkspaceConfig } from "../types";
 import type { InventorySurfaceCopy } from "../registry";
 
@@ -60,8 +60,8 @@ function renderDatasetSurface(
       return <PublicTransportSurface />;
     case "airTransport":
       return <AirTransportSurface />;
-    case "vehicleCounts":
-      return <VehicleCountsSurface />;
+    case "territoryVehicles":
+      return <TerritoryVehiclesSurface />;
     case "perennialPlantationStock":
       return <PerennialPlantationStockSurface />;
     case "livestock":

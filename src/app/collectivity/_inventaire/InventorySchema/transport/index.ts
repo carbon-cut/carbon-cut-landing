@@ -5,13 +5,12 @@ import {
   createGridSchema,
   createGroupSchema,
   createMatrixSchema,
+  createRecordGridSchema,
   createRecordMatrixSchema,
-  datasetPlaceholderSchema,
-  futureYearSchema,
   metadata,
   numberFutureSchema,
 } from "../_shared";
-import { airTransport, port, publicTransport } from "./config";
+import { airTransport, port, publicTransport, territoryVehicles } from "./config";
 
 const publicTransportSchema = z.object({
   dataSet: z.array(
@@ -75,11 +74,27 @@ const airTransportSchema = z.object({
   metadata,
 });
 
+const territoryVehiclesSchema = z.object({
+  dataSet: z.object({
+    rows: createRecordGridSchema(
+      territoryVehicles.measureKeys,
+      z.enum(territoryVehicles.vehicleTypeKeys),
+      {
+        unitsByKeys: territoryVehicles.units.measures,
+      },
+      {
+        fuel: z.enum(territoryVehicles.fuelKeys),
+      }
+    ),
+  }),
+  metadata,
+});
+
 const transportSchema = createGroupSchema({
   publicTransport: publicTransportSchema,
   airTransport: airTransportSchema,
   port: portSchema,
-  vehicleCounts: datasetPlaceholderSchema,
+  territoryVehicles: territoryVehiclesSchema,
 });
 
 export { transportSchema };

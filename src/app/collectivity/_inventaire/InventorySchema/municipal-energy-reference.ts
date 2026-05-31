@@ -95,6 +95,33 @@ const createGridSchema = (
   );
 };
 
+const createRecordGridSchema = <RowFields extends ZodRawShape = Record<string, never>>(
+  keys: readonly [string, ...string[]],
+  nestedKeys: ZodString | ZodEnum<[string, ...string[]]>,
+  GridSchemaOptions: MatrixSchemaOptions,
+  rowFields?: RowFields
+) => {
+  const { unit, unitsByKeys } = GridSchemaOptions;
+
+  return z.array(
+    z.object({
+      key: nestedKeys,
+      ...(rowFields ?? {}),
+      value: z.object(
+        Object.fromEntries(
+          keys.map((key) => [
+            key,
+            z.object({
+              value: numberByYearSchema,
+              unit: constructUnit(unit ?? unitsByKeys?.[key]),
+            }),
+          ])
+        )
+      ),
+    })
+  );
+};
+
 const createMatrixSchema = (
   keys: readonly string[],
   MatrixSchemaOptions: MatrixSchemaOptions,
@@ -290,6 +317,37 @@ const airTransportEnergyKeys = [
   "electricFleet",
   "kerosene",
 ] as const;
+const territoryVehicleTypeKeys = [
+  "motorcycles",
+  "publicTransportVehicles",
+  "mopeds",
+  "agriculturalEquipment",
+  "privateVehicles",
+  "specialPurposeVehicles",
+  "touristBuses",
+  "heavyTrucks",
+  "lightTrucks",
+  "tractors",
+  "tricycles",
+  "quadricycles",
+  "trailers",
+  "semiTrailers",
+  "microbuses",
+  "ambulances",
+  "taxis",
+  "sharedTaxis",
+  "touristTaxis",
+] as const;
+const territoryVehicleFuelKeys = [
+  "diesel",
+  "petrol",
+  "gpl",
+  "gnv",
+  "electricity",
+  "hybrid",
+  "other",
+] as const;
+const territoryVehicleMeasureKeys = ["vehicles", "avgConsumption", "avgMileage"] as const;
 
 const portUnits: UnitConf = {
   vesselCount: {
@@ -367,6 +425,21 @@ const airTransport = {
   movementColumnKeys: airTransportMovementColumnKeys,
   energyKeys: airTransportEnergyKeys,
   units: airTransportUnits,
+};
+
+const territoryVehicleUnits: UnitConf = {
+  measures: {
+    vehicles: [""],
+    avgConsumption: ["L/100km", "kWh/100km", "Nm3/100km"],
+    avgMileage: ["km/year"],
+  },
+} as const;
+
+const territoryVehicles = {
+  vehicleTypeKeys: territoryVehicleTypeKeys,
+  fuelKeys: territoryVehicleFuelKeys,
+  measureKeys: territoryVehicleMeasureKeys,
+  units: territoryVehicleUnits,
 };
 
 const fleetSchema = z.object({
@@ -471,6 +544,22 @@ const airTransportSchema = z.object({
     energy: createMatrixSchema(airTransport.energyKeys, {
       unitsByKeys: airTransport.units.energy,
     }),
+  }),
+  metadata,
+});
+
+const territoryVehiclesSchema = z.object({
+  dataSet: z.object({
+    rows: createRecordGridSchema(
+      territoryVehicles.measureKeys,
+      z.enum(territoryVehicles.vehicleTypeKeys),
+      {
+        unitsByKeys: territoryVehicles.units.measures,
+      },
+      {
+        fuel: z.enum(territoryVehicles.fuelKeys),
+      }
+    ),
   }),
   metadata,
 });
@@ -636,6 +725,7 @@ const transportSchema = createGroupSchema({
   publicTransport: publicTransportSchema,
   airTransport: airTransportSchema,
   port: portSchema,
+  territoryVehicles: territoryVehiclesSchema,
 });
 
 export {
@@ -647,6 +737,7 @@ export {
   createGroupSchema,
   createGridSchema,
   createMatrixSchema,
+  createRecordGridSchema,
   createRecordMatrixSchema,
   port,
   portSchema,
@@ -654,6 +745,8 @@ export {
   publicTransportSchema,
   airTransport,
   airTransportSchema,
+  territoryVehicles,
+  territoryVehiclesSchema,
   municipalSchema,
   energySchema,
   transportSchema,

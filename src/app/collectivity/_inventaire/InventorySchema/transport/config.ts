@@ -38,6 +38,37 @@ const airTransportEnergyKeys = [
   "electricFleet",
   "kerosene",
 ] as const;
+const territoryVehicleTypeKeys = [
+  "motorcycles",
+  "publicTransportVehicles",
+  "mopeds",
+  "agriculturalEquipment",
+  "privateVehicles",
+  "specialPurposeVehicles",
+  "touristBuses",
+  "heavyTrucks",
+  "lightTrucks",
+  "tractors",
+  "tricycles",
+  "quadricycles",
+  "trailers",
+  "semiTrailers",
+  "microbuses",
+  "ambulances",
+  "taxis",
+  "sharedTaxis",
+  "touristTaxis",
+] as const;
+const territoryVehicleFuelKeys = [
+  "diesel",
+  "petrol",
+  "gpl",
+  "gnv",
+  "electricity",
+  "hybrid",
+  "other",
+] as const;
+const territoryVehicleMeasureKeys = ["vehicles", "avgConsumption", "avgMileage"] as const;
 
 const portUnits: UnitConf = {
   vesselCount: {
@@ -102,6 +133,14 @@ const airTransportUnits: UnitConf = {
   },
 } as const;
 
+const territoryVehicleUnits: UnitConf = {
+  measures: {
+    vehicles: [""],
+    avgConsumption: ["L/100km", "kWh/100km", "Nm3/100km"],
+    avgMileage: ["km/year"],
+  },
+} as const;
+
 export const port = {
   rowKeys: portRowKeys,
   units: portUnits,
@@ -121,4 +160,11 @@ export const airTransport = {
   movementColumnKeys: airTransportMovementColumnKeys,
   energyKeys: airTransportEnergyKeys,
   units: airTransportUnits,
+};
+
+export const territoryVehicles = {
+  vehicleTypeKeys: territoryVehicleTypeKeys,
+  fuelKeys: territoryVehicleFuelKeys,
+  measureKeys: territoryVehicleMeasureKeys,
+  units: territoryVehicleUnits,
 };
