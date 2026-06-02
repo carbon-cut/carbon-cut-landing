@@ -9,6 +9,10 @@ import MenuHamburger from "./_menuHamburger";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
+import {
+  DEFAULT_COLLECTIVITY_PLAN_ID,
+  getCollectivityModuleRoute,
+} from "@/app/collectivity/_lib/routing";
 
 type MenuItem = {
   title: string;
@@ -18,21 +22,9 @@ type MenuItem = {
 function Header() {
   const tNav = useScopedI18n("home.nav");
   const tPrimaryCta = useScopedI18n("home.hero.primaryCta");
+  const tCollectivityNav = useScopedI18n("collectivityLanding.nav");
+  const tCollectivityPrimaryCta = useScopedI18n("collectivityLanding.hero.primaryCta");
   const tAuth = useScopedI18n("(auth).common");
-  const menu: MenuItem[] = [
-    {
-      title: tNav("features"),
-      url: "/#features",
-    },
-    {
-      title: tNav("trust"),
-      url: "/#trust",
-    },
-    {
-      title: tNav("results"),
-      url: "/#cta",
-    },
-  ];
   const [dataState, setDataState] = React.useState("big");
   const [show, setShow] = React.useState(false);
   const [isDesktop, setIsDesktop] = React.useState(false);
@@ -40,15 +32,44 @@ function Header() {
   const pathName = usePathname();
   const router = useRouter();
   const { status, signOut } = useAuth();
+  const isCollectivityLanding = pathName === "/collectivity";
+  const isLandingHeader = pathName === "/" || isCollectivityLanding;
+  const primaryCtaHref = isCollectivityLanding
+    ? getCollectivityModuleRoute(DEFAULT_COLLECTIVITY_PLAN_ID, "cadrage")
+    : "/form";
+  const menu: MenuItem[] = isCollectivityLanding
+    ? [
+        {
+          title: tCollectivityNav("prototype"),
+          url: "/collectivity#proof",
+        },
+        {
+          title: tCollectivityNav("cadrage"),
+          url: "/collectivity#cta",
+        },
+      ]
+    : [
+        {
+          title: tNav("features"),
+          url: "/#features",
+        },
+        {
+          title: tNav("trust"),
+          url: "/#trust",
+        },
+        {
+          title: tNav("results"),
+          url: "/#cta",
+        },
+      ];
 
   useEffect(() => {
-    const isHome = pathName === "/";
-    if (!isHome && isDesktop) {
+    if (!isLandingHeader && isDesktop) {
       setDataState("small");
-    } else if (!isHome && !isDesktop) {
+    } else if (!isLandingHeader && !isDesktop) {
       setDataState("bigSticky");
     } else setDataState("big");
-  }, [pathName, isDesktop]);
+  }, [isLandingHeader, isDesktop]);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 768px)");
@@ -70,7 +91,7 @@ function Header() {
     return null;
   }
 
-  if (pathName.startsWith("/collectivity")) {
+  if (pathName.startsWith("/collectivity/")) {
     return null;
   }
 
@@ -123,10 +144,14 @@ function Header() {
             className={style.button}
             size={"lg"}
             tabIndex={navHidden ? -1 : 0}
-            aria-label={tPrimaryCta("aria")}
+            aria-label={
+              isCollectivityLanding ? tCollectivityPrimaryCta("aria") : tPrimaryCta("aria")
+            }
             onClick={() => setShow(false)}
           >
-            <Link href={"/form"}>{tPrimaryCta("label")}</Link>
+            <Link href={primaryCtaHref}>
+              {isCollectivityLanding ? tCollectivityPrimaryCta("label") : tPrimaryCta("label")}
+            </Link>
           </Button>
         )}
       </nav>

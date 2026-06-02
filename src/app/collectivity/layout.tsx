@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { toKeywordArray } from "@/lib/seo";
 import { useScopedServerI18n } from "@/locales/server";
 
-const collectivitySeo = useScopedServerI18n("seo.pages.collectivityDashboard");
+const collectivitySeo = useScopedServerI18n("seo.pages.collectivityLanding");
 
 export const metadata: Metadata = {
   title: collectivitySeo("title"),

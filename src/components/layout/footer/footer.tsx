@@ -72,7 +72,7 @@ function Footer() {
     return null;
   }
 
-  if (pathname.startsWith("/collectivity")) {
+  if (pathname.startsWith("/collectivity/")) {
     return null;
   }
 

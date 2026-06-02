@@ -111,6 +111,19 @@ export default {
           "contact utilisateur carbon cut",
         ],
       },
+      collectivityLanding: {
+        title: "Collectivité | Prototype d'inventaire carbone | Carbon Cut",
+        description:
+          "Découvrez le prototype Carbon Cut pour cadrer le territoire d'une collectivité et préparer un inventaire carbone municipal.",
+        keywords: [
+          "prototype collectivité carbone",
+          "inventaire carbone municipal",
+          "cadrage territoire",
+          "collecte données climat",
+          "bilan carbone collectivité",
+          "outil climat municipal",
+        ],
+      },
       collectivityDashboard: {
         title: "Collectivity Inventory (Draft) | Carbon Cut",
         description:
@@ -124,6 +137,64 @@ export default {
           "territorial data collection",
         ],
       },
+    },
+  },
+  collectivityLanding: {
+    nav: {
+      prototype: "Prototype",
+      cadrage: "Cadrage",
+    },
+    hero: {
+      badge: "Prototype collectivité",
+      title: {
+        line1: "Cadrez votre",
+        highlight: "inventaire carbone",
+        line2: "territorial.",
+      },
+      description:
+        "Une première preuve de concept pour aider une collectivité à poser son périmètre, organiser les données utiles et entrer dans un cadrage municipal guidé.",
+      imageAlt: "Paysage illustrant l'entrée collectivité de Carbon Cut",
+      primaryCta: {
+        label: "Ouvrir le cadrage",
+        aria: "Ouvrir le cadrage de la collectivité Grand Sfax",
+      },
+      secondaryCta: {
+        label: "Voir le prototype",
+        aria: "Voir ce que couvre le prototype collectivité",
+      },
+    },
+    proof: {
+      badge: "Ce que couvre cette version",
+      title: "Un point d'entrée simple avant l'espace de travail.",
+      description:
+        "Cette page reste volontairement minimale : elle présente le prototype, clarifie son périmètre actuel et mène vers le cadrage, sans promettre une plateforme collectivité complète.",
+      points: {
+        territory: {
+          title: "Définir le périmètre",
+          description:
+            "Le cadrage commence par le territoire, les années d'inventaire et les informations de base nécessaires avant la saisie.",
+        },
+        inventory: {
+          title: "Préparer la collecte",
+          description:
+            "Le prototype structure les familles de données pour faciliter la suite du travail d'inventaire.",
+        },
+        review: {
+          title: "Rester en preuve de concept",
+          description:
+            "La version actuelle montre une direction produit, avec un périmètre limité et encore en amélioration.",
+        },
+      },
+    },
+    cta: {
+      title: "Commencez par cadrer le territoire.",
+      description:
+        "Pour cette première version, l'appel à l'action mène directement vers le module de cadrage du plan Grand Sfax.",
+      primaryCta: {
+        label: "Accéder au cadrage",
+        aria: "Accéder au cadrage du plan Grand Sfax",
+      },
+      imageAlt: "Illustration de clôture pour accéder au cadrage collectivité Carbon Cut",
     },
   },
   home: {
