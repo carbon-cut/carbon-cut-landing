@@ -8,6 +8,7 @@ import TrustOptionsSection from "./_home/sections/trustOptionsSection";
 import CtaSection from "./_home/sections/ctaSection";
 import TestOfferSection from "./_home/sections/testOfferSection";
 import FaqSection from "./_home/sections/faqSection";
+import ScrollToTopButton from "@/components/layout/scrollToTopButton";
 
 const homeSeo = useScopedServerI18n("seo.pages.home");
 
@@ -25,6 +26,7 @@ export default function Home() {
       <TestOfferSection />
       <CtaSection />
       <FaqSection />
+      <ScrollToTopButton />
     </main>
   );
 }

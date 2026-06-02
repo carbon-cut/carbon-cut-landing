@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { ChevronUp } from "lucide-react";
-import { usePathname } from "next/navigation";
 
 import { useScopedI18n } from "@/locales/client";
 
@@ -18,11 +17,6 @@ function ScrollToTopButton() {
   const [isFooterVisible, setIsFooterVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const t = useScopedI18n("components.layout.scrollToTop");
-  const pathname = usePathname();
-
-  if (pathname.startsWith("/auth") || pathname.startsWith("/collectivity")) {
-    return null;
-  }
 
   useEffect(() => {
     const footer = document.getElementById("site-footer");
