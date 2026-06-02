@@ -1,10 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import { useInventoryContext } from "../context/inventory-context";
-import type { InventoryFormValues } from "../context/inventory-context";
-import { TName } from "@/components/ui/forms";
 import TableGrid from "@/components/table/table-grid";
 import type { InventoryTableSectionData } from "../types";
 
@@ -24,7 +20,7 @@ export default function InventoryTableSection({
       className={className}
       title={section.title}
       description={section.description}
-      rows={/* rows */ []}
+      rows={section.rows}
       columns={section.columns}
       form={mainForm}
       baseName={section.fieldBaseName}
