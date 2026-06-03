@@ -10,8 +10,6 @@ import Typography from "@/components/ui/typography";
 import { toKeywordArray } from "@/lib/seo";
 import { useScopedServerI18n } from "@/locales/server";
 
-import { DEFAULT_COLLECTIVITY_PLAN_ID, getCollectivityModuleRoute } from "./_lib/routing";
-
 const collectivityLandingSeo = useScopedServerI18n("seo.pages.collectivityLanding");
 
 export const metadata: Metadata = {
@@ -53,9 +51,10 @@ const proofPoints = [
   },
 ] as const;
 
+const collectivityStartHref = "/collectivity/start";
+
 export default function CollectivityIndexPage() {
   const t = useScopedServerI18n("collectivityLanding");
-  const cadrageHref = getCollectivityModuleRoute(DEFAULT_COLLECTIVITY_PLAN_ID, "cadrage");
 
   return (
     <main id="content">
@@ -98,7 +97,7 @@ export default function CollectivityIndexPage() {
               className="justify-center py-6"
               aria-label={t("hero.primaryCta.aria")}
             >
-              <Link href={cadrageHref}>
+              <Link href={collectivityStartHref}>
                 {t("hero.primaryCta.label")} <ArrowRight />
               </Link>
             </Button>
@@ -184,7 +183,7 @@ export default function CollectivityIndexPage() {
                   className="bg-linear-accent-diagonal"
                   aria-label={t("cta.primaryCta.aria")}
                 >
-                  <Link href={cadrageHref}>
+                  <Link href={collectivityStartHref}>
                     {t("cta.primaryCta.label")} <ArrowRight />
                   </Link>
                 </Button>

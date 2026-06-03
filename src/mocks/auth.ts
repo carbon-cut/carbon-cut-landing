@@ -12,6 +12,7 @@ import type {
   SignInRequest,
   SignUpRequest,
 } from "@/lib/auth/types";
+import { COLLECTIVITY_MOCK_PASSWORD, COLLECTIVITY_MOCK_USERS } from "@/mocks/collectivity";
 
 type MockUserRecord = AuthUser & {
   password: string;
@@ -92,6 +93,7 @@ function ensureSeedUsers() {
       provider: "local",
       confirmed: true,
       blocked: false,
+      productType: "household",
       password: defaultPassword,
       confirmationToken: defaultConfirmationToken,
       resetCode: defaultResetCode,
@@ -103,6 +105,7 @@ function ensureSeedUsers() {
       provider: "local",
       confirmed: false,
       blocked: false,
+      productType: "household",
       password: defaultPassword,
       confirmationToken: defaultConfirmationToken,
       resetCode: defaultResetCode,
@@ -114,14 +117,54 @@ function ensureSeedUsers() {
       provider: "local",
       confirmed: true,
       blocked: true,
+      productType: "household",
       password: defaultPassword,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
+    {
+      id: COLLECTIVITY_MOCK_USERS.developedInventory.id,
+      username: COLLECTIVITY_MOCK_USERS.developedInventory.username,
+      email: COLLECTIVITY_MOCK_USERS.developedInventory.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      productType: "collectivity",
+      planId: COLLECTIVITY_MOCK_USERS.developedInventory.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
+    {
+      id: COLLECTIVITY_MOCK_USERS.noInventory.id,
+      username: COLLECTIVITY_MOCK_USERS.noInventory.username,
+      email: COLLECTIVITY_MOCK_USERS.noInventory.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      productType: "collectivity",
+      planId: COLLECTIVITY_MOCK_USERS.noInventory.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
+    {
+      id: COLLECTIVITY_MOCK_USERS.newlyCreated.id,
+      username: COLLECTIVITY_MOCK_USERS.newlyCreated.username,
+      email: COLLECTIVITY_MOCK_USERS.newlyCreated.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      productType: "collectivity",
+      planId: COLLECTIVITY_MOCK_USERS.newlyCreated.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
       confirmationToken: defaultConfirmationToken,
       resetCode: defaultResetCode,
     },
   ] satisfies MockUserRecord[];
 
   seed.forEach((user) => users.set(user.email.toLowerCase(), user));
-  nextUserId = 4;
+  nextUserId = 7;
 }
 
 ensureSeedUsers();
@@ -178,6 +221,7 @@ export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse {
     provider: "local",
     confirmed: false,
     blocked: false,
+    productType: "household",
     password: body.password,
     confirmationToken: defaultConfirmationToken,
     resetCode: defaultResetCode,

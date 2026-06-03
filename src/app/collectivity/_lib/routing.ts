@@ -9,3 +9,7 @@ export function getCollectivityPlanRoute(planId: string) {
 export function getCollectivityModuleRoute(planId: string, moduleSlug: CollectivityModuleSlug) {
   return `${getCollectivityPlanRoute(planId)}/${moduleSlug}`;
 }
+
+export function getCollectivitySetupCadrageRoute() {
+  return "/collectivity/setup/cadrage";
+}

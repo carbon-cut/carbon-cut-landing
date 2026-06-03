@@ -24,6 +24,10 @@ export function SignInPageContent() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
+  const signUpHref = returnTo
+    ? `/auth/sign-up?${new URLSearchParams({ returnTo }).toString()}`
+    : "/auth/sign-up";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -75,7 +79,6 @@ export function SignInPageContent() {
     }
 
     await refetchSession();
-    const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
     router.push(returnTo ?? "/form");
   }
 
@@ -138,7 +141,7 @@ export function SignInPageContent() {
 
         <p className="mt-6 text-center text-sm text-secondary">
           {t("message.signup")}{" "}
-          <Link href="/auth/sign-up" className="text-primary underline-offset-4 hover:underline">
+          <Link href={signUpHref} className="text-primary underline-offset-4 hover:underline">
             {t("link.signup")}
           </Link>
         </p>

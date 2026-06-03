@@ -9,10 +9,6 @@ import MenuHamburger from "./_menuHamburger";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
-import {
-  DEFAULT_COLLECTIVITY_PLAN_ID,
-  getCollectivityModuleRoute,
-} from "@/app/collectivity/_lib/routing";
 
 type MenuItem = {
   title: string;
@@ -34,9 +30,7 @@ function Header() {
   const { status, signOut } = useAuth();
   const isCollectivityLanding = pathName === "/collectivity";
   const isLandingHeader = pathName === "/" || isCollectivityLanding;
-  const primaryCtaHref = isCollectivityLanding
-    ? getCollectivityModuleRoute(DEFAULT_COLLECTIVITY_PLAN_ID, "cadrage")
-    : "/form";
+  const primaryCtaHref = isCollectivityLanding ? "/collectivity/start" : "/form";
   const menu: MenuItem[] = isCollectivityLanding
     ? [
         {

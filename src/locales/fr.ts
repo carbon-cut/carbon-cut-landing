@@ -156,7 +156,7 @@ export default {
       imageAlt: "Paysage illustrant l'entrée collectivité de Carbon Cut",
       primaryCta: {
         label: "Ouvrir le cadrage",
-        aria: "Ouvrir le cadrage de la collectivité Grand Sfax",
+        aria: "Ouvrir le cadrage de la collectivité",
       },
       secondaryCta: {
         label: "Voir le prototype",
@@ -189,13 +189,20 @@ export default {
     cta: {
       title: "Commencez par cadrer le territoire.",
       description:
-        "Pour cette première version, l'appel à l'action mène directement vers le module de cadrage du plan Grand Sfax.",
+        "Pour cette première version, l'appel à l'action mène vers le module de cadrage associé à votre collectivité.",
       primaryCta: {
         label: "Accéder au cadrage",
-        aria: "Accéder au cadrage du plan Grand Sfax",
+        aria: "Accéder au cadrage de la collectivité",
       },
       imageAlt: "Illustration de clôture pour accéder au cadrage collectivité Carbon Cut",
     },
+  },
+  collectivitySetup: {
+    title: "Configurer la collectivité",
+    description:
+      "Avant d'ouvrir l'espace de travail complet, commencez par cadrer le territoire et les années de référence.",
+    primaryCta: "Continuer",
+    submitError: "Impossible d'enregistrer le cadrage pour le moment.",
   },
   home: {
     nav: {
@@ -797,6 +804,7 @@ export default {
         title: "Cadrage du plan",
         description:
           "Définissez le territoire de référence et les années de travail avant d'ouvrir l'inventaire.",
+        primaryCta: "Enregistrer le cadrage",
         output: {
           title: "Sortie attendue",
           items: [
@@ -811,17 +819,34 @@ export default {
           incomplete: "À compléter",
           progressSuffix: "blocs cadrés",
           items: {
+            country: "Pays",
+            planId: "Identifiant du plan",
             territory: "Territoire",
             referenceYear: "Année de référence",
             supportYears: "Année(s) d'appoint",
           },
         },
         sections: {
+          scope: {
+            title: "Identification",
+            description:
+              "Choisissez le pays de travail, la ville ou le territoire concerné, puis vérifiez l'identifiant du plan.",
+            countryLabel: "Pays",
+            countryPlaceholder: "Choisir un pays",
+            countryHelper:
+              "Le pays conditionne les référentiels et les données de travail rattachés au plan.",
+            planIdLabel: "Identifiant du plan",
+            planIdPlaceholder: "ex. grand-sfax",
+            planIdHelper:
+              "Cet identifiant est proposé à partir de la ville sélectionnée. Vous pouvez le modifier, mais il doit rester unique.",
+          },
           territory: {
             title: "Territoire",
-            description: "Vérifiez le territoire principal du plan avant d'ouvrir l'inventaire.",
-            label: "Territoire de référence",
-            placeholder: "ex. Commune porteuse, territoire ou agglomération",
+            description:
+              "Choisissez la ville ou le territoire principal du plan avant d'ouvrir l'inventaire.",
+            label: "Ville ou territoire",
+            placeholder: "Choisir une ville ou un territoire",
+            disabledPlaceholder: "Choisissez d'abord un pays",
             helper: "Cette valeur sert ensuite de base commune à tous les modules du plan.",
           },
           temporality: {
@@ -3310,6 +3335,18 @@ export default {
     submit: "Résultat",
     errors: {
       Required: "Obligatoire",
+      collectivityCountryRequired: "Sélectionnez un pays.",
+      collectivityCountryInvalid: "Choisissez un pays valide.",
+      collectivityPlanIdRequired: "Renseignez l'identifiant du plan.",
+      collectivityPlanIdInvalid:
+        "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",
+      collectivityPlanIdNotUnique: "Cet identifiant existe déjà. Choisissez-en un autre.",
+      collectivityTerritoryRequired: "Sélectionnez une ville ou un territoire.",
+      collectivityReferenceYearRequired: "Choisissez une année de référence.",
+      collectivitySupportYearsRequired: "Ajoutez au moins une année d'appoint.",
+      collectivitySupportYearsDuplicate: "Chaque année d'appoint doit être unique.",
+      collectivitySupportYearsReferenceConflict:
+        "L'année de référence ne peut pas aussi être une année d'appoint.",
       woodTypeRequired: "Sélectionnez au moins un type de bois.",
       food: {
         minMeals: "Le total des repas doit être au moins de 7.",

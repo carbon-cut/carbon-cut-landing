@@ -12,7 +12,8 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
           px-3 py-1 shadow-sm transition-colors file:border-0 
           file:bg-transparent file:text-sm file:font-medium file:text-foreground
           placeholder:text-muted-foreground 
-          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring 
+          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
+          aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20
           disabled:cursor-not-allowed disabled:opacity-50 text-sm `,
           className
         )}
@@ -33,7 +34,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<"tex
           px-3 py-1 shadow-sm transition-colors file:border-0 
           file:bg-transparent file:text-sm file:font-medium file:text-foreground
           placeholder:text-muted-foreground 
-          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring 
+          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
+          aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20
           disabled:cursor-not-allowed disabled:opacity-50 text-sm `,
           className
         )}

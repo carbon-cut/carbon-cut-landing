@@ -21,6 +21,10 @@ export function ConfirmEmailPageContent() {
   const router = useRouter();
   const { refetchSession } = useAuth();
   const email = searchParams.get("email") ?? "";
+  const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
+  const signInHref = returnTo
+    ? `/auth/sign-in?${new URLSearchParams({ returnTo }).toString()}`
+    : "/auth/sign-in";
   const [confirmation, setConfirmation] = useState("");
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -65,7 +69,6 @@ export function ConfirmEmailPageContent() {
     }
 
     await refetchSession();
-    const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
     router.push(returnTo ?? "/form");
   }
 
@@ -89,7 +92,7 @@ export function ConfirmEmailPageContent() {
       const code = getErrorCode(result.error);
 
       if (code === "AUTH_EMAIL_ALREADY_CONFIRMED") {
-        router.push("/auth/sign-in");
+        router.push(signInHref);
         return;
       }
 
@@ -162,7 +165,7 @@ export function ConfirmEmailPageContent() {
         </form>
 
         <p className="mt-6 text-center text-sm text-secondary">
-          <Link href="/auth/sign-in" className="text-primary underline-offset-4 hover:underline">
+          <Link href={signInHref} className="text-primary underline-offset-4 hover:underline">
             {t("link.login")}
           </Link>
         </p>

@@ -1,5 +1,9 @@
 "use client";
 
+"use client";
+
+import * as React from "react";
+
 import {
   Select,
   SelectContent,
@@ -20,27 +24,35 @@ type CollectivitySelectProps = {
   placeholder: string;
   options: CollectivitySelectOption[];
   className?: string;
+  disabled?: boolean;
+  id?: string;
+  "aria-describedby"?: string;
+  "aria-invalid"?: boolean;
 };
 
-export default function CollectivitySelect({
-  value,
-  onValueChange,
-  placeholder,
-  options,
-  className,
-}: CollectivitySelectProps) {
-  return (
-    <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className={cn("h-10 w-full rounded-md bg-card shadow-none", className)}>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-}
+const CollectivitySelect = React.forwardRef<HTMLButtonElement, CollectivitySelectProps>(
+  ({ value, onValueChange, placeholder, options, className, disabled, ...triggerProps }, ref) => {
+    return (
+      <Select value={value} onValueChange={onValueChange} disabled={disabled}>
+        <SelectTrigger
+          ref={ref}
+          className={cn("h-10 w-full rounded-md bg-card shadow-none", className)}
+          {...triggerProps}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    );
+  }
+);
+
+CollectivitySelect.displayName = "CollectivitySelect";
+
+export default CollectivitySelect;

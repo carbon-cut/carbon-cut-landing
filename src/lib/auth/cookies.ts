@@ -80,6 +80,15 @@ export function writeSessionCookies(cookieStore: CookieWriter, session: AuthSess
   });
 }
 
+export function writeUserCookie(cookieStore: CookieWriter, user: AuthUser) {
+  cookieStore.set(AUTH_USER_COOKIE, serializeUser(user), {
+    httpOnly: true,
+    path: AUTH_COOKIE_PATH,
+    sameSite: "lax",
+    secure: shouldSecureCookies(),
+  });
+}
+
 export function clearSessionCookies(cookieStore: CookieDeleter) {
   cookieStore.delete(AUTH_ACCESS_COOKIE);
   cookieStore.delete(AUTH_REFRESH_COOKIE);

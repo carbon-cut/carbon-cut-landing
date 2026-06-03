@@ -1,7 +1,21 @@
 import RouteDescriptionPanel from "../../_components/routeDescriptionPanel";
+import { getCollectivityModuleRoute } from "../../_lib/routing";
+import { requireCollectivityPlanSession } from "@/lib/auth/access";
 import { useScopedServerI18n } from "@/locales/server";
 
-export default function CollectivityPlanScenariosPage() {
+export default async function CollectivityPlanScenariosPage({
+  params,
+}: {
+  params: Promise<{ planId: string }>;
+}) {
+  const { planId } = await params;
+
+  await requireCollectivityPlanSession({
+    requestedPlanId: planId,
+    requestedModule: "scenarios",
+    returnTo: getCollectivityModuleRoute(planId, "scenarios"),
+  });
+
   const t = useScopedServerI18n("(pages).collectivityDashboard");
 
   return (
