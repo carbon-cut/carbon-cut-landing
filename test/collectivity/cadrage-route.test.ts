@@ -21,6 +21,7 @@ describe("collectivity cadrage route", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
+        allowedProducts: ["collectivity"],
         productType: "collectivity",
       },
     });

@@ -28,6 +28,7 @@ describe("collectivity start route", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
+        allowedProducts: ["collectivity"],
         productType: "collectivity",
       },
     });
@@ -43,6 +44,7 @@ describe("collectivity start route", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
+        allowedProducts: ["collectivity"],
         productType: "collectivity",
         planId: ["grand-sfax"],
       },

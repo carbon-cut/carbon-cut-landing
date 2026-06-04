@@ -18,17 +18,18 @@ type AuthUser = {
   provider: string;
   confirmed: boolean;
   blocked: boolean;
-  productType: ProductType;
+  allowedProducts: ProductType[];
   planId?: string[];
 };
 ```
 
 ## Meaning
 
-- `productType` decides which product the user is allowed to access.
+- `allowedProducts` decides which product surfaces the user is allowed to access.
 - `planId` is optional and only relevant for `collectivity`.
 - `planId === undefined` means the collectivity user has not yet created a collectivity workspace and must be redirected to setup.
 - `planId.length > 0` means the collectivity user can access collectivity workspace routes for those plans.
+- `allowedProducts: ["household", "collectivity"]` means a super user can access both products.
 
 ## Frontend routing rules already implemented
 
@@ -39,7 +40,7 @@ type AuthUser = {
 
 ## Auth and session work needed in backend
 
-- Add `productType` to the session/auth response payload.
+- Add `allowedProducts` to the session/auth response payload.
 - Add `planId` to the session/auth response payload for collectivity users.
 - Keep the session cookie or session endpoint in sync after collectivity setup creates the first plan.
 - Keep the session cookie or session endpoint in sync after a collectivity user renames an existing `planId`.

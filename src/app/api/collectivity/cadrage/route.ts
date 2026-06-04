@@ -5,7 +5,7 @@ import {
   type CollectivityCadrageValues,
 } from "@/app/collectivity/_cadrage/schema";
 import { writeUserCookie } from "@/lib/auth/cookies";
-import { getUserPlanIds, getUserProductType } from "@/lib/auth/profile";
+import { getUserAllowedProducts, getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
 import { getServerSession } from "@/lib/auth/session";
 import {
   getMockCollectivityCadrage,
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     );
   }
 
-  if (getUserProductType(session.user) !== "collectivity") {
+  if (!hasUserProductAccess(session.user, "collectivity")) {
     return NextResponse.json(
       {
         error: {
@@ -118,7 +118,7 @@ export async function POST(request: Request) {
 
   writeUserCookie(response.cookies, {
     ...session.user,
-    productType: "collectivity",
+    allowedProducts: Array.from(new Set([...getUserAllowedProducts(session.user), "collectivity"])),
     planId: nextPlanIds,
   });
 

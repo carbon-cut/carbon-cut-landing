@@ -7,6 +7,7 @@ export type AuthUser = {
   provider: string;
   confirmed: boolean;
   blocked: boolean;
+  allowedProducts?: ProductType[];
   productType?: ProductType;
   planId?: string[];
 };

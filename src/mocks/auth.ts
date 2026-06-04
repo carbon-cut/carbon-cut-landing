@@ -93,6 +93,7 @@ function ensureSeedUsers() {
       provider: "local",
       confirmed: true,
       blocked: false,
+      allowedProducts: ["household"],
       productType: "household",
       password: defaultPassword,
       confirmationToken: defaultConfirmationToken,
@@ -105,6 +106,7 @@ function ensureSeedUsers() {
       provider: "local",
       confirmed: false,
       blocked: false,
+      allowedProducts: ["household"],
       productType: "household",
       password: defaultPassword,
       confirmationToken: defaultConfirmationToken,
@@ -117,6 +119,7 @@ function ensureSeedUsers() {
       provider: "local",
       confirmed: true,
       blocked: true,
+      allowedProducts: ["household"],
       productType: "household",
       password: defaultPassword,
       confirmationToken: defaultConfirmationToken,
@@ -129,6 +132,7 @@ function ensureSeedUsers() {
       provider: "local",
       confirmed: true,
       blocked: false,
+      allowedProducts: ["collectivity"],
       productType: "collectivity",
       planId: COLLECTIVITY_MOCK_USERS.developedInventory.planId,
       password: COLLECTIVITY_MOCK_PASSWORD,
@@ -142,6 +146,7 @@ function ensureSeedUsers() {
       provider: "local",
       confirmed: true,
       blocked: false,
+      allowedProducts: ["collectivity"],
       productType: "collectivity",
       planId: COLLECTIVITY_MOCK_USERS.noInventory.planId,
       password: COLLECTIVITY_MOCK_PASSWORD,
@@ -155,8 +160,23 @@ function ensureSeedUsers() {
       provider: "local",
       confirmed: true,
       blocked: false,
+      allowedProducts: ["collectivity"],
       productType: "collectivity",
       planId: COLLECTIVITY_MOCK_USERS.newlyCreated.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
+    {
+      id: COLLECTIVITY_MOCK_USERS.superUser.id,
+      username: COLLECTIVITY_MOCK_USERS.superUser.username,
+      email: COLLECTIVITY_MOCK_USERS.superUser.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      allowedProducts: ["household", "collectivity"],
+      productType: "collectivity",
+      planId: COLLECTIVITY_MOCK_USERS.superUser.planId,
       password: COLLECTIVITY_MOCK_PASSWORD,
       confirmationToken: defaultConfirmationToken,
       resetCode: defaultResetCode,
@@ -164,7 +184,7 @@ function ensureSeedUsers() {
   ] satisfies MockUserRecord[];
 
   seed.forEach((user) => users.set(user.email.toLowerCase(), user));
-  nextUserId = 7;
+  nextUserId = 8;
 }
 
 ensureSeedUsers();
@@ -221,6 +241,7 @@ export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse {
     provider: "local",
     confirmed: false,
     blocked: false,
+    allowedProducts: ["household"],
     productType: "household",
     password: body.password,
     confirmationToken: defaultConfirmationToken,

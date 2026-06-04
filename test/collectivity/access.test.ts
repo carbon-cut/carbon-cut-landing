@@ -30,6 +30,7 @@ describe("auth access helpers", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
+        allowedProducts: ["collectivity"],
         productType: "collectivity",
         planId: ["grand-sfax"],
       },
@@ -51,6 +52,7 @@ describe("auth access helpers", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
+        allowedProducts: ["household"],
         productType: "household",
       },
     });
@@ -71,6 +73,7 @@ describe("auth access helpers", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
+        allowedProducts: ["collectivity"],
         productType: "collectivity",
       },
     });
@@ -83,5 +86,64 @@ describe("auth access helpers", () => {
     });
 
     expect(mockRedirect).toHaveBeenCalledWith("/collectivity/setup/cadrage");
+  });
+
+  it("allows a super user to access both household and collectivity products", async () => {
+    mockRequireServerSession.mockResolvedValue({
+      authenticated: true,
+      user: {
+        id: 7,
+        username: "collectivity-super-user",
+        email: "collectivity.super@example.com",
+        provider: "local",
+        confirmed: true,
+        blocked: false,
+        allowedProducts: ["household", "collectivity"],
+        planId: ["grand-sfax"],
+      },
+    });
+
+    const { requireHouseholdSession, requireCollectivitySession, getCollectivityDefaultRoute } =
+      await import("@/lib/auth/access");
+
+    const householdSession = await requireHouseholdSession("/form");
+    const collectivitySession = await requireCollectivitySession("/collectivity/start");
+
+    expect(householdSession.user.email).toBe("collectivity.super@example.com");
+    expect(collectivitySession.user.email).toBe("collectivity.super@example.com");
+    expect(getCollectivityDefaultRoute(collectivitySession.user)).toBe(
+      "/collectivity/grand-sfax/cadrage"
+    );
+    expect(mockRedirect).not.toHaveBeenCalled();
+  });
+
+  it("sends authenticated users away from auth pages based on their allowed products", async () => {
+    mockRequireServerSession.mockResolvedValue({
+      authenticated: true,
+      user: {
+        id: 4,
+        username: "collectivity-user",
+        email: "collectivity.ready@example.com",
+        provider: "local",
+        confirmed: true,
+        blocked: false,
+        allowedProducts: ["collectivity"],
+        planId: ["grand-sfax"],
+      },
+    });
+
+    const { getAuthenticatedUserHomeRoute } = await import("@/lib/auth/access");
+
+    expect(
+      getAuthenticatedUserHomeRoute({
+        allowedProducts: ["household"],
+      })
+    ).toBe("/form");
+    expect(getAuthenticatedUserHomeRoute({ allowedProducts: ["household", "collectivity"] })).toBe(
+      "/form"
+    );
+    expect(
+      getAuthenticatedUserHomeRoute({ allowedProducts: ["collectivity"], planId: ["grand-sfax"] })
+    ).toBe("/collectivity/grand-sfax/cadrage");
   });
 });

@@ -56,6 +56,22 @@ export const COLLECTIVITY_MOCK_USERS = {
     cadrage: null,
     inventory: null,
   },
+  superUser: {
+    id: 7,
+    username: "collectivity-super-user",
+    email: "collectivity.super@example.com",
+    planId: ["grand-sfax"],
+    cadrage: {
+      country: "tunisia",
+      planId: "grand-sfax",
+      territoryName: "Grand Sfax",
+      referenceYear: "2022",
+      supportYears: ["2021"],
+    },
+    inventory: {
+      municipalElectricityConsumptionKwh: 42000,
+    },
+  },
 };
 
 export type MockCollectivityUserState = {
