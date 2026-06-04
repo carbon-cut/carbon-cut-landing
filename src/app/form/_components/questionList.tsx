@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { TabValues } from "@/lib/formTabs/types";
 import FormContext from "../_layout/_formContext";
 import { useScopedI18n } from "@/locales/client";
-import { getIcon, getName } from "@/lib/formTabs/geters";
+import { getIcon } from "@/lib/formTabs/geters";
 import { Label } from "@/components/ui/label";
 import Question from "./QuestionListItem";
 import Typography from "@/components/ui/typography";
@@ -50,6 +50,7 @@ function buttonVariants(tab: TabValues) {
 function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
   const t = useScopedI18n("forms");
   const tOverview = useScopedI18n("components.forms.overview");
+  const tSections = useScopedI18n("sections");
 
   const { tab, setTab, currentIndexes, setCurrentIndexes } = React.useContext(FormContext);
 
@@ -117,7 +118,7 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
                     </div>
                     <div className="grid grid-rows-2 ml-3">
                       <Typography asChild variant="subtitle" size="md">
-                        <Label>{getName(key)}</Label>
+                        <Label>{tSections(key)}</Label>
                       </Typography>
                       <Typography asChild variant="caption" size="sm">
                         <Label>{list[key]?.length} questions</Label>

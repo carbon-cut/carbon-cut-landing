@@ -14,7 +14,7 @@ import { formSchema } from "../../_forms/formSchema";
 import FormContext from "../_layout/_formContext";
 import { Car, Zap, UtensilsCrossed, Trash2, Plane } from "lucide-react";
 import ProgressBar from "./_progressBar";
-import { getIndex, getName } from "@/lib/formTabs/geters";
+import { getIndex } from "@/lib/formTabs/geters";
 import QuestionList from "./questionList";
 import style from "../form.module.css";
 import Container from "./container";
@@ -25,10 +25,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import PreAssessment from "./preAssessment";
 import { shellLayout } from "./shellLayout";
+import { useScopedI18n } from "@/locales/client";
 
 export default function FormPageClient() {
   const { tab, setTab, currentIndexes, readyToSubmit } = React.useContext(FormContext);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const tSections = useScopedI18n("sections");
 
   const router = useRouter();
 
@@ -235,7 +237,7 @@ export default function FormPageClient() {
                     dataLengths={dataLengths}
                     currentQuestion={currentIndexes[tab]}
                     currentSectionDataLength={dataLengths[tab]}
-                    currentSectionName={getName(tab)}
+                    currentSectionName={tSections(tab)}
                   >
                     <QuestionList
                       mainForm={mainForm}

@@ -7,12 +7,13 @@ import { z } from "zod";
 import { formSchema } from "@/app/_forms/formSchema";
 import QuestionRenderer from "./questionRenderer";
 import FormContext from "../_layout/_formContext";
-import { getName } from "@/lib/formTabs/geters";
+import { useScopedI18n } from "@/locales/client";
 const TabTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsTrigger>,
   React.ComponentPropsWithoutRef<typeof TabsTrigger>
 >(({ className, ...props }, ref) => {
   const tab = props.value as keyof typeof colorVariants;
+  const tSections = useScopedI18n("sections");
   const colorVariants = {
     transport: `
     data-[state=active]:bg-linear-section-transport
@@ -46,7 +47,9 @@ const TabTrigger = React.forwardRef<
       {...props}
     >
       {props.children}
-      <span className="font-medium md:text-sm text-xs md:block hidden">{getName(props.value)}</span>
+      <span className="font-medium md:text-sm text-xs md:block hidden">
+        {tSections(props.value)}
+      </span>
     </TabsTrigger>
   );
 });
