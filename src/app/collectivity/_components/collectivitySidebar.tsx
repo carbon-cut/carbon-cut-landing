@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils";
 import { useScopedI18n } from "@/locales/client";
 
 import { getCollectivityModuleRoute, type CollectivityModuleSlug } from "../_lib/routing";
+import Typography from "@/components/ui/typography";
 
 export type CollectivityRouteItem = {
   key: CollectivityModuleSlug;
@@ -48,7 +49,7 @@ const routeDefinitions: Array<{
 
 const BRAND_MARK_SIZE = 50;
 const FULL_LOGO_WIDTH = (BRAND_MARK_SIZE * 89) / 36;
-const NAV_ICON_SIZE_CLASS = "[&_svg]:!size-[18px]";
+const NAV_ICON_SIZE_CLASS = "[&_svg]:!size-[16px]";
 
 export function useCollectivityRouteItems(planId: string) {
   const t = useScopedI18n("(pages).collectivityDashboard");
@@ -113,9 +114,11 @@ export default function CollectivitySidebar({
                     size="lg"
                     tooltip={route.title}
                     className={cn(
-                      "h-fit rounded-2xl px-3 text-sm transition-all duration-200 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:rounded-xl",
+                      "relative gap-4 h-9 w-full overflow-hidden rounded-md px-4 text-sm transition-all duration-200 group-data-[collapsible=icon]:h-fit group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:rounded-xl group-data-[collapsible=icon]:px-0",
                       NAV_ICON_SIZE_CLASS,
-                      "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground"
+                      "hover:bg-[hsl(var(--primary)/0.07)] group-data-[collapsible=icon]:hover:bg-sidebar-accent",
+                      "data-[active=true]:bg-primary/10 data-[active=true]:text-foreground data-[active=true]:before:absolute data-[active=true]:before:inset-y-0 data-[active=true]:before:left-0 data-[active=true]:before:w-[3px] data-[active=true]:before:bg-primary",
+                      "group-data-[collapsible=icon]:data-[active=true]:bg-sidebar-accent group-data-[collapsible=icon]:data-[active=true]:text-sidebar-accent-foreground group-data-[collapsible=icon]:data-[active=true]:before:hidden"
                     )}
                   >
                     <Link
@@ -130,15 +133,20 @@ export default function CollectivitySidebar({
                     >
                       <Icon
                         className={cn(
+                          !isCollapsed && isActive && "text-[hsl(var(--primary)/0.82)]",
                           isCollapsed &&
                             !isActive &&
                             "text-[hsl(var(--card-primary-foreground)/0.68)]",
                           isCollapsed && isActive && "text-primary-foreground"
                         )}
                       />
-                      <span className="truncate group-data-[collapsible=icon]:hidden">
-                        {route.title}
-                      </span>
+                      <Typography
+                        variant={"title"}
+                        size="xs"
+                        className="text-foreground group-data-[collapsible=icon]:hidden"
+                      >
+                        <span className="truncate">{route.title}</span>
+                      </Typography>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
