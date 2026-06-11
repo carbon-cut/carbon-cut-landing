@@ -1,8 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CloudUpload, Save } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
+import { useScopedI18n } from "@/locales/client";
 
 import DatasetHeader from "./DatasetHeader";
 import InventoryDatasetSwitcher from "./InventoryDatasetSwitcher";
@@ -84,6 +87,7 @@ export default function InventoryWorkspace({
   workspace: InventoryWorkspaceConfig;
   surfaces: InventorySurfaceCopy;
 }) {
+  const t = useScopedI18n("(pages).collectivityDashboard");
   const defaultFamily = useMemo(() => workspace.families[0]?.key ?? "", [workspace.families]);
   const [activeFamilyKey, setActiveFamilyKey] = useState(defaultFamily);
 
@@ -109,6 +113,32 @@ export default function InventoryWorkspace({
 
   return (
     <section className="space-y-6">
+      <header className="-mx-4 -mt-3 border-b border-border/10 bg-card px-4 py-5 md:-mx-8 md:-mt-4 md:px-8">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <Typography asChild variant="subtitle" size="lg">
+            <h1>
+              {activeFamily?.title} / {activeDataset?.title}
+            </h1>
+          </Typography>
+
+          <div className="flex flex-wrap items-center gap-2.5 md:justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-9 rounded-md px-4 shadow-none"
+            >
+              <Save aria-hidden="true" />
+              {t("actions.save") as string}
+            </Button>
+            <Button type="submit" size="sm" className="h-9 rounded-md px-4">
+              <CloudUpload aria-hidden="true" />
+              {t("actions.submitData") as string}
+            </Button>
+          </div>
+        </div>
+      </header>
+
       <InventoryDatasetSwitcher
         families={workspace.families}
         activeFamily={activeFamily}
@@ -120,19 +150,12 @@ export default function InventoryWorkspace({
         todoLabel={workspace.hints.todoLabel}
       />
 
-      <section className="rounded-[1.6rem] border border-border/10 bg-card px-5 py-5 shadow-[0_14px_30px_rgba(9,35,31,0.03)] md:px-6 md:py-6">
-        <div className="space-y-6">
+      <section className="overflow-hidden rounded-[2rem] border border-border/10 bg-card shadow-[0_16px_34px_rgba(9,35,31,0.035)]">
+        <div className="space-y-10 px-6 py-6 md:px-8 md:py-8">
           <DatasetHeader dataset={activeDataset} hints={workspace.hints} />
 
-          {renderDatasetSurface(activeDataset, surfaces, workspace.hints)}
-
-          <div className="grid gap-3 border-t border-border/10 pt-4 md:grid-cols-2">
-            <Typography asChild variant="caption" size="sm" className="text-secondary">
-              <p>{workspace.hints.provenanceTodo}</p>
-            </Typography>
-            <Typography asChild variant="caption" size="sm" className="text-secondary">
-              <p>{workspace.hints.progressTodo}</p>
-            </Typography>
+          <div className="border-t border-border/10 pt-8">
+            {renderDatasetSurface(activeDataset, surfaces, workspace.hints)}
           </div>
         </div>
       </section>

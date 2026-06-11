@@ -21,8 +21,8 @@ export default function RouteDescriptionPanel({
   sections = [],
 }: RouteDescriptionPanelProps) {
   return (
-    <section className="border border-border bg-card">
-      <header className="border-b border-border px-5 py-5 md:px-6">
+    <section className="overflow-hidden rounded-[2rem] border border-border/10 bg-card shadow-[0_18px_36px_rgba(9,35,31,0.04)]">
+      <header className="border-b border-border/10 px-5 py-5 md:px-6">
         <Typography asChild variant="eyebrow" size="xxs" className="text-secondary">
           <p>{eyebrow}</p>
         </Typography>
@@ -38,7 +38,7 @@ export default function RouteDescriptionPanel({
       </div>
 
       {sections.length > 0 ? (
-        <div className="border-t border-border px-5 py-5 md:px-6">
+        <div className="border-t border-border/10 px-5 py-5 md:px-6">
           {sectionsTitle ? (
             <Typography asChild variant="sectionTitle" size="sm">
               <h3>{sectionsTitle}</h3>
@@ -47,7 +47,10 @@ export default function RouteDescriptionPanel({
 
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {sections.map((section) => (
-              <section key={section.title} className="border border-border bg-background px-4 py-4">
+              <section
+                key={section.title}
+                className="rounded-2xl border border-border/10 bg-background/90 px-4 py-4"
+              >
                 <Typography asChild variant="sectionTitle" size="sm">
                   <h4>{section.title}</h4>
                 </Typography>

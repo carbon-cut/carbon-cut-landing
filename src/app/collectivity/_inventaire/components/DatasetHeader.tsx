@@ -13,22 +13,30 @@ export default function DatasetHeader({
   hints: InventoryWorkspaceConfig["hints"];
 }) {
   return (
-    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-      <div className="min-w-0">
+    <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+      <div className="min-w-0 space-y-3">
         <div className="flex flex-wrap items-center gap-2">
-          <Typography asChild variant="sectionTitle" size="sm">
-            <h3>{dataset?.title}</h3>
+          <Typography asChild variant="title" size="lg">
+            <h2>{dataset?.title}</h2>
           </Typography>
-          <Badge variant={dataset?.surfaceKind === "placeholder" ? "outline" : "accent"}>
+          <Badge
+            variant="outline"
+            size="lg"
+            className={
+              dataset?.surfaceKind === "placeholder"
+                ? undefined
+                : "border-[#ffd6cb] bg-[#fff7f4] text-[#f0674b]"
+            }
+          >
             {dataset?.status}
           </Badge>
         </div>
-        <Typography asChild variant="body" size="body" className="mt-2 max-w-3xl text-secondary">
+        <Typography asChild variant="body" size="body" className="max-w-3xl text-secondary">
           <p>{dataset?.description}</p>
         </Typography>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 lg:pt-1">
         {dataset?.surfaceKind !== "placeholder" ? (
           <>
             <Badge variant="outline">{hints.sourceFirst}</Badge>

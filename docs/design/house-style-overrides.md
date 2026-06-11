@@ -64,5 +64,5 @@ For house-level UI decisions, this file has precedence over non-canonical refere
 - Fake charts/metrics used only as visual filler are forbidden.
 - Decorative trust/testimonial/status blocks without concrete product support are forbidden.
 - Glassmorphism, glow-heavy cards, and frosted-panel styling as a base visual language are forbidden.
-- Repeating the same rounded container treatment across every surface type (cards/buttons/panels/navigation shells) is forbidden.
+- Repeating the same rounded container treatment across every surface type (cards/buttons/panels/navigation shells) is forbidden unless the reference screenshot clearly uses that pattern or the user explicitly asks for it.
 - Dashboard-style KPI grids are forbidden as a default first pattern.

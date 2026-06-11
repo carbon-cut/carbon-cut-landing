@@ -656,6 +656,7 @@ export default {
         switchInventory: "Changer de plan",
         new: "Nouveau plan",
         settings: "Paramètres",
+        save: "Enregistrer",
         import: "Importer des fichiers",
         addManual: "Ajouter manuellement",
         downloadTemplate: "Télécharger le modèle",

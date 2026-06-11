@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 
 import SurfaceToggle from "./SurfaceToggle";
@@ -26,48 +25,53 @@ export default function InventoryDatasetSwitcher({
   todoLabel: string;
 }) {
   return (
-    <div className="space-y-3 border-b border-border/10 pb-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <Typography asChild variant="label" size="sm" className="text-secondary">
-            <p>{controls.sourceLabel}</p>
+    <section
+      className="px-0 py-0"
+      aria-label={`${controls.sourceLabel} / ${controls.datasetLabel}`}
+    >
+      <div className="space-y-4">
+        <div>
+          <Typography asChild variant="sectionTitle" size="sm" className="sr-only">
+            <h2>{controls.sourceLabel}</h2>
           </Typography>
-          {families.map((family) => (
-            <SurfaceToggle
-              key={family.key}
-              active={family.key === activeFamily?.key}
-              onClick={() => onFamilyChange(family.key)}
-            >
-              <span>{family.title}</span>
-            </SurfaceToggle>
-          ))}
+          <div className="flex flex-wrap items-center gap-3">
+            {families.map((family) => (
+              <SurfaceToggle
+                key={family.key}
+                active={family.key === activeFamily?.key}
+                onClick={() => onFamilyChange(family.key)}
+                level="family"
+              >
+                <span>{family.title}</span>
+              </SurfaceToggle>
+            ))}
+          </div>
         </div>
 
-        <Button type="submit" variant="outline" size="sm" className="ml-auto shrink-0">
-          {controls.submitLabel}
-        </Button>
+        <div className="border-l border-border/15 pl-4 md:pl-6">
+          <Typography asChild variant="sectionTitle" size="sm" className="sr-only">
+            <h2>{controls.datasetLabel}</h2>
+          </Typography>
+          <div className="flex flex-wrap items-center gap-2.5">
+            {datasetsInFamily.map((dataset) => (
+              <SurfaceToggle
+                key={dataset.key}
+                active={dataset.key === activeDataset?.key}
+                onClick={() => onDatasetChange(dataset.key)}
+                tone={dataset.surfaceKind === "placeholder" ? "muted" : "default"}
+                level="dataset"
+              >
+                <span>{dataset.title}</span>
+                {dataset.surfaceKind === "placeholder" ? (
+                  <span className="rounded-full border border-border/15 px-2 py-0.5 text-[9px] uppercase tracking-[0.14em] text-secondary">
+                    {todoLabel}
+                  </span>
+                ) : null}
+              </SurfaceToggle>
+            ))}
+          </div>
+        </div>
       </div>
-
-      <div className="flex flex-wrap items-center gap-2">
-        <Typography asChild variant="label" size="sm" className="text-secondary">
-          <p>{controls.datasetLabel}</p>
-        </Typography>
-        {datasetsInFamily.map((dataset) => (
-          <SurfaceToggle
-            key={dataset.key}
-            active={dataset.key === activeDataset?.key}
-            onClick={() => onDatasetChange(dataset.key)}
-            tone={dataset.surfaceKind === "placeholder" ? "muted" : "default"}
-          >
-            <span>{dataset.title}</span>
-            {dataset.surfaceKind === "placeholder" ? (
-              <span className="rounded-full border border-border/18 px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-secondary">
-                {todoLabel}
-              </span>
-            ) : null}
-          </SurfaceToggle>
-        ))}
-      </div>
-    </div>
+    </section>
   );
 }
