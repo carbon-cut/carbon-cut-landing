@@ -2,6 +2,7 @@ import type {
   FleetSurfaceCopy,
   InventoryDataset,
   InventoryFamily,
+  InventoryNavIconKey,
   InventoryDatasetSurfaceKind,
   InventoryWorkspaceConfig,
   InventoryYear,
@@ -204,6 +205,41 @@ const datasetOverrides: Record<
   },
 };
 
+const familyNavOverrides: Record<string, { navIcon: InventoryNavIconKey }> = {
+  "municipal-patrimoine": { navIcon: "municipal" },
+  "territorial-energy": { navIcon: "energy" },
+  "transport-mobility": { navIcon: "transport" },
+  afat: { navIcon: "afat" },
+  waste: { navIcon: "waste" },
+  wastewater: { navIcon: "water" },
+};
+
+const datasetNavOverrides: Record<
+  string,
+  { navIcon: InventoryNavIconKey; navStatusLabel?: string; progressLabel?: string }
+> = {
+  fleet: { navIcon: "fleet", navStatusLabel: "En cours", progressLabel: "40%" },
+  "public-lighting": { navIcon: "lighting", navStatusLabel: "À faire", progressLabel: "0%" },
+  buildings: { navIcon: "buildings", navStatusLabel: "À faire", progressLabel: "0%" },
+  "trees-parks-waste": { navIcon: "trees", navStatusLabel: "À faire", progressLabel: "0%" },
+  electricity: { navIcon: "energy", navStatusLabel: "À faire", progressLabel: "0%" },
+  photovoltaic: { navIcon: "energy", navStatusLabel: "À faire", progressLabel: "0%" },
+  "natural-gas": { navIcon: "energy", navStatusLabel: "À faire", progressLabel: "0%" },
+  "solar-water-heating": { navIcon: "energy", navStatusLabel: "À faire", progressLabel: "0%" },
+  port: { navIcon: "transport", navStatusLabel: "À faire", progressLabel: "0%" },
+  "public-transport": { navIcon: "transport", navStatusLabel: "À faire", progressLabel: "0%" },
+  "air-transport": { navIcon: "transport", navStatusLabel: "À faire", progressLabel: "0%" },
+  transport: { navIcon: "transport", navStatusLabel: "À faire", progressLabel: "0%" },
+  "perennial-plantation-stock": { navIcon: "afat", navStatusLabel: "À faire", progressLabel: "0%" },
+  livestock: { navIcon: "afat", navStatusLabel: "À faire", progressLabel: "0%" },
+  fertilizers: { navIcon: "afat", navStatusLabel: "À faire", progressLabel: "0%" },
+  "agricultural-production": { navIcon: "afat", navStatusLabel: "À faire", progressLabel: "0%" },
+  sanitation: { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
+  "sanitation-continuation": { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
+  "sanitation-ch4": { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
+  "sanitation-n2o": { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
+};
+
 export function buildInventoryRegistry(locale: InventoryWorkspaceLocale): {
   workspace: InventoryWorkspaceConfig;
   surfaces: InventorySurfaceCopy;
@@ -213,15 +249,22 @@ export function buildInventoryRegistry(locale: InventoryWorkspaceLocale): {
     workspace: {
       controls: locale.controls,
       hints: locale.hints,
-      families: locale.families,
+      families: locale.families.map((family) => ({
+        ...family,
+        navIcon: familyNavOverrides[family.key]?.navIcon ?? "municipal",
+      })),
       datasets: locale.datasets.map((dataset) => {
         const override = datasetOverrides[dataset.key];
+        const nav = datasetNavOverrides[dataset.key];
 
         return {
           key: dataset.key,
           familyKey: dataset.familyKey,
           surfaceKind: override?.surfaceKind ?? dataset.kind,
           title: dataset.title,
+          navIcon: nav?.navIcon ?? "municipal",
+          navStatusLabel: nav?.navStatusLabel,
+          progressLabel: nav?.progressLabel,
           status: override?.status ?? dataset.status,
           description: override?.description ?? dataset.description,
           sourceMode: override?.sourceMode ?? dataset.sourceMode,

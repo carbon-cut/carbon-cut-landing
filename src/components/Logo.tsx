@@ -216,9 +216,7 @@ export default function Logo({ bg, variant, size = LOGO_HEIGHT, ...props }: Logo
         {...props}
       >
         <LogoDefs suffix={suffix} />
-        <g transform="translate(1 0)">
-          <LogoMark suffix={suffix} foreground={foreground} />
-        </g>
+        <LogoMark suffix={suffix} foreground={foreground} />
       </svg>
     );
   }

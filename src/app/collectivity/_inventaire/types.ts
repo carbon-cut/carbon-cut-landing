@@ -4,9 +4,22 @@ import type { TableGridProps } from "@/components/table/table-grid/types";
 
 export type InventoryYear = number;
 
+export type InventoryNavIconKey =
+  | "municipal"
+  | "energy"
+  | "transport"
+  | "afat"
+  | "waste"
+  | "water"
+  | "fleet"
+  | "lighting"
+  | "buildings"
+  | "trees";
+
 export type InventoryFamily = {
   key: string;
   title: string;
+  navIcon?: InventoryNavIconKey;
 };
 
 export type InventoryDatasetStatus = string;
@@ -38,6 +51,9 @@ export type InventoryDataset = {
   familyKey: string;
   surfaceKind: InventoryDatasetSurfaceKind;
   title: string;
+  navIcon?: InventoryNavIconKey;
+  navStatusLabel?: string;
+  progressLabel?: string;
   status: InventoryDatasetStatus;
   description: string;
   sourceMode: string;
@@ -116,7 +132,7 @@ export type PublicLightingSurfaceCopy = {
 
 export type InventoryWorkspaceConfig = {
   controls: {
-    sourceLabel: string;
+    domainsLabel: string;
     datasetLabel: string;
     submitLabel: string;
   };

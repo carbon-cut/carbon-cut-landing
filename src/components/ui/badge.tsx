@@ -20,7 +20,7 @@ const badgeVariants = cva(
     variants: {
       variant: badgeVariantsClasses,
       size: {
-        default: "px-2 py-0.5 text-[11px]",
+        default: "px-2 text-[11px]",
         micro: "px-0.5 py-0.5 text-[6px] uppercase tracking-[0.16em]",
         lg: "px-3 py-1 text-xs shadow-sm",
       },

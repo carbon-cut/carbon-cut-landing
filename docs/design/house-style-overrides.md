@@ -11,6 +11,7 @@ For house-level UI decisions, this file has precedence over non-canonical refere
 - Primitive-first policy: recurring UI patterns should come from shared primitives.
 - Prefer primitive defaults first. If a primitive already encodes key style (for example radius, height, spacing rhythm), use that baseline before adding page-level overrides.
 - Prefer using primitives directly over creating local one-off style systems.
+- Arbitrary Tailwind values are not a normal design tool in product UI. Treat classes like `text-[...]`, `h-[...]`, `rounded-[...]`, `tracking-[...]`, or similar as exceptional escapes, not defaults.
 - Replicating primitive styles is discouraged, but allowed when necessary.
 - When replication is necessary, keep behavior and token usage aligned with primitive conventions.
 - Treat local visual overrides on primitives as exceptions, not baseline behavior. Keep overrides minimal and purposeful.
@@ -48,6 +49,7 @@ For house-level UI decisions, this file has precedence over non-canonical refere
 
 - Marketing/editorial surfaces may use more expressive typography where appropriate.
 - Product/task surfaces should keep typography restrained, practical, and clear.
+- Product UI should use the shared typography primitive first; arbitrary text sizes, weights, tracking, or line-height overrides are exceptions and must be justified by a clear reference or explicit instruction.
 
 ## Interpretation discipline
 

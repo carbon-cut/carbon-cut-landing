@@ -8,7 +8,8 @@ import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 
 import DatasetHeader from "./DatasetHeader";
-import InventoryDatasetSwitcher from "./InventoryDatasetSwitcher";
+import InventoryDatasetNav from "./InventoryDatasetNav";
+import InventoryDomainNav from "./InventoryDomainNav";
 import PlaceholderSurface from "./PlaceholderSurface";
 import AgriculturalProductionSurface from "../datasets/afat/agricultural-production/surface";
 import FertilizersSurface from "../datasets/afat/fertilizers/surface";
@@ -113,11 +114,13 @@ export default function InventoryWorkspace({
 
   return (
     <section className="space-y-6">
-      <header className="-mx-4 -mt-3 border-b border-border/10 bg-card px-4 py-5 md:-mx-8 md:-mt-4 md:px-8">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <Typography asChild variant="subtitle" size="lg">
+      <header className="h-[var(--sidebar-width-icon)] border-b border-border/10 bg-card px-4 py-3 md:-mx-8 md:-mt-4 md:px-8">
+        <div className="my-auto flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <Typography asChild variant="subtitle" size="md">
             <h1>
-              {activeFamily?.title} / {activeDataset?.title}
+              {activeFamily?.title}
+              {activeDataset ? " · " : ""}
+              {activeDataset?.title}
             </h1>
           </Typography>
 
@@ -126,38 +129,45 @@ export default function InventoryWorkspace({
               type="button"
               variant="outline"
               size="sm"
-              className="h-9 rounded-md px-4 shadow-none"
+              className="h-8 rounded-md px-4 shadow-none"
             >
               <Save aria-hidden="true" />
               {t("actions.save") as string}
             </Button>
-            <Button type="submit" size="sm" className="h-9 rounded-md px-4">
+            <Button type="submit" size="sm" className="h-8 rounded-md px-4">
               <CloudUpload aria-hidden="true" />
               {t("actions.submitData") as string}
             </Button>
           </div>
         </div>
       </header>
+      <section className="relative !mt-10 pt-16">
+        <InventoryDomainNav
+          label={workspace.controls.domainsLabel}
+          families={workspace.families}
+          activeFamilyKey={activeFamily?.key ?? ""}
+          onFamilyChange={handleFamilyChange}
+        />
 
-      <InventoryDatasetSwitcher
-        families={workspace.families}
-        activeFamily={activeFamily}
-        activeDataset={activeDataset}
-        datasetsInFamily={datasetsInFamily}
-        controls={workspace.controls}
-        onFamilyChange={handleFamilyChange}
-        onDatasetChange={setActiveDatasetKey}
-        todoLabel={workspace.hints.todoLabel}
-      />
-
-      <section className="overflow-hidden rounded-[2rem] border border-border/10 bg-card shadow-[0_16px_34px_rgba(9,35,31,0.035)]">
-        <div className="space-y-10 px-6 py-6 md:px-8 md:py-8">
-          <DatasetHeader dataset={activeDataset} hints={workspace.hints} />
-
-          <div className="border-t border-border/10 pt-8">
-            {renderDatasetSurface(activeDataset, surfaces, workspace.hints)}
+        <section className="!mt-0 relative z-1 overflow-hidden rounded-2xl border border-t-0 border-border/10 bg-card shadow-[0_16px_34px_rgba(9,35,31,0.035)]">
+          <div className="border-b border-border/10 px-6 py-6 md:px-8">
+            <InventoryDatasetNav
+              label={workspace.controls.datasetLabel}
+              activeFamily={activeFamily}
+              datasets={datasetsInFamily}
+              activeDatasetKey={activeDataset?.key ?? ""}
+              onDatasetChange={setActiveDatasetKey}
+            />
           </div>
-        </div>
+
+          <div className="space-y-10 px-6 py-6 md:px-8 md:py-8">
+            <DatasetHeader dataset={activeDataset} hints={workspace.hints} />
+
+            <div className="border-t border-border/10 pt-8">
+              {renderDatasetSurface(activeDataset, surfaces, workspace.hints)}
+            </div>
+          </div>
+        </section>
       </section>
     </section>
   );

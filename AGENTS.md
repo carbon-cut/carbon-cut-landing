@@ -13,12 +13,16 @@ Working notes for contributors to this codebase.
 ## Implementation rules
 
 - Prefer shared primitives/components before introducing local UI patterns.
+- Prefer the shared `Typography` primitive for text styling; do not introduce arbitrary text sizes, weights, or line-heights when an existing typography variant/size fits.
+- For product UI, arbitrary Tailwind values such as `text-[...]`, `h-[...]`, `rounded-[...]`, or `tracking-[...]` are forbidden by default. Use them only when the user explicitly approves them, or when the system cannot express the required reference and that limitation has been stated first.
 - Keep styling aligned with token semantics in `globals.css` and `tailwind.config.ts`.
 - Preserve accessibility (`aria-*`, alt text, keyboard focus visibility).
 - Keep sections semantic and data-driven where possible.
 - Run `npm run lint` before shipping UI changes.
 - Only change files or code the user explicitly asked you to change.
 - Do not overreach; if the task is simple, do the simple task and do not go wild.
+- When a user requests changes to a specific UI region, do not modify adjacent regions, shared shells, headers, sidebars, or unrelated surfaces unless the user explicitly includes them.
+- If a reference image is provided, apply it only to the named region in scope, not to the whole screen or neighboring UI.
 
 ## Localization
 

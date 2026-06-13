@@ -47,7 +47,7 @@ const routeDefinitions: Array<{
   { key: "actions", icon: ClipboardList },
 ];
 
-const BRAND_MARK_SIZE = 50;
+const BRAND_MARK_SIZE = 40;
 const FULL_LOGO_WIDTH = (BRAND_MARK_SIZE * 89) / 36;
 const NAV_ICON_SIZE_CLASS = "[&_svg]:!size-[16px]";
 
@@ -98,7 +98,7 @@ export default function CollectivitySidebar({
             className="object-cover object-bottom"
           />
         </div>
-        <SidebarHeader className="relative z-10 gap-4 border-b border-sidebar-border pb-0 transition-[padding] duration-200 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-2.5">
+        <SidebarHeader className="relative h-[var(--sidebar-width-icon)] z-10 gap-4 border-b border-sidebar-border pb-0 transition-[padding] duration-200 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-2.5">
           <div className="relative h-[50px] w-full overflow-visible">
             <div
               className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"

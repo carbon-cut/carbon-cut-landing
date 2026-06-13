@@ -920,8 +920,8 @@ export default {
         description:
           "Ouvrir la route doit amener directement sur un jeu de donnees a renseigner, avec les champs utiles visibles sans structure de navigation envahissante.",
         controls: {
-          sourceLabel: "Source",
-          datasetLabel: "Jeu de donnees",
+          domainsLabel: "Domaines d'inventaire",
+          datasetLabel: "Jeux de données",
           submitLabel: "Soumettre les données",
           datasetPlaceholder: "Choisir un jeu de donnees",
           yearLabel: "Annee consultee",
