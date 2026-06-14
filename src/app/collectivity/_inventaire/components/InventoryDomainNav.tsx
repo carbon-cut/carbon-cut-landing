@@ -23,15 +23,19 @@ export default function InventoryDomainNav({
         <h2>{label}</h2>
       </Typography>
  */}
-      <div className="mt-3 overflow-x-auto">
-        <div className="flex min-w-max items-end h-16">
+      <div className="mt-3 overflow-hidden">
+        <div className="flex items-end h-16 min-w-0">
           {families.map((family, index) => {
             const isActive = family.key === activeFamilyKey;
 
             return (
               <div
                 key={family.key}
-                className={cn(index > 0 && !isActive && "border-l border-border/10", "w-full")}
+                className={cn(
+                  "min-w-0 flex-1",
+                  isActive ? "min-w-fit" : "basis-0",
+                  index > 0 && !isActive && "border-l border-border/10"
+                )}
               >
                 <InventoryDomainButton
                   active={isActive}

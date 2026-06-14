@@ -40,8 +40,8 @@ export default function InventoryDomainButton({
       {...props}
     >
       <Icon aria-hidden="true" className={cn("h-4 w-4", active && "text-primary")} />
-      <Typography variant="label" size="sm" className="text-inherit leading-none">
-        <span>{label}</span>
+      <Typography variant="label" size="sm" className="min-w-0 text-inherit leading-none">
+        <span className="block truncate">{label}</span>
       </Typography>
     </Button>
   );
