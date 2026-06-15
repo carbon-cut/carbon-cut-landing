@@ -14,7 +14,19 @@ export type InventoryNavIconKey =
   | "fleet"
   | "lighting"
   | "buildings"
-  | "trees";
+  | "trees"
+  | "electricity"
+  | "photovoltaic"
+  | "naturalGas"
+  | "solarWaterHeating"
+  | "port"
+  | "publicTransport"
+  | "airTransport"
+  | "territoryVehicles"
+  | "perennialPlantationStock"
+  | "livestock"
+  | "fertilizers"
+  | "agriculturalProduction";
 
 export type InventoryFamily = {
   key: string;
