@@ -32,6 +32,7 @@ export type InventoryFamily = {
   key: string;
   title: string;
   navIcon?: InventoryNavIconKey;
+  hasError?: boolean;
 };
 
 export type InventoryDatasetStatus = string;
@@ -66,6 +67,9 @@ export type InventoryDataset = {
   navIcon?: InventoryNavIconKey;
   navStatusLabel?: string;
   progressLabel?: string;
+  progressPercent?: number;
+  hasError?: boolean;
+  isComplete?: boolean;
   status: InventoryDatasetStatus;
   description: string;
   sourceMode: string;

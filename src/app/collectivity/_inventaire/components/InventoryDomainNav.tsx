@@ -39,6 +39,7 @@ export default function InventoryDomainNav({
               >
                 <InventoryDomainButton
                   active={isActive}
+                  hasError={family.hasError ?? false}
                   iconKey={family.navIcon ?? "municipal"}
                   label={family.title}
                   onClick={() => onFamilyChange(family.key)}

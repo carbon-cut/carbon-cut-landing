@@ -34,10 +34,13 @@ export default function InventoryDatasetNav({
           <InventoryDatasetButton
             key={dataset.key}
             active={dataset.key === activeDatasetKey}
+            hasError={dataset.hasError ?? false}
+            isComplete={dataset.isComplete ?? false}
             iconKey={dataset.navIcon ?? "municipal"}
             label={dataset.title}
             statusText={dataset.navStatusLabel}
             badgeText={dataset.progressLabel}
+            progressPercent={dataset.progressPercent}
             onClick={() => onDatasetChange(dataset.key)}
           />
         ))}

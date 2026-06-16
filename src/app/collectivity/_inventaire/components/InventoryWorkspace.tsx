@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useWatch } from "react-hook-form";
+import { useFormState, useWatch } from "react-hook-form";
 import { CloudUpload, Save } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,7 @@ import PortSurface from "../datasets/transport/port/surface";
 import PublicTransportSurface from "../datasets/transport/public-transport/surface";
 import TerritoryVehiclesSurface from "../datasets/transport/territory-vehicles/surface";
 import { useInventoryContext, type InventoryFormValues } from "../context/inventory-context";
+import { getInventoryDatasetErrorCount } from "../inventoryErrors";
 import { getInventoryDatasetProgress } from "../inventoryProgress";
 import type { InventoryDataset, InventoryWorkspaceConfig } from "../types";
 import type { InventorySurfaceCopy } from "../registry";
@@ -95,21 +96,50 @@ export default function InventoryWorkspace({
   const formValues = useWatch({ control: mainForm.control }) as
     | Partial<InventoryFormValues>
     | undefined;
+  const { errors } = useFormState({ control: mainForm.control });
   const defaultFamily = useMemo(() => workspace.families[0]?.key ?? "", [workspace.families]);
   const [activeFamilyKey, setActiveFamilyKey] = useState(defaultFamily);
   const datasetsWithProgress = useMemo(
     () =>
       workspace.datasets.map((dataset) => {
         const progress = getInventoryDatasetProgress(dataset.key, formValues, years);
+        const errorCount = getInventoryDatasetErrorCount(dataset.key, errors);
+        const isPlaceholderComplete = dataset.surfaceKind === "placeholder";
+        const progressPercent = progress?.percent ?? (isPlaceholderComplete ? 100 : undefined);
 
-        return progress ? { ...dataset, progressLabel: progress.label } : dataset;
+        return {
+          ...dataset,
+          navStatusLabel:
+            progressPercent === undefined
+              ? dataset.navStatusLabel
+              : progressPercent === 0
+                ? "À faire"
+                : progressPercent === 100
+                  ? "Complet"
+                  : "En cours",
+          progressLabel:
+            progressPercent === undefined ? dataset.progressLabel : `${progressPercent}%`,
+          progressPercent,
+          hasError: errorCount > 0,
+          isComplete: progressPercent === 100,
+        };
       }),
-    [formValues, workspace.datasets, years]
+    [errors, formValues, workspace.datasets, years]
   );
 
   const datasetsInFamily = useMemo(
     () => datasetsWithProgress.filter((dataset) => dataset.familyKey === activeFamilyKey),
     [activeFamilyKey, datasetsWithProgress]
+  );
+  const familiesWithError = useMemo(
+    () =>
+      workspace.families.map((family) => ({
+        ...family,
+        hasError: datasetsWithProgress.some(
+          (dataset) => dataset.familyKey === family.key && dataset.hasError
+        ),
+      })),
+    [datasetsWithProgress, workspace.families]
   );
 
   const defaultDataset = useMemo(() => getDefaultDataset(datasetsInFamily), [datasetsInFamily]);
@@ -118,7 +148,7 @@ export default function InventoryWorkspace({
   const activeDataset =
     datasetsInFamily.find((dataset) => dataset.key === activeDatasetKey) ?? defaultDataset;
   const activeFamily =
-    workspace.families.find((family) => family.key === activeFamilyKey) ?? workspace.families[0];
+    familiesWithError.find((family) => family.key === activeFamilyKey) ?? familiesWithError[0];
 
   const handleFamilyChange = (familyKey: string) => {
     setActiveFamilyKey(familyKey);
@@ -159,7 +189,7 @@ export default function InventoryWorkspace({
       <section className="relative !mt-8 pt-14">
         <InventoryDomainNav
           label={workspace.controls.domainsLabel}
-          families={workspace.families}
+          families={familiesWithError}
           activeFamilyKey={activeFamily?.key ?? ""}
           onFamilyChange={handleFamilyChange}
         />

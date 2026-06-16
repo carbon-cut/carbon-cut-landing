@@ -10,6 +10,7 @@ import { useScopedI18n } from "@/locales/client";
 
 import InventoryWorkspace from "./components/InventoryWorkspace";
 import { InventoryProvider, type InventoryFormValues } from "./context/inventory-context";
+import { buildInventoryDefaultValues } from "./inventoryDefaultValues";
 import { inventorySchema } from "./InventorySchema";
 import { buildInventoryRegistry, type InventoryWorkspaceLocale } from "./registry";
 import { z } from "zod";
@@ -31,6 +32,7 @@ export default function InventoryRouteClient() {
   const mainForm = useForm<InventoryFormValues>({
     resolver: zodResolver(inventorySchema),
     defaultValues: {
+      ...buildInventoryDefaultValues(),
       years: inventoryYearPlan,
     },
   });
