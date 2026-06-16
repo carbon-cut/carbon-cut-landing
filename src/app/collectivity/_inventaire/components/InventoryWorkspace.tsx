@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useWatch } from "react-hook-form";
 import { CloudUpload, Save } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,8 @@ import AirTransportSurface from "../datasets/transport/air-transport/surface";
 import PortSurface from "../datasets/transport/port/surface";
 import PublicTransportSurface from "../datasets/transport/public-transport/surface";
 import TerritoryVehiclesSurface from "../datasets/transport/territory-vehicles/surface";
+import { useInventoryContext, type InventoryFormValues } from "../context/inventory-context";
+import { getInventoryDatasetProgress } from "../inventoryProgress";
 import type { InventoryDataset, InventoryWorkspaceConfig } from "../types";
 import type { InventorySurfaceCopy } from "../registry";
 
@@ -87,13 +90,26 @@ export default function InventoryWorkspace({
   workspace: InventoryWorkspaceConfig;
   surfaces: InventorySurfaceCopy;
 }) {
+  const { mainForm, years } = useInventoryContext();
   const t = useScopedI18n("(pages).collectivityDashboard");
+  const formValues = useWatch({ control: mainForm.control }) as
+    | Partial<InventoryFormValues>
+    | undefined;
   const defaultFamily = useMemo(() => workspace.families[0]?.key ?? "", [workspace.families]);
   const [activeFamilyKey, setActiveFamilyKey] = useState(defaultFamily);
+  const datasetsWithProgress = useMemo(
+    () =>
+      workspace.datasets.map((dataset) => {
+        const progress = getInventoryDatasetProgress(dataset.key, formValues, years);
+
+        return progress ? { ...dataset, progressLabel: progress.label } : dataset;
+      }),
+    [formValues, workspace.datasets, years]
+  );
 
   const datasetsInFamily = useMemo(
-    () => workspace.datasets.filter((dataset) => dataset.familyKey === activeFamilyKey),
-    [activeFamilyKey, workspace.datasets]
+    () => datasetsWithProgress.filter((dataset) => dataset.familyKey === activeFamilyKey),
+    [activeFamilyKey, datasetsWithProgress]
   );
 
   const defaultDataset = useMemo(() => getDefaultDataset(datasetsInFamily), [datasetsInFamily]);
@@ -106,7 +122,7 @@ export default function InventoryWorkspace({
 
   const handleFamilyChange = (familyKey: string) => {
     setActiveFamilyKey(familyKey);
-    const nextDatasets = workspace.datasets.filter((dataset) => dataset.familyKey === familyKey);
+    const nextDatasets = datasetsWithProgress.filter((dataset) => dataset.familyKey === familyKey);
     const nextDataset = getDefaultDataset(nextDatasets);
     setActiveDatasetKey(nextDataset?.key ?? "");
   };
