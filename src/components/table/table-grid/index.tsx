@@ -59,9 +59,9 @@ export default function TableGrid<T extends FieldValues>({
   );
 
   return (
-    <section className={className ?? "space-y-4"}>
+    <section className={className ?? "space-y-3"}>
       {title || description || yearSelector || addRow ? (
-        <div className="flex flex-wrap items-start justify-between gap-3 lg:flex-nowrap">
+        <div className="flex flex-wrap items-start justify-between gap-2 lg:flex-nowrap">
           <div>
             {title ? (
               <Typography asChild variant="sectionTitle" size="sm">
@@ -69,13 +69,18 @@ export default function TableGrid<T extends FieldValues>({
               </Typography>
             ) : null}
             {description ? (
-              <Typography asChild variant="body" size="body" className={title ? "mt-2" : undefined}>
+              <Typography
+                asChild
+                variant="description"
+                size="md"
+                className={title ? "mt-1.5" : undefined}
+              >
                 <p>{description}</p>
               </Typography>
             ) : null}
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             {yearSelector ? (
               <YearSelector
                 years={yearSelector.years}

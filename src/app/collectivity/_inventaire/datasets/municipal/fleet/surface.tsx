@@ -31,7 +31,7 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/*       <CollectivityMetadataScopeControl
         form={mainForm}
         name={"municipal.fleet.metadata"}
@@ -39,7 +39,7 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
         drawerDescription="Renseignez la provenance et la qualité pour la flotte municipale."
       /> */}
       <InventoryTableSection section={compositionSection} />
-      <div className="border-t border-border/10 pt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-6 border-t border-border/10 pt-6 md:grid-cols-2">
         <MatrixTable
           title={copy.yearlyVehiclesTitle}
           rows={rows.engine}

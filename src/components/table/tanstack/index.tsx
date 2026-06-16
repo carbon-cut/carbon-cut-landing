@@ -73,7 +73,7 @@ export default function InventoryTanstackTable<TData>({
       : flexRender(cell.column.columnDef.cell, cell.getContext());
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-3">
       {title ? (
         <Typography asChild variant="sectionTitle" size="sm">
           <h4>{title}</h4>
@@ -148,7 +148,7 @@ export default function InventoryTanstackTable<TData>({
                   return (
                     <TableCell
                       key={cell.id}
-                      className={cn("px-3 py-2.5 align-middle", meta?.className, dataCellClassName)}
+                      className={cn("px-3 py-2 align-middle", meta?.className, dataCellClassName)}
                     >
                       {renderCell(cell)}
                     </TableCell>

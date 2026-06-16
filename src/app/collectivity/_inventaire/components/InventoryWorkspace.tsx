@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 
-import DatasetHeader from "./DatasetHeader";
 import InventoryDatasetNav from "./InventoryDatasetNav";
 import InventoryDomainNav from "./InventoryDomainNav";
 import PlaceholderSurface from "./PlaceholderSurface";
@@ -141,7 +140,7 @@ export default function InventoryWorkspace({
           </div>
         </div>
       </header>
-      <section className="relative !mt-10 pt-16">
+      <section className="relative !mt-8 pt-14">
         <InventoryDomainNav
           label={workspace.controls.domainsLabel}
           families={workspace.families}
@@ -150,7 +149,7 @@ export default function InventoryWorkspace({
         />
 
         <section className="!mt-0 relative z-1 overflow-hidden rounded-2xl border border-t-0 border-border/10 bg-card shadow-[0_16px_34px_rgba(9,35,31,0.035)]">
-          <div className="border-b border-border/10 px-6 py-6 md:px-8">
+          <div className="border-b border-border/10 px-6 py-4 md:px-8 md:py-4">
             <InventoryDatasetNav
               label={workspace.controls.datasetLabel}
               activeFamily={activeFamily}
@@ -160,12 +159,8 @@ export default function InventoryWorkspace({
             />
           </div>
 
-          <div className="space-y-10 px-6 py-6 md:px-8 md:py-8">
-            <DatasetHeader dataset={activeDataset} hints={workspace.hints} />
-
-            <div className="border-t border-border/10 pt-8">
-              {renderDatasetSurface(activeDataset, surfaces, workspace.hints)}
-            </div>
+          <div className="space-y-4 px-6 py-3 md:px-8 md:py-4">
+            {renderDatasetSurface(activeDataset, surfaces, workspace.hints)}
           </div>
         </section>
       </section>

@@ -104,9 +104,9 @@ export default function MatrixTable<T extends FieldValues>({
   );
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {editableRows ? (
-        <div className="flex flex-wrap items-start justify-between gap-3 lg:flex-nowrap">
+        <div className="flex flex-wrap items-start justify-between gap-2 lg:flex-nowrap">
           {title ? (
             <Typography className="my-auto" asChild variant="sectionTitle" size="sm">
               <h4>{title}</h4>
