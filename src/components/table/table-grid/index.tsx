@@ -5,10 +5,9 @@ import { useEffect, useState } from "react";
 
 import type { FieldValues } from "react-hook-form";
 
-import { Button } from "@/components/ui/button";
-import Typography from "@/components/ui/typography";
 import InventoryTanstackTable from "../tanstack";
 import YearSelector from "../year-selector";
+import { InventoryTableActionButton, InventoryTableHeader } from "../InventoryTableHeader";
 import { createTableGridColumns } from "./columns";
 import type { TableGridProps } from "./types";
 import { Plus } from "lucide-react";
@@ -60,27 +59,11 @@ export default function TableGrid<T extends FieldValues>({
 
   return (
     <section className={className ?? "space-y-3"}>
-      {title || description || yearSelector || addRow ? (
-        <div className="flex flex-wrap items-start justify-between gap-2 lg:flex-nowrap">
-          <div>
-            {title ? (
-              <Typography asChild variant="sectionTitle" size="sm">
-                <h4>{title}</h4>
-              </Typography>
-            ) : null}
-            {description ? (
-              <Typography
-                asChild
-                variant="description"
-                size="md"
-                className={title ? "mt-1.5" : undefined}
-              >
-                <p>{description}</p>
-              </Typography>
-            ) : null}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
+      <InventoryTableHeader
+        title={title}
+        description={description}
+        endContent={
+          <>
             {yearSelector ? (
               <YearSelector
                 years={yearSelector.years}
@@ -92,10 +75,8 @@ export default function TableGrid<T extends FieldValues>({
             ) : null}
 
             {addRow ? (
-              <Button
+              <InventoryTableActionButton
                 type="button"
-                variant="outline"
-                size="sm"
                 /* onClick={addRow.onAdd} */ onPointerDown={(event) => {
                   event.preventDefault();
                   addRow.onAdd();
@@ -103,11 +84,11 @@ export default function TableGrid<T extends FieldValues>({
               >
                 <Plus aria-hidden="true" />
                 {addRow.label}
-              </Button>
+              </InventoryTableActionButton>
             ) : null}
-          </div>
-        </div>
-      ) : null}
+          </>
+        }
+      />
       <InventoryTanstackTable
         rows={rows}
         columns={tableColumns}

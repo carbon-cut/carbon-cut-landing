@@ -93,6 +93,14 @@ export default function InventoryWorkspace({
 }) {
   const { mainForm, years } = useInventoryContext();
   const t = useScopedI18n("(pages).collectivityDashboard");
+  const statusLabels = useMemo(
+    () => ({
+      todo: t("status.todo") as string,
+      complete: t("status.complete") as string,
+      inProgress: t("status.inProgress") as string,
+    }),
+    [t]
+  );
   const formValues = useWatch({ control: mainForm.control }) as
     | Partial<InventoryFormValues>
     | undefined;
@@ -113,10 +121,10 @@ export default function InventoryWorkspace({
             progressPercent === undefined
               ? dataset.navStatusLabel
               : progressPercent === 0
-                ? "À faire"
+                ? statusLabels.todo
                 : progressPercent === 100
-                  ? "Complet"
-                  : "En cours",
+                  ? statusLabels.complete
+                  : statusLabels.inProgress,
           progressLabel:
             progressPercent === undefined ? dataset.progressLabel : `${progressPercent}%`,
           progressPercent,
@@ -124,7 +132,7 @@ export default function InventoryWorkspace({
           isComplete: progressPercent === 100,
         };
       }),
-    [errors, formValues, workspace.datasets, years]
+    [errors, formValues, statusLabels, workspace.datasets, years]
   );
 
   const datasetsInFamily = useMemo(

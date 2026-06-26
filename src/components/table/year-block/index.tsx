@@ -1,11 +1,12 @@
 "use client";
 
+import { FieldValues } from "react-hook-form";
+
+import { InventoryTableHeader } from "../InventoryTableHeader";
 import YearSelector from "../year-selector";
 import BlockTable from "./block-table";
-import { YearBlockHeader } from "./header";
 import { useYearBlockTables } from "./useYearBlockTables";
 import type { YearBlockTableFormProps } from "./types";
-import { FieldValues } from "react-hook-form";
 
 export default function InventoryYearBlockTables<T extends FieldValues>({
   title,
@@ -29,17 +30,18 @@ export default function InventoryYearBlockTables<T extends FieldValues>({
 
   return (
     <section className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <YearBlockHeader title={title} description={description} />
-        </div>
-        <YearSelector
-          years={years}
-          selectedYear={selectedYear}
-          onSelectYear={setSelectedYearValue}
-          className="flex flex-wrap justify-end gap-3"
-        />
-      </div>
+      <InventoryTableHeader
+        title={title}
+        description={description}
+        endContent={
+          <YearSelector
+            years={years}
+            selectedYear={selectedYear}
+            onSelectYear={setSelectedYearValue}
+            className="flex flex-wrap justify-end gap-3"
+          />
+        }
+      />
 
       {selectedYear ? (
         <section className="space-y-6">

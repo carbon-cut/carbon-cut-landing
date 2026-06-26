@@ -12,7 +12,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import Typography from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -25,7 +24,6 @@ type InventoryTanstackColumnMeta = {
 };
 
 type InventoryTanstackTableProps<TData> = {
-  title?: string;
   rows: TData[];
   columns: ColumnDef<TData, unknown>[];
   getRowId: (row: TData, index: number, parent?: Row<TData>) => string;
@@ -41,7 +39,6 @@ type InventoryTanstackTableProps<TData> = {
 };
 
 export default function InventoryTanstackTable<TData>({
-  title,
   rows,
   columns,
   getRowId,
@@ -73,13 +70,7 @@ export default function InventoryTanstackTable<TData>({
       : flexRender(cell.column.columnDef.cell, cell.getContext());
 
   return (
-    <section className="space-y-3">
-      {title ? (
-        <Typography asChild variant="sectionTitle" size="sm">
-          <h4>{title}</h4>
-        </Typography>
-      ) : null}
-
+    <section>
       <Table className={cn("w-full overflow-hidden", tableClassName)}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

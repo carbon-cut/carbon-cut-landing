@@ -3,7 +3,7 @@ import { Trash2 } from "lucide-react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 
 import { InventoryFieldInput } from "@/app/collectivity/_components/fields";
-import { Button } from "@/components/ui/button";
+import { InventoryTableIconButton } from "../InventoryTableHeader";
 import { renderMatrixRowSelectCell, renderMatrixYearInputCell } from "./cells";
 import type { MatrixEditableRows, MatrixRowField, MatrixTableRow } from "./types";
 import type { MatrixYearCellRenderer } from "./types";
@@ -109,17 +109,15 @@ export function createMatrixTableColumns<T extends FieldValues>({
         const canRemove = !isLocked && rowCount > (editableRows.minRows ?? 0);
 
         return (
-          <Button
+          <InventoryTableIconButton
             type="button"
-            variant="ghost"
-            size="icon"
             title="Supprimer"
             aria-label={`Supprimer ${row.original.label}`}
             disabled={!canRemove}
             onClick={() => onRemoveRow(row.index)}
           >
             <Trash2 aria-hidden="true" />
-          </Button>
+          </InventoryTableIconButton>
         );
       },
     });

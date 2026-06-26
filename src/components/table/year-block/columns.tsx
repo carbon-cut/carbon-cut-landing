@@ -16,7 +16,7 @@ import {
   InventoryTableRow,
   InventoryYearBlockTableBlock,
 } from "@/app/collectivity/_inventaire/types";
-import { Button } from "@/components/ui/button";
+import { InventoryTableIconButton } from "../InventoryTableHeader";
 
 type BlockTableRow = InventoryTableRow;
 type BlockTableCellContext = CellContext<BlockTableRow, unknown>;
@@ -58,17 +58,15 @@ export function createYearBlockColumns<T extends FieldValues>({
                 form={form}
                 name={`${columnName}.key` as TName<T>}
               />
-              <Button
+              <InventoryTableIconButton
                 type="button"
-                variant="ghost"
-                size="icon"
                 title="Supprimer la colonne"
                 aria-label={`Supprimer la colonne ${columnLabel}`}
                 onClick={() => onRemoveColumn(index)}
                 disabled={columnLabel === "total"}
               >
                 <Trash2 aria-hidden="true" />
-              </Button>
+              </InventoryTableIconButton>
             </span>
           ) : (
             columnLabel

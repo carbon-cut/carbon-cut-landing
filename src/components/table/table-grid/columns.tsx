@@ -2,10 +2,10 @@
 
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
 import { TName } from "@/components/ui/forms";
+import { InventoryTableIconButton } from "../InventoryTableHeader";
 import { NumberInputCell, TextInputCell } from "./cells";
 import type { TableGridRow, TableGridCellRenderer, TableGridColumn } from "./types";
 
@@ -65,10 +65,8 @@ export function createTableGridColumns<T extends FieldValues>({
         align: "center" as const,
       },
       cell: ({ row }: CellContext<TableGridRow, unknown>) => (
-        <Button
+        <InventoryTableIconButton
           type="button"
-          variant="ghost"
-          size="icon"
           title="Supprimer"
           aria-label={`Supprimer ${row.original.label}`}
           disabled={editableRows.rowCount <= editableRows.minRows}
@@ -78,7 +76,7 @@ export function createTableGridColumns<T extends FieldValues>({
           }}
         >
           <Trash2 aria-hidden="true" />
-        </Button>
+        </InventoryTableIconButton>
       ),
     });
   }

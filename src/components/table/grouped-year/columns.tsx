@@ -7,7 +7,7 @@ import type { FieldValues } from "react-hook-form";
 import { renderGroupedYearInputCell, renderGroupedYearRowSelectCell } from "./cells";
 import type { GroupedYearTableProps } from "./types";
 import type { InventoryTableColumn, InventoryTableRow } from "@/app/collectivity/_inventaire/types";
-import { Button } from "@/components/ui/button";
+import { InventoryTableIconButton } from "../InventoryTableHeader";
 
 type GroupedYearCellContext = CellContext<InventoryTableRow, unknown>;
 
@@ -97,17 +97,15 @@ export function createGroupedYearColumns<T extends FieldValues>({
         const canRemove = rowCount > (editableRows.minRows ?? 0);
 
         return (
-          <Button
+          <InventoryTableIconButton
             type="button"
-            variant="ghost"
-            size="icon"
             title="Supprimer"
             aria-label={`Supprimer ${row.original.label}`}
             disabled={!canRemove}
             onClick={() => onRemoveRow(row.index)}
           >
             <Trash2 aria-hidden="true" />
-          </Button>
+          </InventoryTableIconButton>
         );
       },
     });

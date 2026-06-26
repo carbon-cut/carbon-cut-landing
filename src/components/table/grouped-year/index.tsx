@@ -6,8 +6,7 @@ import { type ArrayPath, type FieldValues, useFieldArray } from "react-hook-form
 import { Plus } from "lucide-react";
 
 import { useInventoryContext } from "@/app/collectivity/_inventaire/context/inventory-context";
-import { Button } from "@/components/ui/button";
-import Typography from "@/components/ui/typography";
+import { InventoryTableActionButton, InventoryTableHeader } from "../InventoryTableHeader";
 import InventoryTanstackTable from "../tanstack";
 import { createGroupedYearColumns } from "./columns";
 import type { GroupedYearEditableRows, GroupedYearTableProps } from "./types";
@@ -15,6 +14,7 @@ import type { TName } from "@/components/ui/forms";
 
 function EditableInventoryGroupedYearTable<T extends FieldValues>({
   title,
+  description,
   rows,
   subcolumns,
   form,
@@ -55,31 +55,27 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap items-start justify-between gap-3 lg:flex-nowrap">
-        {title ? (
-          <Typography className="my-auto" asChild variant="sectionTitle" size="sm">
-            <h4>{title}</h4>
-          </Typography>
-        ) : null}
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          title={editableRows?.addLabel}
-          aria-label={editableRows?.addLabel}
-          className="h-8 rounded-full px-3 shadow-none"
-          onClick={() =>
-            append(
-              // @ts-expect-error - initialize dynamic grouped-year row fields lazily
-              { key: "", value: {} },
-              { shouldFocus: true }
-            )
-          }
-        >
-          <Plus aria-hidden="true" />
-          {editableRows?.addLabel}
-        </Button>
-      </div>
+      <InventoryTableHeader
+        title={title}
+        description={description}
+        endContent={
+          <InventoryTableActionButton
+            type="button"
+            title={editableRows?.addLabel}
+            aria-label={editableRows?.addLabel}
+            onClick={() =>
+              append(
+                // @ts-expect-error - initialize dynamic grouped-year row fields lazily
+                { key: "", value: {} },
+                { shouldFocus: true }
+              )
+            }
+          >
+            <Plus aria-hidden="true" />
+            {editableRows?.addLabel}
+          </InventoryTableActionButton>
+        }
+      />
       <InventoryTanstackTable
         rows={tableRows}
         columns={columns}
@@ -92,6 +88,7 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
 
 function StaticInventoryGroupedYearTable<T extends FieldValues>({
   title,
+  description,
   rows,
   subcolumns,
   form,
@@ -114,13 +111,15 @@ function StaticInventoryGroupedYearTable<T extends FieldValues>({
   );
 
   return (
-    <InventoryTanstackTable
-      title={title}
-      rows={rows}
-      columns={columns}
-      getRowId={(row) => row.key}
-      stickyColumnIds={["label"]}
-    />
+    <div className="space-y-3">
+      <InventoryTableHeader title={title} description={description} />
+      <InventoryTanstackTable
+        rows={rows}
+        columns={columns}
+        getRowId={(row) => row.key}
+        stickyColumnIds={["label"]}
+      />
+    </div>
   );
 }
 
