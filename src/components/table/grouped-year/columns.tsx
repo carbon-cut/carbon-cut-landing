@@ -69,7 +69,7 @@ export function createGroupedYearColumns<T extends FieldValues>({
         meta: {
           align: "center" as const,
           tone: "secondary" as const,
-          className: "min-w-[110px] py-2",
+          className: `min-w-[110px] py-2 ${subcolumn.className ?? ""}`.trim(),
         },
         cell: ({ row }: GroupedYearCellContext) =>
           renderGroupedYearInputCell({

@@ -1,26 +1,68 @@
 import { z } from "zod";
 
 import {
+  constructUnit,
+  createGridSchema,
   createGroupSchema,
-  createRepeatableRowGroupSchema,
-  datasetPlaceholderSchema,
+  createMatrixSchema,
+  createRecordGridSchema,
+  createRecordMatrixSchema,
+  metadata,
 } from "../_shared";
+import { agriculturalProduction, fertilizers, livestock, perennialPlantationStock } from "./config";
 
-const perennialPlantationStockRowSchema = z.object({
-  plantType: z.string(),
-  customName: z.string(),
-  values: z.record(z.string(), z.record(z.string(), z.string())),
+const perennialPlantationStockSchema = z.object({
+  dataSet: createRecordGridSchema(
+    perennialPlantationStock.metricKeys,
+    z.enum(perennialPlantationStock.plantOptions),
+    {
+      unitsByKeys: perennialPlantationStock.units.metrics,
+    }
+  ),
+  metadata,
 });
 
-const perennialPlantationStockSchema = createRepeatableRowGroupSchema(
-  perennialPlantationStockRowSchema
-);
+const livestockSchema = z.object({
+  dataSet: z.object({
+    headcount: createMatrixSchema(livestock.rowKeys, {
+      unit: livestock.units.headcount.default,
+    }),
+    confinedTimeShare: z.object(
+      Object.fromEntries(
+        livestock.rowKeys.map((key) => [
+          key,
+          z
+            .object({
+              value: z.coerce.number().min(0).max(100).optional(),
+              unit: constructUnit(livestock.units.confinedTimeShare.default),
+            })
+            .optional(),
+        ])
+      )
+    ),
+  }),
+  metadata,
+});
+
+const fertilizersSchema = z.object({
+  dataSet: createRecordMatrixSchema(z.string(), {
+    unit: fertilizers.units.default,
+  }),
+  metadata,
+});
+
+const agriculturalProductionSchema = z.object({
+  dataSet: createRecordGridSchema(agriculturalProduction.measureKeys, z.string(), {
+    unitsByKeys: agriculturalProduction.units.measures,
+  }),
+  metadata,
+});
 
 const afatSchema = createGroupSchema({
   perennialPlantationStock: perennialPlantationStockSchema,
-  livestock: datasetPlaceholderSchema,
-  fertilizers: datasetPlaceholderSchema,
-  agriculturalProduction: datasetPlaceholderSchema,
+  livestock: livestockSchema,
+  fertilizers: fertilizersSchema,
+  agriculturalProduction: agriculturalProductionSchema,
 });
 
 export { afatSchema };

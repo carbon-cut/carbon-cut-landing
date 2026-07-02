@@ -21,6 +21,10 @@ Working notes for contributors to this codebase.
 - Run `npm run lint` before shipping UI changes.
 - Only change files or code the user explicitly asked you to change.
 - Do not overreach; if the task is simple, do the simple task and do not go wild.
+- When the user names a specific layer, file, region, or subsystem, treat that as a hard scope boundary.
+- Do not modify shared components, locales, schemas, APIs, tests, or adjacent files unless the user explicitly approves that scope expansion.
+- If the requested change cannot be completed without crossing the stated scope, stop and ask before editing outside it.
+- Do not "clean up", "align", or "follow through" into neighboring layers unless the user explicitly asks for that additional work.
 - When a user requests changes to a specific UI region, do not modify adjacent regions, shared shells, headers, sidebars, or unrelated surfaces unless the user explicitly includes them.
 - If a reference image is provided, apply it only to the named region in scope, not to the whole screen or neighboring UI.
 

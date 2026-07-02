@@ -1,4 +1,4 @@
-import { columns as perennialPlantationColumns } from "./datasets/afat/perennial-plantation-stock/constants";
+import { columns as perennialPlantationColumns } from "./datasets/afat/perennial-plantation-stock/config";
 import { buildPublicTransportFutureYears } from "./datasets/transport/public-transport/config";
 import {
   airTransport,
