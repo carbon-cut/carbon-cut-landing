@@ -21,6 +21,7 @@ Il répond à une question simple :
 - territoire de référence
 - année de référence
 - années d'appoint
+  ###TODO user note change the notation from années d'appoint to annees d'inventaires
 
 ## Ce que l'utilisateur fait ici
 
