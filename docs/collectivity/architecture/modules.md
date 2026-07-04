@@ -10,7 +10,7 @@ Own the calculation parameters used by the inventory and calculation flow.
 
 - parameter definitions
 - parameter versioning by source and validity period
-- parameter metadata: kind, unit, selector, applicability
+- parameter metadata: kind, unit, gas, selector, applicability
 - parameter selection rules for a given inventory year, country, and selector
 - fallback from country-specific parameter to global default
 - parameter edit permissions
@@ -35,6 +35,10 @@ Own the calculation parameters used by the inventory and calculation flow.
 - If a `country-specific` parameter exists, it must be used.
 - If no `country-specific` parameter exists, the module falls back to the `global` default. Not all parameters have a fallback.
 - Parameter resolution uses selector, year, and country.
+- `unit` is the physical unit. `gas` is stored separately on parameters when they refer to `CO2`, `CH4`, `N2O`, or `CO2e`.
+- Each parameter family should define its selector vocabulary instead of relying on arbitrary selector keys.
+- Parameter resolution should use only the selector fields relevant to that parameter family.
+- Imports must parse raw names and raw units into structured fields. Raw import names are not the source of truth for `key`.
 - Admin manages parameters and country-specific parameters.
 - A user can add a country-specific parameter only when none exists for that country and use case.
 - If an admin-set country-specific parameter exists, the user cannot edit it directly.

@@ -84,17 +84,22 @@ Required fields:
 
 Role: calculation reference value used by the calculation engine.
 
-`selector` defines when a parameter applies, for example by activity and qualifier such as fuel or animal.
 `key` identifies the parameter family, not a unique version.
+`key` must stay human-readable and may include a human-important qualifier when that improves readability, for example `ef-diesel` or `ef-electricity`.
+`key` must not duplicate dimensions already stored in structured fields such as `country`, `emissionScope`, validity years, or `sourceReferenceId`.
+`selector` contains only the qualifiers needed to disambiguate a parameter within its family.
+`selector` is flexible but not free-form; each parameter family should define its allowed selector fields.
+`activity` is optional and should be used only when it actually distinguishes calculation contexts.
+`unit` stores the physical unit only, while `gas` stores the emitted gas or accounting basis when relevant.
 
 Examples:
 
-- `key`: `ef-diesel-1`
-  `selector`: `{ activity: "burning", fuel: "diesel" }`
-- `key`: `frac-gas-system`
-  `selector`: `{ activity: "manure-management", animal: "cattle" }`
-- `key`: `absorption-factor`
-  `selector`: `{ activity: "tree-stock", treeType: "urban-tree" }`
+- `key`: `ef-diesel`
+  `selector`: `{}`
+- `key`: `gwp`
+  `selector`: `{ inputGas: "CH4" }`
+- `key`: `rootToShoot`
+  `selector`: `{ treeType: "olive" }`
 
 Required fields:
 
@@ -104,6 +109,7 @@ Required fields:
 - `selector`
 - `applicability` (`global` or `country-specific`)
 - `country` nullable
+- `gas` nullable (`CO2`, `CH4`, `N2O`, `CO2e`)
 - `emissionScope` nullable
 - `value`
 - `unit` nullable
@@ -186,5 +192,4 @@ Required fields:
 
 - Does `parameterSnapshot` need its own entity later?
 - Does parameter resolution need its own entity later, or stay in calculation logic?
-- Does `formulaVersion` need its own entity later?
-- Does `SourceReference` also need to support multiple files or attachments?
+- Does `CalculationResult` need only final `CO2e` outputs for users, or should it also preserve per-gas composition such as `CO2`, `CH4`, and `N2O`?
