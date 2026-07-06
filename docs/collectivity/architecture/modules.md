@@ -4,15 +4,14 @@
 
 ### Responsibility
 
-Own the calculation parameters used by the inventory and calculation flow.
+Own the calculation parameter catalog and its maintenance lifecycle.
 
 ### Owns
 
 - parameter definitions
 - parameter versioning by source and validity period
 - parameter metadata: kind, unit, gas, selector, applicability
-- parameter selection rules for a given inventory year, country, and selector
-- fallback from country-specific parameter to global default
+- the rule metadata needed for later parameter resolution
 - parameter edit permissions
 
 ### Inputs
@@ -21,28 +20,24 @@ Own the calculation parameters used by the inventory and calculation flow.
 - imported parameter tables
 - admin-managed parameter entries
 - user-managed country-specific parameter entries when missing
-- inventory context: territory, country, year, selector
 
 ### Outputs
 
-- resolved parameter set usable by the calculation engine
-- traceability data showing which parameter was used and why
+- maintained parameter records usable by calculation
+- parameter metadata and traceability fields usable during calculation
 - permission state for whether a parameter can be edited or only requested
 
 ### Rules
 
 - A parameter is either `global` or `country-specific`.
-- If a `country-specific` parameter exists, it must be used.
-- If no `country-specific` parameter exists, the module falls back to the `global` default. Not all parameters have a fallback.
-- Parameter resolution uses selector, year, and country.
 - `unit` is the physical unit. `gas` is stored separately on parameters when they refer to `CO2`, `CH4`, `N2O`, or `CO2e`.
 - Each parameter family should define its selector vocabulary instead of relying on arbitrary selector keys.
-- Parameter resolution should use only the selector fields relevant to that parameter family.
 - Imports must parse raw names and raw units into structured fields. Raw import names are not the source of truth for `key`.
 - Admin manages parameters and country-specific parameters.
 - A user can add a country-specific parameter only when none exists for that country and use case.
 - If an admin-set country-specific parameter exists, the user cannot edit it directly.
 - In that case, the user may request permission or request a change.
+- Parameters must carry the selector, applicability, and validity data needed for later resolution during a calculation run.
 
 ### Boundaries
 
@@ -157,31 +152,34 @@ Own the calculation flow that transforms activity data and parameters into inven
 ### Owns
 
 - calculation rules
+- per-run parameter acquisition and resolution
 - parameter application
 - yearly result generation
-- aggregation by dataset, category, and perimeter
+- production of the canonical emissions output for the run
 
 ### Inputs
 
 - structured activity data
-- resolved parameters
 - inventory years
+- parameter data from `Calculation parameter management`
 
 ### Outputs
 
-- calculated inventory results by year
-- aggregated totals for result reading
-- calculation traceability
-- the parameter set used for the calculation
+- canonical emissions output that mirrors the activity structure
+- the parameter snapshot used for the calculation
 - the calculation algorithm version used
 
 ### Rules
 
 - Calculations use the inventory years defined in `cadrage`.
-- Calculations use the resolved parameters provided by `Calculation parameter management`.
-- The calculation engine should load parameters in one database call, or from one preloaded parameter set, not call parameters one by one during calculation.
+- Before formula execution, the calculation flow should determine all parameters needed for the run.
+- The calculation flow should acquire those parameters in one database call, or one preload phase, not by on-demand lookups during calculation.
+- After acquisition, the run should resolve the parameters it will use from the preloaded set.
 - Parameter resolution uses selector, year, and country applicability.
-- The calculation should specify the parameters used for that calculation.
+- If a `country-specific` parameter exists, it must be used.
+- If no `country-specific` parameter exists, the run falls back to the `global` default when a fallback exists.
+- The calculation output should stay structurally close to the submitted activity data rather than being reshaped into a reporting model.
+- The calculation should specify the parameter snapshot used for that calculation.
 - The calculation should specify the calculation algorithm version used.
 - Results must stay traceable to both activity data and parameters.
 

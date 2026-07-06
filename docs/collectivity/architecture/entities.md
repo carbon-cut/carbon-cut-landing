@@ -136,26 +136,21 @@ Required fields:
 - `startedAt`
 - `completedAt` nullable
 - `status`
-- `parameterSnapshot` or `parameterReferenceSet`
+- `parameterSnapshot`
 - `formulaVersion` nullable
 
 ### CalculationResult
 
-Role: stored output of a calculation run.
+Role: stored canonical output of a calculation run.
 
 Required fields:
 
 - `id`
 - `calculationRunId`
 - `projectId`
-- `sectorKey`
-- `subsectorKey` nullable
-- `ownershipKey` nullable
-- `energyTypeKey` nullable
-- `year`
-- `resultKey`
-- `value`
-- `unit`
+- `emissionsPayload`
+- `createdAt`
+- `updatedAt`
 
 ### SourceReference
 
@@ -177,10 +172,11 @@ Required fields:
 - One `User` can access zero or many `Project` entries.
 - One `Project` has one current `InventoryState`.
 - One `Project` has many `CalculationRun`.
-- One `CalculationRun` has many `CalculationResult`.
+- One `CalculationRun` has one canonical `CalculationResult`.
 - One `Sector` groups many `Subsector` entries in the product structure.
 - `InventoryState` stores the nested inventory JSON payload for a project.
-- `CalculationResult` can be classified by `Sector`, `Subsector`, `Ownership`, and `EnergyType`.
+- `CalculationResult` stores the nested emissions JSON payload for a project run.
+- Reporting may later project `CalculationResult` into read models classified by `Sector`, `Subsector`, `Ownership`, and `EnergyType`.
 - One `CalculationParameter` can be linked to one `SourceReference`.
 - One `InventoryState` can contain source references inside its payload.
 - `CalculationParameter` resolution should use country-specific first, then global fallback.
@@ -192,4 +188,5 @@ Required fields:
 
 - Does `parameterSnapshot` need its own entity later?
 - Does parameter resolution need its own entity later, or stay in calculation logic?
-- Does `CalculationResult` need only final `CO2e` outputs for users, or should it also preserve per-gas composition such as `CO2`, `CH4`, and `N2O`?
+- Does `CalculationResult` later need separate flattened read models in addition to the canonical nested emissions payload?
+- Does the canonical emissions payload later need explicit per-gas composition in addition to the current `CO2e` assumption?
