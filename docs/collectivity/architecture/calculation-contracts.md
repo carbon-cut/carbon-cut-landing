@@ -18,7 +18,7 @@ Meaning:
 - `projectId` identifies the project workspace
 - `activityData` is the submitted form payload
 
-The backend loads project and `cadrage` context from storage using `projectId`.
+The backend loads project and `setup` context from storage using `projectId`.
 
 ### `PreparedCalculationInput`
 
@@ -105,7 +105,7 @@ The reporting module is responsible for reshaping this tree into whatever read m
 Before calculation:
 
 - project state
-- `cadrage` state
+- `setup` state
 - saved `activityData`
 
 At run start:

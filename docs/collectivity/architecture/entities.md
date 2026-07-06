@@ -16,6 +16,7 @@ Required fields:
 - `country`
 - `referenceYear`
 - `inventoryYears`
+- `currentInventoryStateId` nullable
 - `createdAt`
 - `updatedAt`
 
@@ -69,14 +70,17 @@ Required fields:
 
 ### InventoryState
 
-Role: stored inventory payload for a project.
+Role: one stored inventory revision for a project.
 
 Required fields:
 
 - `id`
 - `projectId`
-- `payload`
+- `setupPayload`
+- `inventoryPayload`
+- `status` (`draft`, `calculated`, `outdated`)
 - `lockedYears`
+- `latestCalculationRunId` nullable
 - `createdAt`
 - `updatedAt`
 
@@ -132,6 +136,7 @@ Required fields:
 
 - `id`
 - `projectId`
+- `inventoryStateId`
 - `runType`
 - `startedAt`
 - `completedAt` nullable
@@ -171,17 +176,21 @@ Required fields:
 
 - One `User` can access zero or many `Project` entries.
 - One `Project` has one current `InventoryState`.
+- One `Project` can keep many `InventoryState` revisions as history.
 - One `Project` has many `CalculationRun`.
+- One `InventoryState` can have many `CalculationRun`.
 - One `CalculationRun` has one canonical `CalculationResult`.
 - One `Sector` groups many `Subsector` entries in the product structure.
-- `InventoryState` stores the nested inventory JSON payload for a project.
+- `InventoryState` stores one saved `setup` and `inventory` revision for a project.
 - `CalculationResult` stores the nested emissions JSON payload for a project run.
 - Reporting may later project `CalculationResult` into read models classified by `Sector`, `Subsector`, `Ownership`, and `EnergyType`.
 - One `CalculationParameter` can be linked to one `SourceReference`.
-- One `InventoryState` can contain source references inside its payload.
+- `InventoryState` may contain source references inside its stored `setup` or `inventory` payloads when needed.
 - `CalculationParameter` resolution should use country-specific first, then global fallback.
 - One `CalculationRun` must record the parameters used for that run.
+- `InventoryState` carries lifecycle status such as `draft`, `calculated`, and `outdated`.
 - Previously calculated years should remain read-only by default.
+- Setup applicability choices that affected previously calculated years should remain locked by default with those years.
 - Reopening old years for editing must be an explicit special action.
 
 ## Open questions

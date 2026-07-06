@@ -1,5 +1,7 @@
 # Architecture Modules
 
+> Terminology note: `setup` is the current name for what older drafts and implementation called `cadrage`.
+
 ## Calculation parameter management
 
 ### Responsibility
@@ -95,9 +97,9 @@ Own the storage of project state and workflow state for one collectivity plan.
 ### Owns
 
 - project identity
-- `cadrage` state
-- `general data` state
+- `setup` state
 - current `inventory` state
+- historical `InventoryState` revisions when needed
 - user save-for-later state
 - locked years
 - progress and completion state
@@ -122,10 +124,14 @@ Own the storage of project state and workflow state for one collectivity plan.
 
 - Storage is scoped to one collectivity plan.
 - Workflow state must stay linked to the project and its inventory years.
+- Workflow state is stored in `InventoryState`, not directly on the `Project` entity.
 - Users can save their work whenever they want and continue later.
 - Save should accept incomplete input with minimal validation.
-- The project stores the current nested inventory state.
+- `InventoryState` stores the current editable `setup` and `inventory` state.
+- Reopening previously calculated years creates a new draft `InventoryState`.
+- Older calculated inventory states may be kept as `outdated` history after a new draft is created.
 - Previously calculated years remain read-only by default.
+- Setup applicability choices that determine whether sections exist, such as airport, port, or agriculture, are also locked for previously calculated years by default.
 - Reopening old years must be an explicit special action.
 - The project should save the parameters used for a specific inventory for auditability.
 - Stored parameter usage should come from the calculation output, not from a separate parameter lookup.
@@ -171,7 +177,7 @@ Own the calculation flow that transforms activity data and parameters into inven
 
 ### Rules
 
-- Calculations use the inventory years defined in `cadrage`.
+- Calculations use the inventory years defined in `setup`.
 - Before formula execution, the calculation flow should determine all parameters needed for the run.
 - The calculation flow should acquire those parameters in one database call, or one preload phase, not by on-demand lookups during calculation.
 - After acquisition, the run should resolve the parameters it will use from the preloaded set.
@@ -201,8 +207,7 @@ Own the collection and storage of activity data used by the inventory.
 
 ### Owns
 
-- `cadrage`
-- `general data`
+- `setup`
 - `inventory`
 - yearly data entry
 - common data format across datasets
@@ -221,8 +226,9 @@ Own the collection and storage of activity data used by the inventory.
 
 ### Rules
 
-- `cadrage` defines the territory and the inventory years.
-- `general data` and `inventory` data follow the years defined in `cadrage`.
+- `setup` defines the territory, country, reference year, inventory years, and pre-activity framing choices that determine which inventory sections are applicable.
+- `inventory` includes both direct activity data and shared supporting inputs needed for calculation, such as population or optional prices.
+- `inventory` data follows the years and applicability choices defined in `setup`.
 - Datasets use a common data format.
 
 ### Boundaries

@@ -56,7 +56,7 @@ Carries:
 - `projectId`
 - submitted `ActivityData`
 
-This object starts the backend calculation flow. The backend loads project and `cadrage` context from storage using `projectId`.
+This object starts the backend calculation flow. The backend loads project and `setup` context from storage using `projectId`.
 
 ### `PreparedCalculationInput`
 

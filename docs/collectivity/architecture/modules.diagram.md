@@ -2,8 +2,7 @@
 
 ```mermaid
 flowchart LR
-    C["Cadrage"]
-    G["General data"]
+    C["Setup"]
     I["Inventory"]
 
     ADC["Activity data collection"]
@@ -13,7 +12,6 @@ flowchart LR
     RR["Results/reporting"]
 
     C --> ADC
-    G --> ADC
     I --> ADC
 
     ADC -->|structured activity data| CE
