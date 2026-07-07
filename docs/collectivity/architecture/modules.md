@@ -99,7 +99,7 @@ Own the storage of project state and workflow state for one collectivity plan.
 - project identity
 - `setup` state
 - current `inventory` state
-- historical `InventoryState` revisions when needed
+- historical `Inventory` revisions when needed
 - user save-for-later state
 - locked years
 - progress and completion state
@@ -124,11 +124,11 @@ Own the storage of project state and workflow state for one collectivity plan.
 
 - Storage is scoped to one collectivity plan.
 - Workflow state must stay linked to the project and its inventory years.
-- Workflow state is stored in `InventoryState`, not directly on the `Project` entity.
+- Workflow state is stored in `Inventory`, not directly on the `Project` entity.
 - Users can save their work whenever they want and continue later.
 - Save should accept incomplete input with minimal validation.
-- `InventoryState` stores the current editable `setup` and `inventory` state.
-- Reopening previously calculated years creates a new draft `InventoryState`.
+- `Inventory` stores the current editable `setup` and `inventory` state.
+- Reopening previously calculated years creates a new draft `Inventory`.
 - Older calculated inventory states may be kept as `outdated` history after a new draft is created.
 - Previously calculated years remain read-only by default.
 - Setup applicability choices that determine whether sections exist, such as airport, port, or agriculture, are also locked for previously calculated years by default.
@@ -145,7 +145,7 @@ This module does not define calculation rules, does not manage factors, and does
 ### Shared entities
 
 - `Project`
-- `InventoryState`
+- `Inventory`
 - `CalculationRun`
 - `CalculationResult`
 
@@ -238,4 +238,4 @@ This module does not manage factors, does not calculate results, and does not ow
 ### Shared entities
 
 - `Project`
-- `InventoryState`
+- `Inventory`

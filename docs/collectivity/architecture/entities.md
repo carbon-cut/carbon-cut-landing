@@ -16,7 +16,7 @@ Required fields:
 - `country`
 - `referenceYear`
 - `inventoryYears`
-- `currentInventoryStateId` nullable
+- `currentInventoryId` nullable
 - `createdAt`
 - `updatedAt`
 
@@ -68,7 +68,7 @@ Required fields:
 
 - `key`
 
-### InventoryState
+### Inventory
 
 Role: one stored inventory revision for a project.
 
@@ -77,7 +77,7 @@ Required fields:
 - `id`
 - `projectId`
 - `setupPayload`
-- `inventoryPayload`
+- `inventoryInput`
 - `status` (`draft`, `calculated`, `outdated`)
 - `lockedYears`
 - `latestCalculationRunId` nullable
@@ -136,11 +136,10 @@ Required fields:
 
 - `id`
 - `projectId`
-- `inventoryStateId`
-- `runType`
+- `inventoryId`
 - `startedAt`
 - `completedAt` nullable
-- `status`
+- `status` (`succeeded`, `failed`)
 - `parameterSnapshot`
 - `formulaVersion` nullable
 
@@ -175,20 +174,20 @@ Required fields:
 ## Main relationships
 
 - One `User` can access zero or many `Project` entries.
-- One `Project` has one current `InventoryState`.
-- One `Project` can keep many `InventoryState` revisions as history.
+- One `Project` has one current `Inventory`.
+- One `Project` can keep many `Inventory` revisions as history.
 - One `Project` has many `CalculationRun`.
-- One `InventoryState` can have many `CalculationRun`.
+- One `Inventory` can have many `CalculationRun`.
 - One `CalculationRun` has one canonical `CalculationResult`.
 - One `Sector` groups many `Subsector` entries in the product structure.
-- `InventoryState` stores one saved `setup` and `inventory` revision for a project.
+- `Inventory` stores one saved `setup` and `inventoryInput` revision for a project.
 - `CalculationResult` stores the nested emissions JSON payload for a project run.
 - Reporting may later project `CalculationResult` into read models classified by `Sector`, `Subsector`, `Ownership`, and `EnergyType`.
 - One `CalculationParameter` can be linked to one `SourceReference`.
-- `InventoryState` may contain source references inside its stored `setup` or `inventory` payloads when needed.
+- `Inventory` may contain source references inside its stored `setup` or `inventoryInput` payloads when needed.
 - `CalculationParameter` resolution should use country-specific first, then global fallback.
 - One `CalculationRun` must record the parameters used for that run.
-- `InventoryState` carries lifecycle status such as `draft`, `calculated`, and `outdated`.
+- `Inventory` carries lifecycle status such as `draft`, `calculated`, and `outdated`.
 - Previously calculated years should remain read-only by default.
 - Setup applicability choices that affected previously calculated years should remain locked by default with those years.
 - Reopening old years for editing must be an explicit special action.
