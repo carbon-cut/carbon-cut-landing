@@ -84,39 +84,53 @@ Required fields:
 - `createdAt`
 - `updatedAt`
 
-### CalculationParameter
+### CalculationParameterFamily
 
-Role: calculation reference value used by the calculation engine.
+Role: stable definition of one calculation parameter family.
 
-`key` identifies the parameter family, not a unique version.
+`key` identifies the stable parameter family.
 `key` must stay human-readable and may include a human-important qualifier when that improves readability, for example `ef-diesel` or `ef-electricity`.
-`key` must not duplicate dimensions already stored in structured fields such as `country`, `emissionScope`, validity years, or `sourceReferenceId`.
-`selector` contains only the qualifiers needed to disambiguate a parameter within its family.
-`selector` is flexible but not free-form; each parameter family should define its allowed selector fields.
-`activity` is optional and should be used only when it actually distinguishes calculation contexts.
-`unit` stores the physical unit only, while `gas` stores the emitted gas or accounting basis when relevant.
+`key` should not encode changing value-entry dimensions such as `country`, validity years, or source.
+Each family defines the selector vocabulary allowed for its entries.
+`unit` stores the expected physical unit. `gas` stores the emitted gas or accounting basis when relevant.
 
 Examples:
 
 - `key`: `ef-diesel`
-  `selector`: `{}`
 - `key`: `gwp`
-  `selector`: `{ inputGas: "CH4" }`
 - `key`: `rootToShoot`
-  `selector`: `{ treeType: "olive" }`
 
 Required fields:
 
 - `id`
 - `key`
 - `kind` (`emissionFactor`, `constant`, `density`, `absorptionFactor`)
+- `selectorSchema`
+- `gas` nullable (`CO2`, `CH4`, `N2O`, `CO2e`)
+- `unit` nullable
+- `emissionScope` nullable
+- `createdAt`
+- `updatedAt`
+
+Uniqueness rule:
+
+- unique on `key`
+
+### CalculationParameterEntry
+
+Role: one stored value entry under a calculation parameter family.
+
+`selector` contains the qualifier values used for this entry within its family.
+Entries carry the changing dimensions of a parameter, such as `country`, `value`, `sourceReferenceId`, and validity years.
+
+Required fields:
+
+- `id`
+- `familyId`
 - `selector`
 - `applicability` (`global` or `country-specific`)
 - `country` nullable
-- `gas` nullable (`CO2`, `CH4`, `N2O`, `CO2e`)
-- `emissionScope` nullable
 - `value`
-- `unit` nullable
 - `sourceReferenceId` nullable
 - `validFromYear` nullable
 - `validToYear` nullable
@@ -126,7 +140,7 @@ Required fields:
 
 Uniqueness rule:
 
-- unique on `key + applicability + country + validFromYear + validToYear + selector`
+- unique on `familyId + applicability + country + validFromYear + validToYear + selector`
 
 ### CalculationRun
 
@@ -183,9 +197,10 @@ Required fields:
 - `Inventory` stores one saved `setup` and `inventoryInput` revision for a project.
 - `CalculationResult` stores the nested emissions JSON payload for a project run.
 - Reporting may later project `CalculationResult` into read models classified by `Sector`, `Subsector`, `Ownership`, and `EnergyType`.
-- One `CalculationParameter` can be linked to one `SourceReference`.
+- One `CalculationParameterFamily` can have many `CalculationParameterEntry` records.
+- One `CalculationParameterEntry` can be linked to one `SourceReference`.
 - `Inventory` may contain source references inside its stored `setup` or `inventoryInput` payloads when needed.
-- `CalculationParameter` resolution should use country-specific first, then global fallback.
+- `CalculationParameterEntry` resolution should use country-specific first, then global fallback within one family.
 - One `CalculationRun` must record the parameters used for that run.
 - `Inventory` carries lifecycle status such as `draft`, `calculated`, and `outdated`.
 - Previously calculated years should remain read-only by default.
@@ -195,6 +210,6 @@ Required fields:
 ## Open questions
 
 - Does `parameterSnapshot` need its own entity later?
-- Does parameter resolution need its own entity later, or stay in calculation logic?
+- Does parameter family definition stay fully database-managed, or later become partly code-defined?
 - Does `CalculationResult` later need separate flattened read models in addition to the canonical nested emissions payload?
 - Does the canonical emissions payload later need explicit per-gas composition in addition to the current `CO2e` assumption?

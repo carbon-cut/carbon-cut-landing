@@ -38,17 +38,25 @@ Table Inventory {
   updatedAt timestamp
 }
 
-Table CalculationParameter {
+Table CalculationParameterFamily {
   id uuid [pk]
   key text
   kind text
+  selectorSchema jsonb
+  gas text
+  emissionScope text
+  unit text
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table CalculationParameterEntry {
+  id uuid [pk]
+  familyId uuid [not null]
   selector jsonb
   applicability text
   country text
-  gas text
-  emissionScope text
   value numeric
-  unit text
   sourceReferenceId uuid
   validFromYear int
   validToYear int
@@ -96,7 +104,8 @@ Ref: CalculationRun.inventoryId > Inventory.id
 Ref: Inventory.latestCalculationRunId - CalculationRun.id
 Ref: CalculationResult.calculationRunId - CalculationRun.id
 Ref: CalculationResult.projectId > Project.id
-Ref: CalculationParameter.sourceReferenceId > SourceReference.id
+Ref: CalculationParameterEntry.familyId > CalculationParameterFamily.id
+Ref: CalculationParameterEntry.sourceReferenceId > SourceReference.id
 
-// TODO: normalized relation between CalculationRun and CalculationParameter is unresolved.
+// TODO: normalized relation between CalculationRun and CalculationParameterEntry is unresolved.
 // Current architecture stores parameter usage inside CalculationRun.parameterSnapshot.
