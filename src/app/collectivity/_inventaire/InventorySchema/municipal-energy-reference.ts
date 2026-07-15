@@ -1,11 +1,23 @@
-import { number, z, ZodEnum, ZodString, type ZodRawShape, type ZodTypeAny } from "zod";
+import {
+  number,
+  z,
+  ZodEnum,
+  ZodString,
+  ZodUndefined,
+  type ZodRawShape,
+  type ZodTypeAny,
+} from "zod";
 
 /*
   Standalone reference copy of the inventory schema pieces for:
   - _shared helpers
+  - years schema
   - municipal schema
   - energy schema
   - transport schema
+  - afat schema
+  - wastewater sanitation schema
+  - waste schema
 
   This file is intentionally separate from the production schema modules.
 */
@@ -20,6 +32,11 @@ const futureYearSchema = yearSchema.refine((value) => Number(value.slice(2)) >= 
 const numberSchema = z.coerce.number({ errorMap: () => ({ message: "Required" }) });
 const numberFutureSchema = z.record(futureYearSchema, numberSchema);
 const numberByYearSchema = z.record(yearSchema, numberSchema);
+const inventoryYearSchema = z.coerce.number().int();
+const yearsSchema = z.object({
+  reference: inventoryYearSchema,
+  comparisons: z.array(inventoryYearSchema).min(1),
+});
 
 const metadataSourceTypeValues = ["invoice", "report", "excel", "manual", "estimate"] as const;
 const metadataQualityStatusValues = ["missing", "provided", "estimated", "verified"] as const;
@@ -64,6 +81,7 @@ type GridSchemaOptions =
       unitsByKeys?: never;
       unitsByCols: Record<string, NonEmptyStringArray>;
     };
+type RecordGridSchemaOptions = MatrixSchemaOptions;
 
 const createGroupSchema = <Shape extends ZodRawShape>(shape: Shape) => {
   return z.object(shape).strict();
@@ -98,7 +116,7 @@ const createGridSchema = (
 const createRecordGridSchema = <RowFields extends ZodRawShape = Record<string, never>>(
   keys: readonly [string, ...string[]],
   nestedKeys: ZodString | ZodEnum<[string, ...string[]]>,
-  GridSchemaOptions: MatrixSchemaOptions,
+  GridSchemaOptions: RecordGridSchemaOptions,
   rowFields?: RowFields
 ) => {
   const { unit, unitsByKeys } = GridSchemaOptions;
@@ -120,6 +138,45 @@ const createRecordGridSchema = <RowFields extends ZodRawShape = Record<string, n
       ),
     })
   );
+};
+
+const createRecordMatrix = (
+  keys: ZodString | ZodEnum<[string, ...string[]]>,
+  MatrixSchemaOptions: MatrixSchemaOptions,
+  type: ZodEnum<[string, ...string[]]> | ZodString | ZodUndefined = z.undefined()
+) => {
+  const { unit, unitsByKeys } = MatrixSchemaOptions;
+  const dynamicUnitSchema = unitsByKeys
+    ? z
+        .object({
+          type: z.enum(Object.keys(unitsByKeys) as [string, ...string[]]),
+          unit: z.string(),
+          value: numberByYearSchema,
+        })
+        .superRefine((value, ctx) => {
+          const validUnits = unitsByKeys[value.type];
+          if (!validUnits.includes(value.unit)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ["unit"],
+              message: `Unit must match selected type (${validUnits.join(" or ")})`,
+            });
+          }
+        })
+    : undefined;
+
+  return z.object({
+    key: keys,
+    value: unit
+      ? z.object({
+          value: numberByYearSchema,
+          unit: constructUnit(unit),
+          type,
+        })
+      : dynamicUnitSchema
+        ? dynamicUnitSchema
+        : z.object({}).strict(),
+  });
 };
 
 const createMatrixSchema = (
@@ -145,20 +202,9 @@ const createMatrixSchema = (
 const createRecordMatrixSchema = (
   keys: ZodString | ZodEnum<[string, ...string[]]>,
   MatrixSchemaOptions: MatrixSchemaOptions,
-  type: ZodEnum<[string, ...string[]]> | ZodString | undefined = undefined
+  type: ZodEnum<[string, ...string[]]> | ZodString | ZodUndefined = z.undefined()
 ) => {
-  const { unit } = MatrixSchemaOptions;
-
-  return z.array(
-    z.object({
-      key: keys,
-      value: z.object({
-        value: numberByYearSchema,
-        unit: constructUnit(unit ?? ["null"]),
-        type: type ?? z.undefined(),
-      }),
-    })
-  );
+  return z.array(createRecordMatrix(keys, MatrixSchemaOptions, type));
 };
 
 type UnitConf = {
@@ -354,12 +400,16 @@ const portUnits: UnitConf = {
     default: [""],
   },
   fuelConsumption: {
-    default: ["L"],
+    diesel: ["L"],
+    marineDiesel: ["L"],
+    heavyFuelOil: ["L"],
+    LNG: ["Nm3"],
+    electricity: ["kWh"],
   },
 } as const;
 
 const port = {
-  defaultRowKeys: portDefaultRowKeys,
+  rowKeys: portDefaultRowKeys,
   fuels: portFuelValues,
   units: portUnits,
 };
@@ -497,7 +547,7 @@ const portSchema = z.object({
     fuelConsumption: createRecordMatrixSchema(
       z.string(),
       {
-        unit: port.units.fuelConsumption.default,
+        unitsByKeys: port.units.fuelConsumption,
       },
       z.enum(port.fuels)
     ),
@@ -721,6 +771,155 @@ const energySchema = createGroupSchema({
   solarWaterHeating: solarWaterHeatingSchema,
 });
 
+const perennialPlantationMetricKeys = [
+  "youngHectares",
+  "adultHectares",
+  "oldHectares",
+  "youngTrees",
+  "adultTrees",
+  "oldTrees",
+] as const;
+
+const perennialPlantationUnits: UnitConf = {
+  metrics: {
+    youngHectares: ["ha"],
+    adultHectares: ["ha"],
+    oldHectares: ["ha"],
+    youngTrees: [""],
+    adultTrees: [""],
+    oldTrees: [""],
+  },
+} as const;
+
+const perennialPlantationPlantOptions = [
+  "oliveTrees",
+  "almondTrees",
+  "palmTrees",
+  "tableGrapes",
+  "citrus",
+  "applesPears",
+  "apricots",
+  "pomegranates",
+  "figs",
+  "quinces",
+  "loquats",
+  "peaches",
+  "plums",
+  "pistachios",
+  "cherryTrees",
+  "nutsAndOthers",
+] as const;
+
+const perennialPlantationStock = {
+  metricKeys: perennialPlantationMetricKeys,
+  plantOptions: perennialPlantationPlantOptions,
+  units: perennialPlantationUnits,
+};
+
+const livestockRowKeys = [
+  "dairyCattle",
+  "otherCattle",
+  "sheep",
+  "goats",
+  "horses",
+  "donkeysMules",
+  "camels",
+  "broilers",
+  "layingHens",
+  "turkeys",
+] as const;
+
+const livestockUnits: UnitConf = {
+  headcount: {
+    default: [""],
+  },
+  confinedTimeShare: {
+    default: ["%"],
+  },
+} as const;
+
+const livestock = {
+  rowKeys: livestockRowKeys,
+  units: livestockUnits,
+};
+
+const fertilizerCommonRowKeys = ["ammonitrate", "dap", "compost", "sewageSludge"] as const;
+
+const fertilizers = {
+  commonRowKeys: fertilizerCommonRowKeys,
+  units: {
+    default: ["t"] as [string],
+  },
+};
+
+const agriculturalProductionMeasureKeys = ["harvestedArea", "production"] as const;
+
+const agriculturalProductionUnits: UnitConf = {
+  measures: {
+    harvestedArea: ["ha"],
+    production: ["t"],
+  },
+} as const;
+
+const agriculturalProduction = {
+  measureKeys: agriculturalProductionMeasureKeys,
+  units: agriculturalProductionUnits,
+};
+
+const perennialPlantationStockSchema = z.object({
+  dataSet: createRecordGridSchema(
+    perennialPlantationStock.metricKeys,
+    z.enum(perennialPlantationStock.plantOptions),
+    {
+      unitsByKeys: perennialPlantationStock.units.metrics,
+    }
+  ),
+  metadata,
+});
+
+const livestockSchema = z.object({
+  dataSet: z.object({
+    headcount: createMatrixSchema(livestock.rowKeys, {
+      unit: livestock.units.headcount.default,
+    }),
+    confinedTimeShare: z.object(
+      Object.fromEntries(
+        livestock.rowKeys.map((key) => [
+          key,
+          z
+            .object({
+              value: z.coerce.number().min(0).max(100).optional(),
+              unit: constructUnit(livestock.units.confinedTimeShare.default),
+            })
+            .optional(),
+        ])
+      )
+    ),
+  }),
+  metadata,
+});
+
+const fertilizersSchema = z.object({
+  dataSet: createRecordMatrixSchema(z.string(), {
+    unit: fertilizers.units.default,
+  }),
+  metadata,
+});
+
+const agriculturalProductionSchema = z.object({
+  dataSet: createRecordGridSchema(agriculturalProduction.measureKeys, z.string(), {
+    unitsByKeys: agriculturalProduction.units.measures,
+  }),
+  metadata,
+});
+
+const afatSchema = createGroupSchema({
+  perennialPlantationStock: perennialPlantationStockSchema,
+  livestock: livestockSchema,
+  fertilizers: fertilizersSchema,
+  agriculturalProduction: agriculturalProductionSchema,
+});
+
 const transportSchema = createGroupSchema({
   publicTransport: publicTransportSchema,
   airTransport: airTransportSchema,
@@ -728,8 +927,13 @@ const transportSchema = createGroupSchema({
   territoryVehicles: territoryVehiclesSchema,
 });
 
+const wastewaterSanitationSchema = createGroupSchema({});
+const wasteSchema = createGroupSchema({});
+
 export {
   yearSchema,
+  inventoryYearSchema,
+  yearsSchema,
   futureYearSchema,
   numberByYearSchema,
   numberFutureSchema,
@@ -750,10 +954,31 @@ export {
   municipalSchema,
   energySchema,
   transportSchema,
+  perennialPlantationStock,
+  perennialPlantationStockSchema,
+  livestock,
+  livestockSchema,
+  fertilizers,
+  fertilizersSchema,
+  agriculturalProduction,
+  agriculturalProductionSchema,
+  afatSchema,
+  wastewaterSanitationSchema,
+  wasteSchema,
 };
 
 export const inventoryMunicipalEnergySchemaReference = createGroupSchema({
   municipal: municipalSchema,
   energy: energySchema,
   transport: transportSchema,
+});
+
+export const inventorySchemaReference = createGroupSchema({
+  years: yearsSchema,
+  municipal: municipalSchema,
+  energy: energySchema,
+  transport: transportSchema,
+  afat: afatSchema,
+  wastewaterSanitation: wastewaterSanitationSchema,
+  waste: wasteSchema,
 });
