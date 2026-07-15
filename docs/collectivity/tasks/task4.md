@@ -1,17 +1,16 @@
 ### Goal
 
-Implement one real emissions calculation as a proof of concept.
-
-The objective is to prove that activity data, factors/constants, and the calculation engine can work together correctly.
+Implement the municipality calculation slice.
 
 ### Acceptance criteria
 
-- [ ] One real formula is implemented
-- [ ] Formula accepts activity data as input
-- [ ] Formula uses factor or constant data
-- [ ] Formula returns a clear result object
-- [ ] Result includes the calculated value and unit
-- [ ] Result can be manually compared with an existing Excel calculation
-- [ ] Formula is placed inside the calculation engine structure
+- [ ] Municipality formulas are implemented for `fleet`
+- [ ] Municipality formulas are implemented for `publicLighting`
+- [ ] Municipality formulas are implemented for `buildings`
+- [ ] Municipality formulas are implemented for `treesParksWaste`
+- [ ] Municipality calculation reads from the saved inventory input shape
+- [ ] Municipality calculation uses resolved parameter entries from the run preload
+- [ ] Municipality output is written under the `municipal` branch of the canonical emissions payload
+- [ ] At least one municipality sample can be manually checked against a known reference
 
 effort: M

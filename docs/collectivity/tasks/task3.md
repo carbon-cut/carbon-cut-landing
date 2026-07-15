@@ -1,16 +1,18 @@
 ### Goal
 
-Create the initial structure for the calculation engine.
-
-The calculation logic should be separated from UI code and database-specific code, so formulas can be tested and reused cleanly.
+Implement full calculation run orchestration and persistence.
 
 ### Acceptance criteria
 
-- [ ] Calculation engine module/folder exists
-- [ ] Engine entry point exists
-- [ ] Calculation functions are separated from UI code
-- [ ] Calculation functions are separated from direct database access
-- [ ] Input and output shapes are clear enough for the first formula
-- [ ] A dummy calculation can run end-to-end
+- [ ] A calculate action submits the current `setupPayload` and `inventoryInput` together
+- [ ] The calculation flow gathers all parameters needed for the run before formula execution
+- [ ] Parameter resolution uses family key, selector, year, and country fallback rules
+- [ ] One `CalculationRun` is stored for each calculation attempt
+- [ ] `CalculationRun.status` is only `succeeded` or `failed`
+- [ ] `CalculationRun` stores the `parameterSnapshot` used by the run
+- [ ] `CalculationRun` stores the `formulaVersion` used by the run
+- [ ] One `CalculationResult` is stored for each successful calculation run
+- [ ] `CalculationResult.emissionsPayload` keeps the canonical nested output structure
+- [ ] A failed run does not overwrite the latest successful result
 
-effort: M
+effort: L

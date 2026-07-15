@@ -1,16 +1,16 @@
 ### Goal
 
-Implement persistence for `CalculationParameterFamily`.
+Implement the energy calculation slice.
 
 ### Acceptance criteria
 
-- [ ] `CalculationParameterFamily` table/model exists
-- [ ] Required architecture fields are implemented
-- [ ] `key` is stored as the stable family identity
-- [ ] `kind` supports factor-like and constant-like families
-- [ ] `selectorSchema` is stored in a structured form
-- [ ] `gas`, `unit`, and `emissionScope` are supported
-- [ ] Migrations run successfully
-- [ ] At least one factor-like family and one constant-like family can be stored
+- [ ] Energy formulas are implemented for `electricity`
+- [ ] Energy formulas are implemented for `photovoltaic`
+- [ ] Energy formulas are implemented for `naturalGas`
+- [ ] Energy formulas are implemented for `solarWaterHeating`
+- [ ] Energy calculation reads from the saved inventory input shape
+- [ ] Energy calculation uses resolved parameter entries from the run preload
+- [ ] Energy output is written under the `energy` branch of the canonical emissions payload
+- [ ] At least one energy sample can be manually checked against a known reference
 
 effort: M

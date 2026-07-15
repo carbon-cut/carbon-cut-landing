@@ -1,17 +1,16 @@
 ### Goal
 
-Build a minimal development-oriented workflow to inspect parameter families and manage parameter entries.
+Implement the AFAT calculation slice.
 
 ### Acceptance criteria
 
-- [ ] User can browse `CalculationParameterFamily` records
-- [ ] User can inspect entries under one parameter family
-- [ ] User can edit an existing `CalculationParameterEntry`
-- [ ] User can add a country-specific `CalculationParameterEntry`
-- [ ] User can create a `SourceReference` from the interface if needed
-- [ ] Saved parameter entries can be viewed after saving
-- [ ] Saved source references can be viewed after saving
-- [ ] Workflow is clearly separated from the final production UI if needed
-- [ ] Workflow is fast enough for seeding and testing
+- [ ] AFAT formulas are implemented for `perennialPlantationStock`
+- [ ] AFAT formulas are implemented for `livestock`
+- [ ] AFAT formulas are implemented for `fertilizers`
+- [ ] AFAT formulas are implemented for `agriculturalProduction`
+- [ ] AFAT calculation reads from the saved inventory input shape
+- [ ] AFAT calculation uses resolved parameter entries from the run preload
+- [ ] AFAT output is written under the `afat` branch of the canonical emissions payload
+- [ ] At least one AFAT sample can be manually checked against a known reference
 
 effort: M

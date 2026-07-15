@@ -1,16 +1,15 @@
 ### Goal
 
-Build a simple development-oriented interface to add initial factors and constants without editing the database manually.
-
-This is not the final polished admin UI. It only needs to make seeding and testing faster.
+Implement save and reload of editable inventory input for the current draft.
 
 ### Acceptance criteria
 
-- [ ] User can add a seed factor from the interface
-- [ ] User can add a seed constant from the interface
-- [ ] Seeded records are saved in the database
-- [ ] Seeded records can be viewed after saving
-- [ ] Interface is simple and fast to use
-- [ ] Interface is clearly separated from the final production UI if needed
+- [ ] User can enter inventory input for the scoped sections: municipality, energy, transport, and AFAT
+- [ ] User can save an incomplete draft with minimal validation
+- [ ] Saving updates the current `Inventory.inventoryInput`
+- [ ] Reopening the project restores the saved `setupPayload` and `inventoryInput`
+- [ ] Save keeps values grouped by year and subgroup
+- [ ] Save does not create a `CalculationRun`
+- [ ] Save does not create a `CalculationResult`
 
-effort L
+effort: M
