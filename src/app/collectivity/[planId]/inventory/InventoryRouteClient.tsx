@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { toast } from "sonner";
 
 import { Form } from "@/components/ui/forms";
 import { useScopedI18n } from "@/locales/client";
@@ -56,21 +56,62 @@ export default function InventoryRouteClient({
     resolver: zodResolver(inventorySchema),
     defaultValues,
   });
+  const [isSaving, setIsSaving] = useState(false);
   useEffect(() => {
     mainForm.reset(defaultValues);
   }, [defaultValues, mainForm]);
-  const handleSubmit: SubmitHandler<z.infer<typeof inventorySchema>> = (data) => {
-    console.log("Inventory submitted data:", data);
-  };
-  const handleError = () => {
-    console.log(mainForm.getValues(`energy.electricity.dataSet`));
+  const handleSaveDraft = async () => {
+    const currentValues = mainForm.getValues();
+    const { years: _years, ...inventoryInput } = currentValues;
+
+    setIsSaving(true);
+
+    try {
+      const response = await fetch(
+        `/api/collectivity/projects/${encodeURIComponent(snapshot.project.slug)}/current-inventory/input`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "same-origin",
+          body: JSON.stringify({
+            inventoryInput,
+          }),
+        }
+      );
+
+      const payload = (await response.json()) as {
+        data?: CollectivitySetupSnapshot;
+        error?: {
+          message?: string;
+        };
+      };
+
+      if (!response.ok || !payload.data) {
+        toast.error(payload.error?.message ?? (t("inventoryWorkspace.saveError") as string));
+        return;
+      }
+
+      mainForm.reset(currentValues);
+      toast.success(t("inventoryWorkspace.saveSuccess") as string);
+    } catch {
+      toast.error(t("inventoryWorkspace.saveError") as string);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
     <Form {...mainForm}>
-      <form onSubmit={mainForm.handleSubmit(handleSubmit, handleError)}>
+      <form onSubmit={(event) => event.preventDefault()}>
         <InventoryProvider years={years} mainForm={mainForm}>
-          <InventoryWorkspace workspace={workspace} surfaces={surfaces} />
+          <InventoryWorkspace
+            workspace={workspace}
+            surfaces={surfaces}
+            isSaving={isSaving}
+            onSaveDraft={handleSaveDraft}
+          />
         </InventoryProvider>
       </form>
     </Form>

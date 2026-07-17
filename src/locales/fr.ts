@@ -924,9 +924,8 @@ export default {
           "Le chargement du projet a échoué avant l'ouverture de l'espace de travail.",
         alertTitle: "Accès interrompu",
         authAlertDescription:
-          "L'authentification backend n'est pas disponible pour cette page pour le moment.",
-        unavailableAlertDescription:
-          "Le backend collectivité est indisponible ou a renvoyé une erreur côté serveur.",
+          "L'authentification du serveur n'est pas disponible pour cette page pour le moment.",
+        unavailableAlertDescription: "Le serveur est indisponible ou a renvoyé une erreur.",
         returnAction: "Retour à l'espace collectivité",
       },
       planSidebar: {
@@ -994,6 +993,9 @@ export default {
             municipal: "Patrimoine municipal",
           },
         },
+        saveSuccess: "Le brouillon d'inventaire a été enregistré.",
+        saveError: "Impossible d'enregistrer le brouillon d'inventaire pour le moment.",
+        validationError: "Corrigez les erreurs du formulaire avant d'enregistrer.",
         hints: {
           sourceFirst: "Source-first",
           multiYear: "Multi-annees",

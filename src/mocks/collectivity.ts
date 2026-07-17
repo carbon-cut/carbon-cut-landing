@@ -376,3 +376,55 @@ export function saveMockCollectivitySetup(
     currentInventory: cloneCurrentInventory(snapshot.currentInventory)!,
   };
 }
+
+export function saveMockCollectivityInventoryInput(
+  userOrEmail: Pick<AuthUser, "email"> | string,
+  planId: string,
+  inventoryInput: Record<string, unknown>
+) {
+  if (!userOwnsMockCollectivityPlan(userOrEmail, planId)) {
+    return null;
+  }
+
+  const snapshot = collectivitySnapshotByPlanId.get(planId) ?? null;
+
+  if (!snapshot) {
+    return null;
+  }
+
+  const timestamp = new Date().toISOString();
+  const nextSnapshot: CollectivitySetupSnapshot = {
+    project: {
+      ...cloneProject(snapshot.project)!,
+      updatedAt: timestamp,
+    },
+    currentInventory: {
+      ...cloneCurrentInventory(snapshot.currentInventory)!,
+      inventoryInput: { ...inventoryInput },
+      updatedAt: timestamp,
+    },
+  };
+
+  collectivitySnapshotByPlanId.set(planId, {
+    project: cloneProject(nextSnapshot.project)!,
+    currentInventory: cloneCurrentInventory(nextSnapshot.currentInventory)!,
+  });
+
+  const email = typeof userOrEmail === "string" ? userOrEmail : userOrEmail.email;
+  const normalizedEmail = email.toLowerCase();
+  const previousState = collectivityStateByEmail.get(normalizedEmail) ?? null;
+
+  if (previousState) {
+    collectivityStateByEmail.set(normalizedEmail, {
+      ...previousState,
+      inventory: { ...inventoryInput },
+      project: cloneProject(nextSnapshot.project),
+      currentInventory: cloneCurrentInventory(nextSnapshot.currentInventory),
+    });
+  }
+
+  return {
+    project: cloneProject(nextSnapshot.project)!,
+    currentInventory: cloneCurrentInventory(nextSnapshot.currentInventory)!,
+  };
+}

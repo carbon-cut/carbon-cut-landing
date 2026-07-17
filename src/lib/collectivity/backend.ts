@@ -12,6 +12,7 @@ import { isMockBackendEnabled } from "@/mocks/config";
 import {
   getMockCollectivitySetupSnapshot,
   isMockCollectivityPlanIdUnique,
+  saveMockCollectivityInventoryInput,
   saveMockCollectivitySetup,
 } from "@/mocks/collectivity";
 
@@ -32,6 +33,10 @@ type CurrentInventoryResponse = {
 };
 
 type InitProjectResponse = {
+  data: CollectivitySetupSnapshot;
+};
+
+type SaveInventoryInputResponse = {
   data: CollectivitySetupSnapshot;
 };
 
@@ -169,6 +174,39 @@ export async function saveCollectivitySetup(
     {
       method: "POST",
       body: JSON.stringify(setup),
+    }
+  );
+
+  return response.data;
+}
+
+export async function saveCollectivityInventoryInput(
+  user: Pick<AuthUser, "email">,
+  projectSlug: string,
+  inventoryInput: Record<string, unknown>
+): Promise<CollectivitySetupSnapshot> {
+  if (isMockBackendEnabled()) {
+    const saved = saveMockCollectivityInventoryInput(user, projectSlug, inventoryInput);
+
+    if (!saved) {
+      throw new CollectivityBackendError(404, {
+        error: {
+          status: 404,
+          message: "Collectivity inventory draft not found",
+        },
+      });
+    }
+
+    return saved;
+  }
+
+  const response = await requestCollectivity<SaveInventoryInputResponse>(
+    `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/input`,
+    {
+      method: "PUT",
+      body: JSON.stringify({
+        inventoryInput,
+      }),
     }
   );
 

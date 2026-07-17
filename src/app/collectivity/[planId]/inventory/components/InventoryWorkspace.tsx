@@ -87,9 +87,13 @@ function renderDatasetSurface(
 export default function InventoryWorkspace({
   workspace,
   surfaces,
+  isSaving,
+  onSaveDraft,
 }: {
   workspace: InventoryWorkspaceConfig;
   surfaces: InventorySurfaceCopy;
+  isSaving: boolean;
+  onSaveDraft: () => void;
 }) {
   const { mainForm, years } = useInventoryContext();
   const t = useScopedI18n("(pages).collectivityDashboard");
@@ -195,11 +199,13 @@ export default function InventoryWorkspace({
               variant="outline"
               size="sm"
               className="h-8 rounded-md px-4 shadow-none"
+              disabled={isSaving}
+              onClick={onSaveDraft}
             >
               <Save aria-hidden="true" />
               {t("actions.save") as string}
             </Button>
-            <Button type="submit" size="sm" className="h-8 rounded-md px-4">
+            <Button type="button" size="sm" className="h-8 rounded-md px-4" disabled={isSaving}>
               <CloudUpload aria-hidden="true" />
               {t("actions.submitData") as string}
             </Button>

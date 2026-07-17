@@ -11,12 +11,14 @@ Use these docs in this order:
 5. `inventaire-input-inventory.md` when turning report outputs into explicit input families
 6. route specs such as `inventaire-route-spec.md`
 7. `inventaire-schema-contract.md` for the inventory schema and yearly/unit contract
-8. report-reading notes and source report files as reference only
+8. `contracts/` for frozen frontend/backend API agreements
+9. report-reading notes and source report files as reference only
 
 ## Rules
 
 - `00-product-truth.md` is the current source of truth for product assumptions.
 - Route specs must follow product truth. They should not invent product structure on their own.
+- Contracts should be organized by domain in `contracts/`, not by task number.
 - Report-derived docs can inform the product, but they do not define the product by themselves.
 - If a product decision is still open, write it down explicitly instead of inferring it in implementation.
 

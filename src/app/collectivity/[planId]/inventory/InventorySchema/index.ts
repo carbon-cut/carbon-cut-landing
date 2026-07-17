@@ -17,4 +17,8 @@ const inventorySchema = createGroupSchema({
   waste: wasteSchema,
 });
 
-export { inventorySchema };
+const inventoryInputSchema = inventorySchema.omit({
+  years: true,
+});
+
+export { inventorySchema, inventoryInputSchema };

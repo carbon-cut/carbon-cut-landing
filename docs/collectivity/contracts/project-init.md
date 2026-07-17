@@ -1,6 +1,8 @@
-# Task 1 Project Initialization Contract
+# Project Initialization Contract
 
-This document defines the frontend/backend contract for `docs/collectivity/tasks/task1.md`.
+This document defines the frontend/backend contract for collectivity project initialization.
+
+It was first used for `docs/collectivity/tasks/task1.md`.
 
 It exists to align frontend and backend before implementation.
 
@@ -28,7 +30,7 @@ This contract does not cover:
 
 ## Product Meaning
 
-Task 1 must implement this lifecycle:
+Project initialization must implement this lifecycle:
 
 1. the user submits the initial setup data
 2. the backend creates a `Project`
@@ -37,13 +39,13 @@ Task 1 must implement this lifecycle:
 5. the backend links that inventory as `Project.currentInventoryId`
 6. reopening the project loads that current inventory
 
-Task 1 must not create a `CalculationRun`.
+Project initialization must not create a `CalculationRun`.
 
 ## Entities In Scope
 
 ### `Project`
 
-Minimum fields required by this task:
+Minimum fields required by this contract:
 
 - `id`
 - `name`
@@ -59,7 +61,7 @@ Minimum fields required by this task:
 
 ### `Inventory`
 
-Minimum fields required by this task:
+Minimum fields required by this contract:
 
 - `id`
 - `projectId`
@@ -101,7 +103,7 @@ type ProjectSetupPayload = {
 
 ## API Surface
 
-Three endpoints are required for task 1.
+Three endpoints are required for project initialization.
 
 ### 1. List User Projects
 
@@ -267,123 +269,3 @@ type GetCurrentInventoryResponse = {
   };
 };
 ```
-
-## Validation Rules
-
-The backend should enforce these rules even if the frontend also validates them.
-
-### Required fields
-
-- `name` required
-- `slug` required
-- `territory` required
-- `country` required
-- `referenceYear` required
-- `inventoryYears` required
-- `applicability` required
-
-### Country rule
-
-- `country` must be a stable ISO 3166-1 alpha-3 code
-- examples: `TUN`, `FRA`, `SEN`
-- `country` must not be a database relation id
-
-### Year rules
-
-- `inventoryYears` must contain at least one year
-- `referenceYear` must be included in `inventoryYears`
-- `inventoryYears` must not contain duplicates
-- `referenceYear` and `inventoryYears` must be integers in the API contract
-
-### Slug rule
-
-- `slug` is part of the request contract for task 1
-- the frontend derives an initial `slug` value from `name`
-- the frontend shows the `slug` to the user before submit
-- the user may edit the `slug` explicitly before submit
-- the backend validates format and uniqueness
-- the backend must persist the submitted `slug` as validated
-- if the submitted `slug` is invalid or not unique, the backend must return a field-level error on `slug`
-
-### Applicability rules
-
-- `airport`, `port`, and `agriculture` must be explicit booleans
-
-## Error Shape
-
-Field-level validation errors should be returned in a form the frontend can bind directly to inputs.
-
-Suggested error shape:
-
-```json
-{
-  "error": {
-    "status": 400,
-    "message": "Invalid project initialization payload",
-    "details": {
-      "fieldErrors": {
-        "name": "projectNameRequired",
-        "territory": "projectTerritoryRequired"
-      }
-    }
-  }
-}
-```
-
-Suggested conflict shape for slug or duplicate project identity:
-
-```json
-{
-  "error": {
-    "status": 409,
-    "message": "collectivityProjectSlugNotUnique",
-    "details": {
-      "fieldErrors": {
-        "slug": "collectivityProjectSlugNotUnique"
-      }
-    }
-  }
-}
-```
-
-## Authorization Rules
-
-The backend must enforce:
-
-- only authenticated collectivity users can initialize a collectivity project
-- users can only load projects they are allowed to access
-- project membership returned in session must match actual backend authorization
-
-## Frontend Expectations
-
-For task 1, the frontend needs the backend contract to support these UI behaviors:
-
-- submit one setup form and receive the created project plus current inventory
-- derive an initial `slug` from `name` and let the user edit it before submit
-- redirect into the new project after successful initialization
-- reopen the project and restore the current inventory
-- derive visible inventory years from `setupPayload.inventoryYears`
-- derive visible optional sections from `setupPayload.applicability`
-
-The frontend should not hardcode inventory years for collectivity once this contract is implemented.
-
-## Backend Notes
-
-The backend may choose different internal table names or ORM shapes.
-
-That is fine as long as the external behavior stays consistent with this contract:
-
-- one project created
-- one first draft inventory created
-- project points to that inventory
-- setup stored on inventory
-- no calculation run created
-
-## Open Implementation Choices
-
-These points may be decided by backend implementation without changing task 1 semantics:
-
-- whether ids are numeric ids or UUIDs
-- whether `inventoryYears` are stored as numbers or another internal database representation
-
-If any of those choices change the API shape, the frontend and backend should freeze the final DTO before implementation starts.
