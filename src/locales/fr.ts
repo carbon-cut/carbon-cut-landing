@@ -114,11 +114,11 @@ export default {
       collectivityLanding: {
         title: "Collectivité | Prototype d'inventaire carbone | Carbon Cut",
         description:
-          "Découvrez le prototype Carbon Cut pour cadrer le territoire d'une collectivité et préparer un inventaire carbone municipal.",
+          "Découvrez le prototype Carbon Cut pour configurer le territoire d'une collectivité et préparer un inventaire carbone municipal.",
         keywords: [
           "prototype collectivité carbone",
           "inventaire carbone municipal",
-          "cadrage territoire",
+          "configuration territoire",
           "collecte données climat",
           "bilan carbone collectivité",
           "outil climat municipal",
@@ -142,21 +142,21 @@ export default {
   collectivityLanding: {
     nav: {
       prototype: "Prototype",
-      cadrage: "Cadrage",
+      setup: "Configuration",
     },
     hero: {
       badge: "Prototype collectivité",
       title: {
-        line1: "Cadrez votre",
+        line1: "Configurez votre",
         highlight: "inventaire carbone",
         line2: "territorial.",
       },
       description:
-        "Une première preuve de concept pour aider une collectivité à poser son périmètre, organiser les données utiles et entrer dans un cadrage municipal guidé.",
+        "Une première preuve de concept pour aider une collectivité à poser son périmètre, organiser les données utiles et entrer dans une configuration municipale guidée.",
       imageAlt: "Paysage illustrant l'entrée collectivité de Carbon Cut",
       primaryCta: {
-        label: "Ouvrir le cadrage",
-        aria: "Ouvrir le cadrage de la collectivité",
+        label: "Ouvrir la configuration",
+        aria: "Ouvrir la configuration de la collectivité",
       },
       secondaryCta: {
         label: "Voir le prototype",
@@ -167,12 +167,12 @@ export default {
       badge: "Ce que couvre cette version",
       title: "Un point d'entrée simple avant l'espace de travail.",
       description:
-        "Cette page reste volontairement minimale : elle présente le prototype, clarifie son périmètre actuel et mène vers le cadrage, sans promettre une plateforme collectivité complète.",
+        "Cette page reste volontairement minimale : elle présente le prototype, clarifie son périmètre actuel et mène vers la configuration, sans promettre une plateforme collectivité complète.",
       points: {
         territory: {
           title: "Définir le périmètre",
           description:
-            "Le cadrage commence par le territoire, les années d'inventaire et les informations de base nécessaires avant la saisie.",
+            "La configuration commence par le territoire, les années d'inventaire et les informations de base nécessaires avant la saisie.",
         },
         inventory: {
           title: "Préparer la collecte",
@@ -187,22 +187,22 @@ export default {
       },
     },
     cta: {
-      title: "Commencez par cadrer le territoire.",
+      title: "Commencez par configurer le territoire.",
       description:
-        "Pour cette première version, l'appel à l'action mène vers le module de cadrage associé à votre collectivité.",
+        "Pour cette première version, l'appel à l'action mène vers le module de configuration associé à votre collectivité.",
       primaryCta: {
-        label: "Accéder au cadrage",
-        aria: "Accéder au cadrage de la collectivité",
+        label: "Accéder à la configuration",
+        aria: "Accéder à la configuration de la collectivité",
       },
-      imageAlt: "Illustration de clôture pour accéder au cadrage collectivité Carbon Cut",
+      imageAlt: "Illustration de clôture pour accéder à la configuration collectivité Carbon Cut",
     },
   },
   collectivitySetup: {
     title: "Configurer la collectivité",
     description:
-      "Avant d'ouvrir l'espace de travail complet, commencez par cadrer le territoire et les années de référence.",
+      "Avant d'ouvrir l'espace de travail complet, renseignez le projet, le territoire, les années d'inventaire et les sections applicables.",
     primaryCta: "Continuer",
-    submitError: "Impossible d'enregistrer le cadrage pour le moment.",
+    submitError: "Impossible d'enregistrer la configuration du projet pour le moment.",
   },
   home: {
     nav: {
@@ -668,15 +668,16 @@ export default {
         eyebrow: "Espace collectivité",
         title: "Modules du plan",
         description:
-          "Le plan suit la progression du rapport : cadrage, inventaire, scénarios et plan d'action.",
+          "Le plan suit la progression du rapport : configuration, inventaire, scénarios et plan d'action.",
         currentLabel: "Espace actif",
         sections: {
-          cadrage: {
-            title: "Cadrage",
-            description: "Définir le territoire de référence et les années du cadrage.",
-            status: "À cadrer",
+          setup: {
+            title: "Configuration",
+            description:
+              "Définir le territoire de référence, les années et le périmètre initial du projet.",
+            status: "À configurer",
           },
-          inventaire: {
+          inventory: {
             title: "Inventaire",
             description:
               "Gérer la collecte, les années couvertes et les résultats d'inventaire dans un même espace de travail.",
@@ -699,17 +700,18 @@ export default {
       moduleStructure: {
         title: "Sections majeures",
         sections: {
-          cadrage: [
+          setup: [
             {
               title: "Territoire",
               description: "Vérification du territoire de référence utilisé par le plan.",
             },
             {
               title: "Temporalité",
-              description: "Année de référence et année(s) d'appoint du cadrage.",
+              description:
+                "Année de référence et années d'inventaire incluses dans la configuration.",
             },
           ],
-          inventaire: [
+          inventory: [
             {
               title: "Collecte des données",
               description:
@@ -800,18 +802,20 @@ export default {
           ],
         },
       },
-      cadrageWorkspace: {
+      setupWorkspace: {
         eyebrow: "Module actif",
-        title: "Cadrage du plan",
+        title: "Configuration du projet",
         description:
           "Définissez le territoire de référence et les années de travail avant d'ouvrir l'inventaire.",
-        primaryCta: "Enregistrer le cadrage",
+        primaryCta: "Enregistrer la configuration",
         output: {
           title: "Sortie attendue",
           items: [
+            "Une identité projet stable pour la collectivité.",
             "Un territoire de référence confirmé pour le plan.",
             "Une année de référence clairement fixée.",
-            "Une ou plusieurs année(s) d'appoint prêtes pour l'inventaire.",
+            "Une série d'années d'inventaire prête pour l'inventaire.",
+            "Les sections optionnelles activées selon le périmètre réel.",
           ],
         },
         completion: {
@@ -820,63 +824,120 @@ export default {
           incomplete: "À compléter",
           progressSuffix: "blocs cadrés",
           items: {
+            name: "Nom du projet",
+            slug: "Slug du projet",
             country: "Pays",
-            planId: "Identifiant du plan",
             territory: "Territoire",
             referenceYear: "Année de référence",
-            supportYears: "Année(s) d'appoint",
+            inventoryYears: "Années d'inventaire",
+            applicability: "Sections applicables",
           },
         },
         sections: {
           scope: {
             title: "Identification",
             description:
-              "Choisissez le pays de travail, la ville ou le territoire concerné, puis vérifiez l'identifiant du plan.",
+              "Renseignez le nom du projet, choisissez le pays et le territoire concernés, puis vérifiez le slug utilisé dans l'URL du projet.",
+            nameLabel: "Nom du projet",
+            namePlaceholder: "ex. Inventaire carbone Grand Sfax",
+            nameHelper:
+              "Ce nom sert à identifier clairement le projet dans l'espace de travail et dans les retours backend.",
             countryLabel: "Pays",
             countryPlaceholder: "Choisir un pays",
             countryHelper:
               "Le pays conditionne les référentiels et les données de travail rattachés au plan.",
-            planIdLabel: "Identifiant du plan",
-            planIdPlaceholder: "ex. grand-sfax",
-            planIdHelper:
-              "Cet identifiant est proposé à partir de la ville sélectionnée. Vous pouvez le modifier, mais il doit rester unique.",
+            slugLabel: "Slug du projet",
+            slugPlaceholder: "ex. inventaire-grand-sfax",
+            slugHelper:
+              "Le slug est proposé à partir du nom du projet. Il reste modifiable, mais il doit être unique.",
           },
           territory: {
             title: "Territoire",
             description:
-              "Choisissez la ville ou le territoire principal du plan avant d'ouvrir l'inventaire.",
+              "Renseignez la ville, l'intercommunalité ou le territoire principal du projet avant d'ouvrir l'inventaire.",
             label: "Ville ou territoire",
-            placeholder: "Choisir une ville ou un territoire",
-            disabledPlaceholder: "Choisissez d'abord un pays",
-            helper: "Cette valeur sert ensuite de base commune à tous les modules du plan.",
+            placeholder: "ex. Grand Sfax",
+            disabledPlaceholder: "Renseignez un territoire",
+            helper:
+              "Saisissez le territoire tel qu'il doit apparaître dans le projet et dans les futurs exports.",
           },
           temporality: {
             title: "Temporalité",
             description:
-              "Fixez l'année de référence et ajoutez une ou plusieurs année(s) d'appoint pour le travail d'inventaire.",
+              "Fixez l'année de référence puis ajoutez les autres années couvertes par l'inventaire.",
             referenceYearLabel: "Année de référence",
             referenceYearPlaceholder: "Choisir une année",
             referenceYearHelper:
               "Cette année sert de point d'ancrage pour la lecture de l'inventaire.",
-            supportYearsLabel: "Année(s) d'appoint",
-            supportYearsPlaceholder: "Choisir une année",
+            inventoryYearsLabel: "Années d'inventaire",
+            inventoryYearsPlaceholder: "Ajouter une année d'inventaire",
+            inventoryYearsDisabledPlaceholder: "Choisissez d'abord l'année de référence",
             addYear: "Ajouter",
             removeYear: "Retirer",
-            emptyState: "Aucune année d'appoint n'est encore ajoutée.",
+            referenceYearBadge: "Référence",
+            emptyState: "Aucune année d'inventaire n'est encore ajoutée.",
             helper:
-              "Ajoutez autant d'années que nécessaire pour comparer les données et stabiliser l'inventaire.",
+              "L'année de référence est ajoutée automatiquement. Ajoutez ensuite les autres années à couvrir.",
+          },
+          applicability: {
+            title: "Périmètre applicable",
+            description:
+              "Précisez les sections optionnelles à ouvrir dans l'inventaire dès la création du projet.",
+            legend: "Sections à inclure dans le périmètre initial",
+            helper:
+              "Ces choix servent à décider quelles sections de saisie doivent exister dans l'inventaire courant.",
+            footer:
+              "Vous pouvez cocher uniquement les sections qui existent réellement dans le périmètre de la collectivité.",
+            options: {
+              airport: {
+                label: "Aéroport",
+                helper: "Active la section liée au transport aérien dans le périmètre collecté.",
+              },
+              port: {
+                label: "Port",
+                helper:
+                  "Active la section liée aux activités portuaires dans le périmètre collecté.",
+              },
+              agriculture: {
+                label: "Agriculture",
+                helper:
+                  "Active les sections AFAT liées à la production et aux activités agricoles.",
+              },
+            },
           },
         },
+      },
+      projectSelector: {
+        eyebrow: "Espace collectivité",
+        title: "Choisissez un projet",
+        description:
+          "Le projet demandé n'est pas disponible pour le moment. Sélectionnez un projet existant pour continuer dans le bon espace de travail.",
+        openAction: "Ouvrir le projet",
+      },
+      accessNotice: {
+        eyebrow: "Espace collectivité",
+        authTitle: "Session collectivité indisponible",
+        authDescription:
+          "La page n'a pas pu charger les données du projet avec votre session actuelle.",
+        unavailableTitle: "Données collectivité indisponibles",
+        unavailableDescription:
+          "Le chargement du projet a échoué avant l'ouverture de l'espace de travail.",
+        alertTitle: "Accès interrompu",
+        authAlertDescription:
+          "L'authentification backend n'est pas disponible pour cette page pour le moment.",
+        unavailableAlertDescription:
+          "Le backend collectivité est indisponible ou a renvoyé une erreur côté serveur.",
+        returnAction: "Retour à l'espace collectivité",
       },
       planSidebar: {
         title: "Lecture du rapport",
         description:
-          "Quatre modules visibles au démarrage : cadrage, inventaire, scénarios et plan d'action. Les routes d'entrée restent non modulaires.",
+          "Quatre modules visibles au démarrage : configuration, inventaire, scénarios et plan d'action. Les routes d'entrée restent non modulaires.",
       },
       planMarkers: {
         territory: "Territoire de référence",
         referenceYear: "Année de référence",
-        supportYears: "Année(s) d'appoint",
+        supportYears: "Années d'inventaire",
       },
       baseline: {
         eyebrow: "Série de référence",
@@ -1503,34 +1564,34 @@ export default {
             title: "Energie territoriale",
             description:
               "Electricite, photovoltaique, gaz naturel et chauffe-eau solaire a l'echelle du territoire.",
-            status: "Sous cadrage",
+            status: "Sous configuration",
           },
           {
             key: "transport-mobility",
             title: "Transport et mobilite",
             description: "Port, transport public, air transport et transport generique.",
-            status: "Sous cadrage",
+            status: "Sous configuration",
           },
           {
             key: "afat",
             title: "AFAT",
             description:
               "AFAT encore sans structure de saisie stabilisee dans le fichier d'entree.",
-            status: "Sous cadrage",
+            status: "Sous configuration",
           },
           {
             key: "waste",
             title: "Déchets",
             description:
               "Dechets et flux associes encore sans structure de saisie stabilisee dans le fichier d'entree.",
-            status: "Sous cadrage",
+            status: "Sous configuration",
           },
           {
             key: "wastewater",
             title: "Assainissement",
             description:
               "Assainissement et sous-jeux encore sans structure de saisie stabilisee dans le fichier d'entree.",
-            status: "Sous cadrage",
+            status: "Sous configuration",
           },
         ],
         datasets: [
@@ -2146,13 +2207,13 @@ export default {
         items: {
           "city-profile": {
             title: "Profil de la ville",
-            description: "Informations de base pour cadrer l'inventaire.",
-            count: "4 champs de cadrage confirmés",
+            description: "Informations de base pour configurer l'inventaire.",
+            count: "4 champs de configuration confirmés",
             scope:
               "Utilisez ce domaine pour fixer l'identité de la collectivité, le contexte de périmètre et l'année de référence avant d'examiner les jeux de données patrimoniaux ou territoriaux.",
             readiness: "Le périmètre et l'année de référence sont déjà alignés.",
             summary:
-              "L'inventaire est actuellement cadré autour de Sfax, en Tunisie, avec 2023 comme année de référence et une population de cadrage fixée.",
+              "L'inventaire est actuellement configuré autour de Sfax, en Tunisie, avec 2023 comme année de référence et une population de référence fixée.",
             checklist: [
               "Nom officiel de la collectivité et périmètre géographique.",
               "Année de référence utilisée dans tous les domaines de collecte.",
@@ -2162,7 +2223,7 @@ export default {
             evidence: [
               "Note d'identification de la collectivité et référence de périmètre administratif.",
               "Note de décision sur l'année de référence partagée pour l'ensemble de l'inventaire.",
-              "Source de population ou document de planification utilisé pour le cadrage.",
+              "Source de population ou document de planification utilisé pour la configuration.",
             ],
             fields: {
               cityName: "Nom de la ville",
@@ -2210,7 +2271,7 @@ export default {
             scope:
               "Utilisez ce domaine pour les jeux de données à l'échelle de la ville qui décrivent le territoire dans son ensemble, et pas seulement les opérations municipales. Gardez visibles les sources opérateurs et les méthodes de proxy.",
             readiness:
-              "Le cadrage énergie et déchets est en place ; les proxies transport demandent encore une passe.",
+              "La configuration énergie et déchets est en place ; les proxies transport demandent encore une passe.",
             summary:
               "Les références de demande d'électricité et de traitement des déchets sont déjà reliées. L'activité transport repose encore sur des proxies provisoires.",
             checklist: [
@@ -3427,18 +3488,15 @@ export default {
     submit: "Résultat",
     errors: {
       Required: "Obligatoire",
-      collectivityCountryRequired: "Sélectionnez un pays.",
       collectivityCountryInvalid: "Choisissez un pays valide.",
-      collectivityPlanIdRequired: "Renseignez l'identifiant du plan.",
-      collectivityPlanIdInvalid:
+      collectivityProjectSlugInvalid:
         "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",
-      collectivityPlanIdNotUnique: "Cet identifiant existe déjà. Choisissez-en un autre.",
-      collectivityTerritoryRequired: "Sélectionnez une ville ou un territoire.",
-      collectivityReferenceYearRequired: "Choisissez une année de référence.",
-      collectivitySupportYearsRequired: "Ajoutez au moins une année d'appoint.",
-      collectivitySupportYearsDuplicate: "Chaque année d'appoint doit être unique.",
-      collectivitySupportYearsReferenceConflict:
-        "L'année de référence ne peut pas aussi être une année d'appoint.",
+      collectivityProjectSlugNotUnique: "Ce slug existe déjà. Choisissez-en un autre.",
+      collectivityYearMustBePast: "L'année en cours et les années futures ne sont pas autorisées.",
+      collectivityInventoryYearInvalid: "Chaque année d'inventaire doit être valide.",
+      collectivityInventoryYearsDuplicate: "Chaque année d'inventaire doit être unique.",
+      collectivityInventoryYearsReferenceMissing:
+        "L'année de référence doit aussi figurer dans les années d'inventaire.",
       woodTypeRequired: "Sélectionnez au moins un type de bois.",
       food: {
         minMeals: "Le total des repas doit être au moins de 7.",

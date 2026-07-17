@@ -4,7 +4,7 @@ const yearSchema = z.coerce.number().int();
 
 const yearsSchema = z.object({
   reference: yearSchema,
-  comparisons: z.array(yearSchema).min(1),
+  comparisons: z.array(yearSchema),
 });
 
 export { yearSchema, yearsSchema };

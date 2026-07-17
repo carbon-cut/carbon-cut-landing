@@ -53,7 +53,7 @@ export function SignInPageContent() {
       const code = getErrorCode(result.error);
 
       if (code === "AUTH_EMAIL_CONFIRMATION_REQUIRED") {
-        router.push(
+        router.replace(
           `/auth/confirmation-required?email=${encodeURIComponent(identifier)}${searchParams.get("returnTo") ? `&returnTo=${encodeURIComponent(searchParams.get("returnTo") as string)}` : ""}`
         );
         return;
@@ -79,7 +79,7 @@ export function SignInPageContent() {
     }
 
     await refetchSession();
-    router.push(returnTo ?? "/form");
+    router.replace(returnTo ?? "/form");
   }
 
   return (

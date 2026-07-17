@@ -39,7 +39,7 @@ describe("auth access helpers", () => {
     const { requireHouseholdSession } = await import("@/lib/auth/access");
     await requireHouseholdSession("/form");
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/grand-sfax/cadrage");
+    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/grand-sfax/setup");
   });
 
   it("redirects household users away from collectivity routes", async () => {
@@ -81,11 +81,37 @@ describe("auth access helpers", () => {
     const { requireCollectivityPlanSession } = await import("@/lib/auth/access");
     await requireCollectivityPlanSession({
       requestedPlanId: "grand-sfax",
-      requestedModule: "inventaire",
-      returnTo: "/collectivity/grand-sfax/inventaire",
+      requestedModule: "inventory",
+      returnTo: "/collectivity/grand-sfax/inventory",
     });
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/setup/cadrage");
+    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/setup");
+  });
+
+  it("redirects collectivity users with projects but a bad slug to the selector page", async () => {
+    mockRequireServerSession.mockResolvedValue({
+      authenticated: true,
+      user: {
+        id: 4,
+        username: "collectivity-user",
+        email: "collectivity.ready@example.com",
+        provider: "local",
+        confirmed: true,
+        blocked: false,
+        allowedProducts: ["collectivity"],
+        productType: "collectivity",
+        planId: ["grand-sfax"],
+      },
+    });
+
+    const { requireCollectivityPlanSession } = await import("@/lib/auth/access");
+    await requireCollectivityPlanSession({
+      requestedPlanId: "wrong-slug",
+      requestedModule: "inventory",
+      returnTo: "/collectivity/wrong-slug/inventory",
+    });
+
+    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/projects?module=inventory");
   });
 
   it("allows a super user to access both household and collectivity products", async () => {
@@ -112,7 +138,7 @@ describe("auth access helpers", () => {
     expect(householdSession.user.email).toBe("collectivity.super@example.com");
     expect(collectivitySession.user.email).toBe("collectivity.super@example.com");
     expect(getCollectivityDefaultRoute(collectivitySession.user)).toBe(
-      "/collectivity/grand-sfax/cadrage"
+      "/collectivity/grand-sfax/setup"
     );
     expect(mockRedirect).not.toHaveBeenCalled();
   });
@@ -144,6 +170,6 @@ describe("auth access helpers", () => {
     );
     expect(
       getAuthenticatedUserHomeRoute({ allowedProducts: ["collectivity"], planId: ["grand-sfax"] })
-    ).toBe("/collectivity/grand-sfax/cadrage");
+    ).toBe("/collectivity/grand-sfax/setup");
   });
 });

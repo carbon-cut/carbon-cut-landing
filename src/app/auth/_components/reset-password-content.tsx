@@ -72,7 +72,7 @@ export function ResetPasswordPageContent() {
 
     await refetchSession();
     const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
-    router.push(returnTo ?? "/form");
+    router.replace(returnTo ?? "/form");
   }
 
   return (

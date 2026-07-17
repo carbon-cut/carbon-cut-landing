@@ -34,7 +34,7 @@ describe("collectivity start route", () => {
     });
   });
 
-  it("sends collectivity users with a plan to the workspace cadrage route", async () => {
+  it("sends collectivity users with a plan to the workspace setup route", async () => {
     mockRequireCollectivitySession.mockResolvedValue({
       authenticated: true,
       user: {
@@ -54,13 +54,13 @@ describe("collectivity start route", () => {
     await page();
 
     expect(mockRequireCollectivitySession).toHaveBeenCalledWith("/collectivity/start");
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/grand-sfax/cadrage");
+    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/grand-sfax/setup");
   });
 
-  it("sends collectivity users without a plan to the setup cadrage route", async () => {
+  it("sends collectivity users without a plan to the setup route", async () => {
     const page = (await import("@/app/collectivity/start/page")).default;
     await page();
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/setup/cadrage");
+    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/setup");
   });
 });

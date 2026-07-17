@@ -15,5 +15,5 @@ export default async function CollectivityPlanIndexPage({
     returnTo: `/collectivity/${planId}`,
   });
 
-  redirect(getCollectivityModuleRoute(planId, "cadrage"));
+  redirect(getCollectivityModuleRoute(planId, "setup"));
 }

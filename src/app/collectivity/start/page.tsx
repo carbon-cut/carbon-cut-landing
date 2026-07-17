@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { requireCollectivitySession } from "@/lib/auth/access";
 import { getPrimaryPlanId } from "@/lib/auth/profile";
 
-import { getCollectivityModuleRoute, getCollectivitySetupCadrageRoute } from "../_lib/routing";
+import { getCollectivityModuleRoute, getCollectivitySetupRoute } from "../_lib/routing";
 
 export const dynamic = "force-dynamic";
 
@@ -12,9 +12,9 @@ export default async function CollectivityStartPage() {
   const primaryPlanId = getPrimaryPlanId(session.user);
 
   if (!primaryPlanId) {
-    redirect(getCollectivitySetupCadrageRoute());
+    redirect(getCollectivitySetupRoute());
     return null;
   }
 
-  redirect(getCollectivityModuleRoute(primaryPlanId, "cadrage"));
+  redirect(getCollectivityModuleRoute(primaryPlanId, "setup"));
 }

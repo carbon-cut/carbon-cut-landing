@@ -13,3 +13,11 @@ Implement project initialization and first inventory draft creation.
 - [ ] Project initialization does not create a `CalculationRun`
 
 effort: M
+##TODO
+
+- [x] manual pass:create project
+- [x] reopen setup
+- [ ] edit setup
+- [x] open inventory
+- [x] bad slug -> selector
+- [x] logout

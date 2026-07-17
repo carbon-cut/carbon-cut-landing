@@ -191,4 +191,18 @@ describe("auth route handlers", () => {
     await expect(response.json()).resolves.toEqual({ ok: true });
     expect(response.headers.get("set-cookie")).toContain("cc_access_token=;");
   });
+
+  it("logout GET clears cookies and redirects to sign-in", async () => {
+    const { GET } = await import("@/app/api/auth/logout/route");
+    const response = await GET(
+      new Request("http://localhost/api/auth/logout?returnTo=%2Fcollectivity%2Fproject-1%2Fsetup")
+    );
+
+    expect(mockLogoutAndClearSession).toHaveBeenCalled();
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "http://localhost/auth/sign-in?returnTo=%2Fcollectivity%2Fproject-1%2Fsetup"
+    );
+    expect(response.headers.get("set-cookie")).toContain("cc_access_token=;");
+  });
 });

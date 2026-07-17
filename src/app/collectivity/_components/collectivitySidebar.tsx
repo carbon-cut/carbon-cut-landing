@@ -41,8 +41,8 @@ const routeDefinitions: Array<{
   key: CollectivityModuleSlug;
   icon: LucideIcon;
 }> = [
-  { key: "cadrage", icon: SlidersHorizontal },
-  { key: "inventaire", icon: FileSpreadsheet },
+  { key: "setup", icon: SlidersHorizontal },
+  { key: "inventory", icon: FileSpreadsheet },
   { key: "scenarios", icon: Target },
   { key: "actions", icon: ClipboardList },
 ];

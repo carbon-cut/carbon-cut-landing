@@ -6,7 +6,10 @@ import type { FieldValues } from "react-hook-form";
 
 import { renderGroupedYearInputCell, renderGroupedYearRowSelectCell } from "./cells";
 import type { GroupedYearTableProps } from "./types";
-import type { InventoryTableColumn, InventoryTableRow } from "@/app/collectivity/_inventaire/types";
+import type {
+  InventoryTableColumn,
+  InventoryTableRow,
+} from "@/app/collectivity/[planId]/inventory/types";
 import { InventoryTableIconButton } from "../InventoryTableHeader";
 
 type GroupedYearCellContext = CellContext<InventoryTableRow, unknown>;

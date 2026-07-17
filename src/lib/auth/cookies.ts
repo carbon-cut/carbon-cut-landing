@@ -27,6 +27,8 @@ type CookieDeleter = {
   delete(name: string): void;
 };
 
+type MaybeWritableCookieStore = CookieReader & Partial<CookieWriter & CookieDeleter>;
+
 export type AuthCookies = {
   accessToken: string | null;
   refreshToken: string | null;
@@ -93,4 +95,31 @@ export function clearSessionCookies(cookieStore: CookieDeleter) {
   cookieStore.delete(AUTH_ACCESS_COOKIE);
   cookieStore.delete(AUTH_REFRESH_COOKIE);
   cookieStore.delete(AUTH_USER_COOKIE);
+}
+
+export function writeSessionCookiesIfPossible(
+  cookieStore: MaybeWritableCookieStore,
+  session: AuthSessionResponse
+) {
+  if (typeof cookieStore.set !== "function") {
+    return;
+  }
+
+  try {
+    writeSessionCookies(cookieStore as CookieWriter, session);
+  } catch {
+    // Server-rendered reads may expose cookie mutation methods that are not actually writable.
+  }
+}
+
+export function clearSessionCookiesIfPossible(cookieStore: MaybeWritableCookieStore) {
+  if (typeof cookieStore.delete !== "function") {
+    return;
+  }
+
+  try {
+    clearSessionCookies(cookieStore as CookieDeleter);
+  } catch {
+    // Server-rendered reads may expose cookie mutation methods that are not actually writable.
+  }
 }

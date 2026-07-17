@@ -38,7 +38,7 @@ function Header() {
           url: "/collectivity#proof",
         },
         {
-          title: tCollectivityNav("cadrage"),
+          title: tCollectivityNav("setup"),
           url: "/collectivity#cta",
         },
       ]
@@ -76,7 +76,12 @@ function Header() {
   const navHidden = !show && !isDesktop;
 
   async function handleSignOut() {
-    await signOut();
+    const signedOut = await signOut();
+
+    if (!signedOut) {
+      return;
+    }
+
     setShow(false);
     router.push("/auth/sign-in");
   }

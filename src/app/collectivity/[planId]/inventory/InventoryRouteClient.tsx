@@ -1,45 +1,68 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 import { Form } from "@/components/ui/forms";
 import { useScopedI18n } from "@/locales/client";
+import type { CollectivitySetupSnapshot } from "@/app/collectivity/setup/_lib/types";
 
 import InventoryWorkspace from "./components/InventoryWorkspace";
 import { InventoryProvider, type InventoryFormValues } from "./context/inventory-context";
 import { buildInventoryDefaultValues } from "./inventoryDefaultValues";
 import { inventorySchema } from "./InventorySchema";
 import { buildInventoryRegistry, type InventoryWorkspaceLocale } from "./registry";
-import { z } from "zod";
 
-const inventoryYears = [2019, 2023] as const;
-const inventoryYearPlan = {
-  reference: inventoryYears[0],
-  comparisons: [inventoryYears[1]],
-};
+function buildInventoryYearPlan(snapshot: CollectivitySetupSnapshot) {
+  const reference = snapshot.currentInventory.setupPayload.referenceYear;
+  const comparisons = snapshot.currentInventory.setupPayload.inventoryYears.filter(
+    (year) => year !== reference
+  );
 
-export default function InventoryRouteClient() {
+  return {
+    reference,
+    comparisons,
+  };
+}
+
+export default function InventoryRouteClient({
+  snapshot,
+}: {
+  snapshot: CollectivitySetupSnapshot;
+}) {
   const t = useScopedI18n("(pages).collectivityDashboard");
   const inventoryLocale = t("inventoryWorkspace") as InventoryWorkspaceLocale;
-  const { workspace, surfaces } = useMemo(
-    () => buildInventoryRegistry(inventoryLocale),
-    [inventoryLocale]
+  const inventoryYearPlan = useMemo(() => buildInventoryYearPlan(snapshot), [snapshot]);
+  const years = useMemo(
+    () => [inventoryYearPlan.reference, ...inventoryYearPlan.comparisons],
+    [inventoryYearPlan]
   );
-  const years = useMemo(() => [inventoryYearPlan.reference, ...inventoryYearPlan.comparisons], []);
+  const defaultValues = useMemo(
+    () => ({
+      ...buildInventoryDefaultValues(snapshot.currentInventory.inventoryInput),
+      years: inventoryYearPlan,
+    }),
+    [inventoryYearPlan, snapshot.currentInventory.inventoryInput]
+  );
+  const { workspace, surfaces } = useMemo(
+    () =>
+      buildInventoryRegistry(inventoryLocale, snapshot.currentInventory.setupPayload.applicability),
+    [inventoryLocale, snapshot.currentInventory.setupPayload.applicability]
+  );
   const mainForm = useForm<InventoryFormValues>({
     resolver: zodResolver(inventorySchema),
-    defaultValues: {
-      ...buildInventoryDefaultValues(),
-      years: inventoryYearPlan,
-    },
+    defaultValues,
   });
+  useEffect(() => {
+    mainForm.reset(defaultValues);
+  }, [defaultValues, mainForm]);
   const handleSubmit: SubmitHandler<z.infer<typeof inventorySchema>> = (data) => {
     console.log("Inventory submitted data:", data);
   };
-  const handleError = (...args: unknown[]) => {
+  const handleError = () => {
     console.log(mainForm.getValues(`energy.electricity.dataSet`));
   };
 

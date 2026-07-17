@@ -5,7 +5,7 @@ import type { Row } from "@tanstack/react-table";
 import { TName } from "@/components/ui/forms";
 import InventoryTableInput from "../InventoryTableInput";
 import InventoryTableSelect from "../InventoryTableSelect";
-import type { InventoryTableRow } from "@/app/collectivity/_inventaire/types";
+import type { InventoryTableRow } from "@/app/collectivity/[planId]/inventory/types";
 import type { GroupedYearRowField } from "./types";
 
 export function getGroupedYearFieldName<T extends FieldValues>({

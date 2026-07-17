@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 
 import type { TName } from "@/components/ui/forms";
-import type { InventoryTableRow } from "@/app/collectivity/_inventaire/types";
+import type { InventoryTableRow } from "@/app/collectivity/[planId]/inventory/types";
 import { Row } from "@tanstack/react-table";
 
 export type MatrixTableRow = InventoryTableRow;

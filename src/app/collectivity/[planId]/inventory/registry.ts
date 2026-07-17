@@ -1,3 +1,4 @@
+import type { CollectivitySetupApplicability } from "@/app/collectivity/setup/_lib/types";
 import type {
   FleetSurfaceCopy,
   InventoryDataset,
@@ -5,7 +6,6 @@ import type {
   InventoryNavIconKey,
   InventoryDatasetSurfaceKind,
   InventoryWorkspaceConfig,
-  InventoryYear,
   PublicLightingSurfaceCopy,
 } from "./types";
 
@@ -256,43 +256,87 @@ const datasetNavOverrides: Record<
   "sanitation-n2o": { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
 };
 
-export function buildInventoryRegistry(locale: InventoryWorkspaceLocale): {
+const applicabilityDatasetKeys: Record<keyof CollectivitySetupApplicability, readonly string[]> = {
+  airport: ["air-transport"],
+  port: ["port"],
+  agriculture: [
+    "perennial-plantation-stock",
+    "livestock",
+    "fertilizers",
+    "agricultural-production",
+  ],
+};
+
+function buildInventoryRegistryWithApplicability(
+  locale: InventoryWorkspaceLocale,
+  applicability: CollectivitySetupApplicability | null
+): {
   workspace: InventoryWorkspaceConfig;
   surfaces: InventorySurfaceCopy;
-  years: InventoryYear[];
 } {
+  const disabledDatasetKeys = new Set<string>();
+
+  if (applicability) {
+    (
+      Object.entries(applicability) as Array<[keyof CollectivitySetupApplicability, boolean]>
+    ).forEach(([key, enabled]) => {
+      if (!enabled) {
+        applicabilityDatasetKeys[key].forEach((datasetKey) => {
+          disabledDatasetKeys.add(datasetKey);
+        });
+      }
+    });
+  }
+
+  const datasets = locale.datasets
+    .map((dataset) => {
+      const override = datasetOverrides[dataset.key];
+      const nav = datasetNavOverrides[dataset.key];
+
+      return {
+        key: dataset.key,
+        familyKey: dataset.familyKey,
+        surfaceKind: override?.surfaceKind ?? dataset.kind,
+        title: dataset.title,
+        navIcon: nav?.navIcon ?? "municipal",
+        navStatusLabel: nav?.navStatusLabel,
+        progressLabel: nav?.progressLabel,
+        status: override?.status ?? dataset.status,
+        description: override?.description ?? dataset.description,
+        sourceMode: override?.sourceMode ?? dataset.sourceMode,
+        yearMode: override?.yearMode ?? dataset.yearMode,
+        implementationNote: override?.implementationNote ?? dataset.implementationNote,
+      };
+    })
+    .filter((dataset) => !disabledDatasetKeys.has(dataset.key));
+
+  const familyKeys = new Set(datasets.map((dataset) => dataset.familyKey));
+
   return {
     workspace: {
       controls: locale.controls,
       hints: locale.hints,
-      families: locale.families.map((family) => ({
-        ...family,
-        navIcon: familyNavOverrides[family.key]?.navIcon ?? "municipal",
-      })),
-      datasets: locale.datasets.map((dataset) => {
-        const override = datasetOverrides[dataset.key];
-        const nav = datasetNavOverrides[dataset.key];
-
-        return {
-          key: dataset.key,
-          familyKey: dataset.familyKey,
-          surfaceKind: override?.surfaceKind ?? dataset.kind,
-          title: dataset.title,
-          navIcon: nav?.navIcon ?? "municipal",
-          navStatusLabel: nav?.navStatusLabel,
-          progressLabel: nav?.progressLabel,
-          status: override?.status ?? dataset.status,
-          description: override?.description ?? dataset.description,
-          sourceMode: override?.sourceMode ?? dataset.sourceMode,
-          yearMode: override?.yearMode ?? dataset.yearMode,
-          implementationNote: override?.implementationNote ?? dataset.implementationNote,
-        };
-      }),
+      families: locale.families
+        .map((family) => ({
+          ...family,
+          navIcon: familyNavOverrides[family.key]?.navIcon ?? "municipal",
+        }))
+        .filter((family) => familyKeys.has(family.key)),
+      datasets,
     },
     surfaces: {
       fleet: locale.sections.entry.fleet,
       publicLighting: locale.sections.entry.publicLighting,
     },
-    years: locale.years.map((year) => Number(year.value)),
   };
+}
+
+export function buildInventoryRegistry(
+  locale: InventoryWorkspaceLocale,
+  applicability: CollectivitySetupApplicability | null = null
+): {
+  workspace: InventoryWorkspaceConfig;
+  surfaces: InventorySurfaceCopy;
+} {
+  return buildInventoryRegistryWithApplicability(locale, applicability);
 }

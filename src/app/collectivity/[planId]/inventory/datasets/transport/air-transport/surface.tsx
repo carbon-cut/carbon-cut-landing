@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { useInventoryContext } from "@/app/collectivity/_inventaire/context/inventory-context";
+import { useInventoryContext } from "@/app/collectivity/[planId]/inventory/context/inventory-context";
 import InventoryGroupedYearTable from "@/components/table/grouped-year";
 import MatrixTable from "@/components/table/matrix";
 import { useScopedI18n } from "@/locales/client";

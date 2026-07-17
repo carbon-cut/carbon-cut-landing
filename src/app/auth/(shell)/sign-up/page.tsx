@@ -86,7 +86,7 @@ export default function SignUpPage() {
       nextParams.set("returnTo", returnTo);
     }
 
-    router.push(`/auth/confirmation-required?${nextParams.toString()}`);
+    router.replace(`/auth/confirmation-required?${nextParams.toString()}`);
   }
 
   return (

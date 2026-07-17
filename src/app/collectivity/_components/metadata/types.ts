@@ -2,7 +2,7 @@ import type { FieldValues, UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
 
 import type { TName } from "@/components/ui/forms";
-import { metadata as collectivityMetadataSchema } from "@/app/collectivity/_inventaire/InventorySchema/_shared";
+import { metadata as collectivityMetadataSchema } from "@/app/collectivity/[planId]/inventory/InventorySchema/_shared";
 
 export type CollectivityMetadataValue = z.infer<typeof collectivityMetadataSchema>;
 

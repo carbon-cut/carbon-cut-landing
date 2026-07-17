@@ -1,6 +1,12 @@
 export const DEFAULT_COLLECTIVITY_PLAN_ID = "grand-sfax";
 
-export type CollectivityModuleSlug = "cadrage" | "inventaire" | "scenarios" | "actions";
+export const collectivityModuleSlugs = ["setup", "inventory", "scenarios", "actions"] as const;
+
+export type CollectivityModuleSlug = (typeof collectivityModuleSlugs)[number];
+
+export function isCollectivityModuleSlug(value: string): value is CollectivityModuleSlug {
+  return collectivityModuleSlugs.includes(value as CollectivityModuleSlug);
+}
 
 export function getCollectivityPlanRoute(planId: string) {
   return `/collectivity/${planId}`;
@@ -10,6 +16,14 @@ export function getCollectivityModuleRoute(planId: string, moduleSlug: Collectiv
   return `${getCollectivityPlanRoute(planId)}/${moduleSlug}`;
 }
 
-export function getCollectivitySetupCadrageRoute() {
-  return "/collectivity/setup/cadrage";
+export function getCollectivitySetupRoute() {
+  return "/collectivity/setup";
+}
+
+export function getCollectivityProjectsRoute(moduleSlug?: CollectivityModuleSlug | null) {
+  if (!moduleSlug) {
+    return "/collectivity/projects";
+  }
+
+  return `/collectivity/projects?module=${moduleSlug}`;
 }

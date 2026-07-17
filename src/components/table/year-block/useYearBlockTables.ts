@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { useInventoryContext } from "@/app/collectivity/_inventaire/context/inventory-context";
+import { useInventoryContext } from "@/app/collectivity/[planId]/inventory/context/inventory-context";
 import type { YearBlockTableProps } from "./types";
 import { createInitialColumns, getCellKey } from "./helpers";
 

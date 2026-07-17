@@ -1,4 +1,4 @@
-import type { InventoryYearBlockTableBlock } from "@/app/collectivity/_inventaire/types";
+import type { InventoryYearBlockTableBlock } from "@/app/collectivity/[planId]/inventory/types";
 import type { InventoryBlockColumns, InventoryTableValues } from "./types";
 
 export function getCellKey(yearValue: number, blockKey: string, rowKey: string, columnKey: string) {

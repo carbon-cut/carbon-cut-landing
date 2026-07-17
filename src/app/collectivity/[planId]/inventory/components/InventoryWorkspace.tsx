@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormState, useWatch } from "react-hook-form";
 import { CloudUpload, Save } from "lucide-react";
 
@@ -152,6 +152,18 @@ export default function InventoryWorkspace({
 
   const defaultDataset = useMemo(() => getDefaultDataset(datasetsInFamily), [datasetsInFamily]);
   const [activeDatasetKey, setActiveDatasetKey] = useState(defaultDataset?.key ?? "");
+
+  useEffect(() => {
+    if (!workspace.families.some((family) => family.key === activeFamilyKey)) {
+      setActiveFamilyKey(defaultFamily);
+    }
+  }, [activeFamilyKey, defaultFamily, workspace.families]);
+
+  useEffect(() => {
+    if (!datasetsInFamily.some((dataset) => dataset.key === activeDatasetKey)) {
+      setActiveDatasetKey(defaultDataset?.key ?? "");
+    }
+  }, [activeDatasetKey, datasetsInFamily, defaultDataset]);
 
   const activeDataset =
     datasetsInFamily.find((dataset) => dataset.key === activeDatasetKey) ?? defaultDataset;

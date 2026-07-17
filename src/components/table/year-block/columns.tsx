@@ -15,7 +15,7 @@ import { TName } from "@/components/ui/forms";
 import {
   InventoryTableRow,
   InventoryYearBlockTableBlock,
-} from "@/app/collectivity/_inventaire/types";
+} from "@/app/collectivity/[planId]/inventory/types";
 import { InventoryTableIconButton } from "../InventoryTableHeader";
 
 type BlockTableRow = InventoryTableRow;

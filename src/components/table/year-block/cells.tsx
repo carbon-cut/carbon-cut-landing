@@ -2,7 +2,10 @@
 
 import { FieldValues, UseFormReturn } from "react-hook-form";
 import InventoryTableInput from "../InventoryTableInput";
-import type { InventoryTableColumn, InventoryTableRow } from "@/app/collectivity/_inventaire/types";
+import type {
+  InventoryTableColumn,
+  InventoryTableRow,
+} from "@/app/collectivity/[planId]/inventory/types";
 import { TName } from "@/components/ui/forms";
 
 export type YearBlockEditableCellArgs<T extends FieldValues> = {

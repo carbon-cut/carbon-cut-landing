@@ -69,7 +69,7 @@ export function ConfirmEmailPageContent() {
     }
 
     await refetchSession();
-    router.push(returnTo ?? "/form");
+    router.replace(returnTo ?? "/form");
   }
 
   async function handleResend() {
@@ -92,7 +92,7 @@ export function ConfirmEmailPageContent() {
       const code = getErrorCode(result.error);
 
       if (code === "AUTH_EMAIL_ALREADY_CONFIRMED") {
-        router.push(signInHref);
+        router.replace(signInHref);
         return;
       }
 

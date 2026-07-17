@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import {
   getCollectivityModuleRoute,
   getCollectivityPlanRoute,
-  getCollectivitySetupCadrageRoute,
+  getCollectivityProjectsRoute,
+  getCollectivitySetupRoute,
   type CollectivityModuleSlug,
 } from "@/app/collectivity/_lib/routing";
 import { getPrimaryPlanId, getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
@@ -16,12 +17,12 @@ const householdHomeRoute = "/form";
 
 export function getCollectivityDefaultRoute(
   user: Pick<AuthUser, "allowedProducts" | "productType" | "planId">,
-  moduleSlug: CollectivityModuleSlug = "cadrage"
+  moduleSlug: CollectivityModuleSlug = "setup"
 ) {
   const primaryPlanId = getPrimaryPlanId(user);
 
   if (!primaryPlanId) {
-    return getCollectivitySetupCadrageRoute();
+    return getCollectivitySetupRoute();
   }
 
   return getCollectivityModuleRoute(primaryPlanId, moduleSlug);
@@ -70,7 +71,7 @@ export async function requireCollectivitySetupSession(returnTo?: string | null) 
   const primaryPlanId = getPrimaryPlanId(session.user);
 
   if (primaryPlanId) {
-    redirect(getCollectivityModuleRoute(primaryPlanId, "cadrage"));
+    redirect(getCollectivityModuleRoute(primaryPlanId, "setup"));
   }
 
   return session;
@@ -89,16 +90,14 @@ export async function requireCollectivityPlanSession({
   const planIds = getUserPlanIds(session.user);
 
   if (planIds.length === 0) {
-    redirect(getCollectivitySetupCadrageRoute());
+    redirect(getCollectivitySetupRoute());
   }
 
   if (!planIds.includes(requestedPlanId)) {
-    const fallbackPlanId = planIds[0];
-
     redirect(
       requestedModule
-        ? getCollectivityModuleRoute(fallbackPlanId, requestedModule)
-        : getCollectivityPlanRoute(fallbackPlanId)
+        ? getCollectivityProjectsRoute(requestedModule)
+        : getCollectivityProjectsRoute()
     );
   }
 
