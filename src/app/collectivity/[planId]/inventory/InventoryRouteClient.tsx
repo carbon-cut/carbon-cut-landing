@@ -111,6 +111,7 @@ export default function InventoryRouteClient({
             surfaces={surfaces}
             isSaving={isSaving}
             onSaveDraft={handleSaveDraft}
+            projectSlug={snapshot.project.slug}
           />
         </InventoryProvider>
       </form>

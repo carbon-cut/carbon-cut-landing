@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useFormState, useWatch } from "react-hook-form";
-import { CloudUpload, Save } from "lucide-react";
+import { useFormState, useWatch, type FieldPath } from "react-hook-form";
+import { Calculator, CloudUpload, Save } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
@@ -28,10 +29,47 @@ import PortSurface from "../datasets/transport/port/surface";
 import PublicTransportSurface from "../datasets/transport/public-transport/surface";
 import TerritoryVehiclesSurface from "../datasets/transport/territory-vehicles/surface";
 import { useInventoryContext, type InventoryFormValues } from "../context/inventory-context";
-import { getInventoryDatasetErrorCount } from "../inventoryErrors";
+import { getInventoryDatasetErrorCount, getInventoryDatasetFieldName } from "../inventoryErrors";
 import { getInventoryDatasetProgress } from "../inventoryProgress";
 import type { InventoryDataset, InventoryWorkspaceConfig } from "../types";
 import type { InventorySurfaceCopy } from "../registry";
+
+type DebugCalculationPanelState =
+  | {
+      status: "success";
+      datasetKey: string;
+      total?: number;
+      unit?: string;
+      formulaVersion: string;
+      parameterCount: number;
+    }
+  | {
+      status: "error";
+      datasetKey: string;
+      message: string;
+      reasons: string[];
+    };
+
+type DebugCalculationResponse = {
+  data?: {
+    datasetKey: string;
+    emissionsPayload: Record<string, unknown>;
+    parameterSnapshot?: {
+      items?: unknown[];
+    };
+    formulaVersion: string;
+  };
+  error?: {
+    message?: string;
+    details?: {
+      reasons?: Array<{
+        code?: string;
+        path?: string;
+        parameterKey?: string;
+      }>;
+    };
+  };
+};
 
 function getDefaultDataset(datasets: InventoryDataset[]) {
   return datasets.find((dataset) => dataset.surfaceKind !== "placeholder") ?? datasets[0];
@@ -84,16 +122,64 @@ function renderDatasetSurface(
   }
 }
 
+function DebugCalculationPanel({
+  result,
+  label,
+  totalLabel,
+  formulaVersionLabel,
+  parametersLabel,
+}: {
+  result: DebugCalculationPanelState;
+  label: string;
+  totalLabel: string;
+  formulaVersionLabel: string;
+  parametersLabel: string;
+}) {
+  return (
+    <aside className="rounded-md border border-border/20 bg-muted/30 px-4 py-3">
+      <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+        <Typography asChild variant="eyebrow" size="xxs" className="text-secondary">
+          <p>{label}</p>
+        </Typography>
+        <Typography asChild variant="body" size="body" className="text-secondary">
+          <p>{result.datasetKey}</p>
+        </Typography>
+      </div>
+
+      {result.status === "success" ? (
+        <div className="mt-2 grid gap-2 text-sm text-foreground md:grid-cols-3">
+          <span>
+            {totalLabel}: {result.total ?? "-"} {result.unit ?? ""}
+          </span>
+          <span>
+            {formulaVersionLabel}: {result.formulaVersion}
+          </span>
+          <span>
+            {parametersLabel}: {result.parameterCount}
+          </span>
+        </div>
+      ) : (
+        <div className="mt-2 space-y-1 text-sm text-destructive">
+          <p>{result.message}</p>
+          {result.reasons.length > 0 ? <p>{result.reasons.join(", ")}</p> : null}
+        </div>
+      )}
+    </aside>
+  );
+}
+
 export default function InventoryWorkspace({
   workspace,
   surfaces,
   isSaving,
   onSaveDraft,
+  projectSlug,
 }: {
   workspace: InventoryWorkspaceConfig;
   surfaces: InventorySurfaceCopy;
   isSaving: boolean;
   onSaveDraft: () => void;
+  projectSlug: string;
 }) {
   const { mainForm, years } = useInventoryContext();
   const t = useScopedI18n("(pages).collectivityDashboard");
@@ -111,6 +197,10 @@ export default function InventoryWorkspace({
   const { errors } = useFormState({ control: mainForm.control });
   const defaultFamily = useMemo(() => workspace.families[0]?.key ?? "", [workspace.families]);
   const [activeFamilyKey, setActiveFamilyKey] = useState(defaultFamily);
+  const [isDebugCalculating, setIsDebugCalculating] = useState(false);
+  const [debugCalculationsByDatasetKey, setDebugCalculationsByDatasetKey] = useState<
+    Record<string, DebugCalculationPanelState>
+  >({});
   const datasetsWithProgress = useMemo(
     () =>
       workspace.datasets.map((dataset) => {
@@ -173,12 +263,108 @@ export default function InventoryWorkspace({
     datasetsInFamily.find((dataset) => dataset.key === activeDatasetKey) ?? defaultDataset;
   const activeFamily =
     familiesWithError.find((family) => family.key === activeFamilyKey) ?? familiesWithError[0];
+  const activeDebugCalculation = activeDataset
+    ? debugCalculationsByDatasetKey[activeDataset.surfaceKind]
+    : null;
 
   const handleFamilyChange = (familyKey: string) => {
     setActiveFamilyKey(familyKey);
     const nextDatasets = datasetsWithProgress.filter((dataset) => dataset.familyKey === familyKey);
     const nextDataset = getDefaultDataset(nextDatasets);
     setActiveDatasetKey(nextDataset?.key ?? "");
+  };
+
+  const handleDebugCalculate = async () => {
+    if (!activeDataset || activeDataset.surfaceKind === "placeholder") {
+      return;
+    }
+
+    const datasetFieldName = getInventoryDatasetFieldName(activeDataset.key);
+    const isDatasetValid = datasetFieldName
+      ? await mainForm.trigger(datasetFieldName as FieldPath<InventoryFormValues>, {
+          shouldFocus: true,
+        })
+      : true;
+
+    if (!isDatasetValid) {
+      toast.error(t("inventoryWorkspace.debugCalculation.error") as string);
+      return;
+    }
+
+    const currentValues = mainForm.getValues();
+    const { years: _years, ...inventoryInput } = currentValues;
+
+    setIsDebugCalculating(true);
+
+    try {
+      const response = await fetch(
+        `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/debug-calculate`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "same-origin",
+          body: JSON.stringify({
+            datasetKey: activeDataset.surfaceKind,
+            inventoryInput,
+          }),
+        }
+      );
+      const payload = (await response.json()) as DebugCalculationResponse;
+
+      if (!response.ok || !payload.data) {
+        const reasons =
+          payload.error?.details?.reasons?.map((reason) =>
+            [reason.code, reason.path, reason.parameterKey].filter(Boolean).join(" · ")
+          ) ?? [];
+
+        setDebugCalculationsByDatasetKey((current) => ({
+          ...current,
+          [activeDataset.surfaceKind]: {
+            status: "error",
+            datasetKey: activeDataset.surfaceKind,
+            message:
+              payload.error?.message ?? (t("inventoryWorkspace.debugCalculation.error") as string),
+            reasons,
+          },
+        }));
+        toast.error(t("inventoryWorkspace.debugCalculation.error") as string);
+        return;
+      }
+
+      const total = payload.data.emissionsPayload.total;
+      const totalRecord =
+        total && typeof total === "object" && !Array.isArray(total)
+          ? (total as Record<string, unknown>)
+          : null;
+
+      setDebugCalculationsByDatasetKey((current) => ({
+        ...current,
+        [payload.data.datasetKey]: {
+          status: "success",
+          datasetKey: payload.data.datasetKey,
+          total: typeof totalRecord?.value === "number" ? totalRecord.value : undefined,
+          unit: typeof totalRecord?.unit === "string" ? totalRecord.unit : undefined,
+          formulaVersion: payload.data.formulaVersion,
+          parameterCount: payload.data.parameterSnapshot?.items?.length ?? 0,
+        },
+      }));
+      toast.success(t("inventoryWorkspace.debugCalculation.success") as string);
+    } catch {
+      setDebugCalculationsByDatasetKey((current) => ({
+        ...current,
+        [activeDataset.surfaceKind]: {
+          status: "error",
+          datasetKey: activeDataset.surfaceKind,
+          message: t("inventoryWorkspace.debugCalculation.error") as string,
+          reasons: [],
+        },
+      }));
+      toast.error(t("inventoryWorkspace.debugCalculation.error") as string);
+    } finally {
+      setIsDebugCalculating(false);
+    }
   };
 
   return (
@@ -221,7 +407,7 @@ export default function InventoryWorkspace({
         />
 
         <section className="!mt-0 relative z-1 overflow-hidden rounded-2xl border border-t-0 border-border/10 bg-card shadow-[0_16px_34px_rgba(9,35,31,0.035)]">
-          <div className="border-b border-border/10 px-6 py-4 md:px-8 md:py-4">
+          <div className="space-y-4 border-b border-border/10 px-6 py-4 md:px-8 md:py-4">
             <InventoryDatasetNav
               label={workspace.controls.datasetLabel}
               activeFamily={activeFamily}
@@ -229,6 +415,41 @@ export default function InventoryWorkspace({
               activeDatasetKey={activeDataset?.key ?? ""}
               onDatasetChange={setActiveDatasetKey}
             />
+
+            <div className="flex flex-col gap-3 rounded-md border border-border/10 bg-muted/20 p-3 md:flex-row md:items-start md:justify-between">
+              <div className="min-w-0">
+                {activeDebugCalculation ? (
+                  <DebugCalculationPanel
+                    result={activeDebugCalculation}
+                    label={t("inventoryWorkspace.debugCalculation.label") as string}
+                    totalLabel={t("inventoryWorkspace.debugCalculation.total") as string}
+                    formulaVersionLabel={
+                      t("inventoryWorkspace.debugCalculation.formulaVersion") as string
+                    }
+                    parametersLabel={t("inventoryWorkspace.debugCalculation.parameters") as string}
+                  />
+                ) : (
+                  <Typography asChild variant="body" size="sm" className="text-muted-foreground">
+                    <p>{activeDataset?.title}</p>
+                  </Typography>
+                )}
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 shrink-0 rounded-md px-4 shadow-none"
+                disabled={
+                  isDebugCalculating ||
+                  !activeDataset ||
+                  activeDataset.surfaceKind === "placeholder"
+                }
+                onClick={handleDebugCalculate}
+              >
+                <Calculator aria-hidden="true" />
+                {t("inventoryWorkspace.debugCalculation.action") as string}
+              </Button>
+            </div>
           </div>
 
           <div className="space-y-4 px-6 py-3 md:px-8 md:py-4">

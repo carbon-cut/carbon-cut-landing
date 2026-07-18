@@ -996,6 +996,15 @@ export default {
         saveSuccess: "Le brouillon d'inventaire a été enregistré.",
         saveError: "Impossible d'enregistrer le brouillon d'inventaire pour le moment.",
         validationError: "Corrigez les erreurs du formulaire avant d'enregistrer.",
+        debugCalculation: {
+          action: "Calcul debug",
+          label: "Résultat debug temporaire",
+          success: "Succès",
+          error: "Impossible de lancer le calcul debug pour ce jeu de données.",
+          total: "Total",
+          formulaVersion: "Version formule",
+          parameters: "Paramètres",
+        },
         hints: {
           sourceFirst: "Source-first",
           multiYear: "Multi-annees",

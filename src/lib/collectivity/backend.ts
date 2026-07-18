@@ -40,6 +40,17 @@ type SaveInventoryInputResponse = {
   data: CollectivitySetupSnapshot;
 };
 
+type DebugCalculationResponse = {
+  data: {
+    datasetKey: string;
+    emissionsPayload: Record<string, unknown>;
+    parameterSnapshot: {
+      items: Array<Record<string, unknown>>;
+    };
+    formulaVersion: string;
+  };
+};
+
 export class CollectivityBackendError extends Error {
   status: number;
   body: CollectivityErrorBody;
@@ -205,6 +216,60 @@ export async function saveCollectivityInventoryInput(
     {
       method: "PUT",
       body: JSON.stringify({
+        inventoryInput,
+      }),
+    }
+  );
+
+  return response.data;
+}
+
+export async function debugCalculateCollectivityDataset({
+  projectSlug,
+  datasetKey,
+  inventoryInput,
+}: {
+  projectSlug: string;
+  datasetKey: string;
+  inventoryInput: Record<string, unknown>;
+}) {
+  if (isMockBackendEnabled()) {
+    const datasetSeed = Array.from(datasetKey).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    const parameterCount = (datasetSeed % 3) + 1;
+
+    return {
+      datasetKey,
+      emissionsPayload: {
+        total: {
+          value: 500 + datasetSeed,
+          unit: "kgCO2e",
+        },
+      },
+      parameterSnapshot: {
+        items: Array.from({ length: parameterCount }, (_, index) => ({
+          key: `mock-${datasetKey}-factor-${index + 1}`,
+          selector: {
+            datasetKey,
+          },
+          value: index + 1,
+          unit: "kgCO2e/unit",
+          gas: "CO2e",
+          country: null,
+          validFromYear: null,
+          validToYear: null,
+          sourceReferenceId: null,
+        })),
+      },
+      formulaVersion: `mock-debug-${parameterCount}`,
+    };
+  }
+
+  const response = await requestCollectivity<DebugCalculationResponse>(
+    `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/debug-calculate`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        datasetKey,
         inventoryInput,
       }),
     }

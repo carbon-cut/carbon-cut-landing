@@ -49,3 +49,7 @@ export function getInventoryDatasetErrorCount(datasetKey: string, errors: unknow
 
   return path ? countFieldErrors(getNestedValue(errors, path)) : 0;
 }
+
+export function getInventoryDatasetFieldName(datasetKey: string) {
+  return datasetErrorPaths[datasetKey]?.join(".") ?? null;
+}
