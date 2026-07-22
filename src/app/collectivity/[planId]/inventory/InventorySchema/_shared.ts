@@ -24,6 +24,7 @@ const numberSchema = z.coerce.number({ errorMap: () => ({ message: "Required" })
 export const numberFutureSchema = z.record(futureYearSchema, numberSchema);
 
 export const numberByYearSchema = z.record(yearSchema, numberSchema);
+export const numberByYearOptionalSchema = z.record(yearSchema, numberSchema.optional());
 
 export const metadataSourceTypeValues = [
   "invoice",
@@ -42,21 +43,23 @@ export const metadataQualityStatusValues = [
 
 export const metadataConfidenceValues = ["low", "medium", "high"] as const;
 
-const metadata = z.object({
-  source: z.object({
-    organization: z.string().optional(),
-    documentName: z.string().optional(),
-    contactPerson: z.string().optional(),
-    collectionDate: z.string().optional(),
-    sourceType: z.enum(metadataSourceTypeValues).optional(),
-    documents: z.array(z.instanceof(File)).optional(),
-  }),
-  quality: z.object({
-    status: z.enum(metadataQualityStatusValues).optional(),
-    confidence: z.enum(metadataConfidenceValues).optional(),
-    comment: z.string().optional(),
-  }),
-});
+const metadata = z
+  .object({
+    source: z.object({
+      organization: z.string().optional(),
+      documentName: z.string().optional(),
+      contactPerson: z.string().optional(),
+      collectionDate: z.string().optional(),
+      sourceType: z.enum(metadataSourceTypeValues).optional(),
+      documents: z.array(z.instanceof(File)).optional(),
+    }),
+    quality: z.object({
+      status: z.enum(metadataQualityStatusValues).optional(),
+      confidence: z.enum(metadataConfidenceValues).optional(),
+      comment: z.string().optional(),
+    }),
+  })
+  .optional();
 
 export const constructUnit = (input: [string, ...string[]]) => {
   return z.enum(input).default(input[0]);
@@ -86,7 +89,8 @@ type RecordGridSchemaOptions = MatrixSchemaOptions;
 export function createGridSchema(
   keys: readonly string[],
   nestedKeys: readonly string[],
-  GridSchemaOptions: GridSchemaOptions
+  GridSchemaOptions: GridSchemaOptions,
+  optional: boolean = false
 ) {
   const { unit, unitsByKeys, unitsByCols } = GridSchemaOptions;
   return z.object(
@@ -98,7 +102,7 @@ export function createGridSchema(
             nestedKeys.map((nestedKey) => [
               nestedKey,
               z.object({
-                value: numberByYearSchema,
+                value: optional ? numberByYearOptionalSchema : numberByYearSchema,
                 unit: constructUnit(unit ?? unitsByKeys?.[key] ?? unitsByCols![nestedKey]),
               }),
             ])
@@ -185,6 +189,7 @@ export type RecordMatrixSchema = z.infer<ReturnType<typeof createRecordMatrixSch
 export function createMatrixSchema(
   keys: readonly string[],
   MatrixSchemaOptions: MatrixSchemaOptions,
+  optional: boolean = false,
   type: ZodEnum<[string, ...string[]]> | ZodString | ZodUndefined = z.undefined()
 ) {
   const { unit, unitsByKeys } = MatrixSchemaOptions;
@@ -193,7 +198,7 @@ export function createMatrixSchema(
       keys.map((key) => [
         key,
         z.object({
-          value: numberByYearSchema,
+          value: optional ? numberByYearOptionalSchema : numberByYearSchema,
           type,
           unit: constructUnit(unit ?? unitsByKeys![key]),
         }),

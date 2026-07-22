@@ -18,6 +18,7 @@ Working notes for contributors to this codebase.
 - Keep styling aligned with token semantics in `globals.css` and `tailwind.config.ts`.
 - Preserve accessibility (`aria-*`, alt text, keyboard focus visibility).
 - Keep sections semantic and data-driven where possible.
+- Mocks must imitate the real backend/API contract exactly. Do not invent mock-only response shapes, UI convenience fields, shortcuts, or alternate data structures. If the contract is unclear, stop and clarify it before coding the mock or the UI parser.
 - Run `npm run lint` before shipping UI changes.
 - Only change files or code the user explicitly asked you to change.
 - Do not overreach; if the task is simple, do the simple task and do not go wild.

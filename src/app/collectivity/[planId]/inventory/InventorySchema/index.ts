@@ -6,6 +6,7 @@ import { transportSchema } from "./transport";
 import { afatSchema } from "./afat";
 import { wastewaterSanitationSchema } from "./wastewaterSanitation";
 import { wasteSchema } from "./waste";
+import { priceAssumptionsSchema } from "./price-assumptions";
 
 const inventorySchema = createGroupSchema({
   years: yearsSchema,
@@ -15,6 +16,7 @@ const inventorySchema = createGroupSchema({
   afat: afatSchema,
   wastewaterSanitation: wastewaterSanitationSchema,
   waste: wasteSchema,
+  priceAssumptions: priceAssumptionsSchema.optional(),
 });
 
 const inventoryInputSchema = inventorySchema.omit({

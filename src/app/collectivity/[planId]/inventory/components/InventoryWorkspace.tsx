@@ -38,8 +38,7 @@ type DebugCalculationPanelState =
   | {
       status: "success";
       datasetKey: string;
-      total?: number;
-      unit?: string;
+      emissionLeaves: DebugEmissionLeaf[];
       formulaVersion: string;
       parameterCount: number;
     }
@@ -49,6 +48,12 @@ type DebugCalculationPanelState =
       message: string;
       reasons: string[];
     };
+
+type DebugEmissionLeaf = {
+  path: string;
+  value: number;
+  unit: string;
+};
 
 type DebugCalculationResponse = {
   data?: {
@@ -70,6 +75,30 @@ type DebugCalculationResponse = {
     };
   };
 };
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function collectEmissionLeaves(value: unknown, path: string[] = []): DebugEmissionLeaf[] {
+  if (!isRecord(value)) {
+    return [];
+  }
+
+  if (typeof value.value === "number" && typeof value.unit === "string") {
+    return [
+      {
+        path: path.join("."),
+        value: value.value,
+        unit: value.unit,
+      },
+    ];
+  }
+
+  return Object.entries(value).flatMap(([key, nestedValue]) =>
+    collectEmissionLeaves(nestedValue, [...path, key])
+  );
+}
 
 function getDefaultDataset(datasets: InventoryDataset[]) {
   return datasets.find((dataset) => dataset.surfaceKind !== "placeholder") ?? datasets[0];
@@ -125,43 +154,62 @@ function renderDatasetSurface(
 function DebugCalculationPanel({
   result,
   label,
-  totalLabel,
   formulaVersionLabel,
   parametersLabel,
 }: {
   result: DebugCalculationPanelState;
   label: string;
-  totalLabel: string;
   formulaVersionLabel: string;
   parametersLabel: string;
 }) {
   return (
-    <aside className="rounded-md border border-border/20 bg-muted/30 px-4 py-3">
-      <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+    <aside className="space-y-1.5">
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <Typography asChild variant="eyebrow" size="xxs" className="text-secondary">
           <p>{label}</p>
         </Typography>
-        <Typography asChild variant="body" size="body" className="text-secondary">
+        <Typography asChild variant="caption" size="sm">
           <p>{result.datasetKey}</p>
         </Typography>
       </div>
 
       {result.status === "success" ? (
-        <div className="mt-2 grid gap-2 text-sm text-foreground md:grid-cols-3">
-          <span>
-            {totalLabel}: {result.total ?? "-"} {result.unit ?? ""}
-          </span>
-          <span>
-            {formulaVersionLabel}: {result.formulaVersion}
-          </span>
-          <span>
-            {parametersLabel}: {result.parameterCount}
-          </span>
+        <div className="space-y-1.5">
+          {result.emissionLeaves.map((leaf) => (
+            <div key={leaf.path} className="flex flex-wrap gap-x-3 gap-y-1">
+              <Typography asChild variant="caption" size="sm" className="text-secondary">
+                <span>{leaf.path}</span>
+              </Typography>
+              <Typography asChild variant="label" size="sm">
+                <span>
+                  {leaf.value} {leaf.unit}
+                </span>
+              </Typography>
+            </div>
+          ))}
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <Typography asChild variant="caption" size="sm">
+              <span>
+                {formulaVersionLabel}: {result.formulaVersion}
+              </span>
+            </Typography>
+            <Typography asChild variant="caption" size="sm">
+              <span>
+                {parametersLabel}: {result.parameterCount}
+              </span>
+            </Typography>
+          </div>
         </div>
       ) : (
-        <div className="mt-2 space-y-1 text-sm text-destructive">
-          <p>{result.message}</p>
-          {result.reasons.length > 0 ? <p>{result.reasons.join(", ")}</p> : null}
+        <div className="space-y-1">
+          <Typography asChild variant="caption" size="sm" className="text-destructive">
+            <p>{result.message}</p>
+          </Typography>
+          {result.reasons.length > 0 ? (
+            <Typography asChild variant="caption" size="sm" className="text-destructive">
+              <p>{result.reasons.join(", ")}</p>
+            </Typography>
+          ) : null}
         </div>
       )}
     </aside>
@@ -286,8 +334,10 @@ export default function InventoryWorkspace({
         })
       : true;
 
+    console.log("data", mainForm.formState.errors);
+
     if (!isDatasetValid) {
-      toast.error(t("inventoryWorkspace.debugCalculation.error") as string);
+      toast.error(t("inventoryWorkspace.debugCalculation.validationError") as string);
       return;
     }
 
@@ -325,31 +375,29 @@ export default function InventoryWorkspace({
             status: "error",
             datasetKey: activeDataset.surfaceKind,
             message:
-              payload.error?.message ?? (t("inventoryWorkspace.debugCalculation.error") as string),
+              payload.error?.message ??
+              (t("inventoryWorkspace.debugCalculation.calculationError") as string),
             reasons,
           },
         }));
-        toast.error(t("inventoryWorkspace.debugCalculation.error") as string);
+        toast.error(t("inventoryWorkspace.debugCalculation.calculationError") as string);
         return;
       }
 
-      const total = payload.data.emissionsPayload.total;
-      const totalRecord =
-        total && typeof total === "object" && !Array.isArray(total)
-          ? (total as Record<string, unknown>)
-          : null;
+      const debugData = payload.data;
+      const emissionLeaves = collectEmissionLeaves(debugData.emissionsPayload);
 
       setDebugCalculationsByDatasetKey((current) => ({
         ...current,
-        [payload.data.datasetKey]: {
+        [debugData.datasetKey]: {
           status: "success",
-          datasetKey: payload.data.datasetKey,
-          total: typeof totalRecord?.value === "number" ? totalRecord.value : undefined,
-          unit: typeof totalRecord?.unit === "string" ? totalRecord.unit : undefined,
-          formulaVersion: payload.data.formulaVersion,
-          parameterCount: payload.data.parameterSnapshot?.items?.length ?? 0,
+          datasetKey: debugData.datasetKey,
+          emissionLeaves,
+          formulaVersion: debugData.formulaVersion,
+          parameterCount: debugData.parameterSnapshot?.items?.length ?? 0,
         },
       }));
+      console.log("debugData", debugData);
       toast.success(t("inventoryWorkspace.debugCalculation.success") as string);
     } catch {
       setDebugCalculationsByDatasetKey((current) => ({
@@ -357,11 +405,11 @@ export default function InventoryWorkspace({
         [activeDataset.surfaceKind]: {
           status: "error",
           datasetKey: activeDataset.surfaceKind,
-          message: t("inventoryWorkspace.debugCalculation.error") as string,
+          message: t("inventoryWorkspace.debugCalculation.requestError") as string,
           reasons: [],
         },
       }));
-      toast.error(t("inventoryWorkspace.debugCalculation.error") as string);
+      toast.error(t("inventoryWorkspace.debugCalculation.requestError") as string);
     } finally {
       setIsDebugCalculating(false);
     }
@@ -416,13 +464,12 @@ export default function InventoryWorkspace({
               onDatasetChange={setActiveDatasetKey}
             />
 
-            <div className="flex flex-col gap-3 rounded-md border border-border/10 bg-muted/20 p-3 md:flex-row md:items-start md:justify-between">
-              <div className="min-w-0">
+            <div className="flex flex-col gap-3 border-t border-border/10 pt-3 md:flex-row md:items-start md:justify-between">
+              <div className="min-w-0 flex-1">
                 {activeDebugCalculation ? (
                   <DebugCalculationPanel
                     result={activeDebugCalculation}
                     label={t("inventoryWorkspace.debugCalculation.label") as string}
-                    totalLabel={t("inventoryWorkspace.debugCalculation.total") as string}
                     formulaVersionLabel={
                       t("inventoryWorkspace.debugCalculation.formulaVersion") as string
                     }

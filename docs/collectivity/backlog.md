@@ -34,6 +34,9 @@ Keep this file as the working index for open items. If another doc contains a ba
 
 - Investigate the `logout doesn't work?` bug.
 
+- Centralize authenticated API `401` handling.
+  Expected behavior: when a protected frontend-to-Next API call receives `401 unauthenticated`, the app should route through the logout flow and clear auth state consistently instead of each feature showing its own local error. Scope includes collectivity debug calculation and any other protected API action.
+
 ## Inventaire Decision Blockers
 
 These items block a final `inventaire` route contract and should stay explicit until answered.

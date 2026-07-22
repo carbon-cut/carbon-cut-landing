@@ -16,12 +16,21 @@ const fleetSchema = z.object({
 
 const publicLightingSchema = z.object({
   dataSet: z.object({
-    infrastructure: createMatrixSchema(publicLighting.infrastructureKeys, {
-      unitsByKeys: publicLighting.units.infrastructure,
-    }),
-    lamps: createGridSchema(publicLighting.lampKeys, publicLighting.lampCols, {
-      unitsByCols: publicLighting.units.lamps,
-    }),
+    infrastructure: createMatrixSchema(
+      publicLighting.infrastructureKeys,
+      {
+        unitsByKeys: publicLighting.units.infrastructure,
+      },
+      true
+    ),
+    lamps: createGridSchema(
+      publicLighting.lampKeys,
+      publicLighting.lampCols,
+      {
+        unitsByCols: publicLighting.units.lamps,
+      },
+      true
+    ),
     yearly: createMatrixSchema(publicLighting.yearlyKeys, {
       unitsByKeys: publicLighting.units.yearly,
     }),

@@ -32,7 +32,7 @@ type RouteContext = {
   }>;
 };
 
-function isCalculationDatasetKey(value: unknown) {
+function isCalculationDatasetKey(value: unknown): value is (typeof calculationDatasetKeys)[number] {
   return (
     typeof value === "string" &&
     calculationDatasetKeys.includes(value as (typeof calculationDatasetKeys)[number])
@@ -102,10 +102,12 @@ export async function POST(request: Request, context: RouteContext) {
   }
 
   try {
+    const datasetKey = body.datasetKey;
+    const inventoryInput = body.inventoryInput as Record<string, unknown>;
     const result = await debugCalculateCollectivityDataset({
       projectSlug,
-      datasetKey: body.datasetKey,
-      inventoryInput: body.inventoryInput as Record<string, unknown>,
+      datasetKey,
+      inventoryInput,
     });
 
     return NextResponse.json({ data: result });
