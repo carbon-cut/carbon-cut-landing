@@ -31,9 +31,13 @@ const publicLightingSchema = z.object({
       },
       true
     ),
-    yearly: createMatrixSchema(publicLighting.yearlyKeys, {
-      unitsByKeys: publicLighting.units.yearly,
-    }),
+    yearly: createMatrixSchema(
+      publicLighting.yearlyKeys,
+      {
+        unitsByKeys: publicLighting.units.yearly,
+      },
+      true
+    ),
   }),
   metadata: metadata,
 });

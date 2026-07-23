@@ -103,12 +103,12 @@ const publicTransportUnits: UnitConf = {
     electricity: ["kWh"],
   },
   spend: {
-    default: ["TND"],
+    default: ["currency"],
   },
   renewal: {
     scrapped: [""],
     purchased: [""],
-    purchaseCost: ["TND"],
+    purchaseCost: ["currency"],
   },
   age: {
     age0to5: [""],

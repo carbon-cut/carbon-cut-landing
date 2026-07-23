@@ -1,4 +1,3 @@
-import build from "next/dist/build";
 import { publicLighting } from "../../../InventorySchema/municipal/config";
 import type { InventoryTableRow, InventoryTableColumn } from "../../../types";
 
@@ -25,6 +24,14 @@ export function buildPublicLightingRows(
         label: labelFunc(`yearly.${key}`),
         unit: publicLighting.units.yearly[key][0],
       }));
+    case "priceAssumptions":
+      return [
+        {
+          key: "electricity",
+          label: labelFunc("priceAssumptions.electricity"),
+          unit: "currency/kWh",
+        },
+      ];
     default:
       return [];
   }

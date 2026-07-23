@@ -14,7 +14,7 @@ const energyPriceUnits: Record<(typeof energyPriceKeys)[number], NonEmptyStringA
 };
 
 const priceAssumptionsSchema = createGroupSchema({
-  energy: createMatrixSchema(energyPriceKeys, { unitsByKeys: energyPriceUnits })
+  energy: createMatrixSchema(energyPriceKeys, { unitsByKeys: energyPriceUnits }, true)
     .partial()
     .optional(),
 });

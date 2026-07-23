@@ -18,7 +18,7 @@ const fleetCategoryKeys = ["service", "function", "serviceEngines", "other"] as 
 const fleetUnits: UnitConf = {
   vehicles: { default: [""] },
   consumption: consumptionUnitByFuel,
-  spend: { default: ["$"] },
+  spend: { default: ["currency"] },
   composition: { default: [""] },
 } as const;
 
@@ -47,7 +47,7 @@ const publicLightingUnits: UnitConf = {
   },
   yearly: {
     consumption: ["kWh"],
-    bill: ["$"],
+    bill: ["currency"],
   },
 } as const;
 
@@ -57,6 +57,17 @@ export const publicLighting = {
   lampCols: ["unitPower", "number"] as const,
   yearlyKeys: publicLightingYearlyKeys,
   units: publicLightingUnits,
+  calculation: {
+    activityBasePath: "municipal.publicLighting.dataSet.yearly",
+    priceBasePath: "priceAssumptions.energy",
+    fallbackActivities: [
+      {
+        physicalKey: "consumption",
+        monetaryKey: "bill",
+        priceKey: "electricity",
+      },
+    ],
+  },
 };
 
 const buildingsAreaKeys = ["building", "openSurface", "closedSurface"] as const;
@@ -80,13 +91,13 @@ const buildingsUnits: UnitConf = {
   },
   consumption: {
     electricityConsumption: ["kWh"],
-    electricityBill: ["$"],
+    electricityBill: ["currency"],
     gasConsumption: ["Nm3"],
-    gasBill: ["$"],
+    gasBill: ["currency"],
     dieselConsumption: ["L"],
-    dieselBill: ["$"],
+    dieselBill: ["currency"],
     //otherConsumption: [""],
-    //otherBill: ["TND"],
+    //otherBill: ["currency"],
   },
 } as const;
 

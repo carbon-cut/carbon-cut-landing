@@ -1114,6 +1114,10 @@ export default {
                 consumption: "Consommation electrique annuelle",
                 bill: "Facture electrique annuelle",
               },
+              priceAssumptionsTitle: "Prix de l'electricite",
+              priceAssumptions: {
+                electricity: "Prix unitaire de l'electricite",
+              },
             },
             buildings: {
               areasTitle: "Patrimoine batimentaire",

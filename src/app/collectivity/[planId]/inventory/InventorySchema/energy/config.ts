@@ -55,7 +55,7 @@ const photovoltaicUnits: UnitConf = {
     subscribers: [""],
     capacity: ["kWc"],
     production: ["MWh"],
-    balance: ["TND"],
+    balance: ["currency"],
   },
 } as const;
 

@@ -19,7 +19,7 @@ export const futureYearSchema = yearSchema.refine(
   }
 );
 
-const numberSchema = z.coerce.number({ errorMap: () => ({ message: "Required" }) });
+const numberSchema = z.coerce.number();
 
 export const numberFutureSchema = z.record(futureYearSchema, numberSchema);
 

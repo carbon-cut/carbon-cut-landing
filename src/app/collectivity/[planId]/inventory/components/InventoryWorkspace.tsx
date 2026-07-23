@@ -29,6 +29,10 @@ import PortSurface from "../datasets/transport/port/surface";
 import PublicTransportSurface from "../datasets/transport/public-transport/surface";
 import TerritoryVehiclesSurface from "../datasets/transport/territory-vehicles/surface";
 import { useInventoryContext, type InventoryFormValues } from "../context/inventory-context";
+import {
+  getInventoryCalculationReadinessPaths,
+  validateInventoryCalculationReadiness,
+} from "../InventorySchema/calculation-readiness";
 import { getInventoryDatasetErrorCount, getInventoryDatasetFieldName } from "../inventoryErrors";
 import { getInventoryDatasetProgress } from "../inventoryProgress";
 import type { InventoryDataset, InventoryWorkspaceConfig } from "../types";
@@ -333,8 +337,8 @@ export default function InventoryWorkspace({
           shouldFocus: true,
         })
       : true;
-
-    console.log("data", mainForm.formState.errors);
+    console.log("data", mainForm.getValues(datasetFieldName as FieldPath<InventoryFormValues>));
+    console.log("errors", mainForm.formState.errors);
 
     if (!isDatasetValid) {
       toast.error(t("inventoryWorkspace.debugCalculation.validationError") as string);
@@ -342,6 +346,30 @@ export default function InventoryWorkspace({
     }
 
     const currentValues = mainForm.getValues();
+    for (const path of getInventoryCalculationReadinessPaths(
+      activeDataset.surfaceKind,
+      currentValues
+    )) {
+      mainForm.clearErrors(path.join(".") as FieldPath<InventoryFormValues>);
+    }
+
+    const readinessResult = validateInventoryCalculationReadiness(
+      activeDataset.surfaceKind,
+      currentValues
+    );
+
+    if (!readinessResult.success) {
+      for (const issue of readinessResult.error.issues) {
+        mainForm.setError(issue.path.join(".") as FieldPath<InventoryFormValues>, {
+          type: "custom",
+          message: issue.message,
+        });
+      }
+
+      toast.error(t("inventoryWorkspace.debugCalculation.validationError") as string);
+      return;
+    }
+
     const { years: _years, ...inventoryInput } = currentValues;
 
     setIsDebugCalculating(true);

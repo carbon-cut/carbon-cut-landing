@@ -20,6 +20,7 @@ export default function PublicLightingSurface({ copy }: { copy: PublicLightingSu
     infrastructure: buildPublicLightingRows("infrastructure", tFleet),
     lamps: buildPublicLightingRows("lamps", tFleet),
     yearly: buildPublicLightingRows("yearly", tFleet),
+    priceAssumptions: buildPublicLightingRows("priceAssumptions", tFleet),
     lampsColumns: buildPublicLightingColumns("lamps", tFleet),
   }));
 
@@ -44,6 +45,12 @@ export default function PublicLightingSurface({ copy }: { copy: PublicLightingSu
         rows={rows.yearly}
         form={mainForm}
         baseName={"municipal.publicLighting.dataSet.yearly"}
+      />
+      <MatrixTable
+        title={tFleet("priceAssumptionsTitle")}
+        rows={rows.priceAssumptions}
+        form={mainForm}
+        baseName={"priceAssumptions.energy"}
       />
     </div>
   );
