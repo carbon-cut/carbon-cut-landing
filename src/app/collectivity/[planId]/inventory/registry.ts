@@ -82,16 +82,6 @@ const datasetOverrides: Record<
     implementationNote:
       "La structure preserve les blocs BT / MT / HT et rend les colonnes haute tension editables.",
   },
-  photovoltaic: {
-    surfaceKind: "photovoltaic",
-    status: "Structure initiale",
-    description:
-      "Jeu photovoltaque territorial avec blocs BT et MT visibles sur les annees d'inventaire.",
-    sourceMode: "Source-native: une source photovoltaique peut couvrir plusieurs annees.",
-    yearMode: "Year-native: production et capacite restent comparees par annee.",
-    implementationNote:
-      "Le premier panneau garde les blocs BT / MT du rapport et rend le solde BT visible.",
-  },
   "natural-gas": {
     surfaceKind: "naturalGas",
     status: "Structure initiale",
@@ -102,16 +92,6 @@ const datasetOverrides: Record<
     yearMode: "Year-native: chaque annee conserve son bloc BP / MP / HP.",
     implementationNote:
       "La structure preserve les niveaux de pression et rend les colonnes haute pression editables.",
-  },
-  "solar-water-heating": {
-    surfaceKind: "solarWaterHeating",
-    status: "Structure initiale",
-    description:
-      "Jeu chauffe-eau solaire par annee avec blocs residentiel, tertiaire et industriel.",
-    sourceMode: "Source-native: une source CES peut couvrir plusieurs annees dans un meme format.",
-    yearMode: "Year-native: le suivi se fait par annee sur les trois blocs.",
-    implementationNote:
-      "Le premier panneau rend la structure secteur x annee directement editable.",
   },
   port: {
     surfaceKind: "port",
@@ -223,13 +203,7 @@ const datasetNavOverrides: Record<
   buildings: { navIcon: "buildings", navStatusLabel: "À faire", progressLabel: "0%" },
   "trees-parks-waste": { navIcon: "trees", navStatusLabel: "À faire", progressLabel: "0%" },
   electricity: { navIcon: "electricity", navStatusLabel: "À faire", progressLabel: "0%" },
-  photovoltaic: { navIcon: "photovoltaic", navStatusLabel: "À faire", progressLabel: "0%" },
   "natural-gas": { navIcon: "naturalGas", navStatusLabel: "À faire", progressLabel: "0%" },
-  "solar-water-heating": {
-    navIcon: "solarWaterHeating",
-    navStatusLabel: "À faire",
-    progressLabel: "0%",
-  },
   port: { navIcon: "port", navStatusLabel: "À faire", progressLabel: "0%" },
   "public-transport": {
     navIcon: "publicTransport",
@@ -256,6 +230,8 @@ const datasetNavOverrides: Record<
   "sanitation-n2o": { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
 };
 
+const hiddenEnergyDatasetKeys = new Set(["photovoltaic", "solar-water-heating"]);
+
 const applicabilityDatasetKeys: Record<keyof CollectivitySetupApplicability, readonly string[]> = {
   airport: ["air-transport"],
   port: ["port"],
@@ -274,7 +250,7 @@ function buildInventoryRegistryWithApplicability(
   workspace: InventoryWorkspaceConfig;
   surfaces: InventorySurfaceCopy;
 } {
-  const disabledDatasetKeys = new Set<string>();
+  const disabledDatasetKeys = new Set<string>(hiddenEnergyDatasetKeys);
 
   if (applicability) {
     (

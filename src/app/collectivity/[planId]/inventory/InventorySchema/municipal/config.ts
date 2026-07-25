@@ -27,6 +27,15 @@ export const fleet = {
   fuelKeys: fleetFuelKeys,
   categoryKeys: fleetCategoryKeys,
   carEngineKeys: fleetCarEngineKeys,
+  calculation: {
+    activityBasePath: "municipal.fleet.dataSet",
+    priceBasePath: "priceAssumptions.energy",
+    atLeastOneFallbackActivity: {
+      physicalGroupKey: "consumption",
+      monetaryGroupKey: "spend",
+      keys: fleetFuelKeys,
+    },
+  },
 };
 
 const publicLightingInfrastructureKeys = ["cabinets", "meters", "dimmers", "power"] as const;
@@ -105,6 +114,17 @@ export const buildings = {
   areaKeys: buildingsAreaKeys,
   consumptionKeys: buildingsConsumptionKeys,
   units: buildingsUnits,
+  calculation: {
+    activityBasePath: "municipal.buildings.dataSet.consumption",
+    priceBasePath: "priceAssumptions.energy",
+    fallbackActivities: [
+      {
+        physicalKey: "electricityConsumption",
+        monetaryKey: "electricityBill",
+        priceKey: "electricity",
+      },
+    ],
+  },
 };
 
 const treesParksWasteYearlyKeys = [

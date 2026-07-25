@@ -1086,6 +1086,7 @@ export default {
               },
               yearlyEnergyTitle: "Consommation energetique",
               yearlySpendTitle: "Depense energetique",
+              priceAssumptionsTitle: "Prix des carburants et de l'electricite",
             },
             publicLighting: {
               infrastructureTitle: "Infrastructure d'eclairage public",
@@ -1140,6 +1141,12 @@ export default {
                 dieselBill: "Facture diesel",
                 otherConsumption: "Autre consommation",
                 otherBill: "Autre facture",
+              },
+              priceAssumptionsTitle: "Prix de l'energie",
+              priceAssumptions: {
+                electricity: "Prix unitaire de l'electricite",
+                naturalGas: "Prix unitaire du gaz naturel",
+                diesel: "Prix unitaire du diesel",
               },
             },
             electricity: {

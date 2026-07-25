@@ -15,6 +15,7 @@ export default function BuildingsSurface() {
   const [rows] = useState(() => ({
     areas: buildBuildingsRows("areas", tBuildings),
     consumption: buildBuildingsRows("consumption", tBuildings),
+    priceAssumptions: buildBuildingsRows("priceAssumptions", tBuildings),
   }));
 
   return (
@@ -30,6 +31,12 @@ export default function BuildingsSurface() {
         rows={rows.consumption}
         form={mainForm}
         baseName="municipal.buildings.dataSet.consumption"
+      />
+      <MatrixTable
+        title={tBuildings("priceAssumptionsTitle")}
+        rows={rows.priceAssumptions}
+        form={mainForm}
+        baseName="priceAssumptions.energy"
       />
     </div>
   );

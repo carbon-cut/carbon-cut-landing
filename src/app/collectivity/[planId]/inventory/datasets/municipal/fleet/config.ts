@@ -30,6 +30,12 @@ export function buildFleetRows(
         label: labelFunc(`fuel.${key}`),
         unit: fleet.units.spend.default[0],
       }));
+    case "priceAssumptions":
+      return fleet.fuelKeys.map((key) => ({
+        key,
+        label: labelFunc(`fuel.${key}`),
+        unit: `currency/${fleet.units.consumption[key][0]}`,
+      }));
     default:
       return [];
   }

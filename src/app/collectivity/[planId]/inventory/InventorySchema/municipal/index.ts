@@ -4,12 +4,17 @@ import { fleet, publicLighting, buildings, treesParksWaste } from "./config";
 
 const fleetSchema = z.object({
   dataSet: z.object({
-    vehicles: createMatrixSchema(fleet.carEngineKeys, { unit: fleet.units.vehicles.default }),
-    consumption: createMatrixSchema(fleet.fuelKeys, { unitsByKeys: fleet.units.consumption }),
-    spend: createMatrixSchema(fleet.fuelKeys, { unit: fleet.units.spend.default }),
-    composition: createGridSchema(fleet.categoryKeys, fleet.carEngineKeys, {
-      unit: fleet.units.composition.default,
-    }),
+    vehicles: createMatrixSchema(fleet.carEngineKeys, { unit: fleet.units.vehicles.default }, true),
+    consumption: createMatrixSchema(fleet.fuelKeys, { unitsByKeys: fleet.units.consumption }, true),
+    spend: createMatrixSchema(fleet.fuelKeys, { unit: fleet.units.spend.default }, true),
+    composition: createGridSchema(
+      fleet.categoryKeys,
+      fleet.carEngineKeys,
+      {
+        unit: fleet.units.composition.default,
+      },
+      true
+    ),
   }),
   metadata: metadata,
 });
@@ -44,18 +49,41 @@ const publicLightingSchema = z.object({
 
 const buildingsSchema = z.object({
   dataSet: z.object({
-    areas: createMatrixSchema(buildings.areaKeys, { unitsByKeys: buildings.units.areas }),
-    consumption: createMatrixSchema(buildings.consumptionKeys, {
-      unitsByKeys: buildings.units.consumption,
-    }),
+    areas: createMatrixSchema(buildings.areaKeys, { unitsByKeys: buildings.units.areas }, true),
+    consumption: createMatrixSchema(
+      buildings.consumptionKeys,
+      {
+        unitsByKeys: buildings.units.consumption,
+      },
+      true
+    ),
   }),
   metadata: metadata,
 });
 
+const optionalTreesParksWasteDestinationKeys = [
+  "controlledLandfill",
+  "uncontrolledLandfill",
+] as const;
+const optionalTreesParksWasteDestinationKeySet = new Set<string>(
+  optionalTreesParksWasteDestinationKeys
+);
+const requiredTreesParksWasteYearlyKeys = treesParksWaste.yearlyKeys.filter(
+  (key) => !optionalTreesParksWasteDestinationKeySet.has(key)
+);
+
 const treesParksWasteSchema = z.object({
-  dataSet: createMatrixSchema(treesParksWaste.yearlyKeys, {
+  dataSet: createMatrixSchema(requiredTreesParksWasteYearlyKeys, {
     unitsByKeys: treesParksWaste.units.yearly,
-  }),
+  }).merge(
+    createMatrixSchema(
+      optionalTreesParksWasteDestinationKeys,
+      {
+        unitsByKeys: treesParksWaste.units.yearly,
+      },
+      true
+    )
+  ),
   metadata: metadata,
 });
 

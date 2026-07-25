@@ -18,8 +18,6 @@ import LivestockSurface from "../datasets/afat/livestock/surface";
 import PerennialPlantationStockSurface from "../datasets/afat/perennial-plantation-stock/surface";
 import ElectricitySurface from "../datasets/energy/electricity/surface";
 import NaturalGasSurface from "../datasets/energy/natural-gas/surface";
-import PhotovoltaicSurface from "../datasets/energy/photovoltaic/surface";
-import SolarWaterHeatingSurface from "../datasets/energy/solar-water-heating/surface";
 import BuildingsSurface from "../datasets/municipal/buildings/surface";
 import FleetSurface from "../datasets/municipal/fleet/surface";
 import PublicLightingSurface from "../datasets/municipal/public-lighting/surface";
@@ -126,12 +124,8 @@ function renderDatasetSurface(
       return <TreesParksWasteSurface />;
     case "electricity":
       return <ElectricitySurface />;
-    case "photovoltaic":
-      return <PhotovoltaicSurface />;
     case "naturalGas":
       return <NaturalGasSurface />;
-    case "solarWaterHeating":
-      return <SolarWaterHeatingSurface />;
     case "port":
       return <PortSurface />;
     case "publicTransport":

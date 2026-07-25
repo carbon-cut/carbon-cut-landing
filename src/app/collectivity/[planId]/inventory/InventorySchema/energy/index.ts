@@ -50,9 +50,9 @@ const solarWaterHeatingSchema = z.object({
 
 const energySchema = createGroupSchema({
   electricity: electricitySchema,
-  photovoltaic: photovoltaicSchema,
+  //photovoltaic: photovoltaicSchema,
   naturalGas: naturalGasSchema,
-  solarWaterHeating: solarWaterHeatingSchema,
+  //solarWaterHeating: solarWaterHeatingSchema,
 });
 
 export { energySchema };

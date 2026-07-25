@@ -1,0 +1,77 @@
+import { buildings, fleet, publicLighting } from "../municipal/config";
+import {
+  fallbackActivityRule,
+  getFallbackActivityRulePaths,
+  validateFallbackActivityRule,
+} from "./rules/fallback-activity";
+import {
+  atLeastOneFallbackActivityRule,
+  getAtLeastOneFallbackActivityRulePaths,
+  validateAtLeastOneFallbackActivityRule,
+} from "./rules/at-least-one-fallback-activity";
+import type { CalculationReadinessResult } from "./types";
+
+const fleetRule = atLeastOneFallbackActivityRule({
+  activityBasePath: fleet.calculation.activityBasePath,
+  priceBasePath: fleet.calculation.priceBasePath,
+  ...fleet.calculation.atLeastOneFallbackActivity,
+});
+
+const publicLightingRules = publicLighting.calculation.fallbackActivities.map((activity) =>
+  fallbackActivityRule({
+    activityBasePath: publicLighting.calculation.activityBasePath,
+    priceBasePath: publicLighting.calculation.priceBasePath,
+    ...activity,
+  })
+);
+
+const buildingsRules = buildings.calculation.fallbackActivities.map((activity) =>
+  fallbackActivityRule({
+    activityBasePath: buildings.calculation.activityBasePath,
+    priceBasePath: buildings.calculation.priceBasePath,
+    ...activity,
+  })
+);
+
+function toResult(
+  issues: ReturnType<typeof validateFallbackActivityRule>
+): CalculationReadinessResult {
+  return issues.length > 0 ? { success: false, error: { issues } } : { success: true };
+}
+
+export function validateDatasetCalculationReadiness(
+  datasetKey: string,
+  values: unknown
+): CalculationReadinessResult {
+  if (datasetKey === "fleet") {
+    return toResult(validateAtLeastOneFallbackActivityRule(values, fleetRule));
+  }
+
+  if (datasetKey === "publicLighting") {
+    return toResult(
+      publicLightingRules.flatMap((rule) => validateFallbackActivityRule(values, rule))
+    );
+  }
+
+  if (datasetKey === "buildings") {
+    return toResult(buildingsRules.flatMap((rule) => validateFallbackActivityRule(values, rule)));
+  }
+
+  return { success: true };
+}
+
+export function getDatasetCalculationReadinessPaths(datasetKey: string, values: unknown) {
+  if (datasetKey === "fleet") {
+    return getAtLeastOneFallbackActivityRulePaths(values, fleetRule);
+  }
+
+  if (datasetKey === "publicLighting") {
+    return publicLightingRules.flatMap((rule) => getFallbackActivityRulePaths(values, rule));
+  }
+
+  if (datasetKey === "buildings") {
+    return buildingsRules.flatMap((rule) => getFallbackActivityRulePaths(values, rule));
+  }
+
+  return [];
+}

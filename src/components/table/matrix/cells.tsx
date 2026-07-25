@@ -27,7 +27,7 @@ export function renderMatrixYearInputCell<T extends FieldValues>({
   const [fieldUnit] = useState(form?.getValues(fieldUnitPath));
 
   useEffect(() => {
-    if (fieldUnit === undefined) {
+    if (fieldUnit === undefined && row.original.unit) {
       form?.setValue(
         fieldUnitPath,
         //@ts-expect-error - initialization of unit field value

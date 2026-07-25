@@ -20,6 +20,7 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
     fuel: buildFleetRows("fuel", tFleet),
     engine: buildFleetRows("engine", tFleet),
     spend: buildFleetRows("spend", tFleet),
+    priceAssumptions: buildFleetRows("priceAssumptions", tFleet),
   }));
   const compositionSection: InventoryTableSectionData = {
     title: copy.compositionTitle,
@@ -57,6 +58,12 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
           rows={rows.spend}
           form={mainForm}
           baseName={"municipal.fleet.dataSet.spend"}
+        />
+        <MatrixTable
+          title={tFleet("priceAssumptionsTitle")}
+          rows={rows.priceAssumptions}
+          form={mainForm}
+          baseName={"priceAssumptions.energy"}
         />
       </div>
     </div>
