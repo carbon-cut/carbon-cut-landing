@@ -2,12 +2,37 @@ import { z } from "zod";
 
 import { createGroupSchema, createMatrixSchema, metadata } from "../_shared";
 import { electricity, naturalGas, photovoltaic, solarWaterHeating } from "./config";
+import { createTerritorialEnergyBlockSchema } from "./territorial-energy";
 
 const electricitySchema = z.object({
   dataSet: z.object({
-    lt: createMatrixSchema(electricity.rowKeys, { unitsByKeys: electricity.units.tensions }),
-    mt: createMatrixSchema(electricity.rowKeys, { unitsByKeys: electricity.units.tensions }),
-    ht: createMatrixSchema(electricity.rowKeys, { unitsByKeys: electricity.units.tensions }),
+    lt: createTerritorialEnergyBlockSchema({
+      fixedLines: electricity.lines.lt,
+      metrics: {
+        consumption: electricity.units.tensions.consumption,
+      },
+      optionalMetrics: {
+        subscribers: electricity.units.tensions.subscribers,
+      },
+    }),
+    mt: createTerritorialEnergyBlockSchema({
+      fixedLines: electricity.lines.mt,
+      metrics: {
+        consumption: electricity.units.tensions.consumption,
+      },
+      optionalMetrics: {
+        subscribers: electricity.units.tensions.subscribers,
+      },
+    }),
+    ht: createTerritorialEnergyBlockSchema({
+      fixedLines: electricity.lines.ht,
+      metrics: {
+        consumption: electricity.units.tensions.consumption,
+      },
+      optionalMetrics: {
+        subscribers: electricity.units.tensions.subscribers,
+      },
+    }),
   }),
   metadata,
 });
@@ -26,9 +51,33 @@ const photovoltaicSchema = z.object({
 
 const naturalGasSchema = z.object({
   dataSet: z.object({
-    bp: createMatrixSchema(naturalGas.rowKeys, { unitsByKeys: naturalGas.units.tensions }),
-    mp: createMatrixSchema(naturalGas.rowKeys, { unitsByKeys: naturalGas.units.tensions }),
-    hp: createMatrixSchema(naturalGas.rowKeys, { unitsByKeys: naturalGas.units.tensions }),
+    bp: createTerritorialEnergyBlockSchema({
+      fixedLines: naturalGas.lines.bp,
+      metrics: {
+        consumption: naturalGas.units.tensions.consumption,
+      },
+      optionalMetrics: {
+        subscribers: naturalGas.units.tensions.subscribers,
+      },
+    }),
+    mp: createTerritorialEnergyBlockSchema({
+      fixedLines: naturalGas.lines.mp,
+      metrics: {
+        consumption: naturalGas.units.tensions.consumption,
+      },
+      optionalMetrics: {
+        subscribers: naturalGas.units.tensions.subscribers,
+      },
+    }),
+    hp: createTerritorialEnergyBlockSchema({
+      fixedLines: naturalGas.lines.hp,
+      metrics: {
+        consumption: naturalGas.units.tensions.consumption,
+      },
+      optionalMetrics: {
+        subscribers: naturalGas.units.tensions.subscribers,
+      },
+    }),
   }),
   metadata,
 });

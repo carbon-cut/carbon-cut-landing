@@ -1,4 +1,5 @@
 import { buildings, fleet, publicLighting } from "../municipal/config";
+import { electricity, naturalGas } from "../energy/config";
 import {
   fallbackActivityRule,
   getFallbackActivityRulePaths,
@@ -9,6 +10,11 @@ import {
   getAtLeastOneFallbackActivityRulePaths,
   validateAtLeastOneFallbackActivityRule,
 } from "./rules/at-least-one-fallback-activity";
+import {
+  atLeastOneSectorConsumptionRule,
+  getAtLeastOneSectorConsumptionRulePaths,
+  validateAtLeastOneSectorConsumptionRule,
+} from "./rules/at-least-one-sector-consumption";
 import type { CalculationReadinessResult } from "./types";
 
 const fleetRule = atLeastOneFallbackActivityRule({
@@ -32,6 +38,20 @@ const buildingsRules = buildings.calculation.fallbackActivities.map((activity) =
     ...activity,
   })
 );
+
+const electricityIndustryRule = atLeastOneSectorConsumptionRule({
+  datasetBasePath: "energy.electricity.dataSet",
+  ghostErrorPath: "energy.electricity.__readiness.industry",
+  blocks: electricity.lines,
+  sector: "industry",
+});
+
+const naturalGasTertiaryRule = atLeastOneSectorConsumptionRule({
+  datasetBasePath: "energy.naturalGas.dataSet",
+  ghostErrorPath: "energy.naturalGas.__readiness.tertiary",
+  blocks: naturalGas.lines,
+  sector: "tertiary",
+});
 
 function toResult(
   issues: ReturnType<typeof validateFallbackActivityRule>
@@ -57,6 +77,14 @@ export function validateDatasetCalculationReadiness(
     return toResult(buildingsRules.flatMap((rule) => validateFallbackActivityRule(values, rule)));
   }
 
+  if (datasetKey === "electricity") {
+    return toResult(validateAtLeastOneSectorConsumptionRule(values, electricityIndustryRule));
+  }
+
+  if (datasetKey === "naturalGas") {
+    return toResult(validateAtLeastOneSectorConsumptionRule(values, naturalGasTertiaryRule));
+  }
+
   return { success: true };
 }
 
@@ -71,6 +99,14 @@ export function getDatasetCalculationReadinessPaths(datasetKey: string, values: 
 
   if (datasetKey === "buildings") {
     return buildingsRules.flatMap((rule) => getFallbackActivityRulePaths(values, rule));
+  }
+
+  if (datasetKey === "electricity") {
+    return getAtLeastOneSectorConsumptionRulePaths(electricityIndustryRule);
+  }
+
+  if (datasetKey === "naturalGas") {
+    return getAtLeastOneSectorConsumptionRulePaths(naturalGasTertiaryRule);
   }
 
   return [];

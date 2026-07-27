@@ -6,16 +6,17 @@ import { useEffect, useState } from "react";
 import type { FieldValues } from "react-hook-form";
 
 import InventoryTanstackTable from "../tanstack";
+import YearSelector from "../year-selector";
 import { InventoryTableActionButton, InventoryTableHeader } from "../InventoryTableHeader";
-import { createTableGridColumns } from "./columns";
-import type { TableGridProps } from "./types";
+import { createYearMetricsColumns } from "./columns";
+import type { YearMetricsTableProps } from "./types";
 import { Plus } from "lucide-react";
-import InventoryYearSelector from "@/app/collectivity/[planId]/inventory/components/InventoryYearSelector";
 
-export default function TableGrid<T extends FieldValues>({
+export default function YearMetricsTable<T extends FieldValues>({
   title,
   description,
   className,
+  selectedYear: selectedYearProp,
   rows,
   columns,
   form,
@@ -24,24 +25,27 @@ export default function TableGrid<T extends FieldValues>({
   renderCell,
   yearSelector,
   addRow,
-}: TableGridProps<T>) {
-  const [selectedYear, setSelectedYear] = useState<number | undefined>(
+}: YearMetricsTableProps<T>) {
+  const [internalSelectedYear, setSelectedYear] = useState<number | undefined>(
     yearSelector?.initialYear ?? yearSelector?.years[0]
   );
+  const selectedYear = selectedYearProp ?? internalSelectedYear;
 
   useEffect(() => {
     if (!yearSelector?.years.length) return;
+
+    if (selectedYearProp !== undefined) return;
 
     setSelectedYear((currentYear) =>
       currentYear && yearSelector.years.includes(currentYear)
         ? currentYear
         : (yearSelector.initialYear ?? yearSelector.years[0])
     );
-  }, [yearSelector?.initialYear, yearSelector?.years]);
+  }, [selectedYearProp, yearSelector?.initialYear, yearSelector?.years]);
 
   const tableColumns = useMemo(
     () =>
-      createTableGridColumns({
+      createYearMetricsColumns({
         columns: columns,
         form,
         baseName,
@@ -65,8 +69,7 @@ export default function TableGrid<T extends FieldValues>({
         endContent={
           <>
             {yearSelector ? (
-              <InventoryYearSelector
-                datasetKey={yearSelector.datasetKey}
+              <YearSelector
                 years={yearSelector.years}
                 selectedYear={selectedYear}
                 onSelectYear={setSelectedYear}

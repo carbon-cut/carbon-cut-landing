@@ -50,6 +50,65 @@ export function getInventoryDatasetErrorCount(datasetKey: string, errors: unknow
   return path ? countFieldErrors(getNestedValue(errors, path)) : 0;
 }
 
+export function getInventoryDatasetHasError(datasetKey: string, errors: unknown) {
+  const path = datasetErrorPaths[datasetKey];
+
+  return path ? getNestedValue(errors, path) !== undefined : false;
+}
+
+export function getInventoryDatasetErrorSignature(datasetKeys: readonly string[], errors: unknown) {
+  return datasetKeys
+    .map((datasetKey) => `${datasetKey}:${getInventoryDatasetErrorCount(datasetKey, errors)}`)
+    .join("|");
+}
+
+function hasYearError(value: unknown, yearKey: string): boolean {
+  if (Array.isArray(value)) {
+    return value.some((item) => hasYearError(item, yearKey));
+  }
+
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  if (Object.keys(value).some((key) => key === yearKey || key.endsWith(`.${yearKey}`))) {
+    return true;
+  }
+
+  return Object.values(value).some((item) => hasYearError(item, yearKey));
+}
+
+export function getInventoryDatasetErrorPath(datasetKey: string) {
+  return datasetErrorPaths[datasetKey];
+}
+
+export function getInventoryDatasetErrorYears(
+  datasetKey: string,
+  errors: unknown,
+  years: readonly number[]
+) {
+  const path = datasetErrorPaths[datasetKey];
+  return path ? getInventoryErrorYearsAtPath(errors, path, years) : [];
+}
+
+function getInventoryErrorYearsAtPath(
+  errors: unknown,
+  path: readonly string[],
+  years: readonly number[]
+) {
+  const nestedErrors = getNestedValue(errors, path);
+
+  return years.filter((year) => hasYearError(nestedErrors, `y-${year}`));
+}
+
+export function getInventoryDatasetYearErrorSignature(
+  datasetKey: string,
+  errors: unknown,
+  years: readonly number[]
+) {
+  return getInventoryDatasetErrorYears(datasetKey, errors, years).join("|");
+}
+
 export function getInventoryDatasetFieldName(datasetKey: string) {
   return datasetErrorPaths[datasetKey]?.join(".") ?? null;
 }

@@ -1,8 +1,11 @@
 import { electricity } from "../../../InventorySchema/energy/config";
 import type { InventoryTableColumn, InventoryTableRow } from "../../../types";
+import type { YearMetricsColumn, YearMetricsRow } from "@/components/table/year-metrics/types";
+
+type ElectricityBlockKey = "lt" | "mt" | "ht";
 
 export function buildElectricityRows(
-  input: "lt" | "mt" | "ht",
+  input: ElectricityBlockKey,
   labelFunc: (key: string) => string
 ): InventoryTableRow[] {
   switch (input) {
@@ -20,7 +23,7 @@ export function buildElectricityRows(
 }
 
 export function buildElectricityColumns(
-  input: "lt" | "mt" | "ht",
+  input: ElectricityBlockKey,
   labelFunc: (key: string) => string
 ): InventoryTableColumn[] {
   switch (input) {
@@ -42,4 +45,26 @@ export function buildElectricityColumns(
     default:
       return [];
   }
+}
+
+export function buildElectricityFixedLines(
+  block: ElectricityBlockKey,
+  labelFunc: (key: string) => string,
+  sectorLabelFunc: (sector: string) => string
+): YearMetricsColumn[] {
+  return Object.entries(electricity.lines[block]).map(([key, definition]) => ({
+    key,
+    label: labelFunc(`${block}.${key}`),
+    metaLabel: sectorLabelFunc(definition.sector),
+  }));
+}
+
+export function buildElectricityMetrics(
+  labelFunc: (key: string) => string
+): YearMetricsRow[] {
+  return electricity.rowKeys.map((key) => ({
+    key,
+    label: labelFunc(`rows.${key}`),
+    unit: electricity.units.tensions[key][0],
+  }));
 }

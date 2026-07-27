@@ -1,3 +1,5 @@
+import type { TerritorialEnergyLineDefinitions } from "./territorial-energy";
+
 type UnitConf = {
   [key: string]: {
     [key: string]: [string, ...string[]];
@@ -23,7 +25,7 @@ const electricityMtColumnKeys = [
   "chemical",
   "textile",
   "food",
-  "misc",
+  "otherIndustries",
   "agriculture",
   "pumping",
   "tourism",
@@ -32,6 +34,35 @@ const electricityMtColumnKeys = [
 ] as const;
 
 const electricityHtColumnKeys = ["cement", "water", "industrialZone", "total"] as const;
+
+const electricityLtLines = {
+  domestic: { sector: "residential", required: true },
+  commercial: { sector: "tertiary", required: true },
+  administration: { sector: "tertiary", required: true },
+  publicLighting: { sector: "tertiary", required: true },
+  agriculture: { sector: "agriculture" },
+  smallIndustry: { sector: "industry" },
+  workshops: { sector: "industry" },
+  industries: { sector: "industry" },
+} as const satisfies TerritorialEnergyLineDefinitions;
+
+const electricityMtLines = {
+  extractive: { sector: "industry" },
+  chemical: { sector: "industry" },
+  textile: { sector: "industry" },
+  food: { sector: "industry" },
+  otherIndustries: { sector: "industry" },
+  agriculture: { sector: "agriculture" },
+  pumping: { sector: "agriculture" },
+  tourism: { sector: "tertiary" },
+  transportTelco: { sector: "transport" },
+} as const satisfies TerritorialEnergyLineDefinitions;
+
+const electricityHtLines = {
+  cement: { sector: "industry" },
+  water: { sector: "tertiary" },
+  industrialZone: { sector: "industry" },
+} as const satisfies TerritorialEnergyLineDefinitions;
 
 const electricityUnits: UnitConf = {
   tensions: {
@@ -45,6 +76,11 @@ export const electricity = {
   ltColumnKeys: electricityltColumnKeys,
   mtColumnKeys: electricityMtColumnKeys,
   htColumnKeys: electricityHtColumnKeys,
+  lines: {
+    lt: electricityLtLines,
+    mt: electricityMtLines,
+    ht: electricityHtLines,
+  },
   units: electricityUnits,
 };
 
@@ -73,6 +109,23 @@ const naturalGasMpColumnKeys = ["industry", "tourism", "agriculture", "total"] a
 
 const naturalGasHpColumnKeys = ["powerPlant", "industrialHub", "total"] as const;
 
+const naturalGasBpLines = {
+  households: { sector: "residential", required: true },
+  commerce: { sector: "tertiary" },
+  services: { sector: "tertiary" },
+} as const satisfies TerritorialEnergyLineDefinitions;
+
+const naturalGasMpLines = {
+  industry: { sector: "industry" },
+  tourism: { sector: "tertiary" },
+  agriculture: { sector: "agriculture" },
+} as const satisfies TerritorialEnergyLineDefinitions;
+
+const naturalGasHpLines = {
+  powerPlant: { sector: "industry" },
+  industrialHub: { sector: "industry" },
+} as const satisfies TerritorialEnergyLineDefinitions;
+
 const naturalGasUnits: UnitConf = {
   tensions: {
     consumption: ["Nm3"],
@@ -85,6 +138,11 @@ export const naturalGas = {
   bpColumnKeys: naturalGasBpColumnKeys,
   mpColumnKeys: naturalGasMpColumnKeys,
   hpColumnKeys: naturalGasHpColumnKeys,
+  lines: {
+    bp: naturalGasBpLines,
+    mp: naturalGasMpLines,
+    hp: naturalGasHpLines,
+  },
   units: naturalGasUnits,
 };
 

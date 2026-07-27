@@ -99,7 +99,7 @@ export type InventoryTableSectionData = Pick<
   fieldBaseName: TName<InventoryFormValues>;
   yearSelector?: Pick<
     NonNullable<TableGridProps<InventoryFormValues>["yearSelector"]>,
-    "initialYear" | "ariaLabel"
+    "initialYear" | "ariaLabel" | "datasetKey"
   >;
   editableRows?: {
     addLabel: string;

@@ -30,6 +30,7 @@ export default function InventoryTableSection({
               years,
               initialYear: section.yearSelector.initialYear,
               ariaLabel: section.yearSelector.ariaLabel,
+              datasetKey: section.yearSelector.datasetKey,
             }
           : undefined
       }

@@ -26,7 +26,7 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
     title: copy.compositionTitle,
     description: copy.compositionDescription,
     fieldBaseName: "municipal.fleet.dataSet.composition",
-    yearSelector: {},
+    yearSelector: { datasetKey: "fleet" },
     columns: rows.engine,
     rows: rows.category,
   };

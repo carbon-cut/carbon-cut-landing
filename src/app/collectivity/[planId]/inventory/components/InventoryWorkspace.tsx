@@ -31,7 +31,11 @@ import {
   getInventoryCalculationReadinessPaths,
   validateInventoryCalculationReadiness,
 } from "../InventorySchema/calculation-readiness";
-import { getInventoryDatasetErrorCount, getInventoryDatasetFieldName } from "../inventoryErrors";
+import {
+  getInventoryDatasetErrorSignature,
+  getInventoryDatasetFieldName,
+  getInventoryDatasetHasError,
+} from "../inventoryErrors";
 import { getInventoryDatasetProgress } from "../inventoryProgress";
 import type { InventoryDataset, InventoryWorkspaceConfig } from "../types";
 import type { InventorySurfaceCopy } from "../registry";
@@ -240,7 +244,11 @@ export default function InventoryWorkspace({
   const formValues = useWatch({ control: mainForm.control }) as
     | Partial<InventoryFormValues>
     | undefined;
-  const { errors } = useFormState({ control: mainForm.control });
+  const { errors, isValidating } = useFormState({ control: mainForm.control });
+  const datasetErrorSignature = getInventoryDatasetErrorSignature(
+    workspace.datasets.map((dataset) => dataset.key),
+    errors
+  );
   const defaultFamily = useMemo(() => workspace.families[0]?.key ?? "", [workspace.families]);
   const [activeFamilyKey, setActiveFamilyKey] = useState(defaultFamily);
   const [isDebugCalculating, setIsDebugCalculating] = useState(false);
@@ -251,7 +259,7 @@ export default function InventoryWorkspace({
     () =>
       workspace.datasets.map((dataset) => {
         const progress = getInventoryDatasetProgress(dataset.key, formValues, years);
-        const errorCount = getInventoryDatasetErrorCount(dataset.key, errors);
+        const hasError = getInventoryDatasetHasError(dataset.key, errors);
         const isPlaceholderComplete = dataset.surfaceKind === "placeholder";
         const progressPercent = progress?.percent ?? (isPlaceholderComplete ? 100 : undefined);
 
@@ -268,11 +276,13 @@ export default function InventoryWorkspace({
           progressLabel:
             progressPercent === undefined ? dataset.progressLabel : `${progressPercent}%`,
           progressPercent,
-          hasError: errorCount > 0,
+          hasError,
           isComplete: progressPercent === 100,
         };
       }),
-    [errors, formValues, statusLabels, workspace.datasets, years]
+    // RHF keeps the errors object reference stable; use primitive validation signals instead.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [datasetErrorSignature, formValues, isValidating, statusLabels, workspace.datasets, years]
   );
 
   const datasetsInFamily = useMemo(

@@ -1149,9 +1149,30 @@ export default {
                 diesel: "Prix unitaire du diesel",
               },
             },
+            yearMetricsTable: {
+              columns: {
+                line: "Ligne",
+                sector: "Secteur",
+                actions: "Actions",
+              },
+              sectors: {
+                residential: "Residentiel",
+                tertiary: "Tertiaire",
+                industry: "Industrie",
+                transport: "Transport",
+                agriculture: "Agriculture",
+              },
+              customLabelPlaceholder: "Nom de la colonne",
+              sectorPlaceholder: "Choisir un secteur",
+              addColumn: "Ajouter une colonne",
+              removeColumn: "Supprimer la colonne",
+            },
             electricity: {
               surface: {
                 title: "Demande d'électricité",
+                readinessTitle: "Consommation industrie manquante",
+                readinessDescription: ({ years }: { years: string }) =>
+                  `Renseignez au moins une consommation électrique du secteur industrie pour les années suivantes : ${years}.`,
               },
               lt: {
                 title: "Basse tension",
@@ -1171,7 +1192,7 @@ export default {
                 chemical: "Industrie chimique",
                 textile: "Industrie textile et habillement",
                 food: "Industrie alimentaire",
-                misc: "Industries diverses",
+                otherIndustries: "Industries diverses",
                 agriculture: "Agriculture",
                 pumping: "Pompage",
                 tourism: "Tourisme",
@@ -1209,6 +1230,9 @@ export default {
             naturalGas: {
               surface: {
                 title: "Gaz naturel",
+                readinessTitle: "Consommation tertiaire manquante",
+                readinessDescription: ({ years }: { years: string }) =>
+                  `Renseignez au moins une consommation de gaz naturel du secteur tertiaire pour les années suivantes : ${years}.`,
               },
               bp: {
                 title: "Basse pression",

@@ -61,11 +61,19 @@ const metadata = z
   })
   .optional();
 
-export const constructUnit = (input: [string, ...string[]]) => {
+type NonEmptyStringArray = [string, ...string[]];
+
+export const constructUnit = (input: NonEmptyStringArray) => {
   return z.enum(input).default(input[0]);
 };
 
-type NonEmptyStringArray = [string, ...string[]];
+export function createYearValueSchema(unit: NonEmptyStringArray, optional: boolean = false) {
+  return z.object({
+    value: optional ? numberByYearOptionalSchema : numberByYearSchema,
+    unit: constructUnit(unit),
+  });
+}
+
 type MatrixSchemaOptions =
   | {
       unit: NonEmptyStringArray;
