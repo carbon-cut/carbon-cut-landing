@@ -92,7 +92,7 @@ export function renderGroupedYearInputCell<T extends FieldValues>({
   const [fieldUnit] = useState(form?.getValues(fieldUnitPath));
 
   useEffect(() => {
-    if (fieldUnit === undefined) {
+    if (fieldUnit === undefined || fieldUnit === "") {
       form?.setValue(
         fieldUnitPath,
         // @ts-expect-error - initialization of grouped-year unit field value

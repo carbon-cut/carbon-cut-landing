@@ -53,6 +53,13 @@ const naturalGasTertiaryRule = atLeastOneSectorConsumptionRule({
   sector: "tertiary",
 });
 
+const naturalGasIndustryRule = atLeastOneSectorConsumptionRule({
+  datasetBasePath: "energy.naturalGas.dataSet",
+  ghostErrorPath: "energy.naturalGas.__readiness.industry",
+  blocks: naturalGas.lines,
+  sector: "industry",
+});
+
 function toResult(
   issues: ReturnType<typeof validateFallbackActivityRule>
 ): CalculationReadinessResult {
@@ -82,7 +89,10 @@ export function validateDatasetCalculationReadiness(
   }
 
   if (datasetKey === "naturalGas") {
-    return toResult(validateAtLeastOneSectorConsumptionRule(values, naturalGasTertiaryRule));
+    return toResult([
+      ...validateAtLeastOneSectorConsumptionRule(values, naturalGasTertiaryRule),
+      ...validateAtLeastOneSectorConsumptionRule(values, naturalGasIndustryRule),
+    ]);
   }
 
   return { success: true };
@@ -106,7 +116,10 @@ export function getDatasetCalculationReadinessPaths(datasetKey: string, values: 
   }
 
   if (datasetKey === "naturalGas") {
-    return getAtLeastOneSectorConsumptionRulePaths(naturalGasTertiaryRule);
+    return [
+      ...getAtLeastOneSectorConsumptionRulePaths(naturalGasTertiaryRule),
+      ...getAtLeastOneSectorConsumptionRulePaths(naturalGasIndustryRule),
+    ];
   }
 
   return [];

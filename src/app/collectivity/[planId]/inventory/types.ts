@@ -16,9 +16,7 @@ export type InventoryNavIconKey =
   | "buildings"
   | "trees"
   | "electricity"
-  | "photovoltaic"
   | "naturalGas"
-  | "solarWaterHeating"
   | "port"
   | "publicTransport"
   | "airTransport"
@@ -43,9 +41,7 @@ export const inventoryDatasetSurfaceKindValues = [
   "buildings",
   "treesParksWaste",
   "electricity",
-  "photovoltaic",
   "naturalGas",
-  "solarWaterHeating",
   "port",
   "publicTransport",
   "airTransport",

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { Trash2 } from "lucide-react";
@@ -10,6 +11,38 @@ import InventoryTableInput from "../InventoryTableInput";
 import InventoryTableSelect from "../InventoryTableSelect";
 import { NumberInputCell, TextInputCell } from "./cells";
 import type { YearMetricsRow, YearMetricsCellRenderer, YearMetricsColumn } from "./types";
+
+function FixedColumnHeader<T extends FieldValues>({
+  form,
+  baseName,
+  column,
+}: {
+  form: UseFormReturn<T, undefined>;
+  baseName: TName<T>;
+  column: YearMetricsColumn;
+}) {
+  const fieldSectorPath = `${baseName}.fixed.${column.key}.sector` as TName<T>;
+  const [fieldSector] = useState(form.getValues(fieldSectorPath));
+
+  useEffect(() => {
+    if (fieldSector === undefined && column.sector) {
+      form.setValue(
+        fieldSectorPath,
+        // @ts-expect-error - initialization of dynamic territorial energy sector path
+        column.sector
+      );
+    }
+  }, [column.sector, fieldSector, fieldSectorPath, form]);
+
+  return (
+    <span>
+      {column.label}
+      {column.metaLabel ? (
+        <span className="block text-xs font-normal text-muted-foreground">{column.metaLabel}</span>
+      ) : null}
+    </span>
+  );
+}
 
 type CreateYearMetricsColumnsArgs<T extends FieldValues> = {
   columns: YearMetricsColumn[];
@@ -71,14 +104,7 @@ export function createYearMetricsColumns<T extends FieldValues>({
             ) : null}
           </div>
         ) : (
-          <span>
-            {column.label}
-            {column.metaLabel ? (
-              <span className="block text-xs font-normal text-muted-foreground">
-                {column.metaLabel}
-              </span>
-            ) : null}
-          </span>
+          <FixedColumnHeader form={form} baseName={baseName} column={column} />
         ),
       meta: {
         align: "center" as const,

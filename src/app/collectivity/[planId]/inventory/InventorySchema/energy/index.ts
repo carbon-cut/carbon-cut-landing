@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createGroupSchema, createMatrixSchema, metadata } from "../_shared";
-import { electricity, naturalGas, photovoltaic, solarWaterHeating } from "./config";
+import { electricity, naturalGas } from "./config";
 import { createTerritorialEnergyBlockSchema } from "./territorial-energy";
 
 const electricitySchema = z.object({
@@ -32,18 +32,6 @@ const electricitySchema = z.object({
       optionalMetrics: {
         subscribers: electricity.units.tensions.subscribers,
       },
-    }),
-  }),
-  metadata,
-});
-
-const photovoltaicSchema = z.object({
-  dataSet: z.object({
-    bt: createMatrixSchema(photovoltaic.btRowKeys, {
-      unitsByKeys: photovoltaic.units.tension,
-    }),
-    mt: createMatrixSchema(photovoltaic.mtRowKeys, {
-      unitsByKeys: photovoltaic.units.tension,
     }),
   }),
   metadata,
@@ -82,26 +70,9 @@ const naturalGasSchema = z.object({
   metadata,
 });
 
-const solarWaterHeatingSchema = z.object({
-  dataSet: z.object({
-    residential: createMatrixSchema(solarWaterHeating.defaultRowKeys, {
-      unitsByKeys: solarWaterHeating.units.default,
-    }),
-    tertiary: createMatrixSchema(solarWaterHeating.defaultRowKeys, {
-      unitsByKeys: solarWaterHeating.units.default,
-    }),
-    industrial: createMatrixSchema(solarWaterHeating.defaultRowKeys, {
-      unitsByKeys: solarWaterHeating.units.default,
-    }),
-  }),
-  metadata,
-});
-
 const energySchema = createGroupSchema({
   electricity: electricitySchema,
-  //photovoltaic: photovoltaicSchema,
   naturalGas: naturalGasSchema,
-  //solarWaterHeating: solarWaterHeatingSchema,
 });
 
 export { energySchema };

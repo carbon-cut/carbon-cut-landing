@@ -55,7 +55,7 @@ export function createTerritorialEnergyBlockSchema<
       Object.fromEntries(
         Object.entries(fixedLines).map(([key, definition]) => {
           const lineSchema = z.object({
-            sector: z.literal(definition.sector).default(definition.sector),
+            sector: z.literal(definition.sector),
             ...metricShape(!definition.required),
           });
 

@@ -12,12 +12,7 @@ import {
   publicLighting,
   treesParksWaste,
 } from "./InventorySchema/municipal/config";
-import {
-  electricity,
-  naturalGas,
-  photovoltaic,
-  solarWaterHeating,
-} from "./InventorySchema/energy/config";
+import { electricity, naturalGas } from "./InventorySchema/energy/config";
 import type { InventoryFormValues } from "./context/inventory-context";
 import type { InventoryYear } from "./types";
 
@@ -122,6 +117,35 @@ function computeYearBlockProgress(
   return createProgress(completed, total);
 }
 
+function computeTerritorialEnergyBlockProgress(
+  block: unknown,
+  metricKeys: readonly string[],
+  fixedLineCount: number,
+  years: readonly InventoryYear[]
+) {
+  if (!isRecord(block)) {
+    return createProgress(0, fixedLineCount * metricKeys.length * years.length);
+  }
+
+  const customRows = getArrayEntries(block.custom).filter(isRecord);
+  const fixedRows = isRecord(block.fixed) ? Object.values(block.fixed).filter(isRecord) : [];
+  const rows = [...fixedRows, ...customRows];
+  const total = rows.length * metricKeys.length * years.length;
+  const completed = rows.reduce(
+    (sum, row) =>
+      sum +
+      metricKeys.reduce(
+        (metricSum, metricKey) =>
+          metricSum +
+          countFilledYearValues(isRecord(row[metricKey]) ? row[metricKey].value : undefined),
+        0
+      ),
+    0
+  );
+
+  return createProgress(completed, total);
+}
+
 function computeFleetProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
@@ -167,17 +191,6 @@ function computeTreesParksWasteProgress(
   return createProgress(countFilledYearValues(values?.municipal?.treesParksWaste?.dataSet), total);
 }
 
-function computePhotovoltaicProgress(
-  values: Partial<InventoryFormValues> | undefined,
-  years: readonly InventoryYear[]
-) {
-  const total =
-    countMatrixTotal(photovoltaic.btRowKeys.length, years.length) +
-    countMatrixTotal(photovoltaic.mtRowKeys.length, years.length);
-
-  return createProgress(countFilledYearValues(values?.energy?.photovoltaic?.dataSet), total);
-}
-
 function computeElectricityProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
@@ -185,20 +198,27 @@ function computeElectricityProgress(
   const dataSet = values?.energy?.electricity?.dataSet as
     | { lt?: unknown; mt?: unknown; ht?: unknown }
     | undefined;
-  const lt = computeYearBlockProgress(dataSet?.lt, electricity.rowKeys.length, years);
-  const mt = computeYearBlockProgress(dataSet?.mt, electricity.rowKeys.length, years);
-  const ht = computeYearBlockProgress(dataSet?.ht, electricity.rowKeys.length, years);
+  const metricKeys = ["consumption"] as const;
+  const lt = computeTerritorialEnergyBlockProgress(
+    dataSet?.lt,
+    metricKeys,
+    Object.keys(electricity.lines.lt).length,
+    years
+  );
+  const mt = computeTerritorialEnergyBlockProgress(
+    dataSet?.mt,
+    metricKeys,
+    Object.keys(electricity.lines.mt).length,
+    years
+  );
+  const ht = computeTerritorialEnergyBlockProgress(
+    dataSet?.ht,
+    metricKeys,
+    Object.keys(electricity.lines.ht).length,
+    years
+  );
 
   return createProgress(lt.completed + mt.completed + ht.completed, lt.total + mt.total + ht.total);
-}
-
-function computeSolarWaterHeatingProgress(
-  values: Partial<InventoryFormValues> | undefined,
-  years: readonly InventoryYear[]
-) {
-  const total = countMatrixTotal(solarWaterHeating.defaultRowKeys.length * 3, years.length);
-
-  return createProgress(countFilledYearValues(values?.energy?.solarWaterHeating?.dataSet), total);
 }
 
 function computeNaturalGasProgress(
@@ -208,9 +228,25 @@ function computeNaturalGasProgress(
   const dataSet = values?.energy?.naturalGas?.dataSet as
     | { bp?: unknown; mp?: unknown; hp?: unknown }
     | undefined;
-  const bp = computeYearBlockProgress(dataSet?.bp, naturalGas.rowKeys.length, years);
-  const mp = computeYearBlockProgress(dataSet?.mp, naturalGas.rowKeys.length, years);
-  const hp = computeYearBlockProgress(dataSet?.hp, naturalGas.rowKeys.length, years);
+  const metricKeys = ["consumption"] as const;
+  const bp = computeTerritorialEnergyBlockProgress(
+    dataSet?.bp,
+    metricKeys,
+    Object.keys(naturalGas.lines.bp).length,
+    years
+  );
+  const mp = computeTerritorialEnergyBlockProgress(
+    dataSet?.mp,
+    metricKeys,
+    Object.keys(naturalGas.lines.mp).length,
+    years
+  );
+  const hp = computeTerritorialEnergyBlockProgress(
+    dataSet?.hp,
+    metricKeys,
+    Object.keys(naturalGas.lines.hp).length,
+    years
+  );
 
   return createProgress(bp.completed + mp.completed + hp.completed, bp.total + mp.total + hp.total);
 }
@@ -311,9 +347,7 @@ const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
   buildings: computeBuildingsProgress,
   "trees-parks-waste": computeTreesParksWasteProgress,
   electricity: computeElectricityProgress,
-  photovoltaic: computePhotovoltaicProgress,
   "natural-gas": computeNaturalGasProgress,
-  "solar-water-heating": computeSolarWaterHeatingProgress,
   port: computePortProgress,
   "public-transport": computePublicTransportProgress,
   "air-transport": computeAirTransportProgress,

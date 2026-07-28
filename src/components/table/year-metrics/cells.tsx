@@ -31,7 +31,7 @@ export function NumberInputCell<T extends FieldValues>({
   const [fieldUnit] = useState(form.getValues(fieldUnitPath));
 
   useEffect(() => {
-    if (fieldUnit === undefined && row.original.unit) {
+    if ((fieldUnit === undefined || fieldUnit === "") && row.original.unit) {
       form.setValue(
         fieldUnitPath,
         // @ts-expect-error - initialization of dynamic territorial energy unit path

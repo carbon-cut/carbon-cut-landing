@@ -15,6 +15,7 @@ export type YearMetricsColumn = InventoryTableColumn & {
   id?: string;
   kind?: "fixed" | "custom";
   index?: number;
+  sector?: string;
   metaLabel?: string;
   metaFieldName?: TName<any>;
   metaOptions?: Array<{ value: string; label: string }>;

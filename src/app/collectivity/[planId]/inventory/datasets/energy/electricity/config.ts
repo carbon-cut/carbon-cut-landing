@@ -55,13 +55,12 @@ export function buildElectricityFixedLines(
   return Object.entries(electricity.lines[block]).map(([key, definition]) => ({
     key,
     label: labelFunc(`${block}.${key}`),
+    sector: definition.sector,
     metaLabel: sectorLabelFunc(definition.sector),
   }));
 }
 
-export function buildElectricityMetrics(
-  labelFunc: (key: string) => string
-): YearMetricsRow[] {
+export function buildElectricityMetrics(labelFunc: (key: string) => string): YearMetricsRow[] {
   return electricity.rowKeys.map((key) => ({
     key,
     label: labelFunc(`rows.${key}`),

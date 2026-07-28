@@ -7,6 +7,7 @@ import { afatSchema } from "./afat";
 import { wastewaterSanitationSchema } from "./wastewaterSanitation";
 import { wasteSchema } from "./waste";
 import { priceAssumptionsSchema } from "./price-assumptions";
+import { sharedDataSchema } from "./shared-data";
 
 const inventorySchema = createGroupSchema({
   years: yearsSchema,
@@ -16,6 +17,7 @@ const inventorySchema = createGroupSchema({
   afat: afatSchema,
   wastewaterSanitation: wastewaterSanitationSchema,
   waste: wasteSchema,
+  sharedData: sharedDataSchema.optional(),
   priceAssumptions: priceAssumptionsSchema.optional(),
 });
 

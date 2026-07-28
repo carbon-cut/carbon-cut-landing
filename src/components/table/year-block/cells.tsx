@@ -37,7 +37,7 @@ export function renderYearBlockEditableCell<T extends FieldValues>({
 
   const fieldUnitPath = `${baseName}.value.${row.key}.unit` as TName<T>;
   let fieldUnit = form.getValues(fieldUnitPath);
-  if (fieldUnit === undefined) {
+  if (fieldUnit === undefined || fieldUnit === "") {
     form.setValue(
       fieldUnitPath,
       //@ts-expect-error - initialization of unit field value

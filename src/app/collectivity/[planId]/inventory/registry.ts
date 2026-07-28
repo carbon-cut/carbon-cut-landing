@@ -230,7 +230,7 @@ const datasetNavOverrides: Record<
   "sanitation-n2o": { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
 };
 
-const hiddenEnergyDatasetKeys = new Set(["photovoltaic", "solar-water-heating"]);
+const retiredDatasetKeys = new Set(["photovoltaic", "solar-water-heating"]);
 
 const applicabilityDatasetKeys: Record<keyof CollectivitySetupApplicability, readonly string[]> = {
   airport: ["air-transport"],
@@ -250,7 +250,7 @@ function buildInventoryRegistryWithApplicability(
   workspace: InventoryWorkspaceConfig;
   surfaces: InventorySurfaceCopy;
 } {
-  const disabledDatasetKeys = new Set<string>(hiddenEnergyDatasetKeys);
+  const disabledDatasetKeys = new Set<string>(retiredDatasetKeys);
 
   if (applicability) {
     (

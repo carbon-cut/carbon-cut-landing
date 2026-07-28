@@ -129,13 +129,7 @@ export default function ElectricitySurface() {
           },
         ])
       ) as Record<ElectricityBlockKey, { label: string; onAdd: () => void }>,
-    [
-      appendHtCustomColumn,
-      appendLtCustomColumn,
-      appendMtCustomColumn,
-      metrics,
-      tTable,
-    ]
+    [appendHtCustomColumn, appendLtCustomColumn, appendMtCustomColumn, metrics, tTable]
   );
 
   useEffect(() => {

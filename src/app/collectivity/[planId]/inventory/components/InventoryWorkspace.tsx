@@ -45,6 +45,7 @@ type DebugCalculationPanelState =
       status: "success";
       datasetKey: string;
       emissionLeaves: DebugEmissionLeaf[];
+      warnings: DebugCalculationWarning[];
       formulaVersion: string;
       parameterCount: number;
     }
@@ -61,6 +62,16 @@ type DebugEmissionLeaf = {
   unit: string;
 };
 
+type DebugCalculationWarning = {
+  code?: string;
+  itemId?: string;
+  path?: string;
+  message?: string;
+  details?: Record<string, unknown>;
+};
+
+const summedDebugDatasetKeys = new Set(["electricity"]);
+
 type DebugCalculationResponse = {
   data?: {
     datasetKey: string;
@@ -68,6 +79,7 @@ type DebugCalculationResponse = {
     parameterSnapshot?: {
       items?: unknown[];
     };
+    warnings?: DebugCalculationWarning[];
     formulaVersion: string;
   };
   error?: {
@@ -87,6 +99,12 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function collectEmissionLeaves(value: unknown, path: string[] = []): DebugEmissionLeaf[] {
+  if (Array.isArray(value)) {
+    return value.flatMap((nestedValue, index) =>
+      collectEmissionLeaves(nestedValue, [...path, String(index)])
+    );
+  }
+
   if (!isRecord(value)) {
     return [];
   }
@@ -104,6 +122,57 @@ function collectEmissionLeaves(value: unknown, path: string[] = []): DebugEmissi
   return Object.entries(value).flatMap(([key, nestedValue]) =>
     collectEmissionLeaves(nestedValue, [...path, key])
   );
+}
+
+function getDisplayEmissionLeaves(
+  datasetKey: string,
+  emissionsPayload: unknown
+): DebugEmissionLeaf[] {
+  if (datasetKey === "naturalGas") {
+    const payload = isRecord(emissionsPayload) ? emissionsPayload : {};
+
+    return [
+      ...sumEmissionLeavesByYear("dataSet.total", payload.dataSet),
+      ...sumEmissionLeavesByYear("approximations.gpl", payload.approximations),
+    ];
+  }
+
+  const emissionLeaves = collectEmissionLeaves(emissionsPayload);
+
+  if (!summedDebugDatasetKeys.has(datasetKey)) {
+    return emissionLeaves;
+  }
+
+  return sumEmissionLeavesByYear("total", emissionsPayload);
+}
+
+function sumEmissionLeavesByYear(prefix: string, value: unknown): DebugEmissionLeaf[] {
+  const emissionLeaves = collectEmissionLeaves(value);
+  const totalsByYear = emissionLeaves.reduce<Record<string, { value: number; unit: string }>>(
+    (acc, leaf) => {
+      const yearSegment = leaf.path.split(".").find((segment) => /^y-\d{4}$/.test(segment));
+
+      if (!yearSegment) {
+        return acc;
+      }
+
+      const current = acc[yearSegment];
+      acc[yearSegment] = {
+        value: (current?.value ?? 0) + leaf.value,
+        unit: current?.unit ?? leaf.unit,
+      };
+      return acc;
+    },
+    {}
+  );
+
+  return Object.entries(totalsByYear)
+    .sort(([leftYear], [rightYear]) => leftYear.localeCompare(rightYear))
+    .map(([year, total]) => ({
+      path: `${prefix}.${year}`,
+      value: total.value,
+      unit: total.unit,
+    }));
 }
 
 function getDefaultDataset(datasets: InventoryDataset[]) {
@@ -158,11 +227,13 @@ function DebugCalculationPanel({
   label,
   formulaVersionLabel,
   parametersLabel,
+  warningsLabel,
 }: {
   result: DebugCalculationPanelState;
   label: string;
   formulaVersionLabel: string;
   parametersLabel: string;
+  warningsLabel: string;
 }) {
   return (
     <aside className="space-y-1.5">
@@ -201,6 +272,24 @@ function DebugCalculationPanel({
               </span>
             </Typography>
           </div>
+          {result.warnings.length > 0 ? (
+            <div className="space-y-1 pt-1">
+              <Typography asChild variant="caption" size="sm" className="text-amber-700">
+                <p>{warningsLabel}</p>
+              </Typography>
+              {result.warnings.map((warning, index) => (
+                <Typography
+                  key={`${warning.code ?? "warning"}-${warning.itemId ?? index}`}
+                  asChild
+                  variant="caption"
+                  size="sm"
+                  className="text-amber-700"
+                >
+                  <p>{warning.message ?? warning.code ?? "Warning"}</p>
+                </Typography>
+              ))}
+            </div>
+          ) : null}
         </div>
       ) : (
         <div className="space-y-1">
@@ -336,13 +425,20 @@ export default function InventoryWorkspace({
     }
 
     const datasetFieldName = getInventoryDatasetFieldName(activeDataset.key);
-    const isDatasetValid = datasetFieldName
-      ? await mainForm.trigger(datasetFieldName as FieldPath<InventoryFormValues>, {
-          shouldFocus: true,
-        })
-      : true;
-    console.log("data", mainForm.getValues(datasetFieldName as FieldPath<InventoryFormValues>));
-    console.log("errors", mainForm.formState.errors);
+    const debugFieldNames =
+      activeDataset.surfaceKind === "naturalGas"
+        ? ([datasetFieldName, "sharedData.population", "sharedData.householdEnergy"].filter(
+            Boolean
+          ) as FieldPath<InventoryFormValues>[])
+        : datasetFieldName
+          ? [datasetFieldName as FieldPath<InventoryFormValues>]
+          : [];
+    const isDatasetValid =
+      debugFieldNames.length > 0
+        ? await mainForm.trigger(debugFieldNames, {
+            shouldFocus: true,
+          })
+        : true;
 
     if (!isDatasetValid) {
       toast.error(t("inventoryWorkspace.debugCalculation.validationError") as string);
@@ -417,7 +513,10 @@ export default function InventoryWorkspace({
       }
 
       const debugData = payload.data;
-      const emissionLeaves = collectEmissionLeaves(debugData.emissionsPayload);
+      const emissionLeaves = getDisplayEmissionLeaves(
+        debugData.datasetKey,
+        debugData.emissionsPayload
+      );
 
       setDebugCalculationsByDatasetKey((current) => ({
         ...current,
@@ -425,6 +524,7 @@ export default function InventoryWorkspace({
           status: "success",
           datasetKey: debugData.datasetKey,
           emissionLeaves,
+          warnings: debugData.warnings ?? [],
           formulaVersion: debugData.formulaVersion,
           parameterCount: debugData.parameterSnapshot?.items?.length ?? 0,
         },
@@ -506,6 +606,7 @@ export default function InventoryWorkspace({
                       t("inventoryWorkspace.debugCalculation.formulaVersion") as string
                     }
                     parametersLabel={t("inventoryWorkspace.debugCalculation.parameters") as string}
+                    warningsLabel={t("inventoryWorkspace.debugCalculation.warnings") as string}
                   />
                 ) : (
                   <Typography asChild variant="body" size="sm" className="text-muted-foreground">

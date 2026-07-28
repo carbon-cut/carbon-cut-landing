@@ -14,9 +14,7 @@ export function buildInventoryDefaultValues(inventoryInput?: Record<string, unkn
     },
     energy: {
       electricity: {},
-      photovoltaic: {},
       naturalGas: {},
-      solarWaterHeating: {},
     },
     transport: {
       publicTransport: {},
@@ -32,6 +30,10 @@ export function buildInventoryDefaultValues(inventoryInput?: Record<string, unkn
     },
     wastewaterSanitation: {},
     waste: {},
+    sharedData: {
+      population: {},
+      householdEnergy: {},
+    },
   } as Partial<InventoryFormValues>;
   const input = getRecord(inventoryInput);
 
@@ -59,6 +61,10 @@ export function buildInventoryDefaultValues(inventoryInput?: Record<string, unkn
     waste: {
       ...defaults.waste,
       ...getRecord(input.waste),
+    },
+    sharedData: {
+      ...defaults.sharedData,
+      ...getRecord(input.sharedData),
     },
   } as Partial<InventoryFormValues>;
 }

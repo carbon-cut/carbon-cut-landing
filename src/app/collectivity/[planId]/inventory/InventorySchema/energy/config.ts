@@ -103,22 +103,50 @@ export const photovoltaic = {
 
 const naturalGasRowKeys = ["consumption", "subscribers"] as const;
 
-const naturalGasBpColumnKeys = ["households", "commerce", "services", "total"] as const;
+const naturalGasBpColumnKeys = [
+  "domestic",
+  "commercial",
+  "administration",
+  "smallIndustry",
+  "workshops",
+  "industries",
+  "total",
+] as const;
 
-const naturalGasMpColumnKeys = ["industry", "tourism", "agriculture", "total"] as const;
+const naturalGasMpColumnKeys = [
+  "extractive",
+  "chemical",
+  "textile",
+  "food",
+  "otherIndustries",
+  "agriculture",
+  "tourism",
+  "transportTelco",
+  "services",
+  "total",
+] as const;
 
 const naturalGasHpColumnKeys = ["powerPlant", "industrialHub", "total"] as const;
 
 const naturalGasBpLines = {
-  households: { sector: "residential", required: true },
-  commerce: { sector: "tertiary" },
-  services: { sector: "tertiary" },
+  domestic: { sector: "residential", required: true },
+  commercial: { sector: "tertiary" },
+  administration: { sector: "tertiary" },
+  smallIndustry: { sector: "industry" },
+  workshops: { sector: "industry" },
+  industries: { sector: "industry" },
 } as const satisfies TerritorialEnergyLineDefinitions;
 
 const naturalGasMpLines = {
-  industry: { sector: "industry" },
-  tourism: { sector: "tertiary" },
+  extractive: { sector: "industry" },
+  chemical: { sector: "industry" },
+  textile: { sector: "industry" },
+  food: { sector: "industry" },
+  otherIndustries: { sector: "industry" },
   agriculture: { sector: "agriculture" },
+  tourism: { sector: "tertiary" },
+  transportTelco: { sector: "transport" },
+  services: { sector: "tertiary" },
 } as const satisfies TerritorialEnergyLineDefinitions;
 
 const naturalGasHpLines = {

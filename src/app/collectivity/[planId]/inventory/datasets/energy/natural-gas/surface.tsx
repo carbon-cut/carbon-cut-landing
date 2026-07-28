@@ -1,8 +1,10 @@
 "use client";
 
+import MatrixTable from "@/components/table/matrix";
+import ScalarTable from "@/components/table/scalar";
+import { InventoryTableHeader } from "@/components/table/InventoryTableHeader";
 import YearMetricsTable from "@/components/table/year-metrics";
 import type { YearMetricsColumn } from "@/components/table/year-metrics/types";
-import { InventoryTableHeader } from "@/components/table/InventoryTableHeader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useScopedI18n } from "@/locales/client";
 import { useEffect, useMemo, useState } from "react";
@@ -13,7 +15,12 @@ import InventoryYearSelector, {
 } from "../../../components/InventoryYearSelector";
 import { useInventoryContext } from "../../../context/inventory-context";
 import { territorialEnergySectorValues } from "../../../InventorySchema/energy/territorial-energy";
-import { buildNaturalGasFixedLines, buildNaturalGasMetrics } from "./config";
+import {
+  buildNaturalGasAssumptionFields,
+  buildNaturalGasFixedLines,
+  buildNaturalGasMetrics,
+  buildNaturalGasPopulationRows,
+} from "./config";
 
 const blockKeys = ["bp", "mp", "hp"] as const;
 type NaturalGasBlockKey = (typeof blockKeys)[number];
@@ -25,18 +32,38 @@ export default function NaturalGasSurface() {
   const tNaturalGas = useScopedI18n(
     "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.naturalGas"
   );
+  const tElectricity = useScopedI18n(
+    "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.electricity"
+  );
   const tTable = useScopedI18n(
     "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.yearMetricsTable"
   );
-  const { blocks, metrics, sectorOptions } = useState(() => ({
+  const naturalGasFixedLabel = (blockKey: NaturalGasBlockKey, key: string) => {
+    if (blockKey === "bp") {
+      return tElectricity(`lt.${key}`);
+    }
+
+    if (blockKey === "mp") {
+      return key === "services"
+        ? (tNaturalGas("bp.services") as string)
+        : tElectricity(`mt.${key}`);
+    }
+
+    return tNaturalGas(`hp.${key}`);
+  };
+  const { blocks, metrics, populationRows, assumptionFields, sectorOptions } = useState(() => ({
     blocks: blockKeys.map((key) => ({
       key,
       title: tNaturalGas(`${key}.title`),
-      fixedColumns: buildNaturalGasFixedLines(key, tNaturalGas, (sector) =>
-        tTable(`sectors.${sector}`)
+      fixedColumns: buildNaturalGasFixedLines(
+        key,
+        (lineKey) => naturalGasFixedLabel(key, lineKey),
+        (sector) => tTable(`sectors.${sector}`)
       ),
     })),
     metrics: buildNaturalGasMetrics(tNaturalGas),
+    populationRows: buildNaturalGasPopulationRows(tNaturalGas),
+    assumptionFields: buildNaturalGasAssumptionFields(tNaturalGas),
     sectorOptions: territorialEnergySectorValues.map((sector) => ({
       value: sector,
       label: tTable(`sectors.${sector}`),
@@ -129,13 +156,7 @@ export default function NaturalGasSurface() {
           },
         ])
       ) as Record<NaturalGasBlockKey, { label: string; onAdd: () => void }>,
-    [
-      appendBpCustomColumn,
-      appendHpCustomColumn,
-      appendMpCustomColumn,
-      metrics,
-      tTable,
-    ]
+    [appendBpCustomColumn, appendHpCustomColumn, appendMpCustomColumn, metrics, tTable]
   );
 
   useEffect(() => {
@@ -148,6 +169,17 @@ export default function NaturalGasSurface() {
 
   return (
     <section className="space-y-8">
+      <MatrixTable
+        title={tNaturalGas("populationTitle")}
+        rows={populationRows}
+        form={mainForm}
+        baseName="sharedData.population.dataSet"
+      />
+      <ScalarTable
+        title={tNaturalGas("assumptionsTitle")}
+        form={mainForm}
+        fields={assumptionFields}
+      />
       <InventoryTableHeader
         title={tNaturalGas("surface.title")}
         endContent={

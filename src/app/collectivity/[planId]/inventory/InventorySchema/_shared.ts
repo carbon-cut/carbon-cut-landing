@@ -67,6 +67,13 @@ export const constructUnit = (input: NonEmptyStringArray) => {
   return z.enum(input).default(input[0]);
 };
 
+export function createScalarValueSchema(unit: NonEmptyStringArray, optional: boolean = false) {
+  return z.object({
+    value: optional ? numberSchema.optional() : numberSchema,
+    unit: constructUnit(unit),
+  });
+}
+
 export function createYearValueSchema(unit: NonEmptyStringArray, optional: boolean = false) {
   return z.object({
     value: optional ? numberByYearOptionalSchema : numberByYearSchema,

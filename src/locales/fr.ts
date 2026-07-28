@@ -1007,6 +1007,7 @@ export default {
           total: "Total",
           formulaVersion: "Version formule",
           parameters: "Paramètres",
+          warnings: "Avertissements",
         },
         hints: {
           sourceFirst: "Source-first",
@@ -1234,6 +1235,8 @@ export default {
                 readinessDescription: ({ years }: { years: string }) =>
                   `Renseignez au moins une consommation de gaz naturel du secteur tertiaire pour les années suivantes : ${years}.`,
               },
+              populationTitle: "Population",
+              assumptionsTitle: "Hypothèses énergie ménage",
               bp: {
                 title: "Basse pression",
                 households: "Menages",
@@ -1258,6 +1261,14 @@ export default {
               rows: {
                 consumption: "Consommation (Nm3)",
                 subscribers: "Nombre d'abonnes",
+              },
+              population: {
+                count: "Population",
+              },
+              assumptions: {
+                consumptionNorm: "Norme de consommation",
+                consumptionNormHelper:
+                  "Valeur de référence représentant la consommation moyenne des ménages en combustibles gazeux par habitant, pour les usages résidentiels, exprimée en tep/capita. Elle est utilisée pour estimer la consommation de GPL des ménages.",
               },
             },
             solarWaterHeating: {
