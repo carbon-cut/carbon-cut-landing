@@ -58,11 +58,12 @@ const metadata = z.object({
   }),
 });
 
-const constructUnit = (input: [string, ...string[]]) => {
-  return z.enum(input).default(input[0]);
-};
-
 type NonEmptyStringArray = [string, ...string[]];
+const normalizeUnitValue = (input: NonEmptyStringArray) => (value: unknown) =>
+  value === undefined || value === null ? input[0] : value;
+const constructUnit = (input: NonEmptyStringArray) => {
+  return z.preprocess(normalizeUnitValue(input), z.enum(input));
+};
 type MatrixSchemaOptions =
   | {
       unit: NonEmptyStringArray;
@@ -350,8 +351,6 @@ const treesParksWaste = {
   Port rows are dynamic in the app: users can add custom rows.
   The UI initializes and protects these default vessel category rows.
 */
-const portDefaultRowKeys = ["leisure", "fishing", "other"] as const;
-const portFuelValues = ["diesel", "marineDiesel", "heavyFuelOil", "LNG", "electricity"] as const;
 const publicTransportExploitationRowKeys = [
   "kmTravelled",
   "staff",
@@ -401,22 +400,22 @@ const territoryVehicleFuelKeys = [
 ] as const;
 const territoryVehicleMeasureKeys = ["vehicles", "avgConsumption", "avgMileage"] as const;
 
+const portFuelKeys = ["diesel"] as const;
+const portElectricityKeys = ["electricityConsumption", "electricityBill"] as const;
+
 const portUnits: UnitConf = {
-  vesselCount: {
-    default: [""],
-  },
   fuelConsumption: {
     diesel: ["L"],
-    marineDiesel: ["L"],
-    heavyFuelOil: ["L"],
-    LNG: ["Nm3"],
-    electricity: ["kWh"],
+  },
+  electricityConsumption: {
+    electricityConsumption: ["kWh"],
+    electricityBill: ["currency"],
   },
 } as const;
 
 const port = {
-  rowKeys: portDefaultRowKeys,
-  fuels: portFuelValues,
+  fuelKeys: portFuelKeys,
+  electricityKeys: portElectricityKeys,
   units: portUnits,
 };
 
@@ -543,18 +542,19 @@ const treesParksWasteSchema = z.object({
 
 const portSchema = z.object({
   dataSet: z.object({
-    concernedPorts: z.array(
-      z.object({
-        key: z.string(),
-      })
-    ),
-    vesselCount: createRecordMatrixSchema(z.string(), { unit: port.units.vesselCount.default }),
-    fuelConsumption: createRecordMatrixSchema(
-      z.string(),
+    fuelConsumption: createMatrixSchema(
+      port.fuelKeys,
       {
         unitsByKeys: port.units.fuelConsumption,
       },
-      z.enum(port.fuels)
+      true
+    ),
+    electricityConsumption: createMatrixSchema(
+      port.electricityKeys,
+      {
+        unitsByKeys: port.units.electricityConsumption,
+      },
+      true
     ),
   }),
   metadata,

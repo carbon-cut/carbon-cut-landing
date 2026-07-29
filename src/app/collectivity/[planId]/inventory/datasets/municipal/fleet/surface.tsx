@@ -4,6 +4,7 @@ import { useScopedI18n } from "@/locales/client";
 import CollectivityMetadataScopeControl from "@/app/collectivity/_components/metadata/CollectivityMetadataScopeControl";
 import MatrixTable from "@/components/table/matrix";
 import InventoryTableSection from "../../../components/InventoryTableSection";
+import PriceAssumptionsTable from "../../../components/PriceAssumptionsTable";
 import { useInventoryContext } from "../../../context/inventory-context";
 import type { FleetSurfaceCopy, InventoryTableSectionData } from "../../../types";
 import { buildFleetRows } from "./config";
@@ -20,7 +21,6 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
     fuel: buildFleetRows("fuel", tFleet),
     engine: buildFleetRows("engine", tFleet),
     spend: buildFleetRows("spend", tFleet),
-    priceAssumptions: buildFleetRows("priceAssumptions", tFleet),
   }));
   const compositionSection: InventoryTableSectionData = {
     title: copy.compositionTitle,
@@ -59,12 +59,7 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
           form={mainForm}
           baseName={"municipal.fleet.dataSet.spend"}
         />
-        <MatrixTable
-          title={tFleet("priceAssumptionsTitle")}
-          rows={rows.priceAssumptions}
-          form={mainForm}
-          baseName={"priceAssumptions.energy"}
-        />
+        <PriceAssumptionsTable titleKey="fuelsAndElectricity" priceKeys={["petrol", "diesel", "gpl", "electricity", "gnv"]} />
       </div>
     </div>
   );

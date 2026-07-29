@@ -45,18 +45,18 @@ const publicTransportSchema = z.object({
 
 const portSchema = z.object({
   dataSet: z.object({
-    concernedPorts: z.array(
-      z.object({
-        key: z.string(),
-      })
-    ),
-    vesselCount: createRecordMatrixSchema(z.string(), { unit: port.units.vesselCount.default }),
-    fuelConsumption: createRecordMatrixSchema(
-      z.string(),
+    fuelConsumption: createMatrixSchema(
+      port.fuelKeys,
       {
         unitsByKeys: port.units.fuelConsumption,
       },
-      z.enum(port.fuels)
+    ),
+    electricityConsumption: createMatrixSchema(
+      port.electricityKeys,
+      {
+        unitsByKeys: port.units.electricityConsumption,
+      },
+      true
     ),
   }),
   metadata,
@@ -101,7 +101,7 @@ const territoryVehiclesSchema = z.object({
 const transportSchema = createGroupSchema({
   publicTransport: publicTransportSchema,
   airTransport: airTransportSchema.optional(),
-  port: portSchema,
+  port: portSchema.optional(),
   territoryVehicles: territoryVehiclesSchema,
 });
 

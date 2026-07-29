@@ -63,8 +63,11 @@ const metadata = z
 
 type NonEmptyStringArray = [string, ...string[]];
 
+const normalizeUnitValue = (input: NonEmptyStringArray) => (value: unknown) =>
+  value === undefined || value === null ? input[0] : value;
+
 export const constructUnit = (input: NonEmptyStringArray) => {
-  return z.enum(input).default(input[0]);
+  return z.preprocess(normalizeUnitValue(input), z.enum(input));
 };
 
 export function createScalarValueSchema(unit: NonEmptyStringArray, optional: boolean = false) {

@@ -24,14 +24,6 @@ export function buildPublicLightingRows(
         label: labelFunc(`yearly.${key}`),
         unit: publicLighting.units.yearly[key][0],
       }));
-    case "priceAssumptions":
-      return [
-        {
-          key: "electricity",
-          label: labelFunc("priceAssumptions.electricity"),
-          unit: "currency/kWh",
-        },
-      ];
     default:
       return [];
   }

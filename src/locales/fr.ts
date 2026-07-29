@@ -1087,7 +1087,6 @@ export default {
               },
               yearlyEnergyTitle: "Consommation energetique",
               yearlySpendTitle: "Depense energetique",
-              priceAssumptionsTitle: "Prix des carburants et de l'electricite",
             },
             publicLighting: {
               infrastructureTitle: "Infrastructure d'eclairage public",
@@ -1116,10 +1115,6 @@ export default {
                 consumption: "Consommation electrique annuelle",
                 bill: "Facture electrique annuelle",
               },
-              priceAssumptionsTitle: "Prix de l'electricite",
-              priceAssumptions: {
-                electricity: "Prix unitaire de l'electricite",
-              },
             },
             buildings: {
               areasTitle: "Patrimoine batimentaire",
@@ -1143,11 +1138,20 @@ export default {
                 otherConsumption: "Autre consommation",
                 otherBill: "Autre facture",
               },
-              priceAssumptionsTitle: "Prix de l'energie",
-              priceAssumptions: {
+            },
+            priceAssumptionsTable: {
+              titles: {
+                electricity: "Prix de l'electricite",
+                energy: "Prix de l'energie",
+                fuelsAndElectricity: "Prix des carburants et de l'electricite",
+              },
+              rows: {
                 electricity: "Prix unitaire de l'electricite",
                 naturalGas: "Prix unitaire du gaz naturel",
                 diesel: "Prix unitaire du diesel",
+                petrol: "Prix unitaire de l'essence",
+                gpl: "Prix unitaire du GPL",
+                gnv: "Prix unitaire du GNV",
               },
             },
             yearMetricsTable: {
@@ -1289,33 +1293,20 @@ export default {
               },
             },
             port: {
-              vesselCount: {
-                title: "Nombre de bateaux / barges",
-              },
               fuelConsumption: {
-                title: "Consommation de carburant dans le perimetre (L)",
+                title: "Consommation de diesel dans le perimetre",
                 fuelType: "Carburant",
                 fuelPlaceholder: "Choisir un carburant",
                 fuels: {
                   diesel: "Diesel",
-                  marineDiesel: "Diesel marin",
-                  heavyFuelOil: "Fioul lourd",
-                  LNG: "GNL",
-                  electricity: "Electricite",
                 },
               },
-              rows: {
-                leisure: "Plaisance",
-                fishing: "Peche",
-                other: "Autre",
-              },
-              concernedPorts: {
-                title: "Ports concernes",
-                description:
-                  "Le rapport source liste les ports concernes; la structure initiale les garde visibles comme metadonnees de travail.",
-                column: "Port",
-                addLabel: "Ajouter un port",
-                rowLabelPrefix: "Port",
+              electricityConsumption: {
+                title: "Consommation electrique portuaire",
+                rows: {
+                  electricityConsumption: "Consommation electrique",
+                  electricityBill: "Facture electrique",
+                },
               },
             },
             publicTransport: {

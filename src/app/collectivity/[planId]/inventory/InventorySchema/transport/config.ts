@@ -4,7 +4,8 @@ type UnitConf = {
   };
 };
 
-const portRowKeys = ["leisure", "fishing", "other"] as const;
+const portFuelKeys = ["diesel"] as const;
+const portElectricityKeys = ["electricityConsumption", "electricityBill"] as const;
 const publicTransportExploitationRowKeys = [
   "kmTravelled",
   "staff",
@@ -55,19 +56,14 @@ const territoryVehicleFuelKeys = [
 const territoryVehicleMeasureKeys = ["vehicles", "avgConsumption", "avgMileage"] as const;
 
 const portUnits: UnitConf = {
-  vesselCount: {
-    default: [""],
-  },
   fuelConsumption: {
     diesel: ["L"],
-    marineDiesel: ["L"],
-    heavyFuelOil: ["L"],
-    LNG: ["Nm3"],
-    electricity: ["kWh"],
+  },
+  electricityConsumption: {
+    electricityConsumption: ["kWh"],
+    electricityBill: ["currency"],
   },
 } as const;
-
-const portFuels = ["diesel", "marineDiesel", "heavyFuelOil", "LNG", "electricity"] as const;
 
 const publicTransportUnits: UnitConf = {
   exploitation: {
@@ -126,9 +122,9 @@ const territoryVehicleUnits: UnitConf = {
 } as const;
 
 export const port = {
-  rowKeys: portRowKeys,
+  fuelKeys: portFuelKeys,
+  electricityKeys: portElectricityKeys,
   units: portUnits,
-  fuels: portFuels,
 };
 
 export const publicTransport = {

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useScopedI18n } from "@/locales/client";
 import MatrixTable from "@/components/table/matrix";
 import GroupedYear from "@/components/table/grouped-year";
+import PriceAssumptionsTable from "../../../components/PriceAssumptionsTable";
 
 import { useInventoryContext } from "../../../context/inventory-context";
 import type { PublicLightingSurfaceCopy } from "../../../types";
@@ -20,7 +21,6 @@ export default function PublicLightingSurface({ copy }: { copy: PublicLightingSu
     infrastructure: buildPublicLightingRows("infrastructure", tFleet),
     lamps: buildPublicLightingRows("lamps", tFleet),
     yearly: buildPublicLightingRows("yearly", tFleet),
-    priceAssumptions: buildPublicLightingRows("priceAssumptions", tFleet),
     lampsColumns: buildPublicLightingColumns("lamps", tFleet),
   }));
 
@@ -46,12 +46,7 @@ export default function PublicLightingSurface({ copy }: { copy: PublicLightingSu
         form={mainForm}
         baseName={"municipal.publicLighting.dataSet.yearly"}
       />
-      <MatrixTable
-        title={tFleet("priceAssumptionsTitle")}
-        rows={rows.priceAssumptions}
-        form={mainForm}
-        baseName={"priceAssumptions.energy"}
-      />
+      <PriceAssumptionsTable titleKey="electricity" priceKeys={["electricity"]} />
     </div>
   );
 }

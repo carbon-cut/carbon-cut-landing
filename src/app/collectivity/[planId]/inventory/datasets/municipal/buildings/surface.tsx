@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { useScopedI18n } from "@/locales/client";
 import MatrixTable from "@/components/table/matrix";
+import PriceAssumptionsTable from "../../../components/PriceAssumptionsTable";
 import { useInventoryContext } from "../../../context/inventory-context";
 import { buildBuildingsRows } from "./config";
 
@@ -15,7 +16,6 @@ export default function BuildingsSurface() {
   const [rows] = useState(() => ({
     areas: buildBuildingsRows("areas", tBuildings),
     consumption: buildBuildingsRows("consumption", tBuildings),
-    priceAssumptions: buildBuildingsRows("priceAssumptions", tBuildings),
   }));
 
   return (
@@ -32,12 +32,7 @@ export default function BuildingsSurface() {
         form={mainForm}
         baseName="municipal.buildings.dataSet.consumption"
       />
-      <MatrixTable
-        title={tBuildings("priceAssumptionsTitle")}
-        rows={rows.priceAssumptions}
-        form={mainForm}
-        baseName="priceAssumptions.energy"
-      />
+      <PriceAssumptionsTable titleKey="energy" priceKeys={["electricity", "naturalGas", "diesel"]} />
     </div>
   );
 }

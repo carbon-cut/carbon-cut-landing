@@ -97,11 +97,11 @@ const datasetOverrides: Record<
     surfaceKind: "port",
     status: "Structure initiale",
     description:
-      "Jeu portuaire avec comptes de navires, consommations de carburant et ports concernes.",
+      "Jeu portuaire avec ports concernes, consommation diesel et consommation electrique.",
     sourceMode: "Source-native: un tableau portuaire peut couvrir plusieurs annees.",
-    yearMode: "Year-native: les comptes et consommations restent compares par annee.",
+    yearMode: "Year-native: les consommations restent comparees par annee.",
     implementationNote:
-      "La structure initiale garde aussi la liste des ports concernes comme contexte d'entree.",
+      "Le panneau garde la liste des ports concernes et autorise le fallback facture/prix pour l'electricite.",
   },
   "public-transport": {
     surfaceKind: "publicTransport",
