@@ -10,6 +10,7 @@ import type {
 } from "@/app/collectivity/setup/_lib/types";
 import { isMockBackendEnabled } from "@/mocks/config";
 import {
+  getMockCollectivitySupportedValues,
   getMockCollectivitySetupSnapshot,
   isMockCollectivityPlanIdUnique,
   saveMockCollectivityInventoryInput,
@@ -48,6 +49,18 @@ type DebugCalculationResponse = {
       items: Array<Record<string, unknown>>;
     };
     formulaVersion: string;
+  };
+};
+
+type SupportedValuesResponse = {
+  data: {
+    familyKey: string;
+    selectorKey: string;
+    values: Array<{
+      value: string;
+      label: string;
+      selector: Record<string, string>;
+    }>;
   };
 };
 
@@ -273,6 +286,33 @@ export async function debugCalculateCollectivityDataset({
         inventoryInput,
       }),
     }
+  );
+
+  return response.data;
+}
+
+export async function listCollectivitySupportedValues(familyKey: string, selectorKey: string) {
+  if (isMockBackendEnabled()) {
+    const values = getMockCollectivitySupportedValues(familyKey, selectorKey);
+
+    if (!values) {
+      throw new CollectivityBackendError(404, {
+        error: {
+          status: 404,
+          message: "Collectivity supported values not found",
+        },
+      });
+    }
+
+    return {
+      familyKey,
+      selectorKey,
+      values,
+    };
+  }
+
+  const response = await requestCollectivity<SupportedValuesResponse>(
+    `/api/collectivity/supported-values/${encodeURIComponent(familyKey)}/${encodeURIComponent(selectorKey)}`
   );
 
   return response.data;

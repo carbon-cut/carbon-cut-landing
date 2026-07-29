@@ -82,6 +82,31 @@ export type MockCollectivityUserState = {
   currentInventory: CollectivityInventorySnapshot | null;
 };
 
+const mockCollectivitySupportedValues = {
+  "ef-lto:aircraft": [
+    "A220",
+    "A319",
+    "A320",
+    "A321",
+    "A330",
+    "A350",
+    "B737",
+    "B757",
+    "B767",
+    "B777",
+    "B787",
+    "RegionalTurboprop",
+    "RegionalJet",
+    "Other",
+  ].map((value) => ({
+    value,
+    label: value,
+    selector: {
+      aircraft: value,
+    },
+  })),
+} as const;
+
 function cloneSetup(setup: CollectivitySetupData | null): CollectivitySetupData | null {
   if (!setup) {
     return null;
@@ -273,6 +298,21 @@ export function getMockCollectivityUserState(userOrEmail: Pick<AuthUser, "email"
 
 export function getMockCollectivitySetup(planId: string) {
   return cloneSetup(collectivitySetupByPlanId.get(planId) ?? null);
+}
+
+export function getMockCollectivitySupportedValues(familyKey: string, selectorKey: string) {
+  const key = `${familyKey}:${selectorKey}` as keyof typeof mockCollectivitySupportedValues;
+  const values = mockCollectivitySupportedValues[key];
+
+  if (!values) {
+    return null;
+  }
+
+  return values.map((entry) => ({
+    value: entry.value,
+    label: entry.label,
+    selector: { ...entry.selector },
+  }));
 }
 
 export function getMockCollectivitySetupSnapshot(planId: string) {

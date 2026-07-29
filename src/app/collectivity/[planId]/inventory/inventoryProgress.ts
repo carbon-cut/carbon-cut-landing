@@ -255,12 +255,12 @@ function computeAirTransportProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
 ) {
+  const movementRows = Object.keys(
+    values?.transport?.airTransport?.dataSet?.movements ?? {}
+  ).length;
   const total =
-    countGridTotal(
-      airTransport.aircraftModelKeys.length,
-      airTransport.movementColumnKeys.length,
-      years.length
-    ) + countMatrixTotal(airTransport.energyKeys.length, years.length);
+    countGridTotal(movementRows, airTransport.movementColumnKeys.length, years.length) +
+    countMatrixTotal(airTransport.energyKeys.length, years.length);
 
   return createProgress(countFilledYearValues(values?.transport?.airTransport?.dataSet), total);
 }

@@ -113,6 +113,28 @@ const createGridSchema = (
   );
 };
 
+const createDynamicGridSchema = (
+  nestedKeys: readonly string[],
+  GridSchemaOptions: GridSchemaOptions
+) => {
+  const { unit, unitsByCols } = GridSchemaOptions;
+
+  return z.record(
+    z.string(),
+    z.object(
+      Object.fromEntries(
+        nestedKeys.map((nestedKey) => [
+          nestedKey,
+          z.object({
+            value: numberByYearSchema,
+            unit: constructUnit(unit ?? unitsByCols![nestedKey]),
+          }),
+        ])
+      )
+    )
+  );
+};
+
 const createRecordGridSchema = <RowFields extends ZodRawShape = Record<string, never>>(
   keys: readonly [string, ...string[]],
   nestedKeys: ZodString | ZodEnum<[string, ...string[]]>,
@@ -339,22 +361,6 @@ const publicTransportExploitationRowKeys = [
 const publicTransportRenewalRowKeys = ["scrapped", "purchased", "purchaseCost"] as const;
 const publicTransportAgeRowKeys = ["age0to5", "age6to10", "age10plus"] as const;
 const publicTransportFuelKeys = ["diesel", "petrol", "gpl", "gnv", "electricity"] as const;
-const airTransportAircraftModelKeys = [
-  "a220",
-  "a319",
-  "a320",
-  "a321",
-  "a330",
-  "a350",
-  "boeing737",
-  "boeing757",
-  "boeing767",
-  "boeing777",
-  "boeing787",
-  "regionalTurboprop",
-  "regionalJet",
-  "other",
-] as const;
 const airTransportMovementColumnKeys = ["international", "national"] as const;
 const airTransportEnergyKeys = [
   "buildingElectricity",
@@ -471,7 +477,6 @@ const airTransportUnits: UnitConf = {
 } as const;
 
 const airTransport = {
-  aircraftModelKeys: airTransportAircraftModelKeys,
   movementColumnKeys: airTransportMovementColumnKeys,
   energyKeys: airTransportEnergyKeys,
   units: airTransportUnits,
@@ -588,7 +593,7 @@ const publicTransportSchema = z.object({
 
 const airTransportSchema = z.object({
   dataSet: z.object({
-    movements: createGridSchema(airTransport.aircraftModelKeys, airTransport.movementColumnKeys, {
+    movements: createDynamicGridSchema(airTransport.movementColumnKeys, {
       unit: airTransport.units.movements.default,
     }),
     energy: createMatrixSchema(airTransport.energyKeys, {

@@ -13,6 +13,10 @@ Keep this file as the working index for open items. If another doc contains a ba
 
 - Add flags to the country select in `cadrage`.
 
+- Centralize frontend request handling primitives for collectivity surfaces.
+  Scope: shared hooks/components for loading state, waiting state, error display, and authenticated request handling instead of per-surface ad hoc implementations.
+  Expected outcome: inventory and adjacent collectivity screens reuse the same request pattern and UI behavior.
+
 - Improve inventory domain-nav responsive behavior:
   keep the domain nav on a single row; when there is room, inactive tabs should share the available width; when space gets tight, inactive tabs should compress like browser tabs and ellipsize; the active tab should keep the width it needs; do not solve this with wrapping, aggressive font shrinking, or equal-width segmented controls.
 

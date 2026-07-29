@@ -15,6 +15,11 @@ import {
   getAtLeastOneSectorConsumptionRulePaths,
   validateAtLeastOneSectorConsumptionRule,
 } from "./rules/at-least-one-sector-consumption";
+import {
+  atLeastOneRecordColumnActivityRule,
+  getAtLeastOneRecordColumnActivityRulePaths,
+  validateAtLeastOneRecordColumnActivityRule,
+} from "./rules/at-least-one-record-column-activity";
 import type { CalculationReadinessResult } from "./types";
 
 const fleetRule = atLeastOneFallbackActivityRule({
@@ -60,6 +65,13 @@ const naturalGasIndustryRule = atLeastOneSectorConsumptionRule({
   sector: "industry",
 });
 
+const airTransportNationalMovementsRule = atLeastOneRecordColumnActivityRule({
+  datasetBasePath: "transport.airTransport.dataSet",
+  recordsBasePath: "transport.airTransport.dataSet.movements",
+  columnKey: "national",
+  ghostErrorPath: "transport.airTransport.__readiness.national",
+});
+
 function toResult(
   issues: ReturnType<typeof validateFallbackActivityRule>
 ): CalculationReadinessResult {
@@ -95,6 +107,12 @@ export function validateDatasetCalculationReadiness(
     ]);
   }
 
+  if (datasetKey === "airTransport") {
+    return toResult(
+      validateAtLeastOneRecordColumnActivityRule(values, airTransportNationalMovementsRule)
+    );
+  }
+
   return { success: true };
 }
 
@@ -120,6 +138,10 @@ export function getDatasetCalculationReadinessPaths(datasetKey: string, values: 
       ...getAtLeastOneSectorConsumptionRulePaths(naturalGasTertiaryRule),
       ...getAtLeastOneSectorConsumptionRulePaths(naturalGasIndustryRule),
     ];
+  }
+
+  if (datasetKey === "airTransport") {
+    return getAtLeastOneRecordColumnActivityRulePaths(airTransportNationalMovementsRule);
   }
 
   return [];

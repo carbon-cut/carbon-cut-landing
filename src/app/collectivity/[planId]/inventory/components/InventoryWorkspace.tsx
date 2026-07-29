@@ -439,13 +439,18 @@ export default function InventoryWorkspace({
             shouldFocus: true,
           })
         : true;
+    const currentValues = mainForm.getValues();
+    const debugData = datasetFieldName
+      ? mainForm.getValues(datasetFieldName as FieldPath<InventoryFormValues>)
+      : undefined;
 
     if (!isDatasetValid) {
+      console.log("debugData", debugData);
+      console.log("debugError", mainForm.formState.errors);
       toast.error(t("inventoryWorkspace.debugCalculation.validationError") as string);
       return;
     }
 
-    const currentValues = mainForm.getValues();
     for (const path of getInventoryCalculationReadinessPaths(
       activeDataset.surfaceKind,
       currentValues
@@ -466,11 +471,17 @@ export default function InventoryWorkspace({
         });
       }
 
+      console.log("debugData", debugData);
+      console.log("debugError", readinessResult.error);
       toast.error(t("inventoryWorkspace.debugCalculation.validationError") as string);
       return;
     }
 
     const { years: _years, ...inventoryInput } = currentValues;
+    const debugRequest = {
+      datasetKey: activeDataset.surfaceKind,
+      inventoryInput,
+    };
 
     setIsDebugCalculating(true);
 
@@ -483,15 +494,14 @@ export default function InventoryWorkspace({
             "Content-Type": "application/json",
           },
           credentials: "same-origin",
-          body: JSON.stringify({
-            datasetKey: activeDataset.surfaceKind,
-            inventoryInput,
-          }),
+          body: JSON.stringify(debugRequest),
         }
       );
       const payload = (await response.json()) as DebugCalculationResponse;
 
       if (!response.ok || !payload.data) {
+        console.log("debugData", debugRequest);
+        console.log("debugError", payload.error);
         const reasons =
           payload.error?.details?.reasons?.map((reason) =>
             [reason.code, reason.path, reason.parameterKey].filter(Boolean).join(" · ")
@@ -531,7 +541,9 @@ export default function InventoryWorkspace({
       }));
       console.log("debugData", debugData);
       toast.success(t("inventoryWorkspace.debugCalculation.success") as string);
-    } catch {
+    } catch (error) {
+      console.log("debugData", debugRequest);
+      console.log("debugError", error);
       setDebugCalculationsByDatasetKey((current) => ({
         ...current,
         [activeDataset.surfaceKind]: {

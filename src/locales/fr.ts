@@ -1371,6 +1371,11 @@ export default {
               },
             },
             airTransport: {
+              surface: {
+                readinessTitle: "Mouvements nationaux manquants",
+                readinessDescription: ({ years }: { years: string }) =>
+                  `Renseignez au moins un mouvement national pour les années suivantes : ${years}.`,
+              },
               movements: {
                 title: "Mouvements d'aeronefs",
                 description:

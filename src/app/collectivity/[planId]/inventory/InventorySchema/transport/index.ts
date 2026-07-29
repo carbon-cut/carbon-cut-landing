@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import {
   constructUnit,
-  createGridSchema,
+  createDynamicGridSchema,
   createGroupSchema,
   createMatrixSchema,
   createRecordGridSchema,
@@ -64,12 +64,20 @@ const portSchema = z.object({
 
 const airTransportSchema = z.object({
   dataSet: z.object({
-    movements: createGridSchema(airTransport.aircraftModelKeys, airTransport.movementColumnKeys, {
-      unit: airTransport.units.movements.default,
-    }),
-    energy: createMatrixSchema(airTransport.energyKeys, {
-      unitsByKeys: airTransport.units.energy,
-    }),
+    movements: createDynamicGridSchema(
+      airTransport.movementColumnKeys,
+      {
+        unit: airTransport.units.movements.default,
+      },
+      true
+    ),
+    energy: createMatrixSchema(
+      airTransport.energyKeys,
+      {
+        unitsByKeys: airTransport.units.energy,
+      },
+      true
+    ),
   }),
   metadata,
 });
@@ -92,7 +100,7 @@ const territoryVehiclesSchema = z.object({
 
 const transportSchema = createGroupSchema({
   publicTransport: publicTransportSchema,
-  airTransport: airTransportSchema,
+  airTransport: airTransportSchema.optional(),
   port: portSchema,
   territoryVehicles: territoryVehiclesSchema,
 });

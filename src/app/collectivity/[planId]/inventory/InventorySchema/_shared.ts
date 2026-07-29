@@ -128,6 +128,29 @@ export function createGridSchema(
   );
 }
 
+export function createDynamicGridSchema(
+  nestedKeys: readonly string[],
+  GridSchemaOptions: GridSchemaOptions,
+  optional: boolean = false
+) {
+  const { unit, unitsByCols } = GridSchemaOptions;
+
+  return z.record(
+    z.string(),
+    z.object(
+      Object.fromEntries(
+        nestedKeys.map((nestedKey) => [
+          nestedKey,
+          z.object({
+            value: optional ? numberByYearOptionalSchema : numberByYearSchema,
+            unit: constructUnit(unit ?? unitsByCols![nestedKey]),
+          }),
+        ])
+      )
+    )
+  );
+}
+
 export function createRecordGridSchema<RowFields extends ZodRawShape = Record<string, never>>(
   keys: readonly [string, ...string[]],
   nestedKeys: ZodString | ZodEnum<[string, ...string[]]>,

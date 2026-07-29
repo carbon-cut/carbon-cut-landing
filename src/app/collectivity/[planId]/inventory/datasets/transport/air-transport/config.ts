@@ -2,6 +2,7 @@ import { airTransport } from "../../../InventorySchema/transport/config";
 import type { InventoryGroupedYearTableData, InventoryTableRow } from "../../../types";
 
 export function buildAirTransportMovementSection(
+  rows: InventoryTableRow[],
   labelFunc: (key: string) => string
 ): InventoryGroupedYearTableData {
   return {
@@ -12,11 +13,7 @@ export function buildAirTransportMovementSection(
       label: labelFunc(`movements.columns.${key}`),
       unit: airTransport.units.movements.default[0],
     })),
-    rows: airTransport.aircraftModelKeys.map((key) => ({
-      key,
-      label: labelFunc(`aircraft.${key}`),
-      unit: airTransport.units.movements.default[0],
-    })),
+    rows,
   };
 }
 
