@@ -8,49 +8,73 @@ import {
   createRecordGridSchema,
   createRecordMatrixSchema,
   metadata,
-  numberFutureSchema,
+  numberFutureOptionalSchema,
+  requiredStringSchema,
 } from "../_shared";
 import { airTransport, port, publicTransport, territoryVehicles } from "./config";
 
 const publicTransportSchema = z.object({
-  dataSet: z.array(
-    z.object({
-      key: z.string(), // operator name
-      exploitation: createMatrixSchema(publicTransport.exploitationRowKeys, {
-        unitsByKeys: publicTransport.units.exploitation,
-      }),
-      buses: createMatrixSchema(publicTransport.fuelKeys, {
-        unit: publicTransport.units.buses.default,
-      }),
-      consumption: createMatrixSchema(publicTransport.fuelKeys, {
-        unitsByKeys: publicTransport.units.consumption,
-      }),
-      spend: createMatrixSchema(publicTransport.fuelKeys, {
-        unit: publicTransport.units.spend.default,
-      }),
-      renewal: createMatrixSchema(publicTransport.renewalRowKeys, {
-        unitsByKeys: publicTransport.units.renewal,
-      }),
-      age: createMatrixSchema(publicTransport.ageRowKeys, {
-        unitsByKeys: publicTransport.units.age,
-      }),
-      renewalFuture: z.object({
-        value: numberFutureSchema,
-        unit: constructUnit(publicTransport.units.future.default),
-      }),
-    })
-  ),
+  dataSet: z
+    .array(
+      z.object({
+        name: requiredStringSchema,
+        exploitation: createMatrixSchema(
+          publicTransport.exploitationRowKeys,
+          {
+            unitsByKeys: publicTransport.units.exploitation,
+          },
+          true
+        ),
+        buses: createMatrixSchema(
+          publicTransport.fuelKeys,
+          {
+            unit: publicTransport.units.buses.default,
+          },
+          true
+        ),
+        consumption: createMatrixSchema(
+          publicTransport.fuelKeys,
+          {
+            unitsByKeys: publicTransport.units.consumption,
+          },
+          true
+        ),
+        spend: createMatrixSchema(
+          publicTransport.fuelKeys,
+          {
+            unit: publicTransport.units.spend.default,
+          },
+          true
+        ),
+        renewal: createMatrixSchema(
+          publicTransport.renewalRowKeys,
+          {
+            unitsByKeys: publicTransport.units.renewal,
+          },
+          true
+        ),
+        age: createMatrixSchema(
+          publicTransport.ageRowKeys,
+          {
+            unitsByKeys: publicTransport.units.age,
+          },
+          true
+        ),
+        renewalFuture: z.object({
+          value: numberFutureOptionalSchema,
+          unit: constructUnit(publicTransport.units.future.default),
+        }),
+      })
+    )
+    .min(1, { message: "Required" }),
   metadata,
 });
 
 const portSchema = z.object({
   dataSet: z.object({
-    fuelConsumption: createMatrixSchema(
-      port.fuelKeys,
-      {
-        unitsByKeys: port.units.fuelConsumption,
-      },
-    ),
+    fuelConsumption: createMatrixSchema(port.fuelKeys, {
+      unitsByKeys: port.units.fuelConsumption,
+    }),
     electricityConsumption: createMatrixSchema(
       port.electricityKeys,
       {

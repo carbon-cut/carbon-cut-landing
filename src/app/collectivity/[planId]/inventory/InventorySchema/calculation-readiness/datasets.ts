@@ -20,6 +20,8 @@ import {
   getAtLeastOneRecordColumnActivityRulePaths,
   validateAtLeastOneRecordColumnActivityRule,
 } from "./rules/at-least-one-record-column-activity";
+import { publicTransport } from "../transport/config";
+import { getPath } from "./helpers";
 import type { CalculationReadinessResult } from "./types";
 
 const fleetRule = atLeastOneFallbackActivityRule({
@@ -72,6 +74,24 @@ const airTransportNationalMovementsRule = atLeastOneRecordColumnActivityRule({
   ghostErrorPath: "transport.airTransport.__readiness.national",
 });
 
+function getPublicTransportRules(values: unknown) {
+  const operators = getPath(values, ["transport", "publicTransport", "dataSet"]);
+
+  if (!Array.isArray(operators)) {
+    return [];
+  }
+
+  return operators.map((_, index) =>
+    atLeastOneFallbackActivityRule({
+      activityBasePath: `transport.publicTransport.dataSet.${index}`,
+      priceBasePath: "priceAssumptions.energy",
+      physicalGroupKey: "consumption",
+      monetaryGroupKey: "spend",
+      keys: publicTransport.fuelKeys,
+    })
+  );
+}
+
 function toResult(
   issues: ReturnType<typeof validateFallbackActivityRule>
 ): CalculationReadinessResult {
@@ -113,6 +133,14 @@ export function validateDatasetCalculationReadiness(
     );
   }
 
+  if (datasetKey === "public-transport") {
+    return toResult(
+      getPublicTransportRules(values).flatMap((rule) =>
+        validateAtLeastOneFallbackActivityRule(values, rule)
+      )
+    );
+  }
+
   return { success: true };
 }
 
@@ -142,6 +170,12 @@ export function getDatasetCalculationReadinessPaths(datasetKey: string, values: 
 
   if (datasetKey === "airTransport") {
     return getAtLeastOneRecordColumnActivityRulePaths(airTransportNationalMovementsRule);
+  }
+
+  if (datasetKey === "public-transport") {
+    return getPublicTransportRules(values).flatMap((rule) =>
+      getAtLeastOneFallbackActivityRulePaths(values, rule)
+    );
   }
 
   return [];

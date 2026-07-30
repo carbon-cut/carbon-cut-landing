@@ -290,12 +290,9 @@ function computePortProgress(
   const dataSet = values?.transport?.port?.dataSet;
   const fuelConsumption = dataSet?.fuelConsumption;
   const electricityConsumption = dataSet?.electricityConsumption;
-  const total =
-    port.fuelKeys.length * years.length +
-    port.electricityKeys.length * years.length;
+  const total = port.fuelKeys.length * years.length + port.electricityKeys.length * years.length;
   const completed =
-    countFilledYearValues(fuelConsumption) +
-    countFilledYearValues(electricityConsumption);
+    countFilledYearValues(fuelConsumption) + countFilledYearValues(electricityConsumption);
 
   return createProgress(completed, total);
 }
@@ -314,7 +311,7 @@ function computePublicTransportProgress(
     publicTransportFutureYearCount;
   const total = operators.length * totalPerOperator;
   const completed =
-    operators.reduce((sum, operator) => sum + countFilledField(operator?.key), 0) +
+    operators.reduce((sum, operator) => sum + countFilledField(operator?.name), 0) +
     countFilledYearValues(operators);
 
   return createProgress(completed, total);

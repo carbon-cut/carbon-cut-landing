@@ -5,10 +5,7 @@ import { useMemo } from "react";
 import MatrixTable from "@/components/table/matrix";
 import { useScopedI18n } from "@/locales/client";
 
-import {
-  energyPriceKeys,
-  energyPriceUnits,
-} from "../InventorySchema/price-assumptions";
+import { energyPriceKeys, energyPriceUnits } from "../InventorySchema/price-assumptions";
 import { useInventoryContext } from "../context/inventory-context";
 import type { InventoryTableRow } from "../types";
 

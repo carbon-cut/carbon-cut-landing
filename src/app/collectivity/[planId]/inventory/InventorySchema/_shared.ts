@@ -20,8 +20,10 @@ export const futureYearSchema = yearSchema.refine(
 );
 
 const numberSchema = z.coerce.number({ errorMap: () => ({ message: "Required" }) });
+export const requiredStringSchema = z.string().min(1, { message: "Required" });
 
 export const numberFutureSchema = z.record(futureYearSchema, numberSchema);
+export const numberFutureOptionalSchema = z.record(futureYearSchema, numberSchema.optional());
 
 export const numberByYearSchema = z.record(yearSchema, numberSchema);
 export const numberByYearOptionalSchema = z.record(yearSchema, numberSchema.optional());

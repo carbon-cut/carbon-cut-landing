@@ -59,7 +59,10 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
           form={mainForm}
           baseName={"municipal.fleet.dataSet.spend"}
         />
-        <PriceAssumptionsTable titleKey="fuelsAndElectricity" priceKeys={["petrol", "diesel", "gpl", "electricity", "gnv"]} />
+        <PriceAssumptionsTable
+          titleKey="fuelsAndElectricity"
+          priceKeys={["petrol", "diesel", "gpl", "electricity", "gnv"]}
+        />
       </div>
     </div>
   );

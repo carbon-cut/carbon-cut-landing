@@ -374,20 +374,23 @@ const territoryVehicleTypeKeys = [
   "mopeds",
   "agriculturalEquipment",
   "privateVehicles",
-  "specialPurposeVehicles",
+  "specializedMachinery",
   "touristBuses",
   "heavyTrucks",
   "lightTrucks",
-  "tractors",
+  "agriculturalTractors",
   "tricycles",
   "quadricycles",
   "trailers",
-  "semiTrailers",
+  "semiTrailerTractors",
   "microbuses",
   "ambulances",
   "taxis",
   "sharedTaxis",
   "touristTaxis",
+  "motorbikes",
+  "specialVehicles",
+  "mixedCars",
 ] as const;
 const territoryVehicleFuelKeys = [
   "diesel",
@@ -563,7 +566,7 @@ const portSchema = z.object({
 const publicTransportSchema = z.object({
   dataSet: z.array(
     z.object({
-      key: z.string(),
+      name: z.string(),
       exploitation: createMatrixSchema(publicTransport.exploitationRowKeys, {
         unitsByKeys: publicTransport.units.exploitation,
       }),

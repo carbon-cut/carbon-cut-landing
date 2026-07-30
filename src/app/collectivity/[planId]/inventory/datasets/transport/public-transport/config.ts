@@ -5,6 +5,21 @@ import type {
 } from "../../../types";
 import { publicTransport } from "../../../InventorySchema/transport/config";
 
+function createMatrixBranch<TKeys extends readonly string[]>(
+  keys: TKeys,
+  unitByKey: (key: TKeys[number]) => string
+) {
+  return Object.fromEntries(
+    keys.map((key) => [
+      key,
+      {
+        value: {},
+        unit: unitByKey(key),
+      },
+    ])
+  );
+}
+
 export function buildPublicTransportFutureYears(): number[] {
   const currentYear = new Date().getFullYear();
   return [currentYear, currentYear + 1, currentYear + 2];
@@ -103,4 +118,35 @@ export function buildPublicTransportRenewalFutureRows(
       unit: "",
     },
   ];
+}
+
+export function buildPublicTransportOperatorDefaultValues() {
+  return {
+    name: "",
+    exploitation: createMatrixBranch(
+      publicTransport.exploitationRowKeys,
+      (key) => publicTransport.units.exploitation[key][0]
+    ),
+    buses: createMatrixBranch(
+      publicTransport.fuelKeys,
+      () => publicTransport.units.buses.default[0]
+    ),
+    consumption: createMatrixBranch(
+      publicTransport.fuelKeys,
+      (key) => publicTransport.units.consumption[key][0]
+    ),
+    spend: createMatrixBranch(
+      publicTransport.fuelKeys,
+      () => publicTransport.units.spend.default[0]
+    ),
+    renewal: createMatrixBranch(
+      publicTransport.renewalRowKeys,
+      (key) => publicTransport.units.renewal[key][0]
+    ),
+    age: createMatrixBranch(publicTransport.ageRowKeys, (key) => publicTransport.units.age[key][0]),
+    renewalFuture: {
+      value: {},
+      unit: publicTransport.units.future.default[0],
+    },
+  };
 }

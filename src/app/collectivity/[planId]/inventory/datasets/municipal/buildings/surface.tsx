@@ -32,7 +32,10 @@ export default function BuildingsSurface() {
         form={mainForm}
         baseName="municipal.buildings.dataSet.consumption"
       />
-      <PriceAssumptionsTable titleKey="energy" priceKeys={["electricity", "naturalGas", "diesel"]} />
+      <PriceAssumptionsTable
+        titleKey="energy"
+        priceKeys={["electricity", "naturalGas", "diesel"]}
+      />
     </div>
   );
 }

@@ -55,6 +55,7 @@ export default function InventoryRouteClient({
   const mainForm = useForm<InventoryFormValues>({
     resolver: zodResolver(inventorySchema),
     defaultValues,
+    mode: "onChange",
   });
   const [isSaving, setIsSaving] = useState(false);
   useEffect(() => {
