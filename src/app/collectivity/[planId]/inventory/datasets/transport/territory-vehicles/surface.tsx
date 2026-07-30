@@ -3,13 +3,17 @@
 import { useState } from "react";
 
 import GroupedYear from "@/components/table/grouped-year";
+import { FormField, FormItem, FormMessage, type TName } from "@/components/ui/forms";
 import { useScopedI18n } from "@/locales/client";
+import type { InventoryFormValues } from "../../../context/inventory-context";
 import { useInventoryContext } from "../../../context/inventory-context";
 import {
   buildTerritoryVehiclesEditableRows,
   buildTerritoryVehiclesRowFields,
   buildTerritoryVehiclesSection,
 } from "./config";
+
+const inventoryName = (name: string) => name as TName<InventoryFormValues>;
 
 export default function TerritoryVehiclesSurface() {
   const { mainForm } = useInventoryContext();
@@ -24,15 +28,24 @@ export default function TerritoryVehiclesSurface() {
   }))[0];
 
   return (
-    <GroupedYear
-      title={section.title}
-      description={section.description}
-      rows={section.rows}
-      subcolumns={section.subcolumns}
-      form={mainForm}
-      baseName="transport.territoryVehicles.dataSet.rows"
-      editableRows={editableRows}
-      rowFields={rowFields}
+    <FormField
+      control={mainForm.control}
+      name={inventoryName("transport.territoryVehicles.dataSet.rows")}
+      render={() => (
+        <FormItem>
+          <GroupedYear
+            title={section.title}
+            description={section.description}
+            rows={section.rows}
+            subcolumns={section.subcolumns}
+            form={mainForm}
+            baseName="transport.territoryVehicles.dataSet.rows"
+            editableRows={editableRows}
+            rowFields={rowFields}
+          />
+          <FormMessage />
+        </FormItem>
+      )}
     />
   );
 }

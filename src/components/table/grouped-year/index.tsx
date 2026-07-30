@@ -27,6 +27,7 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
     control: form.control,
     name: baseName as ArrayPath<T>,
   });
+  const rowKeyFieldName = editableRows.rowKeyFieldName ?? "key";
 
   const tableRows = useMemo(
     () =>
@@ -49,8 +50,9 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
         rowFields,
         onRemoveRow: remove,
         rowCount: tableRows.length,
+        fieldRows: fields,
       }),
-    [baseName, editableRows, form, remove, rowFields, subcolumns, tableRows.length, years]
+    [baseName, editableRows, fields, form, remove, rowFields, subcolumns, tableRows.length, years]
   );
 
   return (
@@ -66,7 +68,7 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
             onClick={() =>
               append(
                 // @ts-expect-error - initialize dynamic grouped-year row fields lazily
-                { key: "", value: {} },
+                { [rowKeyFieldName]: "", value: {} },
                 { shouldFocus: true }
               )
             }

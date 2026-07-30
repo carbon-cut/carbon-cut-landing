@@ -275,7 +275,7 @@ function computeTerritoryVehiclesProgress(
     rows.reduce(
       (sum, row) =>
         sum +
-        countFilledField(isRecord(row) ? row.key : undefined) +
+        countFilledField(isRecord(row) ? (row as Record<string, unknown>).vehicleType : undefined) +
         countFilledField(isRecord(row) ? (row as Record<string, unknown>).fuel : undefined),
       0
     ) + countFilledYearValues(rows);

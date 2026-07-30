@@ -17,7 +17,7 @@ export default function PhotovoltaicSurface() {
 
   return (
     <div className="space-y-8">
-      <MatrixTable
+      {/*       <MatrixTable
         title={tPhotovoltaic("bt.title")}
         rows={btRows}
         form={mainForm}
@@ -30,7 +30,7 @@ export default function PhotovoltaicSurface() {
           form={mainForm}
           baseName="energy.photovoltaic.dataSet.mt"
         />
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function SolarWaterHeatingSurface() {
 
   return (
     <div className="space-y-8">
-      <MatrixTable
+      {/* <MatrixTable
         title={tSolarWaterHeating("residential.title")}
         rows={residentialRows}
         form={mainForm}
@@ -38,7 +38,7 @@ export default function SolarWaterHeatingSurface() {
           form={mainForm}
           baseName="energy.solarWaterHeating.dataSet.industrial"
         />
-      </div>
+      </div> */}
     </div>
   );
 }

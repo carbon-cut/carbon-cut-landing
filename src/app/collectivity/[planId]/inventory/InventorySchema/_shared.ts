@@ -160,13 +160,14 @@ export function createRecordGridSchema<RowFields extends ZodRawShape = Record<st
   keys: readonly [string, ...string[]],
   nestedKeys: ZodString | ZodEnum<[string, ...string[]]>,
   GridSchemaOptions: RecordGridSchemaOptions,
-  rowFields?: RowFields
+  rowFields?: RowFields,
+  rowKeyFieldName: string = "key"
 ) {
   const { unit, unitsByKeys } = GridSchemaOptions;
 
   return z.array(
     z.object({
-      key: nestedKeys,
+      [rowKeyFieldName]: nestedKeys,
       ...(rowFields ?? {}),
       value: z.object(
         Object.fromEntries(
@@ -179,7 +180,7 @@ export function createRecordGridSchema<RowFields extends ZodRawShape = Record<st
           ])
         )
       ),
-    })
+    } as Record<string, ZodTypeAny>)
   );
 }
 

@@ -13,6 +13,19 @@ import {
 } from "../_shared";
 import { airTransport, port, publicTransport, territoryVehicles } from "./config";
 
+const territoryVehicleTypeKeys = Object.keys(territoryVehicles.allowedFuelsByType) as [
+  keyof typeof territoryVehicles.allowedFuelsByType,
+  ...(keyof typeof territoryVehicles.allowedFuelsByType)[],
+];
+const territoryVehicleFuelKeys = territoryVehicles.fuelKeys as [
+  (typeof territoryVehicles.fuelKeys)[number],
+  ...(typeof territoryVehicles.fuelKeys)[number][],
+];
+const territoryVehicleRequiredTypes = territoryVehicles.requiredDefaults.map(({ key }) => key) as [
+  (typeof territoryVehicles.requiredDefaults)[number]["key"],
+  ...(typeof territoryVehicles.requiredDefaults)[number]["key"][],
+];
+
 const publicTransportSchema = z.object({
   dataSet: z
     .array(
@@ -110,14 +123,27 @@ const territoryVehiclesSchema = z.object({
   dataSet: z.object({
     rows: createRecordGridSchema(
       territoryVehicles.measureKeys,
-      z.enum(territoryVehicles.vehicleTypeKeys),
+      z.enum(territoryVehicleTypeKeys),
       {
         unitsByKeys: territoryVehicles.units.measures,
       },
       {
-        fuel: z.enum(territoryVehicles.fuelKeys),
+        fuel: z.enum(territoryVehicleFuelKeys),
+      },
+      "vehicleType"
+    ).superRefine((rows, ctx) => {
+      const availableTypes = new Set(rows.map((row) => row.vehicleType));
+
+      for (const vehicleType of territoryVehicleRequiredTypes) {
+        if (!availableTypes.has(vehicleType)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [],
+            message: `Required: ${vehicleType}`,
+          });
+        }
       }
-    ),
+    }),
   }),
   metadata,
 });

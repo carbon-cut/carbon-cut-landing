@@ -22,6 +22,7 @@ type CreateGroupedYearColumnsArgs<T extends FieldValues> = Pick<
   subcolumns: InventoryTableColumn[];
   onRemoveRow?: (index: number) => void;
   rowCount: number;
+  fieldRows?: unknown[];
 };
 
 export function createGroupedYearColumns<T extends FieldValues>({
@@ -34,6 +35,7 @@ export function createGroupedYearColumns<T extends FieldValues>({
   rowFields = [],
   onRemoveRow,
   rowCount,
+  fieldRows = [],
 }: CreateGroupedYearColumnsArgs<T>) {
   const columns: ColumnDef<InventoryTableRow>[] = [
     ...(editableRows
@@ -50,6 +52,7 @@ export function createGroupedYearColumns<T extends FieldValues>({
               baseName: baseName!,
               row,
               field,
+              disabled: editableRows.isFieldDisabled?.(fieldRows[row.index], field.key, row.index),
             }),
         }))
       : [
@@ -97,7 +100,11 @@ export function createGroupedYearColumns<T extends FieldValues>({
         className: "w-12",
       },
       cell: ({ row }: GroupedYearCellContext) => {
-        const canRemove = rowCount > (editableRows.minRows ?? 0);
+        const canRemoveByCount = rowCount > (editableRows.minRows ?? 0);
+        const canRemoveByRow = editableRows.canRemoveRow
+          ? editableRows.canRemoveRow(fieldRows[row.index], row.index)
+          : true;
+        const canRemove = canRemoveByCount && canRemoveByRow;
 
         return (
           <InventoryTableIconButton

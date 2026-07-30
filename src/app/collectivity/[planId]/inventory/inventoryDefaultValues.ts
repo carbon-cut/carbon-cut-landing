@@ -1,4 +1,5 @@
 import type { InventoryFormValues } from "./context/inventory-context";
+import { buildTerritoryVehicleDefaultRows } from "./InventorySchema/transport/config";
 
 function getRecord(value: unknown) {
   return typeof value === "object" && value !== null ? (value as Record<string, unknown>) : {};
@@ -49,6 +50,17 @@ export function buildInventoryDefaultValues(inventoryInput?: Record<string, unkn
     transport: {
       ...defaults.transport,
       ...getRecord(input.transport),
+      territoryVehicles: {
+        ...getRecord(defaults.transport?.territoryVehicles),
+        ...getRecord(getRecord(input.transport).territoryVehicles),
+        dataSet: {
+          ...getRecord(getRecord(defaults.transport?.territoryVehicles).dataSet),
+          ...getRecord(getRecord(getRecord(input.transport).territoryVehicles).dataSet),
+          rows: buildTerritoryVehicleDefaultRows(
+            getRecord(getRecord(getRecord(input.transport).territoryVehicles).dataSet).rows
+          ),
+        },
+      },
     },
     afat: {
       ...defaults.afat,

@@ -71,7 +71,7 @@ export default function InventoryTanstackTable<TData>({
 
   return (
     <section>
-      <Table className={cn("w-full overflow-hidden", tableClassName)}>
+      <Table className={cn("min-w-full overflow-hidden", tableClassName)}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow

@@ -23,40 +23,47 @@ const airTransportEnergyKeys = [
   "electricFleet",
   "kerosene",
 ] as const;
-const territoryVehicleTypeKeys = [
-  "motorcycles",
-  "publicTransportVehicles",
-  "mopeds",
-  "agriculturalEquipment",
-  "privateVehicles",
-  "specializedMachinery",
-  "touristBuses",
-  "heavyTrucks",
-  "lightTrucks",
-  "agriculturalTractors",
-  "tricycles",
-  "quadricycles",
-  "trailers",
-  "semiTrailerTractors",
-  "microbuses",
-  "ambulances",
-  "taxis",
-  "sharedTaxis",
-  "touristTaxis",
-  "motorbikes",
-  "specialVehicles",
-  "mixedCars",
-] as const;
-const territoryVehicleFuelKeys = [
-  "diesel",
-  "petrol",
-  "gpl",
-  "gnv",
-  "electricity",
-  "hybrid",
-  "other",
-] as const;
+const territoryVehicleAllowedFuelsByType = {
+  motorcycles: ["petrol", "electricity"],
+  publicTransportVehicles: ["diesel", "gpl", "gnv", "electricity"],
+  mopeds: ["petrol", "electricity"],
+  agriculturalEquipment: ["diesel", "petrol"],
+  privateVehicles: ["diesel", "petrol", "gpl", "gnv", "electricity"],
+  specializedMachinery: ["diesel", "electricity"],
+  touristBuses: ["diesel", "gnv", "electricity"],
+  heavyTrucks: ["diesel", "electricity"],
+  lightTrucks: ["diesel", "petrol", "gpl", "gnv", "electricity"],
+  agriculturalTractors: ["diesel", "electricity"],
+  tricycles: ["petrol", "electricity"],
+  quadricycles: ["petrol", "electricity"],
+  semiTrailerTractors: ["diesel", "electricity"],
+  microbuses: ["diesel", "petrol", "gpl", "gnv", "electricity"],
+  doubleDeckerCoaches: ["diesel", "gnv", "electricity"],
+  emergencyInterventionVehicles: ["diesel", "petrol", "electricity"],
+  taxis: ["diesel", "petrol", "gpl", "gnv", "electricity"],
+  sharedTaxis: ["diesel", "petrol", "gpl", "gnv", "electricity"],
+  touristTaxis: ["diesel", "petrol", "gpl", "gnv", "electricity"],
+  motorbikes: ["petrol", "electricity"],
+  specialVehicles: ["diesel", "petrol", "electricity"],
+  mixedCars: ["diesel", "petrol", "gpl", "gnv", "electricity"],
+} as const;
 const territoryVehicleMeasureKeys = ["vehicles", "avgConsumption", "avgMileage"] as const;
+
+const territoryVehicleConsumptionUnitByFuel = {
+  diesel: "L/100km",
+  petrol: "L/100km",
+  gpl: "L/100km",
+  gnv: "Nm3/100km",
+  electricity: "kWh/100km",
+} as const;
+
+const territoryVehicleRequiredDefaults = [
+  { key: "privateVehicles", fuel: "petrol" },
+  { key: "lightTrucks", fuel: "diesel" },
+  { key: "heavyTrucks", fuel: "diesel" },
+  { key: "publicTransportVehicles", fuel: "diesel" },
+  { key: "taxis", fuel: "petrol" },
+] as const;
 
 const portUnits: UnitConf = {
   fuelConsumption: {
@@ -145,8 +152,65 @@ export const airTransport = {
 };
 
 export const territoryVehicles = {
-  vehicleTypeKeys: territoryVehicleTypeKeys,
-  fuelKeys: territoryVehicleFuelKeys,
+  allowedFuelsByType: territoryVehicleAllowedFuelsByType,
+  fuelKeys: [...new Set(Object.values(territoryVehicleAllowedFuelsByType).flat())],
   measureKeys: territoryVehicleMeasureKeys,
+  consumptionUnitByFuel: territoryVehicleConsumptionUnitByFuel,
+  requiredDefaults: territoryVehicleRequiredDefaults,
   units: territoryVehicleUnits,
 };
+
+export function buildTerritoryVehicleDefaultRows(rows: unknown) {
+  const currentRows = Array.isArray(rows)
+    ? rows
+        .filter((row) => row && typeof row === "object")
+        .map((row) => {
+          const record = row as Record<string, unknown>;
+
+          if (typeof record.vehicleType === "string") {
+            return record;
+          }
+
+          if (typeof record.key === "string") {
+            return {
+              ...record,
+              vehicleType: record.key,
+            };
+          }
+
+          return record;
+        })
+    : [];
+  const existingTypes = new Set(
+    currentRows
+      .map((row) => (row as Record<string, unknown>).vehicleType)
+      .filter(
+        (value): value is keyof typeof territoryVehicleAllowedFuelsByType =>
+          typeof value === "string"
+      )
+  );
+
+  const seededRows = territoryVehicleRequiredDefaults
+    .filter(({ key }) => !existingTypes.has(key))
+    .map(({ key, fuel }) => ({
+      vehicleType: key,
+      protected: true,
+      fuel,
+      value: {
+        vehicles: {
+          value: {},
+          unit: territoryVehicleUnits.measures.vehicles[0],
+        },
+        avgConsumption: {
+          value: {},
+          unit: territoryVehicleConsumptionUnitByFuel[fuel],
+        },
+        avgMileage: {
+          value: {},
+          unit: territoryVehicleUnits.measures.avgMileage[0],
+        },
+      },
+    }));
+
+  return [...seededRows, ...currentRows];
+}

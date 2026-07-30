@@ -3,17 +3,18 @@ import type {
   GroupedYearEditableRows,
   GroupedYearRowField,
 } from "@/components/table/grouped-year/types";
+import type { InventoryFormValues } from "../../../context/inventory-context";
 import { territoryVehicles } from "../../../InventorySchema/transport/config";
 
-const consumptionUnitByFuel: Record<(typeof territoryVehicles.fuelKeys)[number], string> = {
-  diesel: "L/100km",
-  petrol: "L/100km",
-  gpl: "L/100km",
-  gnv: "Nm3/100km",
-  electricity: "kWh/100km",
-  hybrid: "L/100km",
-  other: "L/100km",
-};
+type TerritoryVehicleType = keyof typeof territoryVehicles.allowedFuelsByType;
+type TerritoryVehicleFuel = (typeof territoryVehicles.fuelKeys)[number];
+type TerritoryVehicleRow = Partial<
+  InventoryFormValues["transport"]["territoryVehicles"]["dataSet"]["rows"][number]
+>;
+
+const territoryVehicleTypeKeys = Object.keys(
+  territoryVehicles.allowedFuelsByType
+) as Array<TerritoryVehicleType>;
 
 export function buildTerritoryVehiclesSection(
   labelFunc: (key: string) => string
@@ -26,6 +27,7 @@ export function buildTerritoryVehiclesSection(
       key,
       label: labelFunc(`measures.${key}`),
       unit: territoryVehicles.units.measures[key][0],
+      className: key === "avgConsumption" || key === "avgMileage" ? "min-w-[180px]" : undefined,
     })),
   };
 }
@@ -35,11 +37,11 @@ export function buildTerritoryVehiclesRowFields(
 ): GroupedYearRowField[] {
   return [
     {
-      key: "key",
+      key: "vehicleType",
       label: labelFunc("fields.vehicleType"),
       type: "select",
       placeholder: labelFunc("fields.vehicleTypePlaceholder"),
-      options: territoryVehicles.vehicleTypeKeys.map((vehicleType) => ({
+      options: territoryVehicleTypeKeys.map((vehicleType) => ({
         value: vehicleType,
         label: labelFunc(`vehicleTypes.${vehicleType}`),
       })),
@@ -50,11 +52,43 @@ export function buildTerritoryVehiclesRowFields(
       type: "select",
       placeholder: labelFunc("fields.fuelPlaceholder"),
       unitSubcolumnKey: "avgConsumption",
-      options: territoryVehicles.fuelKeys.map((fuel) => ({
-        value: fuel,
-        label: labelFunc(`fuels.${fuel}`),
-        unit: consumptionUnitByFuel[fuel],
-      })),
+      options: [],
+      getOptions: ({ form, rowIndex }) => {
+        const rows = (form.getValues("transport.territoryVehicles.dataSet.rows") ??
+          []) as TerritoryVehicleRow[];
+        const currentRow = rows[rowIndex];
+        const vehicleType = currentRow?.vehicleType;
+
+        if (
+          !vehicleType ||
+          !territoryVehicleTypeKeys.includes(vehicleType as TerritoryVehicleType)
+        ) {
+          return [];
+        }
+
+        const typedVehicleType = vehicleType as TerritoryVehicleType;
+        const allowedFuels = territoryVehicles.allowedFuelsByType[typedVehicleType];
+        const usedFuels = new Set(
+          rows
+            .filter((row, index) => index !== rowIndex && row?.vehicleType === typedVehicleType)
+            .map((row) => row?.fuel)
+            .filter(
+              (fuel): fuel is TerritoryVehicleFuel =>
+                typeof fuel === "string" &&
+                territoryVehicles.fuelKeys.includes(fuel as TerritoryVehicleFuel)
+            )
+        );
+
+        const currentFuel = currentRow?.fuel;
+
+        return allowedFuels
+          .filter((fuel: TerritoryVehicleFuel) => fuel === currentFuel || !usedFuels.has(fuel))
+          .map((fuel) => ({
+            value: fuel,
+            label: labelFunc(`fuels.${fuel}`),
+            unit: territoryVehicles.consumptionUnitByFuel[fuel],
+          }));
+      },
     },
   ];
 }
@@ -66,5 +100,26 @@ export function buildTerritoryVehiclesEditableRows(
     addLabel: labelFunc("addLabel"),
     minRows: 0,
     rowLabelPrefix: labelFunc("rowLabelPrefix"),
+    rowKeyFieldName: "vehicleType",
+    canRemoveRow: (row) => {
+      if (!row || typeof row !== "object") {
+        return true;
+      }
+
+      return (row as Record<string, unknown>).protected !== true;
+    },
+    isFieldDisabled: (row, fieldKey) => {
+      if (!row || typeof row !== "object") {
+        return false;
+      }
+
+      const record = row as Record<string, unknown>;
+
+      if (record.protected !== true) {
+        return false;
+      }
+
+      return fieldKey === "vehicleType" || fieldKey === "fuel";
+    },
   };
 }

@@ -28,6 +28,7 @@ type Props<T extends FieldValues> = {
   onChange?: (value: string) => void;
   size?: "xl" | "sm";
   disabled?: boolean;
+  preserveDisabledAppearance?: boolean;
   labelClassName?: string;
   className?: string;
   fallback?: boolean;
@@ -44,6 +45,7 @@ function InventoryTableSelect<T extends FieldValues>({
   onChange,
   size = "sm",
   disabled = false,
+  preserveDisabledAppearance = false,
   className,
   fallback = false,
 }: Props<T>) {
@@ -60,6 +62,9 @@ function InventoryTableSelect<T extends FieldValues>({
                 `text-sm font-medium ${
                   disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""
                 }`,
+                preserveDisabledAppearance && disabled
+                  ? "text-foreground data-[state=error]:text-destructive"
+                  : "",
                 labelClassName
               )}
             >
@@ -85,6 +90,7 @@ function InventoryTableSelect<T extends FieldValues>({
                       `w-full ${size === "xl" ? "h-9" : "h-8 !text-xs"} rounded-lg bg-muted/50 ${
                         fieldState.error ? "outline-none ring-1 ring-destructive/60" : ""
                       }`,
+                      preserveDisabledAppearance && disabled ? "disabled:opacity-100" : "",
                       "px-3 py-1 shadow-sm focus-visible:ring-1 focus-visible:ring-ring"
                     )}
                   >

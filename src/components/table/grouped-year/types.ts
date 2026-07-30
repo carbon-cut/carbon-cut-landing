@@ -8,10 +8,17 @@ export type GroupedYearEditableRows = {
   addLabel: string;
   minRows?: number;
   rowLabelPrefix?: string;
+  rowKeyFieldName?: string;
+  canRemoveRow?: (row: unknown, index: number) => boolean;
+  isFieldDisabled?: (row: unknown, fieldKey: string, index: number) => boolean;
 };
 
 export type GroupedYearRowField = MatrixRowField & {
   unitSubcolumnKey?: string;
+  getOptions?: (args: {
+    form: UseFormReturn<any, undefined>;
+    rowIndex: number;
+  }) => Array<{ value: string; label: string; unit?: string }>;
 };
 
 export type GroupedYearTableProps<T extends FieldValues> = InventoryGroupedYearTableData & {

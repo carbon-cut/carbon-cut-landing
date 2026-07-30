@@ -35,6 +35,7 @@ type Props<T extends FieldValues> = {
   onChange?: (v: any) => void;
   size?: "xl" | "sm";
   disabled?: boolean;
+  preserveDisabledAppearance?: boolean;
   labelClassName?: string;
   valueControl?: (v: any) => boolean;
   className?: string;
@@ -57,6 +58,7 @@ function InventoryTableInput<T extends FieldValues>({
   onChange,
   size = "sm",
   disabled = false,
+  preserveDisabledAppearance = false,
   className,
   fallback = false,
   isError = false,
@@ -103,6 +105,9 @@ function InventoryTableInput<T extends FieldValues>({
                 `text-sm font-medium ${
                   disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""
                 }`,
+                preserveDisabledAppearance && disabled
+                  ? "text-foreground data-[state=error]:text-destructive"
+                  : "",
                 labelClassName
               )}
             >
@@ -128,6 +133,7 @@ function InventoryTableInput<T extends FieldValues>({
                     `w-full ${size === "xl" ? "h-9" : "h-8 !text-xs"} rounded-lg bg-muted/50 ${
                       fieldState.error ? "outline-none ring-1 ring-destructive/60" : ""
                     }`,
+                    preserveDisabledAppearance && disabled ? "disabled:opacity-100" : "",
                     unitAdornment
                       ? unitPx
                         ? ""

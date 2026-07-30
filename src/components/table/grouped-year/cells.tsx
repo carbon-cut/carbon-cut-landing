@@ -111,13 +111,21 @@ export function renderGroupedYearRowSelectCell<T extends FieldValues>({
   baseName,
   row,
   field,
+  disabled = false,
 }: {
   form: UseFormReturn<T, undefined>;
   baseName: TName<T>;
   row: Row<InventoryTableRow>;
   field: GroupedYearRowField;
+  disabled?: boolean;
 }) {
   const fieldName = `${baseName}.${row.index}.${field.key}` as TName<T>;
+  const options = field.getOptions
+    ? field.getOptions({
+        form,
+        rowIndex: row.index,
+      })
+    : field.options;
 
   return (
     <InventoryTableSelect
@@ -125,11 +133,13 @@ export function renderGroupedYearRowSelectCell<T extends FieldValues>({
       name={fieldName}
       ariaLabel={field.label}
       placeholder={field.placeholder ?? field.label}
-      options={field.options}
+      options={options}
+      disabled={disabled}
+      preserveDisabledAppearance
       onChange={(value) => {
         if (!field.unitSubcolumnKey) return;
 
-        const option = field.options.find((currentOption) => currentOption.value === value);
+        const option = options.find((currentOption) => currentOption.value === value);
         if (!option?.unit) return;
 
         form.setValue(
