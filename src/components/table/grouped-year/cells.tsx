@@ -4,7 +4,7 @@ import type { Row } from "@tanstack/react-table";
 
 import { TName } from "@/components/ui/forms";
 import InventoryTableInput from "../InventoryTableInput";
-import InventoryTableSelect from "../InventoryTableSelect";
+import { InventoryTableSelectForm } from "../InventoryTableSelect";
 import type { InventoryTableRow } from "@/app/collectivity/[planId]/inventory/types";
 import type { GroupedYearRowField } from "./types";
 
@@ -128,7 +128,7 @@ export function renderGroupedYearRowSelectCell<T extends FieldValues>({
     : field.options;
 
   return (
-    <InventoryTableSelect
+    <InventoryTableSelectForm
       form={form}
       name={fieldName}
       ariaLabel={field.label}

@@ -8,13 +8,89 @@ import { territoryVehicles } from "../../../InventorySchema/transport/config";
 
 type TerritoryVehicleType = keyof typeof territoryVehicles.allowedFuelsByType;
 type TerritoryVehicleFuel = (typeof territoryVehicles.fuelKeys)[number];
-type TerritoryVehicleRow = Partial<
+export type TerritoryVehicleRow = Partial<
   InventoryFormValues["transport"]["territoryVehicles"]["dataSet"]["rows"][number]
 >;
 
 const territoryVehicleTypeKeys = Object.keys(
   territoryVehicles.allowedFuelsByType
 ) as Array<TerritoryVehicleType>;
+
+export function buildTerritoryVehicleTypeOptions(labelFunc: (key: string) => string) {
+  return territoryVehicleTypeKeys.map((vehicleType) => ({
+    value: vehicleType,
+    label: labelFunc(`vehicleTypes.${vehicleType}`),
+  }));
+}
+
+export function buildTerritoryVehicleFuelOptions({
+  rows,
+  vehicleType,
+  currentFuel,
+  labelFunc,
+}: {
+  rows: TerritoryVehicleRow[];
+  vehicleType: string;
+  currentFuel?: string;
+  labelFunc: (key: string) => string;
+}) {
+  if (!vehicleType || !territoryVehicleTypeKeys.includes(vehicleType as TerritoryVehicleType)) {
+    return [];
+  }
+
+  const typedVehicleType = vehicleType as TerritoryVehicleType;
+  const allowedFuels = territoryVehicles.allowedFuelsByType[typedVehicleType];
+  const usedFuels = new Set(
+    rows
+      .filter((row) => row?.vehicleType === typedVehicleType && row?.fuel !== currentFuel)
+      .map((row) => row?.fuel)
+      .filter(
+        (fuel): fuel is TerritoryVehicleFuel =>
+          typeof fuel === "string" && territoryVehicles.fuelKeys.includes(fuel as TerritoryVehicleFuel)
+      )
+  );
+
+  return allowedFuels
+    .filter((fuel: TerritoryVehicleFuel) => fuel === currentFuel || !usedFuels.has(fuel))
+    .map((fuel) => ({
+      value: fuel,
+      label: labelFunc(`fuels.${fuel}`),
+      unit: territoryVehicles.consumptionUnitByFuel[fuel],
+    }));
+}
+
+export function buildTerritoryVehicleRow(vehicleType: string, fuel: string) {
+  return {
+    vehicleType,
+    fuel,
+    value: {
+      vehicles: {
+        value: {},
+        unit: territoryVehicles.units.measures.vehicles[0],
+      },
+      avgConsumption: {
+        value: {},
+        unit: territoryVehicles.consumptionUnitByFuel[fuel as TerritoryVehicleFuel],
+      },
+      avgMileage: {
+        value: {},
+        unit: territoryVehicles.units.measures.avgMileage[0],
+      },
+    },
+  };
+}
+
+export function getTerritoryVehicleInsertIndex(rows: TerritoryVehicleRow[], vehicleType: string) {
+  let lastMatchingIndex = -1;
+
+  rows.forEach((row, index) => {
+    if (row?.vehicleType === vehicleType) {
+      lastMatchingIndex = index;
+    }
+  });
+
+  return lastMatchingIndex >= 0 ? lastMatchingIndex + 1 : rows.length;
+}
 
 export function buildTerritoryVehiclesSection(
   labelFunc: (key: string) => string
@@ -41,10 +117,7 @@ export function buildTerritoryVehiclesRowFields(
       label: labelFunc("fields.vehicleType"),
       type: "select",
       placeholder: labelFunc("fields.vehicleTypePlaceholder"),
-      options: territoryVehicleTypeKeys.map((vehicleType) => ({
-        value: vehicleType,
-        label: labelFunc(`vehicleTypes.${vehicleType}`),
-      })),
+      options: buildTerritoryVehicleTypeOptions(labelFunc),
     },
     {
       key: "fuel",
@@ -59,35 +132,12 @@ export function buildTerritoryVehiclesRowFields(
         const currentRow = rows[rowIndex];
         const vehicleType = currentRow?.vehicleType;
 
-        if (
-          !vehicleType ||
-          !territoryVehicleTypeKeys.includes(vehicleType as TerritoryVehicleType)
-        ) {
-          return [];
-        }
-
-        const typedVehicleType = vehicleType as TerritoryVehicleType;
-        const allowedFuels = territoryVehicles.allowedFuelsByType[typedVehicleType];
-        const usedFuels = new Set(
-          rows
-            .filter((row, index) => index !== rowIndex && row?.vehicleType === typedVehicleType)
-            .map((row) => row?.fuel)
-            .filter(
-              (fuel): fuel is TerritoryVehicleFuel =>
-                typeof fuel === "string" &&
-                territoryVehicles.fuelKeys.includes(fuel as TerritoryVehicleFuel)
-            )
-        );
-
-        const currentFuel = currentRow?.fuel;
-
-        return allowedFuels
-          .filter((fuel: TerritoryVehicleFuel) => fuel === currentFuel || !usedFuels.has(fuel))
-          .map((fuel) => ({
-            value: fuel,
-            label: labelFunc(`fuels.${fuel}`),
-            unit: territoryVehicles.consumptionUnitByFuel[fuel],
-          }));
+        return buildTerritoryVehicleFuelOptions({
+          rows,
+          vehicleType: vehicleType ?? "",
+          currentFuel: currentRow?.fuel,
+          labelFunc,
+        });
       },
     },
   ];

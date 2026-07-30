@@ -8,7 +8,7 @@ import { Trash2 } from "lucide-react";
 import { TName } from "@/components/ui/forms";
 import { InventoryTableIconButton } from "../InventoryTableHeader";
 import InventoryTableInput from "../InventoryTableInput";
-import InventoryTableSelect from "../InventoryTableSelect";
+import { InventoryTableSelectForm } from "../InventoryTableSelect";
 import { NumberInputCell, TextInputCell } from "./cells";
 import type { YearMetricsRow, YearMetricsCellRenderer, YearMetricsColumn } from "./types";
 
@@ -93,7 +93,7 @@ export function createYearMetricsColumns<T extends FieldValues>({
               ) : null}
             </div>
             {column.metaOptions ? (
-              <InventoryTableSelect
+              <InventoryTableSelectForm
                 form={form}
                 name={
                   `${String(column.metaFieldName ?? "").replace(/\.label$/, ".sector")}` as TName<T>

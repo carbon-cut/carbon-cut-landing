@@ -23,11 +23,22 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
   rowFields,
 }: GroupedYearTableProps<T> & { baseName: TName<T>; editableRows: GroupedYearEditableRows }) {
   const { years } = useInventoryContext();
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, insert, remove } = useFieldArray({
     control: form.control,
     name: baseName as ArrayPath<T>,
   });
   const rowKeyFieldName = editableRows.rowKeyFieldName ?? "key";
+  const appendRow = (row: Record<string, unknown>) => {
+    // @ts-expect-error - dynamic grouped-year row structure depends on surface config
+    append(row, { shouldFocus: true });
+  };
+  const insertRow = (index: number, row: Record<string, unknown>) => {
+    // @ts-expect-error - dynamic grouped-year row structure depends on surface config
+    insert(index, row, { shouldFocus: true });
+  };
+  const handleAddRow = () => {
+    appendRow({ [rowKeyFieldName]: "", value: {} });
+  };
 
   const tableRows = useMemo(
     () =>
@@ -57,33 +68,34 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
 
   return (
     <div className="space-y-3">
-      <InventoryTableHeader
-        title={title}
-        description={description}
-        endContent={
-          <InventoryTableActionButton
-            type="button"
-            title={editableRows?.addLabel}
-            aria-label={editableRows?.addLabel}
-            onClick={() =>
-              append(
-                // @ts-expect-error - initialize dynamic grouped-year row fields lazily
-                { [rowKeyFieldName]: "", value: {} },
-                { shouldFocus: true }
-              )
-            }
-          >
-            <Plus aria-hidden="true" />
-            {editableRows?.addLabel}
-          </InventoryTableActionButton>
-        }
-      />
+      <InventoryTableHeader title={title} description={description} />
       <InventoryTanstackTable
         rows={tableRows}
         columns={columns}
         getRowId={(row) => row.key}
         stickyColumnIds={rowFields?.[0] ? [rowFields[0].key] : []}
       />
+      <div className="flex items-center justify-between gap-3 rounded-b-xl bg-surface-warm/60 p-3">
+        <div className="min-w-0 flex-1">
+          {editableRows.renderFooterContent?.({
+            rowKeyFieldName,
+            rows: fields,
+            appendRow,
+            insertRow,
+          })}
+        </div>
+        {editableRows.showAddButton !== false ? (
+          <InventoryTableActionButton
+            type="button"
+            title={editableRows.addLabel}
+            aria-label={editableRows.addLabel}
+            onClick={handleAddRow}
+          >
+            <Plus aria-hidden="true" />
+            {editableRows.addLabel}
+          </InventoryTableActionButton>
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useWatch, type FieldValues } from "react-hook-form";
 
 import { TName } from "@/components/ui/forms";
 import InventoryTableInput from "../InventoryTableInput";
-import InventoryTableSelect from "../InventoryTableSelect";
+import { InventoryTableSelectForm } from "../InventoryTableSelect";
 import type { MatrixRowField, MatrixYearCellRendererArgs, MatrixTableRow } from "./types";
 import { useEffect, useState } from "react";
 import type { Row } from "@tanstack/react-table";
@@ -60,7 +60,7 @@ export function renderMatrixRowSelectCell<T extends FieldValues>({
     `${baseName}.${editableRows ? `${row.index}.value` : row.original.key}.unit` as TName<T>;
 
   return (
-    <InventoryTableSelect
+    <InventoryTableSelectForm
       form={form}
       name={fieldName}
       ariaLabel={field.label}
