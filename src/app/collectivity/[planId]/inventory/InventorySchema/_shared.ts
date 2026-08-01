@@ -72,9 +72,13 @@ export const constructUnit = (input: NonEmptyStringArray) => {
   return z.preprocess(normalizeUnitValue(input), z.enum(input));
 };
 
-export function createScalarValueSchema(unit: NonEmptyStringArray, optional: boolean = false) {
+export function createScalarValueSchema(
+  unit: NonEmptyStringArray,
+  optional: boolean = false,
+  value?: z.ZodTypeAny
+) {
   return z.object({
-    value: optional ? numberSchema.optional() : numberSchema,
+    value: value ? value : optional ? numberSchema.optional() : numberSchema,
     unit: constructUnit(unit),
   });
 }
@@ -184,6 +188,38 @@ export function createRecordGridSchema<RowFields extends ZodRawShape = Record<st
   );
 }
 
+export function createRecordGridSchemaByOptionalKeys<
+  RowFields extends ZodRawShape = Record<string, never>,
+>(
+  keys: readonly [string, ...string[]],
+  nestedKeys: ZodString | ZodEnum<[string, ...string[]]>,
+  GridSchemaOptions: RecordGridSchemaOptions,
+  optionalKeys: readonly string[],
+  rowFields?: RowFields,
+  rowKeyFieldName: string = "key"
+) {
+  const { unit, unitsByKeys } = GridSchemaOptions;
+  const optionalKeySet = new Set(optionalKeys);
+
+  return z.array(
+    z.object({
+      [rowKeyFieldName]: nestedKeys,
+      ...(rowFields ?? {}),
+      value: z.object(
+        Object.fromEntries(
+          keys.map((key) => [
+            key,
+            z.object({
+              value: optionalKeySet.has(key) ? numberByYearOptionalSchema : numberByYearSchema,
+              unit: constructUnit(unit ?? unitsByKeys?.[key]),
+            }),
+          ])
+        )
+      ),
+    } as Record<string, ZodTypeAny>)
+  );
+}
+
 function createRecordMatrix(
   keys: ZodString | ZodEnum<[string, ...string[]]>,
   MatrixSchemaOptions: MatrixSchemaOptions,
@@ -248,6 +284,15 @@ export function createMatrixSchema(
         }),
       ])
     )
+  );
+}
+
+export function createFixedKeyRecordSchema<ValueShape extends ZodRawShape>(
+  keys: readonly string[],
+  valueShape: ValueShape
+) {
+  return z.object(
+    Object.fromEntries(keys.map((key) => [key, z.object(valueShape)])) as Record<string, ZodTypeAny>
   );
 }
 

@@ -26,6 +26,7 @@ export function createTableGridColumns<T extends FieldValues>({
   columns,
   form,
   baseName,
+  renderCell,
   selectedYear,
   editableRows,
 }: CreateTableGridColumnsArgs<T>) {
@@ -43,8 +44,19 @@ export function createTableGridColumns<T extends FieldValues>({
         className: column.className,
       },
       cell: ({ row }: CellContext<TableGridRow, unknown>) => {
-        const renderCell = column.type === "text" ? TextInputCell : NumberInputCell;
-        return renderCell({
+        if (renderCell) {
+          return renderCell({
+            form,
+            baseName,
+            row,
+            column,
+            name: baseName,
+            selectedYear,
+          });
+        }
+
+        const defaultCellRenderer = column.type === "text" ? TextInputCell : NumberInputCell;
+        return defaultCellRenderer({
           form,
           baseName,
           row: row,

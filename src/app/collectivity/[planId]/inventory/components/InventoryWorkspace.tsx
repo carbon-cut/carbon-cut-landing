@@ -12,10 +12,9 @@ import { useScopedI18n } from "@/locales/client";
 import InventoryDatasetNav from "./InventoryDatasetNav";
 import InventoryDomainNav from "./InventoryDomainNav";
 import PlaceholderSurface from "./PlaceholderSurface";
-import AgriculturalProductionSurface from "../datasets/afat/agricultural-production/surface";
 import FertilizersSurface from "../datasets/afat/fertilizers/surface";
 import LivestockSurface from "../datasets/afat/livestock/surface";
-import PerennialPlantationStockSurface from "../datasets/afat/perennial-plantation-stock/surface";
+import TreesSurface from "../datasets/afat/trees/surface";
 import ElectricitySurface from "../datasets/energy/electricity/surface";
 import NaturalGasSurface from "../datasets/energy/natural-gas/surface";
 import BuildingsSurface from "../datasets/municipal/buildings/surface";
@@ -207,14 +206,12 @@ function renderDatasetSurface(
       return <AirTransportSurface />;
     case "territoryVehicles":
       return <TerritoryVehiclesSurface />;
-    case "perennialPlantationStock":
-      return <PerennialPlantationStockSurface />;
+    case "trees":
+      return <TreesSurface />;
     case "livestock":
       return <LivestockSurface />;
     case "fertilizers":
       return <FertilizersSurface />;
-    case "agriculturalProduction":
-      return <AgriculturalProductionSurface />;
     case "placeholder":
       return <PlaceholderSurface hints={hints} dataset={dataset} />;
     default:

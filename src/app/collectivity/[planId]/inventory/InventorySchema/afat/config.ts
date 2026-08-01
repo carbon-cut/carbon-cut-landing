@@ -4,23 +4,23 @@ type UnitConf = {
   };
 };
 
-const perennialPlantationMetricKeys = [
+const trackedTreeCropMetricKeys = [
   "youngHectares",
   "adultHectares",
-  "oldHectares",
+  "senescentHectares",
   "youngTrees",
   "adultTrees",
-  "oldTrees",
+  "senescentTrees",
 ] as const;
 
-const perennialPlantationUnits: UnitConf = {
+const trackedTreeCropUnits: UnitConf = {
   metrics: {
     youngHectares: ["ha"],
     adultHectares: ["ha"],
-    oldHectares: ["ha"],
+    senescentHectares: ["ha"],
     youngTrees: [""],
     adultTrees: [""],
-    oldTrees: [""],
+    senescentTrees: [""],
   },
 } as const;
 
@@ -43,27 +43,19 @@ const perennialPlantationPlantOptions = [
   "nutsAndOthers",
 ] as const;
 
-export const perennialPlantationStock = {
-  metricKeys: perennialPlantationMetricKeys,
-  plantOptions: perennialPlantationPlantOptions,
-  units: perennialPlantationUnits,
+export const trees = {
+  trackedTreeCropOptions: perennialPlantationPlantOptions,
+  trackedTreeCropMetricKeys: trackedTreeCropMetricKeys,
+  trackedTreeCropOptionalMetricKeys: [
+    "youngHectares",
+    "adultHectares",
+    "senescentHectares",
+  ] as const,
+  units: trackedTreeCropUnits,
 };
 
-const livestockRowKeys = [
-  "dairyCattle",
-  "otherCattle",
-  "sheep",
-  "goats",
-  "horses",
-  "donkeysMules",
-  "camels",
-  "broilers",
-  "layingHens",
-  "turkeys",
-] as const;
-
 const livestockUnits: UnitConf = {
-  headcount: {
+  count: {
     default: [""],
   },
   confinedTimeShare: {
@@ -72,18 +64,22 @@ const livestockUnits: UnitConf = {
 } as const;
 
 export const livestock = {
-  rowKeys: livestockRowKeys,
   units: livestockUnits,
 };
 
-const fertilizerCommonRowKeys = ["ammonitrate", "dap", "compost", "sewageSludge"] as const;
+const fertilizerKeys = ["ammonitrate", "dap", "urea"] as const;
 
-const fertilizersUnits = {
-  default: ["t"] as [string],
-};
+const fertilizersUnits: UnitConf = {
+  quantity: {
+    default: ["t"],
+  },
+  tenure: {
+    default: ["%"],
+  },
+} as const;
 
 export const fertilizers = {
-  commonRowKeys: fertilizerCommonRowKeys,
+  keys: fertilizerKeys,
   units: fertilizersUnits,
 };
 

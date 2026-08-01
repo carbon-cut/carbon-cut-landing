@@ -41,7 +41,9 @@ function InventoryTableSelectForm<T extends FieldValues>({
               data-state={fieldState.error && "error"}
               className={cn(
                 `text-sm font-medium ${
-                  selectProps.disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""
+                  selectProps.disabled
+                    ? "text-muted-foreground data-[state=error]:text-destructive/60"
+                    : ""
                 }`,
                 selectProps.preserveDisabledAppearance && selectProps.disabled
                   ? "text-foreground data-[state=error]:text-destructive"

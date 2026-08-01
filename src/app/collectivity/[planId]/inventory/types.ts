@@ -21,10 +21,9 @@ export type InventoryNavIconKey =
   | "publicTransport"
   | "airTransport"
   | "territoryVehicles"
-  | "perennialPlantationStock"
+  | "trees"
   | "livestock"
-  | "fertilizers"
-  | "agriculturalProduction";
+  | "fertilizers";
 
 export type InventoryFamily = {
   key: string;
@@ -46,10 +45,9 @@ export const inventoryDatasetSurfaceKindValues = [
   "publicTransport",
   "airTransport",
   "territoryVehicles",
-  "perennialPlantationStock",
+  "trees",
   "livestock",
   "fertilizers",
-  "agriculturalProduction",
   "placeholder",
 ] as const;
 

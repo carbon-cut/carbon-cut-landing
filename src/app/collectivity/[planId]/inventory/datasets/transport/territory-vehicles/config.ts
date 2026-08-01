@@ -46,7 +46,8 @@ export function buildTerritoryVehicleFuelOptions({
       .map((row) => row?.fuel)
       .filter(
         (fuel): fuel is TerritoryVehicleFuel =>
-          typeof fuel === "string" && territoryVehicles.fuelKeys.includes(fuel as TerritoryVehicleFuel)
+          typeof fuel === "string" &&
+          territoryVehicles.fuelKeys.includes(fuel as TerritoryVehicleFuel)
       )
   );
 

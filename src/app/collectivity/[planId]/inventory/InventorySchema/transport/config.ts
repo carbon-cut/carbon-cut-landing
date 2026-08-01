@@ -52,7 +52,7 @@ const territoryVehicleMeasureKeys = ["vehicles", "avgConsumption", "avgMileage"]
 const territoryVehicleConsumptionUnitByFuel = {
   diesel: "L/100km",
   petrol: "L/100km",
-  gpl: "L/100km",
+  gpl: "kg/100km",
   gnv: "Nm3/100km",
   electricity: "kWh/100km",
 } as const;
@@ -126,7 +126,7 @@ const airTransportUnits: UnitConf = {
 const territoryVehicleUnits: UnitConf = {
   measures: {
     vehicles: [""],
-    avgConsumption: ["L/100km", "kWh/100km", "Nm3/100km"],
+    avgConsumption: ["L/100km", "kg/100km", "kWh/100km", "Nm3/100km"],
     avgMileage: ["km/year"],
   },
 } as const;

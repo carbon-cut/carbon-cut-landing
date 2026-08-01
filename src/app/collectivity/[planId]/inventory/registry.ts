@@ -132,44 +132,33 @@ const datasetOverrides: Record<
     implementationNote:
       "Le panneau utilise des lignes repetables type vehicule / carburant avec mesures annuelles.",
   },
-  "perennial-plantation-stock": {
-    surfaceKind: "perennialPlantationStock",
+  trees: {
+    surfaceKind: "trees",
     status: "Structure initiale",
     description:
-      "Jeu AFAT de stock de plantations perennes avec lignes annuelles et double lecture hectares / arbres.",
-    sourceMode: "Source-native: un tableau de stock plantation peut couvrir plusieurs annees.",
-    yearMode: "Year-native: chaque groupe de plantation garde ses valeurs annuelles.",
+      "Jeu AFAT arbres avec cultures suivies en detail et ligne agregée arbres fruitiers.",
+    sourceMode: "Source-native: les sources arbres peuvent couvrir plusieurs annees.",
+    yearMode: "Year-native: les surfaces et nombres d'arbres restent annuels.",
     implementationNote:
-      "Le panneau propose des types de plantation selectionnables avec saisie libre et lignes ajoutables.",
+      "Le panneau combine des lignes repetables pour les cultures suivies et un bloc annuel pour les arbres fruitiers.",
   },
   livestock: {
     surfaceKind: "livestock",
     status: "Structure initiale",
-    description: "Jeu AFAT cheptel avec volumes par annee et parametre de temps en etable.",
+    description: "Jeu AFAT cheptel avec effectifs annuels et part de temps en espace confine.",
     sourceMode: "Source-native: un tableau cheptel peut couvrir plusieurs annees.",
-    yearMode: "Year-native: les effectifs restent annuels.",
+    yearMode: "Year-native: les effectifs restent annuels et la part confinee reste scalaire.",
     implementationNote:
-      "Le premier panneau garde la colonne additionnelle de temps annuel en espace confine.",
+      "Le panneau garde les effectifs par annee et la part confinee par type d'animal.",
   },
   fertilizers: {
     surfaceKind: "fertilizers",
     status: "Structure initiale",
-    description:
-      "Jeu AFAT engrais et amendements avec lignes fixes et intrants locaux additionnels.",
+    description: "Jeu AFAT engrais avec trois intrants fixes, tonnage annuel et tenure.",
     sourceMode: "Source-native: un tableau engrais peut couvrir plusieurs annees.",
-    yearMode: "Year-native: les tonnages restent annuels.",
+    yearMode: "Year-native: les tonnages restent annuels et la tenure reste scalaire.",
     implementationNote:
-      "Le premier panneau garde les lignes fixes du rapport avec un exemple d'intrant local supplementaire.",
-  },
-  "agricultural-production": {
-    surfaceKind: "agriculturalProduction",
-    status: "Structure initiale",
-    description:
-      "Jeu AFAT production agricole avec doubles tableaux surface recoltee / production.",
-    sourceMode: "Source-native: un tableau production peut couvrir plusieurs annees.",
-    yearMode: "Year-native: surfaces et volumes restent annuels.",
-    implementationNote:
-      "Le premier panneau garde les cultures exemples du rapport et les deux sous-tableaux.",
+      "Le panneau garde les trois intrants fixes et couple tonnage annuel avec tenure.",
   },
   sanitation: {
     surfaceKind: "placeholder",
@@ -212,18 +201,13 @@ const datasetNavOverrides: Record<
   },
   "air-transport": { navIcon: "airTransport", navStatusLabel: "À faire", progressLabel: "0%" },
   transport: { navIcon: "territoryVehicles", navStatusLabel: "À faire", progressLabel: "0%" },
-  "perennial-plantation-stock": {
-    navIcon: "perennialPlantationStock",
+  trees: {
+    navIcon: "trees",
     navStatusLabel: "À faire",
     progressLabel: "0%",
   },
   livestock: { navIcon: "livestock", navStatusLabel: "À faire", progressLabel: "0%" },
   fertilizers: { navIcon: "fertilizers", navStatusLabel: "À faire", progressLabel: "0%" },
-  "agricultural-production": {
-    navIcon: "agriculturalProduction",
-    navStatusLabel: "À faire",
-    progressLabel: "0%",
-  },
   sanitation: { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
   "sanitation-continuation": { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
   "sanitation-ch4": { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
@@ -235,12 +219,7 @@ const retiredDatasetKeys = new Set(["photovoltaic", "solar-water-heating"]);
 const applicabilityDatasetKeys: Record<keyof CollectivitySetupApplicability, readonly string[]> = {
   airport: ["air-transport"],
   port: ["port"],
-  agriculture: [
-    "perennial-plantation-stock",
-    "livestock",
-    "fertilizers",
-    "agricultural-production",
-  ],
+  agriculture: [],
 };
 
 function buildInventoryRegistryWithApplicability(

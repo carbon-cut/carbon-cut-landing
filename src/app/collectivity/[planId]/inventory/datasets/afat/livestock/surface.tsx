@@ -1,30 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 
 import MatrixTable from "@/components/table/matrix";
+import ScalarTable from "@/components/table/scalar";
 import { useScopedI18n } from "@/locales/client";
 import { useInventoryContext } from "../../../context/inventory-context";
-import { buildLivestockRows } from "./config";
+import { buildLivestockConfinedTimeShareFields, buildLivestockRows } from "./config";
 
 export default function LivestockSurface() {
-  const { mainForm } = useInventoryContext();
+  const { years, mainForm } = useInventoryContext();
   const tLivestock = useScopedI18n(
     "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.livestock"
   );
 
-  const rows = useState(() => buildLivestockRows(tLivestock))[0];
+  const rows = useMemo(() => buildLivestockRows(tLivestock), [tLivestock]);
+  const confinedTimeShareFields = useMemo(
+    () => buildLivestockConfinedTimeShareFields(tLivestock),
+    [tLivestock]
+  );
 
   return (
     <div className="space-y-6">
       <MatrixTable
-        title={tLivestock("title") as string}
+        title={tLivestock("title")}
         rows={rows}
         form={mainForm}
-        baseName={"afat.livestock.dataSet.headcount"}
+        baseName="afat.livestock.dataSet.count"
+        years={years}
       />
-
-      {/* TODO: develop the species-dependent confined-time-share (%) block. */}
+      <div className="w-1/3">
+        <ScalarTable
+          title={tLivestock("columns.confinedTimeShare")}
+          help={tLivestock("confinedTimeShareHelp")}
+          form={mainForm}
+          fields={confinedTimeShareFields}
+        />
+      </div>
     </div>
   );
 }

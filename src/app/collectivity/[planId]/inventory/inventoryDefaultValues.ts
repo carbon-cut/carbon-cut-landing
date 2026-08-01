@@ -24,10 +24,18 @@ export function buildInventoryDefaultValues(inventoryInput?: Record<string, unkn
       territoryVehicles: {},
     },
     afat: {
-      perennialPlantationStock: {},
+      trees: {
+        trackedTreeCrops: {
+          dataSet: {},
+        },
+        fruitTrees: {
+          dataSet: {
+            count: {},
+          },
+        },
+      },
       livestock: {},
       fertilizers: {},
-      agriculturalProduction: {},
     },
     wastewaterSanitation: {},
     waste: {},
@@ -65,6 +73,30 @@ export function buildInventoryDefaultValues(inventoryInput?: Record<string, unkn
     afat: {
       ...defaults.afat,
       ...getRecord(input.afat),
+      trees: {
+        ...getRecord(getRecord(defaults.afat).trees),
+        ...getRecord(getRecord(input.afat).trees),
+        trackedTreeCrops: {
+          ...getRecord(getRecord(getRecord(defaults.afat).trees).trackedTreeCrops),
+          ...getRecord(getRecord(getRecord(input.afat).trees).trackedTreeCrops),
+          dataSet: {
+            ...getRecord(
+              getRecord(getRecord(getRecord(defaults.afat).trees).trackedTreeCrops).dataSet
+            ),
+            ...getRecord(
+              getRecord(getRecord(getRecord(input.afat).trees).trackedTreeCrops).dataSet
+            ),
+          },
+        },
+        fruitTrees: {
+          ...getRecord(getRecord(getRecord(defaults.afat).trees).fruitTrees),
+          ...getRecord(getRecord(getRecord(input.afat).trees).fruitTrees),
+          dataSet: {
+            ...getRecord(getRecord(getRecord(getRecord(defaults.afat).trees).fruitTrees).dataSet),
+            ...getRecord(getRecord(getRecord(getRecord(input.afat).trees).fruitTrees).dataSet),
+          },
+        },
+      },
     },
     wastewaterSanitation: {
       ...defaults.wastewaterSanitation,

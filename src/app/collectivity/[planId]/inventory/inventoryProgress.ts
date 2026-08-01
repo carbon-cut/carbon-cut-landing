@@ -1,4 +1,5 @@
-import { columns as perennialPlantationColumns } from "./datasets/afat/perennial-plantation-stock/config";
+import { buildLivestockRows } from "./datasets/afat/livestock/config";
+import { buildFertilizerRows } from "./datasets/afat/fertilizers/config";
 import { buildPublicTransportFutureYears } from "./datasets/transport/public-transport/config";
 import {
   airTransport,
@@ -30,9 +31,8 @@ type ProgressCalculator = (
 
 const yearKeyPattern = /^y-\d{4}$/;
 const publicTransportFutureYearCount = buildPublicTransportFutureYears().length;
-const perennialPlantationInputColumnCount = perennialPlantationColumns.filter(
-  (column) => !("calculatedFrom" in column)
-).length;
+const livestockRowCount = buildLivestockRows((key) => key).length;
+const fertilizerRowCount = buildFertilizerRows((key) => key).length;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -317,14 +317,68 @@ function computePublicTransportProgress(
   return createProgress(completed, total);
 }
 
-function computePerennialPlantationProgress(
+function computeTreesProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
 ) {
-  const rows = values?.afat?.perennialPlantationStock?.rows ?? [];
-  const total = rows.length * perennialPlantationInputColumnCount * years.length;
+  const rows = Array.isArray(values?.afat?.trees?.trackedTreeCrops?.dataSet)
+    ? values.afat.trees.trackedTreeCrops.dataSet
+    : [];
+  const trackedTotal = rows.length * (1 + years.length * 3);
+  const trackedCompleted =
+    rows.reduce(
+      (sum, row) =>
+        sum +
+        countFilledField(isRecord(row) ? (row as Record<string, unknown>).treeType : undefined),
+      0
+    ) +
+    rows.reduce((sum, row) => {
+      if (!isRecord(row) || !isRecord(row.value)) return sum;
+      return (
+        sum +
+        countFilledYearValues((row.value as Record<string, unknown>).youngTrees) +
+        countFilledYearValues((row.value as Record<string, unknown>).adultTrees) +
+        countFilledYearValues((row.value as Record<string, unknown>).senescentTrees)
+      );
+    }, 0);
+  const fruitTotal = years.length;
+  const fruitCompleted = countFilledYearValues(
+    values?.afat?.trees?.fruitTrees?.dataSet?.count?.value
+  );
 
-  return createProgress(countFilledYearValues(rows), total);
+  return createProgress(trackedCompleted + fruitCompleted, trackedTotal + fruitTotal);
+}
+
+function computeLivestockProgress(
+  values: Partial<InventoryFormValues> | undefined,
+  years: readonly InventoryYear[]
+) {
+  const total = livestockRowCount * (years.length + 1);
+  const completed =
+    countFilledYearValues(values?.afat?.livestock?.dataSet?.count) +
+    Object.values(values?.afat?.livestock?.dataSet?.confinedTimeShare ?? {}).reduce(
+      (sum, item) => sum + countFilledField(isRecord(item) ? item.value : undefined),
+      0
+    );
+
+  return createProgress(completed, total);
+}
+
+function computeFertilizersProgress(
+  values: Partial<InventoryFormValues> | undefined,
+  years: readonly InventoryYear[]
+) {
+  const total = fertilizerRowCount * (years.length + 1);
+  const completed =
+    countFilledYearValues(values?.afat?.fertilizers?.dataSet) +
+    Object.values(values?.afat?.fertilizers?.dataSet ?? {}).reduce(
+      (sum, item) =>
+        sum +
+        countFilledField(isRecord(item) && isRecord(item.tenure) ? item.tenure.value : undefined),
+      0
+    );
+
+  return createProgress(completed, total);
 }
 
 const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
@@ -338,7 +392,9 @@ const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
   "public-transport": computePublicTransportProgress,
   "air-transport": computeAirTransportProgress,
   transport: computeTerritoryVehiclesProgress,
-  "perennial-plantation-stock": computePerennialPlantationProgress,
+  trees: computeTreesProgress,
+  livestock: computeLivestockProgress,
+  fertilizers: computeFertilizersProgress,
 };
 
 export function getInventoryDatasetProgress(

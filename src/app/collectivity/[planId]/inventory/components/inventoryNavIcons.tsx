@@ -44,10 +44,8 @@ const iconMap: Record<InventoryNavIconKey, LucideIcon> = {
   publicTransport: Bus,
   airTransport: Plane,
   territoryVehicles: Car,
-  perennialPlantationStock: TreePine,
   livestock: Leaf,
   fertilizers: FlaskConical,
-  agriculturalProduction: Wheat,
 };
 
 export function getInventoryNavIcon(iconKey: InventoryNavIconKey): LucideIcon {
