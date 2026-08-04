@@ -683,6 +683,12 @@ export default {
               "Gérer la collecte, les années couvertes et les résultats d'inventaire dans un même espace de travail.",
             status: "Actif",
           },
+          result: {
+            title: "Résultat",
+            description:
+              "Lire les sorties calculées de l'inventaire et vérifier les valeurs retournées par le backend.",
+            status: "Lecture",
+          },
           scenarios: {
             title: "Scénarios",
             description:
@@ -995,6 +1001,8 @@ export default {
         },
         saveSuccess: "Le brouillon d'inventaire a été enregistré.",
         saveError: "Impossible d'enregistrer le brouillon d'inventaire pour le moment.",
+        submitError: "Impossible de soumettre l'inventaire pour le moment.",
+        submitValidationError: "Certaines données ne sont pas prêtes pour le calcul.",
         validationError: "Corrigez les erreurs du formulaire avant d'enregistrer.",
         debugCalculation: {
           action: "Calcul debug",
@@ -3587,6 +3595,7 @@ export default {
     submit: "Résultat",
     errors: {
       Required: "Obligatoire",
+      between0And100: "Valeur entre 0 et 100",
       collectivityCountryInvalid: "Choisissez un pays valide.",
       collectivityProjectSlugInvalid:
         "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",

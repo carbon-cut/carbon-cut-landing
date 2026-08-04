@@ -308,13 +308,17 @@ export default function InventoryWorkspace({
   workspace,
   surfaces,
   isSaving,
+  isSubmitting,
   onSaveDraft,
+  onSubmitInventory,
   projectSlug,
 }: {
   workspace: InventoryWorkspaceConfig;
   surfaces: InventorySurfaceCopy;
   isSaving: boolean;
+  isSubmitting: boolean;
   onSaveDraft: () => void;
+  onSubmitInventory: () => void;
   projectSlug: string;
 }) {
   const { mainForm, years } = useInventoryContext();
@@ -574,13 +578,19 @@ export default function InventoryWorkspace({
               variant="outline"
               size="sm"
               className="h-8 rounded-md px-4 shadow-none"
-              disabled={isSaving}
+              disabled={isSaving || isSubmitting}
               onClick={onSaveDraft}
             >
               <Save aria-hidden="true" />
               {t("actions.save") as string}
             </Button>
-            <Button type="button" size="sm" className="h-8 rounded-md px-4" disabled={isSaving}>
+            <Button
+              type="button"
+              size="sm"
+              className="h-8 rounded-md px-4"
+              disabled={isSaving || isSubmitting}
+              onClick={onSubmitInventory}
+            >
               <CloudUpload aria-hidden="true" />
               {t("actions.submitData") as string}
             </Button>

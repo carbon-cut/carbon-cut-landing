@@ -6,6 +6,7 @@ import type { AuthErrorPayload } from "@/lib/auth/types";
 
 const {
   mockPush,
+  mockReplace,
   mockSearchParamsGet,
   mockPostAuth,
   mockGetErrorCode,
@@ -13,7 +14,8 @@ const {
   mockRefetchSession,
 } = vi.hoisted(() => ({
   mockPush: vi.fn(),
-  mockSearchParamsGet: vi.fn((key: string) => {
+  mockReplace: vi.fn(),
+  mockSearchParamsGet: vi.fn((key: string): string | null => {
     if (key === "email") return "pending@example.com";
     if (key === "returnTo") return "/form";
     return null;
@@ -39,6 +41,7 @@ vi.mock("@/app/auth/_components/auth-brand", () => ({
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
+    replace: mockReplace,
   }),
   useSearchParams: () => ({
     get: mockSearchParamsGet,
@@ -75,6 +78,7 @@ function authError(code: string, message = "error"): AuthErrorPayload {
 describe("auth pages", () => {
   beforeEach(() => {
     mockPush.mockReset();
+    mockReplace.mockReset();
     mockSearchParamsGet.mockReset();
     mockSearchParamsGet.mockImplementation((key: string) => {
       if (key === "email") return "pending@example.com";
@@ -165,7 +169,7 @@ describe("auth pages", () => {
     fireEvent.click(screen.getByRole("button", { name: "Connexion" }));
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith(
+      expect(mockReplace).toHaveBeenCalledWith(
         "/auth/confirmation-required?email=pending%40example.com&returnTo=%2Fform"
       );
     });
@@ -218,7 +222,7 @@ describe("auth pages", () => {
     fireEvent.click(screen.getByRole("button", { name: "Créer un compte" }));
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith(
+      expect(mockReplace).toHaveBeenCalledWith(
         "/auth/confirmation-required?email=collectivity-user%40example.com&returnTo=%2Fcollectivity%2Fstart"
       );
     });

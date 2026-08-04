@@ -19,8 +19,8 @@ export function buildFertilizerTenureFields(
   return fertilizers.keys.map((key) => ({
     key,
     label: labelFunc(`rows.${key}`),
-    valueName: `afat.fertilizers.dataSet.${key}.tenure.value`,
-    unitName: `afat.fertilizers.dataSet.${key}.tenure.unit`,
+    valueName: `afat.fertilizers.dataSet.tenure.${key}.value`,
+    unitName: `afat.fertilizers.dataSet.tenure.${key}.unit`,
     unit: "%",
   }));
 }

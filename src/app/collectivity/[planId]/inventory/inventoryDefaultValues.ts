@@ -26,7 +26,7 @@ export function buildInventoryDefaultValues(inventoryInput?: Record<string, unkn
     afat: {
       trees: {
         trackedTreeCrops: {
-          dataSet: {},
+          dataSet: [],
         },
         fruitTrees: {
           dataSet: {
@@ -79,14 +79,11 @@ export function buildInventoryDefaultValues(inventoryInput?: Record<string, unkn
         trackedTreeCrops: {
           ...getRecord(getRecord(getRecord(defaults.afat).trees).trackedTreeCrops),
           ...getRecord(getRecord(getRecord(input.afat).trees).trackedTreeCrops),
-          dataSet: {
-            ...getRecord(
-              getRecord(getRecord(getRecord(defaults.afat).trees).trackedTreeCrops).dataSet
-            ),
-            ...getRecord(
-              getRecord(getRecord(getRecord(input.afat).trees).trackedTreeCrops).dataSet
-            ),
-          },
+          dataSet: Array.isArray(
+            getRecord(getRecord(getRecord(input.afat).trees).trackedTreeCrops).dataSet
+          )
+            ? getRecord(getRecord(getRecord(input.afat).trees).trackedTreeCrops).dataSet
+            : [],
         },
         fruitTrees: {
           ...getRecord(getRecord(getRecord(defaults.afat).trees).fruitTrees),

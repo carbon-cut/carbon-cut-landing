@@ -1,8 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-
-import InventoryTableInput from "@/components/table/InventoryTableInput";
 import MatrixTable from "@/components/table/matrix";
 import ScalarTable from "@/components/table/scalar";
 import { useScopedI18n } from "@/locales/client";
@@ -24,16 +22,8 @@ export default function FertilizersSurface() {
         title={tFertilizers("title")}
         rows={rows}
         form={mainForm}
-        baseName="afat.fertilizers.dataSet"
+        baseName="afat.fertilizers.dataSet.quantity"
         years={years}
-        renderYearCell={({ form, row, year }) => (
-          <InventoryTableInput
-            form={form}
-            name={`afat.fertilizers.dataSet.${row.original.key}.quantity.value.y-${year}` as any}
-            type="number"
-            unitAdornment="t"
-          />
-        )}
       />
       <div className="w-1/3">
         <ScalarTable title={tFertilizers("columns.tenure")} form={mainForm} fields={tenureFields} />

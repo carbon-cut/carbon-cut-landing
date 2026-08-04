@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ClipboardList,
+  ChartColumn,
   FileSpreadsheet,
   SlidersHorizontal,
   Target,
@@ -43,6 +44,7 @@ const routeDefinitions: Array<{
 }> = [
   { key: "setup", icon: SlidersHorizontal },
   { key: "inventory", icon: FileSpreadsheet },
+  { key: "result", icon: ChartColumn },
   { key: "scenarios", icon: Target },
   { key: "actions", icon: ClipboardList },
 ];

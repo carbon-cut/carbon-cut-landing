@@ -1,42 +1,17 @@
 import { NextResponse } from "next/server";
 
 import {
-  debugCalculateCollectivityDataset,
+  calculateCollectivityInventory,
   CollectivityBackendError,
 } from "@/lib/collectivity/backend";
 import { getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
 import { getServerSession } from "@/lib/auth/session";
-
-const calculationDatasetKeys = [
-  "fleet",
-  "publicLighting",
-  "buildings",
-  "treesParksWaste",
-  "electricity",
-  "photovoltaic",
-  "naturalGas",
-  "solarWaterHeating",
-  "publicTransport",
-  "airTransport",
-  "port",
-  "territoryVehicles",
-  "trees",
-  "livestock",
-  "fertilizers",
-] as const;
 
 type RouteContext = {
   params: Promise<{
     projectSlug: string;
   }>;
 };
-
-function isCalculationDatasetKey(value: unknown): value is (typeof calculationDatasetKeys)[number] {
-  return (
-    typeof value === "string" &&
-    calculationDatasetKeys.includes(value as (typeof calculationDatasetKeys)[number])
-  );
-}
 
 export async function POST(request: Request, context: RouteContext) {
   const { projectSlug } = await context.params;
@@ -79,12 +54,10 @@ export async function POST(request: Request, context: RouteContext) {
   }
 
   const body = (await request.json()) as {
-    datasetKey?: unknown;
     inventoryInput?: unknown;
   };
 
   if (
-    !isCalculationDatasetKey(body.datasetKey) ||
     !body.inventoryInput ||
     typeof body.inventoryInput !== "object" ||
     Array.isArray(body.inventoryInput)
@@ -93,7 +66,7 @@ export async function POST(request: Request, context: RouteContext) {
       {
         error: {
           status: 400,
-          message: "Invalid debug calculation payload",
+          message: "Invalid collectivity inventory calculation payload",
         },
       },
       { status: 400 }
@@ -101,20 +74,26 @@ export async function POST(request: Request, context: RouteContext) {
   }
 
   try {
-    const datasetKey = body.datasetKey;
-    const inventoryInput = body.inventoryInput as Record<string, unknown>;
-    const result = await debugCalculateCollectivityDataset({
+    const result = await calculateCollectivityInventory(
       projectSlug,
-      datasetKey,
-      inventoryInput,
-    });
+      body.inventoryInput as Record<string, unknown>
+    );
 
-    return NextResponse.json({ data: result });
+    return NextResponse.json(result);
   } catch (error) {
     if (error instanceof CollectivityBackendError) {
       return NextResponse.json(error.body, { status: error.status });
     }
 
-    throw error;
+    console.error("collectivityCalculateProxyError", error);
+    return NextResponse.json(
+      {
+        error: {
+          status: 500,
+          message: error instanceof Error ? error.message : "Collectivity calculate proxy failed",
+        },
+      },
+      { status: 500 }
+    );
   }
 }

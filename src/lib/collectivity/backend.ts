@@ -41,6 +41,10 @@ type SaveInventoryInputResponse = {
   data: CollectivitySetupSnapshot;
 };
 
+type CalculateInventoryResponse = Record<string, unknown>;
+
+type CurrentInventoryResultResponse = Record<string, unknown>;
+
 type DebugCalculationResponse = {
   data: {
     datasetKey: string;
@@ -93,7 +97,19 @@ async function parseJson<T>(response: Response) {
     return null as T;
   }
 
-  return JSON.parse(text) as T;
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new CollectivityBackendError(response.status || 502, {
+      error: {
+        status: response.status || 502,
+        message: "Collectivity backend returned a non-JSON response",
+        details: {
+          body: text.slice(0, 500),
+        },
+      },
+    });
+  }
 }
 
 async function requestCollectivity<T>(path: string, init?: RequestInit) {
@@ -235,6 +251,51 @@ export async function saveCollectivityInventoryInput(
   );
 
   return response.data;
+}
+
+export async function calculateCollectivityInventory(
+  projectSlug: string,
+  inventoryInput: Record<string, unknown>
+): Promise<CalculateInventoryResponse> {
+  if (isMockBackendEnabled()) {
+    throw new CollectivityBackendError(501, {
+      error: {
+        status: 501,
+        message: "Collectivity inventory calculation endpoint not implemented",
+      },
+    });
+  }
+
+  const path = `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/calculate`;
+  console.log("collectivityCalculateForward", `${getCollectivityBaseUrl()}${path}`);
+
+  return requestCollectivity<CalculateInventoryResponse>(
+    path,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        inventoryInput,
+      }),
+    }
+  );
+}
+
+export async function getCollectivityInventoryResult(
+  projectSlug: string
+): Promise<CurrentInventoryResultResponse> {
+  if (isMockBackendEnabled()) {
+    throw new CollectivityBackendError(501, {
+      error: {
+        status: 501,
+        message: "Collectivity inventory result endpoint not implemented",
+      },
+    });
+  }
+
+  const path = `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/result`;
+  console.log("collectivityResultForward", `${getCollectivityBaseUrl()}${path}`);
+
+  return requestCollectivity<CurrentInventoryResultResponse>(path);
 }
 
 export async function debugCalculateCollectivityDataset({

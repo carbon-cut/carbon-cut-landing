@@ -3,12 +3,14 @@ import { z } from "zod";
 import {
   createFixedKeyRecordSchema,
   createGroupSchema,
+  createMatrixSchema,
   createRecordGridSchemaByOptionalKeys,
   createScalarValueSchema,
   createYearValueSchema,
   constructUnit,
   metadata,
   numberByYearSchema,
+  percentScalarSchema,
 } from "../_shared";
 import { fertilizers, livestock, trees } from "./config";
 
@@ -43,25 +45,19 @@ const livestockSchema = z.object({
         unit: constructUnit(livestock.units.count.default),
       })
     ),
-    confinedTimeShare: z.record(
-      z.string(),
-      z.object({
-        value: z.coerce.number().min(0).max(100).optional(),
-        unit: constructUnit(livestock.units.confinedTimeShare.default),
-      })
-    ),
+    confinedTimeShare: z.record(z.string(), percentScalarSchema),
   }),
   metadata,
 });
 
 const fertilizersSchema = z.object({
-  dataSet: createFixedKeyRecordSchema(fertilizers.keys, {
-    quantity: createYearValueSchema(fertilizers.units.quantity.default),
-    tenure: createScalarValueSchema(
-      fertilizers.units.tenure.default,
-      true,
-      z.coerce.number().min(0).max(100).optional()
+  dataSet: z.object({
+    quantity: createMatrixSchema(
+      fertilizers.keys,
+      { unit: fertilizers.units.quantity.default },
+      true
     ),
+    tenure: createFixedKeyRecordSchema(fertilizers.keys, percentScalarSchema.shape),
   }),
   metadata,
 });

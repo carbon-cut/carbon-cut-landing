@@ -19,14 +19,20 @@ export const futureYearSchema = yearSchema.refine(
   }
 );
 
-const numberSchema = z.coerce.number({ errorMap: () => ({ message: "Required" }) });
+const emptyToUndefined = (value: unknown) => (value === "" || value === null ? undefined : value);
+const numberSchema = z.preprocess(
+  emptyToUndefined,
+  z.coerce.number({ errorMap: () => ({ message: "Required" }) })
+);
+export const optionalNumberSchema = z.preprocess(emptyToUndefined, z.coerce.number().optional());
+
 export const requiredStringSchema = z.string().min(1, { message: "Required" });
 
 export const numberFutureSchema = z.record(futureYearSchema, numberSchema);
-export const numberFutureOptionalSchema = z.record(futureYearSchema, numberSchema.optional());
+export const numberFutureOptionalSchema = z.record(futureYearSchema, optionalNumberSchema);
 
 export const numberByYearSchema = z.record(yearSchema, numberSchema);
-export const numberByYearOptionalSchema = z.record(yearSchema, numberSchema.optional());
+export const numberByYearOptionalSchema = z.record(yearSchema, optionalNumberSchema);
 
 export const metadataSourceTypeValues = [
   "invoice",
@@ -78,10 +84,17 @@ export function createScalarValueSchema(
   value?: z.ZodTypeAny
 ) {
   return z.object({
-    value: value ? value : optional ? numberSchema.optional() : numberSchema,
+    value: value ? value : optional ? optionalNumberSchema : numberSchema,
     unit: constructUnit(unit),
   });
 }
+
+export const percentScalarSchema = createScalarValueSchema(["%"], true).extend({
+  value: optionalNumberSchema.refine(
+    (value) => value === undefined || (value >= 0 && value <= 100),
+    { message: "between0And100" }
+  ),
+});
 
 export function createYearValueSchema(unit: NonEmptyStringArray, optional: boolean = false) {
   return z.object({

@@ -1,5 +1,9 @@
 export function getPath(value: unknown, path: string[]) {
   return path.reduce<unknown>((current, key) => {
+    if (Array.isArray(current)) {
+      return /^\d+$/.test(key) ? current[Number(key)] : undefined;
+    }
+
     if (typeof current !== "object" || current === null || Array.isArray(current)) {
       return undefined;
     }

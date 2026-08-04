@@ -9,3 +9,4 @@ Current contracts:
 - `project-init.md`
 - `inventory-draft.md`
 - `calculation.md`
+- `inventory-calculation-submit.md`
