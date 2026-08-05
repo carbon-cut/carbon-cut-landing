@@ -108,8 +108,21 @@ function StaticInventoryGroupedYearTable<T extends FieldValues>({
   form,
   baseName,
   baseNameBySubcolumn,
+  loadingRows,
 }: GroupedYearTableProps<T>) {
   const { years } = useInventoryContext();
+  const isLoadingRows = Boolean(loadingRows?.isLoading);
+  const tableRows = useMemo(
+    () =>
+      isLoadingRows
+        ? Array.from({ length: loadingRows?.count ?? 0 }, (_, index) => ({
+            key: `skeleton-${index}`,
+            label: "",
+            unit: null,
+          }))
+        : rows,
+    [isLoadingRows, loadingRows?.count, rows]
+  );
 
   const columns = useMemo(
     () =>
@@ -119,16 +132,17 @@ function StaticInventoryGroupedYearTable<T extends FieldValues>({
         form,
         baseName,
         baseNameBySubcolumn,
-        rowCount: rows.length,
+        isLoadingRows,
+        rowCount: tableRows.length,
       }),
-    [baseName, baseNameBySubcolumn, form, rows.length, subcolumns, years]
+    [baseName, baseNameBySubcolumn, form, isLoadingRows, subcolumns, tableRows.length, years]
   );
 
   return (
     <div className="space-y-3">
       <InventoryTableHeader title={title} description={description} />
       <InventoryTanstackTable
-        rows={rows}
+        rows={tableRows}
         columns={columns}
         getRowId={(row) => row.key}
         stickyColumnIds={["label"]}

@@ -1,19 +1,32 @@
 "use client";
 
-import type { CollectivitySetupData } from "@/app/collectivity/setup/_lib/types";
+import { useQuery } from "@tanstack/react-query";
+
+import {
+  collectivityQueryKeys,
+  collectivityQueryOptions,
+  fetchCollectivitySetupSnapshot,
+} from "@/app/collectivity/_lib/queries";
+import type { CollectivitySetupSnapshot } from "@/app/collectivity/setup/_lib/types";
 import CollectivitySetupForm from "@/app/collectivity/setup/_components/collectivitySetupForm";
 
 export default function SetupWorkspace({
-  currentPlanId = null,
-  initialValues = null,
+  initialSnapshot,
 }: {
-  currentPlanId?: string | null;
-  initialValues?: CollectivitySetupData | null;
+  initialSnapshot: CollectivitySetupSnapshot;
 }) {
+  const currentPlanId = initialSnapshot.project.slug;
+  const { data: snapshot = initialSnapshot } = useQuery({
+    ...collectivityQueryOptions,
+    queryKey: collectivityQueryKeys.setupSnapshot(currentPlanId),
+    queryFn: () => fetchCollectivitySetupSnapshot(currentPlanId),
+    initialData: initialSnapshot,
+  });
+
   return (
     <CollectivitySetupForm
       currentPlanId={currentPlanId}
-      initialValues={initialValues}
+      initialValues={snapshot.currentInventory.setupPayload}
       variant="workspace"
     />
   );

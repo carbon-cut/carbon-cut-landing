@@ -1,10 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useFormState, useWatch, type FieldPath } from "react-hook-form";
 import { Calculator, CloudUpload, Save } from "lucide-react";
 import { toast } from "sonner";
 
+import {
+  CollectivityApiError,
+  debugCalculateCollectivityDatasetRequest,
+} from "@/app/collectivity/_lib/queries";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
@@ -70,28 +75,6 @@ type DebugCalculationWarning = {
 };
 
 const summedDebugDatasetKeys = new Set(["electricity"]);
-
-type DebugCalculationResponse = {
-  data?: {
-    datasetKey: string;
-    emissionsPayload: Record<string, unknown>;
-    parameterSnapshot?: {
-      items?: unknown[];
-    };
-    warnings?: DebugCalculationWarning[];
-    formulaVersion: string;
-  };
-  error?: {
-    message?: string;
-    details?: {
-      reasons?: Array<{
-        code?: string;
-        path?: string;
-        parameterKey?: string;
-      }>;
-    };
-  };
-};
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -341,10 +324,12 @@ export default function InventoryWorkspace({
   );
   const defaultFamily = useMemo(() => workspace.families[0]?.key ?? "", [workspace.families]);
   const [activeFamilyKey, setActiveFamilyKey] = useState(defaultFamily);
-  const [isDebugCalculating, setIsDebugCalculating] = useState(false);
   const [debugCalculationsByDatasetKey, setDebugCalculationsByDatasetKey] = useState<
     Record<string, DebugCalculationPanelState>
   >({});
+  const debugCalculationMutation = useMutation({
+    mutationFn: debugCalculateCollectivityDatasetRequest,
+  });
   const datasetsWithProgress = useMemo(
     () =>
       workspace.datasets.map((dataset) => {
@@ -484,46 +469,11 @@ export default function InventoryWorkspace({
       inventoryInput,
     };
 
-    setIsDebugCalculating(true);
-
     try {
-      const response = await fetch(
-        `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/debug-calculate`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "same-origin",
-          body: JSON.stringify(debugRequest),
-        }
-      );
-      const payload = (await response.json()) as DebugCalculationResponse;
-
-      if (!response.ok || !payload.data) {
-        console.log("debugData", debugRequest);
-        console.log("debugError", payload.error);
-        const reasons =
-          payload.error?.details?.reasons?.map((reason) =>
-            [reason.code, reason.path, reason.parameterKey].filter(Boolean).join(" · ")
-          ) ?? [];
-
-        setDebugCalculationsByDatasetKey((current) => ({
-          ...current,
-          [activeDataset.surfaceKind]: {
-            status: "error",
-            datasetKey: activeDataset.surfaceKind,
-            message:
-              payload.error?.message ??
-              (t("inventoryWorkspace.debugCalculation.calculationError") as string),
-            reasons,
-          },
-        }));
-        toast.error(t("inventoryWorkspace.debugCalculation.calculationError") as string);
-        return;
-      }
-
-      const debugData = payload.data;
+      const debugData = await debugCalculationMutation.mutateAsync({
+        projectSlug,
+        ...debugRequest,
+      });
       const emissionLeaves = getDisplayEmissionLeaves(
         debugData.datasetKey,
         debugData.emissionsPayload
@@ -543,6 +493,29 @@ export default function InventoryWorkspace({
       console.log("debugData", debugData);
       toast.success(t("inventoryWorkspace.debugCalculation.success") as string);
     } catch (error) {
+      if (error instanceof CollectivityApiError) {
+        console.log("debugData", debugRequest);
+        console.log("debugError", error.payload.error);
+        const reasons =
+          error.payload.error?.details?.reasons?.map((reason) =>
+            [reason.code, reason.path, reason.parameterKey].filter(Boolean).join(" · ")
+          ) ?? [];
+
+        setDebugCalculationsByDatasetKey((current) => ({
+          ...current,
+          [activeDataset.surfaceKind]: {
+            status: "error",
+            datasetKey: activeDataset.surfaceKind,
+            message:
+              error.payload.error?.message ??
+              (t("inventoryWorkspace.debugCalculation.calculationError") as string),
+            reasons,
+          },
+        }));
+        toast.error(t("inventoryWorkspace.debugCalculation.calculationError") as string);
+        return;
+      }
+
       console.log("debugData", debugRequest);
       console.log("debugError", error);
       setDebugCalculationsByDatasetKey((current) => ({
@@ -555,8 +528,6 @@ export default function InventoryWorkspace({
         },
       }));
       toast.error(t("inventoryWorkspace.debugCalculation.requestError") as string);
-    } finally {
-      setIsDebugCalculating(false);
     }
   };
 
@@ -639,7 +610,7 @@ export default function InventoryWorkspace({
                 size="sm"
                 className="h-8 shrink-0 rounded-md px-4 shadow-none"
                 disabled={
-                  isDebugCalculating ||
+                  debugCalculationMutation.isPending ||
                   !activeDataset ||
                   activeDataset.surfaceKind === "placeholder"
                 }

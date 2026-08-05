@@ -49,7 +49,5 @@ export default async function CollectivityPlanSetupPage({
     redirect(getCollectivityProjectsRoute("setup"));
   }
 
-  return (
-    <SetupWorkspace currentPlanId={planId} initialValues={snapshot.currentInventory.setupPayload} />
-  );
+  return <SetupWorkspace initialSnapshot={snapshot} />;
 }

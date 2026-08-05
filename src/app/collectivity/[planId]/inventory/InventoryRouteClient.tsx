@@ -1,12 +1,21 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm, type FieldPath } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
+import {
+  calculateCollectivityInventoryRequest,
+  CollectivityApiError,
+  collectivityQueryKeys,
+  collectivityQueryOptions,
+  fetchCollectivityCurrentInventory,
+  saveCollectivityInventoryDraftRequest,
+} from "@/app/collectivity/_lib/queries";
 import { Form } from "@/components/ui/forms";
 import { useScopedI18n } from "@/locales/client";
 import type { CollectivitySetupSnapshot } from "@/app/collectivity/setup/_lib/types";
@@ -21,6 +30,12 @@ import {
 } from "./InventorySchema/calculation-readiness";
 import { buildInventoryRegistry, type InventoryWorkspaceLocale } from "./registry";
 
+const inventorySnapshotQueryOptions = {
+  ...collectivityQueryOptions,
+  staleTime: Infinity,
+  refetchOnMount: false,
+};
+
 function buildInventoryYearPlan(snapshot: CollectivitySetupSnapshot) {
   const reference = snapshot.currentInventory.setupPayload.referenceYear;
   const comparisons = snapshot.currentInventory.setupPayload.inventoryYears.filter(
@@ -34,13 +49,22 @@ function buildInventoryYearPlan(snapshot: CollectivitySetupSnapshot) {
 }
 
 export default function InventoryRouteClient({
-  snapshot,
+  snapshot: initialSnapshot,
 }: {
   snapshot: CollectivitySetupSnapshot;
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const t = useScopedI18n("(pages).collectivityDashboard");
   const inventoryLocale = t("inventoryWorkspace") as InventoryWorkspaceLocale;
+  const projectSlug = initialSnapshot.project.slug;
+  const { data: snapshot = initialSnapshot } = useQuery({
+    ...inventorySnapshotQueryOptions,
+    queryKey: collectivityQueryKeys.currentInventory(projectSlug),
+    queryFn: () => fetchCollectivityCurrentInventory(projectSlug),
+    initialData: initialSnapshot,
+  });
+  const snapshotVersion = `${snapshot.currentInventory.id}:${snapshot.currentInventory.updatedAt}`;
   const inventoryYearPlan = useMemo(() => buildInventoryYearPlan(snapshot), [snapshot]);
   const years = useMemo(
     () => [inventoryYearPlan.reference, ...inventoryYearPlan.comparisons],
@@ -63,25 +87,34 @@ export default function InventoryRouteClient({
     defaultValues,
     mode: "onChange",
   });
-  const [isSaving, setIsSaving] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const saveDraftMutation = useMutation({
+    mutationFn: saveCollectivityInventoryDraftRequest,
+    onSuccess: (saved) => {
+      queryClient.setQueryData(collectivityQueryKeys.currentInventory(saved.project.slug), saved);
+      queryClient.setQueryData(collectivityQueryKeys.setupSnapshot(saved.project.slug), saved);
+      void queryClient.invalidateQueries({
+        queryKey: collectivityQueryKeys.result(saved.project.slug),
+      });
+    },
+  });
+  const calculateMutation = useMutation({
+    mutationFn: calculateCollectivityInventoryRequest,
+    onSuccess: async (_result, variables) => {
+      await queryClient.invalidateQueries({
+        queryKey: collectivityQueryKeys.result(variables.projectSlug),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: collectivityQueryKeys.currentInventory(variables.projectSlug),
+      });
+      router.push(`/collectivity/${variables.projectSlug}/result`);
+    },
+  });
   useEffect(() => {
     mainForm.reset(defaultValues);
-  }, [defaultValues, mainForm]);
-
-  async function getResponseErrorMessage(response: Response) {
-    try {
-      const payload = (await response.json()) as {
-        error?: {
-          message?: string;
-        };
-      };
-
-      return payload.error?.message;
-    } catch {
-      return undefined;
-    }
-  }
+    // Only rebuild the editable form when the current inventory snapshot itself changes.
+    // Query cache object changes must not overwrite in-progress edits.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainForm, snapshotVersion]);
 
   function getCalculationReadinessKeys() {
     return workspace.datasets.flatMap((dataset) => {
@@ -122,41 +155,17 @@ export default function InventoryRouteClient({
     const currentValues = mainForm.getValues();
     const { years: _years, ...inventoryInput } = currentValues;
 
-    setIsSaving(true);
-
     try {
-      const response = await fetch(
-        `/api/collectivity/projects/${encodeURIComponent(snapshot.project.slug)}/current-inventory/input`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "same-origin",
-          body: JSON.stringify({
-            inventoryInput,
-          }),
-        }
-      );
-
-      const payload = (await response.json()) as {
-        data?: CollectivitySetupSnapshot;
-        error?: {
-          message?: string;
-        };
-      };
-
-      if (!response.ok || !payload.data) {
-        toast.error(payload.error?.message ?? (t("inventoryWorkspace.saveError") as string));
-        return;
-      }
-
+      await saveDraftMutation.mutateAsync({
+        projectSlug: snapshot.project.slug,
+        inventoryInput,
+      });
       mainForm.reset(currentValues);
       toast.success(t("inventoryWorkspace.saveSuccess") as string);
-    } catch {
-      toast.error(t("inventoryWorkspace.saveError") as string);
-    } finally {
-      setIsSaving(false);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : (t("inventoryWorkspace.saveError") as string)
+      );
     }
   };
   const handleSubmitInventory = mainForm.handleSubmit(
@@ -173,34 +182,19 @@ export default function InventoryRouteClient({
 
       const { years: _years, ...inventoryInput } = currentValues;
 
-      setIsSubmitting(true);
-
       try {
-        const response = await fetch(
-          `/api/collectivity/projects/${encodeURIComponent(snapshot.project.slug)}/current-inventory/calculate`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "same-origin",
-            body: JSON.stringify({
-              inventoryInput,
-            }),
-          }
-        );
-
-        if (!response.ok) {
-          const message = await getResponseErrorMessage(response);
-          toast.error(message ?? (t("inventoryWorkspace.submitError") as string));
-          return;
-        }
-
-        router.push(`/collectivity/${snapshot.project.slug}/result`);
-      } catch {
-        toast.error(t("inventoryWorkspace.submitError") as string);
-      } finally {
-        setIsSubmitting(false);
+        await calculateMutation.mutateAsync({
+          projectSlug: snapshot.project.slug,
+          inventoryInput,
+        });
+      } catch (error) {
+        const message =
+          error instanceof CollectivityApiError
+            ? error.payload.error?.message
+            : error instanceof Error
+              ? error.message
+              : null;
+        toast.error(message ?? (t("inventoryWorkspace.submitError") as string));
       }
     },
     (errors) => {
@@ -219,8 +213,8 @@ export default function InventoryRouteClient({
           <InventoryWorkspace
             workspace={workspace}
             surfaces={surfaces}
-            isSaving={isSaving}
-            isSubmitting={isSubmitting}
+            isSaving={saveDraftMutation.isPending}
+            isSubmitting={calculateMutation.isPending}
             onSaveDraft={handleSaveDraft}
             onSubmitInventory={handleSubmitInventory}
             projectSlug={snapshot.project.slug}

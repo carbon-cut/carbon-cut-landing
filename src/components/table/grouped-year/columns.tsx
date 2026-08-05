@@ -10,6 +10,7 @@ import type {
   InventoryTableColumn,
   InventoryTableRow,
 } from "@/app/collectivity/[planId]/inventory/types";
+import { Skeleton } from "@/components/ui/skeleton";
 import { InventoryTableIconButton } from "../InventoryTableHeader";
 
 type GroupedYearCellContext = CellContext<InventoryTableRow, unknown>;
@@ -20,6 +21,7 @@ type CreateGroupedYearColumnsArgs<T extends FieldValues> = Pick<
 > & {
   years: number[];
   subcolumns: InventoryTableColumn[];
+  isLoadingRows?: boolean;
   onRemoveRow?: (index: number) => void;
   rowCount: number;
   fieldRows?: unknown[];
@@ -33,6 +35,7 @@ export function createGroupedYearColumns<T extends FieldValues>({
   baseNameBySubcolumn,
   editableRows,
   rowFields = [],
+  isLoadingRows = false,
   onRemoveRow,
   rowCount,
   fieldRows = [],
@@ -59,7 +62,8 @@ export function createGroupedYearColumns<T extends FieldValues>({
           {
             id: "label",
             header: () => <span className="sr-only">Ligne</span>,
-            cell: ({ row }: GroupedYearCellContext) => row.original.label,
+            cell: ({ row }: GroupedYearCellContext) =>
+              isLoadingRows ? <Skeleton className="h-4 w-40" /> : row.original.label,
           },
         ]),
     ...years.map((year) => ({
@@ -77,8 +81,12 @@ export function createGroupedYearColumns<T extends FieldValues>({
           tone: "secondary" as const,
           className: `min-w-[110px] py-2 ${subcolumn.className ?? ""}`.trim(),
         },
-        cell: ({ row }: GroupedYearCellContext) =>
-          renderGroupedYearInputCell({
+        cell: ({ row }: GroupedYearCellContext) => {
+          if (isLoadingRows) {
+            return <Skeleton className="h-9 w-full" />;
+          }
+
+          return renderGroupedYearInputCell({
             form,
             baseName: baseNameBySubcolumn?.[subcolumn.key] ?? baseName!,
             rowKey: editableRows ? String(row.index) : row.original.key,
@@ -86,7 +94,8 @@ export function createGroupedYearColumns<T extends FieldValues>({
             subcolumnKey: baseNameBySubcolumn ? undefined : subcolumn.key,
             unit: subcolumn.unit ?? row.original.unit,
             editableRows: editableRows !== undefined,
-          }),
+          });
+        },
       })),
     })),
   ];

@@ -34,5 +34,9 @@ export type GroupedYearTableProps<T extends FieldValues> = InventoryGroupedYearT
   baseName?: TName<T>;
   baseNameBySubcolumn?: Record<string, TName<T>>;
   editableRows?: GroupedYearEditableRows;
+  loadingRows?: {
+    isLoading: boolean;
+    count: number;
+  };
   rowFields?: GroupedYearRowField[];
 };

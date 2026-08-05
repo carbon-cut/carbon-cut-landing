@@ -1,12 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import AuthBrand from "@/app/auth/_components/auth-brand";
+import {
+  CollectivityApiError,
+  collectivityQueryKeys,
+  saveCollectivitySetupRequest,
+} from "@/app/collectivity/_lib/queries";
 import {
   collectivitySetupSchema,
   collectivityCountryOptions,
@@ -15,7 +21,6 @@ import {
   latestCollectivityAvailableYear,
   slugifyCollectivitySlug,
 } from "@/app/collectivity/setup/_lib/schema";
-import type { CollectivitySetupSnapshot } from "@/app/collectivity/setup/_lib/types";
 import { getCollectivityModuleRoute } from "@/app/collectivity/_lib/routing";
 import {
   CollectivityCheckbox,
@@ -54,18 +59,6 @@ type CollectivitySetupFormProps = {
   variant: "setup" | "workspace";
 };
 
-type SetupApiError = {
-  message?: string;
-  details?: {
-    fieldErrors?: Partial<Record<string, string>>;
-  };
-};
-
-type SetupApiResponse = {
-  data?: CollectivitySetupSnapshot;
-  error?: SetupApiError;
-};
-
 function sortInventoryYears(years: number[]) {
   return [...years].sort((left, right) => left - right);
 }
@@ -95,11 +88,46 @@ export default function CollectivitySetupForm({
   variant,
 }: CollectivitySetupFormProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const t = useScopedI18n("(pages).collectivityDashboard");
   const tSetup = useScopedI18n("collectivitySetup");
   const isSlugEditable = !currentPlanId;
   const defaultValues = useMemo(() => getSetupFormDefaultValues(initialValues), [initialValues]);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const setupMutation = useMutation({
+    mutationFn: (values: CollectivitySetupValues) =>
+      saveCollectivitySetupRequest({
+        currentPlanId,
+        values,
+      }),
+    onSuccess: (snapshot) => {
+      queryClient.setQueryData(
+        collectivityQueryKeys.setupSnapshot(snapshot.project.slug),
+        snapshot
+      );
+      queryClient.setQueryData(
+        collectivityQueryKeys.currentInventory(snapshot.project.slug),
+        snapshot
+      );
+
+      if (currentPlanId && currentPlanId !== snapshot.project.slug) {
+        void queryClient.invalidateQueries({
+          queryKey: collectivityQueryKeys.setupSnapshot(currentPlanId),
+        });
+        void queryClient.invalidateQueries({
+          queryKey: collectivityQueryKeys.currentInventory(currentPlanId),
+        });
+        void queryClient.invalidateQueries({
+          queryKey: collectivityQueryKeys.result(currentPlanId),
+        });
+      }
+
+      void queryClient.invalidateQueries({
+        queryKey: collectivityQueryKeys.result(snapshot.project.slug),
+      });
+      router.replace(getCollectivityModuleRoute(snapshot.project.slug, "setup"));
+    },
+  });
 
   const form = useForm<CollectivitySetupValues>({
     resolver: zodResolver(collectivitySetupSchema),
@@ -221,24 +249,11 @@ export default function CollectivitySetupForm({
     setSubmitError(null);
     form.clearErrors();
 
-    const response = await fetch(
-      currentPlanId
-        ? `/api/collectivity/setup?currentPlanId=${encodeURIComponent(currentPlanId)}`
-        : "/api/collectivity/setup",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "same-origin",
-        body: JSON.stringify(values),
-      }
-    );
-
-    const payload = (await response.json()) as SetupApiResponse;
-
-    if (!response.ok || !payload.data) {
-      const fieldErrors = payload.error?.details?.fieldErrors;
+    try {
+      await setupMutation.mutateAsync(values);
+    } catch (error) {
+      const payload = error instanceof CollectivityApiError ? error.payload : null;
+      const fieldErrors = payload?.error?.details?.fieldErrors;
 
       if (fieldErrors) {
         for (const [fieldName, message] of Object.entries(fieldErrors)) {
@@ -254,13 +269,9 @@ export default function CollectivitySetupForm({
       }
 
       if (!fieldErrors || Object.keys(fieldErrors).length === 0) {
-        setSubmitError(payload.error?.message ?? (tSetup("submitError") as string));
+        setSubmitError(error instanceof Error ? error.message : (tSetup("submitError") as string));
       }
-
-      return;
     }
-
-    router.replace(getCollectivityModuleRoute(payload.data.project.slug, "setup"));
   };
 
   const formBody = (
@@ -749,7 +760,7 @@ export default function CollectivitySetupForm({
                 <Button
                   type="submit"
                   className={cn("h-11", variant === "setup" ? "w-full" : "min-w-44")}
-                  disabled={form.formState.isSubmitting}
+                  disabled={setupMutation.isPending}
                 >
                   {variant === "setup"
                     ? (tSetup("primaryCta") as string)

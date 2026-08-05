@@ -1,27 +1,21 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { useInventoryContext } from "@/app/collectivity/[planId]/inventory/context/inventory-context";
 import { InventoryYearErrors } from "@/app/collectivity/[planId]/inventory/components/InventoryYearSelector";
+import {
+  collectivityQueryKeys,
+  collectivityQueryOptions,
+  fetchCollectivitySupportedValues,
+} from "@/app/collectivity/_lib/queries";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import InventoryGroupedYearTable from "@/components/table/grouped-year";
 import MatrixTable from "@/components/table/matrix";
 import { useScopedI18n } from "@/locales/client";
 import { buildAirTransportEnergyRows, buildAirTransportMovementSection } from "./config";
 import type { InventoryTableRow } from "../../../types";
-
-type SupportedValue = {
-  value: string;
-  label: string;
-  selector: Record<string, string>;
-};
-
-type SupportedValuesResponse = {
-  data?: {
-    values?: SupportedValue[];
-  };
-};
 
 function toAircraftRowKey(value: string) {
   return `a-${encodeURIComponent(value).replaceAll(".", "%2E")}`;
@@ -32,50 +26,26 @@ export default function AirTransportSurface() {
   const tAirTransport = useScopedI18n(
     "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.airTransport"
   );
-  const [aircraftRows, setAircraftRows] = useState<InventoryTableRow[]>([]);
+  const aircraftValuesQuery = useQuery({
+    ...collectivityQueryOptions,
+    queryKey: collectivityQueryKeys.supportedValues("ef-lto", "aircraft"),
+    queryFn: () => fetchCollectivitySupportedValues("ef-lto", "aircraft"),
+  });
 
   const energyRows = useMemo(() => buildAirTransportEnergyRows(tAirTransport), [tAirTransport]);
+  const aircraftRows = useMemo<InventoryTableRow[]>(
+    () =>
+      aircraftValuesQuery.data?.values.map((entry) => ({
+        key: toAircraftRowKey(entry.value),
+        label: entry.label,
+        unit: null,
+      })) ?? [],
+    [aircraftValuesQuery.data]
+  );
   const movementSection = useMemo(
     () => buildAirTransportMovementSection(aircraftRows, tAirTransport),
     [aircraftRows, tAirTransport]
   );
-
-  useEffect(() => {
-    let active = true;
-
-    const loadAircraftRows = async () => {
-      try {
-        const response = await fetch("/api/collectivity/supported-values/ef-lto/aircraft", {
-          credentials: "same-origin",
-        });
-        const payload = (await response.json()) as SupportedValuesResponse;
-
-        if (!response.ok || !payload.data?.values || !active) {
-          return;
-        }
-
-        setAircraftRows(
-          payload.data.values.map((entry) => ({
-            key: toAircraftRowKey(entry.value),
-            label: entry.label,
-            unit: null,
-          }))
-        );
-      } catch {
-        if (!active) {
-          return;
-        }
-
-        setAircraftRows([]);
-      }
-    };
-
-    void loadAircraftRows();
-
-    return () => {
-      active = false;
-    };
-  }, []);
 
   return (
     <div className="space-y-8">
@@ -100,6 +70,10 @@ export default function AirTransportSurface() {
         subcolumns={movementSection.subcolumns}
         form={mainForm}
         baseName={"transport.airTransport.dataSet.movements"}
+        loadingRows={{
+          isLoading: aircraftValuesQuery.isLoading,
+          count: 8,
+        }}
       />
       <div className="border-t border-border/10 pt-8">
         <MatrixTable

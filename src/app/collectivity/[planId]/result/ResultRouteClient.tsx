@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import {
+  collectivityQueryKeys,
+  collectivityQueryOptions,
+  fetchCollectivityInventoryResult,
+} from "@/app/collectivity/_lib/queries";
 
 type ResultRouteClientProps = {
   projectSlug: string;
@@ -33,33 +40,12 @@ function findResultRows(value: unknown): ResultRow[] {
 }
 
 export default function ResultRouteClient({ projectSlug }: ResultRouteClientProps) {
-  const [rows, setRows] = useState<ResultRow[]>([]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function loadResult() {
-      const response = await fetch(
-        `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/result`,
-        {
-          credentials: "same-origin",
-        }
-      );
-      const payload = await response.json();
-
-      if (!isMounted) {
-        return;
-      }
-
-      setRows(findResultRows(payload));
-    }
-
-    void loadResult();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [projectSlug]);
+  const { data } = useQuery({
+    ...collectivityQueryOptions,
+    queryKey: collectivityQueryKeys.result(projectSlug),
+    queryFn: () => fetchCollectivityInventoryResult(projectSlug),
+  });
+  const rows = useMemo(() => findResultRows(data), [data]);
 
   return (
     <section className="p-6">
