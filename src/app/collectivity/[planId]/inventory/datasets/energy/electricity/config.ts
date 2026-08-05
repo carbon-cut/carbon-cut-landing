@@ -1,3 +1,6 @@
+import React from "react";
+import { FieldRequired } from "@/components/ui/field-help";
+import Typography from "@/components/ui/typography";
 import { electricity } from "../../../InventorySchema/energy/config";
 import type { InventoryTableColumn, InventoryTableRow } from "../../../types";
 import type { YearMetricsColumn, YearMetricsRow } from "@/components/table/year-metrics/types";
@@ -55,9 +58,23 @@ export function buildElectricityFixedLines(
   return Object.entries(electricity.lines[block]).map(([key, definition]) => ({
     key,
     label: labelFunc(`${block}.${key}`),
+    required: definition.required === true,
     sector: definition.sector,
     metaLabel: sectorLabelFunc(definition.sector),
   }));
+}
+
+export function buildElectricityTitleWithRequirement(title: string, requirement: string) {
+  return React.createElement(
+    Typography,
+    {
+      variant: "sectionTitle",
+      size: "lg",
+      className: "inline-flex items-center gap-1",
+    },
+    React.createElement("span", null, title),
+    React.createElement(FieldRequired, { content: requirement })
+  );
 }
 
 export function buildElectricityMetrics(labelFunc: (key: string) => string): YearMetricsRow[] {

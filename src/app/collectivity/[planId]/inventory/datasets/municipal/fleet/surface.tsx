@@ -3,6 +3,8 @@
 import { useScopedI18n } from "@/locales/client";
 import CollectivityMetadataScopeControl from "@/app/collectivity/_components/metadata/CollectivityMetadataScopeControl";
 import MatrixTable from "@/components/table/matrix";
+import { FieldRequired } from "@/components/ui/field-help";
+import Typography from "@/components/ui/typography";
 import InventoryTableSection from "../../../components/InventoryTableSection";
 import PriceAssumptionsTable from "../../../components/PriceAssumptionsTable";
 import { useInventoryContext } from "../../../context/inventory-context";
@@ -39,7 +41,6 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
         drawerTitle="Métadonnées de flotte"
         drawerDescription="Renseignez la provenance et la qualité pour la flotte municipale."
       /> */}
-      <InventoryTableSection section={compositionSection} />
       <div className="grid grid-cols-1 gap-6 border-t border-border/10 pt-6 md:grid-cols-2">
         <MatrixTable
           title={copy.yearlyVehiclesTitle}
@@ -48,7 +49,12 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
           baseName={"municipal.fleet.dataSet.vehicles"}
         />
         <MatrixTable
-          title={copy.yearlyEnergyTitle}
+          title={
+            <Typography variant="sectionTitle" size="lg" className="inline-flex items-center gap-1">
+              <span>{copy.yearlyEnergyTitle}</span>
+              <FieldRequired content={tFleet("yearlyEnergyRequirementTooltip")} />
+            </Typography>
+          }
           rows={rows.fuel}
           form={mainForm}
           baseName={"municipal.fleet.dataSet.consumption"}
@@ -64,6 +70,7 @@ export default function FleetSurface({ copy }: { copy: FleetSurfaceCopy }) {
           priceKeys={["petrol", "diesel", "gpl", "electricity", "gnv"]}
         />
       </div>
+      <InventoryTableSection section={compositionSection} />
     </div>
   );
 }

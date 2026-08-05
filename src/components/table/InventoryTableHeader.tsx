@@ -7,7 +7,7 @@ import Typography from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 
 type InventoryTableHeaderProps = {
-  title?: string;
+  title?: ReactNode;
   description?: string;
   titleAs?: "h4" | "h5";
   titleSize?: "sm" | "xl";

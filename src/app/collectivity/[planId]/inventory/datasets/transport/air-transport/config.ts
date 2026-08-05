@@ -1,3 +1,6 @@
+import React from "react";
+import { FieldRequired } from "@/components/ui/field-help";
+import Typography from "@/components/ui/typography";
 import { airTransport } from "../../../InventorySchema/transport/config";
 import type { InventoryGroupedYearTableData, InventoryTableRow } from "../../../types";
 
@@ -6,7 +9,18 @@ export function buildAirTransportMovementSection(
   labelFunc: (key: string) => string
 ): InventoryGroupedYearTableData {
   return {
-    title: labelFunc("movements.title"),
+    title: React.createElement(
+      Typography,
+      {
+        variant: "sectionTitle",
+        size: "lg",
+        className: "inline-flex items-center gap-1",
+      },
+      React.createElement("span", null, labelFunc("movements.title")),
+      React.createElement(FieldRequired, {
+        content: labelFunc("movements.requirementTooltip"),
+      })
+    ),
     description: labelFunc("movements.description"),
     subcolumns: airTransport.movementColumnKeys.map((key) => ({
       key,

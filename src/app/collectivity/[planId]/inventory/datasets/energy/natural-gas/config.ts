@@ -1,3 +1,6 @@
+import React from "react";
+import { FieldRequired } from "@/components/ui/field-help";
+import Typography from "@/components/ui/typography";
 import { naturalGas } from "../../../InventorySchema/energy/config";
 import { sharedData } from "../../../InventorySchema/shared-data/config";
 import type { InventoryTableColumn, InventoryTableRow } from "../../../types";
@@ -58,6 +61,7 @@ export function buildNaturalGasFixedLines(
   return Object.entries(naturalGas.lines[block]).map(([key, definition]) => ({
     key,
     label: labelFunc(key),
+    required: definition.required === true,
     sector: definition.sector,
     metaLabel: sectorLabelFunc(definition.sector),
   }));
@@ -94,4 +98,17 @@ export function buildNaturalGasAssumptionFields(
       unit: sharedData.householdEnergy.units.assumptions.consumptionNorm[0],
     },
   ];
+}
+
+export function buildNaturalGasTitleWithRequirement(title: string, requirement: string) {
+  return React.createElement(
+    Typography,
+    {
+      variant: "sectionTitle",
+      size: "lg",
+      className: "inline-flex items-center gap-1",
+    },
+    React.createElement("span", null, title),
+    React.createElement(FieldRequired, { content: requirement })
+  );
 }

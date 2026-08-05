@@ -1,3 +1,6 @@
+import React from "react";
+import { FieldRequired } from "@/components/ui/field-help";
+import Typography from "@/components/ui/typography";
 import type {
   InventoryGroupedYearTableData,
   InventoryTableRow,
@@ -63,7 +66,18 @@ export function buildPublicTransportEnergyByFuelSection(
   labelFunc: (key: string) => string
 ): InventoryGroupedYearTableData {
   return {
-    title: labelFunc("energyByFuel.title"),
+    title: React.createElement(
+      Typography,
+      {
+        variant: "sectionTitle",
+        size: "lg",
+        className: "inline-flex items-center gap-1",
+      },
+      React.createElement("span", null, labelFunc("energyByFuel.title")),
+      React.createElement(FieldRequired, {
+        content: labelFunc("energyByFuel.requirementTooltip"),
+      })
+    ),
     rows: buildPublicTransportEnergyRows(labelFunc),
     subcolumns: [
       {

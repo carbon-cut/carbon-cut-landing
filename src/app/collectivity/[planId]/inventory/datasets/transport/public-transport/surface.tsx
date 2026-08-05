@@ -12,6 +12,7 @@ import {
 } from "@/components/table/InventoryTableHeader";
 import MatrixTable from "@/components/table/matrix";
 import PriceAssumptionsTable from "../../../components/PriceAssumptionsTable";
+import { FieldRequired } from "@/components/ui/field-help";
 import {
   Accordion,
   AccordionContent,
@@ -180,7 +181,16 @@ export default function PublicTransportSurface() {
         render={({ fieldState }) => (
           <FormItem className="space-y-3">
             <InventoryTableHeader
-              title={tPublicTransport("operators.title")}
+              title={
+                <Typography
+                  variant="sectionTitle"
+                  size="lg"
+                  className="inline-flex items-center gap-1"
+                >
+                  <span>{tPublicTransport("operators.title")}</span>
+                  <FieldRequired />
+                </Typography>
+              }
               description={tPublicTransport("operators.description")}
               endContent={
                 <InventoryTableActionButton

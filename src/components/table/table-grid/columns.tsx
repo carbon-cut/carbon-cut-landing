@@ -80,7 +80,7 @@ export function createTableGridColumns<T extends FieldValues>({
         <InventoryTableIconButton
           type="button"
           title="Supprimer"
-          aria-label={`Supprimer ${row.original.label}`}
+          aria-label={`Supprimer ${row.original.key}`}
           disabled={editableRows.rowCount <= editableRows.minRows}
           onClick={() => {
             console.log("removed", row.index);

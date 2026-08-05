@@ -41,7 +41,7 @@ export function createGroupedYearColumns<T extends FieldValues>({
     ...(editableRows
       ? rowFields.map((field) => ({
           id: field.key,
-          header: () => field.label,
+          header: () => field.headerLabel ?? field.label,
           meta: {
             align: "center" as const,
             className: "min-w-[180px]",

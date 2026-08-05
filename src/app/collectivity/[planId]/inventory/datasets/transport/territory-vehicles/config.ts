@@ -1,3 +1,6 @@
+import React from "react";
+import { FieldRequired } from "@/components/ui/field-help";
+import Typography from "@/components/ui/typography";
 import type { InventoryGroupedYearTableData } from "../../../types";
 import type {
   GroupedYearEditableRows,
@@ -97,7 +100,18 @@ export function buildTerritoryVehiclesSection(
   labelFunc: (key: string) => string
 ): InventoryGroupedYearTableData {
   return {
-    title: labelFunc("title"),
+    title: React.createElement(
+      Typography,
+      {
+        variant: "sectionTitle",
+        size: "lg",
+        className: "inline-flex items-center gap-1",
+      },
+      React.createElement("span", null, labelFunc("title")),
+      React.createElement(FieldRequired, {
+        content: labelFunc("requirementTooltip"),
+      })
+    ),
     description: labelFunc("description"),
     rows: [],
     subcolumns: territoryVehicles.measureKeys.map((key) => ({

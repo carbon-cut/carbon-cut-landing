@@ -6,6 +6,7 @@ import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { Trash2 } from "lucide-react";
 
 import { TName } from "@/components/ui/forms";
+import { FieldRequired } from "@/components/ui/field-help";
 import { InventoryTableIconButton } from "../InventoryTableHeader";
 import InventoryTableInput from "../InventoryTableInput";
 import { InventoryTableSelectForm } from "../InventoryTableSelect";
@@ -36,7 +37,10 @@ function FixedColumnHeader<T extends FieldValues>({
 
   return (
     <span>
-      {column.label}
+      <span className="inline-flex items-center gap-1">
+        <span>{column.label}</span>
+        {column.required ? <FieldRequired /> : null}
+      </span>
       {column.metaLabel ? (
         <span className="block text-xs font-normal text-muted-foreground">{column.metaLabel}</span>
       ) : null}
@@ -136,7 +140,7 @@ export function createYearMetricsColumns<T extends FieldValues>({
         <InventoryTableIconButton
           type="button"
           title="Supprimer"
-          aria-label={`Supprimer ${row.original.label}`}
+          aria-label={`Supprimer ${row.original.key}`}
           disabled={editableRows.rowCount <= editableRows.minRows}
           onClick={() => {
             console.log("removed", row.index);

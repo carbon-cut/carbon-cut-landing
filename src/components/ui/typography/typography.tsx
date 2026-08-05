@@ -35,7 +35,7 @@ const typographyVariants = cva("", {
     size: {
       default: "text-base",
       huge: "font-extrabold text-3xl md:text-6xl lg:text-7xl",
-      xl: "text-2xl md:text-3xl",
+      xl: "text-2xl",
       "2xl": "text-[1.875rem]",
       lg: "text-lg",
       md: "text-base",

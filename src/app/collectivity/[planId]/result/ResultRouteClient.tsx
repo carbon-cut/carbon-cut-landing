@@ -17,10 +17,7 @@ function findResultRows(value: unknown): ResultRow[] {
     return [];
   }
 
-  if (
-    "resultRows" in value &&
-    Array.isArray((value as { resultRows?: unknown }).resultRows)
-  ) {
+  if ("resultRows" in value && Array.isArray((value as { resultRows?: unknown }).resultRows)) {
     return (value as { resultRows: ResultRow[] }).resultRows;
   }
 

@@ -1094,6 +1094,8 @@ export default {
                 total: "Total",
               },
               yearlyEnergyTitle: "Consommation énergétique",
+              yearlyEnergyRequirementTooltip:
+                "Renseigner au moins une consommation annuelle par energie, ou une depense annuelle avec un prix d'energie correspondant.",
               yearlySpendTitle: "Dépense énergétique",
             },
             publicLighting: {
@@ -1119,6 +1121,8 @@ export default {
                 number: "Total de points lumineux",
               },
               yearlyTitle: "Bloc annuel d'éclairage public",
+              yearlyRequirementTooltip:
+                "Renseigner soit la consommation electrique annuelle, soit la facture annuelle avec le prix de l'electricite correspondant.",
               yearly: {
                 consumption: "Consommation électrique annuelle",
                 bill: "Facture électrique annuelle",
@@ -1136,6 +1140,8 @@ export default {
               consumptionTitle: "Flux energetiques des batiments",
               consumptionDescription:
                 "Les consommations et factures restent organisées par source énergétique.",
+              consumptionRequirementTooltip:
+                "Renseigner soit la consommation electrique, soit la facture electrique avec le prix de l'electricite correspondant.",
               consumption: {
                 electricityConsumption: "Consommation électrique",
                 electricityBill: "Facture électrique",
@@ -1183,6 +1189,8 @@ export default {
             electricity: {
               surface: {
                 title: "Demande d'électricité",
+                requirementTooltip:
+                  "Renseigner au moins une consommation electrique du secteur industrie pour chaque annee.",
                 readinessTitle: "Consommation industrie manquante",
                 readinessDescription: ({ years }: { years: string }) =>
                   `Renseignez au moins une consommation électrique du secteur industrie pour les années suivantes : ${years}.`,
@@ -1243,12 +1251,17 @@ export default {
             naturalGas: {
               surface: {
                 title: "Gaz naturel",
+                requirementTooltip:
+                  "Renseigner au moins une consommation de gaz naturel pour le secteur tertiaire et au moins une pour le secteur industrie pour chaque annee.",
                 readinessTitle: "Consommation tertiaire manquante",
                 readinessDescription: ({ years }: { years: string }) =>
                   `Renseignez au moins une consommation de gaz naturel du secteur tertiaire pour les années suivantes : ${years}.`,
               },
               populationTitle: "Population",
+              populationRequirementTooltip: "Renseigner la population.",
               assumptionsTitle: "Hypothèses énergie ménage",
+              assumptionsRequirementTooltip:
+                "Renseigner l'hypothese energie menage necessaire au calcul.",
               bp: {
                 title: "Basse pression",
                 households: "Ménages",
@@ -1347,6 +1360,8 @@ export default {
               },
               energyByFuel: {
                 title: "Parc et energie par motorisation",
+                requirementTooltip:
+                  "Renseigner au moins une activite carburant par annee pour cet operateur : soit une consommation, soit une depense avec le prix du carburant correspondant.",
                 buses: "Nombre de bus",
                 consumption: "Consommation",
                 spend: "Dépense",
@@ -1377,6 +1392,7 @@ export default {
               },
               movements: {
                 title: "Mouvements d'aeronefs",
+                requirementTooltip: "Renseigner au moins un mouvement national pour chaque annee.",
                 description:
                   "Une ligne par type d'aéronef, avec la distinction international / national dans chaque année.",
                 columns: {
@@ -1411,6 +1427,8 @@ export default {
             },
             territoryVehicles: {
               title: "Véhicules du territoire",
+              requirementTooltip:
+                "Renseigner l'ensemble du parc vehicules du territoire avec le type, le carburant et les mesures associees.",
               description:
                 "Ajouter les combinaisons type de véhicule / carburant actives sur le territoire.",
               addLabel: "Ajouter une ligne",

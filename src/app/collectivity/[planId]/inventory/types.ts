@@ -1,6 +1,10 @@
+import type { ReactNode } from "react";
+
 import { TName } from "@/components/ui/forms";
 import { InventoryFormValues } from "./context/inventory-context";
 import type { TableGridProps } from "@/components/table/table-grid/types";
+
+type InventoryTableLabel = Exclude<ReactNode, boolean | null | undefined>;
 
 export type InventoryYear = number;
 
@@ -73,7 +77,7 @@ export type InventoryDataset = {
 
 export type InventoryTableColumn = {
   key: string;
-  label: string;
+  label: InventoryTableLabel;
   calculated?: "sum";
   editable?: boolean;
   className?: string;
@@ -82,7 +86,7 @@ export type InventoryTableColumn = {
 
 export type InventoryTableRow = {
   key: string;
-  label: string;
+  label: InventoryTableLabel;
   unit: string | null;
 };
 
@@ -113,7 +117,7 @@ export type InventoryYearBlockTableBlock = {
 };
 
 export type InventoryGroupedYearTableData = {
-  title: string;
+  title: InventoryTableLabel;
   description?: string;
   subcolumns: InventoryTableColumn[];
   rows: InventoryTableRow[];

@@ -14,6 +14,7 @@ export type YearMetricsColumn = InventoryTableColumn & {
   type?: "number" | "text";
   id?: string;
   kind?: "fixed" | "custom";
+  required?: boolean;
   index?: number;
   sector?: string;
   metaLabel?: string;
@@ -36,7 +37,7 @@ export type YearMetricsCellRenderer<T extends FieldValues> = (
 ) => ReactNode;
 
 export type YearMetricsTableProps<T extends FieldValues> = {
-  title?: string;
+  title?: ReactNode;
   description?: string;
   className?: string;
   selectedYear?: number;

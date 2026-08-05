@@ -13,7 +13,11 @@ import InventoryYearSelector, {
 } from "../../../components/InventoryYearSelector";
 import { useInventoryContext } from "../../../context/inventory-context";
 import { territorialEnergySectorValues } from "../../../InventorySchema/energy/territorial-energy";
-import { buildElectricityFixedLines, buildElectricityMetrics } from "./config";
+import {
+  buildElectricityFixedLines,
+  buildElectricityMetrics,
+  buildElectricityTitleWithRequirement,
+} from "./config";
 
 const blockKeys = ["lt", "mt", "ht"] as const;
 type ElectricityBlockKey = (typeof blockKeys)[number];
@@ -143,7 +147,10 @@ export default function ElectricitySurface() {
   return (
     <section className="space-y-8">
       <InventoryTableHeader
-        title={tElectricity("surface.title")}
+        title={buildElectricityTitleWithRequirement(
+          tElectricity("surface.title"),
+          tElectricity("surface.requirementTooltip")
+        )}
         endContent={
           <InventoryYearSelector
             datasetKey="electricity"

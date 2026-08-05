@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useScopedI18n } from "@/locales/client";
 import MatrixTable from "@/components/table/matrix";
 import GroupedYear from "@/components/table/grouped-year";
+import { FieldRequired } from "@/components/ui/field-help";
+import Typography from "@/components/ui/typography";
 import PriceAssumptionsTable from "../../../components/PriceAssumptionsTable";
 
 import { useInventoryContext } from "../../../context/inventory-context";
@@ -27,6 +29,18 @@ export default function PublicLightingSurface({ copy }: { copy: PublicLightingSu
   return (
     <div className="space-y-8">
       <MatrixTable
+        title={
+          <Typography variant="sectionTitle" size="lg" className="inline-flex items-center gap-1">
+            <span>{copy.yearlyTitle}</span>
+            <FieldRequired content={tFleet("yearlyRequirementTooltip")} />
+          </Typography>
+        }
+        rows={rows.yearly}
+        form={mainForm}
+        baseName={"municipal.publicLighting.dataSet.yearly"}
+      />
+      <PriceAssumptionsTable titleKey="electricity" priceKeys={["electricity"]} />
+      <MatrixTable
         title={copy.infrastructureTitle}
         rows={rows.infrastructure}
         form={mainForm}
@@ -40,13 +54,6 @@ export default function PublicLightingSurface({ copy }: { copy: PublicLightingSu
         form={mainForm}
         baseName={"municipal.publicLighting.dataSet.lamps"}
       />
-      <MatrixTable
-        title={copy.yearlyTitle}
-        rows={rows.yearly}
-        form={mainForm}
-        baseName={"municipal.publicLighting.dataSet.yearly"}
-      />
-      <PriceAssumptionsTable titleKey="electricity" priceKeys={["electricity"]} />
     </div>
   );
 }

@@ -269,15 +269,12 @@ export async function calculateCollectivityInventory(
   const path = `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/calculate`;
   console.log("collectivityCalculateForward", `${getCollectivityBaseUrl()}${path}`);
 
-  return requestCollectivity<CalculateInventoryResponse>(
-    path,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        inventoryInput,
-      }),
-    }
-  );
+  return requestCollectivity<CalculateInventoryResponse>(path, {
+    method: "POST",
+    body: JSON.stringify({
+      inventoryInput,
+    }),
+  });
 }
 
 export async function getCollectivityInventoryResult(

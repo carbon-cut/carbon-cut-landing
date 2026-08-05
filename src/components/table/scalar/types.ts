@@ -26,7 +26,7 @@ export type ScalarCellRendererArgs<T extends FieldValues> = {
 };
 
 export type ScalarTableProps<T extends FieldValues> = {
-  title: string;
+  title: ReactNode;
   help?: ReactNode;
   form: UseFormReturn<T, undefined>;
   fields: ScalarTableField<T>[];

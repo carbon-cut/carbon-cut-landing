@@ -18,6 +18,7 @@ export type MatrixEditableRows = {
 export type MatrixRowField = {
   key: string;
   label: string;
+  headerLabel?: ReactNode;
   type: "select";
   placeholder?: string;
   options: Array<{ value: string; label: string; unit?: string }>;
@@ -36,7 +37,7 @@ export type MatrixYearCellRenderer<T extends FieldValues> = (
 ) => ReactNode;
 
 export type MatrixTableProps<T extends FieldValues> = {
-  title: string;
+  title: ReactNode;
   rows: MatrixTableRow[];
   form: UseFormReturn<T, undefined>;
   baseName: TName<T>;

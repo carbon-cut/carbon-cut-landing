@@ -4,7 +4,9 @@ import { useMemo } from "react";
 
 import GroupedYear from "@/components/table/grouped-year";
 import MatrixTable from "@/components/table/matrix";
+import { FieldRequired } from "@/components/ui/field-help";
 import { useScopedI18n } from "@/locales/client";
+import Typography from "@/components/ui/typography";
 import { useInventoryContext } from "../../../context/inventory-context";
 import {
   buildFruitTreesRows,
@@ -38,7 +40,12 @@ export default function TreesSurface() {
       />
 
       <MatrixTable
-        title={tTrees("fruitTrees.title")}
+        title={
+          <Typography variant="sectionTitle" size="lg" className="inline-flex items-center gap-1">
+            <span>{tTrees("fruitTrees.title")}</span>
+            <FieldRequired />
+          </Typography>
+        }
         rows={fruitTreesRows}
         form={mainForm}
         baseName="afat.trees.fruitTrees.dataSet"

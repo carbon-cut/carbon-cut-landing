@@ -20,6 +20,7 @@ import {
   buildNaturalGasFixedLines,
   buildNaturalGasMetrics,
   buildNaturalGasPopulationRows,
+  buildNaturalGasTitleWithRequirement,
 } from "./config";
 
 const blockKeys = ["bp", "mp", "hp"] as const;
@@ -170,18 +171,27 @@ export default function NaturalGasSurface() {
   return (
     <section className="space-y-8">
       <MatrixTable
-        title={tNaturalGas("populationTitle")}
+        title={buildNaturalGasTitleWithRequirement(
+          tNaturalGas("populationTitle"),
+          tNaturalGas("populationRequirementTooltip")
+        )}
         rows={populationRows}
         form={mainForm}
         baseName="sharedData.population.dataSet"
       />
       <ScalarTable
-        title={tNaturalGas("assumptionsTitle")}
+        title={buildNaturalGasTitleWithRequirement(
+          tNaturalGas("assumptionsTitle"),
+          tNaturalGas("assumptionsRequirementTooltip")
+        )}
         form={mainForm}
         fields={assumptionFields}
       />
       <InventoryTableHeader
-        title={tNaturalGas("surface.title")}
+        title={buildNaturalGasTitleWithRequirement(
+          tNaturalGas("surface.title"),
+          tNaturalGas("surface.requirementTooltip")
+        )}
         endContent={
           <InventoryYearSelector
             datasetKey="natural-gas"

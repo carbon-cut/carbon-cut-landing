@@ -98,6 +98,10 @@ function toResult(
   return issues.length > 0 ? { success: false, error: { issues } } : { success: true };
 }
 
+function isPublicTransportDatasetKey(datasetKey: string) {
+  return datasetKey === "public-transport" || datasetKey === "publicTransport";
+}
+
 export function validateDatasetCalculationReadiness(
   datasetKey: string,
   values: unknown
@@ -133,7 +137,7 @@ export function validateDatasetCalculationReadiness(
     );
   }
 
-  if (datasetKey === "public-transport") {
+  if (isPublicTransportDatasetKey(datasetKey)) {
     return toResult(
       getPublicTransportRules(values).flatMap((rule) =>
         validateAtLeastOneFallbackActivityRule(values, rule)
@@ -172,7 +176,7 @@ export function getDatasetCalculationReadinessPaths(datasetKey: string, values: 
     return getAtLeastOneRecordColumnActivityRulePaths(airTransportNationalMovementsRule);
   }
 
-  if (datasetKey === "public-transport") {
+  if (isPublicTransportDatasetKey(datasetKey)) {
     return getPublicTransportRules(values).flatMap((rule) =>
       getAtLeastOneFallbackActivityRulePaths(values, rule)
     );
