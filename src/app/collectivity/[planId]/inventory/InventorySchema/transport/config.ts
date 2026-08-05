@@ -194,7 +194,6 @@ export function buildTerritoryVehicleDefaultRows(rows: unknown) {
     .filter(({ key }) => !existingTypes.has(key))
     .map(({ key, fuel }) => ({
       vehicleType: key,
-      protected: true,
       fuel,
       value: {
         vehicles: {

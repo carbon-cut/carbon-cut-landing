@@ -19,6 +19,18 @@ const territoryVehicleTypeKeys = Object.keys(
   territoryVehicles.allowedFuelsByType
 ) as Array<TerritoryVehicleType>;
 
+function isRequiredDefaultRow(
+  row: TerritoryVehicleRow | Record<string, unknown> | null | undefined
+) {
+  if (!row || typeof row !== "object") {
+    return false;
+  }
+
+  return territoryVehicles.requiredDefaults.some(
+    ({ key, fuel }) => row.vehicleType === key && row.fuel === fuel
+  );
+}
+
 export function buildTerritoryVehicleTypeOptions(labelFunc: (key: string) => string) {
   return territoryVehicleTypeKeys.map((vehicleType) => ({
     value: vehicleType,
@@ -166,21 +178,9 @@ export function buildTerritoryVehiclesEditableRows(
     minRows: 0,
     rowLabelPrefix: labelFunc("rowLabelPrefix"),
     rowKeyFieldName: "vehicleType",
-    canRemoveRow: (row) => {
-      if (!row || typeof row !== "object") {
-        return true;
-      }
-
-      return (row as Record<string, unknown>).protected !== true;
-    },
+    canRemoveRow: (row) => !isRequiredDefaultRow(row as TerritoryVehicleRow),
     isFieldDisabled: (row, fieldKey) => {
-      if (!row || typeof row !== "object") {
-        return false;
-      }
-
-      const record = row as Record<string, unknown>;
-
-      if (record.protected !== true) {
+      if (!isRequiredDefaultRow(row as TerritoryVehicleRow)) {
         return false;
       }
 
