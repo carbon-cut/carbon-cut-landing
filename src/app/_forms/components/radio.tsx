@@ -16,7 +16,7 @@ type Props<T extends FieldValues> = {
   form: UseFormReturn<T, undefined>;
   options: {
     label: string;
-    value: string | number;
+    value: string | number | boolean;
   }[];
   name: TName<T>;
   className?: ClassValue;
@@ -47,8 +47,10 @@ function Radio<T extends FieldValues>({
               className={cn("w-3/6 mx-auto flex flex-row flex-wrap justify-between ", className)}
               value={field.value === undefined ? undefined : String(field.value)}
               onValueChange={(v) => {
-                field.onChange(v);
-                setState?.(v);
+                const selectedOption = options.find((option) => String(option.value) === v);
+                const nextValue = selectedOption?.value ?? v;
+                field.onChange(nextValue);
+                setState?.(nextValue);
               }}
               onBlur={field.onBlur}
               name={field.name}
@@ -65,7 +67,7 @@ function Radio<T extends FieldValues>({
                 >
                   <FormControl>
                     <RadioGroupItemSwitch
-                      value={option.value as string}
+                      value={String(option.value)}
                       id={`r${index}`}
                       label={option.label}
                       checked={selected(field.value, option.value)}

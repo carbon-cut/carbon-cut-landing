@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { FieldPath, FieldValues, set, UseFormReturn } from "react-hook-form";
+import React from "react";
+import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage, TValue } from "../../ui/forms";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { useScopedI18n } from "@/locales/client";
@@ -17,6 +17,7 @@ interface Props<T extends FieldValues, E extends FieldPath<T>> {
   size?: "sm" | "xl";
   attachedFields?: FieldPath<T>[];
   isError?: boolean;
+  disabled?: boolean;
 }
 
 function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
@@ -31,6 +32,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
   size = "xl",
   attachedFields = [],
   isError = false,
+  disabled = false,
 }: Props<T, E>) {
   const t = useScopedI18n("components.forms.combox");
 
@@ -58,6 +60,7 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
             </FormLabel>
           )}
           <Select
+            disabled={disabled}
             onValueChange={(_) => {
               console.log(_);
               field.onChange(_);
@@ -67,14 +70,17 @@ function FormSelect<T extends FieldValues, E extends FieldPath<T>>({
           >
             <FormControl>
               <SelectTrigger
+                disabled={disabled}
                 data-size={"none"}
                 onClick={(e) => {
+                  if (disabled) return;
                   setOpen(true);
                 }}
                 key={`${open}`}
                 className={`rounded-full w-full  
                 text-left font-normal bg-white text-ellipsis
-                 ${fieldState.error ? "outline-none ring-1 ring-destructive/60 " : open ? "outline-4 ring-1 ring-ring" : ""}
+                 ${disabled ? "bg-muted text-muted-foreground cursor-not-allowed opacity-70" : ""}
+                 ${fieldState.error ? "outline-none ring-1 ring-destructive/60 " : open && !disabled ? "outline-4 ring-1 ring-ring" : ""}
                  ${size === "sm" ? "h-8 [&_span]:text-xs [&_svg]:size-3.5" : "h-9"}
                  `}
               >

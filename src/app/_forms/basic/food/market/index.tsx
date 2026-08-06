@@ -21,14 +21,6 @@ const frequency = ["year", "month", "week"] as const;
 const Market: QuestionFC = ({ mainForm, setSubmit }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.food.markets");
 
-  useEffect(() => {
-    setSubmit(true);
-
-    return () => {
-      setSubmit(false);
-    };
-  }, []);
-
   return (
     <div>
       <Question>{t("q.text")}</Question>
