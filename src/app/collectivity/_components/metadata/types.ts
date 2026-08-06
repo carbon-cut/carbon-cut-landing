@@ -6,9 +6,13 @@ import { metadata as collectivityMetadataSchema } from "@/app/collectivity/[plan
 
 export type CollectivityMetadataValue = z.infer<typeof collectivityMetadataSchema>;
 
-export type CollectivityMetadataSourceValue = NonNullable<CollectivityMetadataValue["source"]>;
+export type CollectivityMetadataSourceValue = NonNullable<
+  Exclude<CollectivityMetadataValue, undefined>["source"]
+>;
 
-export type CollectivityMetadataQualityValue = NonNullable<CollectivityMetadataValue["quality"]>;
+export type CollectivityMetadataQualityValue = NonNullable<
+  Exclude<CollectivityMetadataValue, undefined>["quality"]
+>;
 
 export type CollectivityMetadataControlProps<TFieldValues extends FieldValues> = {
   form: UseFormReturn<TFieldValues, undefined>;

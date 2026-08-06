@@ -83,7 +83,7 @@ export function createYearMetricsColumns<T extends FieldValues>({
               <InventoryTableInput
                 form={form}
                 name={(column.metaFieldName ?? baseName) as TName<T>}
-                placeholder={column.label}
+                placeholder={String(column.label)}
               />
               {column.onRemoveColumn ? (
                 <InventoryTableIconButton
