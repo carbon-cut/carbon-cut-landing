@@ -43,7 +43,7 @@ export function buildInventoryDefaultValues(inventoryInput?: Record<string, unkn
       population: {},
       householdEnergy: {},
     },
-  } as Partial<InventoryFormValues>;
+  };
   const input = getRecord(inventoryInput);
 
   return {
