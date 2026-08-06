@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../components/question";
-import { FormAlert } from "../../../components/alert";
+import Question from "../../../components/QuestionPrompt";
+import { FieldAlert as FormAlert } from "@/components/forms";
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Input from "../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { FormField, FormMessage, TName, useFormField } from "@/components/ui/forms";
 import { cn } from "@/lib/utils";
 import { useWatch } from "react-hook-form";

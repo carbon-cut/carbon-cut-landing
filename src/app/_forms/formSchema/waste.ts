@@ -1,45 +1,13 @@
 import { z } from "zod";
-import { union } from "./utils";
-
-const wasteGeneral = z.object({
-  amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
-  bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
-  destination: z.null(),
-});
-
-const wasteOrganic = z.object({
-  amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
-  bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
-  destination: union("idk", "biomethan", "compost"),
-});
-
-const wasteRecycle = z.object({
-  amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
-  bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
-  destination: union("idk", "incineration", "recycling"),
-});
-
-const wastePaper = z.object({
-  amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
-  bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
-  destination: union("idk", "incineration", "recycling", "biomethan", "compost"),
-});
-
-const wasteGlass = z.object({
-  amount: z.coerce.number(),
-  amountUnit: z.union([z.literal("bag"), z.literal("kg")]),
-  frequencyUnit: z.union([z.literal("day"), z.literal("week")]),
-  bagVolume: union("10", "20", "30", "40", "50", "60", "70", "80", "90", "100"),
-  destination: union("idk", "recycling", "biomethan", "incineration"),
-});
+import { requiredNumber, union } from "./utils";
+import {
+  wasteGeneral,
+  wasteOrganic,
+  wasteRecycle,
+  wastePaper,
+  wasteGlass,
+  water,
+} from "./validation/waste";
 
 const waste = z.object({
   general: z.object({
@@ -51,7 +19,6 @@ const waste = z.object({
     glass: wasteGlass.nullable(),
     organic: wasteOrganic.nullable(),
   }),
-
   details: z.object({
     wasteDestination: union(
       "incineration",
@@ -61,33 +28,22 @@ const waste = z.object({
       "biomethanation",
       "idk"
     ),
-    personalCompost: z.boolean().default(false),
+    // personalCompost: z.boolean().default(false),
     hasBiodigest: z.boolean().default(false),
-    biodigest: z.object({
-      electric: z.object({
-        amount: z.coerce.number(), // kWh
-        frequencyUnit: union("month", "year"),
-      }),
-      biogas: z.object({
-        amount: z.coerce.number(), // m3
-        frequencyUnit: union("month", "year"),
-      }),
-    }),
+    biodigest: z
+      .object({
+        electric: z.object({
+          amount: requiredNumber(), // kWh
+          frequencyUnit: union("month", "year"),
+        }),
+        biogas: z.object({
+          amount: requiredNumber(), // m3
+          frequencyUnit: union("month", "year"),
+        }),
+      })
+      .optional(),
   }),
-  water: z.object({
-    money: z.object({
-      amount: z.coerce.number(), // euro
-      frequencyUnit: union("month", "year"),
-    }),
-    wasteWater: z.object({
-      amount: z.coerce.number(), // euro
-      frequencyUnit: union("month", "year"),
-    }),
-    /*       index: z.object({
-        value: z.coerce.number(), // in m3?
-        date: z.date(),
-      }), */
-  }),
+  water: water,
 });
 
 export { waste };

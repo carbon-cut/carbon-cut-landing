@@ -31,7 +31,7 @@ export default function ResultPageClient() {
       ).then((res) => res.json());
       return response as {
         transport: TransportResult;
-        energie: EnergieResult;
+        energy: EnergieResult;
       };
     },
     enabled: Boolean(formId),
@@ -64,7 +64,7 @@ export default function ResultPageClient() {
     animateCounter();
   }, []);
 
-  const woodScope1N = cachedResult?.energie?.thermal?.wood?.scope1N ?? 0;
+  const woodScope1N = cachedResult?.energy?.thermal?.wood?.scope1N ?? 0;
   const shouldShowWoodNotice = woodScope1N > 0;
 
   const breakdownData: {
@@ -80,7 +80,7 @@ export default function ResultPageClient() {
       color: "#FF6034",
     },
     {
-      name: "energie",
+      name: "energy",
       value: 28,
       tons: 1.46,
       color: "#00A261",
@@ -114,8 +114,8 @@ export default function ResultPageClient() {
         <ResultCard carbonFootprint={carbonFootprint} averageFootprint={averageFootprint} />
 
         {shouldShowWoodNotice ? (
-          <Alert className="mb-16 border-section-energie/30 bg-section-energie/10">
-            <AlertTitle className="text-primary">{t("title")}</AlertTitle>
+          <Alert className="mb-16 border-section-energy/30 bg-section-energy/10">
+            <AlertTitle className="text-foreground">{t("title")}</AlertTitle>
             <AlertDescription className="text-secondary">{t("description")}</AlertDescription>
           </Alert>
         ) : null}

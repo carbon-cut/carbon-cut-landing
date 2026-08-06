@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+/local-notes/
+/.codex/
 
 # debug
 npm-debug.log*
@@ -49,3 +51,4 @@ chromatic.log
 chromatic-build-*.xml
 chromatic-diagnostics.json
 .env
+

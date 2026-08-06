@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { QuestionProps, QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../components/question";
-import Content from "../../../components/content";
-import Input from "../../../components/input";
-import { FormAlert } from "../../../components/alert";
+import Question from "../../../components/QuestionPrompt";
+import Content from "../../../components/QuestionContent";
+import { FieldInput as Input } from "@/components/forms";
+import { FieldAlert as FormAlert } from "@/components/forms";
 import { FormField, FormItem, FormMessage, useFormField } from "@/components/ui/forms";
 
 const meals = ["redMeat", "whiteMeat", "oilyFish", "whiteFish", "vegan", "vegetarian"] as const;

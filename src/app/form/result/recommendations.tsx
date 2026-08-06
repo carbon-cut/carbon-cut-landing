@@ -18,9 +18,9 @@ function Recommendations() {
             accent: "#FF6034",
           },
           {
-            section: "energie",
+            section: "energy",
             icon: "⚡",
-            title: "energie",
+            title: "energy",
             //desc: "Switch to renewable sources and improve insulation",
             gradient: "from-[#E6F9F3] to-[#D1F2EB]",
             accent: "#00A261",

@@ -1,5 +1,5 @@
 {
-  "energie": {
+  "energy": {
     "gas": {
       "scope1": 1.91632
     },
@@ -45,6 +45,14 @@
         "metro": [],
         "covoiturage": []
       }
+    }
+  },
+  "waste": {
+    "waste": {
+      "scope3": 416
+    },
+    "water": {
+      "scope3": 15
     }
   }
 }

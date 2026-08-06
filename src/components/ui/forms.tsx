@@ -93,7 +93,7 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn("data-[state=error]:text-destructive", className)}
+      className={cn("text-foreground/80 data-[state=error]:text-destructive", className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -144,7 +144,14 @@ const FormMessage = React.forwardRef<
 >(({ className, children, fallback, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
   const t = useScopedI18n("forms.errors");
-  const body = error?.message ?? children;
+  const rawMessage = error?.message;
+  const normalizedMessage =
+    typeof rawMessage === "string" &&
+    rawMessage.startsWith("Invalid enum value.") &&
+    rawMessage.includes("received ''")
+      ? "Required"
+      : rawMessage;
+  const body = normalizedMessage ?? children;
 
   if (!body) {
     return (
@@ -169,7 +176,7 @@ const FormMessage = React.forwardRef<
       )}
       {...props}
     >
-      {error ? t(String(error?.message)) : children}
+      {error ? t(String(normalizedMessage)) : children}
     </p>
   );
 });

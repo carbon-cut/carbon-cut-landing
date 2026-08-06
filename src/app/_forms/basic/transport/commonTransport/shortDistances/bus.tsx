@@ -1,6 +1,6 @@
 import { QuestionProps } from "../../../../types";
-import FormSelect from "@/components/forms/formSelect";
-import Input from "../../../../components/input";
+import { FieldSelect as FormSelect } from "@/components/forms";
+import { FieldInput as Input } from "@/components/forms";
 import { useScopedI18n } from "@/locales/client";
 
 type Props = {

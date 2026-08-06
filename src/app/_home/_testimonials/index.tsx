@@ -1,7 +1,7 @@
 "use client";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -95,29 +95,30 @@ function Testimonials() {
     <div className="flex flex-col md:grid md:grid-cols-2 md:py-12 md:px-32 py-6 px-2 gap-8 w-full max-w-full">
       <div className=" md:pr-24 timeline-view range-on-entry/20vh_50vh opacity-0 animate-tilt-in-left motion-reduce:animate-none no-animations:translate-y-0 no-animations:translate-x-0 no-animations:rotate-0 no-animations:opacity-100">
         <div className="h-[50px]" />
-        <span className="text-center text-4xl font-bold tracking-tight lg:text-5xl text-primary">
-          {t("title")}
-        </span>
-        <br />
-        <p className="text-secondary my-6">{t("description")}</p>
+        <Typography asChild variant="title" size="xl" className="text-center">
+          <h2 id="testimonials-heading">{t("title")}</h2>
+        </Typography>
+        <Typography asChild variant="description" size="md" className="my-6">
+          <p>{t("description")}</p>
+        </Typography>
         <div className="grid grid-cols-2 w-1/4">
           <Button
             size={"icon"}
             variant={"ghost"}
-            className=" hover:bg-transparent rounded-full bg-white border-chart-2 border "
+            className="rounded-full border border-chart-2 bg-card text-chart-2 hover:bg-card/90"
             onClick={handlePrev}
             aria-label={t("controls.prev")}
           >
-            <ArrowLeft className="stroke-chart-2" aria-hidden />
+            <ArrowLeft aria-hidden />
           </Button>
           <Button
             size={"icon"}
             variant={"ghost"}
-            className="rounded-full bg-white border-chart-2 border "
+            className="rounded-full border border-chart-2 bg-card text-chart-2 hover:bg-card/90"
             onClick={handleNext}
             aria-label={t("controls.next")}
           >
-            <ArrowRight className="stroke-chart-2" aria-hidden />
+            <ArrowRight aria-hidden />
           </Button>
         </div>
       </div>
@@ -142,20 +143,24 @@ function Testimonials() {
                   alt="Quote icon"
                   src={`${basePath}/home/features/bi_chat-quote-fill.svg`}
                 />
-                <p className="text-primary font-semibold text-xl my-4 leading-relaxed">
+                <p className="text-foreground font-semibold text-xl my-4 leading-relaxed">
                   {item.quote}
                 </p>
                 <p className="text-secondary text-base mb-6 leading-relaxed">{item.detail}</p>
                 <div className="mt-auto flex flex-row justify-start">
                   <Avatar className="h-12 w-12">
                     {item.avatar ? <AvatarImage src={`${basePath}/${item.avatar}`} /> : null}
-                    <AvatarFallback className="bg-chart-3 text-primary-foreground">
+                    <AvatarFallback className="bg-chart-3 text-accent-foreground">
                       {item.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div className="ml-3">
-                    <h1 className="text-primary text-lg font-semibold">{item.name}</h1>
-                    <p className="text-secondary">{item.role}</p>
+                    <Typography asChild variant="subtitle">
+                      <h3>{item.name}</h3>
+                    </Typography>
+                    <Typography asChild variant="description">
+                      <p>{item.role}</p>
+                    </Typography>
                   </div>
                 </div>
               </article>

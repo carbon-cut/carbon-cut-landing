@@ -1,37 +1,49 @@
 # AGENTS
 
-Working notes for anyone contributing to this codebase. Keep changes aligned with the existing implementation rather than reinventing patterns.
+Working notes for contributors to this codebase.
 
 ## Project map
 
-- Next.js App Router in `src/app`; root layout wires `Header`, `Footer`, `ScrollToTopButton`, `Providers` (`src/lib/partials/Providers.tsx` starts MSW and React Query).
-- Design system: Tailwind with CSS variables defined in `src/app/globals.css` (green/orange palette via `--primary`, `--chart-*`, `--section-*`). UI primitives live in `src/components/ui` (Button, Typography, Badge, Card, Tabs, Forms, etc.) and should be reused instead of raw elements.
-- Home page is composed from section wrappers in `src/app/_home/sections/*` and presentational components in sibling folders (`_features`, `_pricing`, `_testimonials`, `_faqs`).
-- Forms flow: `src/app/form` uses `react-hook-form` + `zod` schemas from `src/app/_forms/formSchema`, with shared context in `src/app/form/_layout/_formContext.tsx` and question renderers under `_components`.
-- Static assets expect `NEXT_PUBLIC_BASE_PATH`; Next Image/Link used across sections for performance and routing.
+- Next.js App Router in `src/app`; root layout wires `Header`, `Footer`, `ScrollToTopButton`, and `Providers`.
+- Design system uses Tailwind + CSS variables from `src/app/globals.css`; shared primitives are in `src/components/ui`.
+- Home page is assembled from `src/app/_home/sections/*` and sibling presentational folders.
+- Forms use `react-hook-form` + `zod` schemas from `src/app/_forms/formSchema` with shared form context.
+- Static assets should respect `NEXT_PUBLIC_BASE_PATH`.
 
-## Patterns to reuse
+## Implementation rules
 
-- Prefer the shared UI components for typography, buttons, badges, cards, tabs, form wiring, etc.; follow existing className/variant patterns (`class-variance-authority` + `cn`).
-- Keep styling on the palette: use theme tokens (`text-primary`, `text-secondary`, `text-chart-3`, `bg-card`, `bg-linear-*`) instead of new hex values. Respect the soft background tone (`#F8F8EC`) used on hero/CTA when adding similar blocks.
-- Maintain the section pattern: `section` with `aria-labelledby`, a heading rendered via `Typography`, and any controls labeled (`aria-label` for buttons/nav).
-- Animations are handled with Tailwind plugins (`timeline-view`, `animate-rise-in`, `animate-tilt-in-*`, etc.); reuse these utility classes to match existing motion.
-- When adding assets, prepend `process.env.NEXT_PUBLIC_BASE_PATH` where applicable to keep preview builds working.
+- Prefer shared primitives/components before introducing local UI patterns.
+- Prefer the shared `Typography` primitive for text styling; do not introduce arbitrary text sizes, weights, or line-heights when an existing typography variant/size fits.
+- For product UI, arbitrary Tailwind values such as `text-[...]`, `h-[...]`, `rounded-[...]`, or `tracking-[...]` are forbidden by default. Use them only when the user explicitly approves them, or when the system cannot express the required reference and that limitation has been stated first.
+- Keep styling aligned with token semantics in `globals.css` and `tailwind.config.ts`.
+- Preserve accessibility (`aria-*`, alt text, keyboard focus visibility).
+- Keep sections semantic and data-driven where possible.
+- Mocks must imitate the real backend/API contract exactly. Do not invent mock-only response shapes, UI convenience fields, shortcuts, or alternate data structures. If the contract is unclear, stop and clarify it before coding the mock or the UI parser.
+- Run `npm run lint` before shipping UI changes.
+- Only change files or code the user explicitly asked you to change.
+- Do not overreach; if the task is simple, do the simple task and do not go wild.
+- When the user names a specific layer, file, region, or subsystem, treat that as a hard scope boundary.
+- Do not modify shared components, locales, schemas, APIs, tests, or adjacent files unless the user explicitly approves that scope expansion.
+- If the requested change cannot be completed without crossing the stated scope, stop and ask before editing outside it.
+- Do not "clean up", "align", or "follow through" into neighboring layers unless the user explicitly asks for that additional work.
+- When a user requests changes to a specific UI region, do not modify adjacent regions, shared shells, headers, sidebars, or unrelated surfaces unless the user explicitly includes them.
+- If a reference image is provided, apply it only to the named region in scope, not to the whole screen or neighboring UI.
 
-## Translation expectations
+## Localization
 
-- Source of truth is `src/locales/fr.ts`. Use `useScopedI18n` in client components and `useScopedServerI18n` in server components/metadata; no hard-coded UI strings.
-- New copy belongs in the locale file under the existing scopes (`seo.*`, `home.*`, `components.*`, `forms.*`, etc.). Follow the nested structure (e.g., `home.pricing.*`, `home.faq.*`) so hooks resolve naturally.
-- Outstanding i18n work: move the pricing plan labels/descriptions/prices from `src/app/_home/_pricing/index.tsx` and FAQ items in `src/app/_home/_faqs/index.tsx` into the locale file; align `<html lang>` with the default locale.
+- Source of truth: `src/locales/fr.ts`.
+- Use `useScopedI18n` and `useScopedServerI18n`; avoid hard-coded UI strings.
 
-## Component structure and reuse
+## Design docs entrypoint
 
-- Keep sections data-driven: define arrays of content and map to small card components (pattern used in `_features` and `_testimonials`); avoid duplicating markup.
-- Shared patterns belong in `src/components` (ui/layout/forms). If a block is reused across pages, extract a prop-driven component rather than copying section markup.
-- Forms: extend schemas in `src/app/_forms/formSchema`, keep `zod` types and `react-hook-form` fields in sync, and leverage the helpers in `src/components/ui/forms` for accessibility/error messaging.
-- Charts or API-bound views should run through React Query (already set up) and respect the mock worker during development.
+Use docs in `docs/design/` with precedence defined in:
 
-## Workflow notes
+- `docs/design/README.md`
 
-- Run `npm run dev` for local work, `npm run lint` before shipping. Storybook is available (`npm run storybook`) for UI verification; add stories when introducing new primitives or layout blocks.
-- Preserve accessibility: meaningful alt text on images, keyboard focus states (already styled in `globals.css`), and `aria-*` labels on controls like carousels or nav toggles.
+Primary files:
+
+- `docs/design/00-product-truth.md`
+- `docs/design/house-style-overrides.md`
+- `docs/design/01-design-principles.md`
+- `docs/design/02-homepage-spec.md`
+- `docs/design/03-workflow.md`

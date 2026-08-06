@@ -14,15 +14,16 @@ import {
 } from "@/components/ui/dialog";
 import { Menu } from "lucide-react";
 import React from "react";
-import { QuestionFC, QuestionProps } from "@/app/_forms/types";
+import { QuestionFC } from "@/app/_forms/types";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { TabValues } from "@/lib/formTabs/types";
 import FormContext from "../_layout/_formContext";
 import { useScopedI18n } from "@/locales/client";
-import { getIcon, getName } from "@/lib/formTabs/geters";
+import { getIcon } from "@/lib/formTabs/geters";
 import { Label } from "@/components/ui/label";
-import Question from "./question";
+import Question from "./QuestionListItem";
+import Typography from "@/components/ui/typography";
 
 interface Props {
   list: { [key in TabValues]?: QuestionFC[] };
@@ -34,21 +35,22 @@ interface Props {
 function buttonVariants(tab: TabValues) {
   switch (tab) {
     case "transport":
-      return "border-section-transport/50 text-section-transport hover:bg-section-transport/80";
+      return "border-section-transport/50 text-section-transport hover:bg-section-transport/80 hover:border-section-transport";
     case "food":
-      return "border-section-food/50 text-section-food hover:bg-section-food/80";
+      return "border-section-food/50 text-section-food hover:bg-section-food/80 hover:border-section-food";
     case "vacation":
-      return "border-section-vacation/50 text-section-vacation hover:bg-section-vacation/80";
-    case "energie":
-      return "border-section-energie/50 text-section-energie hover:bg-section-energie/80";
+      return "border-section-vacation/50 text-section-vacation hover:bg-section-vacation/80 hover:border-section-vacation";
+    case "energy":
+      return "border-section-energy/50 text-section-energy hover:bg-section-energy/80 hover:border-section-energy";
     case "waste":
-      return "border-section-waste/50 text-section-waste hover:bg-section-waste/80";
+      return "border-section-waste/50 text-section-waste hover:bg-section-waste/80 hover:border-section-waste";
   }
 }
 
 function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
   const t = useScopedI18n("forms");
   const tOverview = useScopedI18n("components.forms.overview");
+  const tSections = useScopedI18n("sections");
 
   const { tab, setTab, currentIndexes, setCurrentIndexes } = React.useContext(FormContext);
 
@@ -59,9 +61,8 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
           type="button"
           variant="outline"
           className={`
-          w-fit
-          hover:text-accent
-          bg-transparent
+            bg-transparent
+          hover:text-primary-foreground
           ${buttonVariants(tab)}
           `}
         >
@@ -70,19 +71,25 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent asChild className="h-4/6 overflow-hidden w-11/12 rounded-xl">
+      <DialogContent asChild className="h-4/6 w-11/12 overflow-hidden rounded-xl bg-card">
         <DialogHeader className="mb-4 max-w-full">
-          <DialogTitle className="font-extrabold text-section-transport text-2xl">
-            {tOverview("title")}
+          <DialogTitle asChild>
+            <Typography asChild variant="title" size="lg" className="text-section-transport">
+              <h3>{tOverview("title")}</h3>
+            </Typography>
           </DialogTitle>
-          <DialogDescription className="text-sm">{tOverview("description")}</DialogDescription>
+          <DialogDescription asChild>
+            <Typography asChild variant="description" size="sm">
+              <p>{tOverview("description")}</p>
+            </Typography>
+          </DialogDescription>
         </DialogHeader>
         <Accordion type="single" collapsible className="w-full">
           {(Object.keys(list) as TabValues[]).map((key) => {
             const Icon = getIcon(key);
             const ColorVariant = {
               transport: "bg-section-transport",
-              energie: "bg-section-energie",
+              energy: "bg-section-energy",
               food: "bg-section-food",
               waste: "bg-section-waste",
               vacation: "bg-section-vacation",
@@ -92,14 +99,11 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
 
             return (
               <AccordionItem
-                className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 md:px-4
+                className={`max-w-full  mb-4 border-b-0 2 border-2  rounded-lg px-0 
                  hover:border-section-transport transition-colors
-                ${sectionError ? "border-destructive hover:border-destructive/60" : "border-gray-200"}
+                ${sectionError ? "border-destructive hover:border-destructive/60" : "border-border"}
                 `}
-                style={{
-                  //@ts-expect-error interpolateSize is not supported, only in Chrome
-                  interpolateSize: "allow-keywords",
-                }}
+                style={{ interpolateSize: "allow-keywords" } as React.CSSProperties}
                 key={key}
                 value={key}
               >
@@ -110,13 +114,15 @@ function QuestionList({ list, mainForm, dialog, setDialog }: Props) {
                 >
                   <div className="flex flex-row">
                     <div className={`p-2 rounded-full h-fit my-auto ${ColorVariant[key]}`}>
-                      <Icon className="h-5 w-5 text-white" />
+                      <Icon className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <div className="grid grid-rows-2 ml-3">
-                      <Label className="font-extrabold text-lg">{getName(key)}</Label>
-                      <Label className="font-semibold text-sm text-muted-foreground">
-                        {list[key]?.length} questions
-                      </Label>
+                      <Typography asChild variant="subtitle" size="md">
+                        <Label>{tSections(key)}</Label>
+                      </Typography>
+                      <Typography asChild variant="caption" size="sm">
+                        <Label>{list[key]?.length} questions</Label>
+                      </Typography>
                     </div>
                   </div>
                 </AccordionTrigger>

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import Question from "../../../../components/question";
+import Question from "../../../../components/QuestionPrompt";
 import { useScopedI18n } from "@/locales/client";
-import Content from "../../../../components/content";
+import Content from "@/app/_forms/components/QuestionContent";
 import { QuestionProps } from "../../../../types";
 import { useQuery } from "@tanstack/react-query";
-import FormCombox from "../../../../components/combox";
-import Input from "@/app/_forms/components/input";
+import { FieldCombobox as FormCombox } from "@/components/forms";
+import { FieldInput as Input } from "@/components/forms";
 import { Button } from "@/components/ui/button";
 import { useWatch } from "react-hook-form";
 
@@ -108,7 +108,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({ index, mainForm }) =>
             type="button"
             variant="link"
             size="sm"
-            className="h-auto px-0 text-xs font-semibold text-section-energie/90"
+            className="h-auto px-0 text-xs font-semibold text-section-energy/90"
             onClick={() => {
               if (useCustomMake) {
                 setUseCustomMake(false);
@@ -147,7 +147,7 @@ const QuestionCompo1: React.FC<QuestionProps & Props> = ({ index, mainForm }) =>
             type="button"
             variant="link"
             size="sm"
-            className="h-auto px-0 text-xs font-semibold text-section-energie/90"
+            className="h-auto px-0 text-xs font-semibold text-section-energy/90"
             disabled={!make || make == "" || useCustomMake}
             onClick={() => {
               if (useCustomModel) {

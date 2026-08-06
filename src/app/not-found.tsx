@@ -11,7 +11,7 @@ function NotFound() {
       <div className="pointer-events-none absolute inset-0 opacity-90">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_25%,hsl(var(--chart-1)_/_0.30),transparent_40%),radial-gradient(circle_at_80%_20%,hsl(var(--chart-2)_/_0.22),transparent_42%),radial-gradient(circle_at_50%_78%,hsl(var(--chart-3)_/_0.18),transparent_45%)]" />
       </div>
-      <div className="relative max-w-3xl w-full text-center space-y-6 px-4 text-primary">
+      <div className="relative max-w-3xl w-full text-center space-y-6 px-4 text-foreground">
         <p className="text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--chart-1))] via-[hsl(var(--chart-2))] to-[hsl(var(--chart-3))] text-6xl md:text-8xl font-black tracking-tight drop-shadow-sm">
           404
         </p>
@@ -24,7 +24,7 @@ function NotFound() {
             <Link href="/">{t("404.button")}</Link>
           </Button>
           <Link
-            className="text-primary underline-offset-4 hover:underline text-base font-medium"
+            className="text-foreground underline-offset-4 hover:underline text-base font-medium"
             href="/#faq"
           >
             {tNav("faq")}

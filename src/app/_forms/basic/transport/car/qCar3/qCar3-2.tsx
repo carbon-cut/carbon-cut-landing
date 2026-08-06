@@ -2,9 +2,9 @@ import { FuelTypes, QuestionProps } from "@/app/_forms/types";
 import { useScopedI18n } from "@/locales/client";
 import React, { useEffect, useState } from "react";
 import CarTitle from "../components/carTitle";
-import Question from "@/app/_forms/components/question";
-import Content from "@/app/_forms/components/content";
-import Input from "@/app/_forms/components/input";
+import Question from "@/app/_forms/components/QuestionPrompt";
+import Content from "@/app/_forms/components/QuestionContent";
+import { FieldInput as Input } from "@/components/forms";
 import SegmentedControl from "@/components/ui/segmentedControl";
 
 function QCarComponent({

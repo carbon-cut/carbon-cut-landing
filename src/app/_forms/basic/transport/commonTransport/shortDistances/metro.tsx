@@ -7,7 +7,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { QuestionProps } from "../../../../types";
-import Input from "../../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { UseFieldArrayRemove } from "react-hook-form";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";

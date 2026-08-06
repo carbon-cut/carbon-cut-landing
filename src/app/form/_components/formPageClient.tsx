@@ -1,10 +1,11 @@
 "use client";
 
 import { Tabs, TabsList } from "@/components/ui/tabs";
-import { TabTrigger } from "./_tab";
-import initEnergieQuestions from "../../_forms/basic/energie";
+import { TabTrigger } from "./formTabs";
+import initEnergyQuestions from "../../_forms/basic/energy";
 import initTransportQuestions from "../../_forms/basic/transport";
 import initFoodQuestions from "../../_forms/basic/food";
+import initWasteQuestions from "../../_forms/basic/waste";
 import React, { useCallback, useMemo, useState } from "react";
 import { Form } from "@/components/ui/forms";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -14,7 +15,7 @@ import { formSchema } from "../../_forms/formSchema";
 import FormContext from "../_layout/_formContext";
 import { Car, Zap, UtensilsCrossed, Trash2, Plane } from "lucide-react";
 import ProgressBar from "./_progressBar";
-import { getIndex, getName } from "@/lib/formTabs/geters";
+import { getIndex } from "@/lib/formTabs/geters";
 import QuestionList from "./questionList";
 import style from "../form.module.css";
 import Container from "./container";
@@ -24,10 +25,13 @@ import { v4 as uuidv4 } from "uuid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import PreAssessment from "./preAssessment";
+import { shellLayout } from "./shellLayout";
+import { useScopedI18n } from "@/locales/client";
 
 export default function FormPageClient() {
   const { tab, setTab, currentIndexes, readyToSubmit } = React.useContext(FormContext);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const tSections = useScopedI18n("sections");
 
   const router = useRouter();
 
@@ -37,8 +41,9 @@ export default function FormPageClient() {
   const [showPreAssessment, setShowPreAssessment] = useState<boolean>(true);
 
   const transportQuestions = useState(initTransportQuestions);
-  const energieQuestions = useState(initEnergieQuestions);
+  const energyQuestions = useState(initEnergyQuestions);
   const foodQuestions = useState(initFoodQuestions);
+  const wasteQuestions = useState(initWasteQuestions);
 
   const mainForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -108,25 +113,29 @@ export default function FormPageClient() {
   const dataLengths = useMemo(() => {
     return {
       transport: transportQuestions[0].length,
-      energie: energieQuestions[0].length,
+      energy: energyQuestions[0].length,
       food: foodQuestions[0].length,
-      waste: 0,
+      waste: wasteQuestions[0].length,
       vacation: 0,
-      total: transportQuestions[0].length + energieQuestions[0].length + foodQuestions[0].length,
+      total:
+        transportQuestions[0].length +
+        energyQuestions[0].length +
+        foodQuestions[0].length +
+        wasteQuestions[0].length,
     };
-  }, [foodQuestions, transportQuestions, energieQuestions]);
+  }, [foodQuestions, transportQuestions, energyQuestions, wasteQuestions]);
 
   const setNextTab = useCallback(() => {
     setTab((prev) => {
       switch (prev) {
         case "transport":
-          return "energie";
-        case "energie":
+          return "energy";
+        case "energy":
           return "food";
         case "food":
-          return "food";
+          return "waste";
         case "waste":
-          return "vacation";
+          return "waste";
         case "vacation":
           return "vacation";
         default:
@@ -158,7 +167,22 @@ export default function FormPageClient() {
             sizes="100vw"
             className="h-auto w-full object-cover object-top"
           />
+          <div className="bg-[#7e94ef] h-fit object-bottom opacity-80 border-2 border-[#7e94ef]"></div>
         </div>
+        <div
+          className={style.landSkyMask}
+          style={{
+            WebkitMaskImage: `url(${basePath}/form/background/land1.png)`,
+            maskImage: `url(${basePath}/form/background/land1.png)`,
+          }}
+        />
+        <div
+          className={style.landSkyMaskPhone}
+          style={{
+            WebkitMaskImage: `url(${basePath}/form/background/landPhone.png)`,
+            maskImage: `url(${basePath}/form/background/landPhone.png)`,
+          }}
+        />
         <div className={style.sun}>
           <Image
             src={`${basePath}/form/background/sun.png`}
@@ -207,7 +231,7 @@ export default function FormPageClient() {
               className="md:min-h-screen min-h-[93vh] h-full w-full"
             >
               <Tabs
-                className="relative md:pt-32 pt-20 px-0 lg:w-[850px] mx-auto"
+                className={shellLayout.frame}
                 value={tab}
                 //@ts-expect-error because Tabs cannot access to possible values
                 onValueChange={(v) => setTab(v)}
@@ -219,22 +243,23 @@ export default function FormPageClient() {
                     dataLengths={dataLengths}
                     currentQuestion={currentIndexes[tab]}
                     currentSectionDataLength={dataLengths[tab]}
-                    currentSectionName={getName(tab)}
+                    currentSectionName={tSections(tab)}
                   >
                     <QuestionList
                       mainForm={mainForm}
                       list={{
                         transport: transportQuestions[0],
-                        energie: energieQuestions[0],
+                        energy: energyQuestions[0],
                         food: foodQuestions[0],
+                        waste: wasteQuestions[0],
                       }}
                       dialog={questionList}
                       setDialog={setQuestionList}
                     />
                   </ProgressBar>
                 </div>
-                <div className="flex justify-center mb-4 relative">
-                  <TabsList className="flex max-w-full flex-wrap space-x-2 bg-white rounded-full p-2 shadow-lg h-fit">
+                <div className={shellLayout.tabsRailWrap}>
+                  <TabsList className={shellLayout.tabsRail}>
                     <TabTrigger
                       value="transport"
                       data-state={
@@ -248,9 +273,9 @@ export default function FormPageClient() {
                       <Car className="w-4 h-4" />
                     </TabTrigger>
                     <TabTrigger
-                      value="energie"
+                      value="energy"
                       data-state={
-                        getIndex(tab) > 1 ? "completed" : tab === "energie" ? "active" : "inactive"
+                        getIndex(tab) > 1 ? "completed" : tab === "energy" ? "active" : "inactive"
                       }
                     >
                       <Zap className="w-4 h-4" />
@@ -263,7 +288,12 @@ export default function FormPageClient() {
                     >
                       <UtensilsCrossed className="w-4 h-4" />
                     </TabTrigger>
-                    <TabTrigger disabled value="waste">
+                    <TabTrigger
+                      value="waste"
+                      data-state={
+                        getIndex(tab) > 3 ? "completed" : tab === "waste" ? "active" : "inactive"
+                      }
+                    >
                       <Trash2 className="w-4 h-4" />
                     </TabTrigger>
                     <TabTrigger disabled value="vacation">
@@ -276,9 +306,9 @@ export default function FormPageClient() {
                   mainForm={mainForm}
                   initQuestions={{
                     transport: transportQuestions,
-                    energie: energieQuestions,
+                    energy: energyQuestions,
                     food: foodQuestions,
-                    waste: [[], () => {}],
+                    waste: wasteQuestions,
                     vacation: [[], () => {}],
                   }}
                   setNextTab={setNextTab}
