@@ -912,6 +912,20 @@ export default {
             },
           },
         },
+        destructiveWarnings: {
+          title:
+            "Cette modification supprimera des donnees enregistrees et imposera une remise a jour de l'inventaire.",
+          items: {
+            removeYear: ({ year }: { year: number }) =>
+              `L'annee ${year} sera retiree de l'etat enregistre.`,
+            disableAirport:
+              "La desactivation de l'aeroport supprimera les donnees enregistrees liees au transport aerien.",
+            disablePort:
+              "La desactivation du port supprimera les donnees enregistrees liees aux activites portuaires.",
+            disableAgriculture:
+              "La desactivation de l'agriculture supprimera les donnees enregistrees liees aux sections agricoles.",
+          },
+        },
       },
       projectSelector: {
         eyebrow: "Espace collectivité",

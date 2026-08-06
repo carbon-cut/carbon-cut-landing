@@ -16,6 +16,7 @@ import {
   fetchCollectivityCurrentInventory,
   saveCollectivityInventoryDraftRequest,
 } from "@/app/collectivity/_lib/queries";
+import { getCollectivityProjectsRoute } from "@/app/collectivity/_lib/routing";
 import { Form } from "@/components/ui/forms";
 import { useScopedI18n } from "@/locales/client";
 import type { CollectivitySetupSnapshot } from "@/app/collectivity/setup/_lib/types";
@@ -58,7 +59,7 @@ export default function InventoryRouteClient({
   const t = useScopedI18n("(pages).collectivityDashboard");
   const inventoryLocale = t("inventoryWorkspace") as InventoryWorkspaceLocale;
   const projectSlug = initialSnapshot.project.slug;
-  const { data: snapshot = initialSnapshot } = useQuery({
+  const { data: snapshot = initialSnapshot, error: snapshotError } = useQuery({
     ...inventorySnapshotQueryOptions,
     queryKey: collectivityQueryKeys.currentInventory(projectSlug),
     queryFn: () => fetchCollectivityCurrentInventory(projectSlug),
@@ -115,6 +116,18 @@ export default function InventoryRouteClient({
     // Query cache object changes must not overwrite in-progress edits.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainForm, snapshotVersion]);
+  useEffect(() => {
+    if (!(snapshotError instanceof CollectivityApiError)) {
+      return;
+    }
+
+    if (
+      snapshotError.payload.error?.status === 403 ||
+      snapshotError.payload.error?.status === 404
+    ) {
+      router.replace(getCollectivityProjectsRoute("inventory"));
+    }
+  }, [router, snapshotError]);
 
   function getCalculationReadinessKeys() {
     return workspace.datasets.flatMap((dataset) => {

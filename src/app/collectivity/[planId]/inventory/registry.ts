@@ -214,12 +214,19 @@ const datasetNavOverrides: Record<
   "sanitation-n2o": { navIcon: "water", navStatusLabel: "À faire", progressLabel: "0%" },
 };
 
-const retiredDatasetKeys = new Set(["photovoltaic", "solar-water-heating"]);
+const retiredDatasetKeys = new Set([
+  "photovoltaic",
+  "solar-water-heating",
+  "sanitation",
+  "sanitation-continuation",
+  "sanitation-ch4",
+  "sanitation-n2o",
+]);
 
 const applicabilityDatasetKeys: Record<keyof CollectivitySetupApplicability, readonly string[]> = {
   airport: ["air-transport"],
   port: ["port"],
-  agriculture: [],
+  agriculture: ["trees", "livestock", "fertilizers"],
 };
 
 function buildInventoryRegistryWithApplicability(

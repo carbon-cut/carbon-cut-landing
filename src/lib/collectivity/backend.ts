@@ -37,6 +37,10 @@ type InitProjectResponse = {
   data: CollectivitySetupSnapshot;
 };
 
+type UpdateProjectSetupResponse = {
+  data: CollectivitySetupSnapshot;
+};
+
 type SaveInventoryInputResponse = {
   data: CollectivitySetupSnapshot;
 };
@@ -201,12 +205,15 @@ export async function saveCollectivitySetup(
   }
 
   if (currentPlanId) {
-    throw new CollectivityBackendError(501, {
-      error: {
-        status: 501,
-        message: "Collectivity setup update endpoint not implemented",
-      },
-    });
+    const response = await requestCollectivity<UpdateProjectSetupResponse>(
+      `/api/collectivity/projects/${encodeURIComponent(currentPlanId)}/setup`,
+      {
+        method: "PUT",
+        body: JSON.stringify(setup),
+      }
+    );
+
+    return response.data;
   }
 
   const response = await requestCollectivity<InitProjectResponse>(

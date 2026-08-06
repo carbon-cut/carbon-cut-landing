@@ -80,7 +80,7 @@ export async function fetchCollectivityInventoryResult(projectSlug: string) {
 
 export async function fetchCollectivitySetupSnapshot(projectSlug: string) {
   const response = await fetch(
-    `/api/collectivity/setup?planId=${encodeURIComponent(projectSlug)}`,
+    `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory`,
     {
       credentials: "same-origin",
     }
@@ -107,10 +107,10 @@ export async function saveCollectivitySetupRequest({
 }) {
   const response = await fetch(
     currentPlanId
-      ? `/api/collectivity/setup?currentPlanId=${encodeURIComponent(currentPlanId)}`
+      ? `/api/collectivity/projects/${encodeURIComponent(currentPlanId)}/setup`
       : "/api/collectivity/setup",
     {
-      method: "POST",
+      method: currentPlanId ? "PUT" : "POST",
       headers: {
         "Content-Type": "application/json",
       },

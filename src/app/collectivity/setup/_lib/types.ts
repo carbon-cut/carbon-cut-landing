@@ -32,9 +32,9 @@ export type CollectivityInventorySnapshot = {
   projectId: string;
   setupPayload: CollectivitySetupData;
   inventoryInput: Record<string, unknown> | null;
-  status: "draft";
+  status: "draft" | "calculated" | "outdated";
   lockedYears: number[];
-  latestCalculationRunId: null;
+  latestCalculationRunId: string | null;
   createdAt: string;
   updatedAt: string;
 };

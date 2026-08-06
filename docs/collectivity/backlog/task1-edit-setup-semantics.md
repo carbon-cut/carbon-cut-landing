@@ -20,12 +20,29 @@ Do not implement setup-edit behavior on top of the current raw `fetch` pattern.
 
 Reminder: show warnings for destructive setup edits such as year removal or disabling applicability fields. This is implementation detail, not a planning blocker.
 
+### Progress
+
+- TanStack Query is wired for collectivity frontend data ownership.
+- Query keys/fetchers now live in `src/app/collectivity/_lib/queries.ts`.
+- Query-backed reads:
+  - setup snapshot
+  - current inventory snapshot
+  - result
+  - supported aircraft values
+- Mutation-backed actions:
+  - setup save
+  - inventory draft save
+  - full calculation submit
+  - debug calculation
+- Current inventory uses server `initialData` and local query options to avoid background form resets.
+- Grouped-year tables support `loadingRows` skeleton rows for async row definitions.
+
 ### Acceptance criteria
 
 - [ ] User can reopen project setup in edit mode for an existing project
 - [ ] Backend exposes an update route for project setup and current inventory setup payload
-- [ ] A frontend implementation plan is defined before coding, including query ownership, mutation ownership, invalidation flow, and forced refresh behavior for open collectivity inventory views
-- [ ] Collectivity setup/inventory data flow is migrated away from raw `fetch` to TanStack Query before or as part of setup-edit implementation
+- [x] A frontend implementation plan is defined before coding, including query ownership, mutation ownership, invalidation flow, and forced refresh behavior for open collectivity inventory views
+- [x] Collectivity setup/inventory data flow is migrated away from raw `fetch` to TanStack Query before or as part of setup-edit implementation
 - [ ] Editing rules are defined for applicability toggles after related data has already been saved
 - [ ] Editing rules are defined for removing inventory years after related data has already been saved
 - [ ] Editing rules are defined for changing the reference year after inventory data already exists

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, X } from "lucide-react";
+import { AlertTriangle, Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
@@ -28,6 +28,7 @@ import {
   CollectivitySelect,
 } from "@/app/collectivity/_components/fields";
 import { CollectivityBulletList } from "@/app/collectivity/_components/lists";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FieldHelp } from "@/components/ui/field-help";
@@ -91,7 +92,7 @@ export default function CollectivitySetupForm({
   const queryClient = useQueryClient();
   const t = useScopedI18n("(pages).collectivityDashboard");
   const tSetup = useScopedI18n("collectivitySetup");
-  const isSlugEditable = !currentPlanId;
+  const isCountryEditable = !currentPlanId;
   const defaultValues = useMemo(() => getSetupFormDefaultValues(initialValues), [initialValues]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const setupMutation = useMutation({
@@ -123,6 +124,12 @@ export default function CollectivitySetupForm({
       }
 
       void queryClient.invalidateQueries({
+        queryKey: collectivityQueryKeys.setupSnapshot(snapshot.project.slug),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: collectivityQueryKeys.currentInventory(snapshot.project.slug),
+      });
+      void queryClient.invalidateQueries({
         queryKey: collectivityQueryKeys.result(snapshot.project.slug),
       });
       router.replace(getCollectivityModuleRoute(snapshot.project.slug, "setup"));
@@ -143,6 +150,7 @@ export default function CollectivitySetupForm({
   const territory = form.watch("territory");
   const referenceYear = form.watch("referenceYear");
   const inventoryYears = form.watch("inventoryYears");
+  const applicability = form.watch("applicability");
 
   const yearOptions = useMemo(
     () => getCollectivityYearOptions(2010, latestCollectivityAvailableYear),
@@ -151,11 +159,52 @@ export default function CollectivitySetupForm({
   const suggestedSlug = useMemo(() => slugifyCollectivitySlug(name), [name]);
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(
     Boolean(
-      isSlugEditable &&
-      defaultValues.slug &&
-      defaultValues.slug !== slugifyCollectivitySlug(defaultValues.name ?? "")
+      defaultValues.slug && defaultValues.slug !== slugifyCollectivitySlug(defaultValues.name ?? "")
     )
   );
+  const destructiveWarnings = useMemo(() => {
+    if (!currentPlanId || !initialValues) {
+      return [];
+    }
+
+    const warnings: string[] = [];
+    const initialYears = initialValues.inventoryYears ?? [];
+    const nextYears = new Set(inventoryYears);
+
+    initialYears
+      .filter((year) => !nextYears.has(year))
+      .forEach((year) => {
+        warnings.push(
+          t("setupWorkspace.destructiveWarnings.items.removeYear", {
+            year,
+          }) as string
+        );
+      });
+
+    const initialApplicability = initialValues.applicability;
+
+    if (initialApplicability?.airport && !applicability.airport) {
+      warnings.push(t("setupWorkspace.destructiveWarnings.items.disableAirport") as string);
+    }
+
+    if (initialApplicability?.port && !applicability.port) {
+      warnings.push(t("setupWorkspace.destructiveWarnings.items.disablePort") as string);
+    }
+
+    if (initialApplicability?.agriculture && !applicability.agriculture) {
+      warnings.push(t("setupWorkspace.destructiveWarnings.items.disableAgriculture") as string);
+    }
+
+    return warnings;
+  }, [
+    applicability.agriculture,
+    applicability.airport,
+    applicability.port,
+    currentPlanId,
+    initialValues,
+    inventoryYears,
+    t,
+  ]);
 
   useEffect(() => {
     form.reset(defaultValues);
@@ -163,15 +212,14 @@ export default function CollectivitySetupForm({
     setSubmitError(null);
     setSlugManuallyEdited(
       Boolean(
-        isSlugEditable &&
         defaultValues.slug &&
         defaultValues.slug !== slugifyCollectivitySlug(defaultValues.name ?? "")
       )
     );
-  }, [defaultValues, form, isSlugEditable]);
+  }, [defaultValues, form]);
 
   useEffect(() => {
-    if (!isSlugEditable || !name || !suggestedSlug || slugManuallyEdited) {
+    if (!name || !suggestedSlug || slugManuallyEdited) {
       return;
     }
 
@@ -181,7 +229,7 @@ export default function CollectivitySetupForm({
         shouldValidate: true,
       });
     }
-  }, [form, isSlugEditable, name, slug, slugManuallyEdited, suggestedSlug]);
+  }, [form, name, slug, slugManuallyEdited, suggestedSlug]);
 
   const inventoryYearOptions = yearOptions.filter(
     (option) => !inventoryYears.includes(Number(option.value))
@@ -345,6 +393,10 @@ export default function CollectivitySetupForm({
                         <CollectivitySelect
                           value={field.value}
                           onValueChange={(value) => {
+                            if (!isCountryEditable) {
+                              return;
+                            }
+
                             field.onChange(value);
                             form.setValue("territory", "", {
                               shouldDirty: true,
@@ -352,6 +404,7 @@ export default function CollectivitySetupForm({
                             });
                             form.clearErrors("territory");
                           }}
+                          disabled={!isCountryEditable}
                           placeholder={
                             t("setupWorkspace.sections.scope.countryPlaceholder") as string
                           }
@@ -407,18 +460,12 @@ export default function CollectivitySetupForm({
                         <CollectivityInput
                           {...field}
                           value={field.value ?? ""}
-                          className={cn("w-full", !isSlugEditable && "bg-muted/40 text-secondary")}
+                          className="w-full"
                           placeholder={t("setupWorkspace.sections.scope.slugPlaceholder") as string}
                           autoCapitalize="none"
                           autoCorrect="off"
                           spellCheck={false}
-                          readOnly={!isSlugEditable}
-                          aria-readonly={!isSlugEditable}
                           onChange={(event) => {
-                            if (!isSlugEditable) {
-                              return;
-                            }
-
                             setSlugManuallyEdited(true);
                             field.onChange(event);
                           }}
@@ -744,6 +791,19 @@ export default function CollectivitySetupForm({
 
               {submitError ? (
                 <p className="mt-4 text-sm font-medium text-destructive">{submitError}</p>
+              ) : null}
+              {destructiveWarnings.length > 0 ? (
+                <Alert variant="destructive" className="mt-4">
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTitle>{t("setupWorkspace.destructiveWarnings.title") as string}</AlertTitle>
+                  <AlertDescription>
+                    <ul className="list-disc space-y-1 pl-4">
+                      {destructiveWarnings.map((warning) => (
+                        <li key={warning}>{warning}</li>
+                      ))}
+                    </ul>
+                  </AlertDescription>
+                </Alert>
               ) : null}
 
               <div
