@@ -1,10 +1,9 @@
 import React from "react";
 import { QuestionFC, QuestionProps } from "../../../types";
-import Question from "../../../components/question";
+import Question from "../../../components/QuestionPrompt";
 import { useScopedI18n } from "@/locales/client";
-import Content from "../../../components/content";
-import Input from "../../../components/input";
-import FormSelect from "@/components/forms/formSelect";
+import Content from "../../../components/QuestionContent";
+import { FieldInput as Input, FieldSelect as FormSelect } from "@/components/forms";
 import { useWatch } from "react-hook-form";
 
 const Q1: QuestionFC = ({ mainForm }: QuestionProps) => {

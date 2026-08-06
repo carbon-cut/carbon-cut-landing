@@ -12,8 +12,7 @@ import { useScopedI18n } from "@/locales/client";
 import React from "react";
 import { UseFormReturn, useWatch } from "react-hook-form";
 import { z } from "zod";
-import FormSelect from "@/components/forms/formSelect";
-import Input from "../../../components/input";
+import { FieldInput as Input, FieldSelect as FormSelect } from "@/components/forms";
 
 const wastesKeys = ["recylablePackaging", "paper", "glass", "organic"] as const;
 

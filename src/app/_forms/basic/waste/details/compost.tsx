@@ -1,9 +1,9 @@
 import React from "react";
 import { QuestionFC, QuestionProps } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../components/question";
-import Content from "../../../components/content";
-import Radio from "../../../components/radio";
+import Question from "../../../components/QuestionPrompt";
+import Content from "../../../components/QuestionContent";
+import { FieldRadio as Radio } from "@/components/forms";
 
 const keys = ["yes", "no"] as const;
 
@@ -13,14 +13,15 @@ const Compost: QuestionFC = ({ mainForm }: QuestionProps) => {
     <div>
       <Question>{t("q")}</Question>
       <Content>
-        <Radio
+        <></>
+        {/* <Radio
           form={mainForm}
           name={"waste.details.personalCompost"}
           options={keys.map((e) => ({
             label: t(`${e}`),
             value: e === "yes",
           }))}
-        />
+        /> */}
       </Content>
     </div>
   );
@@ -28,7 +29,9 @@ const Compost: QuestionFC = ({ mainForm }: QuestionProps) => {
 
 Compost.Symbol = {
   question: "forms.basic.waste.details.personalCompost.q",
-  fields: ["waste.details.personalCompost"],
+  fields: [
+    /* "waste.details.personalCompost" */
+  ],
 };
 
 export default Compost;

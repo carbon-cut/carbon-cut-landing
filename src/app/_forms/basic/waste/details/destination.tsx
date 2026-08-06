@@ -1,9 +1,9 @@
 import React from "react";
 import { QuestionFC, QuestionProps } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../components/question";
-import Content from "../../../components/content";
-import FormSelect from "@/components/forms/formSelect";
+import Question from "../../../components/QuestionPrompt";
+import Content from "../../../components/QuestionContent";
+import { FieldSelect as FormSelect } from "@/components/forms";
 
 const destinationKeys = [
   "incineration",

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { QuestionFC, QuestionProps } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../../components/question";
-import Content from "../../../../components/content";
-import Radio from "../../../../components/radio";
+import Question from "../../../../components/QuestionPrompt";
+import Content from "../../../../components/QuestionContent";
+import { FieldRadio as Radio } from "@/components/forms";
 import Detail from "./detail";
 import { useSubmit } from "@/lib/hooks/useSubmit";
 

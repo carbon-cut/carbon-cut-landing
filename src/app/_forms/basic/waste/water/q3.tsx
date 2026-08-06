@@ -1,8 +1,8 @@
 import React from "react";
 import { QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../components/question";
-import Content from "../../../components/content";
+import Question from "../../../components/QuestionPrompt";
+import Content from "../../../components/QuestionContent";
 
 const Q3: QuestionFC = () => {
   const t = useScopedI18n("forms.basic.waste.water.q3");

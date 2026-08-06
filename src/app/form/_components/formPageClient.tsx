@@ -119,11 +119,11 @@ export default function FormPageClient() {
       vacation: 0,
       total:
         transportQuestions[0].length +
-        energieQuestions[0].length +
+        energyQuestions[0].length +
         foodQuestions[0].length +
         wasteQuestions[0].length,
     };
-  }, [foodQuestions, transportQuestions, energieQuestions, wasteQuestions]);
+  }, [foodQuestions, transportQuestions, energyQuestions, wasteQuestions]);
 
   const setNextTab = useCallback(() => {
     setTab((prev) => {

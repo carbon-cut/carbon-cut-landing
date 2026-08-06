@@ -1,25 +1,27 @@
 import { useScopedI18n } from "@/locales/client";
 import React from "react";
-import Question from "../../../components/question";
-import Content from "../../../components/content";
-import { MultiCheckInput } from "../../../components/multiCheckInput";
+import Question from "../../../components/QuestionPrompt";
+import Content from "../../../components/QuestionContent";
+import { FieldMultiCheckInput as MultiCheckInput } from "@/components/forms";
 import WastesTable from "./wastesTable";
 import { QuestionFC, QuestionProps } from "../../../types";
+import { useWatch } from "react-hook-form";
 
 const wasteTypes = ["recylablePackaging", "paper", "glass", "organic"] as const;
 
 const Precise: QuestionFC = ({ mainForm }: QuestionProps) => {
   const t = useScopedI18n("forms.basic.waste.precise");
-  const [wastes, setWastes] = React.useState(() => {
-    const preciseValues = mainForm.getValues("waste.precise") ?? {};
-
-    return {
-      recylablePackaging: Boolean(preciseValues.recylablePackaging),
-      paper: Boolean(preciseValues.paper),
-      glass: Boolean(preciseValues.glass),
-      organic: Boolean(preciseValues.organic),
-    };
+  const preciseValues = useWatch({
+    control: mainForm.control,
+    name: "waste.precise",
   });
+
+  const wastes = {
+    recylablePackaging: Boolean(preciseValues?.recylablePackaging),
+    paper: Boolean(preciseValues?.paper),
+    glass: Boolean(preciseValues?.glass),
+    organic: Boolean(preciseValues?.organic),
+  };
 
   return (
     <div>
@@ -29,10 +31,6 @@ const Precise: QuestionFC = ({ mainForm }: QuestionProps) => {
           className="px-3"
           form={mainForm}
           name="waste.precise"
-          onChange={(checked, key) => {
-            if (!key) return;
-            setWastes((prev) => ({ ...prev, [key]: Boolean(checked) }));
-          }}
           options={wasteTypes.map((e) => ({
             label: t(`labels.${e}`),
             value: e,
