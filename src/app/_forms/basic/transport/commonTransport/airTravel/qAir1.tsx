@@ -1,19 +1,19 @@
 import React, { useMemo, useState } from "react";
 import { QuestionProps, QuestionFC } from "../../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Input from "../../../../components/input";
+import { FieldInput as Input } from "@/components/forms";
 import { Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import FormMultiCombox from "../../../../components/multiCombox";
+import { FieldMultiCombobox as FormMultiCombox } from "@/components/forms";
 import { useQuery } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
-import FormSelect from "@/components/forms/formSelect";
-import FormCheckbox from "@/components/forms/formCheckbox";
+import { FieldSelect as FormSelect } from "@/components/forms";
+import { FieldCheckbox as FormCheckbox } from "@/components/forms";
 import { FormLabel } from "@/components/ui/forms";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
-import Question from "@/app/_forms/components/question";
-import Content from "@/app/_forms/components/content";
+import Question from "@/app/_forms/components/QuestionPrompt";
+import Content from "@/app/_forms/components/QuestionContent";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useFieldArray } from "react-hook-form";
 import { toast } from "sonner";
@@ -224,7 +224,7 @@ function AirTravelItem({
       <div className="grid md:grid-cols-4 grid-cols-2 md:gap-10 gap-4 items-end">
         <FormMultiCombox
           labelClassName="text-black/70"
-          className="text-primary"
+          className="text-foreground"
           form={mainForm}
           name={`transport.airs.${index}.origin`}
           options={airportsOptions}

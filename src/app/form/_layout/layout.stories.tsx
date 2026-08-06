@@ -1,21 +1,29 @@
-import { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from "@storybook/nextjs";
 import Layout from "../layout";
-import Page from "../page";
 import React from "react";
 
-const meta: Meta<typeof Layout> = {
+const meta = {
   title: "Layout/Form",
   component: Layout,
   parameters: {
     layout: "fullscreen",
   },
   args: {
-    children: <Page />,
+    children: (
+      <div className="min-h-screen bg-surface-warm px-6 py-24 text-center">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-white/40 bg-white/70 p-10 shadow-lg">
+          <h2 className="text-3xl font-extrabold text-foreground">Form Layout Shell</h2>
+          <p className="mt-4 text-base text-muted-foreground">
+            Story-only shell for reviewing the layout context without router or server runtime.
+          </p>
+        </div>
+      </div>
+    ),
   },
-};
+} satisfies Meta<typeof Layout>;
 
 export default meta;
 
-type Story = StoryObj<typeof Layout>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};

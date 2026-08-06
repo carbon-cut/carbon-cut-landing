@@ -1,9 +1,9 @@
 import React from "react";
 import { QuestionProps, QuestionFC } from "../../../types";
 import { useScopedI18n } from "@/locales/client";
-import Question from "../../../components/question";
-import Content from "../../../components/content";
-import Input from "../../../components/input";
+import Question from "../../../components/QuestionPrompt";
+import Content from "../../../components/QuestionContent";
+import { FieldInput as Input } from "@/components/forms";
 
 const meals = ["bread", "salty", "milk", "fruits"] as const;
 

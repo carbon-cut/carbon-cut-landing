@@ -1,5 +1,6 @@
 "use client";
 
+import Typography from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import type { ComponentType } from "react";
 
@@ -28,8 +29,12 @@ export default function PreAssessmentContent({ items, className }: Props) {
               <item.Icon className="h-4 w-4 text-section-transport" />
             </span>
             <div className="flex flex-col gap-1">
-              <span className="text-sm font-semibold text-primary">{item.title}</span>
-              <span className="text-xs text-muted-foreground">{item.description}</span>
+              <Typography asChild variant="subtitle" className="text-sm">
+                <span>{item.title}</span>
+              </Typography>
+              <Typography asChild variant="description" className="text-xs">
+                <span>{item.description}</span>
+              </Typography>
             </div>
           </li>
         ))}

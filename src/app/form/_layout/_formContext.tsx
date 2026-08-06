@@ -15,7 +15,7 @@ const FormContext = createContext<{
   setVerifyFields: React.Dispatch<React.SetStateAction<TName<z.infer<typeof formSchema>>[]>>;
 }>({
   tab: "transport",
-  currentIndexes: { transport: 0, food: 0, vacation: 0, energie: 0, waste: 0 },
+  currentIndexes: { transport: 0, food: 0, vacation: 0, energy: 0, waste: 0 },
   setCurrentIndexes: () => {},
   setTab: () => {},
   readyToSubmit: true,

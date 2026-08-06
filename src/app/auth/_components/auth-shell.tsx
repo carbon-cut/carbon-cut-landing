@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
+import AuthBrand from "@/app/auth/_components/auth-brand";
 
 type AuthShellProps = {
   title: string;
@@ -17,9 +18,10 @@ export default function AuthShell({ title, description, children, footer }: Auth
   return (
     <main
       id="content"
-      className="min-h-screen bg-[linear-gradient(180deg,#F8F8EC_0%,#ffffff_100%)] px-4 py-24"
+      className="min-h-screen bg-[linear-gradient(180deg,hsl(var(--surface-warm))_0%,hsl(var(--card))_100%)] px-4 py-24"
     >
       <div className="mx-auto flex w-full max-w-xl flex-col gap-6">
+        <AuthBrand />
         <div className="space-y-3 text-center">
           <Typography asChild variant="title" size="xl">
             <h1>{title}</h1>
@@ -28,7 +30,7 @@ export default function AuthShell({ title, description, children, footer }: Auth
             <p>{description}</p>
           </Typography>
         </div>
-        <Card className="border-primary/10 shadow-lg">
+        <Card className="border-border/10 shadow-lg">
           <CardHeader className="space-y-2 p-6 pb-2">
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
@@ -39,7 +41,7 @@ export default function AuthShell({ title, description, children, footer }: Auth
           <div className="text-center text-sm text-secondary">{footer}</div>
         ) : (
           <div className="text-center text-sm text-secondary">
-            <Link className="text-primary underline-offset-4 hover:underline" href="/">
+            <Link className="text-foreground underline-offset-4 hover:underline" href="/">
               {t("cta.backHome")}
             </Link>
           </div>

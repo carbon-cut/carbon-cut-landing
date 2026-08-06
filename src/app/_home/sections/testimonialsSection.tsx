@@ -1,5 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 import Testimonials from "../_testimonials";
 
@@ -7,7 +6,11 @@ export default function TestimonialsSection() {
   const t = useScopedI18n("home.testimonials");
 
   return (
-    <section id="testimonials" aria-labelledby="testimonials-heading" className="py-12">
+    <section
+      id="testimonials"
+      aria-labelledby="testimonials-heading"
+      className="bg-surface-warm py-12"
+    >
       <div className="flex flex-col justify-center mb-4">
         <Badge
           variant="default"

@@ -9,7 +9,7 @@ type Props = {
 export default function PreAssessmentTitle({ title, currentStep, totalSteps }: Props) {
   return (
     <div className="flex flex-col items-center gap-3">
-      <Typography asChild variant="title" size="default" className="md:text-4xl font-semibold">
+      <Typography asChild variant="title" size="xl" className="text-center">
         <h1>{title}</h1>
       </Typography>
       <div className="flex items-center gap-2" aria-hidden="true">

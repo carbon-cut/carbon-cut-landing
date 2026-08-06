@@ -139,7 +139,9 @@ export async function ensureIntegrationServicesAvailable() {
 }
 
 export async function fetchFrontend(path: string, init: RequestInit = {}, jar?: CookieJar) {
-  const headers = withAuthTestSupportHeaders(jar ? jar.apply(init.headers) : new Headers(init.headers));
+  const headers = withAuthTestSupportHeaders(
+    jar ? jar.apply(init.headers) : new Headers(init.headers)
+  );
   const response = await fetch(new URL(path, integrationConfig.frontendUrl), {
     ...init,
     headers,
@@ -219,7 +221,9 @@ export async function cleanupTestUser(userId: number) {
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to cleanup test user ${userId}: ${response.status} ${await response.text()}`);
+    throw new Error(
+      `Failed to cleanup test user ${userId}: ${response.status} ${await response.text()}`
+    );
   }
 
   return (await response.json()) as { ok: true; mode: "deleted" | "cleaned" };

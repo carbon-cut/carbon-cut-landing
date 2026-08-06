@@ -25,16 +25,12 @@ function Header() {
       url: "/#features",
     },
     {
-      title: tNav("testimonials"),
-      url: "/#testimonials",
+      title: tNav("trust"),
+      url: "/#trust",
     },
     {
-      title: tNav("pricing"),
-      url: "/#pricing",
-    },
-    {
-      title: tNav("faq"),
-      url: "/#faq",
+      title: tNav("results"),
+      url: "/#cta",
     },
   ];
   const [dataState, setDataState] = React.useState("big");
@@ -68,6 +64,10 @@ function Header() {
     await signOut();
     setShow(false);
     router.push("/auth/sign-in");
+  }
+
+  if (pathName.startsWith("/auth")) {
+    return null;
   }
 
   return (
@@ -113,8 +113,9 @@ function Header() {
           </Button>
         ) : (
           <Button
-            data-state={dataState}
             asChild
+            data-state={dataState}
+            variant="cta"
             className={style.button}
             size={"lg"}
             tabIndex={navHidden ? -1 : 0}
@@ -126,7 +127,7 @@ function Header() {
         )}
       </nav>
       <Button
-        className="md:hidden z-10 hover:bg-transparent flex flex-col items-center justify-center"
+        className="md:hidden z-10 flex flex-col items-center justify-center hover:bg-transparent"
         variant={"ghost"}
         type="button"
         aria-label={tNav("toggleLabel")}
