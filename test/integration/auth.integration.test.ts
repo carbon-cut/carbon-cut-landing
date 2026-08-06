@@ -105,6 +105,15 @@ describe.sequential("auth integration", () => {
       expect(response.headers.get("location")).toBe("/auth/sign-in?returnTo=%2Fform");
     });
 
+    it("redirects unauthenticated users from /collectivity/start to sign-in with returnTo", async () => {
+      const response = await fetchFrontend("/collectivity/start");
+
+      expect(response.status).toBe(307);
+      expect(response.headers.get("location")).toBe(
+        "/auth/sign-in?returnTo=%2Fcollectivity%2Fstart"
+      );
+    });
+
     it("allows authenticated users to access /form", async () => {
       const jar = authenticatedJar.clone();
       const response = await fetchFrontend("/form", undefined, jar);
@@ -112,6 +121,14 @@ describe.sequential("auth integration", () => {
       expect(response.status).toBe(200);
       expect(response.headers.get("location")).toBeNull();
       expect(response.headers.get("content-type")).toContain("text/html");
+    });
+
+    it("redirects a household user away from collectivity start", async () => {
+      const jar = authenticatedJar.clone();
+      const response = await fetchFrontend("/collectivity/start", undefined, jar);
+
+      expect(response.status).toBe(307);
+      expect(response.headers.get("location")).toBe("/form");
     });
 
     it("logs out and clears the auth session", async () => {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { requireServerSession } from "@/lib/auth/session";
+import { requireHouseholdSession } from "@/lib/auth/access";
 import { useScopedServerI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
 import ResultPageClient from "./resultPageClient";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  await requireServerSession("/form/result");
+  await requireHouseholdSession("/form/result");
   return (
     <Suspense fallback={null}>
       <ResultPageClient />

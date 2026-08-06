@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import FormContext from "../_layout/_formContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getIcon, getName } from "@/lib/formTabs/geters";
+import { getIcon } from "@/lib/formTabs/geters";
 import { TName } from "@/components/ui/forms";
 import { TabValues } from "@/lib/formTabs/types";
 import { TabContent } from "./formTabs";
@@ -45,6 +45,7 @@ const Container = React.forwardRef<
 
   const t = useScopedI18n("forms");
   const tOverview = useScopedI18n("components.forms.overview");
+  const tSections = useScopedI18n("sections");
 
   const verify = useCallback<() => Promise<boolean>>(async () => {
     if (verifyFields.length === 0) return true;
@@ -183,7 +184,7 @@ const Container = React.forwardRef<
         <CardHeader className={shellLayout.cardHeader}>
           <CardTitle>
             <Typography asChild variant="title" size="md">
-              <h2>{getName(tab)}</h2>
+              <h2>{tSections(tab)}</h2>
             </Typography>
           </CardTitle>
           <CardDescription>

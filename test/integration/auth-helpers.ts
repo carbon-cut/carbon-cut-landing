@@ -1,6 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import { AUTH_ACCESS_COOKIE, AUTH_REFRESH_COOKIE, AUTH_USER_COOKIE } from "@/lib/auth/constants";
+import {
+  AUTH_ACCESS_COOKIE,
+  AUTH_REFRESH_COOKIE,
+  AUTH_USER_COOKIE,
+} from "../../src/lib/auth/constants";
 const AUTH_TEST_SUPPORT_HEADER = "x-auth-test-support-key";
 
 loadLocalEnv();
@@ -51,10 +55,30 @@ function getRequiredEnv(...names: string[]) {
   throw new Error(`Missing required integration env var: ${names.join(" or ")}`);
 }
 
+function getEnvOrDefault(defaultValue: string, ...names: string[]) {
+  for (const name of names) {
+    const value = process.env[name];
+
+    if (value) {
+      return value;
+    }
+  }
+
+  return defaultValue;
+}
+
 export const integrationConfig = {
-  frontendUrl: getRequiredEnv("FRONTEND_URL", "INTEGRATION_FRONTEND_URL").replace(/\/$/, ""),
-  backendUrl: getRequiredEnv("BACKEND_URL", "INTEGRATION_BACKEND_URL").replace(/\/$/, ""),
-  authTestSupportKey: getRequiredEnv("AUTH_TEST_SUPPORT_KEY"),
+  frontendUrl: getEnvOrDefault(
+    "http://localhost:3000",
+    "FRONTEND_URL",
+    "INTEGRATION_FRONTEND_URL"
+  ).replace(/\/$/, ""),
+  backendUrl: getEnvOrDefault(
+    "http://localhost:1337",
+    "BACKEND_URL",
+    "INTEGRATION_BACKEND_URL"
+  ).replace(/\/$/, ""),
+  authTestSupportKey: process.env.AUTH_TEST_SUPPORT_KEY ?? null,
 };
 
 export const authCookieNames = [AUTH_ACCESS_COOKIE, AUTH_REFRESH_COOKIE, AUTH_USER_COOKIE] as const;
@@ -286,8 +310,18 @@ function uniqueSuffix() {
 
 function withAuthTestSupportHeaders(headers?: HeadersInit) {
   const nextHeaders = new Headers(headers);
-  nextHeaders.set(AUTH_TEST_SUPPORT_HEADER, integrationConfig.authTestSupportKey);
+
+  if (integrationConfig.authTestSupportKey) {
+    nextHeaders.set(AUTH_TEST_SUPPORT_HEADER, integrationConfig.authTestSupportKey);
+  }
+
   return nextHeaders;
+}
+
+function requireAuthTestSupportKey() {
+  if (!integrationConfig.authTestSupportKey) {
+    throw new Error("Missing required integration env var: AUTH_TEST_SUPPORT_KEY");
+  }
 }
 
 export function getSetCookieHeaders(response: Response) {

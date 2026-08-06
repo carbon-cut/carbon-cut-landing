@@ -6,7 +6,6 @@ import Providers from "@/lib/partials/Providers";
 import { manropeSans } from "@/lib/fonts";
 import { useScopedServerI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
-import ScrollToTopButton from "@/components/layout/scrollToTopButton";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -43,7 +42,6 @@ export default function RootLayout({
           <Header />
           <div className="min-h-screen">{children}</div>
           <Footer />
-          <ScrollToTopButton />
         </Providers>
       </body>
     </html>

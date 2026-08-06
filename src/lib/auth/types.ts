@@ -1,3 +1,5 @@
+export type ProductType = "household" | "collectivity";
+
 export type AuthUser = {
   id: number;
   username: string;
@@ -5,6 +7,9 @@ export type AuthUser = {
   provider: string;
   confirmed: boolean;
   blocked: boolean;
+  allowedProducts?: ProductType[];
+  productType?: ProductType;
+  planId?: string[];
 };
 
 export type AuthSessionResponse = {

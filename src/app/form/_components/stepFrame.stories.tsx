@@ -2,13 +2,14 @@ import type { Meta, StoryObj } from "@storybook/nextjs";
 import React from "react";
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { Car, Plane, Trash2, UtensilsCrossed, Zap } from "lucide-react";
-import { getIndex, getName } from "@/lib/formTabs/geters";
+import { getIndex } from "@/lib/formTabs/geters";
 import { TabTrigger } from "./formTabs";
 import ProgressBar from "./_progressBar";
 import QuestionList from "./questionList";
 import Container from "./container";
 import FormShellStoryHarness from "./formShellStoryHarness";
 import { shellLayout } from "./shellLayout";
+import { useScopedI18n } from "@/locales/client";
 
 const meta = {
   title: "Form/Shell/StepFrame",
@@ -29,6 +30,8 @@ function StepFrameCanvas({
   questionIndex?: number;
   withErrors?: boolean;
 }) {
+  const tSections = useScopedI18n("sections");
+
   return (
     <FormShellStoryHarness
       tab={tab}
@@ -64,7 +67,7 @@ function StepFrameCanvas({
                   dataLengths={dataLengths}
                   currentQuestion={questionIndex}
                   currentSectionDataLength={dataLengths[tab]}
-                  currentSectionName={getName(tab)}
+                  currentSectionName={tSections(tab)}
                 >
                   <QuestionList
                     mainForm={mainForm}

@@ -2,7 +2,11 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { readAuthCookies } from "@/lib/auth/cookies";
+import {
+  clearSessionCookiesIfPossible,
+  readAuthCookies,
+  writeSessionCookiesIfPossible,
+} from "@/lib/auth/cookies";
 import { buildSignInRedirect } from "@/lib/auth/redirect";
 import { logout, rotateRefreshToken, StrapiAuthError } from "@/lib/auth/strapi";
 import type { AuthSessionResponse, SessionState } from "@/lib/auth/types";
@@ -48,9 +52,12 @@ export async function refreshSessionFromCookies(
   }
 
   try {
-    return await rotateRefreshToken(refreshToken);
+    const refreshedSession = await rotateRefreshToken(refreshToken);
+    writeSessionCookiesIfPossible(cookieStore, refreshedSession);
+    return refreshedSession;
   } catch (error) {
     if (error instanceof StrapiAuthError) {
+      clearSessionCookiesIfPossible(cookieStore);
       return null;
     }
 

@@ -3,13 +3,14 @@
 import React from "react";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getErrorCode, isUpstreamAuthError, postAuth } from "@/app/auth/_components/auth-api";
 import AuthBrand from "@/app/auth/_components/auth-brand";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Typography from "@/components/ui/typography";
+import { sanitizeReturnTo } from "@/lib/auth/redirect";
 import { useScopedI18n } from "@/locales/client";
 import { Lightbulb, Rocket, Zap } from "lucide-react";
 
@@ -17,6 +18,7 @@ export default function SignUpPage() {
   const t = useScopedI18n("(auth).signup");
   const tCommon = useScopedI18n("(auth).common");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const highlights = t("highlights.items") as { title: string; description: string }[];
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -75,7 +77,16 @@ export default function SignUpPage() {
       return;
     }
 
-    router.push(`/auth/confirmation-required?email=${encodeURIComponent(result.data.user.email)}`);
+    const nextParams = new URLSearchParams({
+      email: result.data.user.email,
+    });
+    const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
+
+    if (returnTo) {
+      nextParams.set("returnTo", returnTo);
+    }
+
+    router.replace(`/auth/confirmation-required?${nextParams.toString()}`);
   }
 
   return (
@@ -180,7 +191,16 @@ export default function SignUpPage() {
 
           <p className="mt-6 text-center text-sm text-secondary">
             {t("message.login")}{" "}
-            <Link href="/auth/sign-in" className="text-primary underline-offset-4 hover:underline">
+            <Link
+              href={
+                sanitizeReturnTo(searchParams.get("returnTo"))
+                  ? `/auth/sign-in?${new URLSearchParams({
+                      returnTo: sanitizeReturnTo(searchParams.get("returnTo")) as string,
+                    }).toString()}`
+                  : "/auth/sign-in"
+              }
+              className="text-primary underline-offset-4 hover:underline"
+            >
               {t("link.login")}
             </Link>
           </p>

@@ -1,0 +1,47 @@
+@startuml UserWorkflowSequence
+title User Workflow Sequence
+
+actor User
+participant UI
+participant ProjectStorage as "Project / Inventory Storage"
+participant CalculationService as "Calculation Service"
+participant RunStore as "CalculationRun Store"
+participant ResultStore as "CalculationResult Store"
+
+== Save draft ==
+User -> UI : Edit setup / inventory
+UI -> ProjectStorage : Save current Inventory(status=draft)
+ProjectStorage --> UI : Draft saved
+
+== Calculate ==
+User -> UI : Trigger calculate
+UI -> CalculationService : Calculate current Inventory
+CalculationService -> RunStore : Create CalculationRun
+RunStore --> CalculationService : calculationRunId
+CalculationService -> ResultStore : Create CalculationResult
+ResultStore --> CalculationService : calculationResultId
+CalculationService -> ProjectStorage : Update Inventory(status=calculated, lockedYears, latestCalculationRunId)
+ProjectStorage --> UI : Calculated Inventory
+UI --> User : Show calculated result
+
+== Add years ==
+User -> UI : Add new years in setup
+UI -> ProjectStorage : Create / update current Inventory as draft
+note right of ProjectStorage
+Previously calculated years remain locked.
+Only new years become editable.
+end note
+ProjectStorage --> UI : Draft Inventory with new years
+
+== Recalculate ==
+User -> UI : Trigger calculate for updated Inventory
+UI -> CalculationService : Calculate current Inventory
+CalculationService -> RunStore : Create CalculationRun
+RunStore --> CalculationService : calculationRunId
+CalculationService -> ResultStore : Create CalculationResult
+ResultStore --> CalculationService : calculationResultId
+CalculationService -> ProjectStorage : Update Inventory(status=calculated, latestCalculationRunId)
+ProjectStorage --> UI : Updated calculated Inventory
+UI --> User : Show updated result
+
+@enduml

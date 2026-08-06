@@ -5,7 +5,6 @@ import { Doughnut } from "react-chartjs-2";
 import { TabValues } from "@/lib/formTabs/types";
 import doughtPlugin from "@/lib/chartPlugins/doughnut";
 import { plugin } from "@/lib/chartPlugins/ChartJS";
-import { getName } from "@/lib/formTabs/geters";
 import { useScopedI18n } from "@/locales/client";
 
 const tabs: TabValues[] = ["transport", "food", "vacation", "energy", "waste"];
@@ -21,6 +20,7 @@ type Props = {
 };
 function Categorisation({ data, isAnimating }: Props) {
   const t = useScopedI18n("result.categorisation");
+  const tSections = useScopedI18n("sections");
 
   const { values, labels, colors } = useMemo(() => {
     if (typeof window === "undefined") return { values: [], labels: [], colors: [] };
@@ -62,7 +62,7 @@ function Categorisation({ data, isAnimating }: Props) {
                       return "";
                     },
                     label: (context) => {
-                      return getName(context.label);
+                      return tSections(context.label);
                     },
                     afterLabel: (context) => {
                       return context.dataset.data[context.dataIndex] + "T";
@@ -106,7 +106,7 @@ function Categorisation({ data, isAnimating }: Props) {
                 <div className="flex items-center gap-3 mb-2">
                   <div className={`w-3 h-3 rounded-full `} style={{ backgroundColor: color() }} />
                   <span className="font-light text-base text-foreground text-left">
-                    {getName(item.name)}
+                    {tSections(item.name)}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 items-end">
