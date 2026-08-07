@@ -9,6 +9,12 @@ import MenuHamburger from "./_menuHamburger";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
+import {
+  getAuthSignInRoute,
+  getCollectivityLandingRoute,
+  getCollectivityStartRoute,
+  getFormRoute,
+} from "@/lib/routing/routes";
 
 type MenuItem = {
   title: string;
@@ -30,16 +36,16 @@ function Header() {
   const { status, signOut } = useAuth();
   const isCollectivityLanding = pathName === "/collectivity";
   const isLandingHeader = pathName === "/" || isCollectivityLanding;
-  const primaryCtaHref = isCollectivityLanding ? "/collectivity/start" : "/form";
+  const primaryCtaHref = isCollectivityLanding ? getCollectivityStartRoute() : getFormRoute();
   const menu: MenuItem[] = isCollectivityLanding
     ? [
         {
           title: tCollectivityNav("prototype"),
-          url: "/collectivity#proof",
+          url: `${getCollectivityLandingRoute()}#proof`,
         },
         {
           title: tCollectivityNav("setup"),
-          url: "/collectivity#cta",
+          url: `${getCollectivityLandingRoute()}#cta`,
         },
       ]
     : [
@@ -83,7 +89,7 @@ function Header() {
     }
 
     setShow(false);
-    router.push("/auth/sign-in");
+    router.push(getAuthSignInRoute());
   }
 
   if (pathName.startsWith("/auth")) {
@@ -96,7 +102,7 @@ function Header() {
 
   return (
     <header /* ref={headerDiv} */ data-state={dataState} className={style.header}>
-      <Link className="z-50" href={"/"} onClick={() => setShow(false)}>
+      <Link className="z-50" href="/" onClick={() => setShow(false)}>
         <Image
           data-state={dataState}
           src={`${process.env.NEXT_PUBLIC_BASE_PATH}/logo/logoLight.svg`}

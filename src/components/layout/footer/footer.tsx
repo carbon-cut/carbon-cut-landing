@@ -8,6 +8,7 @@ import FooterColumn, { FooterItem } from "./footerColumn";
 import Image from "next/image";
 import Typography from "@/components/ui/typography";
 import { usePathname } from "next/navigation";
+import { getContactRoute, getFormRoute, getHelpRoute } from "@/lib/routing/routes";
 
 function Footer() {
   const tNav = useScopedI18n("home.nav");
@@ -31,15 +32,15 @@ function Footer() {
   const contactLinks = [
     {
       title: tFooter("contact.email"),
-      url: "/contact",
+      url: getContactRoute(),
     },
     {
       title: tFooter("contact.helpCenter"),
-      url: "/help",
+      url: getHelpRoute(),
     },
     {
       title: tFooter("contact.demo"),
-      url: "/form",
+      url: getFormRoute(),
     },
   ];
   const socialLinks: FooterItem[] = [

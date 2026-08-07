@@ -827,31 +827,6 @@ export default {
         description:
           "Définissez le territoire de référence et les années de travail avant d'ouvrir l'inventaire.",
         primaryCta: "Enregistrer la configuration",
-        output: {
-          title: "Sortie attendue",
-          items: [
-            "Une identité projet stable pour la collectivité.",
-            "Un territoire de référence confirmé pour le plan.",
-            "Une année de référence clairement fixée.",
-            "Une série d'années d'inventaire prête pour l'inventaire.",
-            "Les sections optionnelles activées selon le périmètre réel.",
-          ],
-        },
-        completion: {
-          title: "État de complétude",
-          ready: "Prêt pour l'inventaire",
-          incomplete: "À compléter",
-          progressSuffix: "blocs cadrés",
-          items: {
-            name: "Nom du projet",
-            slug: "Slug du projet",
-            country: "Pays",
-            territory: "Territoire",
-            referenceYear: "Année de référence",
-            inventoryYears: "Années d'inventaire",
-            applicability: "Sections applicables",
-          },
-        },
         sections: {
           scope: {
             title: "Identification",
@@ -929,8 +904,7 @@ export default {
           title:
             "Cette modification supprimera des donnees enregistrees et imposera une remise a jour de l'inventaire.",
           items: {
-            removeYear: ({ year }: { year: number }) =>
-              `L'annee ${year} sera retiree de l'etat enregistre.`,
+            removeYear: "Lannee {year} sera retiree de l'etat enregistre.",
             disableAirport:
               "La desactivation de l'aeroport supprimera les donnees enregistrees liees au transport aerien.",
             disablePort:
@@ -982,23 +956,6 @@ export default {
           "1 autre année minimale pour comparer et projeter.",
           "Données municipales et territoriales cohérentes avant scénarisation.",
         ],
-        cards: {
-          ire: {
-            title: "IRE 2023",
-            meta: "année de référence validée",
-            status: "Obligatoire",
-          },
-          year2: {
-            title: "Année complémentaire",
-            meta: "ajout requis pour les projections",
-            status: "À compléter",
-          },
-          horizon: {
-            title: "Horizon 2030",
-            meta: "sortie cible des scénarios",
-            status: "Projection",
-          },
-        },
       },
       inventory: {
         eyebrow: "Module actif",
@@ -1012,20 +969,6 @@ export default {
         title: "Collecte de l'inventaire",
         description:
           "Ouvrir la route doit amener directement sur un jeu de données à renseigner, avec les champs utiles visibles sans structure de navigation envahissante.",
-        controls: {
-          domainsLabel: "Domaines d'inventaire",
-          datasetLabel: "Jeux de données",
-          submitLabel: "Soumettre les données",
-          datasetPlaceholder: "Choisir un jeu de données",
-          yearLabel: "Année consultée",
-          yearPlaceholder: "Choisir une année d'inventaire",
-          lensLabel: "Lecture active",
-          lensPlaceholder: "Choisir une lecture",
-          lenses: {
-            territorial: "Territorial",
-            municipal: "Patrimoine municipal",
-          },
-        },
         saveSuccess: "Le brouillon d'inventaire a été enregistré.",
         saveError: "Impossible d'enregistrer le brouillon d'inventaire pour le moment.",
         submitError: "Impossible de soumettre l'inventaire pour le moment.",
@@ -1043,16 +986,6 @@ export default {
           formulaVersion: "Version formule",
           parameters: "Paramètres",
           warnings: "Avertissements",
-        },
-        hints: {
-          sourceFirst: "Source-first",
-          multiYear: "Multi-annees",
-          todoLabel: "TODO",
-          provenanceTodo:
-            "TODO provenance : le document inventaire demande une règle transversale, mais ne fixe pas encore les champs standard de preuve, source ou validation.",
-          progressTodo:
-            "TODO progression : on pourra montrer une progression plus tard, mais pas avant qu'une règle produit explicite existe pour le niveau de suivi.",
-          placeholderTitle: "Structure encore à cadrer dans le document d'entrée",
         },
         sections: {
           years: {
@@ -1219,8 +1152,8 @@ export default {
                 requirementTooltip:
                   "Renseigner au moins une consommation electrique du secteur industrie pour chaque annee.",
                 readinessTitle: "Consommation industrie manquante",
-                readinessDescription: ({ years }: { years: string }) =>
-                  `Renseignez au moins une consommation électrique du secteur industrie pour les années suivantes : ${years}.`,
+                readinessDescription:
+                  "Renseignez au moins une consommation électrique du secteur industrie pour les années suivantes : {years}.",
               },
               lt: {
                 title: "Basse tension",
@@ -1281,8 +1214,8 @@ export default {
                 requirementTooltip:
                   "Renseigner au moins une consommation de gaz naturel pour le secteur tertiaire et au moins une pour le secteur industrie pour chaque annee.",
                 readinessTitle: "Consommation tertiaire manquante",
-                readinessDescription: ({ years }: { years: string }) =>
-                  `Renseignez au moins une consommation de gaz naturel du secteur tertiaire pour les années suivantes : ${years}.`,
+                readinessDescription:
+                  "Renseignez au moins une consommation de gaz naturel du secteur tertiaire pour les années suivantes : {years}.",
               },
               populationTitle: "Population",
               populationRequirementTooltip: "Renseigner la population.",
@@ -1414,8 +1347,8 @@ export default {
             airTransport: {
               surface: {
                 readinessTitle: "Mouvements nationaux manquants",
-                readinessDescription: ({ years }: { years: string }) =>
-                  `Renseignez au moins un mouvement national pour les années suivantes : ${years}.`,
+                readinessDescription:
+                  "Renseignez au moins un mouvement national pour les années suivantes : {years}.",
               },
               movements: {
                 title: "Mouvements d'aeronefs",
@@ -1694,79 +1627,29 @@ export default {
             pending: "A lever",
           },
         },
-        years: [
-          {
-            value: "2023",
-            title: "2023",
-            badge: "Référence",
-            status: "Base consolidee",
-            note: "Annee de reference deja structurante pour la collecte et les premiers calculs.",
-          },
-          {
-            value: "2022",
-            title: "2022",
-            badge: "Comparaison",
-            status: "Comparaison disponible",
-            note: "Annee utile pour la comparaison et la reprise des jeux historiques.",
-          },
-          {
-            value: "2024",
-            title: "2024",
-            badge: "Complément",
-            status: "Collecte en cours",
-            note: "Annee plus recente encore incomplete, surtout utile pour poursuivre la collecte.",
-          },
-        ],
-        families: [
-          {
-            key: "municipal-patrimoine",
+        families: {
+          municipalPatrimoine: {
             title: "Patrimoine municipal",
-            description:
-              "Flotte, eclairage public, batiments et autres jeux municipaux cites par le rapport.",
-            status: "Pret a saisir",
           },
-          {
-            key: "territorial-energy",
+          territorialEnergy: {
             title: "Energie territoriale",
-            description:
-              "Electricite, photovoltaique, gaz naturel et chauffe-eau solaire a l'echelle du territoire.",
-            status: "Sous configuration",
           },
-          {
-            key: "transport-mobility",
+          transportMobility: {
             title: "Transport et mobilite",
-            description: "Port, transport public, air transport et parc routier du territoire.",
-            status: "Sous configuration",
           },
-          {
-            key: "afat",
+          afat: {
             title: "AFAT",
-            description:
-              "AFAT encore sans structure de saisie stabilisee dans le fichier d'entree.",
-            status: "Sous configuration",
           },
-          {
-            key: "waste",
+          waste: {
             title: "Déchets",
-            description:
-              "Dechets et flux associes encore sans structure de saisie stabilisee dans le fichier d'entree.",
-            status: "Sous configuration",
           },
-          {
-            key: "wastewater",
+          wastewater: {
             title: "Assainissement",
-            description:
-              "Assainissement et sous-jeux encore sans structure de saisie stabilisee dans le fichier d'entree.",
-            status: "Sous configuration",
           },
-        ],
-        datasets: [
-          {
-            key: "fleet",
-            familyKey: "municipal-patrimoine",
-            kind: "fleet",
+        },
+        datasets: {
+          fleet: {
             title: "Flotte",
-            status: "Structure finie",
             description:
               "Jeu municipal avec composition de flotte et bloc annuel vehicules / consommation / depense.",
             sourceMode: "Source-native: une table flotte peut couvrir plusieurs annees.",
@@ -1774,21 +1657,9 @@ export default {
               "Year-native: l'etat par annee doit rester explicite et jamais vide silencieusement.",
             implementationNote:
               "Le panneau reprend la structure finie du document d'entree et la cale sur l'annee active pour rester pratique.",
-            sources: [
-              "Table administrative du parc roulant municipal.",
-              "Journaux carburant, carnets de bord et releves de consommation.",
-            ],
-            gaps: [
-              "Verifier encore le traitement des vehicules inactifs sur une annee donnee.",
-              "Confirmer la logique de carry-forward pour les annees supplementaires.",
-            ],
           },
-          {
-            key: "public-lighting",
-            familyKey: "municipal-patrimoine",
-            kind: "publicLighting",
+          publicLighting: {
             title: "Eclairage public",
-            status: "Structure finie",
             description:
               "Jeu municipal avec infrastructure reseau, lampes par type, consommation electrique et facture annuelle.",
             sourceMode:
@@ -1796,416 +1667,135 @@ export default {
             yearMode: "Year-native: consommation et facture doivent rester lisibles par annee.",
             implementationNote:
               "Le panneau reprend la structure finie du document d'entree et concentre la saisie sur l'annee active.",
-            sources: [
-              "Inventaire technique du reseau d'eclairage public.",
-              "Factures et abonnements electriques rattaches au reseau.",
-            ],
-            gaps: [
-              "Confirmer si la puissance doit rester libre ou normalisee par unite.",
-              "Preciser plus tard la logique d'expansion quand des annees supplementaires existent.",
-            ],
           },
-          {
-            key: "buildings",
-            familyKey: "municipal-patrimoine",
-            kind: "placeholder",
+          buildings: {
             title: "Batiments",
-            status: "Sous dev",
             description:
               "Le rapport cite ce dataset, mais le fichier d'entree ne fixe pas encore ses champs exacts.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO champs annuels et champs stables.",
             implementationNote:
               "Bloc provisoire pour garder visible le dataset dans la page de collecte.",
-            sources: ["under dev source list", "placeholder facture maybe later"],
-            gaps: ["Champ exact sous dev.", "Validation produit encore absente."],
           },
-          {
-            key: "trees-parks-waste",
-            familyKey: "municipal-patrimoine",
-            kind: "placeholder",
+          treesParksWaste: {
             title: "Arbres / parcs / dechets municipaux",
-            status: "Sous dev",
             description: "Le rapport mentionne cette famille, mais l'entree produit reste ouverte.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO blocs annuels et perimetre exact.",
             implementationNote: "Bloc provisoire pour garder visible toute la famille municipale.",
-            sources: ["under dev parc source", "under dev municipal waste note"],
-            gaps: [
-              "Structure d'entree pas encore definie.",
-              "Perimetre municipal exact a arbitrer.",
-            ],
           },
-          {
-            key: "electricity",
-            familyKey: "territorial-energy",
-            kind: "placeholder",
+          electricity: {
             title: "Demande d'electricite",
-            status: "Sous dev",
             description: "Dataset energie territorial connu, sans structure de champs finalisee.",
             sourceMode: "TODO entre fournisseur, secteur, usage ou fichier agrege.",
             yearMode: "TODO lecture pluriannuelle et completude par annee.",
             implementationNote:
               "Placeholder visible pour garder l'architecture territoire energie complete.",
-            sources: ["under dev electricity export", "under dev sector split note"],
-            gaps: ["Structure exacte encore ouverte.", "Mode d'entree utilisateur encore ouvert."],
           },
-          {
-            key: "photovoltaic",
-            familyKey: "territorial-energy",
-            kind: "placeholder",
+          photovoltaic: {
             title: "Photovoltaique",
-            status: "Sous dev",
             description:
               "Dataset energie territorial cite par le rapport, sans details de champs finalises.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO blocs de production ou capacite annuelle.",
             implementationNote: "Placeholder volontaire pour le panneau energie.",
-            sources: ["under dev pv source", "draft production file"],
-            gaps: ["Champs exacts manquants.", "Granularite installation vs agregee ouverte."],
           },
-          {
-            key: "natural-gas",
-            familyKey: "territorial-energy",
-            kind: "placeholder",
+          naturalGas: {
             title: "Gaz naturel",
-            status: "Sous dev",
             description:
               "Dataset energie territorial connu, mais encore sans structure de saisie fixe.",
             sourceMode: "TODO fournisseur vs secteur vs agrege.",
             yearMode: "TODO logique de comparaison inter-annuelle.",
             implementationNote: "Placeholder volontaire pour la route inventaire complete.",
-            sources: ["under dev gas export", "draft territory gas note"],
-            gaps: ["Modele de champs a definir.", "Niveau d'usage a arbitrer."],
           },
-          {
-            key: "solar-water-heating",
-            familyKey: "territorial-energy",
-            kind: "placeholder",
+          solarWaterHeating: {
             title: "Chauffe-eau solaire",
-            status: "Sous dev",
             description: "Dataset energie territorial cite, encore en mode placeholder produit.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO production, nombre d'installations ou capacite.",
             implementationNote:
               "Placeholder volontaire pour ne pas perdre le dataset dans l'architecture.",
-            sources: ["under dev solar water source", "draft equipment note"],
-            gaps: ["Structure pas encore definie.", "Perimetre de collecte pas encore tranche."],
           },
-          {
-            key: "port",
-            familyKey: "transport-mobility",
-            kind: "placeholder",
+          port: {
             title: "Donnees portuaires",
-            status: "Sous dev",
             description:
               "Le rapport cite ce jeu transport, mais la structure produit n'est pas encore decidee.",
             sourceMode: "TODO split par sous-mode ou source unique.",
             yearMode: "TODO temporalite et carry-forward.",
             implementationNote: "Placeholder transport pour voir l'architecture complete.",
-            sources: ["under dev port source", "draft port traffic note"],
-            gaps: ["Champs exacts inconnus.", "Premiere scope produit encore ouverte."],
           },
-          {
-            key: "public-transport",
-            familyKey: "transport-mobility",
-            kind: "placeholder",
+          publicTransport: {
             title: "Transport public",
-            status: "Sous dev",
             description: "Jeu transport cite, sans structure de champs finalisee.",
             sourceMode: "TODO split par sous-mode ou operateur.",
             yearMode: "TODO blocs annuels et niveau de granularite.",
             implementationNote: "Placeholder transport public volontaire.",
-            sources: ["under dev public transport source", "draft ridership note"],
-            gaps: ["Structure d'entree manquante.", "Sous-modes pas encore arbitres."],
           },
-          {
-            key: "air-transport",
-            familyKey: "transport-mobility",
-            kind: "placeholder",
+          airTransport: {
             title: "Transport aerien",
-            status: "Sous dev",
             description: "Jeu transport cite, encore sous forme de place reservee dans la page.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO volume d'activite et maille annuelle.",
             implementationNote: "Placeholder air transport volontaire.",
-            sources: ["under dev airport source", "draft aviation note"],
-            gaps: ["Champs exacts absents.", "Perimetre de calcul encore ouvert."],
           },
-          {
-            key: "transport",
-            familyKey: "transport-mobility",
-            kind: "placeholder",
+          territoryVehicles: {
             title: "Parc routier du territoire",
-            status: "Sous dev",
             description:
               "Le template parc routier du territoire n'est pas encore transforme en modele de champs produit.",
             sourceMode: "TODO source-first, year-first ou hybride.",
             yearMode: "TODO logique proxys, comparaisons et validation annuelle.",
             implementationNote: "Placeholder transport general volontaire.",
-            sources: ["under dev mobility study", "under dev proxy file"],
-            gaps: ["Template produit absent.", "Sous-modes et proxys encore ouverts."],
           },
-          {
-            key: "sanitation",
-            familyKey: "wastewater",
-            kind: "placeholder",
+          sanitation: {
             title: "Assainissement",
-            status: "Sous dev",
             description:
               "Le rapport cite sanitation, mais le fichier d'entree ne fixe pas encore les champs.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO volumes annuels et logique d'installation.",
             implementationNote: "Placeholder sanitation volontaire.",
-            sources: ["under dev sanitation report", "draft station note"],
-            gaps: ["Structure de champs absente.", "Niveau utilisateur vs app encore ouvert."],
           },
-          {
-            key: "sanitation-continuation",
-            familyKey: "wastewater",
-            kind: "placeholder",
+          sanitationContinuation: {
             title: "Assainissement suite",
-            status: "Sous dev",
             description: "Suite sanitation encore non definie en produit.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO continuation inter-annuelle.",
             implementationNote: "Placeholder sanitation continuation volontaire.",
-            sources: ["under dev continuation source", "draft continuation note"],
-            gaps: ["Structure absente.", "Perimetre exact non tranche."],
           },
-          {
-            key: "sanitation-ch4",
-            familyKey: "wastewater",
-            kind: "placeholder",
+          sanitationCh4: {
             title: "Assainissement CH4",
-            status: "Sous dev",
             description: "Breakdown sanitation CH4 encore non expose dans le produit.",
             sourceMode: "TODO expose direct ou couche app.",
             yearMode: "TODO blocs annuels et niveau de detail.",
             implementationNote: "Placeholder CH4 volontaire.",
-            sources: ["under dev CH4 source", "draft methane note"],
-            gaps: ["Decision UI encore absente.", "Frontiere user/app encore ouverte."],
           },
-          {
-            key: "sanitation-n2o",
-            familyKey: "wastewater",
-            kind: "placeholder",
+          sanitationN2o: {
             title: "Assainissement N2O",
-            status: "Sous dev",
             description: "Breakdown sanitation N2O encore non expose dans le produit.",
             sourceMode: "TODO expose direct ou couche app.",
             yearMode: "TODO blocs annuels et niveau de detail.",
             implementationNote: "Placeholder N2O volontaire.",
-            sources: ["under dev N2O source", "draft nitrous note"],
-            gaps: ["Decision UI encore absente.", "Frontiere user/app encore ouverte."],
           },
-          {
-            key: "trees",
-            familyKey: "afat",
-            kind: "placeholder",
+          trees: {
             title: "Arbres",
-            status: "Sous dev",
             description: "Jeu AFAT arbres avec cultures suivies et arbres fruitiers agreges.",
             sourceMode: "Source-native: les sources arbres peuvent couvrir plusieurs annees.",
             yearMode: "Year-native: les surfaces et nombres d'arbres restent annuels.",
             implementationNote: "Le panneau combine cultures suivies et arbres fruitiers.",
-            sources: ["under dev tree source", "draft orchard note"],
-            gaps: ["Facteurs encore a finaliser.", "Parametres backend encore a raccorder."],
           },
-          {
-            key: "livestock",
-            familyKey: "afat",
-            kind: "placeholder",
+          livestock: {
             title: "Elevage",
-            status: "Sous dev",
             description: "Jeu AFAT cite, encore sans contrat de champs produit.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO temporalite et classifications.",
             implementationNote: "Placeholder AFAT volontaire.",
-            sources: ["under dev livestock source", "draft herd note"],
-            gaps: ["Structure absente.", "AFAT first scope encore a arbitrer."],
           },
-          {
-            key: "fertilizers",
-            familyKey: "afat",
-            kind: "placeholder",
+          fertilizers: {
             title: "Engrais",
-            status: "Sous dev",
             description: "Jeu AFAT cite, encore en bloc provisoire produit.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO logique annuelle et perimetre.",
             implementationNote: "Placeholder AFAT volontaire.",
-            sources: ["under dev fertilizer source", "draft fertilizer note"],
-            gaps: ["Structure absente.", "AFAT first scope encore a arbitrer."],
           },
-        ],
-        readouts: {
-          territorial: {
-            "2023": {
-              summary:
-                "Base territoriale lisible. L'energie tient deja la structure, tandis que transport et quelques jeux territoriaux restent encore fragiles.",
-              cards: [
-                {
-                  label: "Total territorial",
-                  value: "128 ktCO2e",
-                  note: "Lecture agregee de l'IRE.",
-                },
-                {
-                  label: "Donnees observees",
-                  value: "74 %",
-                  note: "Part issue de jeux documentes.",
-                },
-                {
-                  label: "Premier poste",
-                  value: "Energie",
-                  note: "61 % du total territorial.",
-                },
-              ],
-            },
-            "2022": {
-              summary:
-                "Bonne base de comparaison, meme si les jeux transport restent moins robustes que les jeux energie.",
-              cards: [
-                {
-                  label: "Total territorial",
-                  value: "121 ktCO2e",
-                  note: "Base de comparaison pre-IRE.",
-                },
-                {
-                  label: "Donnees observees",
-                  value: "70 %",
-                  note: "Part couverte par des sources stables.",
-                },
-                {
-                  label: "Premier poste",
-                  value: "Energie",
-                  note: "59 % du total territorial.",
-                },
-              ],
-            },
-            "2024": {
-              summary:
-                "Lecture encore partielle, utile pour le suivi interne mais pas encore pour figer la base finale.",
-              cards: [
-                {
-                  label: "Total territorial",
-                  value: "119 ktCO2e",
-                  note: "Valeur provisoire.",
-                },
-                {
-                  label: "Donnees observees",
-                  value: "67 %",
-                  note: "Encore plusieurs branches en attente.",
-                },
-                {
-                  label: "Premier poste",
-                  value: "Energie",
-                  note: "58 % du total territorial.",
-                },
-              ],
-            },
-          },
-          municipal: {
-            "2023": {
-              summary:
-                "Lecture municipale deja utile. Batiments et eclairage sont bien lisibles; la flotte reste le poste le plus sensible.",
-              cards: [
-                {
-                  label: "Total municipal",
-                  value: "8.6 ktCO2e",
-                  note: "Sous-ensemble patrimoine municipal.",
-                },
-                {
-                  label: "Factures et releves",
-                  value: "81 %",
-                  note: "Part appuyee sur justificatifs directs.",
-                },
-                {
-                  label: "Premier poste",
-                  value: "Batiments",
-                  note: "49 % du total municipal.",
-                },
-              ],
-            },
-            "2022": {
-              summary:
-                "Lecture municipale correcte pour la comparaison, avec une flotte encore plus incertaine que sur l'IRE.",
-              cards: [
-                {
-                  label: "Total municipal",
-                  value: "8.9 ktCO2e",
-                  note: "Base de comparaison municipale.",
-                },
-                {
-                  label: "Factures et releves",
-                  value: "77 %",
-                  note: "Base documentaire deja large.",
-                },
-                {
-                  label: "Premier poste",
-                  value: "Batiments",
-                  note: "48 % du total municipal.",
-                },
-              ],
-            },
-            "2024": {
-              summary:
-                "Lecture municipale provisoire. Batiments presque consolides, flotte et preuves encore incompletes.",
-              cards: [
-                {
-                  label: "Total municipal",
-                  value: "7.8 ktCO2e",
-                  note: "Valeur provisoire.",
-                },
-                {
-                  label: "Factures et releves",
-                  value: "75 %",
-                  note: "Bonne couverture bati et eclairage.",
-                },
-                {
-                  label: "Premier poste",
-                  value: "Batiments",
-                  note: "50 % du total municipal.",
-                },
-              ],
-            },
-          },
-        },
-        completeness: {
-          checks: [
-            {
-              label: "Une IRE est identifiee et lisible dans la base.",
-              done: true,
-            },
-            {
-              label: "Au moins une autre annee de comparaison reste consultable.",
-              done: true,
-            },
-            {
-              label: "Toutes les familles source sont visibles dans la page.",
-              done: true,
-            },
-            {
-              label: "Fleet dispose d'une structure de saisie exploitable.",
-              done: true,
-            },
-            {
-              label: "Public Lighting dispose d'une structure de saisie exploitable.",
-              done: true,
-            },
-            {
-              label: "Les jeux encore non definis sont signales comme sous dev.",
-              done: true,
-            },
-            {
-              label: "Le transport dispose d'un modele de champs finalise.",
-              done: false,
-            },
-            {
-              label: "Les datasets energie territoriale disposent d'un modele de champs finalise.",
-              done: false,
-            },
-          ],
         },
       },
       overview: {
@@ -2278,8 +1868,7 @@ export default {
       },
       tray: {
         title: "Préparation à la soumission",
-        description: ({ count }: { count: string }) =>
-          `${count} domaines doivent encore être revus avant de figer la base.`,
+        description: "{count} domaines doivent encore être revus avant de figer la base.",
       },
       workspacePanels: {
         scenarios: {
@@ -2891,8 +2480,7 @@ export default {
       title: "Confirmer votre e-mail",
       description: "Entrez le code reçu par e-mail pour activer votre session.",
       message: {
-        email: ({ email }: { email: string }) =>
-          `Nous avons envoyé un code de vérification à ${email}.`,
+        email: "Nous avons envoyé un code de vérification à {email}.",
         pending:
           "Votre inscription est en attente. Confirmez votre e-mail pour ouvrir votre session.",
         sent: "Si le compte existe et n'est pas confirme, un nouvel e-mail a ete envoye.",
@@ -3069,8 +2657,7 @@ export default {
       ],
       cta: "Commencer",
       next: "Suivant",
-      stepIndicator: ({ current, total }: { current: number; total: number }) =>
-        `Étape ${current} sur ${total}`,
+      stepIndicator: "Étape {current} sur {total}",
     },
     basic: {
       energy: {
@@ -3322,8 +2909,7 @@ export default {
           },
         },
         "qCar1-1": {
-          title: ({ index }: { index: number }) =>
-            `Voiture ${index + 1} : Informations sur la voiture`,
+          title: "Voiture {index} : Informations sur la voiture",
           q: "Informations sur la voiture",
           l1: "Marque",
           l2: "Modèle",
@@ -3335,7 +2921,7 @@ export default {
           otherModelPlaceholder: "Saisissez le modèle",
         },
         "qCar1-2": {
-          title: ({ index }: { index: number }) => `Voiture ${index + 1} : type de voiture`,
+          title: "Voiture {index} : type de voiture",
           q: "Quel type de voiture avez-vous?",
           Gasoline: "Essence",
           Diesel: "Diesel",
@@ -3346,7 +2932,7 @@ export default {
           other: "Autre",
         },
         "qCar1-3": {
-          title: ({ index }: { index: number }) => `Voiture ${index + 1} : carburant de voiture`,
+          title: "Voiture {index} : carburant de voiture",
           q: "Quel carburant utilise la partie thermique de votre hybride ?",
           Gasoline: "Essence",
           Diesel: "Diesel",
@@ -3354,8 +2940,7 @@ export default {
           other: "Autre",
         },
         qCar2: {
-          title: ({ index }: { index: number }) =>
-            `Voiture ${index + 1} : Informations supplémentaires`,
+          title: "Voiture {index} : Informations supplémentaires",
           q: "Informations supplémentaires",
           l3: "Année",
           l4: "Cylindrée",
@@ -3367,7 +2952,7 @@ export default {
           u5: "km",
         },
         qCar3: {
-          title: ({ index }: { index: number }) => `Voiture ${index + 1} : Consommation de voiture`,
+          title: "Voiture {index} : Consommation de voiture",
           q1L: "Combien de litres votre voiture consomme-t-elle par semaine?",
           q1E: "Combien d'electricite (en kWh) votre voiture consomme-t-elle par semaine?",
           q1LL: "Litres par semaine",
@@ -3381,17 +2966,16 @@ export default {
           },
           labels: {
             moneySpent: "Montant dépensé par semaine",
-            price: ({ unit }: { unit: string }) => `Prix de ${unit}`,
+            price: "Prix de {unit}",
           },
           q3: "Quelle est la distance parcourue par votre voiture chaque semaine?",
         },
         qCar4: {
-          title: ({ index }: { index: number }) =>
-            `Voiture ${index + 1} : Distance totale affichée`,
+          title: "Voiture {index} : Distance totale affichée",
           q: "Quelle est la distance totale affichée sur le tableau de bord de votre voiture?",
         },
         carStatus: {
-          label: ({ index }: { index: number }) => `Voiture ${index}`,
+          label: "Voiture {index}",
           incomplete: "À compléter",
         },
         commonTransport: {
@@ -3514,8 +3098,7 @@ export default {
             text: "Pour chaque repas sélectionné, indiquez où votre foyer le consomme approximativement en une semaine?",
             helper: "La somme des 3 colonnes doit être égale au total indiqué.",
             note: "Indication que le remplissage est approximative.",
-            enteredLabel: ({ entered, total }: { entered: number; total: number }) =>
-              `Saisi: ${entered} / ${total}`,
+            enteredLabel: "Saisi: {entered} / {total}",
           },
           meals: {
             redMeat: "Viande rouge",
@@ -3537,8 +3120,7 @@ export default {
             text: "Pour chaque repas sélectionné, indiquez où votre foyer le consomme approximativement en une semaine?",
             helper: "La somme des 3 colonnes doit être égale au total indiqué.",
             note: "Indication que le remplissage est approximative.",
-            enteredLabel: ({ entered, total }: { entered: number; total: number }) =>
-              `Saisi: ${entered} / ${total}`,
+            enteredLabel: "Saisi: {entered} / {total}",
           },
           meals: {
             bread: "Pain",
@@ -3714,12 +3296,11 @@ export default {
     },
     yes: "oui",
     no: "non",
-    unit: ({ unit }: { unit: string }) => `en ${unit}`,
+    unit: "en {unit}",
     idk: "Je ne sais pas",
     progress: {
-      title: ({ current, total }: { current: number; total: number }) =>
-        `Question ${current} sur ${total}`,
-      percentage: ({ value }: { value: number }) => `${value}% terminé`,
+      title: "Question {current} sur {total}",
+      percentage: "{value}% terminé",
     },
     next: "Continuer",
     back: "Précédent",

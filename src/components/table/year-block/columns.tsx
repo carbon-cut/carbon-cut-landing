@@ -4,7 +4,7 @@ import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 
 import { renderYearBlockEditableCell } from "./cells";
-import { InventoryFieldInput } from "@/app/collectivity/_components/fields";
+import { InventoryFieldInput } from "@/app/[locale]/collectivity/_components/fields";
 import {
   FieldValues,
   UseFieldArrayRemove,
@@ -15,7 +15,7 @@ import { TName } from "@/components/ui/forms";
 import {
   InventoryTableRow,
   InventoryYearBlockTableBlock,
-} from "@/app/collectivity/[planId]/inventory/types";
+} from "@/app/[locale]/collectivity/[planId]/inventory/types";
 import { InventoryTableIconButton } from "../InventoryTableHeader";
 
 type BlockTableRow = InventoryTableRow;

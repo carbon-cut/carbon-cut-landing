@@ -4,7 +4,7 @@ import type {
   InventoryTableColumn,
   InventoryYear,
   InventoryYearBlockTableBlock,
-} from "@/app/collectivity/[planId]/inventory/types";
+} from "@/app/[locale]/collectivity/[planId]/inventory/types";
 import { FieldValues, UseFormReturn } from "react-hook-form";
 import { TName } from "@/components/ui/forms";
 

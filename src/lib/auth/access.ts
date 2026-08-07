@@ -8,12 +8,15 @@ import {
   getCollectivityProjectsRoute,
   getCollectivitySetupRoute,
   type CollectivityModuleSlug,
-} from "@/app/collectivity/_lib/routing";
+} from "@/app/[locale]/collectivity/_lib/routing";
 import { getPrimaryPlanId, getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
 import { getServerSession, requireServerSession } from "@/lib/auth/session";
 import type { AuthUser } from "@/lib/auth/types";
+import { getFormRoute } from "@/lib/routing/routes";
 
-const householdHomeRoute = "/form";
+function getHouseholdHomeRoute() {
+  return getFormRoute();
+}
 
 export function getCollectivityDefaultRoute(
   user: Pick<AuthUser, "allowedProducts" | "productType" | "planId">,
@@ -32,10 +35,10 @@ export function getAuthenticatedUserHomeRoute(
   user: Pick<AuthUser, "allowedProducts" | "productType" | "planId">
 ) {
   if (hasUserProductAccess(user, "household")) {
-    return householdHomeRoute;
+    return getHouseholdHomeRoute();
   }
 
-  return getCollectivityDefaultRoute(user);
+  return getCollectivityDefaultRoute(user, "setup");
 }
 
 export async function redirectAuthenticatedUserFromAuth() {
@@ -50,7 +53,7 @@ export async function requireHouseholdSession(returnTo?: string | null) {
   const session = await requireServerSession(returnTo);
 
   if (!hasUserProductAccess(session.user, "household")) {
-    redirect(getCollectivityDefaultRoute(session.user));
+    redirect(getCollectivityDefaultRoute(session.user, "setup"));
   }
 
   return session;
@@ -60,7 +63,7 @@ export async function requireCollectivitySession(returnTo?: string | null) {
   const session = await requireServerSession(returnTo);
 
   if (!hasUserProductAccess(session.user, "collectivity")) {
-    redirect(householdHomeRoute);
+    redirect(getHouseholdHomeRoute());
   }
 
   return session;

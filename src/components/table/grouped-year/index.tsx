@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { type ArrayPath, type FieldValues, useFieldArray } from "react-hook-form";
 import { Plus } from "lucide-react";
 
-import { useInventoryContext } from "@/app/collectivity/[planId]/inventory/context/inventory-context";
+import { useInventoryContext } from "@/app/[locale]/collectivity/[planId]/inventory/context/inventory-context";
 import { InventoryTableActionButton, InventoryTableHeader } from "../InventoryTableHeader";
 import InventoryTanstackTable from "../tanstack";
 import { createGroupedYearColumns } from "./columns";

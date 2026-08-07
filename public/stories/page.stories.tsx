@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/nextjs";
-import Layout from "../../src/app/layout";
-import Page from "../../src/app/page";
+import Layout from "../../src/app/[locale]/layout";
+import Page from "../../src/app/[locale]/page";
 import React from "react";
 
 const meta: Meta<typeof Layout> = {

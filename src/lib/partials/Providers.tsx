@@ -6,8 +6,9 @@ import { broadcastQueryClient } from "@tanstack/query-broadcast-client-experimen
 import { AuthProvider } from "@/lib/auth/auth-context";
 import { isMockBackendEnabled } from "@/mocks/config";
 import { worker } from "@/mocks/worker";
+import { I18nProviderClient } from "@/locales/client";
 
-const Providers = ({ children }: { children: ReactNode }) => {
+const Providers = ({ children, locale }: { children: ReactNode; locale: string }) => {
   const [queryClient] = useState(() => new QueryClient());
 
   useEffect(() => {
@@ -34,9 +35,11 @@ const Providers = ({ children }: { children: ReactNode }) => {
   }, [queryClient]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>{children}</AuthProvider>
-    </QueryClientProvider>
+    <I18nProviderClient locale={locale}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>{children}</AuthProvider>
+      </QueryClientProvider>
+    </I18nProviderClient>
   );
 };
 
