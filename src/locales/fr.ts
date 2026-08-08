@@ -2193,7 +2193,7 @@ export default {
           startForm: "Ouvrir le formulaire",
         },
       },
-      resultats: {
+      results: {
         badge: "Aide résultats",
         title: "Résultats",
         subtitle: "Comprendre l'estimation CO2 et les recommandations",
@@ -2271,7 +2271,7 @@ export default {
           restart: "Refaire une évaluation",
         },
       },
-      compte: {
+      account: {
         badge: "Aide compte",
         title: "Compte",
         subtitle: "Connexion, accès et récupération du compte",
@@ -2620,69 +2620,59 @@ export default {
           title: "Durée & précision",
           visualLabel: "15–25 minutes",
           note: "La longueur du formulaire ainsi que la finesse et le raffinement des questions conditionnent, dans une large mesure, la fiabilité des résultats. C'est notre atout distinctif.",
-          items: [
-            {
-              id: "duration",
+          items: {
+            duration: {
               title: "Durée estimée",
               description: "15–25 minutes pour compléter l'évaluation",
             },
-            {
-              id: "measure",
+            measure: {
               title: "Ce que nous mesurons",
               description: "Estimation de votre empreinte carbone basée sur vos réponses",
             },
-            {
-              id: "accuracy",
+            accuracy: {
               title: "Niveau de précision",
               description: "Résultats indicatifs fondés sur des données déclaratives",
             },
-          ],
+          },
         },
         {
           title: "Sections & données",
-          items: [
-            {
-              id: "transport",
+          items: {
+            transport: {
               title: "Transport",
               description: "Voiture, transports en commun, vols",
             },
-            {
-              id: "energy",
+            energy: {
               title: "Énergie",
               description: "Électricité, gaz, chauffage à domicile",
             },
-            {
-              id: "food",
+            food: {
               title: "Alimentation & Déchet",
               description: "Habitudes alimentaires et gestion des déchets",
             },
-            {
-              id: "data",
+            data: {
               title: "Données nécessaires",
               description: "Factures énergétiques, kilométrage annuel, habitudes de consommation",
             },
-          ],
+          },
         },
         {
           title: "Données & accès",
-          items: [
-            {
-              id: "privacy",
+          items: {
+            privacy: {
               title: "Confidentialité",
               description:
                 "Vos données sont confidentielles et utilisées uniquement pour votre diagnostic",
             },
-            {
-              id: "save",
+            save: {
               title: "Sauvegarde",
               description: "Reprenez votre évaluation à tout moment",
             },
-            {
-              id: "results",
+            results: {
               title: "Accès aux résultats",
               description: "Résultats disponibles pendant X jours avant abonnement",
             },
-          ],
+          },
         },
       ],
       cta: "Commencer",

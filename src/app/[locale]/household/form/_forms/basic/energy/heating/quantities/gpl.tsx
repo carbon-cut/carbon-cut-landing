@@ -114,66 +114,68 @@ const Gpl: QuestionFC = ({ mainForm }: QuestionProps) => {
           <p>{t("description")}</p>
         </Typography>
 
-        {Object.entries(groupedByFormat).map(([format, items]) => (
-          <div key={format} className="mb-8">
-            <div className="mb-4">
-              <QuestionSubheading>{t(format)}</QuestionSubheading>
+        {(Object.entries(groupedByFormat) as [keyof typeof groupedByFormat, GasType[]][]).map(
+          ([format, items]) => (
+            <div key={format} className="mb-8">
+              <div className="mb-4">
+                <QuestionSubheading>{t(format)}</QuestionSubheading>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {items.map((gasType) => (
+                  <FormField
+                    key={gasType.id}
+                    control={mainForm.control}
+                    // @ts-expect-error dynamic field path (schema typed elsewhere)
+                    name={`energy.heating.quantities.GPL.types.${format}.${gasType.id}`}
+                    render={({ field }) => {
+                      const label = t(`types.${gasType.id}`);
+                      const checked = field.value === true;
+
+                      return (
+                        <FormItem>
+                          <QuestionSelectableCard
+                            tone="energy"
+                            checked={checked}
+                            onToggle={() => field.onChange(!checked)}
+                            leading={<GasIcon type={gasType} alt={label} />}
+                            title={label}
+                          >
+                            <div className="grid grid-cols-2 gap-4">
+                              <Input
+                                form={mainForm}
+                                name={`energy.heating.quantities.GPL.quantities.${gasType.id}.quantity`}
+                                type="number"
+                                fallback
+                                unitAdornment={t("unit")}
+                                unitAdornmentPlacement="end"
+                                label={t("quantity")}
+                                size="sm"
+                              />
+
+                              <FormSelect
+                                fallback
+                                label={t("frequency.placeholder")}
+                                form={mainForm}
+                                name={`energy.heating.quantities.GPL.quantities.${gasType.id}.frequency`}
+                                placeholder={t("frequency.placeholder")}
+                                size="sm"
+                                data={[
+                                  { value: "month", label: t("frequency.month") },
+                                  { value: "year", label: t("frequency.year") },
+                                ]}
+                              />
+                            </div>
+                          </QuestionSelectableCard>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                ))}
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {items.map((gasType) => (
-                <FormField
-                  key={gasType.id}
-                  control={mainForm.control}
-                  // @ts-expect-error dynamic field path (schema typed elsewhere)
-                  name={`energy.heating.quantities.GPL.types.${format}.${gasType.id}`}
-                  render={({ field }) => {
-                    const label = t(`types.${gasType.id}`);
-                    const checked = field.value === true;
-
-                    return (
-                      <FormItem>
-                        <QuestionSelectableCard
-                          tone="energy"
-                          checked={checked}
-                          onToggle={() => field.onChange(!checked)}
-                          leading={<GasIcon type={gasType} alt={label} />}
-                          title={label}
-                        >
-                          <div className="grid grid-cols-2 gap-4">
-                            <Input
-                              form={mainForm}
-                              name={`energy.heating.quantities.GPL.quantities.${gasType.id}.quantity`}
-                              type="number"
-                              fallback
-                              unitAdornment={t("unit")}
-                              unitAdornmentPlacement="end"
-                              label={t("quantity")}
-                              size="sm"
-                            />
-
-                            <FormSelect
-                              fallback
-                              label={t("frequency.placeholder")}
-                              form={mainForm}
-                              name={`energy.heating.quantities.GPL.quantities.${gasType.id}.frequency`}
-                              placeholder={t("frequency.placeholder")}
-                              size="sm"
-                              data={[
-                                { value: "month", label: t("frequency.month") },
-                                { value: "year", label: t("frequency.year") },
-                              ]}
-                            />
-                          </div>
-                        </QuestionSelectableCard>
-                      </FormItem>
-                    );
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+          )
+        )}
       </div>
     </QuestionFrame>
   );

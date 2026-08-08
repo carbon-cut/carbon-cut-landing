@@ -31,7 +31,10 @@ export async function generateMetadata({
   };
 }
 
-export default function Home() {
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
+
   return (
     <main id="content">
       <HeroSection />

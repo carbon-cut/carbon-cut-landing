@@ -4,14 +4,21 @@ import { Badge } from "@/components/ui/badge";
 import Typography from "@/components/ui/typography";
 import { getScopedI18n } from "@/locales/server";
 import { getHelpRoute, localizeInternalHref } from "@/lib/routing/routes";
+import { setStaticParamsLocale } from "next-international/server";
 
 type Props = {
   children: ReactNode;
+  params: Promise<{ locale: string }>;
 };
 
-export default async function HelpNestedLayout({ children }: Props) {
-  const t = getScopedI18n("(pages).helpCurrent");
-  const categories = t("categories.items") as { title: string; href: string }[];
+export default async function HelpNestedLayout({ children, params }: Props) {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
+  const t = await getScopedI18n("(pages).helpCurrent");
+  const categories = Array.from({ length: 3 }).map((_, i) => ({
+    title: t(`categories.items.${i}.title` as Parameters<typeof t>[0]),
+    href: t(`categories.items.${i}` as Parameters<typeof t>[0]),
+  }));
 
   return (
     <main id="content" className="bg-background px-4 pb-16 pt-32 md:px-8 md:pt-36">

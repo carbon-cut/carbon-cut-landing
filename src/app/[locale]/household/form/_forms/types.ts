@@ -1,7 +1,8 @@
 import { UseFormReturn } from "react-hook-form";
 import { formSchema } from "./formSchema";
-import { z } from "zod";
+import { any, z } from "zod";
 import { TName } from "@/components/ui/forms";
+import { LocaleKey, useI18n, useScopedI18n } from "@/locales/client";
 export interface QuestionProps {
   setOnSubmit: React.Dispatch<React.SetStateAction<() => void>>;
   setQuestions: React.Dispatch<React.SetStateAction<QuestionFC[]>>;
@@ -16,7 +17,7 @@ export interface QuestionProps {
   prevAction: "next" | "prev" | null;
 }
 export type QuestionSymbol = {
-  question: string | [string, Record<string, any>];
+  question: LocaleKey | [LocaleKey, ...any[]];
   fields: TName<z.infer<typeof formSchema>>[];
 };
 

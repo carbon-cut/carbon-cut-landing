@@ -4,17 +4,37 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { getScopedI18n } from "@/locales/server";
 import { getContactRoute, getFormRoute, getHelpRoute } from "@/lib/routing/routes";
+import { setStaticParamsLocale } from "next-international/server";
 import { ChevronRight } from "lucide-react";
 import FAQs from "../_components/Faq";
 
-export default async function HelpQuestionnairePage() {
-  const t = getScopedI18n("(pages).helpCategory.questionnaire");
-  const summaryItems = t("summaryItems") as string[];
-  const prepItems = t("prep.items") as string[];
-  const flowSteps = t("flow.steps") as string[];
-  const issues = t("issues.items") as { title: string; description: string }[];
-  const scopeLimits = t("scope.limits") as string[];
-  const supportChecklist = t("support.checklist") as string[];
+export default async function HelpQuestionnairePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
+  const t = await getScopedI18n("(pages).helpCategory.questionnaire");
+  const summaryItems = Array.from({ length: 4 }).map((_, i) =>
+    t(`summaryItems.${i}` as Parameters<typeof t>[0])
+  );
+  const prepItems = Array.from({ length: 3 }).map((_, i) =>
+    t(`prep.items.${i}` as Parameters<typeof t>[0])
+  );
+  const flowSteps = Array.from({ length: 4 }).map((_, i) =>
+    t(`flow.steps.${i}` as Parameters<typeof t>[0])
+  );
+  const issues = Array.from({ length: 3 }).map((_, i) => ({
+    title: t(`issues.items.${i}.title` as Parameters<typeof t>[0]),
+    description: t(`issues.items.${i}.description` as Parameters<typeof t>[0]),
+  }));
+  const scopeLimits = Array.from({ length: 4 }).map((_, i) =>
+    t(`scope.limits.${i}` as Parameters<typeof t>[0])
+  );
+  const supportChecklist = Array.from({ length: 4 }).map((_, i) =>
+    t(`support.checklist.${i}` as Parameters<typeof t>[0])
+  );
 
   return (
     <article className="w-full">

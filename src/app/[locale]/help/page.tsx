@@ -6,10 +6,17 @@ import Typography from "@/components/ui/typography";
 import { localizeInternalHref, getContactRoute } from "@/lib/routing/routes";
 import { getScopedI18n } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
+import { setStaticParamsLocale } from "next-international/server";
 import { BarChart3, ChevronRight, ClipboardList, Dot, Search, ShieldCheck } from "lucide-react";
 import FAQs from "./(nested)/_components/Faq";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
   const helpSeo = await getScopedI18n("seo.pages.help");
 
   return {
@@ -23,17 +30,28 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function HelpPage() {
+export default async function HelpPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
   const t = await getScopedI18n("(pages).helpCurrent");
-  const topicHints = t("topicHints") as string[];
-  const categories = t("categories.items") as {
-    title: string;
-    description: string;
-    href: string;
-  }[];
-  const scopeAvailable = t("scope.available.items") as string[];
-  const scopeUnavailable = t("scope.unavailable.items") as string[];
-  const faqItems = t("faq.items") as { question: string; answer: string }[];
+  const topicHints = Array.from({ length: 5 }).map((_, i) =>
+    t(`topicHints.${i}` as Parameters<typeof t>[0])
+  );
+  const categories = Array.from({ length: 3 }).map((_, i) => ({
+    title: t(`categories.items.${i}.title` as Parameters<typeof t>[0]),
+    description: t(`categories.items.${i}.description` as Parameters<typeof t>[0]),
+    href: t(`categories.items.${i}.href` as Parameters<typeof t>[0]),
+  }));
+  const scopeAvailable = Array.from({ length: 3 }).map((_, i) =>
+    t(`scope.available.items.${i}` as Parameters<typeof t>[0])
+  );
+  const scopeUnavailable = Array.from({ length: 5 }).map((_, i) =>
+    t(`scope.unavailable.items.${i}` as Parameters<typeof t>[0])
+  );
+  const faqItems = Array.from({ length: 8 }).map((_, i) => ({
+    question: t(`faq.items.${i}.question` as Parameters<typeof t>[0]),
+    answer: t(`faq.items.${i}.answer` as Parameters<typeof t>[0]),
+  }));
   const categoryIcons = [ClipboardList, BarChart3, ShieldCheck];
 
   return (

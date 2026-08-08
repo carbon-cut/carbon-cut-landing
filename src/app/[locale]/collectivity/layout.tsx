@@ -3,8 +3,15 @@ import type { ReactNode } from "react";
 
 import { toKeywordArray } from "@/lib/seo";
 import { getScopedI18n } from "@/locales/server";
+import { setStaticParamsLocale } from "next-international/server";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
   const collectivitySeo = await getScopedI18n("seo.pages.collectivityLanding");
 
   return {

@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "css.d.ts",
+    "src/app/[locale]/layout.tsx",
+    "src/app/[locale]/not-found.tsx",
+    "src/app/api/**/*.ts",
+    "src/app/api/**/*.tsx",
+    "src/hooks/**/*.ts",
+    "src/hooks/**/*.tsx",
+    "src/lib/**/*.ts",
+    "src/lib/**/*.tsx",
+    "src/locales/**/*.ts",
+    "src/locales/**/*.tsx",
+    "src/middlewares/**/*.ts",
+    "src/middlewares/**/*.tsx",
+    "src/mocks/**/*.ts",
+    "src/mocks/**/*.tsx"
+  ],
+  "exclude": ["src/lib/collectivity/**/*.ts", "src/lib/collectivity/**/*.tsx"]
+}

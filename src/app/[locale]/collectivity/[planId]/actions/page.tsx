@@ -2,13 +2,15 @@ import RouteDescriptionPanel from "../../_components/routeDescriptionPanel";
 import { getCollectivityModuleRoute } from "../../_lib/routing";
 import { requireCollectivityPlanSession } from "@/lib/auth/access";
 import { getScopedI18n } from "@/locales/server";
+import { setStaticParamsLocale } from "next-international/server";
 
 export default async function CollectivityPlanActionsPage({
   params,
 }: {
-  params: Promise<{ planId: string }>;
+  params: Promise<{ locale: string; planId: string }>;
 }) {
-  const { planId } = await params;
+  const { locale, planId } = await params;
+  setStaticParamsLocale(locale);
 
   await requireCollectivityPlanSession({
     requestedPlanId: planId,

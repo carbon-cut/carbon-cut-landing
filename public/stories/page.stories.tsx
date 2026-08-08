@@ -10,7 +10,7 @@ const meta: Meta<typeof Layout> = {
     layout: "fullscreen",
   },
   args: {
-    children: <Page />,
+    children: <Page params={Promise.resolve({ locale: "fr" })} />,
   },
 };
 

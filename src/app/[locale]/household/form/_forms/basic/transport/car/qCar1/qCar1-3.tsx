@@ -37,6 +37,8 @@ const QuestionCompo3: React.FC<QuestionProps & Props> = ({
   );
 
   const t = useScopedI18n("forms.basic.transport.qCar1-3");
+  const t2 = useScopedI18n("forms.basic.transport.qCar1-2");
+
   return (
     <div>
       <Question>{t("q")}</Question>
@@ -49,7 +51,7 @@ const QuestionCompo3: React.FC<QuestionProps & Props> = ({
             form={mainForm}
             options={
               fuelTypes?.map((element: FuelTypes) => ({
-                label: t(element),
+                label: t2(element),
                 value: element,
               })) ?? []
             }

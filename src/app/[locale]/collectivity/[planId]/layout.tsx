@@ -3,9 +3,16 @@ import type { Metadata } from "next";
 
 import { toKeywordArray } from "@/lib/seo";
 import { getScopedI18n } from "@/locales/server";
+import { setStaticParamsLocale } from "next-international/server";
 import WorkspaceShell from "../_components/workspaceShell";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; planId: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
   const collectivityDashboardSeo = await getScopedI18n("seo.pages.collectivityDashboard");
 
   return {
@@ -28,9 +35,10 @@ export default async function CollectivityPlanLayout({
   params,
 }: {
   children: ReactNode;
-  params: Promise<{ planId: string }>;
+  params: Promise<{ locale: string; planId: string }>;
 }) {
-  const { planId } = await params;
+  const { locale, planId } = await params;
+  setStaticParamsLocale(locale);
 
   return <WorkspaceShell planId={planId}>{children}</WorkspaceShell>;
 }

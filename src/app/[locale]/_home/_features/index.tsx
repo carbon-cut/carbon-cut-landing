@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 
-const cardContent: Props[] = [
+const cardContent = [
   {
     icon: calculator,
     altKey: "cards.0.alt",
@@ -49,7 +49,7 @@ const cardContent: Props[] = [
     titleKey: "cards.5.title",
     descriptionKey: "cards.5.description",
   },
-];
+] as const;
 
 function Features() {
   return (
@@ -63,13 +63,7 @@ function Features() {
 
 export default Features;
 
-type Props = {
-  icon: string;
-  altKey: string;
-  titleKey: string;
-  descriptionKey: string;
-  delay?: number;
-};
+type Props = (typeof cardContent)[number];
 const CardComponent: React.FC<Props> = (props) => {
   const t = useScopedI18n("home.features");
 

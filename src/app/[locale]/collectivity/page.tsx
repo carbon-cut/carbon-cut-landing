@@ -10,8 +10,15 @@ import Typography from "@/components/ui/typography";
 import { getCollectivityStartRoute } from "@/lib/routing/routes";
 import { toKeywordArray } from "@/lib/seo";
 import { getScopedI18n } from "@/locales/server";
+import { setStaticParamsLocale } from "next-international/server";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
   const collectivityLandingSeo = await getScopedI18n("seo.pages.collectivityLanding");
 
   return {
@@ -60,7 +67,13 @@ const proofPoints = [
   },
 ] as const;
 
-export default async function CollectivityIndexPage() {
+export default async function CollectivityIndexPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
   const t = await getScopedI18n("collectivityLanding");
 
   return (

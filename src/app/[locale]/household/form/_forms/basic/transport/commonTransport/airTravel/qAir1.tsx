@@ -115,7 +115,9 @@ const QAir: QuestionFC = ({ mainForm }: QuestionProps) => {
   return (
     <div className="">
       <Question className="text-center font-semibold text-xl">{t("q")}</Question>
-      <Content className="text-center text-muted-foreground mb-0">{t("description")}</Content>
+      <Content className="text-center text-muted-foreground mb-0">
+        <>{t("description")}</>
+      </Content>
       <ul ref={parent}>
         {data.map(({ id }, index) => (
           <AirTravelItem
@@ -167,7 +169,7 @@ export default QAir;
 
 type AirTravelItemProps = {
   index: number;
-  t: ReturnType<typeof useScopedI18n>;
+  t: (...args: [string, ...any[]]) => string;
   airports: { reduced: AirportsReduced; raw?: AirportsData } | undefined;
   isLoading: boolean;
   mainForm: QuestionProps["mainForm"];

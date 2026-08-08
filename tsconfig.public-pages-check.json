@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "css.d.ts",
+    "src/app/[locale]/page.tsx",
+    "src/app/[locale]/_home/**/*.ts",
+    "src/app/[locale]/_home/**/*.tsx",
+    "src/app/[locale]/help/**/*.ts",
+    "src/app/[locale]/help/**/*.tsx",
+    "src/app/[locale]/contact/**/*.ts",
+    "src/app/[locale]/contact/**/*.tsx"
+  ]
+}

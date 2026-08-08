@@ -4,17 +4,37 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { getScopedI18n } from "@/locales/server";
 import { getContactRoute, getFormRoute, getHelpRoute } from "@/lib/routing/routes";
+import { setStaticParamsLocale } from "next-international/server";
 import { ChevronRight } from "lucide-react";
 import FAQs from "../_components/Faq";
 
-export default async function HelpResultatsPage() {
-  const t = getScopedI18n("(pages).helpCategory.resultats");
-  const summaryItems = t("summaryItems") as string[];
-  const readingSteps = t("readingGuide.steps") as string[];
-  const indicators = t("indicators.items") as { title: string; description: string }[];
-  const recommendationItems = t("recommendations.items") as string[];
-  const limits = t("limits.items") as string[];
-  const supportChecklist = t("support.checklist") as string[];
+export default async function HelpResultatsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
+  const t = await getScopedI18n("(pages).helpCategory.results");
+  const summaryItems = Array.from({ length: 4 }).map((_, i) =>
+    t(`summaryItems.${i}` as Parameters<typeof t>[0])
+  );
+  const readingSteps = Array.from({ length: 4 }).map((_, i) =>
+    t(`readingGuide.steps.${i}` as Parameters<typeof t>[0])
+  );
+  const indicators = Array.from({ length: 3 }).map((_, i) => ({
+    title: t(`indicators.items.${i}.title` as Parameters<typeof t>[0]),
+    description: t(`indicators.items.${i}.description` as Parameters<typeof t>[0]),
+  }));
+  const recommendationItems = Array.from({ length: 3 }).map((_, i) =>
+    t(`recommendations.items.${i}` as Parameters<typeof t>[0])
+  );
+  const limits = Array.from({ length: 4 }).map((_, i) =>
+    t(`limits.items.${i}` as Parameters<typeof t>[0])
+  );
+  const supportChecklist = Array.from({ length: 4 }).map((_, i) =>
+    t(`support.checklist.${i}` as Parameters<typeof t>[0])
+  );
 
   return (
     <article className="w-full">

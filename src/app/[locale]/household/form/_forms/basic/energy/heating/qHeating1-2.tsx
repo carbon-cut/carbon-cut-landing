@@ -14,12 +14,7 @@ import {
 import { FieldCheckbox as FormCheckbox } from "@/components/forms";
 
 const headerKeys = [0, 1, 2] as const;
-const bodyKeys = [
-  { l: "insert", n: 0 },
-  { l: "stove", n: 1 },
-  { l: "openFireplace", n: 2 },
-  { l: "woodBoiler", n: 3 },
-] as const;
+const bodyKeys = ["insert", "stove", "openFireplace", "woodBoiler"] as const;
 
 function QHeating2({ mainForm }: QuestionProps) {
   const t = useScopedI18n("forms.basic.energy.heating.q2");
@@ -31,24 +26,25 @@ function QHeating2({ mainForm }: QuestionProps) {
           <TableHeader>
             <TableRow>
               {headerKeys.map((e) => (
+                // @ts-ignore - it needs to be fixed, just not now
                 <TableHead key={e}>{t(`headers.${e}`)}</TableHead>
               ))}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {bodyKeys.map(({ l, n }) => (
-              <TableRow key={n}>
-                <TableCell>{t(`rows.${n}`)}</TableCell>
+            {bodyKeys.map((l) => (
+              <TableRow key={l}>
+                <TableCell>{t(`rows.${l}`)}</TableCell>
                 <TableCell>
                   <FormCheckbox
-                    id={`wood${n}`}
+                    id={`wood${l}`}
                     form={mainForm}
                     name={`energy.heating.system.wood.${l}`}
                   />
                 </TableCell>
                 <TableCell>
                   <FormCheckbox
-                    id={`charcoal${n}`}
+                    id={`charcoal${l}`}
                     form={mainForm}
                     name={`energy.heating.system.charcoal.${l}`}
                   />

@@ -8,16 +8,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-type Testimonial = {
-  quote: string;
-  detail: string;
-  name: string;
-  role: string;
-  initials: string;
-  avatar?: string;
-};
-
-const testimonialKeys: Testimonial[] = [
+const testimonialKeys = [
   {
     quote: "cards.0.quote",
     detail: "cards.0.detail",
@@ -42,7 +33,7 @@ const testimonialKeys: Testimonial[] = [
     initials: "CD",
     avatar: "home/testimonials/Avatar 3.png",
   },
-];
+] as const;
 
 function Testimonials() {
   const t = useScopedI18n("home.testimonials");

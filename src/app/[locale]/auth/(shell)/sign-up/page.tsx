@@ -24,7 +24,10 @@ export default function SignUpPage() {
   const tCommon = useScopedI18n("(auth).common");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const highlights = t("highlights.items") as { title: string; description: string }[];
+  const highlights = Array.from({ length: 3 }).map((_, i) => ({
+    title: t(`highlights.items.${i}.title` as Parameters<typeof t>[0]),
+    description: t(`highlights.items.${i}.description` as Parameters<typeof t>[0]),
+  }));
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

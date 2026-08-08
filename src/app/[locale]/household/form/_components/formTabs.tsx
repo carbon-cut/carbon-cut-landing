@@ -8,6 +8,7 @@ import { formSchema } from "@/app/[locale]/household/form/_forms/formSchema";
 import QuestionRenderer from "./questionRenderer";
 import FormContext from "../_layout/_formContext";
 import { useScopedI18n } from "@/locales/client";
+import { TabValues } from "@/lib/formTabs/types";
 const TabTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsTrigger>,
   React.ComponentPropsWithoutRef<typeof TabsTrigger>
@@ -50,7 +51,7 @@ const TabTrigger = React.forwardRef<
     >
       {props.children}
       <span className="font-medium md:text-sm text-xs md:block hidden">
-        {tSections(props.value)}
+        {tSections(props.value as TabValues)}
       </span>
     </TabsTrigger>
   );

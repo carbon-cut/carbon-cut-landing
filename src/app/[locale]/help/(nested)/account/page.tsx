@@ -4,21 +4,38 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { getScopedI18n } from "@/locales/server";
 import { getContactRoute, getHelpRoute, localizeInternalHref } from "@/lib/routing/routes";
+import { setStaticParamsLocale } from "next-international/server";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import FAQs from "../_components/Faq";
 
-export default async function HelpComptePage() {
-  const t = getScopedI18n("(pages).helpCategory.compte");
-  const quickLinks = t("quickAccess.items") as {
-    title: string;
-    description: string;
-    href: string;
-  }[];
-  const faqs = t("faqs.items") as { title: string; description: string }[];
-  const flowSteps = t("flow.steps") as string[];
-  const errorMap = t("errorMap.items") as { label: string; meaning: string }[];
-  const errorColumns = t("errorMap.columns") as { message: string; meaning: string };
-  const supportChecklist = t("support.checklist") as string[];
+export default async function HelpComptePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
+  const t = await getScopedI18n("(pages).helpCategory.account");
+  const quickLinks = Array.from({ length: 3 }, (_, i) => ({
+    title: t(`quickAccess.items.${i}.title` as Parameters<typeof t>[0]),
+    description: t(`quickAccess.items.${i}.description` as Parameters<typeof t>[0]),
+    href: t(`quickAccess.items.${i}.href` as Parameters<typeof t>[0]),
+  }));
+
+  const faqs = Array.from({ length: 5 }, (_, i) => ({
+    title: t(`faqs.items.${i}.title` as Parameters<typeof t>[0]),
+    description: t(`faqs.items.${i}.description` as Parameters<typeof t>[0]),
+  }));
+  const flowSteps = Array.from({ length: 4 }, (_, i) =>
+    t(`flow.steps.${i}` as Parameters<typeof t>[0])
+  );
+  const errorMap = Array.from({ length: 4 }, (_, i) => ({
+    label: t(`errorMap.items.${i}` as Parameters<typeof t>[0]),
+    meaning: t(`errorMap.meanings.${i}` as Parameters<typeof t>[0]),
+  }));
+  const errorColumns = {
+    message: t("errorMap.columns.message"),
+    meaning: t("errorMap.columns.meaning"),
+  };
+  const supportChecklist = Array.from({ length: 4 }, (_, i) =>
+    t(`support.checklist.${i}` as Parameters<typeof t>[0])
+  );
 
   return (
     <article className="w-full">

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { TabValues } from "@/lib/formTabs/types";
-import { useScopedI18n } from "@/locales/client";
+import { useI18n } from "@/locales/client";
 import { useContext } from "react";
 import { UseFormReturn } from "react-hook-form";
 import FormContext from "../_layout/_formContext";
@@ -23,7 +23,7 @@ const Question = ({
   index: number;
   currentIndex: number;
 }) => {
-  const t = useScopedI18n();
+  const t = useI18n();
 
   const { tab } = useContext(FormContext);
 

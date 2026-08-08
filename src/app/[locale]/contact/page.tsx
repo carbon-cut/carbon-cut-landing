@@ -8,9 +8,16 @@ import Typography from "@/components/ui/typography";
 import { getFormRoute, getHelpRoute } from "@/lib/routing/routes";
 import { toKeywordArray } from "@/lib/seo";
 import { getScopedI18n } from "@/locales/server";
+import { setStaticParamsLocale } from "next-international/server";
 import { ArrowRight, Mail, ShieldCheck } from "lucide-react";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
   const contactSeo = await getScopedI18n("seo.pages.contact");
 
   return {
@@ -24,9 +31,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function ContactPage() {
+export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
   const t = await getScopedI18n("(pages).contact");
-  const checklist = t("checklist") as string[];
+  const checklist = Array.from({ length: 4 }).map((_, i) =>
+    t(`checklist.${i}` as Parameters<typeof t>[0])
+  );
 
   return (
     <main id="content" className="bg-background px-4 pb-20 pt-32 md:px-8 md:pt-40">

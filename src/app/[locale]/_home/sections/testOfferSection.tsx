@@ -8,8 +8,7 @@ const introAnimation = "";
 
 export default async function TestOfferSection() {
   const t = await getScopedI18n("home.testOffer");
-  const chips = t("chips") as string[];
-  const safeChips = Array.isArray(chips) ? chips : [];
+  const chips = Array.from({ length: 4 }).map((_, i) => t(`chips.${i}` as Parameters<typeof t>[0]));
   const chipToneClasses = [
     "border-chart-3/35 bg-chart-3/10 text-chart-3",
     "border-chart-1/35 bg-chart-1/10 text-chart-1",
@@ -31,7 +30,7 @@ export default async function TestOfferSection() {
             </Typography>
           </div>
           <div className="flex flex-wrap items-center gap-2 md:justify-end">
-            {safeChips.map((chip, index) => (
+            {chips.map((chip, index) => (
               <span
                 key={chip}
                 className={cn(

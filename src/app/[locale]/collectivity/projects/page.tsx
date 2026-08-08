@@ -18,6 +18,7 @@ import { requireCollectivitySession } from "@/lib/auth/access";
 import { CollectivityBackendError } from "@/lib/collectivity/backend";
 import { buildLogoutRedirect } from "@/lib/auth/redirect";
 import { getScopedI18n } from "@/locales/server";
+import { setStaticParamsLocale } from "next-international/server";
 
 export const dynamic = "force-dynamic";
 
@@ -33,10 +34,14 @@ function normalizeModuleParam(value: string | string[] | undefined): Collectivit
 }
 
 export default async function CollectivityProjectsPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  const { locale } = await params;
+  setStaticParamsLocale(locale);
   const session = await requireCollectivitySession(getCollectivityProjectsRoute());
   let projects;
 
@@ -60,8 +65,8 @@ export default async function CollectivityProjectsPage({
     redirect(getCollectivitySetupRoute());
   }
 
-  const params = await searchParams;
-  const moduleSlug = normalizeModuleParam(params.module);
+  const resolvedSearchParams = await searchParams;
+  const moduleSlug = normalizeModuleParam(resolvedSearchParams.module);
   const t = await getScopedI18n("(pages).collectivityDashboard");
   const moduleTitle = t(`workflow.sections.${moduleSlug}.title`);
 

@@ -53,6 +53,7 @@ type PreAssessmentSlide = {
 
 export default function PreAssessment({ onContinue }: Props) {
   const t = useScopedI18n("forms.preAssessment");
+  const tSlide = useScopedI18n("forms.preAssessment.slides");
   const tForms = useScopedI18n("forms");
   const iconMap: Record<PreAssessmentItemKey, ComponentType<{ className?: string }>> = {
     duration: Clock,
@@ -66,7 +67,48 @@ export default function PreAssessment({ onContinue }: Props) {
     save: Save,
     results: LineChart,
   };
-  const slides = t("slides") as PreAssessmentSlide[];
+  const slidesStructure = [
+    {
+      items: ["duration", "transport", "energy"],
+    },
+    {
+      items: ["food", "data", "privacy"],
+    },
+    {
+      items: ["save", "results"],
+    },
+  ] as const;
+  const visualLabel = (index: 0 | 1 | 2) => {
+    switch (index) {
+      case 0:
+        return {
+          visualLabel: tSlide(`${index}.visualLabel`),
+          note: tSlide(`${index}.note`),
+        };
+      default:
+        return { visualLabel: undefined, note: undefined };
+    }
+  };
+  const slides: PreAssessmentSlide[] = ([0, 1, 2] as const).map((_, i) => ({
+    title: tSlide(`${_}.title`),
+    ...visualLabel(_),
+    items: [
+      ...slidesStructure[i].items.map((item) => ({
+        id: item,
+        title: tForms(`${_}.${item}.title` as Parameters<typeof tForms>[0]),
+        description: tForms(`${_}.${item}.description` as Parameters<typeof tForms>[0]),
+      })),
+    ],
+  }));
+  /* const slides: PreAssessmentSlide[] = [{
+    title: tSlide(`0.title`),
+    items: [
+      { id: "duration", title: tForms("transport.duration.title"), description: tForms("transport.duration.description") },
+      { id: "transport", title: tForms("transport.transport.title"), description: tForms("transport.transport.description") },
+      { id: "energy", title: tForms("transport.energy.title"), description: tForms("transport.energy.description") },
+    ]
+
+  } */
   const safeSlides = Array.isArray(slides) ? slides : [];
   const [currentStep, setCurrentStep] = useState(0);
   const totalSteps = safeSlides.length;

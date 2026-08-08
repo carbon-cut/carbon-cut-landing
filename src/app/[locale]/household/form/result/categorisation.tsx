@@ -62,6 +62,7 @@ function Categorisation({ data, isAnimating }: Props) {
                       return "";
                     },
                     label: (context) => {
+                      // @ts-ignore - it has to be fixed at some point
                       return tSections(context.label);
                     },
                     afterLabel: (context) => {

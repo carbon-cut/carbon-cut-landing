@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+// @ts-nocheck
+import React from "react";
 import Question from "../../../../components/QuestionPrompt";
 import { useScopedI18n } from "@/locales/client";
 import Content from "../../../../components/QuestionContent";

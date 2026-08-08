@@ -102,7 +102,7 @@ function FieldSelect<T extends FieldValues, E extends FieldPath<T>>({
                  ${size === "sm" ? "h-8 [&_span]:text-xs [&_svg]:size-3.5" : "h-9"}
                  `}
               >
-                <SelectValue placeholder={placeholder ?? t("value", { placeholder })} />
+                <SelectValue placeholder={placeholder ?? t("value")} />
               </SelectTrigger>
             </FormControl>
             <SelectContent onFocus={() => setOpen(true)} onCloseAutoFocus={() => setOpen(false)}>
