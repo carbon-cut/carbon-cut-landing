@@ -4,16 +4,14 @@ import Typography from "@/components/ui/typography";
 
 import InventoryDatasetButton from "./InventoryDatasetButton";
 import type { InventoryDataset, InventoryFamily, InventoryWorkspaceConfig } from "../types";
-import { useScopedI18n } from "@/locales/client";
+import { useI18n, useScopedI18n } from "@/locales/client";
 
 export default function InventoryDatasetNav({
-  label,
   activeFamily,
   datasets,
   activeDatasetKey,
   onDatasetChange,
 }: {
-  label: InventoryWorkspaceConfig["controls"]["datasetLabel"];
   activeFamily: InventoryFamily | undefined;
   datasets: InventoryDataset[];
   activeDatasetKey: InventoryDataset["key"];
@@ -21,6 +19,7 @@ export default function InventoryDatasetNav({
 }) {
   const tFamily = useScopedI18n("(pages).collectivityDashboard.inventoryWorkspace.families");
   const tDataset = useScopedI18n("(pages).collectivityDashboard.inventoryWorkspace.datasets");
+  const label = useI18n()("(pages).collectivityDashboard.inventoryWorkspace.controls.datasetLabel");
   return (
     <section
       aria-label={`${label} ${activeFamily ? tFamily(`${activeFamily.key}.title`) : ""}`.trim()}

@@ -62,8 +62,8 @@ export default async function CollectivityProjectsPage({
 
   const params = await searchParams;
   const moduleSlug = normalizeModuleParam(params.module);
-  const t = getScopedI18n("(pages).collectivityDashboard");
-  const moduleTitle = t(`workflow.sections.${moduleSlug}.title`) as string;
+  const t = await getScopedI18n("(pages).collectivityDashboard");
+  const moduleTitle = t(`workflow.sections.${moduleSlug}.title`);
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-4 py-10 md:px-6">

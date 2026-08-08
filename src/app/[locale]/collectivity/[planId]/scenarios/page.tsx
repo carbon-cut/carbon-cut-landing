@@ -16,7 +16,7 @@ export default async function CollectivityPlanScenariosPage({
     returnTo: getCollectivityModuleRoute(planId, "scenarios"),
   });
 
-  const t = getScopedI18n("(pages).collectivityDashboard");
+  const t = await getScopedI18n("(pages).collectivityDashboard");
 
   return (
     <RouteDescriptionPanel
@@ -24,7 +24,7 @@ export default async function CollectivityPlanScenariosPage({
       title={t("workflow.sections.scenarios.title") as string}
       description={t("workflow.sections.scenarios.description") as string}
       sectionsTitle={t("moduleStructure.title") as string}
-      sections={t("moduleStructure.sections.scenarios") as { title: string; description: string }[]}
+      sections={[]}
     />
   );
 }

@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/app/[locale]/household/**/*.ts", "src/app/[locale]/household/**/*.tsx"]
+}

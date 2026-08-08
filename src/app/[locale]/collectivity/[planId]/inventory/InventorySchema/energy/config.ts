@@ -34,7 +34,7 @@ const electricityMtColumnKeys = [
 ] as const;
 
 const electricityHtColumnKeys = ["cement", "water", "industrialZone", "total"] as const;
-
+export type Sectors = "residential" | "tertiary" | "agriculture" | "industry" | "transport";
 const electricityLtLines = {
   domestic: { sector: "residential", required: true },
   commercial: { sector: "tertiary", required: true },
@@ -103,7 +103,7 @@ export const photovoltaic = {
 
 const naturalGasRowKeys = ["consumption", "subscribers"] as const;
 
-const naturalGasBpColumnKeys = [
+const naturalGasLpColumnKeys = [
   "domestic",
   "commercial",
   "administration",
@@ -128,7 +128,7 @@ const naturalGasMpColumnKeys = [
 
 const naturalGasHpColumnKeys = ["powerPlant", "industrialHub", "total"] as const;
 
-const naturalGasBpLines = {
+const naturalGasLpLines = {
   domestic: { sector: "residential", required: true },
   commercial: { sector: "tertiary" },
   administration: { sector: "tertiary" },
@@ -163,11 +163,11 @@ const naturalGasUnits: UnitConf = {
 
 export const naturalGas = {
   rowKeys: naturalGasRowKeys,
-  bpColumnKeys: naturalGasBpColumnKeys,
+  lpColumnKeys: naturalGasLpColumnKeys,
   mpColumnKeys: naturalGasMpColumnKeys,
   hpColumnKeys: naturalGasHpColumnKeys,
   lines: {
-    bp: naturalGasBpLines,
+    lp: naturalGasLpLines,
     mp: naturalGasMpLines,
     hp: naturalGasHpLines,
   },

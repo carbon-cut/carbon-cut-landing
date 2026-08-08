@@ -10,7 +10,6 @@ import Image from "next/image";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
 import {
-  getAuthSignInRoute,
   getCollectivityLandingRoute,
   getCollectivityStartRoute,
   getFormRoute,
@@ -89,7 +88,7 @@ function Header() {
     }
 
     setShow(false);
-    router.push(getAuthSignInRoute());
+    router.push("/");
   }
 
   if (pathName.startsWith("/auth")) {

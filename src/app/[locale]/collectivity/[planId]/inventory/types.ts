@@ -21,6 +21,7 @@ export type InventoryDataset = {
   progressLabel?: string;
   progressPercent?: number;
   hasError?: boolean;
+  isComplete?: boolean;
 };
 
 export type InventoryTableColumn = {

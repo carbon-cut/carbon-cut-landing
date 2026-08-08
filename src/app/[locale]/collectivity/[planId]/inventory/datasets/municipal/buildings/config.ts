@@ -6,7 +6,7 @@ import type { InventoryTableRow } from "../../../types";
 
 export function buildBuildingsRows(
   input: "areas" | "consumption",
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   switch (input) {
     case "areas":

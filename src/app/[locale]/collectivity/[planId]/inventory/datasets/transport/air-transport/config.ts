@@ -6,7 +6,7 @@ import type { InventoryGroupedYearTableData, InventoryTableRow } from "../../../
 
 export function buildAirTransportMovementSection(
   rows: InventoryTableRow[],
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryGroupedYearTableData {
   return {
     title: React.createElement(
@@ -32,7 +32,7 @@ export function buildAirTransportMovementSection(
 }
 
 export function buildAirTransportEnergyRows(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   return airTransport.energyKeys.map((key) => ({
     key,

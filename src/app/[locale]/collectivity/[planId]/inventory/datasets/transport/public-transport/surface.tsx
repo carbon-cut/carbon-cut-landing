@@ -59,7 +59,7 @@ function PublicTransportOperatorSection({
   ageRows: ReturnType<typeof buildPublicTransportRows>;
   renewalFutureRows: ReturnType<typeof buildPublicTransportRenewalFutureRows>;
   futureYears: number[];
-  tPublicTransport: ReturnType<typeof useScopedI18n>;
+  tPublicTransport: (...args: [string, ...any]) => string;
 }) {
   const { mainForm } = useInventoryContext();
   const operatorBaseNamePath = useMemo(() => `transport.publicTransport.dataSet.${index}`, [index]);

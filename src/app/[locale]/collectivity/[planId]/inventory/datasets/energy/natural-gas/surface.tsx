@@ -21,9 +21,10 @@ import {
   buildNaturalGasMetrics,
   buildNaturalGasPopulationRows,
   buildNaturalGasTitleWithRequirement,
+  FixedLineKey,
 } from "./config";
 
-const blockKeys = ["bp", "mp", "hp"] as const;
+const blockKeys = ["lp", "mp", "hp"] as const;
 type NaturalGasBlockKey = (typeof blockKeys)[number];
 
 export default function NaturalGasSurface() {
@@ -39,18 +40,8 @@ export default function NaturalGasSurface() {
   const tTable = useScopedI18n(
     "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.yearMetricsTable"
   );
-  const naturalGasFixedLabel = (blockKey: NaturalGasBlockKey, key: string) => {
-    if (blockKey === "bp") {
-      return tElectricity(`lt.${key}`);
-    }
-
-    if (blockKey === "mp") {
-      return key === "services"
-        ? (tNaturalGas("bp.services") as string)
-        : tElectricity(`mt.${key}`);
-    }
-
-    return tNaturalGas(`hp.${key}`);
+  const naturalGasFixedLabel = (key: FixedLineKey) => {
+    return tTable(`fixedLabels.${key}`);
   };
   const { blocks, metrics, populationRows, assumptionFields, sectorOptions } = useState(() => ({
     blocks: blockKeys.map((key) => ({
@@ -58,7 +49,7 @@ export default function NaturalGasSurface() {
       title: tNaturalGas(`${key}.title`),
       fixedColumns: buildNaturalGasFixedLines(
         key,
-        (lineKey) => naturalGasFixedLabel(key, lineKey),
+        (lineKey) => naturalGasFixedLabel(lineKey),
         (sector) => tTable(`sectors.${sector}`)
       ),
     })),
@@ -76,7 +67,7 @@ export default function NaturalGasSurface() {
     remove: removeBpCustomColumn,
   } = useFieldArray({
     control: mainForm.control,
-    name: "energy.naturalGas.dataSet.bp.custom",
+    name: "energy.naturalGas.dataSet.lp.custom",
   });
   const {
     fields: mpCustomFields,
@@ -99,7 +90,7 @@ export default function NaturalGasSurface() {
       Object.fromEntries(
         blocks.map((block) => {
           const customArray =
-            block.key === "bp"
+            block.key === "lp"
               ? { fields: bpCustomFields, remove: removeBpCustomColumn }
               : block.key === "mp"
                 ? { fields: mpCustomFields, remove: removeMpCustomColumn }
@@ -140,7 +131,7 @@ export default function NaturalGasSurface() {
           {
             label: tTable("addColumn"),
             onAdd: () =>
-              (blockKey === "bp"
+              (blockKey === "lp"
                 ? { append: appendBpCustomColumn }
                 : blockKey === "mp"
                   ? { append: appendMpCustomColumn }

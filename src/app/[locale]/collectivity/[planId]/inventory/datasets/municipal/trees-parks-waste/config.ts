@@ -4,7 +4,9 @@ import Typography from "@/components/ui/typography";
 import { treesParksWaste } from "../../../InventorySchema/municipal/config";
 import type { InventoryTableRow } from "../../../types";
 
-export function buildTreesParksWasteRows(labelFunc: (key: string) => string): InventoryTableRow[] {
+export function buildTreesParksWasteRows(
+  labelFunc: (...args: [string, ...any]) => string
+): InventoryTableRow[] {
   const requiredKeys = new Set(["urbanTrees", "greenWaste", "composting"]);
 
   return treesParksWaste.yearlyKeys.map((key) => ({

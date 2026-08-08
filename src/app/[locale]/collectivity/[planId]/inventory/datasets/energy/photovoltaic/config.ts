@@ -3,7 +3,7 @@ import type { InventoryTableRow } from "../../../types";
 
 export function buildPhotovoltaicRows(
   input: "bt" | "mt",
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   switch (input) {
     case "bt":

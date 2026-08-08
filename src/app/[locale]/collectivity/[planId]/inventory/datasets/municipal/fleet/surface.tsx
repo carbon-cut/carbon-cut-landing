@@ -25,8 +25,8 @@ export default function FleetSurface() {
     spend: buildFleetRows("spend", tFleet),
   }));
   const compositionSection: InventoryTableSectionData = {
-    title: "",
-    description: "",
+    title: tFleet("compositionTitle"),
+    description: tFleet("compositionDescription"),
     fieldBaseName: "municipal.fleet.dataSet.composition",
     yearSelector: { datasetKey: "fleet" },
     columns: rows.engine,
@@ -43,7 +43,7 @@ export default function FleetSurface() {
       /> */}
       <div className="grid grid-cols-1 gap-6 border-t border-border/10 pt-6 md:grid-cols-2">
         <MatrixTable
-          title=""
+          title={tFleet("yearlyVehiclesTitle")}
           rows={rows.engine}
           form={mainForm}
           baseName={"municipal.fleet.dataSet.vehicles"}
@@ -51,7 +51,7 @@ export default function FleetSurface() {
         <MatrixTable
           title={
             <Typography variant="sectionTitle" size="lg" className="inline-flex items-center gap-1">
-              <span>{/* {copy.yearlyEnergyTitle} */}</span>
+              <span>{tFleet("yearlyEnergyTitle")}</span>
               <FieldRequired content={tFleet("yearlyEnergyRequirementTooltip")} />
             </Typography>
           }
@@ -60,7 +60,7 @@ export default function FleetSurface() {
           baseName={"municipal.fleet.dataSet.consumption"}
         />
         <MatrixTable
-          title={/* {copy.yearlySpendTitle} */ ""}
+          title={tFleet("yearlySpendTitle")}
           rows={rows.spend}
           form={mainForm}
           baseName={"municipal.fleet.dataSet.spend"}

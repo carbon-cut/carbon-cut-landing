@@ -102,7 +102,8 @@ export default function CollectivitySidebar({
         </div>
         <SidebarHeader className="relative h-[var(--sidebar-width-icon)] z-10 gap-4 border-b border-sidebar-border pb-0 transition-[padding] duration-200 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:px-2.5">
           <div className="relative h-[50px] w-full overflow-visible">
-            <div
+            <Link
+              href="/collectivity"
               className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
               style={{ width: FULL_LOGO_WIDTH, height: BRAND_MARK_SIZE }}
             >
@@ -111,7 +112,7 @@ export default function CollectivitySidebar({
                 variant={isCollapsed ? "icon" : "full"}
                 size={BRAND_MARK_SIZE}
               />
-            </div>
+            </Link>
           </div>
         </SidebarHeader>
         <SidebarContent className="relative z-10 py-4">

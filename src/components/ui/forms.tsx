@@ -176,7 +176,12 @@ const FormMessage = React.forwardRef<
       )}
       {...props}
     >
-      {error ? t(String(normalizedMessage)) : children}
+      {error
+        ? t(
+            //@ts-ignore - expensive
+            String(normalizedMessage)
+          )
+        : children}
     </p>
   );
 });

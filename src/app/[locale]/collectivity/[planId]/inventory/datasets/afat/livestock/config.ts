@@ -18,7 +18,7 @@ const livestockKeys = [
   "turkeys",
 ] as const;
 
-type LabelFunc = (key: string) => string;
+type LabelFunc = (...args: [string, ...any]) => string;
 
 export function buildLivestockRows(labelFunc: LabelFunc): InventoryTableRow[] {
   return livestockKeys.map((key) => ({

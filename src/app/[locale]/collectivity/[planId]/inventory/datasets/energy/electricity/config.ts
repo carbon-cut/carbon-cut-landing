@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldRequired } from "@/components/ui/field-help";
 import Typography from "@/components/ui/typography";
-import { electricity } from "../../../InventorySchema/energy/config";
+import { electricity, Sectors } from "../../../InventorySchema/energy/config";
 import type { InventoryTableColumn, InventoryTableRow } from "../../../types";
 import type { YearMetricsColumn, YearMetricsRow } from "@/components/table/year-metrics/types";
 
@@ -9,7 +9,7 @@ type ElectricityBlockKey = "lt" | "mt" | "ht";
 
 export function buildElectricityRows(
   input: ElectricityBlockKey,
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   switch (input) {
     case "lt":
@@ -27,7 +27,7 @@ export function buildElectricityRows(
 
 export function buildElectricityColumns(
   input: ElectricityBlockKey,
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableColumn[] {
   switch (input) {
     case "lt":
@@ -52,8 +52,8 @@ export function buildElectricityColumns(
 
 export function buildElectricityFixedLines(
   block: ElectricityBlockKey,
-  labelFunc: (key: string) => string,
-  sectorLabelFunc: (sector: string) => string
+  labelFunc: (...args: [string, ...any]) => string,
+  sectorLabelFunc: (...args: [Sectors, ...any]) => string
 ): YearMetricsColumn[] {
   return Object.entries(electricity.lines[block]).map(([key, definition]) => ({
     key,
@@ -77,7 +77,9 @@ export function buildElectricityTitleWithRequirement(title: string, requirement:
   );
 }
 
-export function buildElectricityMetrics(labelFunc: (key: string) => string): YearMetricsRow[] {
+export function buildElectricityMetrics(
+  labelFunc: (...args: [string, ...any]) => string
+): YearMetricsRow[] {
   return electricity.rowKeys.map((key) => ({
     key,
     label: labelFunc(`rows.${key}`),

@@ -8,7 +8,7 @@ import type {
 } from "@/components/table/grouped-year/types";
 import { trees } from "../../../InventorySchema/afat/config";
 
-type LabelFunc = (key: string) => string;
+type LabelFunc = (...args: [string, ...any]) => string;
 
 export function buildTrackedTreeCropsSection(labelFunc: LabelFunc): InventoryGroupedYearTableData {
   return {

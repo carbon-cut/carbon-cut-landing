@@ -2,8 +2,8 @@ import { publicLighting } from "../../../InventorySchema/municipal/config";
 import type { InventoryTableRow, InventoryTableColumn } from "../../../types";
 
 export function buildPublicLightingRows<
-  T extends (...args: any[]) => any,
-  K extends Parameters<T>[0],
+  T extends (...args: [string, ...any]) => string,
+  K extends "infrastructure" | "lamps" | "yearly",
 >(input: K, labelFunc: T): InventoryTableRow[] {
   switch (input) {
     case "infrastructure":
@@ -31,7 +31,7 @@ export function buildPublicLightingRows<
 
 export function buildPublicLightingColumns(
   input: "lamps",
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableColumn[] {
   return publicLighting.lampCols.map((key) => ({
     key,

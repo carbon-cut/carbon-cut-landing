@@ -31,7 +31,7 @@ function isRequiredDefaultRow(
   );
 }
 
-export function buildTerritoryVehicleTypeOptions(labelFunc: (key: string) => string) {
+export function buildTerritoryVehicleTypeOptions(labelFunc: (...args: [string, ...any]) => string) {
   return territoryVehicleTypeKeys.map((vehicleType) => ({
     value: vehicleType,
     label: labelFunc(`vehicleTypes.${vehicleType}`),
@@ -47,7 +47,7 @@ export function buildTerritoryVehicleFuelOptions({
   rows: TerritoryVehicleRow[];
   vehicleType: string;
   currentFuel?: string;
-  labelFunc: (key: string) => string;
+  labelFunc: (...args: [string, ...any]) => string;
 }) {
   if (!vehicleType || !territoryVehicleTypeKeys.includes(vehicleType as TerritoryVehicleType)) {
     return [];
@@ -109,7 +109,7 @@ export function getTerritoryVehicleInsertIndex(rows: TerritoryVehicleRow[], vehi
 }
 
 export function buildTerritoryVehiclesSection(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryGroupedYearTableData {
   return {
     title: React.createElement(
@@ -136,7 +136,7 @@ export function buildTerritoryVehiclesSection(
 }
 
 export function buildTerritoryVehiclesRowFields(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): GroupedYearRowField[] {
   return [
     {
@@ -171,7 +171,7 @@ export function buildTerritoryVehiclesRowFields(
 }
 
 export function buildTerritoryVehiclesEditableRows(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): GroupedYearEditableRows {
   return {
     addLabel: labelFunc("addLabel"),

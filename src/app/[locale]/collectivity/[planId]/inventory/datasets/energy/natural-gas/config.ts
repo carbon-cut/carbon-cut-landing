@@ -1,21 +1,21 @@
 import React from "react";
 import { FieldRequired } from "@/components/ui/field-help";
 import Typography from "@/components/ui/typography";
-import { naturalGas } from "../../../InventorySchema/energy/config";
+import { naturalGas, Sectors } from "../../../InventorySchema/energy/config";
 import { sharedData } from "../../../InventorySchema/shared-data/config";
 import type { InventoryTableColumn, InventoryTableRow } from "../../../types";
 import type { YearMetricsColumn, YearMetricsRow } from "@/components/table/year-metrics/types";
 import type { ScalarTableField } from "@/components/table/scalar/types";
 import type { InventoryFormValues } from "../../../context/inventory-context";
 
-type NaturalGasBlockKey = "bp" | "mp" | "hp";
+type NaturalGasBlockKey = "lp" | "mp" | "hp";
 
 export function buildNaturalGasRows(
   input: NaturalGasBlockKey,
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   switch (input) {
-    case "bp":
+    case "lp":
     case "mp":
     case "hp":
       return naturalGas.rowKeys.map((key) => ({
@@ -30,13 +30,13 @@ export function buildNaturalGasRows(
 
 export function buildNaturalGasColumns(
   input: NaturalGasBlockKey,
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableColumn[] {
   switch (input) {
-    case "bp":
-      return naturalGas.bpColumnKeys.map((key) => ({
+    case "lp":
+      return naturalGas.lpColumnKeys.map((key) => ({
         key,
-        label: labelFunc(`bp.${key}`),
+        label: labelFunc(`lp.${key}`),
       }));
     case "mp":
       return naturalGas.mpColumnKeys.map((key) => ({
@@ -53,12 +53,22 @@ export function buildNaturalGasColumns(
   }
 }
 
+export type FixedLineKey =
+  | keyof (typeof naturalGas.lines)["lp"]
+  | keyof (typeof naturalGas.lines)["mp"]
+  | keyof (typeof naturalGas.lines)["hp"];
+
 export function buildNaturalGasFixedLines(
   block: NaturalGasBlockKey,
-  labelFunc: (key: string) => string,
-  sectorLabelFunc: (sector: string) => string
+  labelFunc: (...args: [FixedLineKey, ...any]) => string,
+  sectorLabelFunc: (...args: [Sectors, ...any]) => string
 ): YearMetricsColumn[] {
-  return Object.entries(naturalGas.lines[block]).map(([key, definition]) => ({
+  return (
+    Object.entries(naturalGas.lines[block]) as [
+      FixedLineKey,
+      { required: boolean; sector: Sectors },
+    ][]
+  ).map(([key, definition]) => ({
     key,
     label: labelFunc(key),
     required: definition.required === true,
@@ -67,7 +77,9 @@ export function buildNaturalGasFixedLines(
   }));
 }
 
-export function buildNaturalGasMetrics(labelFunc: (key: string) => string): YearMetricsRow[] {
+export function buildNaturalGasMetrics(
+  labelFunc: (...args: [string, ...any]) => string
+): YearMetricsRow[] {
   return naturalGas.rowKeys.map((key) => ({
     key,
     label: labelFunc(`rows.${key}`),
@@ -76,7 +88,7 @@ export function buildNaturalGasMetrics(labelFunc: (key: string) => string): Year
 }
 
 export function buildNaturalGasPopulationRows(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   return sharedData.population.metricKeys.map((key) => ({
     key,
@@ -86,7 +98,7 @@ export function buildNaturalGasPopulationRows(
 }
 
 export function buildNaturalGasAssumptionFields(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): ScalarTableField<InventoryFormValues>[] {
   return [
     {

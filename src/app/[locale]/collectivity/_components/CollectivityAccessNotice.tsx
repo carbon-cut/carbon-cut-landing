@@ -11,11 +11,11 @@ type CollectivityAccessNoticeProps = {
   status?: number;
 };
 
-export default function CollectivityAccessNotice({
+export default async function CollectivityAccessNotice({
   returnHref,
   status,
 }: CollectivityAccessNoticeProps) {
-  const t = getScopedI18n("(pages).collectivityDashboard");
+  const t = await getScopedI18n("(pages).collectivityDashboard");
   const isAuthenticationIssue = status === 401;
 
   return (

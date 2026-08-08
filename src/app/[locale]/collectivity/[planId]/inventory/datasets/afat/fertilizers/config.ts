@@ -3,7 +3,7 @@ import type { InventoryFormValues } from "../../../context/inventory-context";
 import type { InventoryTableRow } from "../../../types";
 import { fertilizers } from "../../../InventorySchema/afat/config";
 
-type LabelFunc = (key: string) => string;
+type LabelFunc = (...args: [string, ...any]) => string;
 
 export function buildFertilizerRows(labelFunc: LabelFunc): InventoryTableRow[] {
   return fertilizers.keys.map((key) => ({

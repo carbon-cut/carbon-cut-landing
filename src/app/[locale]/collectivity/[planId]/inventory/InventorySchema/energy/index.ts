@@ -39,8 +39,8 @@ const electricitySchema = z.object({
 
 const naturalGasSchema = z.object({
   dataSet: z.object({
-    bp: createTerritorialEnergyBlockSchema({
-      fixedLines: naturalGas.lines.bp,
+    lp: createTerritorialEnergyBlockSchema({
+      fixedLines: naturalGas.lines.lp,
       metrics: {
         consumption: naturalGas.units.tensions.consumption,
       },

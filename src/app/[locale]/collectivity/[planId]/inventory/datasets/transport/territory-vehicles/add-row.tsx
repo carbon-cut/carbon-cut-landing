@@ -44,7 +44,7 @@ export default function TerritoryVehiclesAddRow({
   fuelPlaceholder: string;
   vehicleTypeOptions: Option[];
   addLabel: string;
-  labelFunc: (key: string) => string;
+  labelFunc: (...args: [string, ...any]) => string;
   insertRow: (index: number, row: Record<string, unknown>) => void;
 }) {
   const form = useForm<AddRowFormValues>({

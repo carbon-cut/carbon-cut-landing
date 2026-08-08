@@ -2,8 +2,8 @@ import { fleet } from "../../../InventorySchema/municipal/config";
 import type { InventoryTableRow } from "../../../types";
 
 export function buildFleetRows(
-  input: string,
-  labelFunc: (key: string) => string
+  input: "category" | "fuel" | "engine" | "spend",
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   switch (input) {
     case "category":

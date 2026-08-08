@@ -14,15 +14,15 @@ import { buildPublicLightingRows, buildPublicLightingColumns } from "./config";
 
 export default function PublicLightingSurface() {
   const { mainForm } = useInventoryContext();
-  const tFleet = useScopedI18n(
+  const tLighting = useScopedI18n(
     "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.publicLighting"
   );
 
   const [rows] = useState(() => ({
-    infrastructure: buildPublicLightingRows("infrastructure", tFleet),
-    lamps: buildPublicLightingRows("lamps", tFleet),
-    yearly: buildPublicLightingRows("yearly", tFleet),
-    lampsColumns: buildPublicLightingColumns("lamps", tFleet),
+    infrastructure: buildPublicLightingRows("infrastructure", tLighting),
+    lamps: buildPublicLightingRows("lamps", tLighting),
+    yearly: buildPublicLightingRows("yearly", tLighting),
+    lampsColumns: buildPublicLightingColumns("lamps", tLighting),
   }));
 
   return (
@@ -30,8 +30,8 @@ export default function PublicLightingSurface() {
       <MatrixTable
         title={
           <Typography variant="sectionTitle" size="lg" className="inline-flex items-center gap-1">
-            <span>{/* {copy.yearlyTitle} */}</span>
-            <FieldRequired content={tFleet("yearlyRequirementTooltip")} />
+            <span>{tLighting("yearlyTitle")}</span>
+            <FieldRequired content={tLighting("yearlyRequirementTooltip")} />
           </Typography>
         }
         rows={rows.yearly}
@@ -40,16 +40,14 @@ export default function PublicLightingSurface() {
       />
       <PriceAssumptionsTable titleKey="electricity" priceKeys={["electricity"]} />
       <MatrixTable
-        //title={copy.infrastructureTitle}
-        title=""
+        title={tLighting("infrastructureTitle")}
         rows={rows.infrastructure}
         form={mainForm}
         baseName={"municipal.publicLighting.dataSet.infrastructure"}
       />
       <GroupedYear
-        // title={copy.lampsTitle}
-        //description={copy.lampsDescription}
-        title=""
+        title={tLighting("lampsTitle")}
+        description={tLighting("lampsDescription")}
         rows={rows.lamps}
         subcolumns={rows.lampsColumns}
         form={mainForm}

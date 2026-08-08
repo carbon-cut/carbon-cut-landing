@@ -8,7 +8,7 @@ const { electricityKeys, fuelKeys, units } = port;
 
 export function buildPortRows(
   input: "electricityConsumption" | "fuelConsumption",
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   if (input === "fuelConsumption") {
     return fuelKeys.map((key) => ({

@@ -232,7 +232,7 @@ function computeNaturalGasProgress(
   const bp = computeTerritorialEnergyBlockProgress(
     dataSet?.bp,
     metricKeys,
-    Object.keys(naturalGas.lines.bp).length,
+    Object.keys(naturalGas.lines.lp).length,
     years
   );
   const mp = computeTerritorialEnergyBlockProgress(

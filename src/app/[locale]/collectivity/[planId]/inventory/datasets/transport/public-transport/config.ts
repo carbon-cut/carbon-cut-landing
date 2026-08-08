@@ -30,7 +30,7 @@ export function buildPublicTransportFutureYears(): number[] {
 
 export function buildPublicTransportRows(
   input: "exploitation" | "renewal" | "age",
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   const rowKeys =
     input === "exploitation"
@@ -47,13 +47,13 @@ export function buildPublicTransportRows(
 }
 
 export function buildPublicTransportExploitationRowsWithoutFuel(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   return buildPublicTransportRows("exploitation", labelFunc);
 }
 
 export function buildPublicTransportEnergyRows(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   return publicTransport.fuelKeys.map((key) => ({
     key,
@@ -63,7 +63,7 @@ export function buildPublicTransportEnergyRows(
 }
 
 export function buildPublicTransportEnergyByFuelSection(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryGroupedYearTableData {
   return {
     title: React.createElement(
@@ -99,7 +99,7 @@ export function buildPublicTransportEnergyByFuelSection(
 }
 
 export function buildPublicTransportOperatorsSection(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): Omit<InventoryTableSectionData, "rows"> {
   return {
     title: labelFunc("operators.title"),
@@ -123,7 +123,7 @@ export function buildPublicTransportOperatorsSection(
 }
 
 export function buildPublicTransportRenewalFutureRows(
-  labelFunc: (key: string) => string
+  labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   return [
     {

@@ -565,7 +565,6 @@ export default function InventoryWorkspace({
         <section className="!mt-0 relative z-1 overflow-hidden rounded-2xl border border-t-0 border-border/10 bg-card shadow-[0_16px_34px_rgba(9,35,31,0.035)]">
           <div className="space-y-4 border-b border-border/10 px-6 py-4 md:px-8 md:py-4">
             <InventoryDatasetNav
-              label={""} //workspace.controls.datasetLabel}
               activeFamily={activeFamily}
               datasets={datasetsInFamily}
               activeDatasetKey={activeDataset?.key ?? ""}
