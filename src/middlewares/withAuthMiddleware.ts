@@ -24,7 +24,7 @@ function normalizeLocalePathname(pathname: string) {
 }
 
 function isProtectedFormPath(pathname: string) {
-  return pathname === "/form" || pathname.startsWith("/form/");
+  return pathname === "/household/form" || pathname.startsWith("/household/form/");
 }
 
 function getStrapiBaseUrl() {

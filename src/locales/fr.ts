@@ -217,6 +217,17 @@ export default {
     primaryCta: "Continuer",
     submitError: "Impossible d'enregistrer la configuration du projet pour le moment.",
   },
+  householdUnderDevelopment: {
+    title: "Household Calculator Is Under Development",
+    description:
+      "We’re preparing the household experience. For now, this area is temporarily unavailable.",
+    primaryButton: {
+      label: "Back",
+    },
+    secondaryButton: {
+      label: "Go To Collectivity",
+    },
+  },
   home: {
     nav: {
       features: "Fonctionnalités",

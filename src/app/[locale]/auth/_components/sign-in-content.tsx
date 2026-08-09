@@ -21,7 +21,7 @@ import {
   getAuthConfirmationRequiredRoute,
   getAuthForgotPasswordRoute,
   getAuthSignUpRoute,
-  getFormRoute,
+  getHomeRoute,
 } from "@/lib/routing/routes";
 
 export function SignInPageContent() {
@@ -94,7 +94,7 @@ export function SignInPageContent() {
     }
 
     await refetchSession();
-    router.replace(returnTo ?? getFormRoute());
+    router.replace(returnTo ?? getHomeRoute());
   }
 
   return (

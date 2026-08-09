@@ -17,7 +17,7 @@ import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
-import { getAuthSignInRoute, getFormRoute } from "@/lib/routing/routes";
+import { getAuthSignInRoute, getHomeRoute } from "@/lib/routing/routes";
 
 export function ConfirmEmailPageContent() {
   const t = useScopedI18n("(auth).verify");
@@ -72,7 +72,7 @@ export function ConfirmEmailPageContent() {
     }
 
     await refetchSession();
-    router.replace(returnTo ?? getFormRoute());
+    router.replace(returnTo ?? getHomeRoute());
   }
 
   async function handleResend() {

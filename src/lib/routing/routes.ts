@@ -8,6 +8,10 @@ function normalizePath(path: string) {
   return path.startsWith("/") ? path : `/${path}`;
 }
 
+export function getHomeRoute() {
+  return "/";
+}
+
 export function localizeInternalHref(href: string) {
   if (!href.startsWith("/") || href.startsWith("//") || href.startsWith("/api/")) {
     return href;
@@ -69,11 +73,11 @@ export function getAuthConfirmEmailRoute(params?: URLSearchParams | Record<strin
 }
 
 export function getFormRoute() {
-  return "/form";
+  return "/household/form";
 }
 
 export function getFormResultRoute(id?: string | null) {
-  const base = "/form/result";
+  const base = "/household/form/result";
 
   if (!id) {
     return base;

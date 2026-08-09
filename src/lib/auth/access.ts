@@ -12,10 +12,11 @@ import {
 import { getPrimaryPlanId, getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
 import { getServerSession, requireServerSession } from "@/lib/auth/session";
 import type { AuthUser } from "@/lib/auth/types";
-import { getFormRoute } from "@/lib/routing/routes";
+import { getHomeRoute } from "@/lib/routing/routes";
 
-function getHouseholdHomeRoute() {
-  return getFormRoute();
+function getNeutralAuthenticatedRoute() {
+  // Future pricing page.
+  return getHomeRoute();
 }
 
 export function getCollectivityDefaultRoute(
@@ -34,11 +35,11 @@ export function getCollectivityDefaultRoute(
 export function getAuthenticatedUserHomeRoute(
   user: Pick<AuthUser, "allowedProducts" | "productType" | "planId">
 ) {
-  if (hasUserProductAccess(user, "household")) {
-    return getHouseholdHomeRoute();
+  if (hasUserProductAccess(user, "collectivity")) {
+    return getCollectivityDefaultRoute(user, "setup");
   }
 
-  return getCollectivityDefaultRoute(user, "setup");
+  return getNeutralAuthenticatedRoute();
 }
 
 export async function redirectAuthenticatedUserFromAuth() {
@@ -52,18 +53,22 @@ export async function redirectAuthenticatedUserFromAuth() {
 export async function requireHouseholdSession(returnTo?: string | null) {
   const session = await requireServerSession(returnTo);
 
-  if (!hasUserProductAccess(session.user, "household")) {
+  if (hasUserProductAccess(session.user, "household")) {
+    return session;
+  }
+
+  if (hasUserProductAccess(session.user, "collectivity")) {
     redirect(getCollectivityDefaultRoute(session.user, "setup"));
   }
 
-  return session;
+  redirect(getNeutralAuthenticatedRoute());
 }
 
 export async function requireCollectivitySession(returnTo?: string | null) {
   const session = await requireServerSession(returnTo);
 
   if (!hasUserProductAccess(session.user, "collectivity")) {
-    redirect(getHouseholdHomeRoute());
+    redirect(getNeutralAuthenticatedRoute());
   }
 
   return session;

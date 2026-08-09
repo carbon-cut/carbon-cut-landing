@@ -16,7 +16,7 @@ import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
-import { getFormRoute } from "@/lib/routing/routes";
+import { getHomeRoute } from "@/lib/routing/routes";
 
 export function ResetPasswordPageContent() {
   const tReset = useScopedI18n("(auth).resetPassword");
@@ -77,7 +77,7 @@ export function ResetPasswordPageContent() {
 
     await refetchSession();
     const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
-    router.replace(returnTo ?? getFormRoute());
+    router.replace(returnTo ?? getHomeRoute());
   }
 
   return (
