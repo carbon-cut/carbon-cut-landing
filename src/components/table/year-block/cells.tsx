@@ -5,7 +5,7 @@ import InventoryTableInput from "../InventoryTableInput";
 import type {
   InventoryTableColumn,
   InventoryTableRow,
-} from "@/app/collectivity/[planId]/inventory/types";
+} from "@/app/[locale]/collectivity/[planId]/inventory/types";
 import { TName } from "@/components/ui/forms";
 
 export type YearBlockEditableCellArgs<T extends FieldValues> = {

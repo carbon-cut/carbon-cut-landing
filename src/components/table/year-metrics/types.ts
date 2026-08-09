@@ -6,7 +6,7 @@ import type { TName } from "@/components/ui/forms";
 import type {
   InventoryTableColumn,
   InventoryTableRow,
-} from "@/app/collectivity/[planId]/inventory/types";
+} from "@/app/[locale]/collectivity/[planId]/inventory/types";
 import { Row } from "@tanstack/react-table";
 
 export type YearMetricsRow = InventoryTableRow & { id?: string };

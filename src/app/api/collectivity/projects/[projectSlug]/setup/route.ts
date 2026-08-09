@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import {
   collectivitySetupSchema,
   type CollectivitySetupValues,
-} from "@/app/collectivity/setup/_lib/schema";
+} from "@/app/[locale]/collectivity/setup/_lib/schema";
 import { CollectivityBackendError, saveCollectivitySetup } from "@/lib/collectivity/backend";
 import { writeUserCookie } from "@/lib/auth/cookies";
 import { getUserAllowedProducts, getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";

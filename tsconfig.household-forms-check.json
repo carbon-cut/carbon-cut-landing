@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/app/[locale]/household/form/_forms/**/*.ts",
+    "src/app/[locale]/household/form/_forms/**/*.tsx"
+  ]
+}

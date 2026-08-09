@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["css.d.ts", "src/app/[locale]/auth/**/*.ts", "src/app/[locale]/auth/**/*.tsx"]
+}

@@ -8,12 +8,16 @@ import {
   getCollectivityProjectsRoute,
   getCollectivitySetupRoute,
   type CollectivityModuleSlug,
-} from "@/app/collectivity/_lib/routing";
+} from "@/app/[locale]/collectivity/_lib/routing";
 import { getPrimaryPlanId, getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
 import { getServerSession, requireServerSession } from "@/lib/auth/session";
 import type { AuthUser } from "@/lib/auth/types";
+import { getHomeRoute } from "@/lib/routing/routes";
 
-const householdHomeRoute = "/form";
+function getNeutralAuthenticatedRoute() {
+  // Future pricing page.
+  return getHomeRoute();
+}
 
 export function getCollectivityDefaultRoute(
   user: Pick<AuthUser, "allowedProducts" | "productType" | "planId">,
@@ -31,11 +35,11 @@ export function getCollectivityDefaultRoute(
 export function getAuthenticatedUserHomeRoute(
   user: Pick<AuthUser, "allowedProducts" | "productType" | "planId">
 ) {
-  if (hasUserProductAccess(user, "household")) {
-    return householdHomeRoute;
+  if (hasUserProductAccess(user, "collectivity")) {
+    return getCollectivityDefaultRoute(user, "setup");
   }
 
-  return getCollectivityDefaultRoute(user);
+  return getNeutralAuthenticatedRoute();
 }
 
 export async function redirectAuthenticatedUserFromAuth() {
@@ -49,18 +53,22 @@ export async function redirectAuthenticatedUserFromAuth() {
 export async function requireHouseholdSession(returnTo?: string | null) {
   const session = await requireServerSession(returnTo);
 
-  if (!hasUserProductAccess(session.user, "household")) {
-    redirect(getCollectivityDefaultRoute(session.user));
+  if (hasUserProductAccess(session.user, "household")) {
+    return session;
   }
 
-  return session;
+  if (hasUserProductAccess(session.user, "collectivity")) {
+    redirect(getCollectivityDefaultRoute(session.user, "setup"));
+  }
+
+  redirect(getNeutralAuthenticatedRoute());
 }
 
 export async function requireCollectivitySession(returnTo?: string | null) {
   const session = await requireServerSession(returnTo);
 
   if (!hasUserProductAccess(session.user, "collectivity")) {
-    redirect(householdHomeRoute);
+    redirect(getNeutralAuthenticatedRoute());
   }
 
   return session;

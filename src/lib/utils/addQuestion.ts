@@ -1,4 +1,4 @@
-import { QuestionFC, QuestionProps } from "@/app/_forms/types";
+import { QuestionFC, QuestionProps } from "@/app/[locale]/household/form/_forms/types";
 import { get } from "http";
 
 type input = [boolean | undefined, boolean | null];

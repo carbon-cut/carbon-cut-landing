@@ -2,7 +2,7 @@ import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 
-import { InventoryFieldInput } from "@/app/collectivity/_components/fields";
+import { InventoryFieldInput } from "@/app/[locale]/collectivity/_components/fields";
 import { InventoryTableIconButton } from "../InventoryTableHeader";
 import { renderMatrixRowSelectCell, renderMatrixYearInputCell } from "./cells";
 import type { MatrixEditableRows, MatrixRowField, MatrixTableRow } from "./types";

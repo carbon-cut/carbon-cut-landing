@@ -13,7 +13,7 @@ export function getUserAllowedProducts(
     return ["collectivity"];
   }
 
-  return ["household"];
+  return [];
 }
 
 export function hasUserProductAccess(

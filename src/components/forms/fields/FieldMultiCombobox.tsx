@@ -110,7 +110,7 @@ function FieldMultiCombobox<T extends FieldValues>({
                           : "truncate"
                       )}
                     >
-                      {selectedLabel ?? t("value", { label })}
+                      {selectedLabel ?? t("value")}
                     </span>
                   );
                 })()}
@@ -124,10 +124,7 @@ function FieldMultiCombobox<T extends FieldValues>({
               onCloseAutoFocus={() => setOpen(false)}
             >
               <Command shouldFilter={false}>
-                <CommandInput
-                  onValueChange={handleSearch}
-                  placeholder={t("placeholder", { label })}
-                />
+                <CommandInput onValueChange={handleSearch} placeholder={t("placeholder")} />
                 {loading ? (
                   <div className="flex items-center gap-2 px-4 py-6 text-sm text-muted-foreground">
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -135,7 +132,7 @@ function FieldMultiCombobox<T extends FieldValues>({
                   </div>
                 ) : (
                   <>
-                    <CommandEmpty>{t("notFound", { label })}</CommandEmpty>
+                    <CommandEmpty>{t("notFound")}</CommandEmpty>
                     <MenuList
                       options={filteredOptions}
                       bannedOptions={bannedOptions}
