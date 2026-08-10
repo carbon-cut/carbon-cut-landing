@@ -71,16 +71,16 @@ export default function InventoryRouteClient({
     () => [inventoryYearPlan.reference, ...inventoryYearPlan.comparisons],
     [inventoryYearPlan]
   );
-  const defaultValues = useMemo(
-    () => ({
-      ...buildInventoryDefaultValues(snapshot.currentInventory.inventoryInput),
-      years: inventoryYearPlan,
-    }),
-    [inventoryYearPlan, snapshot.currentInventory.inventoryInput]
-  );
   const { workspace } = useMemo(
     () => buildInventoryRegistry(snapshot.currentInventory.setupPayload.applicability),
     [snapshot.currentInventory.setupPayload.applicability]
+  );
+  const defaultValues = useMemo(
+    () => ({
+      ...buildInventoryDefaultValues(snapshot.currentInventory.inventoryInput, years, workspace),
+      years: inventoryYearPlan,
+    }),
+    [inventoryYearPlan, snapshot.currentInventory.inventoryInput, workspace, years]
   );
   const mainForm = useForm<InventoryFormValues>({
     resolver: zodResolver(inventorySchema),

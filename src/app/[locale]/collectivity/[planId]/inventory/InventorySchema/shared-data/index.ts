@@ -7,6 +7,7 @@ import {
   metadata,
 } from "../_shared";
 import { sharedData } from "./config";
+export { sharedDataDefault } from "./default";
 
 const populationSchema = z.object({
   dataSet: createMatrixSchema(sharedData.population.metricKeys, {

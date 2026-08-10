@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createGroupSchema, createMatrixSchema, metadata } from "../_shared";
 import { electricity, naturalGas } from "./config";
 import { createTerritorialEnergyBlockSchema } from "./territorial-energy";
+export { energyDefault } from "./default";
 
 const electricitySchema = z.object({
   dataSet: z.object({
