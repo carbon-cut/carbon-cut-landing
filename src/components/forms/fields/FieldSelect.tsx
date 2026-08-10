@@ -1,20 +1,7 @@
 import React from "react";
 import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  TValue,
-} from "@/components/ui/forms";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, TValue } from "../../ui/forms";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { useScopedI18n } from "@/locales/client";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +25,7 @@ interface Props<T extends FieldValues, E extends FieldPath<T>> {
   size?: "sm" | "xl";
   attachedFields?: FieldPath<T>[];
   isError?: boolean;
+  disabled?: boolean;
 }
 
 function FieldSelect<T extends FieldValues, E extends FieldPath<T>>({
@@ -54,6 +42,7 @@ function FieldSelect<T extends FieldValues, E extends FieldPath<T>>({
   size = "xl",
   attachedFields = [],
   isError = false,
+  disabled = false,
 }: Props<T, E>) {
   const t = useScopedI18n("components.forms.combox");
 
@@ -90,6 +79,7 @@ function FieldSelect<T extends FieldValues, E extends FieldPath<T>>({
             </FormLabel>
           )}
           <Select
+            disabled={disabled}
             onValueChange={(value) => {
               field.onChange(value);
               verifyAttachedFields();
@@ -98,14 +88,21 @@ function FieldSelect<T extends FieldValues, E extends FieldPath<T>>({
           >
             <FormControl>
               <SelectTrigger
-                data-size="none"
-                onClick={() => setOpen(true)}
+                disabled={disabled}
+                data-size={"none"}
+                onClick={(e) => {
+                  if (disabled) return;
+                  setOpen(true);
+                }}
                 key={`${open}`}
-                className={`rounded-full w-full text-left font-normal bg-card text-ellipsis
-                 ${fieldState.error ? "outline-none ring-1 ring-destructive/60" : open ? "outline-4 ring-1 ring-ring" : ""}
-                 ${size === "sm" ? "h-8 [&_span]:text-xs [&_svg]:size-3.5" : "h-9"}`}
+                className={`rounded-full w-full  
+                text-left font-normal bg-white text-ellipsis
+                 ${disabled ? "bg-muted text-muted-foreground cursor-not-allowed opacity-70" : ""}
+                 ${fieldState.error ? "outline-none ring-1 ring-destructive/60 " : open && !disabled ? "outline-4 ring-1 ring-ring" : ""}
+                 ${size === "sm" ? "h-8 [&_span]:text-xs [&_svg]:size-3.5" : "h-9"}
+                 `}
               >
-                <SelectValue placeholder={placeholder ?? t("value", { placeholder })} />
+                <SelectValue placeholder={placeholder ?? t("value")} />
               </SelectTrigger>
             </FormControl>
             <SelectContent onFocus={() => setOpen(true)} onCloseAutoFocus={() => setOpen(false)}>

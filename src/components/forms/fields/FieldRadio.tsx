@@ -50,8 +50,8 @@ function FieldRadio<T extends FieldValues>({
               className={cn("w-3/6 mx-auto flex flex-row flex-wrap justify-between", className)}
               value={field.value === undefined ? undefined : String(field.value)}
               onValueChange={(v) => {
-                const matched = options.find((option) => String(option.value) === v);
-                const nextValue = matched ? matched.value : v;
+                const selectedOption = options.find((option) => String(option.value) === v);
+                const nextValue = selectedOption?.value ?? v;
                 field.onChange(nextValue);
                 setState?.(nextValue);
               }}
@@ -70,7 +70,7 @@ function FieldRadio<T extends FieldValues>({
                 >
                   <FormControl>
                     <RadioGroupItemSwitch
-                      value={option.value as string}
+                      value={String(option.value)}
                       id={`r${index}`}
                       label={option.label}
                       checked={selected(field.value, option.value)}

@@ -10,7 +10,7 @@ import { InventoryTableActionButton, InventoryTableHeader } from "../InventoryTa
 import { createTableGridColumns } from "./columns";
 import type { TableGridProps } from "./types";
 import { Plus } from "lucide-react";
-import InventoryYearSelector from "@/app/collectivity/[planId]/inventory/components/InventoryYearSelector";
+import InventoryYearSelector from "@/app/[locale]/collectivity/[planId]/inventory/components/InventoryYearSelector";
 
 export default function TableGrid<T extends FieldValues>({
   title,

@@ -5,12 +5,12 @@ import { useEffect, useMemo, useState } from "react";
 import { type FieldValues, useFieldArray } from "react-hook-form";
 import { Plus } from "lucide-react";
 
-import { useInventoryContext } from "@/app/collectivity/[planId]/inventory/context/inventory-context";
+import { useInventoryContext } from "@/app/[locale]/collectivity/[planId]/inventory/context/inventory-context";
 import InventoryTanstackTable from "../tanstack";
 import { InventoryTableActionButton, InventoryTableHeader } from "../InventoryTableHeader";
 import { createMatrixTableColumns } from "./columns";
 import type { MatrixTableProps, MatrixTableRow } from "./types";
-import { RecordMatrixSchema } from "@/app/collectivity/[planId]/inventory/InventorySchema/_shared";
+import { RecordMatrixSchema } from "@/app/[locale]/collectivity/[planId]/inventory/InventorySchema/_shared";
 
 type MatrixFormRow = RecordMatrixSchema[number];
 const emptyRowFields: NonNullable<MatrixTableProps<FieldValues>["rowFields"]> = [];

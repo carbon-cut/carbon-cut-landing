@@ -4,7 +4,7 @@ import type {
   CollectivityProjectSnapshot,
   CollectivitySetupData,
   CollectivitySetupSnapshot,
-} from "@/app/collectivity/setup/_lib/types";
+} from "@/app/[locale]/collectivity/setup/_lib/types";
 
 export const COLLECTIVITY_MOCK_PASSWORD = "123";
 

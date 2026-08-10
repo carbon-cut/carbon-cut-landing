@@ -7,7 +7,7 @@ import type {
   CollectivityProjectSnapshot,
   CollectivitySetupData,
   CollectivitySetupSnapshot,
-} from "@/app/collectivity/setup/_lib/types";
+} from "@/app/[locale]/collectivity/setup/_lib/types";
 import { isMockBackendEnabled } from "@/mocks/config";
 import {
   getMockCollectivitySupportedValues,

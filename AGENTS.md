@@ -32,7 +32,7 @@ Working notes for contributors to this codebase.
 ## Localization
 
 - Source of truth: `src/locales/fr.ts`.
-- Use `useScopedI18n` and `useScopedServerI18n`; avoid hard-coded UI strings.
+- Use `useScopedI18n` and `getScopedI18n`; avoid hard-coded UI strings.
 
 ## Design docs entrypoint
 
