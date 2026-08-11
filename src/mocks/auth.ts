@@ -342,6 +342,13 @@ export function mockLogout(refreshToken: string) {
   return { ok: true as const };
 }
 
+export function getMockUserByAccessToken(accessToken: string): AuthUser | null {
+  const email = accessTokens.get(accessToken);
+  const user = email ? requireUser(email) : null;
+
+  return user ? publicUser(user) : null;
+}
+
 export function mockChangePassword(
   accessToken: string,
   body: ChangePasswordRequest

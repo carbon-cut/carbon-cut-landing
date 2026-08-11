@@ -1,0 +1,1375 @@
+{
+  "data": {
+    "project": {
+      "id": "413",
+      "slug": "grand-sfax-inventory",
+      "name": "Inventaire carbone Grand Sfax",
+      "territory": "Grand Sfax",
+      "country": "TUN",
+      "referenceYear": 2019,
+      "inventoryYears": [2019, 2020],
+      "currentInventoryId": "434",
+      "createdAt": "2026-07-22T22:06:57.704Z",
+      "updatedAt": "2026-08-06T14:51:04.578Z"
+    },
+    "currentInventory": {
+      "id": "434",
+      "projectId": "413",
+      "setupPayload": {
+        "name": "Inventaire carbone Grand Sfax",
+        "slug": "grand-sfax-inventory",
+        "country": "TUN",
+        "territory": "Grand Sfax",
+        "applicability": { "port": true, "airport": true, "agriculture": true },
+        "referenceYear": 2019,
+        "inventoryYears": [2019, 2020]
+      },
+      "inventoryInput": {
+        "afat": {
+          "trees": {
+            "fruitTrees": {
+              "dataSet": { "count": { "unit": "", "value": { "y-2019": 785, "y-2020": 259 } } }
+            },
+            "trackedTreeCrops": {
+              "dataSet": [
+                {
+                  "value": {
+                    "adultTrees": { "unit": "", "value": { "y-2019": 87, "y-2020": 25 } },
+                    "youngTrees": { "unit": "", "value": { "y-2019": 87, "y-2020": 28 } },
+                    "adultHectares": { "unit": "ha", "value": {} },
+                    "youngHectares": { "unit": "ha", "value": {} },
+                    "senescentTrees": { "unit": "", "value": { "y-2019": 52, "y-2020": 58 } },
+                    "senescentHectares": { "unit": "ha", "value": {} }
+                  },
+                  "treeType": "oliveTrees"
+                }
+              ]
+            }
+          },
+          "livestock": {
+            "dataSet": {
+              "count": {
+                "goats": { "unit": "", "value": { "y-2019": 2882, "y-2020": 82 } },
+                "sheep": { "unit": "", "value": { "y-2019": 58, "y-2020": 258 } },
+                "camels": { "unit": "", "value": { "y-2019": 285, "y-2020": 288 } },
+                "horses": { "unit": "", "value": { "y-2019": 825, "y-2020": 82 } },
+                "turkeys": { "unit": "", "value": { "y-2019": 555, "y-2020": 2896 } },
+                "broilers": { "unit": "", "value": { "y-2019": 2588, "y-2020": 2584 } },
+                "layingHens": { "unit": "", "value": { "y-2019": 256, "y-2020": 2588 } },
+                "dairyCattle": { "unit": "", "value": { "y-2019": 85, "y-2020": 28 } },
+                "otherCattle": { "unit": "", "value": { "y-2019": 25, "y-2020": 258 } },
+                "donkeysMules": { "unit": "", "value": { "y-2019": 288, "y-2020": 2588 } }
+              },
+              "confinedTimeShare": {
+                "goats": { "unit": "%" },
+                "sheep": { "unit": "%" },
+                "camels": { "unit": "%" },
+                "horses": { "unit": "%" },
+                "turkeys": { "unit": "%" },
+                "broilers": { "unit": "%" },
+                "layingHens": { "unit": "%" },
+                "dairyCattle": { "unit": "%" },
+                "otherCattle": { "unit": "%" },
+                "donkeysMules": { "unit": "%" }
+              }
+            }
+          },
+          "fertilizers": {
+            "dataSet": {
+              "tenure": {
+                "dap": { "unit": "%" },
+                "urea": { "unit": "%" },
+                "ammonitrate": { "unit": "%" }
+              },
+              "quantity": {
+                "dap": { "unit": "t", "value": {} },
+                "urea": { "unit": "t", "value": {} },
+                "ammonitrate": { "unit": "t", "value": { "y-2019": 548, "y-2020": 28 } }
+              }
+            }
+          }
+        },
+        "waste": {},
+        "energy": {
+          "electricity": {
+            "dataSet": {
+              "ht": {
+                "fixed": {
+                  "water": {
+                    "sector": "tertiary",
+                    "consumption": { "unit": "GWh", "value": {} },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "cement": {
+                    "sector": "industry",
+                    "consumption": { "unit": "GWh", "value": {} },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "industrialZone": {
+                    "sector": "industry",
+                    "consumption": { "unit": "GWh", "value": {} },
+                    "subscribers": { "unit": "", "value": {} }
+                  }
+                },
+                "custom": []
+              },
+              "lt": {
+                "fixed": {
+                  "domestic": {
+                    "sector": "residential",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 385.023, "y-2020": 421.569 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "workshops": {
+                    "sector": "industry",
+                    "consumption": { "unit": "GWh", "value": { "y-2019": 5.97, "y-2020": 5.52 } },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "commercial": {
+                    "sector": "tertiary",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 132.075, "y-2020": 109.127 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "industries": {
+                    "sector": "industry",
+                    "consumption": { "unit": "GWh", "value": { "y-2019": 6.104, "y-2020": 5.898 } },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "agriculture": {
+                    "sector": "agriculture",
+                    "consumption": { "unit": "GWh", "value": { "y-2019": 2.657, "y-2020": 2.73 } },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "smallIndustry": {
+                    "sector": "industry",
+                    "consumption": { "unit": "GWh", "value": { "y-2019": 9.954, "y-2020": 9.197 } },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "administration": {
+                    "sector": "tertiary",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 19.097, "y-2020": 16.641 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "publicLighting": {
+                    "sector": "tertiary",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 20.888, "y-2020": 21.644 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  }
+                },
+                "custom": []
+              },
+              "mt": {
+                "fixed": {
+                  "food": {
+                    "sector": "industry",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 92.75, "y-2020": 91.887 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "pumping": {
+                    "sector": "agriculture",
+                    "consumption": { "unit": "GWh", "value": { "y-2019": 2.278, "y-2020": 2.014 } },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "textile": {
+                    "sector": "industry",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 23.931, "y-2020": 20.999 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "tourism": {
+                    "sector": "tertiary",
+                    "consumption": { "unit": "GWh", "value": { "y-2019": 7.052, "y-2020": 5.03 } },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "chemical": {
+                    "sector": "industry",
+                    "consumption": { "unit": "GWh", "value": { "y-2019": 22.35, "y-2020": 18.3 } },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "extractive": {
+                    "sector": "industry",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 22.211, "y-2020": 19.949 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "agriculture": {
+                    "sector": "agriculture",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 20.421, "y-2020": 19.594 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "transportTelco": {
+                    "sector": "transport",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 10.014, "y-2020": 10.057 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  },
+                  "otherIndustries": {
+                    "sector": "industry",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 102.689, "y-2020": 98.554 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  }
+                },
+                "custom": [
+                  {
+                    "label": "services et autre",
+                    "sector": "tertiary",
+                    "consumption": {
+                      "unit": "GWh",
+                      "value": { "y-2019": 65.509, "y-2020": 58.491 }
+                    },
+                    "subscribers": { "unit": "", "value": {} }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "municipal": {
+          "fleet": {
+            "dataSet": {
+              "spend": {
+                "gnv": { "unit": "currency", "value": {} },
+                "gpl": { "unit": "currency", "value": {} },
+                "diesel": { "unit": "currency", "value": {} },
+                "petrol": { "unit": "currency", "value": {} },
+                "electricity": { "unit": "currency", "value": {} }
+              },
+              "vehicles": {
+                "gnv": { "unit": "", "value": {} },
+                "gpl": { "unit": "", "value": {} },
+                "diesel": { "unit": "", "value": {} },
+                "hybrid": { "unit": "", "value": {} },
+                "petrol": { "unit": "", "value": {} },
+                "electricity": { "unit": "", "value": {} }
+              },
+              "composition": {
+                "other": {
+                  "gnv": { "unit": "", "value": {} },
+                  "gpl": { "unit": "", "value": {} },
+                  "diesel": { "unit": "", "value": {} },
+                  "hybrid": { "unit": "", "value": {} },
+                  "petrol": { "unit": "", "value": {} },
+                  "electricity": { "unit": "", "value": {} }
+                },
+                "service": {
+                  "gnv": { "unit": "", "value": {} },
+                  "gpl": { "unit": "", "value": {} },
+                  "diesel": { "unit": "", "value": {} },
+                  "hybrid": { "unit": "", "value": {} },
+                  "petrol": { "unit": "", "value": {} },
+                  "electricity": { "unit": "", "value": {} }
+                },
+                "function": {
+                  "gnv": { "unit": "", "value": {} },
+                  "gpl": { "unit": "", "value": {} },
+                  "diesel": { "unit": "", "value": {} },
+                  "hybrid": { "unit": "", "value": {} },
+                  "petrol": { "unit": "", "value": {} },
+                  "electricity": { "unit": "", "value": {} }
+                },
+                "serviceEngines": {
+                  "gnv": { "unit": "", "value": {} },
+                  "gpl": { "unit": "", "value": {} },
+                  "diesel": { "unit": "", "value": {} },
+                  "hybrid": { "unit": "", "value": {} },
+                  "petrol": { "unit": "", "value": {} },
+                  "electricity": { "unit": "", "value": {} }
+                }
+              },
+              "consumption": {
+                "gnv": { "unit": "Nm3", "value": {} },
+                "gpl": { "unit": "L", "value": {} },
+                "diesel": {
+                  "unit": "L",
+                  "value": { "y-2019": 1070062.126, "y-2020": 1151227.063 }
+                },
+                "petrol": { "unit": "L", "value": { "y-2019": 311954, "y-2020": 331818 } },
+                "electricity": { "unit": "kWh", "value": {} }
+              }
+            }
+          },
+          "buildings": {
+            "dataSet": {
+              "areas": {
+                "building": { "unit": "", "value": {} },
+                "openSurface": { "unit": "m²", "value": {} },
+                "closedSurface": { "unit": "m²", "value": { "y-2019": 0 } }
+              },
+              "consumption": {
+                "gasBill": { "unit": "currency", "value": {} },
+                "dieselBill": { "unit": "currency", "value": {} },
+                "gasConsumption": { "unit": "Nm3", "value": { "y-2019": 150846, "y-2020": 23055 } },
+                "electricityBill": { "unit": "currency", "value": {} },
+                "dieselConsumption": { "unit": "L", "value": { "y-2019": 0, "y-2020": 0 } },
+                "electricityConsumption": {
+                  "unit": "kWh",
+                  "value": { "y-2019": 2977762, "y-2020": 2292709 }
+                }
+              }
+            }
+          },
+          "publicLighting": {
+            "dataSet": {
+              "lamps": {
+                "hpl": {
+                  "number": { "unit": "", "value": {} },
+                  "unitPower": { "unit": "W", "value": {} }
+                },
+                "led": {
+                  "number": { "unit": "", "value": {} },
+                  "unitPower": { "unit": "W", "value": {} }
+                },
+                "shp": {
+                  "number": { "unit": "", "value": {} },
+                  "unitPower": { "unit": "W", "value": {} }
+                }
+              },
+              "yearly": {
+                "bill": { "unit": "currency", "value": {} },
+                "consumption": {
+                  "unit": "kWh",
+                  "value": { "y-2019": 24757357.982144, "y-2020": 23895133.2107038 }
+                }
+              },
+              "infrastructure": {
+                "power": { "unit": "kW", "value": {} },
+                "meters": { "unit": "", "value": {} },
+                "dimmers": { "unit": "", "value": {} },
+                "cabinets": { "unit": "", "value": {} }
+              }
+            }
+          },
+          "treesParksWaste": {
+            "dataSet": {
+              "composting": {
+                "unit": "t",
+                "value": { "y-2019": 3417.54954, "y-2020": 3642.48866 }
+              },
+              "greenWaste": {
+                "unit": "t",
+                "value": { "y-2019": 10662.8284, "y-2020": 10887.76752 }
+              },
+              "urbanTrees": { "unit": "", "value": { "y-2019": 148279, "y-2020": 154928 } },
+              "controlledLandfill": { "unit": "t", "value": {} },
+              "uncontrolledLandfill": { "unit": "t", "value": {} }
+            }
+          }
+        },
+        "transport": {
+          "port": {
+            "dataSet": {
+              "fuelConsumption": {
+                "diesel": { "unit": "L", "value": { "y-2019": 5, "y-2020": 5 } }
+              },
+              "electricityConsumption": {
+                "electricityBill": { "unit": "currency", "value": {} },
+                "electricityConsumption": { "unit": "kWh", "value": {} }
+              }
+            }
+          },
+          "airTransport": {
+            "dataSet": {
+              "energy": {
+                "diesel": { "unit": "L", "value": {} },
+                "petrol": { "unit": "L", "value": {} },
+                "kerosene": { "unit": "L", "value": {} },
+                "electricFleet": { "unit": "kWh", "value": {} },
+                "buildingElectricity": { "unit": "kWh", "value": {} }
+              },
+              "movements": {
+                "a-707": { "national": { "unit": "", "value": { "y-2019": 87, "y-2020": 652 } } },
+                "a-717": { "national": { "unit": "", "value": {} } },
+                "a-A300": { "national": { "unit": "", "value": {} } },
+                "a-A310": { "national": { "unit": "", "value": {} } },
+                "a-A319": { "national": { "unit": "", "value": {} } },
+                "a-A320": { "national": { "unit": "", "value": {} } },
+                "a-A321": { "national": { "unit": "", "value": {} } },
+                "a-DC-9": { "national": { "unit": "", "value": {} } },
+                "a-DC-10": { "national": { "unit": "", "value": {} } },
+                "a-L-101": { "national": { "unit": "", "value": {} } },
+                "a-MD-11": { "national": { "unit": "", "value": {} } },
+                "a-MD-80": { "national": { "unit": "", "value": {} } },
+                "a-MD-90": { "national": { "unit": "", "value": {} } },
+                "a-BAC111": { "national": { "unit": "", "value": {} } },
+                "a-TU-134": { "national": { "unit": "", "value": {} } },
+                "a-727-100": { "national": { "unit": "", "value": {} } },
+                "a-727-200": { "national": { "unit": "", "value": {} } },
+                "a-737-600": { "national": { "unit": "", "value": {} } },
+                "a-737-700": { "national": { "unit": "", "value": {} } },
+                "a-747-100": { "national": { "unit": "", "value": {} } },
+                "a-747-200": { "national": { "unit": "", "value": {} } },
+                "a-747-300": { "national": { "unit": "", "value": {} } },
+                "a-747-400": { "national": { "unit": "", "value": {} } },
+                "a-757-200": { "national": { "unit": "", "value": {} } },
+                "a-757-300": { "national": { "unit": "", "value": {} } },
+                "a-767-200": { "national": { "unit": "", "value": {} } },
+                "a-767-300": { "national": { "unit": "", "value": {} } },
+                "a-767-400": { "national": { "unit": "", "value": {} } },
+                "a-ERJ-145": { "national": { "unit": "", "value": {} } },
+                "a-RJ-RJ85": { "national": { "unit": "", "value": {} } },
+                "a-Yak-42M": { "national": { "unit": "", "value": {} } },
+                "a-A340-200": { "national": { "unit": "", "value": {} } },
+                "a-A340-300": { "national": { "unit": "", "value": {} } },
+                "a-TU-154-B": { "national": { "unit": "", "value": {} } },
+                "a-TU-154-M": { "national": { "unit": "", "value": {} } },
+                "a-BAE%20146": { "national": { "unit": "", "value": {} } },
+                "a-CRJ-100ER": { "national": { "unit": "", "value": {} } },
+                "a-737-100%2F200": { "national": { "unit": "", "value": {} } },
+                "a-737-800%2F900": { "national": { "unit": "", "value": {} } },
+                "a-777-200%2F300": { "national": { "unit": "", "value": {} } },
+                "a-A330-200%2F300": { "national": { "unit": "", "value": {} } },
+                "a-A340-500%2F600": { "national": { "unit": "", "value": {} } },
+                "a-Gulfstream%20V": { "national": { "unit": "", "value": {} } },
+                "a-Gulfstream%20IV": { "national": { "unit": "", "value": {} } },
+                "a-DHC8-100%20%3C6)": { "national": { "unit": "", "value": {} } },
+                "a-ATR72-500%20%3C7)": { "national": { "unit": "", "value": {} } },
+                "a-DC-8-50%2F60%2F70": { "national": { "unit": "", "value": {} } },
+                "a-Cessna%20525%2F560": { "national": { "unit": "", "value": {} } },
+                "a-SA%2E365%20Dauphin": { "national": { "unit": "", "value": {} } },
+                "a-737-300%2F400%2F500": { "national": { "unit": "", "value": {} } },
+                "a-Dornier%20328%20Jet": { "national": { "unit": "", "value": {} } },
+                "a-Fokker%20100%2F70%2F28": { "national": { "unit": "", "value": {} } },
+                "a-Beech%20King%20Air%20(5)": { "national": { "unit": "", "value": {} } }
+              }
+            }
+          },
+          "publicTransport": {
+            "dataSet": [
+              {
+                "age": {
+                  "age0to5": { "unit": "", "value": {} },
+                  "age6to10": { "unit": "", "value": {} },
+                  "age10plus": { "unit": "", "value": {} }
+                },
+                "name": "SORETRAS",
+                "buses": {
+                  "gnv": { "unit": "", "value": {} },
+                  "gpl": { "unit": "", "value": {} },
+                  "diesel": { "unit": "", "value": {} },
+                  "petrol": { "unit": "", "value": {} },
+                  "electricity": { "unit": "", "value": {} }
+                },
+                "spend": {
+                  "gnv": { "unit": "currency", "value": {} },
+                  "gpl": { "unit": "currency", "value": {} },
+                  "diesel": { "unit": "currency", "value": {} },
+                  "petrol": { "unit": "currency", "value": {} },
+                  "electricity": { "unit": "currency", "value": {} }
+                },
+                "renewal": {
+                  "scrapped": { "unit": "", "value": {} },
+                  "purchased": { "unit": "", "value": {} },
+                  "purchaseCost": { "unit": "currency", "value": {} }
+                },
+                "consumption": {
+                  "gnv": { "unit": "Nm3", "value": {} },
+                  "gpl": { "unit": "kg", "value": {} },
+                  "diesel": { "unit": "L", "value": { "y-2019": 3102705, "y-2020": 2369973 } },
+                  "petrol": { "unit": "L", "value": {} },
+                  "electricity": { "unit": "kWh", "value": {} }
+                },
+                "exploitation": {
+                  "staff": { "unit": "", "value": {} },
+                  "passengers": { "unit": "", "value": {} },
+                  "kmTravelled": { "unit": "km", "value": {} },
+                  "passengerKm": { "unit": "p/km", "value": {} }
+                },
+                "renewalFuture": { "unit": "", "value": {} }
+              }
+            ]
+          },
+          "territoryVehicles": {
+            "dataSet": {
+              "rows": [
+                {
+                  "fuel": "petrol",
+                  "value": {
+                    "vehicles": { "unit": "", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgMileage": { "unit": "km/year", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgConsumption": { "unit": "L/100km", "value": { "y-2019": 5, "y-2020": 5 } }
+                  },
+                  "vehicleType": "privateVehicles"
+                },
+                {
+                  "fuel": "diesel",
+                  "value": {
+                    "vehicles": { "unit": "", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgMileage": { "unit": "km/year", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgConsumption": { "unit": "L/100km", "value": { "y-2019": 5, "y-2020": 5 } }
+                  },
+                  "vehicleType": "lightTrucks"
+                },
+                {
+                  "fuel": "diesel",
+                  "value": {
+                    "vehicles": { "unit": "", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgMileage": { "unit": "km/year", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgConsumption": { "unit": "L/100km", "value": { "y-2019": 5, "y-2020": 5 } }
+                  },
+                  "vehicleType": "heavyTrucks"
+                },
+                {
+                  "fuel": "diesel",
+                  "value": {
+                    "vehicles": { "unit": "", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgMileage": { "unit": "km/year", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgConsumption": { "unit": "L/100km", "value": { "y-2019": 5, "y-2020": 5 } }
+                  },
+                  "vehicleType": "publicTransportVehicles"
+                },
+                {
+                  "fuel": "petrol",
+                  "value": {
+                    "vehicles": { "unit": "", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgMileage": { "unit": "km/year", "value": { "y-2019": 5, "y-2020": 5 } },
+                    "avgConsumption": { "unit": "L/100km", "value": { "y-2019": 5, "y-2020": 5 } }
+                  },
+                  "vehicleType": "taxis"
+                }
+              ]
+            }
+          }
+        },
+        "sharedData": {
+          "population": {
+            "dataSet": {
+              "count": {
+                "unit": "capita",
+                "value": { "y-2019": 628745.994715236, "y-2020": 635955 }
+              }
+            }
+          },
+          "householdEnergy": {
+            "assumptions": {
+              "consumptionNorm": { "unit": "tep/capita", "value": 0.0867766995902339 }
+            }
+          }
+        },
+        "priceAssumptions": {
+          "energy": {
+            "gnv": { "unit": "currency/Nm3", "value": {} },
+            "gpl": { "unit": "currency/L", "value": {} },
+            "diesel": { "unit": "currency/L", "value": {} },
+            "petrol": { "unit": "currency/L", "value": {} },
+            "electricity": { "unit": "currency/kWh", "value": {} }
+          }
+        },
+        "wastewaterSanitation": {}
+      },
+      "status": "calculated",
+      "lockedYears": [2019, 2020],
+      "latestCalculationRunId": "175",
+      "createdAt": "2026-07-22T22:06:57.806Z",
+      "updatedAt": "2026-08-10T21:31:24.682Z"
+    },
+    "calculationRun": {
+      "id": "175",
+      "status": "succeeded",
+      "startedAt": "2026-08-10T21:29:29.219Z",
+      "completedAt": "2026-08-10T21:29:29.219Z",
+      "formulaVersion": "energy-scope1-scope2-v1+tree-absorption-v1+waste-management-composting-v1+air-transport-lto-v1+afat-livestock-v1+afat-fertilizers-v1"
+    },
+    "calculationResult": {
+      "id": "140",
+      "emissionsPayload": {
+        "afat": {
+          "trees": {
+            "dataSet": {
+              "fruitTrees": {
+                "count": {
+                  "value": {
+                    "y-2019": { "unit": "tCO2e", "value": -9.70546139217198 },
+                    "y-2020": { "unit": "tCO2e", "value": -3.2021840771624746 }
+                  }
+                }
+              },
+              "trackedTreeCrops": [
+                {
+                  "value": {
+                    "adultTrees": {
+                      "value": {
+                        "y-2019": { "unit": "tCO2e", "value": -7.7588775 },
+                        "y-2020": { "unit": "tCO2e", "value": -2.2295624999999997 }
+                      }
+                    },
+                    "youngTrees": {
+                      "value": {
+                        "y-2019": { "unit": "tCO2e", "value": -4.2730049999999995 },
+                        "y-2020": { "unit": "tCO2e", "value": -1.3752199999999999 }
+                      }
+                    },
+                    "senescentTrees": {
+                      "value": {
+                        "y-2019": { "unit": "tCO2e", "value": -10.86561666666669 },
+                        "y-2020": { "unit": "tCO2e", "value": -12.11934166666669 }
+                      }
+                    }
+                  },
+                  "treeType": "oliveTrees"
+                }
+              ]
+            }
+          },
+          "livestock": {
+            "dataSet": {
+              "count": {
+                "goats": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 288.5057255449284 },
+                      "managedManure": { "unit": "tCO2e", "value": 488.72981379921276 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 8.208698644928567 },
+                      "managedManure": { "unit": "tCO2e", "value": 13.905567221212854 }
+                    }
+                  }
+                },
+                "sheep": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 4.6279698894 },
+                      "managedManure": { "unit": "tCO2e", "value": 9.377152251328003 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 20.5864867494 },
+                      "managedManure": { "unit": "tCO2e", "value": 41.712160014528 }
+                    }
+                  }
+                },
+                "camels": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 69.29167560975 },
+                      "managedManure": { "unit": "tCO2e", "value": 341.416661465625 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 70.02106166880002 },
+                      "managedManure": { "unit": "tCO2e", "value": 345.01052106000003 }
+                    }
+                  }
+                },
+                "horses": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 219.99224684250004 },
+                      "managedManure": { "unit": "tCO2e", "value": 405.084103875 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 21.865896049800003 },
+                      "managedManure": { "unit": "tCO2e", "value": 40.26290487 }
+                    }
+                  }
+                },
+                "turkeys": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 6.802244741442862 },
+                      "managedManure": { "unit": "tCO2e", "value": 3.669356153357136 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 35.49423562381716 },
+                      "managedManure": { "unit": "tCO2e", "value": 19.14676652274282 }
+                    }
+                  }
+                },
+                "broilers": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 4.680361174146426 },
+                      "managedManure": { "unit": "tCO2e", "value": 2.4966407809285727 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 4.673127231064282 },
+                      "managedManure": { "unit": "tCO2e", "value": 2.4927819852857156 }
+                    }
+                  }
+                },
+                "layingHens": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 0.9203329283657148 },
+                      "managedManure": { "unit": "tCO2e", "value": 0.6029200248685718 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 9.303990697697147 },
+                      "managedManure": { "unit": "tCO2e", "value": 6.095144626405718 }
+                    }
+                  }
+                },
+                "dairyCattle": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 39.853667906249996 },
+                      "managedManure": { "unit": "tCO2e", "value": 233.948679 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 13.128267075 },
+                      "managedManure": { "unit": "tCO2e", "value": 77.0654472 }
+                    }
+                  }
+                },
+                "otherCattle": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 9.794976434375002 },
+                      "managedManure": { "unit": "tCO2e", "value": 42.78426056875 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 101.08415680275 },
+                      "managedManure": { "unit": "tCO2e", "value": 441.5335690695 }
+                    }
+                  }
+                },
+                "donkeysMules": {
+                  "value": {
+                    "y-2019": {
+                      "excretion": { "unit": "tCO2e", "value": 41.9481014605714 },
+                      "managedManure": { "unit": "tCO2e", "value": 78.45494615999999 }
+                    },
+                    "y-2020": {
+                      "excretion": { "unit": "tCO2e", "value": 376.9503006248568 },
+                      "managedManure": { "unit": "tCO2e", "value": 705.00486341 }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "fertilizers": {
+            "dataSet": {
+              "quantity": {
+                "ammonitrate": {
+                  "value": {
+                    "y-2019": { "unit": "tCO2e", "value": 1139.0745614285715 },
+                    "y-2020": { "unit": "tCO2e", "value": 58.200890000000015 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "energy": {
+          "naturalGas": {
+            "dataSet": {
+              "mp": {
+                "fixed": {
+                  "food": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 37721.13130628999 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 38191.82061257999 } }
+                      }
+                    }
+                  },
+                  "textile": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 517.866777 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 432.1907604 } }
+                      }
+                    }
+                  },
+                  "tourism": {
+                    "sector": "tertiary",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 1412.4061700099999 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 1049.01312249 } }
+                      }
+                    }
+                  },
+                  "chemical": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 14981.45769261 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 3881.1813543899993 } }
+                      }
+                    }
+                  },
+                  "services": {
+                    "sector": "tertiary",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 4211.958856859999 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 3706.30551501 } }
+                      }
+                    }
+                  },
+                  "extractive": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 2647.6543758599996 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 1622.98677213 } }
+                      }
+                    }
+                  },
+                  "agriculture": {
+                    "sector": "agriculture",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 209.02421870999999 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 151.17899211 } }
+                      }
+                    }
+                  },
+                  "transportTelco": {
+                    "sector": "transport",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 131.45338449 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 82.39412421 } }
+                      }
+                    }
+                  },
+                  "otherIndustries": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 7532.68376223 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 5349.929888339999 } }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "electricity": {
+            "dataSet": {
+              "lt": {
+                "fixed": {
+                  "domestic": {
+                    "sector": "residential",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 199953.5756612863 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 219034.1174433626 } }
+                      }
+                    }
+                  },
+                  "workshops": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 3100.3936042726777 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 2868.0200116407077 } }
+                      }
+                    }
+                  },
+                  "commercial": {
+                    "sector": "tertiary",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 68590.36604427367 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 56698.989096071644 } }
+                      }
+                    }
+                  },
+                  "industries": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 3169.983678472433 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 3064.4170341769736 } }
+                      }
+                    }
+                  },
+                  "agriculture": {
+                    "sector": "agriculture",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 1379.85691902052 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 1418.422940539698 } }
+                      }
+                    }
+                  },
+                  "smallIndustry": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 5169.39998943555 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 4778.474646206447 } }
+                      }
+                    }
+                  },
+                  "administration": {
+                    "sector": "tertiary",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 9917.624231288999 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 8646.145111179894 } }
+                      }
+                    }
+                  },
+                  "publicLighting": {
+                    "sector": "tertiary",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 10847.742312570803 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 11245.548031150629 } }
+                      }
+                    }
+                  }
+                }
+              },
+              "mt": {
+                "fixed": {
+                  "food": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 48167.756582293274 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 47741.62224812132 } }
+                      }
+                    }
+                  },
+                  "pumping": {
+                    "sector": "agriculture",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 1183.031261395839 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 1046.4116491747075 } }
+                      }
+                    }
+                  },
+                  "textile": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 12428.060191599572 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 10910.426127616525 } }
+                      }
+                    }
+                  },
+                  "tourism": {
+                    "sector": "tertiary",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 3662.3074869901043 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 2613.431278723326 } }
+                      }
+                    }
+                  },
+                  "chemical": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 11607.001181824848 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 9508.10982120017 } }
+                      }
+                    }
+                  },
+                  "extractive": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 11534.8144630654 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 10364.878842793565 } }
+                      }
+                    }
+                  },
+                  "agriculture": {
+                    "sector": "agriculture",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 10605.215710695536 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 10180.431903639133 } }
+                      }
+                    }
+                  },
+                  "transportTelco": {
+                    "sector": "transport",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 5200.559724151858 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 5225.303850918586 } }
+                      }
+                    }
+                  },
+                  "otherIndustries": {
+                    "sector": "industry",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 53329.36663804975 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 51205.58772232578 } }
+                      }
+                    }
+                  }
+                },
+                "custom": [
+                  {
+                    "label": "services et autre",
+                    "sector": "tertiary",
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope2": { "unit": "tCO2e", "value": 34020.717692177364 } },
+                        "y-2020": { "scope2": { "unit": "tCO2e", "value": 30390.10117769504 } }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "municipal": {
+          "fleet": {
+            "dataSet": {
+              "consumption": {
+                "diesel": {
+                  "value": {
+                    "y-2019": { "scope1": { "unit": "tCO2e", "value": 2879.115304792576 } },
+                    "y-2020": { "scope1": { "unit": "tCO2e", "value": 3097.4981506585045 } }
+                  }
+                },
+                "petrol": {
+                  "value": {
+                    "y-2019": { "scope1": { "unit": "tCO2e", "value": 733.2521776662212 } },
+                    "y-2020": { "scope1": { "unit": "tCO2e", "value": 779.9427835156791 } }
+                  }
+                }
+              }
+            }
+          },
+          "buildings": {
+            "dataSet": {
+              "consumption": {
+                "gasConsumption": {
+                  "value": {
+                    "y-2019": { "scope1": { "unit": "tCO2e", "value": 322.93564217999995 } },
+                    "y-2020": { "scope1": { "unit": "tCO2e", "value": 49.356835649999994 } }
+                  }
+                },
+                "dieselConsumption": {
+                  "value": {
+                    "y-2019": { "scope1": { "unit": "tCO2e", "value": 0 } },
+                    "y-2020": { "scope1": { "unit": "tCO2e", "value": 0 } }
+                  }
+                },
+                "electricityConsumption": {
+                  "value": {
+                    "y-2019": { "scope2": { "unit": "tCO2e", "value": 1546.437899471728 } },
+                    "y-2020": { "scope2": { "unit": "tCO2e", "value": 1191.220161751586 } }
+                  }
+                }
+              }
+            }
+          },
+          "publicLighting": {
+            "dataSet": {
+              "yearly": {
+                "consumption": {
+                  "value": {
+                    "y-2019": { "scope2": { "unit": "tCO2e", "value": 12857.211783338087 } },
+                    "y-2020": { "scope2": { "unit": "tCO2e", "value": 12415.166708173727 } }
+                  }
+                }
+              }
+            }
+          },
+          "treesParksWaste": {
+            "dataSet": {
+              "composting": {
+                "value": {
+                  "y-2019": { "unit": "tCO2e", "value": 647.2838828759999 },
+                  "y-2020": { "unit": "tCO2e", "value": 689.887352204 }
+                }
+              },
+              "urbanTrees": {
+                "value": {
+                  "y-2019": { "unit": "tCO2e", "value": -13414.193554813332 },
+                  "y-2020": { "unit": "tCO2e", "value": -13697.174465743998 }
+                }
+              }
+            }
+          }
+        },
+        "transport": {
+          "port": {
+            "dataSet": {
+              "fuelConsumption": {
+                "diesel": {
+                  "value": {
+                    "y-2019": { "scope1": { "unit": "tCO2e", "value": 0.01345302873 } },
+                    "y-2020": { "scope1": { "unit": "tCO2e", "value": 0.01345302873 } }
+                  }
+                }
+              }
+            }
+          },
+          "airTransport": {
+            "dataSet": {
+              "movements": {
+                "a-707": {
+                  "national": {
+                    "value": {
+                      "y-2019": { "unit": "tCO2e", "value": 497.56953 },
+                      "y-2020": { "unit": "tCO2e", "value": 3728.91188 }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "publicTransport": {
+            "dataSet": [
+              {
+                "name": "SORETRAS",
+                "consumption": {
+                  "diesel": {
+                    "value": {
+                      "y-2019": { "scope1": { "unit": "tCO2e", "value": 8348.15590114293 } },
+                      "y-2020": { "scope1": { "unit": "tCO2e", "value": 6376.662971664858 } }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "territoryVehicles": {
+            "dataSet": {
+              "rows": [
+                {
+                  "fuel": "petrol",
+                  "value": {
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 0.0029381422327739875 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 0.0029381422327739875 } }
+                      }
+                    }
+                  },
+                  "vehicleType": "privateVehicles"
+                },
+                {
+                  "fuel": "diesel",
+                  "value": {
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 0.0033632571825 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 0.0033632571825 } }
+                      }
+                    }
+                  },
+                  "vehicleType": "lightTrucks"
+                },
+                {
+                  "fuel": "diesel",
+                  "value": {
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 0.0033632571825 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 0.0033632571825 } }
+                      }
+                    }
+                  },
+                  "vehicleType": "heavyTrucks"
+                },
+                {
+                  "fuel": "diesel",
+                  "value": {
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 0.0033632571825 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 0.0033632571825 } }
+                      }
+                    }
+                  },
+                  "vehicleType": "publicTransportVehicles"
+                },
+                {
+                  "fuel": "petrol",
+                  "value": {
+                    "consumption": {
+                      "value": {
+                        "y-2019": { "scope1": { "unit": "tCO2e", "value": 0.0029381422327739875 } },
+                        "y-2020": { "scope1": { "unit": "tCO2e", "value": 0.0029381422327739875 } }
+                      }
+                    }
+                  },
+                  "vehicleType": "taxis"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "resultRows": [
+        {
+          "key": "municipal",
+          "label": "Patrimoine municipal",
+          "years": {
+            "y-2019": { "value": 18338.95280744861, "unit": "tCO2e" },
+            "y-2020": { "value": 17533.184639749496, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "navigation",
+          "label": "Navigation",
+          "years": {
+            "y-2019": { "value": 0.01345302873, "unit": "tCO2e" },
+            "y-2020": { "value": 0.01345302873, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "landTransport",
+          "label": "Transport terrestre",
+          "years": {
+            "y-2019": { "value": 0.015966056013047975, "unit": "tCO2e" },
+            "y-2020": { "value": 0.015966056013047975, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "soretras",
+          "label": "SORETRAS",
+          "years": {
+            "y-2019": { "value": 8348.15590114293, "unit": "tCO2e" },
+            "y-2020": { "value": 6376.662971664858, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "nationalAirTransport",
+          "label": "Transport aérien national",
+          "years": {
+            "y-2019": { "value": 497.56953, "unit": "tCO2e" },
+            "y-2020": { "value": 3728.91188, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "airportGroundElectricity",
+          "label": "Aéroport-OACA électricité sol",
+          "years": {}
+        },
+        {
+          "key": "industryElectricity",
+          "label": "Industrie-Elec",
+          "years": {
+            "y-2019": { "value": 148506.7763290135, "unit": "tCO2e" },
+            "y-2020": { "value": 140441.53645408148, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "industryThermal",
+          "label": "Industrie-thermique",
+          "years": {
+            "y-2019": { "value": 63400.79391399, "unit": "tCO2e" },
+            "y-2020": { "value": 49478.10938783999, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "residentialElectricity",
+          "label": "Résidentiel-Elec",
+          "years": {
+            "y-2019": { "value": 199953.5756612863, "unit": "tCO2e" },
+            "y-2020": { "value": 219034.1174433626, "unit": "tCO2e" }
+          }
+        },
+        { "key": "residentialGplGas", "label": "Résidentiel GPL et gaz", "years": {} },
+        {
+          "key": "tertiaryElectricity",
+          "label": "Tertiaire-Elec",
+          "years": {
+            "y-2019": { "value": 108972.80059750102, "unit": "tCO2e" },
+            "y-2020": { "value": 93374.39654617189, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "tertiaryGplGas",
+          "label": "Tertiaire GPL et gaz",
+          "years": {
+            "y-2019": { "value": 4211.958856859999, "unit": "tCO2e" },
+            "y-2020": { "value": 3706.30551501, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "tourismElectricity",
+          "label": "Tourisme-Elec",
+          "years": {
+            "y-2019": { "value": 3662.3074869901043, "unit": "tCO2e" },
+            "y-2020": { "value": 2613.431278723326, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "tourismNaturalGas",
+          "label": "Tourisme-Gaz nat",
+          "years": {
+            "y-2019": { "value": 1412.4061700099999, "unit": "tCO2e" },
+            "y-2020": { "value": 1049.01312249, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "pumpingElectricity",
+          "label": "Pompage-Elec",
+          "years": {
+            "y-2019": { "value": 1183.031261395839, "unit": "tCO2e" },
+            "y-2020": { "value": 1046.4116491747075, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "agricultureElectricity",
+          "label": "Agriculture - Elec.",
+          "years": {
+            "y-2019": { "value": 11985.072629716056, "unit": "tCO2e" },
+            "y-2020": { "value": 11598.854844178832, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "greenWaste",
+          "label": "Déchets verts",
+          "years": {
+            "y-2019": { "value": -12766.909671937332, "unit": "tCO2e" },
+            "y-2020": { "value": -13007.287113539998, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "livestock",
+          "label": "Elevage",
+          "years": {
+            "y-2019": { "value": 1606.56453407907, "unit": "tCO2e" },
+            "y-2020": { "value": 1692.229725979675, "unit": "tCO2e" }
+          }
+        },
+        {
+          "key": "crops",
+          "label": "Cultures",
+          "years": {
+            "y-2019": { "value": 1825.4918639603015, "unit": "tCO2e" },
+            "y-2020": { "value": 719.5171111681141, "unit": "tCO2e" }
+          }
+        }
+      ]
+    }
+  }
+}
