@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm, type FieldPath } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,14 +12,12 @@ import {
   calculateCollectivityInventoryRequest,
   CollectivityApiError,
   collectivityQueryKeys,
-  collectivityQueryOptions,
-  fetchCollectivityCurrentInventory,
   saveCollectivityInventoryDraftRequest,
 } from "@/app/[locale]/collectivity/_lib/queries";
-import { getCollectivityProjectsRoute } from "@/app/[locale]/collectivity/_lib/routing";
+import { useCollectivityWorkspaceSnapshot } from "@/app/[locale]/collectivity/_components/collectivityProjectContext";
+import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/setup/_lib/types";
 import { Form } from "@/components/ui/forms";
 import { useScopedI18n } from "@/locales/client";
-import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/setup/_lib/types";
 
 import InventoryWorkspace from "./components/InventoryWorkspace";
 import { InventoryProvider, type InventoryFormValues } from "./context/inventory-context";
@@ -30,12 +28,6 @@ import {
   validateInventoryCalculationReadiness,
 } from "./InventorySchema/calculation-readiness";
 import { buildInventoryRegistry, type InventoryWorkspaceLocale } from "./registry";
-
-const inventorySnapshotQueryOptions = {
-  ...collectivityQueryOptions,
-  staleTime: Infinity,
-  refetchOnMount: false,
-};
 
 function buildInventoryYearPlan(snapshot: CollectivitySetupSnapshot) {
   const reference = snapshot.currentInventory.setupPayload.referenceYear;
@@ -49,22 +41,13 @@ function buildInventoryYearPlan(snapshot: CollectivitySetupSnapshot) {
   };
 }
 
-export default function InventoryRouteClient({
-  snapshot: initialSnapshot,
-}: {
-  snapshot: CollectivitySetupSnapshot;
-}) {
+export default function InventoryRouteClient() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const t = useScopedI18n("(pages).collectivityDashboard");
+  const snapshot = useCollectivityWorkspaceSnapshot();
   //const inventoryLocale = t("inventoryWorkspace") as InventoryWorkspaceLocale;
-  const projectSlug = initialSnapshot.project.slug;
-  const { data: snapshot = initialSnapshot, error: snapshotError } = useQuery({
-    ...inventorySnapshotQueryOptions,
-    queryKey: collectivityQueryKeys.currentInventory(projectSlug),
-    queryFn: () => fetchCollectivityCurrentInventory(projectSlug),
-    initialData: initialSnapshot,
-  });
+  const projectSlug = snapshot.project.slug;
   const snapshotVersion = `${snapshot.currentInventory.id}:${snapshot.currentInventory.updatedAt}`;
   const inventoryYearPlan = useMemo(() => buildInventoryYearPlan(snapshot), [snapshot]);
   const years = useMemo(
@@ -90,8 +73,9 @@ export default function InventoryRouteClient({
   const saveDraftMutation = useMutation({
     mutationFn: saveCollectivityInventoryDraftRequest,
     onSuccess: (saved) => {
-      queryClient.setQueryData(collectivityQueryKeys.currentInventory(saved.project.slug), saved);
-      queryClient.setQueryData(collectivityQueryKeys.setupSnapshot(saved.project.slug), saved);
+      void queryClient.invalidateQueries({
+        queryKey: collectivityQueryKeys.currentInventory(saved.project.slug),
+      });
       void queryClient.invalidateQueries({
         queryKey: collectivityQueryKeys.result(saved.project.slug),
       });
@@ -115,19 +99,6 @@ export default function InventoryRouteClient({
     // Query cache object changes must not overwrite in-progress edits.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainForm, snapshotVersion]);
-  useEffect(() => {
-    if (!(snapshotError instanceof CollectivityApiError)) {
-      return;
-    }
-
-    if (
-      snapshotError.payload.error?.status === 403 ||
-      snapshotError.payload.error?.status === 404
-    ) {
-      router.replace(getCollectivityProjectsRoute("inventory"));
-    }
-  }, [router, snapshotError]);
-
   function getCalculationReadinessKeys() {
     return workspace.datasets.map((dataset) => dataset.key);
   }

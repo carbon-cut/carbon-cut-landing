@@ -1,0 +1,65 @@
+{
+  "years": ["2019", "2020", "2021", "2022"],
+  "breakdowns": [
+    {
+      "id": "by-fuel",
+      "label": "Par carburant",
+      "segments": [
+        {
+          "id": "fuel-diesel",
+          "label": "Gazole",
+          "unit": "tCO2e",
+          "values": [198400, 184700, 206900, 214600]
+        },
+        {
+          "id": "fuel-gasoline",
+          "label": "Essence",
+          "unit": "tCO2e",
+          "values": [116200, 108400, 119500, 122300]
+        },
+        {
+          "id": "fuel-gpl",
+          "label": "GPL",
+          "unit": "tCO2e",
+          "values": [38400, 36200, 39100, 40300]
+        },
+        {
+          "id": "fuel-natural-gas",
+          "label": "Gaz naturel",
+          "unit": "tCO2e",
+          "values": [12700, 11900, 13600, 14800]
+        }
+      ]
+    },
+    {
+      "id": "by-activity",
+      "label": "Par activité",
+      "segments": [
+        {
+          "id": "activity-land",
+          "label": "Transport terrestre",
+          "unit": "tCO2e",
+          "values": [263800, 247400, 273900, 285600]
+        },
+        {
+          "id": "activity-airport",
+          "label": "Aéroport",
+          "unit": "tCO2e",
+          "values": [38200, 34100, 36800, 40100]
+        },
+        {
+          "id": "activity-navigation",
+          "label": "Navigation",
+          "unit": "tCO2e",
+          "values": [49100, 45700, 49100, 50400]
+        },
+        {
+          "id": "activity-municipal",
+          "label": "Flotte municipale",
+          "unit": "tCO2e",
+          "values": [14600, 14000, 19300, 15900]
+        }
+      ]
+    }
+  ]
+}

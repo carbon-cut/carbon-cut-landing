@@ -1,0 +1,26 @@
+{
+  "years": [
+    {
+      "year": 2019,
+      "items": [
+        { "id": "transport", "label": "Transport", "value": 312480, "unit": "tCO2e" },
+        { "id": "residential", "label": "Résidentiel", "value": 127860, "unit": "tCO2e" },
+        { "id": "industry", "label": "Industrie", "value": 81820, "unit": "tCO2e" },
+        { "id": "tertiary", "label": "Tertiaire", "value": 49640, "unit": "tCO2e" },
+        { "id": "agriculture", "label": "Agriculture", "value": 24880, "unit": "tCO2e" },
+        { "id": "municipal", "label": "Patrimoine municipal", "value": 18340, "unit": "tCO2e" }
+      ]
+    },
+    {
+      "year": 2020,
+      "items": [
+        { "id": "transport", "label": "Transport", "value": 285960, "unit": "tCO2e" },
+        { "id": "residential", "label": "Résidentiel", "value": 134420, "unit": "tCO2e" },
+        { "id": "industry", "label": "Industrie", "value": 74690, "unit": "tCO2e" },
+        { "id": "tertiary", "label": "Tertiaire", "value": 43270, "unit": "tCO2e" },
+        { "id": "agriculture", "label": "Agriculture", "value": 21680, "unit": "tCO2e" },
+        { "id": "municipal", "label": "Patrimoine municipal", "value": 17530, "unit": "tCO2e" }
+      ]
+    }
+  ]
+}

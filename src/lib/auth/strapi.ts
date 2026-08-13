@@ -54,7 +54,7 @@ export class StrapiTransportError extends Error {
 }
 
 function getStrapiBaseUrl() {
-  const baseUrl = process.env.STRAPI_INTERNAL_URL ?? process.env.NEXT_PUBLIC_SERVER;
+  const baseUrl = process.env.STRAPI_INTERNAL_URL;
 
   if (!baseUrl) {
     throw new Error("Missing STRAPI_INTERNAL_URL or NEXT_PUBLIC_SERVER");

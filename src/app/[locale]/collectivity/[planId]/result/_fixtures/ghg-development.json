@@ -1,0 +1,35 @@
+{
+  "years": ["2019", "2020", "2021", "2022"],
+  "series": [
+    {
+      "id": "energy",
+      "label": "Énergie",
+      "unit": "tCO2e",
+      "values": [1124200, 1248560, 1201160, 1318240]
+    },
+    {
+      "id": "afat-emissions",
+      "label": "AFAT (émissions)",
+      "unit": "tCO2e",
+      "values": [143820, 157640, 149270, 164380]
+    },
+    {
+      "id": "waste",
+      "label": "Déchets",
+      "unit": "tCO2e",
+      "values": [33807, 40846, 61165, 51260]
+    },
+    {
+      "id": "absorptions",
+      "label": "Absorptions",
+      "unit": "tCO2e",
+      "values": [-18250, -19600, -20810, -21225]
+    }
+  ],
+  "totalGrossEmissions": {
+    "id": "total-gross-emissions",
+    "label": "Total des émissions brutes",
+    "unit": "tCO2e",
+    "values": [1301827, 1447046, 1411595, 1533880]
+  }
+}

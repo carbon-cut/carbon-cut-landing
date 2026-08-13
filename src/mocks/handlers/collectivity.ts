@@ -11,6 +11,8 @@ import {
   saveMockCollectivitySetup,
 } from "@/mocks/collectivity";
 
+const strapiUrl = process.env.STRAPI_INTERNAL_URL;
+
 function error(status: number, message: string, details?: Record<string, unknown>) {
   return HttpResponse.json(
     { error: { status, message, ...(details ? { details } : {}) } },
@@ -29,7 +31,7 @@ function projectSlug(params: Record<string, string | readonly string[] | undefin
 }
 
 export const collectivityHandlers = [
-  http.get("*/api/collectivity/projects", ({ request }) => {
+  http.get(`${strapiUrl}/api/collectivity/projects`, ({ request }) => {
     const user = authenticatedUser(request);
     if (!user) return error(401, "Authentication required");
 
@@ -39,15 +41,18 @@ export const collectivityHandlers = [
 
     return HttpResponse.json({ data: projects });
   }),
-  http.get("*/api/collectivity/projects/:projectSlug/current-inventory", ({ request, params }) => {
-    if (!authenticatedUser(request)) return error(401, "Authentication required");
+  http.get(
+    `${strapiUrl}/api/collectivity/projects/:projectSlug/current-inventory`,
+    ({ request, params }) => {
+      if (!authenticatedUser(request)) return error(401, "Authentication required");
 
-    const snapshot = getMockCollectivitySetupSnapshot(projectSlug(params));
-    return snapshot
-      ? HttpResponse.json({ data: snapshot })
-      : error(404, "Collectivity inventory draft not found");
-  }),
-  http.post("*/api/collectivity/projects/init", async ({ request }) => {
+      const snapshot = getMockCollectivitySetupSnapshot(projectSlug(params));
+      return snapshot
+        ? HttpResponse.json({ data: snapshot })
+        : error(404, "Collectivity inventory draft not found");
+    }
+  ),
+  http.post(`${strapiUrl}/api/collectivity/projects/init`, async ({ request }) => {
     const user = authenticatedUser(request);
     if (!user) return error(401, "Authentication required");
 
@@ -60,22 +65,25 @@ export const collectivityHandlers = [
 
     return HttpResponse.json({ data: saveMockCollectivitySetup(user, setup) });
   }),
-  http.put("*/api/collectivity/projects/:projectSlug/setup", async ({ request, params }) => {
-    const user = authenticatedUser(request);
-    if (!user) return error(401, "Authentication required");
-
-    const currentPlanId = projectSlug(params);
-    const setup = (await request.json()) as CollectivitySetupData;
-    if (!isMockCollectivityPlanIdUnique(user, setup.slug, currentPlanId)) {
-      return error(409, "collectivityProjectSlugNotUnique", {
-        fieldErrors: { slug: "collectivityProjectSlugNotUnique" },
-      });
-    }
-
-    return HttpResponse.json({ data: saveMockCollectivitySetup(user, setup, currentPlanId) });
-  }),
   http.put(
-    "*/api/collectivity/projects/:projectSlug/current-inventory/input",
+    `${strapiUrl}/api/collectivity/projects/:projectSlug/setup`,
+    async ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+
+      const currentPlanId = projectSlug(params);
+      const setup = (await request.json()) as CollectivitySetupData;
+      if (!isMockCollectivityPlanIdUnique(user, setup.slug, currentPlanId)) {
+        return error(409, "collectivityProjectSlugNotUnique", {
+          fieldErrors: { slug: "collectivityProjectSlugNotUnique" },
+        });
+      }
+
+      return HttpResponse.json({ data: saveMockCollectivitySetup(user, setup, currentPlanId) });
+    }
+  ),
+  http.put(
+    `${strapiUrl}/api/collectivity/projects/:projectSlug/current-inventory/input`,
     async ({ request, params }) => {
       const user = authenticatedUser(request);
       if (!user) return error(401, "Authentication required");
@@ -92,11 +100,11 @@ export const collectivityHandlers = [
         : error(404, "Collectivity inventory draft not found");
     }
   ),
-  http.post("*/api/collectivity/projects/:projectSlug/current-inventory/calculate", () =>
+  http.post(`${strapiUrl}/api/collectivity/projects/:projectSlug/current-inventory/calculate`, () =>
     error(501, "Collectivity inventory calculation endpoint not implemented")
   ),
   http.get(
-    "*/api/collectivity/projects/:projectSlug/current-inventory/result",
+    `${strapiUrl}/api/collectivity/projects/:projectSlug/current-inventory/result`,
     ({ request, params }) => {
       if (!authenticatedUser(request)) return error(401, "Authentication required");
 
@@ -105,7 +113,7 @@ export const collectivityHandlers = [
     }
   ),
   http.post(
-    "*/api/collectivity/projects/:projectSlug/current-inventory/debug-calculate",
+    `${strapiUrl}/api/collectivity/projects/:projectSlug/current-inventory/debug-calculate`,
     async ({ request }) => {
       if (!authenticatedUser(request)) return error(401, "Authentication required");
 
@@ -135,13 +143,16 @@ export const collectivityHandlers = [
       });
     }
   ),
-  http.get("*/api/collectivity/supported-values/:familyKey/:selectorKey", ({ params }) => {
-    const familyKey = String(params.familyKey);
-    const selectorKey = String(params.selectorKey);
-    const values = getMockCollectivitySupportedValues(familyKey, selectorKey);
+  http.get(
+    `${strapiUrl}/api/collectivity/supported-values/:familyKey/:selectorKey`,
+    ({ params }) => {
+      const familyKey = String(params.familyKey);
+      const selectorKey = String(params.selectorKey);
+      const values = getMockCollectivitySupportedValues(familyKey, selectorKey);
 
-    return values
-      ? HttpResponse.json({ data: { familyKey, selectorKey, values } })
-      : error(404, "Collectivity supported values not found");
-  }),
+      return values
+        ? HttpResponse.json({ data: { familyKey, selectorKey, values } })
+        : error(404, "Collectivity supported values not found");
+    }
+  ),
 ];

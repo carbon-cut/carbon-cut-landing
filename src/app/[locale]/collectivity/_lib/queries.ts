@@ -12,7 +12,6 @@ export const collectivityQueryOptions = {
 export const collectivityQueryKeys = {
   currentInventory: (projectSlug: string) =>
     ["collectivity", "currentInventory", projectSlug] as const,
-  setupSnapshot: (projectSlug: string) => ["collectivity", "setupSnapshot", projectSlug] as const,
   result: (projectSlug: string) => ["collectivity", "result", projectSlug] as const,
   supportedValues: (familyKey: string, selectorKey: string) =>
     ["collectivity", "supportedValues", familyKey, selectorKey] as const,

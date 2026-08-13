@@ -101,19 +101,7 @@ export default function CollectivitySetupForm({
         values,
       }),
     onSuccess: (snapshot) => {
-      queryClient.setQueryData(
-        collectivityQueryKeys.setupSnapshot(snapshot.project.slug),
-        snapshot
-      );
-      queryClient.setQueryData(
-        collectivityQueryKeys.currentInventory(snapshot.project.slug),
-        snapshot
-      );
-
       if (currentPlanId && currentPlanId !== snapshot.project.slug) {
-        void queryClient.invalidateQueries({
-          queryKey: collectivityQueryKeys.setupSnapshot(currentPlanId),
-        });
         void queryClient.invalidateQueries({
           queryKey: collectivityQueryKeys.currentInventory(currentPlanId),
         });
@@ -122,9 +110,6 @@ export default function CollectivitySetupForm({
         });
       }
 
-      void queryClient.invalidateQueries({
-        queryKey: collectivityQueryKeys.setupSnapshot(snapshot.project.slug),
-      });
       void queryClient.invalidateQueries({
         queryKey: collectivityQueryKeys.currentInventory(snapshot.project.slug),
       });

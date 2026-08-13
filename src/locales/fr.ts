@@ -12,6 +12,9 @@ const waste = {
 };
 
 export default {
+  units: {
+    capita: "habitant",
+  },
   toast: {
     success: "Succès",
     error: "Erreur",
@@ -725,6 +728,55 @@ export default {
               "Gérer le portefeuille des fiches actions, avec les coûts, le calendrier et le suivi dans ce même module.",
             status: "À structurer",
           },
+        },
+      },
+      resultPoc: {
+        title: "Prototype de graphiques de résultats",
+        chart: {
+          title: "Émissions par périmètre",
+          description: "Année {year}.",
+          ariaLabel: "Diagramme circulaire des émissions par périmètre",
+          yearSelectorAriaLabel: "Sélectionner une année",
+        },
+        sectorChart: {
+          title: "Émissions par secteur",
+          description: "Année {year}.",
+          ariaLabel: "Diagramme circulaire des émissions par secteur",
+          yearSelectorAriaLabel: "Sélectionner une année",
+        },
+        ghgDevelopmentChart: {
+          title: "Émissions de GES",
+          description: "Années d'inventaire.",
+          ariaLabel: "Graphique de l'évolution des émissions de gaz à effet de serre",
+        },
+        municipalAssetsChart: {
+          title: "Émissions des patrimoines municipaux",
+          description: "Par usage.",
+          ariaLabel: "Graphique en aires empilées des émissions des patrimoines municipaux",
+        },
+        territorialEnergyChart: {
+          title: "Détail des émissions",
+          description: "Par catégorie, source et secteur.",
+          ariaLabel: "Graphique des émissions de l'énergie territoriale par source et secteur",
+          tabListAriaLabel: "Catégories de détail des émissions",
+          energyTab: "Énergie territoriale",
+          transportTab: "Transport",
+          transportAriaLabel: "Graphique des émissions de transport par carburant et par activité",
+          afatTab: "AFAT",
+          afatAriaLabel:
+            "Graphique des émissions AFAT par élevage, cultures, déchets et absorptions",
+          municipalTab: "Patrimoine municipal",
+          municipalAriaLabel:
+            "Graphique des émissions du patrimoine municipal par usage et par énergie",
+        },
+        summaryCards: {
+          ariaLabel: "Indicateurs principaux des résultats",
+          emissions: "Émissions",
+          netEmissions: "Émissions nettes",
+          absorptions: "Absorptions",
+          emissionsPerCapita: "Émissions par habitant",
+          annualChange: "{change} par an",
+          unavailable: "Comparaison indisponible",
         },
       },
       moduleStructure: {
