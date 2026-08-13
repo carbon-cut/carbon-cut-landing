@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import type { EChartsOption, LineSeriesOption } from "echarts";
 
 import EChartsChart from "@/components/charts/base/echarts-chart";
+import { chartColors } from "@/components/charts/palette";
 import { createAxisTooltip } from "@/components/charts/shared/axis-tooltip";
 import { formatChartPercentage, formatChartValue } from "@/components/charts/shared/formatters";
 import { useChartUnitFormatter } from "@/components/charts/shared/use-chart-unit-formatter";
@@ -75,64 +76,69 @@ export default function StackedAreaChart({
         bottom: 8,
         type: "scroll",
       },
-      series: data.map(({ color, id, label, values }) => ({
-        areaStyle: {},
-        data: values,
-        id,
-        itemStyle: color ? { color } : undefined,
-        label: showShareLabels ? LabelConstructor(values) : undefined,
-        labelLayout: ({ labelRect, dataIndex, seriesIndex }) => {
-          if (seriesIndex === 0 && dataIndex === 0) {
-            occupied.length = 0;
-          }
-          const GAP = 10;
-          const shiftX = 50;
+      series: data.map(({ color, id, label, values }, index) => {
+        const seriesColor = color ?? chartColors[index % chartColors.length];
 
-          let y = labelRect.y;
-          let x = labelRect.x;
+        return {
+          areaStyle: { color: seriesColor },
+          data: values,
+          id,
+          itemStyle: { color: seriesColor },
+          label: showShareLabels ? LabelConstructor(values) : undefined,
+          labelLayout: ({ labelRect, dataIndex, seriesIndex }) => {
+            if (seriesIndex === 0 && dataIndex === 0) {
+              occupied.length = 0;
+            }
+            const GAP = 10;
+            const shiftX = 50;
 
-          for (const previous of occupied) {
-            const overlapsX =
-              labelRect.x < previous.x + previous.width &&
-              labelRect.x + labelRect.width > previous.x;
+            let y = labelRect.y;
+            let x = labelRect.x;
 
-            const tooCloseY =
-              y < previous.y + previous.height + GAP && y + labelRect.height + GAP > previous.y;
+            for (const previous of occupied) {
+              const overlapsX =
+                labelRect.x < previous.x + previous.width &&
+                labelRect.x + labelRect.width > previous.x;
 
-            if (overlapsX && tooCloseY) {
-              const currentCenter = labelRect.y + labelRect.height / 2;
-              const previousCenter = previous.y + previous.height / 2;
+              const tooCloseY =
+                y < previous.y + previous.height + GAP && y + labelRect.height + GAP > previous.y;
 
-              if (currentCenter < previousCenter) {
-                // current label was ABOVE → push it upward
-                y = previous.y - labelRect.height - GAP;
-              } else {
-                // current label was BELOW → push it downward
-                y = previous.y + previous.height + GAP;
+              if (overlapsX && tooCloseY) {
+                const currentCenter = labelRect.y + labelRect.height / 2;
+                const previousCenter = previous.y + previous.height / 2;
+
+                if (currentCenter < previousCenter) {
+                  // current label was ABOVE → push it upward
+                  y = previous.y - labelRect.height - GAP;
+                } else {
+                  // current label was BELOW → push it downward
+                  y = previous.y + previous.height + GAP;
+                }
               }
             }
-          }
 
-          occupied.push({
-            x: labelRect.x,
-            y,
-            width: labelRect.width,
-            height: labelRect.height,
-          });
+            occupied.push({
+              x: labelRect.x,
+              y,
+              width: labelRect.width,
+              height: labelRect.height,
+            });
 
-          if (dataIndex === values.length - 1) {
-            x = x - shiftX;
-          }
-          return {
-            x,
-            y,
-            hideOverlap: true,
-          };
-        },
-        name: label,
-        stack: "stack",
-        type: "line" as const,
-      })),
+            if (dataIndex === values.length - 1) {
+              x = x - shiftX;
+            }
+            return {
+              x,
+              y,
+              hideOverlap: true,
+            };
+          },
+          lineStyle: { color: seriesColor },
+          name: label,
+          stack: "stack",
+          type: "line" as const,
+        };
+      }),
       tooltip: createAxisTooltip(data, formatChartValue, formatUnit),
       xAxis: {
         boundaryGap: false,

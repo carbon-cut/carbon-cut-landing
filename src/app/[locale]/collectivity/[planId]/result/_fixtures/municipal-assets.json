@@ -5,21 +5,18 @@
       "id": "public-lighting",
       "label": "Éclairage public",
       "unit": "tCO2e",
-      "color": "#4f70b7",
       "values": [5695, 12950, 12560, 12500]
     },
     {
       "id": "vehicle-fleet",
       "label": "Parc véhicules",
       "unit": "tCO2e",
-      "color": "#ef7d2b",
       "values": [2040, 3700, 3350, 3900]
     },
     {
       "id": "buildings",
       "label": "Bâtiment",
       "unit": "tCO2e",
-      "color": "#9f9f9f",
       "values": [765, 1850, 1840, 1430]
     }
   ]

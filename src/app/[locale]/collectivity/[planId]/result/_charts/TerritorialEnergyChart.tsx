@@ -4,6 +4,7 @@ import GroupedStackedBarChart, {
   type GroupedStackedBarGroup,
 } from "@/components/charts/grouped-stacked-bar";
 import StackedBarChart, { type StackedBarDatum } from "@/components/charts/stacked-bar";
+import { energyColors, sectorColors } from "@/components/charts/palette";
 import ChartContainer from "@/components/charts/shared/chart-container";
 import { ChartDescription, ChartTitle } from "@/components/charts/shared/chart-copy";
 import {
@@ -13,15 +14,6 @@ import {
   TabsTrigger as TabsPrimitiveTrigger,
 } from "@/components/ui/tabs";
 import { getInventoryFamilyNavIcon } from "@/app/[locale]/collectivity/[planId]/inventory/components/inventoryNavIcons";
-import {
-  chartFuelColors,
-  chartMunicipalEnergyColors,
-  chartMunicipalUseColors,
-  chartAfatColors,
-  chartSectorColors,
-  chartSourceColors,
-  chartTransportActivityColors,
-} from "@/components/charts/palette";
 import { useScopedI18n } from "@/locales/client";
 
 import territorialEnergy from "../_fixtures/territorial-energy.json";
@@ -29,6 +21,12 @@ import transportEmissions from "../_fixtures/transport-emissions.json";
 import afatEmissions from "../_fixtures/afat-emissions.json";
 import municipalEmissions from "../_fixtures/municipal-emissions.json";
 import React from "react";
+
+const energyColorBySourceId = {
+  electricity: energyColors.electricity,
+  "natural-gas": energyColors.naturalGas,
+  gpl: energyColors.gpl,
+} as const;
 
 const TabsTrigger: React.FC<React.ComponentPropsWithoutRef<typeof TabsPrimitiveTrigger>> = ({
   className,
@@ -52,56 +50,27 @@ TabsContent.displayName = TabsPrimitiveContent.displayName;
 export default function TerritorialEnergyChart() {
   const t = useScopedI18n("(pages).collectivityDashboard.resultPoc");
   const chartTitleId = "territorial-energy-poc-title";
-  const energyGroups: GroupedStackedBarGroup[] = territorialEnergy.sources.map((source) => {
-    const sourceColor =
-      source.id === "electricity"
-        ? chartSourceColors.electricity
-        : source.id === "natural-gas"
-          ? chartSourceColors.naturalGas
-          : chartSourceColors.gpl;
+  const energyGroups: GroupedStackedBarGroup[] = territorialEnergy.sources.map((source) => ({
+    ...source,
+    summary: {
+      ...source.summary,
+      color: energyColorBySourceId[source.id as keyof typeof energyColorBySourceId],
+    },
+    segments: source.segments.map((segment) => {
+      const sectorId = segment.id.slice(segment.id.lastIndexOf("-") + 1);
 
-    return {
-      ...source,
-      summary: { ...source.summary, color: sourceColor },
-      segments: source.segments.map((segment) => {
-        const sectorId = segment.id.slice(segment.id.lastIndexOf("-") + 1);
-        const color = chartSectorColors[sectorId as keyof typeof chartSectorColors];
-
-        return { ...segment, color };
-      }),
-    };
-  });
-  const transportGroups: GroupedStackedBarGroup[] = transportEmissions.breakdowns.map(
-    (breakdown) => ({
-      ...breakdown,
-      segments: breakdown.segments.map((segment) => {
-        const key = segment.id.replace(`${breakdown.id === "by-fuel" ? "fuel" : "activity"}-`, "");
-        const color =
-          breakdown.id === "by-fuel"
-            ? chartFuelColors[key as keyof typeof chartFuelColors]
-            : chartTransportActivityColors[key as keyof typeof chartTransportActivityColors];
-
-        return { ...segment, color };
-      }),
-    })
-  );
-  const afatData: StackedBarDatum[] = afatEmissions.series.map((series) => ({
-    ...series,
-    color: chartAfatColors[series.id as keyof typeof chartAfatColors],
+      return {
+        ...segment,
+        color: sectorColors[sectorId as keyof typeof sectorColors],
+      };
+    }),
   }));
+  const transportGroups: GroupedStackedBarGroup[] = transportEmissions.breakdowns.map(
+    (breakdown) => breakdown
+  );
+  const afatData: StackedBarDatum[] = afatEmissions.series;
   const municipalGroups: GroupedStackedBarGroup[] = municipalEmissions.breakdowns.map(
-    (breakdown) => ({
-      ...breakdown,
-      segments: breakdown.segments.map((segment) => {
-        const key = segment.id.replace(`${breakdown.id === "by-use" ? "use" : "energy"}-`, "");
-        const color =
-          breakdown.id === "by-use"
-            ? chartMunicipalUseColors[key as keyof typeof chartMunicipalUseColors]
-            : chartMunicipalEnergyColors[key as keyof typeof chartMunicipalEnergyColors];
-
-        return { ...segment, color };
-      }),
-    })
+    (breakdown) => breakdown
   );
   const EnergyIcon = getInventoryFamilyNavIcon("territorialEnergy");
   const TransportIcon = getInventoryFamilyNavIcon("transportMobility");

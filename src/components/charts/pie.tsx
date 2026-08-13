@@ -9,6 +9,7 @@ import { formatChartPercentage, formatChartValue } from "@/components/charts/sha
 import { useChartUnitFormatter } from "@/components/charts/shared/use-chart-unit-formatter";
 
 export type PieDatum = {
+  color?: string;
   id: string;
   label: string;
   unit: string;
@@ -20,7 +21,7 @@ type PieChartProps = {
   data: PieDatum[];
 };
 
-const insideLabelThreshold = 10;
+const insideLabelThreshold = 100;
 const chartLabelFontFamily = "var(--font-manrope_sans), sans-serif";
 
 export default function PieChart({ ariaLabel, data }: PieChartProps) {
@@ -30,17 +31,18 @@ export default function PieChart({ ariaLabel, data }: PieChartProps) {
 
     return {
       legend: {
-        show: false,
+        show: true,
       },
       series: [
         {
           avoidLabelOverlap: true,
-          data: data.map(({ id, label, value }) => {
+          data: data.map(({ color, id, label, value }) => {
             const percentage = total === 0 ? 0 : (value / total) * 100;
             const isInside = percentage >= insideLabelThreshold;
 
             return {
               id,
+              itemStyle: color ? { color } : undefined,
               label: {
                 formatter: `{label|${label}}\n{percentage|${formatChartPercentage(percentage)}%}`,
                 position: isInside ? "inside" : "outside",
@@ -66,7 +68,11 @@ export default function PieChart({ ariaLabel, data }: PieChartProps) {
               value,
             };
           }),
-          radius: "80%",
+          itemStyle: {
+            borderRadius: 4,
+          },
+          padAngle: 3,
+          radius: ["40%", "62%"],
           type: "pie",
         },
       ],
@@ -74,5 +80,5 @@ export default function PieChart({ ariaLabel, data }: PieChartProps) {
     };
   }, [data, formatUnit]);
 
-  return <EChartsChart ariaLabel={ariaLabel} option={option} style={{ height: 250 }} />;
+  return <EChartsChart ariaLabel={ariaLabel} option={option} style={{ height: 330 }} />;
 }

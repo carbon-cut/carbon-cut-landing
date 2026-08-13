@@ -21,7 +21,12 @@ export function NumberInputCell<T extends FieldValues>({
   const yearSegment = selectedYear === undefined ? "" : `.y-${selectedYear}`;
   const fieldName = `${baseName}.${row.original.key}.${column.key}.value${yearSegment}` as TName<T>;
   return (
-    <InventoryTableInput form={form} name={fieldName} type="number" unitAdornment={column.unit ?? undefined} />
+    <InventoryTableInput
+      form={form}
+      name={fieldName}
+      type="number"
+      unitAdornment={column.unit ?? undefined}
+    />
   );
 }
 export function TextInputCell<T extends FieldValues>({
@@ -32,6 +37,10 @@ export function TextInputCell<T extends FieldValues>({
 }: TableGridCellRendererArgs<T>) {
   const fieldName = `${baseName}.${row.index}.key` as TName<T>;
   return (
-    <InventoryTableInput form={form} name={fieldName} type="text" /* unitAdornment={column.unit} */ />
+    <InventoryTableInput
+      form={form}
+      name={fieldName}
+      type="text" /* unitAdornment={column.unit} */
+    />
   );
 }

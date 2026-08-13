@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 import ReactECharts from "echarts-for-react";
 
 import { cn } from "@/lib/utils";
+import { chartColors } from "@/components/charts/palette";
 import {
   COLLECTIVITY_CHART_THEME,
   registerCollectivityChartTheme,
@@ -26,7 +27,7 @@ export default function EChartsChart({ ariaLabel, className, option, style }: EC
       autoResize
       className={cn("w-full", className)}
       notMerge
-      option={option}
+      option={{ ...option, color: option.color ?? chartColors }}
       opts={{ renderer: "svg" }}
       role="img"
       style={{ width: "100%", ...style }}

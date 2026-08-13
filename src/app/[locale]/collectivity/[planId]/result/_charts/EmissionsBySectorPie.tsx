@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import PieChart, { type PieDatum } from "@/components/charts/pie";
+import { sectorColors } from "@/components/charts/palette";
 import ChartContainer from "@/components/charts/shared/chart-container";
 import { ChartDescription, ChartTitle } from "@/components/charts/shared/chart-copy";
 import YearSelector from "@/components/table/year-selector";
@@ -16,7 +17,10 @@ export default function EmissionsBySectorPie() {
   const [selectedYear, setSelectedYear] = useState(emissionsBySector.years[0].year);
   const selectedYearData =
     emissionsBySector.years.find(({ year }) => year === selectedYear) ?? emissionsBySector.years[0];
-  const data: PieDatum[] = selectedYearData.items;
+  const data: PieDatum[] = selectedYearData.items.map((item) => ({
+    ...item,
+    color: sectorColors[item.id as keyof typeof sectorColors],
+  }));
 
   return (
     <ChartContainer aria-labelledby={chartTitleId}>

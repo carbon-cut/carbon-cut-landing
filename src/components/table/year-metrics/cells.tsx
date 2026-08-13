@@ -52,6 +52,10 @@ export function TextInputCell<T extends FieldValues>({
 }: YearMetricsCellRendererArgs<T>) {
   const fieldName = `${baseName}.custom.${column.index}.label` as TName<T>;
   return (
-    <InventoryTableInput form={form} name={fieldName} type="text" /* unitAdornment={column.unit} */ />
+    <InventoryTableInput
+      form={form}
+      name={fieldName}
+      type="text" /* unitAdornment={column.unit} */
+    />
   );
 }

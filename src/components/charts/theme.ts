@@ -1,10 +1,12 @@
 import * as echarts from "echarts";
 
+import { chartColors } from "@/components/charts/palette";
+
 export const COLLECTIVITY_CHART_THEME = "carbon-cut-collectivity";
 
-// Intentionally minimal for the proof of concept. Chart visual tokens will be
-// defined here before result charts become product UI.
-const collectivityChartTheme = {};
+const collectivityChartTheme = {
+  color: chartColors,
+};
 
 let isThemeRegistered = false;
 

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import type { EChartsOption } from "echarts";
 
 import EChartsChart from "@/components/charts/base/echarts-chart";
+import { chartColors } from "@/components/charts/palette";
 import { createAxisTooltip } from "@/components/charts/shared/axis-tooltip";
 import { formatChartValue } from "@/components/charts/shared/formatters";
 import { useChartUnitFormatter } from "@/components/charts/shared/use-chart-unit-formatter";
@@ -38,6 +39,14 @@ export default function GroupedStackedBarChart({
   const option = useMemo<EChartsOption>(() => {
     const segments = groups.flatMap(({ segments }) => segments);
     const summaries = groups.flatMap(({ summary }) => (summary ? [summary] : []));
+    let visibleSeriesIndex = 0;
+    const getVisibleSeriesStyle = (color?: string) => {
+      const paletteColor = chartColors[visibleSeriesIndex % chartColors.length];
+      visibleSeriesIndex += 1;
+
+      return { color: color ?? paletteColor };
+    };
+
     return {
       grid: {
         bottom: 64,
@@ -60,7 +69,7 @@ export default function GroupedStackedBarChart({
                 barMaxWidth: 28,
                 data: summary.values,
                 id: summary.id,
-                itemStyle: summary.color ? { color: summary.color } : undefined,
+                itemStyle: getVisibleSeriesStyle(summary.color),
                 name: summary.label,
                 stack: `${groupId}-summary`,
                 type: "bar" as const,
@@ -73,7 +82,7 @@ export default function GroupedStackedBarChart({
           barMaxWidth: summary ? 10 : 32,
           data: values,
           id,
-          itemStyle: color ? { color } : undefined,
+          itemStyle: getVisibleSeriesStyle(color),
           name: label,
           stack: groupId,
           type: "bar" as const,
