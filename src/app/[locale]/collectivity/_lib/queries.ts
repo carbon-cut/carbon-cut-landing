@@ -1,5 +1,16 @@
 import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/setup/_lib/types";
 import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/setup/_lib/schema";
+import type {
+  CollectivityResultRow,
+  CollectivityResultsByYear,
+  CollectivityResultYearKey,
+} from "@/lib/collectivity/result-types";
+
+export type {
+  CollectivityResultRow,
+  CollectivityResultsByYear,
+  CollectivityResultYearKey,
+} from "@/lib/collectivity/result-types";
 
 export const collectivityQueryOptions = {
   staleTime: 0,
@@ -40,6 +51,29 @@ type DebugCalculationWarning = {
   details?: Record<string, unknown>;
 };
 
+export type CollectivityCalculationWarning = {
+  code:
+    | "negativeEstimatedActivityClamped"
+    | "missingLtoCorrectionFactorDefaulted"
+    | "treeAbsorptionFactorFallbackUsed"
+    | "greenWasteAbsorptionFallbackUsed";
+  itemId?: string;
+  path?: string;
+  message: string;
+  details?: Record<string, unknown>;
+};
+
+export type CollectivityInventoryCalculationResult = {
+  id: string;
+  calculationRunId: string;
+  resultRows: Record<CollectivityResultYearKey, CollectivityResultRow[]>;
+  context: {
+    population: Partial<Record<CollectivityResultYearKey, { value: number; unit: "capita" }>>;
+  };
+  warnings: CollectivityCalculationWarning[];
+  createdAt: string;
+};
+
 export type CollectivitySupportedValue = {
   value: string;
   label: string;
@@ -74,7 +108,13 @@ export async function fetchCollectivityInventoryResult(projectSlug: string) {
     }
   );
 
-  return readApiJson<Record<string, unknown>>(response);
+  const payload = await readApiJson<{ data?: CollectivityInventoryCalculationResult }>(response);
+
+  if (!payload.data) {
+    throw new Error("Collectivity inventory result not found");
+  }
+
+  return payload.data;
 }
 
 export async function fetchCollectivitySetupSnapshot(projectSlug: string) {
@@ -205,7 +245,7 @@ export async function debugCalculateCollectivityDatasetRequest({
   const payload = await readApiJson<{
     data?: {
       datasetKey: string;
-      emissionsPayload: Record<string, unknown>;
+      resultRows: CollectivityResultsByYear;
       parameterSnapshot?: {
         items?: unknown[];
       };

@@ -124,7 +124,21 @@ export const collectivityHandlers = [
       return HttpResponse.json({
         data: {
           datasetKey,
-          emissionsPayload: { total: { value: 500 + datasetSeed, unit: "kgCO2e" } },
+          resultRows: {
+            "y-2021": [
+              {
+                key: "municipalPublicLighting",
+                value: 500 + datasetSeed,
+                unit: "tCO2e",
+                owner: "municipal",
+                family: "energy",
+                sector: "tertiary",
+                scope: "scope2",
+                energy: "electricity",
+                direction: "emission",
+              },
+            ],
+          },
           parameterSnapshot: {
             items: Array.from({ length: parameterCount }, (_, index) => ({
               key: `mock-${datasetKey}-factor-${index + 1}`,

@@ -2,6 +2,7 @@ import "server-only";
 
 import { fetchWithAuth, UnauthenticatedRequestError } from "@/lib/auth/fetchWithAuth";
 import type { AuthUser } from "@/lib/auth/types";
+import type { CollectivityResultsByYear } from "@/lib/collectivity/result-types";
 import type {
   CollectivityProjectSnapshot,
   CollectivitySetupData,
@@ -43,11 +44,12 @@ type CurrentInventoryResultResponse = Record<string, unknown>;
 type DebugCalculationResponse = {
   data: {
     datasetKey: string;
-    emissionsPayload: Record<string, unknown>;
+    resultRows: CollectivityResultsByYear;
     parameterSnapshot: {
       items: Array<Record<string, unknown>>;
     };
     formulaVersion: string;
+    warnings?: Array<Record<string, unknown>>;
   };
 };
 

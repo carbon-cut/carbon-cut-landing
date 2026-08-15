@@ -32,6 +32,7 @@ export default function PieChart({ ariaLabel, data }: PieChartProps) {
     return {
       legend: {
         show: true,
+        bottom: 0,
       },
       series: [
         {
@@ -72,7 +73,8 @@ export default function PieChart({ ariaLabel, data }: PieChartProps) {
             borderRadius: 4,
           },
           padAngle: 3,
-          radius: ["40%", "62%"],
+          radius: ["40%", "58%"],
+          center: ["50%", "45%"],
           type: "pie",
         },
       ],
@@ -80,5 +82,5 @@ export default function PieChart({ ariaLabel, data }: PieChartProps) {
     };
   }, [data, formatUnit]);
 
-  return <EChartsChart ariaLabel={ariaLabel} option={option} style={{ height: 330 }} />;
+  return <EChartsChart ariaLabel={ariaLabel} option={option} style={{ height: 350 }} />;
 }

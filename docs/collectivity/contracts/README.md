@@ -10,3 +10,4 @@ Current contracts:
 - `inventory-draft.md`
 - `calculation.md`
 - `inventory-calculation-submit.md`
+- `inventory-result.md`

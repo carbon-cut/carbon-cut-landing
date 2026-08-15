@@ -5,7 +5,7 @@ export type ResultMetricValue = {
 
 export type ResultMetricSeries = {
   referenceYear: number;
-  values: Record<string, ResultMetricValue>;
+  values: Partial<Record<CollectivityResultYearKey, ResultMetricValue>>;
 };
 
 export type ResultMetricSummary = {
@@ -16,10 +16,9 @@ export type ResultMetricSummary = {
   value: number;
 };
 
-function yearlyValues(values: Record<string, ResultMetricValue>) {
+function yearlyValues(values: Partial<Record<CollectivityResultYearKey, ResultMetricValue>>) {
   return Object.entries(values)
-    .map(([year, value]) => ({ year: Number(year), ...value }))
-    .filter(({ year }) => Number.isFinite(year))
+    .flatMap(([year, value]) => (value ? [{ year: Number(year.slice(2)), ...value }] : []))
     .sort((left, right) => left.year - right.year);
 }
 
@@ -29,7 +28,10 @@ export function summarizeResultMetric({
 }: ResultMetricSeries): ResultMetricSummary {
   const entries = yearlyValues(values);
   const latest = entries.at(-1);
-
+  console.log({
+    referenceYear,
+    values,
+  });
   if (!latest) {
     throw new Error("A result metric requires at least one yearly value.");
   }
@@ -53,3 +55,4 @@ export function summarizeResultMetric({
     value: latest.value,
   };
 }
+import type { CollectivityResultYearKey } from "@/lib/collectivity/result-types";

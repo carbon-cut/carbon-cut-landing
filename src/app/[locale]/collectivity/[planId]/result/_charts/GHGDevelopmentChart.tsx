@@ -1,20 +1,35 @@
 "use client";
 
-import StackedBarChart, {
-  type StackedBarDatum,
-  type StackedBarLineDatum,
-} from "@/components/charts/stacked-bar";
+import type { CollectivityInventoryCalculationResult } from "@/app/[locale]/collectivity/_lib/queries";
+import ErrorChart from "@/components/charts/error-chart";
+import StackedBarChart from "@/components/charts/stacked-bar";
 import ChartContainer from "@/components/charts/shared/chart-container";
 import { ChartDescription, ChartTitle } from "@/components/charts/shared/chart-copy";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useScopedI18n } from "@/locales/client";
 
-import ghgDevelopment from "../_fixtures/ghg-development.json";
+import { buildGHGDevelopmentChartData } from "../_lib/ghg-development";
 
-export default function GHGDevelopmentChart() {
+export default function GHGDevelopmentChart({
+  result,
+  isLoading,
+  error,
+}: {
+  result?: CollectivityInventoryCalculationResult;
+  isLoading: boolean;
+  error: Error | null;
+}) {
   const t = useScopedI18n("(pages).collectivityDashboard.resultPoc");
   const chartTitleId = "ghg-development-poc-title";
-  const data: StackedBarDatum[] = ghgDevelopment.series;
-  const totalGrossEmissions: StackedBarLineDatum = ghgDevelopment.totalGrossEmissions;
+  const chartData = result
+    ? buildGHGDevelopmentChartData(result, {
+        energy: t("ghgDevelopmentChart.series.energy"),
+        afatEmissions: t("ghgDevelopmentChart.series.afatEmissions"),
+        waste: t("ghgDevelopmentChart.series.waste"),
+        absorptions: t("ghgDevelopmentChart.series.absorptions"),
+        totalGrossEmissions: t("ghgDevelopmentChart.series.totalGrossEmissions"),
+      })
+    : null;
 
   return (
     <ChartContainer aria-labelledby={chartTitleId}>
@@ -22,12 +37,18 @@ export default function GHGDevelopmentChart() {
         <ChartTitle id={chartTitleId}>{t("ghgDevelopmentChart.title")}</ChartTitle>
         <ChartDescription>{t("ghgDevelopmentChart.description")}</ChartDescription>
       </div>
-      <StackedBarChart
-        ariaLabel={t("ghgDevelopmentChart.ariaLabel")}
-        categories={ghgDevelopment.years}
-        data={data}
-        line={totalGrossEmissions}
-      />
+      {isLoading ? (
+        <Skeleton className="w-full" style={{ height: 360 }} />
+      ) : error ? (
+        <ErrorChart error={error} title={t("ghgDevelopmentChart.errorTitle")} />
+      ) : chartData ? (
+        <StackedBarChart
+          ariaLabel={t("ghgDevelopmentChart.ariaLabel")}
+          categories={chartData.categories}
+          data={chartData.data}
+          line={chartData.line}
+        />
+      ) : null}
     </ChartContainer>
   );
 }

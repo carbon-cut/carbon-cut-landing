@@ -27,10 +27,12 @@ const palette = {
 export const chartColors = [
   palette.green,
   palette.violet,
-  palette.teal,
+
   palette.coral,
-  palette.blue,
+  palette.teal,
+
   palette.gold,
+  palette.blue,
   palette.rose,
   palette.slate,
 ] as const;
@@ -44,7 +46,7 @@ export const chartColors = [
 export const emissionColors = {
   energy: palette.green,
   afat: palette.gold,
-  waste: palette.slate,
+  waste: palette.rose,
   absorption: palette.violet,
 } as const;
 
@@ -56,10 +58,10 @@ export const emissionColors = {
  */
 export const sectorColors = {
   transport: palette.green,
-  residential: palette.teal,
+  residential: palette.violet,
   industry: palette.slate,
   tertiary: palette.blue,
-  agriculture: palette.violet,
+  agriculture: palette.teal,
   municipal: palette.gold,
 } as const;
 

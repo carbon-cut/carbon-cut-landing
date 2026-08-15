@@ -69,7 +69,7 @@ export default function StackedAreaChart({
         bottom: 64,
         containLabel: true,
         left: 8,
-        right: 8,
+        right: 24,
         top: 24,
       },
       legend: {

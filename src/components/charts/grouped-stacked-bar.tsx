@@ -60,51 +60,53 @@ export default function GroupedStackedBarChart({
         data: Array.from(new Set([...summaries, ...segments].map(({ label }) => label))),
         type: "scroll",
       },
-      series: groups.flatMap(({ id: groupId, segments, summary }, groupIndex) => [
-        ...(summary
-          ? [
-              {
-                barCategoryGap: "48%",
-                barGap: "8%",
-                barMaxWidth: 28,
-                data: summary.values,
-                id: summary.id,
-                itemStyle: getVisibleSeriesStyle(summary.color),
-                name: summary.label,
-                stack: `${groupId}-summary`,
-                type: "bar" as const,
-              },
-            ]
-          : []),
-        ...segments.map(({ color, id, label, values }) => ({
-          barCategoryGap: "48%",
-          barGap: "8%",
-          barMaxWidth: summary ? 10 : 32,
-          data: values,
-          id,
-          itemStyle: getVisibleSeriesStyle(color),
-          name: label,
-          stack: groupId,
-          type: "bar" as const,
-        })),
-        ...(summary && groups[groupIndex + 1]?.summary
-          ? [
-              {
-                barCategoryGap: "48%",
-                barGap: "8%",
-                barMaxWidth: 14,
-                data: categories.map(() => 0),
-                id: `${groupId}-spacer`,
-                itemStyle: { color: "transparent" },
-                name: `${groupId}-spacer`,
-                silent: true,
-                stack: `${groupId}-spacer`,
-                tooltip: { show: false },
-                type: "bar" as const,
-              },
-            ]
-          : []),
-      ]),
+      series: [
+        ...groups.flatMap(({ id: groupId, segments, summary }, groupIndex) => [
+          ...(summary
+            ? [
+                {
+                  barCategoryGap: "48%",
+                  barGap: "8%",
+                  barMaxWidth: 28,
+                  data: summary.values,
+                  id: summary.id,
+                  itemStyle: getVisibleSeriesStyle(summary.color),
+                  name: summary.label,
+                  stack: `${groupId}-summary`,
+                  type: "bar" as const,
+                },
+              ]
+            : []),
+          ...segments.map(({ color, id, label, values }) => ({
+            barCategoryGap: "48%",
+            barGap: "8%",
+            barMaxWidth: summary ? 10 : 32,
+            data: values,
+            id,
+            itemStyle: getVisibleSeriesStyle(color),
+            name: label,
+            stack: groupId,
+            type: "bar" as const,
+          })),
+          ...(summary && groups[groupIndex + 1]?.summary
+            ? [
+                {
+                  barCategoryGap: "48%",
+                  barGap: "8%",
+                  barMaxWidth: 14,
+                  data: categories.map(() => 0),
+                  id: `${groupId}-spacer`,
+                  itemStyle: { color: "transparent" },
+                  name: `${groupId}-spacer`,
+                  silent: true,
+                  stack: `${groupId}-spacer`,
+                  tooltip: { show: false },
+                  type: "bar" as const,
+                },
+              ]
+            : []),
+        ]),
+      ],
       tooltip: createAxisTooltip([...summaries, ...segments], formatChartValue, formatUnit),
       xAxis: {
         axisTick: { alignWithLabel: true },

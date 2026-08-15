@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently --kill-others-on-fail --names next,mock --prefix-colors blue,magenta \"npm run dev:next\" \"npm run mock:strapi\"",
+    "dev": "bash -lc 'set -a; [ -f .env.local ] && source .env.local; set +a; if [ \"$NEXT_PUBLIC_ENABLE_MSW\" = \"true\" ]; then npx concurrently --kill-others-on-fail --names next,mock --prefix-colors blue,magenta \"npm run dev:next\" \"npm run mock:strapi\"; else npm run dev:next; fi'",
     "dev:next": "next dev --turbopack",
     "mock:strapi": "tsx src/mocks/strapi-server.ts",
     "build": "next build",
