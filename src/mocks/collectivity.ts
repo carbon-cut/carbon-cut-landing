@@ -5,6 +5,7 @@ import type {
   CollectivitySetupData,
   CollectivitySetupSnapshot,
 } from "@/app/[locale]/collectivity/setup/_lib/types";
+import grandSfaxResult from "@/mocks/fixtures/collectivity-grand-sfax-result.json";
 
 export const COLLECTIVITY_MOCK_PASSWORD = "123";
 
@@ -326,6 +327,14 @@ export function getMockCollectivitySetupSnapshot(planId: string) {
     project: cloneProject(snapshot.project)!,
     currentInventory: cloneCurrentInventory(snapshot.currentInventory)!,
   };
+}
+
+export function getMockCollectivityInventoryResult(planId: string): Record<string, unknown> | null {
+  if (planId !== grandSfaxResult.data.project.slug) {
+    return null;
+  }
+
+  return JSON.parse(JSON.stringify(grandSfaxResult)) as Record<string, unknown>;
 }
 
 export function userOwnsMockCollectivityPlan(

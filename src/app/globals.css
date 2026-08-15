@@ -177,6 +177,70 @@
 }
 
 @layer components {
+  .chart-tooltip-surface {
+    --chart-tooltip-background: hsl(var(--foreground));
+    --chart-tooltip-foreground: hsl(var(--background));
+    --chart-tooltip-radius: calc(var(--radius) - 2px);
+    --chart-tooltip-padding: 0.375rem 0.75rem;
+    --chart-tooltip-font-size: 0.85rem;
+    --chart-tooltip-line-height: 1.25rem;
+
+    background-color: var(--chart-tooltip-background) !important;
+    border: 0 !important;
+    border-radius: var(--chart-tooltip-radius) !important;
+    box-sizing: border-box;
+    color: var(--chart-tooltip-foreground) !important;
+    font-size: var(--chart-tooltip-font-size) !important;
+    line-height: var(--chart-tooltip-line-height) !important;
+    padding: var(--chart-tooltip-padding) !important;
+  }
+
+  .chart-tooltip-arrow {
+    background-color: var(--chart-tooltip-background);
+    fill: var(--chart-tooltip-background);
+  }
+
+  .chart-tooltip-row {
+    align-items: center;
+    display: flex;
+    line-height: 1.25rem;
+  }
+
+  .chart-tooltip-identity {
+    align-items: center;
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .chart-tooltip-marker {
+    align-self: center;
+    border-radius: 9999px;
+    flex: none;
+    height: 0.7rem;
+    width: 0.7rem;
+    margin-top: 0.1rem;
+  }
+
+  .chart-tooltip-label {
+    font-weight: 400;
+  }
+
+  .chart-tooltip-measure {
+    align-items: baseline;
+    display: flex;
+    gap: 0.25rem;
+    margin-left: 0.75rem;
+  }
+
+  .chart-tooltip-value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .chart-tooltip-unit {
+    opacity: 0.75;
+  }
+
   .home-section {
     @apply flex flex-1 flex-wrap justify-center px-3 md:px-24 md:py-8;
   }

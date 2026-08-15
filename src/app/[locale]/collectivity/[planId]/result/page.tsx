@@ -1,18 +1,28 @@
 import { requireCollectivityPlanSession } from "@/lib/auth/access";
+import Typography from "@/components/ui/typography/typography";
+import { getScopedI18n } from "@/locales/server";
 
 import ResultRouteClient from "./ResultRouteClient";
 
-export default async function CollectivityPlanResultPage({
+export default async function CollectivityResultPocPage({
   params,
 }: {
   params: Promise<{ planId: string }>;
 }) {
   const { planId } = await params;
+  const t = await getScopedI18n("(pages).collectivityDashboard.resultPoc");
 
   await requireCollectivityPlanSession({
     requestedPlanId: planId,
-    returnTo: `/collectivity/${planId}/result`,
+    returnTo: `/collectivity/${planId}/result/poc`,
   });
 
-  return <ResultRouteClient projectSlug={planId} />;
+  return (
+    <>
+      <Typography asChild size="lg" variant="title">
+        <h1>{t("title")}</h1>
+      </Typography>
+      <ResultRouteClient projectSlug={planId} />
+    </>
+  );
 }

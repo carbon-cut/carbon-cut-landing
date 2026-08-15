@@ -20,10 +20,6 @@ type CalculateCurrentInventoryRequest = {
 
 The backend loads the project and current inventory from `projectSlug`. The request body carries the submitted inventory input that should be saved and calculated.
 
-### `GET /api/collectivity/projects/:projectSlug/current-inventory/result`
-
-The backend returns the latest persisted calculation result for the current inventory. The response shape is backend-owned.
-
 ## Success response
 
 ```ts
@@ -52,23 +48,7 @@ type CalculateCurrentInventoryResponse = {
       createdAt: string;
       updatedAt: string;
     };
-    calculationRun: {
-      id: string;
-      projectId: string;
-      inventoryId: string;
-      runType: "full";
-      status: "succeeded";
-      formulaVersion: string;
-      parameterSnapshot: CalculationParameterSnapshot;
-      startedAt: string;
-      completedAt: string;
-    };
-    calculationResult: {
-      id: string;
-      calculationRunId: string;
-      emissionsPayload: Record<string, unknown>;
-      createdAt: string;
-    };
+    calculationResult: InventoryCalculationResult;
   };
 };
 ```

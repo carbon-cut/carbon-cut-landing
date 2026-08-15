@@ -28,7 +28,7 @@ const typographyVariants = cva("", {
       sectionTitle: "font-semibold text-foreground leading-6 tracking-normal",
       eyebrow: "font-medium uppercase leading-4 tracking-[0.2em]",
       caption: "font-normal text-secondary leading-5 tracking-normal",
-      muted: "font-normal text-foreground/70 leading-5 tracking-normal",
+      muted: "font-normal text-foreground/60 leading-5 tracking-normal",
       marketingTitle: "font-bold text-foreground leading-[1.02] tracking-[-0.015em]",
       marketingSubtitle: "font-medium text-foreground leading-[1.2] tracking-[-0.01em]",
     },

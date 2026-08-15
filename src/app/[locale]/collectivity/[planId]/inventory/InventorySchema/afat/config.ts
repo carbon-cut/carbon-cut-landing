@@ -63,7 +63,21 @@ const livestockUnits: UnitConf = {
   },
 } as const;
 
+const livestockKeys = [
+  "dairyCattle",
+  "otherCattle",
+  "sheep",
+  "goats",
+  "horses",
+  "donkeysMules",
+  "camels",
+  "broilers",
+  "layingHens",
+  "turkeys",
+] as const;
+
 export const livestock = {
+  keys: livestockKeys,
   units: livestockUnits,
 };
 

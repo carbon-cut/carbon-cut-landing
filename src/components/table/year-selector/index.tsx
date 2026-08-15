@@ -16,7 +16,7 @@ export default function YearSelector({
   years,
   selectedYear,
   onSelectYear,
-  ariaLabel = "Annees",
+  ariaLabel = "years",
   className,
   errorYears = [],
 }: YearSelectorProps) {
@@ -25,7 +25,12 @@ export default function YearSelector({
       value={String(selectedYear ?? years[0] ?? "")}
       onValueChange={(value) => onSelectYear(Number(value))}
     >
-      <TabsList aria-label={ariaLabel} className={className ?? "flex flex-wrap gap-3"}>
+      <TabsList
+        aria-label={ariaLabel}
+        className={
+          className ?? "grid grid-cols-[repeat(auto-fit,minmax(50px,1fr))] gap-3 min-h-9 h-fit"
+        }
+      >
         {years.map((year) => {
           const hasError = errorYears.includes(year);
 
