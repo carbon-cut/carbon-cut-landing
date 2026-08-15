@@ -1,5 +1,6 @@
 "use client";
 
+import { useCollectivityProject } from "@/app/[locale]/collectivity/_components/collectivityProjectContext";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -12,7 +13,9 @@ import {
 } from "@/components/ui/forms";
 import { Input as InputRoot } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { displayUnit } from "@/lib/Unit";
 import { cn } from "@/lib/utils";
+import { useCurrentLocale, useScopedI18n } from "@/locales/client";
 import { Info } from "lucide-react";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { FieldValues, UseFormReturn } from "react-hook-form";
@@ -28,7 +31,7 @@ type Props<T extends FieldValues> = {
    * Inline unit token rendered inside the input (preferred unit depiction).
    * Use this instead of putting units in placeholders.
    */
-  unitAdornment?: React.ReactNode;
+  unitAdornment?: string;
   unitAdornmentPlacement?: "start" | "end";
   unit?: React.ReactNode;
   info?: React.ReactNode;
@@ -68,6 +71,10 @@ function InventoryTableInput<T extends FieldValues>({
   const inputRef = useRef<HTMLInputElement>(null);
   const unitRef = useRef<HTMLSpanElement>(null);
   const [unitPx, setUnitPx] = useState<number>(0);
+
+  const t = useScopedI18n("units");
+  const locale = useCurrentLocale();
+  const { country } = useCollectivityProject();
 
   // Measure unit chip width so padding always matches, regardless of token length.
   useLayoutEffect(() => {
@@ -201,7 +208,7 @@ function InventoryTableInput<T extends FieldValues>({
                         size === "xl" ? "h-6 leading-6" : "h-5 leading-5"
                       )}
                     >
-                      {unitAdornment}
+                      {displayUnit(unitAdornment, { localize: t, locale, countryCode: country })}
                     </span>
                   </div>
                 )}

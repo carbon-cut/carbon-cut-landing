@@ -13,6 +13,7 @@ import {
   percentScalarSchema,
 } from "../_shared";
 import { fertilizers, livestock, trees } from "./config";
+export { afatDefault } from "./default";
 
 const treesSchema = createGroupSchema({
   trackedTreeCrops: z.object({

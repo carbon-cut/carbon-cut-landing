@@ -15,17 +15,6 @@ export type YearBlockEditableCellArgs<T extends FieldValues> = {
   selectedYear: number;
 };
 
-type YearBlockReadonlyCellArgs = {
-  value: string;
-};
-
-type YearBlockCalculatedCellArgs = {
-  value: string;
-  rowLabel: string;
-  yearLabel: string;
-  columnLabel: string;
-};
-
 export function renderYearBlockEditableCell<T extends FieldValues>({
   form,
   baseName,

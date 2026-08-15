@@ -35,8 +35,6 @@ export default function InventoryDatasetButton({
 }: InventoryDatasetButtonProps) {
   const Icon = getInventoryDatasetNavIcon(datasetKey);
   const isTodo = progressPercent === 0;
-  const isInProgress =
-    progressPercent !== undefined && progressPercent > 0 && progressPercent < 100;
   const showSuccess = isComplete && !hasError;
 
   return (
@@ -48,18 +46,18 @@ export default function InventoryDatasetButton({
       aria-invalid={hasError}
       className={cn(
         "relative h-auto w-full justify-start gap-4 rounded-md border px-4 py-3 text-left shadow-none transition-colors",
-        isTodo
+        hasError
           ? active
-            ? "border-amber-300 bg-amber-50 text-foreground hover:border-amber-300 hover:bg-amber-100/80 hover:text-foreground"
-            : "border-amber-200 bg-card text-secondary hover:border-amber-300 hover:bg-amber-50/70 hover:text-foreground"
-          : showSuccess
+            ? "border-destructive/35 bg-destructive/5 text-foreground hover:border-destructive/35 hover:bg-destructive/10 hover:text-foreground"
+            : "border-destructive/25 bg-card text-secondary hover:border-destructive/35 hover:bg-destructive/5 hover:text-foreground"
+          : isTodo
             ? active
-              ? "border-primary/30 bg-primary/5 text-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-foreground"
-              : "border-primary/20 bg-card text-secondary hover:border-primary/30 hover:bg-primary/5 hover:text-foreground"
-            : hasError
+              ? "border-amber-300 bg-amber-50 text-foreground hover:border-amber-300 hover:bg-amber-100/80 hover:text-foreground"
+              : "border-amber-200 bg-card text-secondary hover:border-amber-300 hover:bg-amber-50/70 hover:text-foreground"
+            : showSuccess
               ? active
-                ? "border-destructive/35 bg-destructive/5 text-foreground hover:border-destructive/35 hover:bg-destructive/10 hover:text-foreground"
-                : "border-destructive/25 bg-card text-secondary hover:border-destructive/35 hover:bg-destructive/5 hover:text-foreground"
+                ? "border-primary/30 bg-primary/5 text-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-foreground"
+                : "border-primary/20 bg-card text-secondary hover:border-primary/30 hover:bg-primary/5 hover:text-foreground"
               : active
                 ? "border-primary/30 bg-primary/5 text-foreground hover:border-primary/30 hover:bg-primary/10 hover:text-foreground"
                 : "border-border bg-card text-secondary hover:border-primary/20 hover:bg-primary/5 hover:text-foreground",
@@ -71,12 +69,12 @@ export default function InventoryDatasetButton({
         aria-hidden="true"
         className={cn(
           "!size-6",
-          isTodo
-            ? "text-amber-700"
-            : showSuccess
-              ? "text-primary"
-              : hasError
-                ? "text-destructive"
+          hasError
+            ? "text-destructive"
+            : isTodo
+              ? "text-amber-700"
+              : showSuccess
+                ? "text-primary"
                 : active && "text-primary"
         )}
       />
@@ -92,12 +90,12 @@ export default function InventoryDatasetButton({
                 size="default"
                 className={cn(
                   "pointer-events-none",
-                  isTodo
-                    ? "border-amber-200 bg-amber-50 text-amber-700"
-                    : showSuccess
-                      ? "border-primary/15 bg-primary/10 text-primary"
-                      : hasError && isInProgress
-                        ? "border-destructive/15 bg-destructive/10 text-destructive"
+                  hasError
+                    ? "border-destructive/15 bg-destructive/10 text-destructive"
+                    : isTodo
+                      ? "border-amber-200 bg-amber-50 text-amber-700"
+                      : showSuccess
+                        ? "border-primary/15 bg-primary/10 text-primary"
                         : active
                           ? "border-primary/15 bg-primary/10 text-primary"
                           : "border-border/15 bg-muted text-secondary"
@@ -117,12 +115,12 @@ export default function InventoryDatasetButton({
                 size="xs"
                 className={cn(
                   "font-medium text-secondary",
-                  isTodo
-                    ? "text-amber-700"
-                    : showSuccess
-                      ? "text-primary"
-                      : hasError && isInProgress
-                        ? "text-destructive"
+                  hasError
+                    ? "text-destructive"
+                    : isTodo
+                      ? "text-amber-700"
+                      : showSuccess
+                        ? "text-primary"
                         : active && "text-foreground/80"
                 )}
               >

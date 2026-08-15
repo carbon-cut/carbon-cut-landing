@@ -5,8 +5,10 @@ import { usePathname } from "next/navigation";
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/setup/_lib/types";
 
 import CollectivitySidebar, { useCollectivityRouteItems } from "./collectivitySidebar";
+import { CollectivityProjectProvider } from "./collectivityProjectContext";
 
 const sidebarStyle = {
   "--sidebar-width": "13.5rem",
@@ -15,27 +17,31 @@ const sidebarStyle = {
 
 export default function WorkspaceShell({
   children,
+  initialSnapshot,
   planId,
 }: {
   children: ReactNode;
+  initialSnapshot: CollectivitySetupSnapshot;
   planId: string;
 }) {
   const pathname = usePathname();
   const routeItems = useCollectivityRouteItems(planId);
 
   return (
-    <SidebarProvider defaultOpen style={sidebarStyle}>
-      <TooltipProvider delayDuration={150}>
-        <CollectivitySidebar routeItems={routeItems} pathname={pathname} />
+    <CollectivityProjectProvider initialSnapshot={initialSnapshot}>
+      <SidebarProvider defaultOpen style={sidebarStyle}>
+        <TooltipProvider delayDuration={150}>
+          <CollectivitySidebar routeItems={routeItems} pathname={pathname} />
 
-        <SidebarInset className="min-w-0 bg-workspace">
-          <main id="content" className="min-h-screen bg-workspace text-foreground">
-            <div className="mx-auto w-full max-w-[1500px] px-4 py-3 md:px-8 md:py-4">
-              {children}
-            </div>
-          </main>
-        </SidebarInset>
-      </TooltipProvider>
-    </SidebarProvider>
+          <SidebarInset className="min-w-0 bg-workspace">
+            <main id="content" className="min-h-screen bg-workspace text-foreground">
+              <div className="mx-auto w-full max-w-[1500px] px-4 py-3 md:px-8 md:py-4">
+                {children}
+              </div>
+            </main>
+          </SidebarInset>
+        </TooltipProvider>
+      </SidebarProvider>
+    </CollectivityProjectProvider>
   );
 }

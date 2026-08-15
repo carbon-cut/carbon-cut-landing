@@ -9,6 +9,9 @@ import { toast } from "sonner";
 import {
   CollectivityApiError,
   debugCalculateCollectivityDatasetRequest,
+  type CollectivityResultRow,
+  type CollectivityResultsByYear,
+  type CollectivityResultYearKey,
 } from "@/app/[locale]/collectivity/_lib/queries";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
@@ -47,7 +50,7 @@ type DebugCalculationPanelState =
   | {
       status: "success";
       datasetKey: string;
-      emissionLeaves: DebugEmissionLeaf[];
+      resultRows: DebugResultRow[];
       warnings: DebugCalculationWarning[];
       formulaVersion: string;
       parameterCount: number;
@@ -59,11 +62,7 @@ type DebugCalculationPanelState =
       reasons: string[];
     };
 
-type DebugEmissionLeaf = {
-  path: string;
-  value: number;
-  unit: string;
-};
+type DebugResultRow = CollectivityResultRow & { year: CollectivityResultYearKey };
 
 type DebugCalculationWarning = {
   code?: string;
@@ -73,87 +72,34 @@ type DebugCalculationWarning = {
   details?: Record<string, unknown>;
 };
 
-const summedDebugDatasetKeys = new Set(["electricity"]);
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function collectEmissionLeaves(value: unknown, path: string[] = []): DebugEmissionLeaf[] {
-  if (Array.isArray(value)) {
-    return value.flatMap((nestedValue, index) =>
-      collectEmissionLeaves(nestedValue, [...path, String(index)])
+function getDisplayResultRows(resultRows: CollectivityResultsByYear): DebugResultRow[] {
+  return Object.entries(resultRows)
+    .flatMap(([year, rows]) =>
+      (rows ?? []).map((row) => ({ ...row, year: year as CollectivityResultYearKey }))
+    )
+    .sort(
+      (left, right) =>
+        left.year.localeCompare(right.year) ||
+        left.key.localeCompare(right.key) ||
+        left.direction.localeCompare(right.direction)
     );
-  }
-
-  if (!isRecord(value)) {
-    return [];
-  }
-
-  if (typeof value.value === "number" && typeof value.unit === "string") {
-    return [
-      {
-        path: path.join("."),
-        value: value.value,
-        unit: value.unit,
-      },
-    ];
-  }
-
-  return Object.entries(value).flatMap(([key, nestedValue]) =>
-    collectEmissionLeaves(nestedValue, [...path, key])
-  );
 }
 
-function getDisplayEmissionLeaves(
-  datasetKey: string,
-  emissionsPayload: unknown
-): DebugEmissionLeaf[] {
-  if (datasetKey === "naturalGas") {
-    const payload = isRecord(emissionsPayload) ? emissionsPayload : {};
-
-    return [
-      ...sumEmissionLeavesByYear("dataSet.total", payload.dataSet),
-      ...sumEmissionLeavesByYear("approximations.gpl", payload.approximations),
-    ];
-  }
-
-  const emissionLeaves = collectEmissionLeaves(emissionsPayload);
-
-  if (!summedDebugDatasetKeys.has(datasetKey)) {
-    return emissionLeaves;
-  }
-
-  return sumEmissionLeavesByYear("total", emissionsPayload);
-}
-
-function sumEmissionLeavesByYear(prefix: string, value: unknown): DebugEmissionLeaf[] {
-  const emissionLeaves = collectEmissionLeaves(value);
-  const totalsByYear = emissionLeaves.reduce<Record<string, { value: number; unit: string }>>(
-    (acc, leaf) => {
-      const yearSegment = leaf.path.split(".").find((segment) => /^y-\d{4}$/.test(segment));
-
-      if (!yearSegment) {
-        return acc;
-      }
-
-      const current = acc[yearSegment];
-      acc[yearSegment] = {
-        value: (current?.value ?? 0) + leaf.value,
-        unit: current?.unit ?? leaf.unit,
-      };
-      return acc;
-    },
-    {}
-  );
-
-  return Object.entries(totalsByYear)
-    .sort(([leftYear], [rightYear]) => leftYear.localeCompare(rightYear))
-    .map(([year, total]) => ({
-      path: `${prefix}.${year}`,
-      value: total.value,
-      unit: total.unit,
-    }));
+function getResultRowLabel(row: DebugResultRow) {
+  return [
+    row.year,
+    row.key,
+    row.owner,
+    row.family,
+    row.sector,
+    row.scope,
+    row.energy,
+    row.activity,
+    row.afatSource,
+    row.direction,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 }
 
 function getDefaultDataset(datasets: InventoryDataset[]) {
@@ -221,14 +167,17 @@ function DebugCalculationPanel({
 
       {result.status === "success" ? (
         <div className="space-y-1.5">
-          {result.emissionLeaves.map((leaf) => (
-            <div key={leaf.path} className="flex flex-wrap gap-x-3 gap-y-1">
+          {result.resultRows.map((row) => (
+            <div
+              key={`${row.year}-${row.key}-${row.owner}-${row.family}-${row.scope ?? ""}-${row.energy ?? ""}-${row.activity ?? ""}-${row.afatSource ?? ""}-${row.direction}`}
+              className="flex flex-wrap gap-x-3 gap-y-1"
+            >
               <Typography asChild variant="caption" size="sm" className="text-secondary">
-                <span>{leaf.path}</span>
+                <span>{getResultRowLabel(row)}</span>
               </Typography>
               <Typography asChild variant="label" size="sm">
                 <span>
-                  {leaf.value} {leaf.unit}
+                  {row.value} {row.unit}
                 </span>
               </Typography>
             </div>
@@ -458,17 +407,14 @@ export default function InventoryWorkspace({
         projectSlug,
         ...debugRequest,
       });
-      const emissionLeaves = getDisplayEmissionLeaves(
-        debugData.datasetKey,
-        debugData.emissionsPayload
-      );
+      const resultRows = getDisplayResultRows(debugData.resultRows);
 
       setDebugCalculationsByDatasetKey((current) => ({
         ...current,
         [debugData.datasetKey]: {
           status: "success",
           datasetKey: debugData.datasetKey,
-          emissionLeaves,
+          resultRows,
           warnings: debugData.warnings ?? [],
           formulaVersion: debugData.formulaVersion,
           parameterCount: debugData.parameterSnapshot?.items?.length ?? 0,

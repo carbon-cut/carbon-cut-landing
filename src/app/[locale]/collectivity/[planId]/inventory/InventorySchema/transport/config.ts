@@ -1,3 +1,5 @@
+import { createYearValueDefaults } from "../_sharedDefaults";
+
 type UnitConf = {
   [key: string]: {
     [key: string]: [string, ...string[]];
@@ -160,7 +162,7 @@ export const territoryVehicles = {
   units: territoryVehicleUnits,
 };
 
-export function buildTerritoryVehicleDefaultRows(rows: unknown) {
+export function buildTerritoryVehicleDefaultRows(rows: unknown, years: readonly number[]) {
   const currentRows = Array.isArray(rows)
     ? rows
         .filter((row) => row && typeof row === "object")
@@ -197,15 +199,15 @@ export function buildTerritoryVehicleDefaultRows(rows: unknown) {
       fuel,
       value: {
         vehicles: {
-          value: {},
+          value: createYearValueDefaults(years),
           unit: territoryVehicleUnits.measures.vehicles[0],
         },
         avgConsumption: {
-          value: {},
+          value: createYearValueDefaults(years),
           unit: territoryVehicleConsumptionUnitByFuel[fuel],
         },
         avgMileage: {
-          value: {},
+          value: createYearValueDefaults(years),
           unit: territoryVehicleUnits.measures.avgMileage[0],
         },
       },

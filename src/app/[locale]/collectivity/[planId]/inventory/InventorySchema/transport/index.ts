@@ -12,6 +12,7 @@ import {
   requiredStringSchema,
 } from "../_shared";
 import { airTransport, port, publicTransport, territoryVehicles } from "./config";
+export { transportDefault } from "./default";
 
 const territoryVehicleTypeKeys = Object.keys(territoryVehicles.allowedFuelsByType) as [
   keyof typeof territoryVehicles.allowedFuelsByType,

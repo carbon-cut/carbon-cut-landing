@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -9,61 +8,58 @@ import {
   fetchCollectivityInventoryResult,
 } from "@/app/[locale]/collectivity/_lib/queries";
 
-type ResultRouteClientProps = {
-  projectSlug: string;
-};
+import EmissionsBySectorPie from "./_charts/EmissionsBySectorPie";
+import EmissionsByScopePie from "./_charts/EmissionsByScopePie";
+import GHGDevelopmentChart from "./_charts/GHGDevelopmentChart";
+import MunicipalAssetsChart from "./_charts/MunicipalAssetsChart";
+import TerritorialEnergyChart from "./_charts/TerritorialEnergyChart";
+import ResultSummaryCards from "./_components/ResultSummaryCards";
 
-type ResultRow = {
-  key: string;
-  label: string;
-  years: Record<string, { value: number; unit: string }>;
-};
-
-function findResultRows(value: unknown): ResultRow[] {
-  if (!value || typeof value !== "object") {
-    return [];
-  }
-
-  if ("resultRows" in value && Array.isArray((value as { resultRows?: unknown }).resultRows)) {
-    return (value as { resultRows: ResultRow[] }).resultRows;
-  }
-
-  for (const nestedValue of Object.values(value)) {
-    const rows = findResultRows(nestedValue);
-
-    if (rows.length > 0) {
-      return rows;
-    }
-  }
-
-  return [];
-}
-
-export default function ResultRouteClient({ projectSlug }: ResultRouteClientProps) {
-  const { data } = useQuery({
+export default function ResultRouteClient({ projectSlug }: { projectSlug: string }) {
+  const resultQuery = useQuery({
     ...collectivityQueryOptions,
     queryKey: collectivityQueryKeys.result(projectSlug),
     queryFn: () => fetchCollectivityInventoryResult(projectSlug),
   });
-  const rows = useMemo(() => findResultRows(data), [data]);
 
   return (
-    <section className="p-6">
-      <table className="w-full border-collapse bg-card text-sm">
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.key} className="border-b border-border">
-              <td className="p-3 font-mono">{row.key}</td>
-              <td className="p-3">{row.label}</td>
-              {Object.entries(row.years).map(([year, result]) => (
-                <td key={year} className="p-3 text-right">
-                  {result.value.toFixed(2)} {result.unit}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
+    <>
+      <div className="mt-6">
+        <ResultSummaryCards
+          result={resultQuery.data}
+          isLoading={resultQuery.isLoading}
+          error={resultQuery.error}
+        />
+      </div>
+      <div className="mt-6 flex flex-col gap-6">
+        <GHGDevelopmentChart
+          result={resultQuery.data}
+          isLoading={resultQuery.isLoading}
+          error={resultQuery.error}
+        />
+        <MunicipalAssetsChart
+          result={resultQuery.data}
+          isLoading={resultQuery.isLoading}
+          error={resultQuery.error}
+        />
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <EmissionsByScopePie
+            result={resultQuery.data}
+            isLoading={resultQuery.isLoading}
+            error={resultQuery.error}
+          />
+          <EmissionsBySectorPie
+            result={resultQuery.data}
+            isLoading={resultQuery.isLoading}
+            error={resultQuery.error}
+          />
+        </div>
+        <TerritorialEnergyChart
+          result={resultQuery.data}
+          isLoading={resultQuery.isLoading}
+          error={resultQuery.error}
+        />
+      </div>
+    </>
   );
 }
