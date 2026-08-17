@@ -19,6 +19,7 @@ import { useScopedI18n } from "@/locales/client";
 
 import InventoryDatasetNav from "./InventoryDatasetNav";
 import InventoryDomainNav from "./InventoryDomainNav";
+import AssistantPanel from "./AssistantPanel";
 import FertilizersSurface from "../datasets/afat/fertilizers/surface";
 import LivestockSurface from "../datasets/afat/livestock/surface";
 import TreesSurface from "../datasets/afat/trees/surface";
@@ -476,6 +477,7 @@ export default function InventoryWorkspace({
           </Typography>
 
           <div className="flex flex-wrap items-center gap-2.5 md:justify-end">
+            <AssistantPanel />
             <Button
               type="button"
               variant="outline"

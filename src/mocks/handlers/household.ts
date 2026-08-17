@@ -4,7 +4,7 @@ import models from "@/mocks/data/models.json";
 import airports from "@/mocks/data/airports.json";
 import result from "@/mocks/data/result.json";
 
-const strapiUrl = process.env.STRAPI_INTERNAL_URL;
+const strapiUrl = process.env.BACKEND_URL;
 
 export const householdHandlers = [
   http.get(`${strapiUrl}/api/carbon-footprint/forms/cars/makes`, () => HttpResponse.json(makes)),

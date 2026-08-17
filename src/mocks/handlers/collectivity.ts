@@ -11,7 +11,7 @@ import {
   saveMockCollectivitySetup,
 } from "@/mocks/collectivity";
 
-const strapiUrl = process.env.STRAPI_INTERNAL_URL;
+const strapiUrl = process.env.BACKEND_URL;
 
 function error(status: number, message: string, details?: Record<string, unknown>) {
   return HttpResponse.json(

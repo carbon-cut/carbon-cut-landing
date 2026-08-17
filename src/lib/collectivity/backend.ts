@@ -78,10 +78,10 @@ export class CollectivityBackendError extends Error {
 }
 
 function getCollectivityBaseUrl() {
-  const baseUrl = process.env.STRAPI_INTERNAL_URL ?? process.env.NEXT_PUBLIC_SERVER;
+  const baseUrl = process.env.BACKEND_URL ?? process.env.NEXT_PUBLIC_SERVER;
 
   if (!baseUrl) {
-    throw new Error("Missing STRAPI_INTERNAL_URL or NEXT_PUBLIC_SERVER");
+    throw new Error("Missing BACKEND_URL or NEXT_PUBLIC_SERVER");
   }
 
   return baseUrl.replace(/\/$/, "");

@@ -1107,6 +1107,17 @@ export default {
             municipal: "Patrimoine municipal",
           },
         },
+        assistant: {
+          action: "Assistant",
+          title: "Assistant d’inventaire",
+          description: "Envoyez un message pour vérifier la connexion avec l’assistant.",
+          emptyTitle: "Prêt à vous aider",
+          emptyDescription: "Envoyez un message pour démarrer.",
+          placeholder: "Écrivez un message…",
+          inputHint: "Entrée pour envoyer",
+          scrollToLatest: "Voir les derniers messages",
+          error: "La réponse de l’assistant n’a pas pu être chargée.",
+        },
         debugCalculation: {
           action: "Calcul debug",
           label: "Résultat debug temporaire",

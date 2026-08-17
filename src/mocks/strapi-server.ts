@@ -5,7 +5,7 @@ loadEnvConfig(process.cwd());
 
 async function start() {
   const { handlers } = await import("./handlers");
-  const strapiUrl = new URL(process.env.STRAPI_INTERNAL_URL ?? "http://localhost:1337");
+  const strapiUrl = new URL(process.env.BACKEND_URL ?? "http://localhost:1337");
   const port = Number(strapiUrl.port || (strapiUrl.protocol === "https:" ? 443 : 80));
 
   const server = createServer(...handlers);

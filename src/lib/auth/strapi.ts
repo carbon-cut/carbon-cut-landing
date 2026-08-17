@@ -54,10 +54,10 @@ export class StrapiTransportError extends Error {
 }
 
 function getStrapiBaseUrl() {
-  const baseUrl = process.env.STRAPI_INTERNAL_URL;
+  const baseUrl = process.env.BACKEND_URL;
 
   if (!baseUrl) {
-    throw new Error("Missing STRAPI_INTERNAL_URL or NEXT_PUBLIC_SERVER");
+    throw new Error("Missing BACKEND_URL");
   }
 
   return baseUrl.replace(/\/$/, "");
