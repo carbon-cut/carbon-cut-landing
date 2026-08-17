@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/sheet";
 import { useScopedI18n } from "@/locales/client";
 
-export default function AssistantPanel() {
+export default function AssistantPanel({ datasetKey }: { datasetKey: string }) {
   const t = useScopedI18n("(pages).collectivityDashboard.inventoryWorkspace.assistant");
   const transport = useMemo(
     () => new DefaultChatTransport({ api: "/api/collectivity/assistant/inventory" }),
@@ -98,7 +98,12 @@ export default function AssistantPanel() {
             <PromptInput
               onSubmit={({ text }) => {
                 if (text.trim()) {
-                  void sendMessage({ text });
+                  void sendMessage(
+                    { text },
+                    {
+                      body: { datasetKey },
+                    }
+                  );
                 }
               }}
             >

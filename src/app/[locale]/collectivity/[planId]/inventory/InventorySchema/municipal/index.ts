@@ -2,6 +2,13 @@ import { createGroupSchema, metadata, createMatrixSchema, createGridSchema } fro
 import { z } from "zod";
 import { fleet, publicLighting, buildings, treesParksWaste } from "./config";
 export { municipalDefault } from "./default";
+export {
+  getMunicipalDatasetFieldCatalog,
+  municipalCatalog,
+  municipalDatasetKeys,
+  resolveMunicipalAIField,
+  type MunicipalDatasetKey,
+} from "./catalog";
 
 const fleetSchema = z.object({
   dataSet: z.object({

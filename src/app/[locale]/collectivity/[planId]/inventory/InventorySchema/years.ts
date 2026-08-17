@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createAIFieldCatalog, type AIFieldCatalogEntry } from "./_shared";
 
 const yearSchema = z.coerce.number().int();
 
@@ -7,4 +8,7 @@ const yearsSchema = z.object({
   comparisons: z.array(yearSchema),
 });
 
-export { yearSchema, yearsSchema };
+// The year plan comes from collectivity setup and is omitted from editable inventory input.
+const yearsCatalog = createAIFieldCatalog<AIFieldCatalogEntry>([]);
+
+export { yearSchema, yearsCatalog, yearsSchema };

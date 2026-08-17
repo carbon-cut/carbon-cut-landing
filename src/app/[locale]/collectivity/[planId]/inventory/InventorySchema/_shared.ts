@@ -315,6 +315,57 @@ function createGroupSchema<Shape extends ZodRawShape>(shape: Shape) {
 
 const datasetPlaceholderSchema = z.object({});
 
+export type AIFieldDimension = {
+  key: string;
+  allowedValues?: readonly string[];
+};
+
+export type AIFieldDefinition = {
+  datasetKey: string;
+  id: string;
+  label: string;
+  description: string;
+  valueType: "number" | "string";
+  expectedUnit: string | readonly string[] | null;
+  dimensions: readonly AIFieldDimension[];
+  aliases: readonly string[];
+};
+
+export type AIFieldCatalogEntry = AIFieldDefinition & {
+  /** Application-only RHF value path. Never include this in model context. */
+  fieldPath: string;
+};
+
+export type AIFieldCatalog = {
+  fields: readonly AIFieldDefinition[];
+  resolve: (id: string) => AIFieldCatalogEntry | undefined;
+};
+
+export function createAIFieldCatalog<const TEntry extends AIFieldCatalogEntry>(
+  entries: readonly TEntry[]
+) {
+  const entriesById = new Map(entries.map((entry) => [entry.id, entry]));
+
+  return {
+    fields: entries.map(({ fieldPath: _fieldPath, ...field }) => field),
+    resolve: (id: string) => entriesById.get(id),
+  };
+}
+
+export function createGroupCatalog(catalogs: Record<string, AIFieldCatalog>) {
+  const fields = Object.values(catalogs).flatMap((catalog) => catalog.fields);
+
+  return {
+    fields,
+    getDatasetFields: (datasetKey: string) =>
+      fields.filter((field) => field.datasetKey === datasetKey),
+    resolve: (id: string) =>
+      Object.values(catalogs)
+        .find((catalog) => catalog.resolve(id))
+        ?.resolve(id),
+  };
+}
+
 function createRepeatableRowGroupSchema<RowSchema extends ZodTypeAny>(rowSchema: RowSchema) {
   return z
     .object({

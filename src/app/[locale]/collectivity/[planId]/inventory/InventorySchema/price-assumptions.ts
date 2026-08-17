@@ -1,4 +1,9 @@
-import { createGroupSchema, createMatrixSchema } from "./_shared";
+import {
+  createAIFieldCatalog,
+  createGroupSchema,
+  createMatrixSchema,
+  type AIFieldCatalogEntry,
+} from "./_shared";
 
 type NonEmptyStringArray = [string, ...string[]];
 
@@ -19,4 +24,29 @@ const priceAssumptionsSchema = createGroupSchema({
     .optional(),
 });
 
-export { energyPriceKeys, energyPriceUnits, priceAssumptionsSchema };
+const energyPriceLabels: Record<(typeof energyPriceKeys)[number], string> = {
+  electricity: "Prix unitaire de l’électricité",
+  diesel: "Prix unitaire du diesel",
+  petrol: "Prix unitaire de l’essence",
+  gpl: "Prix unitaire du GPL",
+  gnv: "Prix unitaire du GNV",
+  naturalGas: "Prix unitaire du gaz naturel",
+};
+
+const priceAssumptionsCatalogEntries = energyPriceKeys.map(
+  (energy): AIFieldCatalogEntry => ({
+    datasetKey: "priceAssumptions",
+    id: `priceAssumptions.energy.${energy}`,
+    fieldPath: `priceAssumptions.energy.${energy}.value`,
+    label: energyPriceLabels[energy],
+    description: `${energyPriceLabels[energy]} utilisé pour convertir une dépense monétaire en donnée d’activité.`,
+    valueType: "number",
+    expectedUnit: energyPriceUnits[energy][0],
+    dimensions: [{ key: "year" }],
+    aliases: [energy, "prix énergie", "tarif"],
+  })
+);
+
+const priceAssumptionsCatalog = createAIFieldCatalog(priceAssumptionsCatalogEntries);
+
+export { energyPriceKeys, energyPriceUnits, priceAssumptionsCatalog, priceAssumptionsSchema };

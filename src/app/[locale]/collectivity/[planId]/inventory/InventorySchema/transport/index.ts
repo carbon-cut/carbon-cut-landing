@@ -13,6 +13,13 @@ import {
 } from "../_shared";
 import { airTransport, port, publicTransport, territoryVehicles } from "./config";
 export { transportDefault } from "./default";
+export {
+  getTransportDatasetFieldCatalog,
+  resolveTransportAIField,
+  transportCatalog,
+  transportDatasetKeys,
+  type TransportDatasetKey,
+} from "./catalog";
 
 const territoryVehicleTypeKeys = Object.keys(territoryVehicles.allowedFuelsByType) as [
   keyof typeof territoryVehicles.allowedFuelsByType,

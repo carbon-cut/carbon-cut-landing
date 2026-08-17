@@ -14,6 +14,13 @@ import {
 } from "../_shared";
 import { fertilizers, livestock, trees } from "./config";
 export { afatDefault } from "./default";
+export {
+  afatCatalog,
+  afatDatasetKeys,
+  getAfatDatasetFieldCatalog,
+  resolveAfatAIField,
+  type AfatDatasetKey,
+} from "./catalog";
 
 const treesSchema = createGroupSchema({
   trackedTreeCrops: z.object({

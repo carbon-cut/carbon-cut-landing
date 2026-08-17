@@ -1,13 +1,13 @@
-import { createGroupSchema } from "./_shared";
-import { yearsSchema } from "./years";
-import { municipalSchema } from "./municipal";
-import { energySchema } from "./energy";
-import { transportSchema } from "./transport";
-import { afatSchema } from "./afat";
-import { wastewaterSanitationSchema } from "./wastewaterSanitation";
-import { wasteSchema } from "./waste";
-import { priceAssumptionsSchema } from "./price-assumptions";
-import { sharedDataSchema } from "./shared-data";
+import { createGroupCatalog, createGroupSchema } from "./_shared";
+import { yearsCatalog, yearsSchema } from "./years";
+import { municipalCatalog, municipalSchema } from "./municipal";
+import { energyCatalog, energySchema } from "./energy";
+import { transportCatalog, transportSchema } from "./transport";
+import { afatCatalog, afatSchema } from "./afat";
+import { wastewaterSanitationCatalog, wastewaterSanitationSchema } from "./wastewaterSanitation";
+import { wasteCatalog, wasteSchema } from "./waste";
+import { priceAssumptionsCatalog, priceAssumptionsSchema } from "./price-assumptions";
+import { sharedDataCatalog, sharedDataSchema } from "./shared-data";
 
 const inventorySchema = createGroupSchema({
   years: yearsSchema,
@@ -25,4 +25,30 @@ const inventoryInputSchema = inventorySchema.omit({
   years: true,
 });
 
-export { inventorySchema, inventoryInputSchema };
+const inventoryCatalog = createGroupCatalog({
+  years: yearsCatalog,
+  municipal: municipalCatalog,
+  energy: energyCatalog,
+  transport: transportCatalog,
+  afat: afatCatalog,
+  wastewaterSanitation: wastewaterSanitationCatalog,
+  waste: wasteCatalog,
+  sharedData: sharedDataCatalog,
+  priceAssumptions: priceAssumptionsCatalog,
+});
+
+function getInventoryDatasetFieldCatalog(datasetKey: string) {
+  return inventoryCatalog.getDatasetFields(datasetKey);
+}
+
+function resolveInventoryAIField(id: string) {
+  return inventoryCatalog.resolve(id);
+}
+
+export {
+  getInventoryDatasetFieldCatalog,
+  inventoryCatalog,
+  inventorySchema,
+  inventoryInputSchema,
+  resolveInventoryAIField,
+};

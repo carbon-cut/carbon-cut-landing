@@ -8,6 +8,13 @@ import {
 } from "../_shared";
 import { sharedData } from "./config";
 export { sharedDataDefault } from "./default";
+export {
+  getSharedDataDatasetFieldCatalog,
+  resolveSharedDataAIField,
+  sharedDataCatalog,
+  sharedDataDatasetKeys,
+  type SharedDataDatasetKey,
+} from "./catalog";
 
 const populationSchema = z.object({
   dataSet: createMatrixSchema(sharedData.population.metricKeys, {

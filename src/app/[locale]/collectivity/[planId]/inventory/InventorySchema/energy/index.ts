@@ -4,6 +4,13 @@ import { createGroupSchema, createMatrixSchema, metadata } from "../_shared";
 import { electricity, naturalGas } from "./config";
 import { createTerritorialEnergyBlockSchema } from "./territorial-energy";
 export { energyDefault } from "./default";
+export {
+  energyCatalog,
+  energyDatasetKeys,
+  getEnergyDatasetFieldCatalog,
+  resolveEnergyAIField,
+  type EnergyDatasetKey,
+} from "./catalog";
 
 const electricitySchema = z.object({
   dataSet: z.object({
