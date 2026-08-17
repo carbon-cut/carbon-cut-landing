@@ -1,80 +1,63 @@
 # Collectivity Backlog
 
-Centralized backlog for collectivity work.
+This is the single active backlog for collectivity work. Product-truth questions
+are intentionally deferred until the product-truth documentation is reorganized.
 
-Keep this file as the working index for open items. If another doc contains a backlog-shaped note, fold the actionable part back here instead of letting priorities drift across multiple files.
+## P0 — Auth Reliability
 
-## Product Questions
+- Resolve the backend callback that posts to `/api/revalidate`: locate the Strapi
+  webhook/lifecycle configuration, agree its callback contract, then either
+  implement a protected endpoint or remove/retarget the callback.
 
-- Clarify multi-collectivity identity rules for the same city:
-  same ID or different IDs, whether data is shared, and how access is coordinated inside and outside the project ID.
+- Make refresh-token rotation persist the replacement cookie pair in the browser.
+  Verify the forwarded Next response carries the rotated cookies, clear cookies on
+  failed refresh, and cover the `401 → refresh → retry` flow end to end.
+
+## Auth Flow
+
+- Add signed-in-user guards for the auth entry routes and guard reset-password
+  access when its required token or code is missing or invalid.
+
+- Keep auth guards and redirects consistent with safe `returnTo` handling.
+
+- Investigate the reported logout failure.
+
+- Centralize protected frontend API `401` handling so it consistently follows the
+  logout flow and clears auth state.
+
+- Define and apply one protected-API session-validity policy, preserving the
+  distinction between `401`, `403`, and upstream `5xx` responses.
+
+- Prevent concurrent refresh-token rotation races for the same browser session.
+
+- Investigate the remaining collectivity asset/debug-route `404` requests.
+
+## Result Display
+
+- Add a localized, accessible, non-blocking warning panel to the persisted result
+  view. It must render the result API's structured `warnings` array, including an
+  item or path when supplied; warnings are not calculation errors.
 
 ## UX And UI
 
-- Add flags to the country select in `cadrage`.
+- Add flags to the country select in collectivity setup.
 
-- Centralize frontend request handling primitives for collectivity surfaces.
-  Scope: shared hooks/components for loading state, waiting state, error display, and authenticated request handling instead of per-surface ad hoc implementations.
-  Expected outcome: inventory and adjacent collectivity screens reuse the same request pattern and UI behavior.
+- Consolidate collectivity request-state handling: loading, pending, errors, and
+  authenticated requests should use shared frontend primitives.
 
-- Improve inventory domain-nav responsive behavior:
-  keep the domain nav on a single row; when there is room, inactive tabs should share the available width; when space gets tight, inactive tabs should compress like browser tabs and ellipsize; the active tab should keep the width it needs; do not solve this with wrapping, aggressive font shrinking, or equal-width segmented controls.
+- Add a “missing species?” action to AFAT selectors for animals, crops, and trees.
 
-- Add a `"missing species?"` report action for AFAT selectors:
-  when the needed animal, culture, or tree is not available in the current list, the user should be able to open a dialog and send a request to add that species.
+## Collection Schema
 
-## Auth
+- Add collection-layer metadata where needed: units; source/provenance; data
+  quality; required/optional status; validation rules; and accepted formats.
 
-- Add route-level guard for auth pages when the user is already signed in.
-  Scope: `/auth/sign-in`, `/auth/sign-up`, `/auth/forgot-password`, `/auth/reset-password`, `/auth/confirm-email`.
-  Expected behavior: authenticated users should be redirected away from auth entry pages. Current likely target: `/form`.
+- Keep collection schema independent from calculation, scenario, action-planning,
+  and reporting layers.
 
-- Add guard for reset-password access when required token or code is missing.
-  Scope: `/auth/reset-password`.
-  Expected behavior: if reset token or code is absent or invalid in URL params, redirect the user to the password recovery entry flow.
+## Integration Coverage
 
-- Align auth guard behavior with `returnTo` handling.
-  Redirects should remain safe and continue using current sanitization rules.
-
-- Investigate the `logout doesn't work?` bug.
-
-- Centralize authenticated API `401` handling.
-  Expected behavior: when a protected frontend-to-Next API call receives `401 unauthenticated`, the app should route through the logout flow and clear auth state consistently instead of each feature showing its own local error. Scope includes collectivity debug calculation and any other protected API action.
-
-## Inventaire Decision Blockers
-
-These items block a final `inventaire` route contract and should stay explicit until answered.
-
-- Define the minimum usable inventory:
-  what the minimum required dataset set is for a first usable inventory result, what can remain missing, what blocks progress completely, and what can be estimated or deferred.
-
-- Define quality and missing-data handling:
-  how missing data is represented, how estimated or proxy data is represented, what notes or clarifications are required, what validation means at dataset level, and what completeness means operationally.
-
-- Decide import versus manual entry boundaries:
-  which source families are better by import, which are realistic for manual entry, which require both, and whether files are first-scope or later-scope.
-
-- Confirm route-contract readiness:
-  close remaining unresolved points from `inventaire-input-inventory.md`, the completeness model, the import/manual split, and the minimum usable dataset set.
-
-## Collection Schema Improvements
-
-Strengthen the data-collection layer without mixing it with calculation or scenario logic.
-
-- Add `unit` metadata at dataset, table, or row level where needed.
-
-- Add source and provenance metadata such as organization, document name, contact person, collection date, and source type.
-
-- Add quality metadata such as status, confidence, and comment.
-
-- Add collection-layer metadata for required versus optional status, validation rules, and accepted format.
-
-- Keep collection schema separate from later layers such as emission calculation, scenario projection, climate action planning, and report generation.
-
-## Current Implementation TODOs
-
-- AFAT livestock: develop the species-dependent confined-time-share (%) block.
-  Current location: `src/app/collectivity/_inventaire/datasets/afat/livestock/surface.tsx`.
-
-- AFAT perennial plantation stock: develop calculated totals display.
-  Current location: `src/app/collectivity/_inventaire/datasets/afat/perennial-plantation-stock/config.ts`.
+- Expand the existing real-backend collectivity integration test into a complete
+  workflow test: setup creation and editing, inventory persistence, calculation,
+  and result retrieval. Setup-edit coverage includes destructive year/applicability
+  changes, slug conflicts, and refreshed state.

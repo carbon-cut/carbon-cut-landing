@@ -2,7 +2,7 @@
 
 This document defines the frontend/backend contract for collectivity project initialization.
 
-It was first used for `docs/collectivity/tasks/task1.md`.
+It was first used for the initial collectivity project setup implementation.
 
 It exists to align frontend and backend before implementation.
 
