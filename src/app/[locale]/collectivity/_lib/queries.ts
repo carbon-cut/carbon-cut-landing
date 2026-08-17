@@ -20,6 +20,11 @@ export const collectivityQueryOptions = {
   retry: 1,
 };
 
+export const collectivitySupportedAircraftQueryOptions = {
+  ...collectivityQueryOptions,
+  staleTime: 2 * 24 * 60 * 60 * 1000,
+};
+
 export const collectivityQueryKeys = {
   currentInventory: (projectSlug: string) =>
     ["collectivity", "currentInventory", projectSlug] as const,

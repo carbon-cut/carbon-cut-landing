@@ -37,6 +37,35 @@ const inventoryCatalog = createGroupCatalog({
   priceAssumptions: priceAssumptionsCatalog,
 });
 
+type InventoryAssistantCatalogOptions = {
+  aircraftValues: readonly { value: string; label: string }[];
+};
+
+function buildInventoryAssistantCatalog({ aircraftValues }: InventoryAssistantCatalogOptions) {
+  const aircraftLabels = Object.fromEntries(
+    aircraftValues.map(({ value, label }) => [value, label])
+  );
+
+  return inventoryCatalog.fields.map((field) => {
+    if (field.id !== "transport.airTransport.movements") {
+      return field;
+    }
+
+    return {
+      ...field,
+      dimensions: field.dimensions.map((dimension) =>
+        dimension.key === "aircraft"
+          ? {
+              ...dimension,
+              allowedValues: aircraftValues.map(({ value }) => value),
+              allowedValueLabels: aircraftLabels,
+            }
+          : dimension
+      ),
+    };
+  });
+}
+
 function getInventoryDatasetFieldCatalog(datasetKey: string) {
   return inventoryCatalog.getDatasetFields(datasetKey);
 }
@@ -47,6 +76,7 @@ function resolveInventoryAIField(id: string) {
 
 export {
   getInventoryDatasetFieldCatalog,
+  buildInventoryAssistantCatalog,
   inventoryCatalog,
   inventorySchema,
   inventoryInputSchema,

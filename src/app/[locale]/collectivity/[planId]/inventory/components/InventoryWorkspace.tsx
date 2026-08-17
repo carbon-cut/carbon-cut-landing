@@ -477,7 +477,7 @@ export default function InventoryWorkspace({
           </Typography>
 
           <div className="flex flex-wrap items-center gap-2.5 md:justify-end">
-            {activeDataset ? <AssistantPanel datasetKey={activeDataset.key} /> : null}
+            <AssistantPanel />
             <Button
               type="button"
               variant="outline"

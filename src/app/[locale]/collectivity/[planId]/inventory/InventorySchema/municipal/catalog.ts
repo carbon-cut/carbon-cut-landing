@@ -1,4 +1,4 @@
-import { createAIFieldCatalog, type AIFieldCatalogEntry, type AIFieldDefinition } from "../_shared";
+import { createAIFieldCatalog, type AIFieldCatalogEntry } from "../_shared";
 import { buildings, fleet, publicLighting, treesParksWaste } from "./config";
 
 export const municipalDatasetKeys = [
@@ -7,220 +7,200 @@ export const municipalDatasetKeys = [
   "buildings",
   "treesParksWaste",
 ] as const;
-
 export type MunicipalDatasetKey = (typeof municipalDatasetKeys)[number];
 
-const yearDimension = { key: "year" } as const;
+const year = { key: "year" } as const;
 
-function createYearValueField({
-  datasetKey,
-  id,
-  fieldPath,
-  label,
-  description,
-  expectedUnit,
-  aliases,
-  dimensions = [],
-}: Omit<AIFieldCatalogEntry, "valueType" | "dimensions"> & {
-  datasetKey: MunicipalDatasetKey;
-  dimensions?: readonly AIFieldDefinition["dimensions"][number][];
-}) {
+function yearField(
+  entry: Omit<AIFieldCatalogEntry, "valueType" | "dimensions"> & {
+    dimensions?: AIFieldCatalogEntry["dimensions"];
+  }
+) {
   return {
-    datasetKey,
-    id,
-    fieldPath,
-    label,
-    description,
+    ...entry,
     valueType: "number" as const,
-    expectedUnit,
-    dimensions: [yearDimension, ...dimensions],
-    aliases,
+    dimensions: [year, ...(entry.dimensions ?? [])],
   };
 }
 
-const fuelLabels = {
-  petrol: "essence",
-  diesel: "diesel",
-  gpl: "GPL",
-  electricity: "électricité",
-  gnv: "GNV",
-  hybrid: "hybride",
-} as const;
-
-const publicLightingLampLabels = {
-  shp: "lampes sodium haute pression",
-  hpl: "lampes mercure haute pression",
-  led: "lampes LED",
-} as const;
-
 const municipalCatalogEntries = [
-  ...fleet.carEngineKeys.map((engine) =>
-    createYearValueField({
-      datasetKey: "fleet",
-      id: `municipal.fleet.vehicles.${engine}`,
-      fieldPath: `municipal.fleet.dataSet.vehicles.${engine}.value`,
-      label: `Nombre annuel de véhicules municipaux — ${fuelLabels[engine]}`,
-      description: `Nombre de véhicules municipaux utilisant ${fuelLabels[engine]}.`,
-      expectedUnit: fleet.units.vehicles.default[0] || null,
-      aliases: [`véhicules ${fuelLabels[engine]}`, `flotte ${fuelLabels[engine]}`],
-    })
-  ),
-  ...fleet.fuelKeys.map((fuel) =>
-    createYearValueField({
-      datasetKey: "fleet",
-      id: `municipal.fleet.consumption.${fuel}`,
-      fieldPath: `municipal.fleet.dataSet.consumption.${fuel}.value`,
-      label: `Consommation annuelle de la flotte — ${fuelLabels[fuel]}`,
-      description: `Quantité annuelle de ${fuelLabels[fuel]} consommée par la flotte municipale.`,
-      expectedUnit: fleet.units.consumption[fuel][0] || null,
-      aliases: [`consommation flotte ${fuelLabels[fuel]}`, `carburant ${fuelLabels[fuel]}`],
-    })
-  ),
-  ...fleet.fuelKeys.map((fuel) =>
-    createYearValueField({
-      datasetKey: "fleet",
-      id: `municipal.fleet.spend.${fuel}`,
-      fieldPath: `municipal.fleet.dataSet.spend.${fuel}.value`,
-      label: `Dépense annuelle de la flotte — ${fuelLabels[fuel]}`,
-      description: `Montant annuel dépensé pour ${fuelLabels[fuel]} par la flotte municipale.`,
-      expectedUnit: fleet.units.spend.default[0] || null,
-      aliases: [`dépense flotte ${fuelLabels[fuel]}`, `facture ${fuelLabels[fuel]}`],
-    })
-  ),
-  createYearValueField({
+  yearField({
+    datasetKey: "fleet",
+    id: "municipal.fleet.vehicles",
+    fieldPath: "municipal.fleet.dataSet.vehicles.{engine}.value",
+    label: "Nombre annuel de véhicules municipaux",
+    description: "Nombre de véhicules municipaux par motorisation.",
+    expectedUnit: null,
+    dimensions: [{ key: "engine", allowedValues: fleet.carEngineKeys }],
+    aliases: ["flotte municipale", "parc automobile", "véhicules"],
+  }),
+  yearField({
+    datasetKey: "fleet",
+    id: "municipal.fleet.consumption",
+    fieldPath: "municipal.fleet.dataSet.consumption.{fuel}.value",
+    label: "Consommation annuelle de la flotte municipale",
+    description: "Quantité annuelle de carburant ou d’électricité consommée par la flotte.",
+    expectedUnit: null,
+    unitByDimension: {
+      fuel: Object.fromEntries(
+        fleet.fuelKeys.map((fuel) => [fuel, fleet.units.consumption[fuel][0]])
+      ),
+    },
+    dimensions: [{ key: "fuel", allowedValues: fleet.fuelKeys }],
+    aliases: ["consommation flotte", "carburant", "énergie flotte"],
+  }),
+  yearField({
+    datasetKey: "fleet",
+    id: "municipal.fleet.spend",
+    fieldPath: "municipal.fleet.dataSet.spend.{fuel}.value",
+    label: "Dépense annuelle de la flotte municipale",
+    description: "Montant annuel dépensé par énergie ou carburant pour la flotte.",
+    expectedUnit: "currency",
+    dimensions: [{ key: "fuel", allowedValues: fleet.fuelKeys }],
+    aliases: ["dépense flotte", "facture carburant", "coût énergie"],
+  }),
+  yearField({
     datasetKey: "fleet",
     id: "municipal.fleet.composition",
     fieldPath: "municipal.fleet.dataSet.composition.{category}.{engine}.value",
     label: "Composition annuelle de la flotte municipale",
-    description: "Nombre de véhicules par catégorie de flotte et type de motorisation.",
-    expectedUnit: fleet.units.composition.default[0] || null,
+    description: "Nombre de véhicules par catégorie et motorisation.",
+    expectedUnit: null,
     dimensions: [
       { key: "category", allowedValues: fleet.categoryKeys },
       { key: "engine", allowedValues: fleet.carEngineKeys },
     ],
-    aliases: ["répartition flotte", "composition du parc", "parc automobile"],
+    aliases: ["répartition flotte", "composition du parc"],
   }),
-  ...publicLighting.yearlyKeys.map((key) =>
-    createYearValueField({
+  ...publicLighting.yearlyKeys.map((metric) =>
+    yearField({
       datasetKey: "publicLighting",
-      id: `municipal.publicLighting.yearly.${key}`,
-      fieldPath: `municipal.publicLighting.dataSet.yearly.${key}.value`,
+      id: `municipal.publicLighting.yearly.${metric}`,
+      fieldPath: `municipal.publicLighting.dataSet.yearly.${metric}.value`,
       label:
-        key === "consumption"
+        metric === "consumption"
           ? "Consommation annuelle d’électricité de l’éclairage public"
           : "Facture annuelle d’électricité de l’éclairage public",
       description:
-        key === "consumption"
-          ? "Électricité consommée annuellement par le réseau municipal d’éclairage public."
-          : "Montant annuel facturé pour l’électricité du réseau municipal d’éclairage public.",
-      expectedUnit: publicLighting.units.yearly[key][0] || null,
+        metric === "consumption"
+          ? "Électricité consommée par le réseau municipal d’éclairage public."
+          : "Montant annuel facturé pour l’électricité de l’éclairage public.",
+      expectedUnit: publicLighting.units.yearly[metric][0] || null,
       aliases:
-        key === "consumption"
+        metric === "consumption"
           ? ["consommation éclairage public", "consommation EP"]
           : ["facture éclairage public", "facture EP"],
     })
   ),
-  ...publicLighting.infrastructureKeys.map((key) => {
-    const labels = {
-      cabinets: "Nombre d’armoires d’éclairage public",
-      meters: "Nombre de compteurs d’éclairage public",
-      dimmers: "Nombre de variateurs d’éclairage public",
-      power: "Puissance installée de l’éclairage public",
-    } as const;
-
-    return createYearValueField({
+  yearField({
+    datasetKey: "publicLighting",
+    id: "municipal.publicLighting.infrastructure.count",
+    fieldPath: "municipal.publicLighting.dataSet.infrastructure.{infrastructure}.value",
+    label: "Équipements d’infrastructure d’éclairage public",
+    description: "Nombre d’armoires, compteurs ou variateurs du réseau d’éclairage public.",
+    expectedUnit: null,
+    dimensions: [{ key: "infrastructure", allowedValues: ["cabinets", "meters", "dimmers"] }],
+    aliases: ["armoires", "compteurs", "variateurs", "infrastructure éclairage public"],
+  }),
+  yearField({
+    datasetKey: "publicLighting",
+    id: "municipal.publicLighting.infrastructure.power",
+    fieldPath: "municipal.publicLighting.dataSet.infrastructure.power.value",
+    label: "Puissance installée de l’éclairage public",
+    description: "Puissance du réseau municipal d’éclairage public.",
+    expectedUnit: "kW",
+    aliases: ["puissance éclairage public", "puissance EP"],
+  }),
+  ...publicLighting.lampCols.map((metric) =>
+    yearField({
       datasetKey: "publicLighting",
-      id: `municipal.publicLighting.infrastructure.${key}`,
-      fieldPath: `municipal.publicLighting.dataSet.infrastructure.${key}.value`,
-      label: labels[key],
-      description: `${labels[key]} pour le réseau municipal.`,
-      expectedUnit: publicLighting.units.infrastructure[key][0] || null,
-      aliases: [key, "infrastructure éclairage public"],
-    });
-  }),
-  ...publicLighting.lampKeys.flatMap((lamp) =>
-    publicLighting.lampCols.map((metric) =>
-      createYearValueField({
-        datasetKey: "publicLighting",
-        id: `municipal.publicLighting.lamps.${lamp}.${metric}`,
-        fieldPath: `municipal.publicLighting.dataSet.lamps.${lamp}.${metric}.value`,
-        label:
-          metric === "unitPower"
-            ? `Puissance unitaire des ${publicLightingLampLabels[lamp]}`
-            : `Nombre de ${publicLightingLampLabels[lamp]}`,
-        description:
-          metric === "unitPower"
-            ? "Puissance électrique d’une lampe de ce type."
-            : "Nombre de lampes de ce type installées dans le réseau d’éclairage public.",
-        expectedUnit: publicLighting.units.lamps[metric][0] || null,
-        aliases: [publicLightingLampLabels[lamp], `${lamp} ${metric}`],
-      })
-    )
+      id: `municipal.publicLighting.lamps.${metric}`,
+      fieldPath: `municipal.publicLighting.dataSet.lamps.{lampType}.${metric}.value`,
+      label:
+        metric === "unitPower"
+          ? "Puissance unitaire des lampes d’éclairage public"
+          : "Nombre de lampes d’éclairage public",
+      description: "Valeur par type de lampe : SHP, HPL ou LED.",
+      expectedUnit: publicLighting.units.lamps[metric][0] || null,
+      dimensions: [{ key: "lampType", allowedValues: publicLighting.lampKeys }],
+      aliases: [
+        metric === "unitPower" ? "puissance lampe" : "points lumineux",
+        "SHP",
+        "HPL",
+        "LED",
+      ],
+    })
   ),
-  ...buildings.areaKeys.map((key) => {
-    const labels = {
-      building: "Nombre de bâtiments municipaux",
-      openSurface: "Surface ouverte des bâtiments municipaux",
-      closedSurface: "Surface fermée des bâtiments municipaux",
-    } as const;
-
-    return createYearValueField({
-      datasetKey: "buildings",
-      id: `municipal.buildings.areas.${key}`,
-      fieldPath: `municipal.buildings.dataSet.areas.${key}.value`,
-      label: labels[key],
-      description: `${labels[key]} sur le périmètre municipal.`,
-      expectedUnit: buildings.units.areas[key][0] || null,
-      aliases: [key, "patrimoine bâti municipal"],
-    });
+  yearField({
+    datasetKey: "buildings",
+    id: "municipal.buildings.count",
+    fieldPath: "municipal.buildings.dataSet.areas.building.value",
+    label: "Nombre de bâtiments municipaux",
+    description: "Nombre annuel de bâtiments du patrimoine municipal.",
+    expectedUnit: null,
+    aliases: ["bâtiments municipaux", "patrimoine bâti"],
   }),
-  ...buildings.consumptionKeys.map((key) => {
-    const labels = {
-      electricityConsumption: "Consommation électrique annuelle des bâtiments municipaux",
-      electricityBill: "Facture électrique annuelle des bâtiments municipaux",
-      gasConsumption: "Consommation annuelle de gaz des bâtiments municipaux",
-      gasBill: "Facture annuelle de gaz des bâtiments municipaux",
-      dieselConsumption: "Consommation annuelle de diesel des bâtiments municipaux",
-      dieselBill: "Facture annuelle de diesel des bâtiments municipaux",
-    } as const;
-
-    return createYearValueField({
-      datasetKey: "buildings",
-      id: `municipal.buildings.consumption.${key}`,
-      fieldPath: `municipal.buildings.dataSet.consumption.${key}.value`,
-      label: labels[key],
-      description: `${labels[key]} sur le périmètre municipal.`,
-      expectedUnit: buildings.units.consumption[key][0] || null,
-      aliases: [key, "consommation bâtiments municipaux"],
-    });
+  yearField({
+    datasetKey: "buildings",
+    id: "municipal.buildings.surface",
+    fieldPath: "municipal.buildings.dataSet.areas.{surfaceType}.value",
+    label: "Surface des bâtiments municipaux",
+    description: "Surface ouverte ou couverte du patrimoine bâti municipal.",
+    expectedUnit: "m²",
+    dimensions: [{ key: "surfaceType", allowedValues: ["openSurface", "closedSurface"] }],
+    aliases: ["surface ouverte", "surface couverte", "surface bâtiment"],
   }),
-  ...treesParksWaste.yearlyKeys.map((key) => {
-    const labels = {
-      urbanTrees: "Nombre d’arbres urbains municipaux",
-      greenWaste: "Quantité annuelle de déchets verts municipaux",
-      composting: "Quantité annuelle de déchets verts compostés",
-      controlledLandfill: "Quantité annuelle de déchets verts en décharge contrôlée",
-      uncontrolledLandfill: "Quantité annuelle de déchets verts en décharge non contrôlée",
-    } as const;
-
-    return createYearValueField({
-      datasetKey: "treesParksWaste",
-      id: `municipal.treesParksWaste.yearly.${key}`,
-      fieldPath: `municipal.treesParksWaste.dataSet.${key}.value`,
-      label: labels[key],
-      description: `${labels[key]} sur le périmètre municipal.`,
-      expectedUnit: treesParksWaste.units.yearly[key][0] || null,
-      aliases: [key, "déchets verts", "espaces verts"],
-    });
+  yearField({
+    datasetKey: "buildings",
+    id: "municipal.buildings.energyConsumption",
+    fieldPath: "municipal.buildings.dataSet.consumption.{energy}Consumption.value",
+    label: "Consommation énergétique annuelle des bâtiments municipaux",
+    description: "Consommation annuelle d’électricité, de gaz naturel ou de diesel des bâtiments.",
+    expectedUnit: null,
+    unitByDimension: { energy: { electricity: "kWh", gas: "Nm3", diesel: "L" } },
+    dimensions: [{ key: "energy", allowedValues: ["electricity", "gas", "diesel"] }],
+    aliases: ["consommation bâtiments", "électricité bâtiment", "gaz bâtiment", "diesel bâtiment"],
+  }),
+  yearField({
+    datasetKey: "buildings",
+    id: "municipal.buildings.energyBill",
+    fieldPath: "municipal.buildings.dataSet.consumption.{energy}Bill.value",
+    label: "Facture énergétique annuelle des bâtiments municipaux",
+    description: "Montant annuel facturé pour l’énergie des bâtiments municipaux.",
+    expectedUnit: "currency",
+    dimensions: [{ key: "energy", allowedValues: ["electricity", "gas", "diesel"] }],
+    aliases: ["facture bâtiments", "facture énergie", "dépense énergétique"],
+  }),
+  yearField({
+    datasetKey: "treesParksWaste",
+    id: "municipal.treesParksWaste.urbanTrees",
+    fieldPath: "municipal.treesParksWaste.dataSet.urbanTrees.value",
+    label: "Nombre annuel d’arbres urbains",
+    description: "Nombre d’arbres urbains sur le périmètre municipal.",
+    expectedUnit: null,
+    aliases: ["arbres urbains", "arbres municipaux"],
+  }),
+  yearField({
+    datasetKey: "treesParksWaste",
+    id: "municipal.treesParksWaste.greenWaste",
+    fieldPath: "municipal.treesParksWaste.dataSet.{destination}.value",
+    label: "Quantité annuelle de déchets verts municipaux",
+    description: "Déchets verts produits ou orientés vers une destination de traitement.",
+    expectedUnit: "t",
+    dimensions: [
+      {
+        key: "destination",
+        allowedValues: treesParksWaste.yearlyKeys.filter((key) => key !== "urbanTrees"),
+      },
+    ],
+    aliases: ["déchets verts", "compostage", "décharge"],
   }),
 ] as const;
 
 export const municipalCatalog = createAIFieldCatalog(municipalCatalogEntries);
-
 export function getMunicipalDatasetFieldCatalog(datasetKey: MunicipalDatasetKey) {
   return municipalCatalog.fields.filter((field) => field.datasetKey === datasetKey);
 }
-
 export function resolveMunicipalAIField(id: string) {
   return municipalCatalog.resolve(id);
 }

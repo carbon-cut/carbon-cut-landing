@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 
+import { useQuery } from "@tanstack/react-query";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { BotMessageSquare } from "lucide-react";
@@ -31,14 +32,31 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useScopedI18n } from "@/locales/client";
+import {
+  collectivityQueryKeys,
+  collectivitySupportedAircraftQueryOptions,
+  fetchCollectivitySupportedValues,
+} from "@/app/[locale]/collectivity/_lib/queries";
+import { buildInventoryAssistantCatalog } from "../InventorySchema";
 
-export default function AssistantPanel({ datasetKey }: { datasetKey: string }) {
+export default function AssistantPanel() {
   const t = useScopedI18n("(pages).collectivityDashboard.inventoryWorkspace.assistant");
   const transport = useMemo(
     () => new DefaultChatTransport({ api: "/api/collectivity/assistant/inventory" }),
     []
   );
+  const aircraftValuesQuery = useQuery({
+    ...collectivitySupportedAircraftQueryOptions,
+    queryKey: collectivityQueryKeys.supportedValues("ef-lto", "aircraft"),
+    queryFn: () => fetchCollectivitySupportedValues("ef-lto", "aircraft"),
+  });
+  const catalog = useMemo(
+    () =>
+      buildInventoryAssistantCatalog({ aircraftValues: aircraftValuesQuery.data?.values ?? [] }),
+    [aircraftValuesQuery.data?.values]
+  );
   const { messages, sendMessage, status, error, stop } = useChat({ transport });
+  const isCatalogReady = aircraftValuesQuery.isSuccess;
 
   return (
     <Sheet>
@@ -48,6 +66,7 @@ export default function AssistantPanel({ datasetKey }: { datasetKey: string }) {
           variant="outline"
           size="sm"
           className="h-8 rounded-md px-4 shadow-none"
+          disabled={!isCatalogReady}
         >
           <BotMessageSquare aria-hidden="true" />
           {t("action")}
@@ -98,12 +117,7 @@ export default function AssistantPanel({ datasetKey }: { datasetKey: string }) {
             <PromptInput
               onSubmit={({ text }) => {
                 if (text.trim()) {
-                  void sendMessage(
-                    { text },
-                    {
-                      body: { datasetKey },
-                    }
-                  );
+                  void sendMessage({ text }, { body: { catalog } });
                 }
               }}
             >

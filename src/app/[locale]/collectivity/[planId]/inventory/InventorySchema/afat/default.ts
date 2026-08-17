@@ -1,4 +1,8 @@
-import { createMatrixDefaults, createYearValueFieldDefaults } from "../_sharedDefaults";
+import {
+  createMatrixDefaults,
+  createScalarValueDefaults,
+  createYearValueFieldDefaults,
+} from "../_sharedDefaults";
 import { fertilizers, livestock } from "./config";
 
 export function afatDefault(years: readonly number[]) {
@@ -16,6 +20,12 @@ export function afatDefault(years: readonly number[]) {
     livestock: {
       dataSet: {
         count: createMatrixDefaults(livestock.keys, { unit: livestock.units.count.default }, years),
+        confinedTimeShare: Object.fromEntries(
+          livestock.keys.map((key) => [
+            key,
+            createScalarValueDefaults(livestock.units.confinedTimeShare.default),
+          ])
+        ),
       },
     },
     fertilizers: {

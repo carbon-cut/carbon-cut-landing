@@ -4,123 +4,90 @@ import { fertilizers, livestock, trees } from "./config";
 export const afatDatasetKeys = ["trees", "livestock", "fertilizers"] as const;
 export type AfatDatasetKey = (typeof afatDatasetKeys)[number];
 
-const yearDimension = { key: "year" } as const;
-const recordDimension = { key: "recordIndex" } as const;
-const labels: Record<string, string> = {
-  youngHectares: "Surface de jeunes arbres",
-  adultHectares: "Surface d’arbres adultes",
-  senescentHectares: "Surface d’arbres sénescents",
-  youngTrees: "Nombre de jeunes arbres",
-  adultTrees: "Nombre d’arbres adultes",
-  senescentTrees: "Nombre d’arbres sénescents",
-  dairyCattle: "bovins laitiers",
-  otherCattle: "autres bovins",
-  sheep: "ovins",
-  goats: "caprins",
-  horses: "chevaux",
-  donkeysMules: "ânes et mulets",
-  camels: "camélidés",
-  broilers: "poulets de chair",
-  layingHens: "poules pondeuses",
-  turkeys: "dindes",
-  ammonitrate: "ammonitrate",
-  dap: "DAP",
-  urea: "urée",
-};
-
-function labelFor(key: string) {
-  return labels[key] ?? key;
-}
+const year = { key: "year" } as const;
+const metricUnits = Object.fromEntries(
+  trees.trackedTreeCropMetricKeys.map((metric) => [metric, trees.units.metrics[metric][0]])
+);
 
 const afatCatalogEntries = [
-  ...trees.trackedTreeCropMetricKeys.map(
-    (metric): AIFieldCatalogEntry => ({
-      datasetKey: "trees",
-      id: `afat.trees.trackedTreeCrops.${metric}`,
-      fieldPath: `afat.trees.trackedTreeCrops.dataSet.{recordIndex}.value.${metric}.value`,
-      label: `${labelFor(metric)} des cultures arboricoles`,
-      description: `${labelFor(metric)} pour une espèce d’arbre suivie.`,
-      valueType: "number",
-      expectedUnit: trees.units.metrics[metric][0] || null,
-      dimensions: [
-        yearDimension,
-        recordDimension,
-        { key: "treeType", allowedValues: trees.trackedTreeCropOptions },
-      ],
-      aliases: [metric, "arboriculture", "plantation pérenne"],
-    })
-  ),
+  {
+    datasetKey: "trees",
+    id: "afat.trees.trackedTreeCrops",
+    fieldPath: "afat.trees.trackedTreeCrops.dataSet.{recordIndex}.value.{metric}.value",
+    label: "Données annuelles des cultures arboricoles",
+    description: "Surface ou nombre d’arbres par espèce et stade de maturité.",
+    valueType: "number",
+    expectedUnit: null,
+    unitByDimension: { metric: metricUnits },
+    dimensions: [
+      year,
+      { key: "recordIndex" },
+      { key: "treeType", allowedValues: trees.trackedTreeCropOptions },
+      { key: "metric", allowedValues: trees.trackedTreeCropMetricKeys },
+    ],
+    aliases: ["arboriculture", "plantation pérenne", "jeunes arbres", "arbres adultes"],
+  },
   {
     datasetKey: "trees",
     id: "afat.trees.fruitTrees.count",
     fieldPath: "afat.trees.fruitTrees.dataSet.count.value",
     label: "Nombre annuel d’arbres fruitiers",
-    description: "Nombre annuel d’arbres fruitiers sur le territoire.",
+    description: "Nombre d’arbres fruitiers sur le territoire.",
     valueType: "number",
     expectedUnit: null,
-    dimensions: [yearDimension],
+    dimensions: [year],
     aliases: ["arbres fruitiers", "vergers"],
-  } satisfies AIFieldCatalogEntry,
-  ...livestock.keys.map(
-    (livestockType): AIFieldCatalogEntry => ({
-      datasetKey: "livestock",
-      id: `afat.livestock.count.${livestockType}`,
-      fieldPath: `afat.livestock.dataSet.count.${livestockType}.value`,
-      label: `Effectif annuel de ${labelFor(livestockType)}`,
-      description: `Nombre annuel de ${labelFor(livestockType)} sur le territoire.`,
-      valueType: "number",
-      expectedUnit: livestock.units.count.default[0] || null,
-      dimensions: [yearDimension, { key: "livestockType", allowedValues: livestock.keys }],
-      aliases: [livestockType, labelFor(livestockType), "cheptel"],
-    })
-  ),
-  ...livestock.keys.map(
-    (livestockType): AIFieldCatalogEntry => ({
-      datasetKey: "livestock",
-      id: `afat.livestock.confinedTimeShare.${livestockType}`,
-      fieldPath: `afat.livestock.dataSet.confinedTimeShare.${livestockType}.value`,
-      label: `Part du temps en stabulation de ${labelFor(livestockType)}`,
-      description: `Pourcentage de temps annuel que ${labelFor(livestockType)} passent en stabulation.`,
-      valueType: "number",
-      expectedUnit: livestock.units.confinedTimeShare.default[0] || null,
-      dimensions: [{ key: "livestockType", allowedValues: livestock.keys }],
-      aliases: ["temps en stabulation", livestockType],
-    })
-  ),
-  ...fertilizers.keys.map(
-    (fertilizer): AIFieldCatalogEntry => ({
-      datasetKey: "fertilizers",
-      id: `afat.fertilizers.quantity.${fertilizer}`,
-      fieldPath: `afat.fertilizers.dataSet.quantity.${fertilizer}.value`,
-      label: `Quantité annuelle d’engrais — ${labelFor(fertilizer)}`,
-      description: `Quantité annuelle de ${labelFor(fertilizer)} utilisée sur le territoire.`,
-      valueType: "number",
-      expectedUnit: fertilizers.units.quantity.default[0] || null,
-      dimensions: [yearDimension],
-      aliases: [fertilizer, "engrais"],
-    })
-  ),
-  ...fertilizers.keys.map(
-    (fertilizer): AIFieldCatalogEntry => ({
-      datasetKey: "fertilizers",
-      id: `afat.fertilizers.tenure.${fertilizer}`,
-      fieldPath: `afat.fertilizers.dataSet.tenure.${fertilizer}.value`,
-      label: `Teneur en nutriments de ${labelFor(fertilizer)}`,
-      description: `Part de nutriments contenue dans ${labelFor(fertilizer)}.`,
-      valueType: "number",
-      expectedUnit: fertilizers.units.tenure.default[0] || null,
-      dimensions: [],
-      aliases: [fertilizer, "tenure", "teneur", "part de nutriments"],
-    })
-  ),
-] as const;
+  },
+  {
+    datasetKey: "livestock",
+    id: "afat.livestock.count",
+    fieldPath: "afat.livestock.dataSet.count.{animalType}.value",
+    label: "Effectif annuel du cheptel",
+    description: "Nombre annuel d’animaux par type de cheptel.",
+    valueType: "number",
+    expectedUnit: null,
+    dimensions: [year, { key: "animalType", allowedValues: livestock.keys }],
+    aliases: ["cheptel", "effectif animaux", "bovins", "ovins"],
+  },
+  {
+    datasetKey: "livestock",
+    id: "afat.livestock.confinedTimeShare",
+    fieldPath: "afat.livestock.dataSet.confinedTimeShare.{animalType}.value",
+    label: "Part du temps en stabulation du cheptel",
+    description: "Pourcentage de temps qu’un type d’animal passe en stabulation.",
+    valueType: "number",
+    expectedUnit: "%",
+    dimensions: [{ key: "animalType", allowedValues: livestock.keys }],
+    aliases: ["temps confiné", "stabulation", "part confinée"],
+  },
+  {
+    datasetKey: "fertilizers",
+    id: "afat.fertilizers.quantity",
+    fieldPath: "afat.fertilizers.dataSet.quantity.{fertilizer}.value",
+    label: "Quantité annuelle d’engrais",
+    description: "Tonnage annuel par type d’engrais.",
+    valueType: "number",
+    expectedUnit: "t",
+    dimensions: [year, { key: "fertilizer", allowedValues: fertilizers.keys }],
+    aliases: ["engrais", "ammonitrate", "DAP", "urée"],
+  },
+  {
+    datasetKey: "fertilizers",
+    id: "afat.fertilizers.tenure",
+    fieldPath: "afat.fertilizers.dataSet.tenure.{fertilizer}.value",
+    label: "Teneur en nutriments des engrais",
+    description: "Part de nutriments contenue dans un type d’engrais.",
+    valueType: "number",
+    expectedUnit: "%",
+    dimensions: [{ key: "fertilizer", allowedValues: fertilizers.keys }],
+    aliases: ["tenure", "teneur", "part de nutriments"],
+  },
+] as const satisfies readonly AIFieldCatalogEntry[];
 
 export const afatCatalog = createAIFieldCatalog(afatCatalogEntries);
-
 export function getAfatDatasetFieldCatalog(datasetKey: AfatDatasetKey) {
   return afatCatalog.fields.filter((field) => field.datasetKey === datasetKey);
 }
-
 export function resolveAfatAIField(id: string) {
   return afatCatalog.resolve(id);
 }

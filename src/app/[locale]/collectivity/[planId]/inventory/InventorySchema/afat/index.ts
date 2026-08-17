@@ -7,9 +7,7 @@ import {
   createRecordGridSchemaByOptionalKeys,
   createScalarValueSchema,
   createYearValueSchema,
-  constructUnit,
   metadata,
-  numberByYearSchema,
   percentScalarSchema,
 } from "../_shared";
 import { fertilizers, livestock, trees } from "./config";
@@ -46,14 +44,11 @@ const treesSchema = createGroupSchema({
 
 const livestockSchema = z.object({
   dataSet: z.object({
-    count: z.record(
-      z.string(),
-      z.object({
-        value: numberByYearSchema,
-        unit: constructUnit(livestock.units.count.default),
-      })
-    ),
-    confinedTimeShare: z.record(z.string(), percentScalarSchema),
+    count: createMatrixSchema(livestock.keys, { unit: livestock.units.count.default }).strict(),
+    confinedTimeShare: createFixedKeyRecordSchema(
+      livestock.keys,
+      percentScalarSchema.shape
+    ).strict(),
   }),
   metadata,
 });

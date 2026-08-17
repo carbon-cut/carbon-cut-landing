@@ -7,7 +7,6 @@ import { z } from "zod";
 
 import { hasUserProductAccess } from "@/lib/auth/profile";
 import { getServerSession } from "@/lib/auth/session";
-import { getInventoryDatasetFieldCatalog } from "@/app/[locale]/collectivity/[planId]/inventory/InventorySchema";
 
 export const runtime = "nodejs";
 
@@ -24,12 +23,38 @@ const messageSchema = z
   })
   .passthrough();
 
+const catalogDimensionSchema = z
+  .object({
+    key: z.string().min(1).max(128),
+    allowedValues: z.array(z.string().min(1).max(256)).max(256).optional(),
+    allowedValueLabels: z.record(z.string().min(1).max(256)).optional(),
+  })
+  .strict();
+
+const catalogFieldSchema = z
+  .object({
+    datasetKey: z.string().min(1).max(128),
+    id: z.string().min(1).max(256),
+    label: z.string().min(1).max(512),
+    description: z.string().min(1).max(1_000),
+    valueType: z.enum(["number", "string"]),
+    expectedUnit: z.union([z.string().max(128), z.array(z.string().max(128)).max(16), z.null()]),
+    unitByDimension: z
+      .record(
+        z.record(z.union([z.string().max(128), z.array(z.string().max(128)).max(16), z.null()]))
+      )
+      .optional(),
+    dimensions: z.array(catalogDimensionSchema).max(16),
+    aliases: z.array(z.string().min(1).max(256)).max(64),
+  })
+  .strict();
+
 const requestSchema = z.object({
   id: z.string().min(1).max(128),
   messages: z.array(messageSchema).min(1).max(12),
   trigger: z.enum(["submit-message", "regenerate-message"]),
   messageId: z.string().min(1).max(128).optional(),
-  datasetKey: z.string().min(1).max(128),
+  catalog: z.array(catalogFieldSchema).min(1).max(128),
 });
 
 type InventoryAssistantRequest = z.infer<typeof requestSchema>;
@@ -58,10 +83,10 @@ function buildInput(messages: InventoryAssistantRequest["messages"]) {
     .join("\n\n");
 }
 
-function buildInstructions(catalog: ReturnType<typeof getInventoryDatasetFieldCatalog>) {
+function buildInstructions(catalog: z.infer<typeof requestSchema>["catalog"]) {
   return [
     "You are a helpful assistant for an inventory data-entry application.",
-    "The following catalog contains the only fields in the dataset currently being edited.",
+    "The following catalog contains every approved inventory field the assistant may reference.",
     "Use its labels, descriptions, units, dimensions, and aliases to understand source data.",
     "Do not mention or infer application field paths, and do not claim to modify inventory data or files.",
     "Respond in the same language the user uses when that language is clear.",
@@ -95,12 +120,6 @@ export async function POST(request: Request) {
     return errorResponse(400, "invalid_request", "Invalid assistant request");
   }
 
-  const catalog = getInventoryDatasetFieldCatalog(parsedRequest.data.datasetKey);
-
-  if (catalog.length === 0) {
-    return errorResponse(400, "invalid_request", "Unknown inventory dataset");
-  }
-
   const apiKey = process.env.OPENAI_API_KEY;
   const baseURL = process.env.OPENAI_BASE_URL;
   const model = process.env.OPENAI_MODEL;
@@ -117,7 +136,7 @@ export async function POST(request: Request) {
     response = await client.responses.create(
       {
         model,
-        instructions: buildInstructions(catalog),
+        instructions: buildInstructions(parsedRequest.data.catalog),
         input: buildInput(parsedRequest.data.messages),
         stream: true,
       },

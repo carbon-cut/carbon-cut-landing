@@ -7,7 +7,7 @@ import { useInventoryContext } from "@/app/[locale]/collectivity/[planId]/invent
 import { InventoryYearErrors } from "@/app/[locale]/collectivity/[planId]/inventory/components/InventoryYearSelector";
 import {
   collectivityQueryKeys,
-  collectivityQueryOptions,
+  collectivitySupportedAircraftQueryOptions,
   fetchCollectivitySupportedValues,
 } from "@/app/[locale]/collectivity/_lib/queries";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -27,7 +27,7 @@ export default function AirTransportSurface() {
     "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.airTransport"
   );
   const aircraftValuesQuery = useQuery({
-    ...collectivityQueryOptions,
+    ...collectivitySupportedAircraftQueryOptions,
     queryKey: collectivityQueryKeys.supportedValues("ef-lto", "aircraft"),
     queryFn: () => fetchCollectivitySupportedValues("ef-lto", "aircraft"),
   });

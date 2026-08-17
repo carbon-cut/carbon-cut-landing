@@ -318,6 +318,7 @@ const datasetPlaceholderSchema = z.object({});
 export type AIFieldDimension = {
   key: string;
   allowedValues?: readonly string[];
+  allowedValueLabels?: Readonly<Record<string, string>>;
 };
 
 export type AIFieldDefinition = {
@@ -327,6 +328,7 @@ export type AIFieldDefinition = {
   description: string;
   valueType: "number" | "string";
   expectedUnit: string | readonly string[] | null;
+  unitByDimension?: Record<string, Record<string, string | readonly string[] | null>>;
   dimensions: readonly AIFieldDimension[];
   aliases: readonly string[];
 };

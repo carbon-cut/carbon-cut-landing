@@ -33,19 +33,24 @@ const energyPriceLabels: Record<(typeof energyPriceKeys)[number], string> = {
   naturalGas: "Prix unitaire du gaz naturel",
 };
 
-const priceAssumptionsCatalogEntries = energyPriceKeys.map(
-  (energy): AIFieldCatalogEntry => ({
+const priceAssumptionsCatalogEntries: AIFieldCatalogEntry[] = [
+  {
     datasetKey: "priceAssumptions",
-    id: `priceAssumptions.energy.${energy}`,
-    fieldPath: `priceAssumptions.energy.${energy}.value`,
-    label: energyPriceLabels[energy],
-    description: `${energyPriceLabels[energy]} utilisé pour convertir une dépense monétaire en donnée d’activité.`,
+    id: "priceAssumptions.energy",
+    fieldPath: "priceAssumptions.energy.{energy}.value",
+    label: "Prix unitaire annuel de l’énergie",
+    description: "Prix utilisé pour convertir une dépense monétaire en donnée d’activité.",
     valueType: "number",
-    expectedUnit: energyPriceUnits[energy][0],
-    dimensions: [{ key: "year" }],
-    aliases: [energy, "prix énergie", "tarif"],
-  })
-);
+    expectedUnit: null,
+    unitByDimension: {
+      energy: Object.fromEntries(
+        energyPriceKeys.map((energy) => [energy, energyPriceUnits[energy][0]])
+      ),
+    },
+    dimensions: [{ key: "year" }, { key: "energy", allowedValues: energyPriceKeys }],
+    aliases: ["prix énergie", "tarif", "prix unitaire"],
+  },
+];
 
 const priceAssumptionsCatalog = createAIFieldCatalog(priceAssumptionsCatalogEntries);
 
