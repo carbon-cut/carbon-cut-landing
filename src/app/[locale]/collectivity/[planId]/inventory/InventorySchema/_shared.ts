@@ -317,6 +317,7 @@ const datasetPlaceholderSchema = z.object({});
 
 export type AIFieldDimension = {
   key: string;
+  kind?: "year" | "integer" | "string" | "enum";
   allowedValues?: readonly string[];
   allowedValueLabels?: Readonly<Record<string, string>>;
 };
@@ -343,13 +344,39 @@ export type AIFieldCatalog = {
   resolve: (id: string) => AIFieldCatalogEntry | undefined;
 };
 
+export function getAIFieldDimensionKind(dimension: AIFieldDimension) {
+  if (dimension.kind) {
+    return dimension.kind;
+  }
+
+  if (dimension.allowedValues) {
+    return "enum" as const;
+  }
+
+  if (dimension.key === "year" || dimension.key === "futureYear") {
+    return "year" as const;
+  }
+
+  if (dimension.key === "recordIndex") {
+    return "integer" as const;
+  }
+
+  return "string" as const;
+}
+
 export function createAIFieldCatalog<const TEntry extends AIFieldCatalogEntry>(
   entries: readonly TEntry[]
 ) {
   const entriesById = new Map(entries.map((entry) => [entry.id, entry]));
 
   return {
-    fields: entries.map(({ fieldPath: _fieldPath, ...field }) => field),
+    fields: entries.map(({ fieldPath: _fieldPath, ...field }) => ({
+      ...field,
+      dimensions: field.dimensions.map((dimension) => ({
+        ...dimension,
+        kind: getAIFieldDimensionKind(dimension),
+      })),
+    })),
     resolve: (id: string) => entriesById.get(id),
   };
 }

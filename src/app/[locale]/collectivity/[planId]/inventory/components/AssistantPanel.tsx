@@ -4,7 +4,7 @@ import { useMemo } from "react";
 
 import { useQuery } from "@tanstack/react-query";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, getToolName, isToolUIPart } from "ai";
 import { BotMessageSquare } from "lucide-react";
 
 import {
@@ -95,6 +95,15 @@ export default function AssistantPanel() {
                           <MessageResponse key={`${message.id}-${index}`}>
                             {part.text}
                           </MessageResponse>
+                        ) : isToolUIPart(part) &&
+                          getToolName(part) === "propose_inventory_operation" &&
+                          part.state === "input-available" ? (
+                          <pre
+                            key={`${message.id}-${index}`}
+                            className="max-w-full overflow-x-auto rounded-md bg-muted p-3 font-mono"
+                          >
+                            {JSON.stringify(part.input, null, 2)}
+                          </pre>
                         ) : null
                       )}
                     </MessageContent>

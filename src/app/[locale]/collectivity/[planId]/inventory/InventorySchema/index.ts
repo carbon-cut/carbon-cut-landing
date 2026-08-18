@@ -8,6 +8,7 @@ import { wastewaterSanitationCatalog, wastewaterSanitationSchema } from "./waste
 import { wasteCatalog, wasteSchema } from "./waste";
 import { priceAssumptionsCatalog, priceAssumptionsSchema } from "./price-assumptions";
 import { sharedDataCatalog, sharedDataSchema } from "./shared-data";
+export { createAIFormOperationSchema, type AIFormOperation } from "./operations";
 
 const inventorySchema = createGroupSchema({
   years: yearsSchema,

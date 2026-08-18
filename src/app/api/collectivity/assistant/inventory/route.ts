@@ -7,6 +7,7 @@ import { z } from "zod";
 
 import { hasUserProductAccess } from "@/lib/auth/profile";
 import { getServerSession } from "@/lib/auth/session";
+import { createAIFormOperationSchema } from "@/app/[locale]/collectivity/[planId]/inventory/InventorySchema";
 
 export const runtime = "nodejs";
 
@@ -26,10 +27,49 @@ const messageSchema = z
 const catalogDimensionSchema = z
   .object({
     key: z.string().min(1).max(128),
+    kind: z.enum(["year", "integer", "string", "enum"]),
     allowedValues: z.array(z.string().min(1).max(256)).max(256).optional(),
     allowedValueLabels: z.record(z.string().min(1).max(256)).optional(),
   })
   .strict();
+
+const proposedOperationArgumentsSchema = z
+  .object({
+    operation: z.unknown(),
+  })
+  .strict();
+
+const proposeInventoryOperationTool = {
+  type: "function" as const,
+  name: "propose_inventory_operation",
+  description:
+    "Propose one inventory field update when the user has provided a value that maps to the approved catalog. This only proposes a change; it never applies one.",
+  strict: true,
+  parameters: {
+    type: "object",
+    additionalProperties: false,
+    required: ["operation"],
+    properties: {
+      operation: {
+        type: "object",
+        additionalProperties: false,
+        required: ["type", "fieldId", "dimensions", "value", "unit"],
+        properties: {
+          type: { type: "string", enum: ["setField"] },
+          fieldId: { type: "string" },
+          dimensions: {
+            type: "object",
+            additionalProperties: { type: ["string", "number"] },
+          },
+          value: { type: ["string", "number"] },
+          unit: { type: ["string", "null"] },
+          confidence: { type: "string", enum: ["low", "medium", "high"] },
+          evidence: { type: "array" },
+        },
+      },
+    },
+  },
+};
 
 const catalogFieldSchema = z
   .object({
@@ -88,7 +128,9 @@ function buildInstructions(catalog: z.infer<typeof requestSchema>["catalog"]) {
     "You are a helpful assistant for an inventory data-entry application.",
     "The following catalog contains every approved inventory field the assistant may reference.",
     "Use its labels, descriptions, units, dimensions, and aliases to understand source data.",
-    "Do not mention or infer application field paths, and do not claim to modify inventory data or files.",
+    "When you can identify one supported inventory value, call propose_inventory_operation.",
+    "The tool only proposes a change; do not claim to modify inventory data or files.",
+    "Do not mention or infer application field paths.",
     "Respond in the same language the user uses when that language is clear.",
     "Active dataset catalog:",
     JSON.stringify(catalog),
@@ -129,6 +171,7 @@ export async function POST(request: Request) {
   }
 
   const client = new OpenAI({ apiKey, baseURL });
+  const operationSchema = createAIFormOperationSchema(parsedRequest.data.catalog);
 
   let response;
 
@@ -138,6 +181,7 @@ export async function POST(request: Request) {
         model,
         instructions: buildInstructions(parsedRequest.data.catalog),
         input: buildInput(parsedRequest.data.messages),
+        tools: [proposeInventoryOperationTool],
         stream: true,
       },
       { signal: request.signal }
@@ -158,6 +202,32 @@ export async function POST(request: Request) {
         for await (const event of response) {
           if (event.type === "response.output_text.delta") {
             writer.write({ type: "text-delta", id: textId, delta: event.delta });
+          }
+
+          if (
+            event.type === "response.function_call_arguments.done" &&
+            event.name === "propose_inventory_operation"
+          ) {
+            let argumentsPayload: unknown;
+
+            try {
+              argumentsPayload = JSON.parse(event.arguments);
+            } catch {
+              continue;
+            }
+
+            const argumentsResult = proposedOperationArgumentsSchema.safeParse(argumentsPayload);
+            const operationResult =
+              argumentsResult.success && operationSchema.safeParse(argumentsResult.data.operation);
+
+            if (operationResult && operationResult.success) {
+              writer.write({
+                type: "tool-input-available",
+                toolCallId: event.item_id,
+                toolName: event.name,
+                input: operationResult.data,
+              });
+            }
           }
         }
       } finally {
