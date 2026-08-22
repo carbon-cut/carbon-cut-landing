@@ -23,7 +23,7 @@ const airTransportEnergyKeys = [
   "diesel",
   "petrol",
   "electricFleet",
-  "kerosene",
+  /* "kerosene", */
 ] as const;
 const territoryVehicleAllowedFuelsByType = {
   motorcycles: ["petrol", "electricity"],
@@ -55,7 +55,7 @@ const territoryVehicleConsumptionUnitByFuel = {
   diesel: "L/100km",
   petrol: "L/100km",
   gpl: "kg/100km",
-  gnv: "Nm3/100km",
+  gnv: "kg/100km",
   electricity: "kWh/100km",
 } as const;
 
@@ -91,7 +91,7 @@ const publicTransportUnits: UnitConf = {
     diesel: ["L"],
     petrol: ["L"],
     gpl: ["kg"],
-    gnv: ["Nm3"],
+    gnv: ["kg"],
     electricity: ["kWh"],
   },
   spend: {
@@ -128,7 +128,7 @@ const airTransportUnits: UnitConf = {
 const territoryVehicleUnits: UnitConf = {
   measures: {
     vehicles: [""],
-    avgConsumption: ["L/100km", "kg/100km", "kWh/100km", "Nm3/100km"],
+    avgConsumption: ["L/100km", "kg/100km", "kWh/100km"],
     avgMileage: ["km/year"],
   },
 } as const;

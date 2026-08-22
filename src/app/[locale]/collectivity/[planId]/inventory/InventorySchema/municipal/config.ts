@@ -9,7 +9,7 @@ const consumptionUnitByFuel: { [key: string]: [string, ...string[]] } = {
   diesel: ["L"],
   gpl: ["L"],
   electricity: ["kWh"],
-  gnv: ["Nm3"],
+  gnv: ["kg"],
 };
 const fleetFuelKeys = ["petrol", "diesel", "gpl", "electricity", "gnv"] as const;
 const fleetCarEngineKeys = [...fleetFuelKeys, "hybrid"] as const;

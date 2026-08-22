@@ -9,7 +9,7 @@ const energyPriceUnits: Record<(typeof energyPriceKeys)[number], NonEmptyStringA
   diesel: ["currency/L"],
   petrol: ["currency/L"],
   gpl: ["currency/L"],
-  gnv: ["currency/Nm3"],
+  gnv: ["currency/kg"],
   naturalGas: ["currency/Nm3"],
 };
 
