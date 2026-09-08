@@ -1598,12 +1598,12 @@ export default {
                   treeTypePlaceholder: "Choisir un type d'arbre",
                 },
                 columns: {
-                  youngHectares: "Jeunes (ha)",
-                  adultHectares: "Adultes (ha)",
-                  senescentHectares: "Sénescents (ha)",
-                  youngTrees: "Jeunes (nb)",
-                  adultTrees: "Adultes (nb)",
-                  senescentTrees: "Sénescents (nb)",
+                  youngTreeCanopyArea: "Canopée jeunes (ha)",
+                  adultTreeCanopyArea: "Canopée adultes (ha)",
+                  senescentTreeCanopyArea: "Canopée sénescents (ha)",
+                  youngTrees: "Jeunes (nb, facultatif)",
+                  adultTrees: "Adultes (nb, facultatif)",
+                  senescentTrees: "Sénescents (nb, facultatif)",
                 },
                 treeTypes: {
                   oliveTrees: "Oliviers",
@@ -1626,8 +1626,12 @@ export default {
               },
               fruitTrees: {
                 title: "Arbres fruitiers",
-                countLabel: "Nombre d'arbres fruitiers",
+                treeCanopyAreaLabel: "Surface de canopée",
+                countLabel: "Nombre d'arbres fruitiers (facultatif)",
               },
+              treeCanopyAreaHelpLabel: "Définition de la surface de canopée",
+              treeCanopyAreaHelp:
+                "La surface de canopée correspond à la surface au sol couverte par les couronnes des arbres, et non à la superficie totale de la parcelle.",
             },
             perennialPlantationStock: {
               title: "Plantations perennes",
@@ -1674,14 +1678,40 @@ export default {
             },
             livestock: {
               title: "Cheptel",
-              description: "Renseigner les effectifs annuels et la part confinée.",
+              description: "Renseigner les effectifs annuels et les systèmes de gestion du fumier.",
               yearSelector: "Choisir une année",
               columns: {
                 count: "Effectif",
-                confinedTimeShare: "Temps confiné (%)",
               },
-              confinedTimeShareHelp:
-                "Cette information permettra de déterminer la proportion de la quantité de fumier générée en étable, et celle générée sur les champs (ou éventuellement parcours). Le calcul des émissions dues au fumier en dépendra. À titre d'exemple, une valeur de 25% signifie que les ovins sont en étable en moyenne 25% du temps.",
+              manureManagement: {
+                title: "Systèmes de gestion du fumier",
+                description:
+                  "La répartition est généralement stable : renseignez une année, sauf si les pratiques changent selon les années.",
+                tier2Notice: {
+                  title: "Données de niveau 2.",
+                  description:
+                    "Contrairement au niveau 1, qui applique un facteur global par type d'animal, le niveau 2 distingue chaque système de gestion du fumier pour une estimation plus précise.",
+                },
+                systems: {
+                  solidStorage: "Stockage solide",
+                  liquidSlurry: "Lisier",
+                  dryLot: "Parc d'engraissement sec",
+                  pastureRangePaddock: "Pâturage, parcours ou enclos",
+                  burnedForFuel: "Brûlé comme combustible",
+                },
+              },
+              poultryManureManagement: {
+                title: "Systèmes de gestion du fumier de volaille",
+                description:
+                  "La répartition est généralement stable : renseignez une année, sauf si les pratiques changent selon les années.",
+                systems: {
+                  poultryManureWithLitter: "Fumier de volaille avec litière",
+                  poultryManureWithoutLitter: "Fumier de volaille sans litière",
+                  dryLot: "Parc d'engraissement sec",
+                  anaerobicLagoon: "Lagon anaérobie",
+                  pastureRangePaddock: "Pâturage, parcours ou enclos",
+                },
+              },
               rows: {
                 dairyCattle: "Bovins laitiers",
                 otherCattle: "Autres bovins",
@@ -1736,12 +1766,16 @@ export default {
               yearlyDescription:
                 "Structure issue du document d'entree: arbres urbains, dechets verts et destinations annuelles.",
               yearly: {
-                urbanTrees: "Nombre d'arbres urbains",
+                treeCanopyArea: "Surface de canopée des arbres urbains",
+                urbanTrees: "Nombre d'arbres urbains (facultatif)",
                 greenWaste: "Quantite de dechets verts urbains",
                 composting: "Destination compostage",
                 controlledLandfill: "Destination décharge contrôlée",
                 uncontrolledLandfill: "Destination décharge décontrôlée",
               },
+              treeCanopyAreaHelpLabel: "Définition de la surface de canopée",
+              treeCanopyAreaHelp:
+                "La surface de canopée correspond à la surface au sol couverte par les couronnes des arbres, et non à la superficie totale de la parcelle.",
             },
           },
           evidence: {
@@ -3448,6 +3482,8 @@ export default {
     errors: {
       Required: "Obligatoire",
       between0And100: "Valeur entre 0 et 100",
+      manureManagementSharesMustTotal100:
+        "La répartition des systèmes de gestion du fumier doit totaliser 100 %.",
       collectivityCountryInvalid: "Choisissez un pays valide.",
       collectivityProjectSlugInvalid:
         "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",

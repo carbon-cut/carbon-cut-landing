@@ -63,6 +63,7 @@ const buildingsSchema = z.object({
 });
 
 const optionalTreesParksWasteDestinationKeys = [
+  "urbanTrees",
   "controlledLandfill",
   "uncontrolledLandfill",
 ] as const;

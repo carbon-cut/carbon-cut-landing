@@ -128,6 +128,7 @@ export const buildings = {
 };
 
 const treesParksWasteYearlyKeys = [
+  "treeCanopyArea",
   "urbanTrees",
   "greenWaste",
   "composting",
@@ -137,6 +138,7 @@ const treesParksWasteYearlyKeys = [
 
 const treesParksWasteUnits: UnitConf = {
   yearly: {
+    treeCanopyArea: ["ha"],
     urbanTrees: [""],
     greenWaste: ["t"],
     composting: ["t"],

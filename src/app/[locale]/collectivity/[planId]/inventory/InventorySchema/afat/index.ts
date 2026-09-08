@@ -3,13 +3,11 @@ import { z } from "zod";
 import {
   createFixedKeyRecordSchema,
   createGroupSchema,
+  createGridSchema,
   createMatrixSchema,
   createRecordGridSchemaByOptionalKeys,
-  createScalarValueSchema,
   createYearValueSchema,
-  constructUnit,
   metadata,
-  numberByYearSchema,
   percentScalarSchema,
 } from "../_shared";
 import { fertilizers, livestock, trees } from "./config";
@@ -31,7 +29,8 @@ const treesSchema = createGroupSchema({
   }),
   fruitTrees: z.object({
     dataSet: z.object({
-      count: createYearValueSchema([""]),
+      treeCanopyArea: createYearValueSchema(["ha"]),
+      count: createYearValueSchema([""], true),
     }),
     metadata,
   }),
@@ -39,14 +38,75 @@ const treesSchema = createGroupSchema({
 
 const livestockSchema = z.object({
   dataSet: z.object({
-    count: z.record(
-      z.string(),
-      z.object({
-        value: numberByYearSchema,
-        unit: constructUnit(livestock.units.count.default),
-      })
-    ),
-    confinedTimeShare: z.record(z.string(), percentScalarSchema),
+    count: createMatrixSchema(livestock.keys, { unit: livestock.units.count.default }, true),
+    manureManagementShares: createGridSchema(
+      livestock.manureManagementAnimalKeys,
+      livestock.manureManagementSystemKeys,
+      { unit: livestock.units.manureManagementShares.default },
+      true
+    ).superRefine((shares, context) => {
+      for (const animal of livestock.manureManagementAnimalKeys) {
+        const sharesBySystem = shares[animal];
+        const yearKeys = new Set(
+          livestock.manureManagementSystemKeys.flatMap((system) =>
+            Object.keys(sharesBySystem[system].value)
+          )
+        );
+
+        for (const yearKey of yearKeys) {
+          const year = yearKey as `y-${number}${number}${number}${number}`;
+          const values = livestock.manureManagementSystemKeys.map(
+            (system) => sharesBySystem[system].value[year] ?? 0
+          );
+          const total = values.reduce((sum, value) => sum + value, 0);
+          const hasAnyShare = values.some((value) => value !== 0);
+
+          if (!hasAnyShare || Math.abs(total - 100) < 1e-9) continue;
+
+          for (const system of livestock.manureManagementSystemKeys) {
+            context.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: [animal, system, "value", year],
+              message: "manureManagementSharesMustTotal100",
+            });
+          }
+        }
+      }
+    }),
+    poultryManureManagementShares: createGridSchema(
+      livestock.poultryManureManagementAnimalKeys,
+      livestock.poultryManureManagementSystemKeys,
+      { unit: livestock.units.manureManagementShares.default },
+      true
+    ).superRefine((shares, context) => {
+      for (const animal of livestock.poultryManureManagementAnimalKeys) {
+        const sharesBySystem = shares[animal];
+        const yearKeys = new Set(
+          livestock.poultryManureManagementSystemKeys.flatMap((system) =>
+            Object.keys(sharesBySystem[system].value)
+          )
+        );
+
+        for (const yearKey of yearKeys) {
+          const year = yearKey as `y-${number}${number}${number}${number}`;
+          const values = livestock.poultryManureManagementSystemKeys.map(
+            (system) => sharesBySystem[system].value[year] ?? 0
+          );
+          const total = values.reduce((sum, value) => sum + value, 0);
+          const hasAnyShare = values.some((value) => value !== 0);
+
+          if (!hasAnyShare || Math.abs(total - 100) < 1e-9) continue;
+
+          for (const system of livestock.poultryManureManagementSystemKeys) {
+            context.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: [animal, system, "value", year],
+              message: "manureManagementSharesMustTotal100",
+            });
+          }
+        }
+      }
+    }),
   }),
   metadata,
 });

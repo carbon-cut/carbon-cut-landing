@@ -1,4 +1,3 @@
-import { buildLivestockRows } from "./datasets/afat/livestock/config";
 import { buildFertilizerRows } from "./datasets/afat/fertilizers/config";
 import { buildPublicTransportFutureYears } from "./datasets/transport/public-transport/config";
 import {
@@ -14,6 +13,7 @@ import {
   treesParksWaste,
 } from "./InventorySchema/municipal/config";
 import { electricity, naturalGas } from "./InventorySchema/energy/config";
+import { livestock } from "./InventorySchema/afat/config";
 import type { InventoryFormValues } from "./context/inventory-context";
 import type { InventoryYear } from "./types";
 
@@ -31,7 +31,7 @@ type ProgressCalculator = (
 
 const yearKeyPattern = /^y-\d{4}$/;
 const publicTransportFutureYearCount = buildPublicTransportFutureYears().length;
-const livestockRowCount = buildLivestockRows((key) => key).length;
+const livestockRowCount = livestock.keys.length;
 const fertilizerRowCount = buildFertilizerRows((key) => key).length;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -186,9 +186,17 @@ function computeTreesParksWasteProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
 ) {
-  const total = countMatrixTotal(treesParksWaste.yearlyKeys.length, years.length);
+  const requiredKeys = treesParksWaste.yearlyKeys.filter(
+    (key) => key !== "urbanTrees" && key !== "controlledLandfill" && key !== "uncontrolledLandfill"
+  );
+  const total = countMatrixTotal(requiredKeys.length, years.length);
+  const dataSet = values?.municipal?.treesParksWaste?.dataSet;
+  const completed = requiredKeys.reduce(
+    (sum, key) => sum + countFilledYearValues(dataSet?.[key]?.value),
+    0
+  );
 
-  return createProgress(countFilledYearValues(values?.municipal?.treesParksWaste?.dataSet), total);
+  return createProgress(completed, total);
 }
 
 function computeElectricityProgress(
@@ -336,14 +344,14 @@ function computeTreesProgress(
       if (!isRecord(row) || !isRecord(row.value)) return sum;
       return (
         sum +
-        countFilledYearValues((row.value as Record<string, unknown>).youngTrees) +
-        countFilledYearValues((row.value as Record<string, unknown>).adultTrees) +
-        countFilledYearValues((row.value as Record<string, unknown>).senescentTrees)
+        countFilledYearValues((row.value as Record<string, unknown>).youngTreeCanopyArea) +
+        countFilledYearValues((row.value as Record<string, unknown>).adultTreeCanopyArea) +
+        countFilledYearValues((row.value as Record<string, unknown>).senescentTreeCanopyArea)
       );
     }, 0);
   const fruitTotal = years.length;
   const fruitCompleted = countFilledYearValues(
-    values?.afat?.trees?.fruitTrees?.dataSet?.count?.value
+    values?.afat?.trees?.fruitTrees?.dataSet?.treeCanopyArea?.value
   );
 
   return createProgress(trackedCompleted + fruitCompleted, trackedTotal + fruitTotal);
@@ -353,13 +361,22 @@ function computeLivestockProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
 ) {
-  const total = livestockRowCount * (years.length + 1);
+  const total =
+    countMatrixTotal(livestockRowCount, years.length) +
+    countGridTotal(
+      livestock.manureManagementAnimalKeys.length,
+      livestock.manureManagementSystemKeys.length,
+      years.length
+    ) +
+    countGridTotal(
+      livestock.poultryManureManagementAnimalKeys.length,
+      livestock.poultryManureManagementSystemKeys.length,
+      years.length
+    );
   const completed =
     countFilledYearValues(values?.afat?.livestock?.dataSet?.count) +
-    Object.values(values?.afat?.livestock?.dataSet?.confinedTimeShare ?? {}).reduce(
-      (sum, item) => sum + countFilledField(isRecord(item) ? item.value : undefined),
-      0
-    );
+    countFilledYearValues(values?.afat?.livestock?.dataSet?.manureManagementShares) +
+    countFilledYearValues(values?.afat?.livestock?.dataSet?.poultryManureManagementShares);
 
   return createProgress(completed, total);
 }

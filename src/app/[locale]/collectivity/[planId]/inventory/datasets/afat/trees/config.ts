@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldRequired } from "@/components/ui/field-help";
+import { FieldHelp, FieldRequired } from "@/components/ui/field-help";
 import Typography from "@/components/ui/typography";
 import type { InventoryGroupedYearTableData, InventoryTableRow } from "../../../types";
 import type {
@@ -18,7 +18,9 @@ export function buildTrackedTreeCropsSection(labelFunc: LabelFunc): InventoryGro
     subcolumns: trees.trackedTreeCropMetricKeys.map((key) => ({
       key,
       label:
-        key === "youngTrees" || key === "adultTrees" || key === "senescentTrees"
+        key === "youngTreeCanopyArea" ||
+        key === "adultTreeCanopyArea" ||
+        key === "senescentTreeCanopyArea"
           ? React.createElement(
               Typography,
               {
@@ -27,7 +29,11 @@ export function buildTrackedTreeCropsSection(labelFunc: LabelFunc): InventoryGro
                 className: "inline-flex items-center gap-1",
               },
               React.createElement("span", null, labelFunc(`trackedTreeCrops.columns.${key}`)),
-              React.createElement(FieldRequired, null)
+              React.createElement(FieldRequired, null),
+              React.createElement(FieldHelp, {
+                content: labelFunc("treeCanopyAreaHelp"),
+                srLabel: labelFunc("treeCanopyAreaHelpLabel"),
+              })
             )
           : labelFunc(`trackedTreeCrops.columns.${key}`),
       unit: trees.units.metrics[key][0],
@@ -71,6 +77,24 @@ export function buildTrackedTreeCropsEditableRows(labelFunc: LabelFunc): Grouped
 
 export function buildFruitTreesRows(labelFunc: LabelFunc): InventoryTableRow[] {
   return [
+    {
+      key: "treeCanopyArea",
+      label: React.createElement(
+        Typography,
+        {
+          variant: "label",
+          size: "sm",
+          className: "inline-flex items-center gap-1",
+        },
+        React.createElement("span", null, labelFunc("fruitTrees.treeCanopyAreaLabel")),
+        React.createElement(FieldRequired, null),
+        React.createElement(FieldHelp, {
+          content: labelFunc("treeCanopyAreaHelp"),
+          srLabel: labelFunc("treeCanopyAreaHelpLabel"),
+        })
+      ),
+      unit: "ha",
+    },
     {
       key: "count",
       label: labelFunc("fruitTrees.countLabel"),

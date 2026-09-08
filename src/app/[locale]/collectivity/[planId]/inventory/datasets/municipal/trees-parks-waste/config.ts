@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldRequired } from "@/components/ui/field-help";
+import { FieldHelp, FieldRequired } from "@/components/ui/field-help";
 import Typography from "@/components/ui/typography";
 import { treesParksWaste } from "../../../InventorySchema/municipal/config";
 import type { InventoryTableRow } from "../../../types";
@@ -7,11 +7,26 @@ import type { InventoryTableRow } from "../../../types";
 export function buildTreesParksWasteRows(
   labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
-  const requiredKeys = new Set(["urbanTrees", "greenWaste", "composting"]);
+  const requiredKeys = new Set(["treeCanopyArea", "greenWaste", "composting"]);
 
   return treesParksWaste.yearlyKeys.map((key) => ({
     key,
-    label: requiredKeys.has(key)
+    label: key === "treeCanopyArea"
+      ? React.createElement(
+          Typography,
+          {
+            variant: "label",
+            size: "sm",
+            className: "inline-flex items-center gap-1",
+          },
+          React.createElement("span", null, labelFunc(`yearly.${key}`)),
+          React.createElement(FieldRequired, null),
+          React.createElement(FieldHelp, {
+            content: labelFunc("treeCanopyAreaHelp"),
+            srLabel: labelFunc("treeCanopyAreaHelpLabel"),
+          })
+        )
+      : requiredKeys.has(key)
       ? React.createElement(
           Typography,
           {

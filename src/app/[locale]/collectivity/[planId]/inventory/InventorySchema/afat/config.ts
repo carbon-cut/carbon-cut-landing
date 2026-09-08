@@ -5,9 +5,9 @@ type UnitConf = {
 };
 
 const trackedTreeCropMetricKeys = [
-  "youngHectares",
-  "adultHectares",
-  "senescentHectares",
+  "youngTreeCanopyArea",
+  "adultTreeCanopyArea",
+  "senescentTreeCanopyArea",
   "youngTrees",
   "adultTrees",
   "senescentTrees",
@@ -15,9 +15,9 @@ const trackedTreeCropMetricKeys = [
 
 const trackedTreeCropUnits: UnitConf = {
   metrics: {
-    youngHectares: ["ha"],
-    adultHectares: ["ha"],
-    senescentHectares: ["ha"],
+    youngTreeCanopyArea: ["ha"],
+    adultTreeCanopyArea: ["ha"],
+    senescentTreeCanopyArea: ["ha"],
     youngTrees: [""],
     adultTrees: [""],
     senescentTrees: [""],
@@ -47,9 +47,9 @@ export const trees = {
   trackedTreeCropOptions: perennialPlantationPlantOptions,
   trackedTreeCropMetricKeys: trackedTreeCropMetricKeys,
   trackedTreeCropOptionalMetricKeys: [
-    "youngHectares",
-    "adultHectares",
-    "senescentHectares",
+    "youngTrees",
+    "adultTrees",
+    "senescentTrees",
   ] as const,
   units: trackedTreeCropUnits,
 };
@@ -58,7 +58,7 @@ const livestockUnits: UnitConf = {
   count: {
     default: [""],
   },
-  confinedTimeShare: {
+  manureManagementShares: {
     default: ["%"],
   },
 } as const;
@@ -76,8 +76,39 @@ const livestockKeys = [
   "turkeys",
 ] as const;
 
+const manureManagementAnimalKeys = [
+  "dairyCattle",
+  "otherCattle",
+  "sheep",
+  "goats",
+  "horses",
+  "donkeysMules",
+  "camels",
+] as const;
+
+const poultryManureManagementAnimalKeys = ["broilers", "layingHens", "turkeys"] as const;
+
+const manureManagementSystemKeys = [
+  "solidStorage",
+  "liquidSlurry",
+  "dryLot",
+  "pastureRangePaddock",
+] as const;
+
+const poultryManureManagementSystemKeys = [
+  "poultryManureWithLitter",
+  "poultryManureWithoutLitter",
+  "dryLot",
+  "anaerobicLagoon",
+  "pastureRangePaddock",
+] as const;
+
 export const livestock = {
   keys: livestockKeys,
+  manureManagementAnimalKeys,
+  manureManagementSystemKeys,
+  poultryManureManagementAnimalKeys,
+  poultryManureManagementSystemKeys,
   units: livestockUnits,
 };
 

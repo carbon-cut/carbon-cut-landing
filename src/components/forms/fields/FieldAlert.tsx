@@ -23,12 +23,12 @@ export function FieldAlert({ title, description }: Props) {
           />
         </svg>
       </div>
-      <p className="text-sm text-foreground/90">
+      <div className="text-sm text-foreground/90">
         <AlertTitle className="inline-block font-semibold">{title}</AlertTitle>
         <AlertDescription className="inline-block whitespace-pre-line pl-1">
           {description}
         </AlertDescription>
-      </p>
+      </div>
     </Alert>
   );
 }

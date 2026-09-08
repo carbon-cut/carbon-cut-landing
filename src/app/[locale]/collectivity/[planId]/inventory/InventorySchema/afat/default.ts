@@ -1,4 +1,8 @@
-import { createMatrixDefaults, createYearValueFieldDefaults } from "../_sharedDefaults";
+import {
+  createGridDefaults,
+  createMatrixDefaults,
+  createYearValueFieldDefaults,
+} from "../_sharedDefaults";
 import { fertilizers, livestock } from "./config";
 
 export function afatDefault(years: readonly number[]) {
@@ -9,6 +13,7 @@ export function afatDefault(years: readonly number[]) {
       },
       fruitTrees: {
         dataSet: {
+          treeCanopyArea: createYearValueFieldDefaults(["ha"], years),
           count: createYearValueFieldDefaults([""], years),
         },
       },
@@ -16,6 +21,18 @@ export function afatDefault(years: readonly number[]) {
     livestock: {
       dataSet: {
         count: createMatrixDefaults(livestock.keys, { unit: livestock.units.count.default }, years),
+        manureManagementShares: createGridDefaults(
+          livestock.manureManagementAnimalKeys,
+          livestock.manureManagementSystemKeys,
+          { unit: livestock.units.manureManagementShares.default },
+          years
+        ),
+        poultryManureManagementShares: createGridDefaults(
+          livestock.poultryManureManagementAnimalKeys,
+          livestock.poultryManureManagementSystemKeys,
+          { unit: livestock.units.manureManagementShares.default },
+          years
+        ),
       },
     },
     fertilizers: {
