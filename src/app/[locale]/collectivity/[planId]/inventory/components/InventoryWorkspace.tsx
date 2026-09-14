@@ -32,6 +32,9 @@ import AirTransportSurface from "../datasets/transport/air-transport/surface";
 import PortSurface from "../datasets/transport/port/surface";
 import PublicTransportSurface from "../datasets/transport/public-transport/surface";
 import TerritoryVehiclesSurface from "../datasets/transport/territory-vehicles/surface";
+import WastewaterNitrogenSurface from "../datasets/wastewater-treatment/nitrogen/surface";
+import WastewaterSludgeSurface from "../datasets/wastewater-treatment/sludge/surface";
+import WastewaterTreatmentSurface from "../datasets/wastewater-treatment/treatment-discharge/surface";
 import { useInventoryContext, type InventoryFormValues } from "../context/inventory-context";
 import {
   getInventoryCalculationReadinessPaths,
@@ -106,6 +109,10 @@ function getDefaultDataset(datasets: InventoryDataset[]) {
   return datasets[0];
 }
 
+function isWastewaterDataset(datasetKey: string) {
+  return ["wastewaterTreatment", "wastewaterNitrogen", "wastewaterSludge"].includes(datasetKey);
+}
+
 function renderDatasetSurface(dataset: InventoryDataset | undefined) {
   if (!dataset) return null;
 
@@ -136,6 +143,12 @@ function renderDatasetSurface(dataset: InventoryDataset | undefined) {
       return <LivestockSurface />;
     case "fertilizers":
       return <FertilizersSurface />;
+    case "wastewaterTreatment":
+      return <WastewaterTreatmentSurface />;
+    case "wastewaterNitrogen":
+      return <WastewaterNitrogenSurface />;
+    case "wastewaterSludge":
+      return <WastewaterSludgeSurface />;
     default:
       return <></>; //<PlaceholderSurface dataset={dataset} />;
   }
@@ -349,7 +362,12 @@ export default function InventoryWorkspace({
       return;
     }
 
-    const datasetFieldName = getInventoryDatasetFieldName(activeDataset.key);
+    const wastewaterDataset = isWastewaterDataset(activeDataset.key);
+    const debugDatasetKey = wastewaterDataset ? "wastewaterSanitation" : activeDataset.key;
+    const readinessDatasetKey = wastewaterDataset ? "wastewaterTreatment" : activeDataset.key;
+    const datasetFieldName = wastewaterDataset
+      ? "wastewaterSanitation"
+      : getInventoryDatasetFieldName(activeDataset.key);
     const debugFieldNames =
       activeDataset.key === "naturalGas"
         ? ([datasetFieldName, "sharedData.population", "sharedData.householdEnergy"].filter(
@@ -376,11 +394,14 @@ export default function InventoryWorkspace({
       return;
     }
 
-    for (const path of getInventoryCalculationReadinessPaths(activeDataset.key, currentValues)) {
+    for (const path of getInventoryCalculationReadinessPaths(readinessDatasetKey, currentValues)) {
       mainForm.clearErrors(path.join(".") as FieldPath<InventoryFormValues>);
     }
 
-    const readinessResult = validateInventoryCalculationReadiness(activeDataset.key, currentValues);
+    const readinessResult = validateInventoryCalculationReadiness(
+      readinessDatasetKey,
+      currentValues
+    );
 
     if (!readinessResult.success) {
       for (const issue of readinessResult.error.issues) {
@@ -398,7 +419,7 @@ export default function InventoryWorkspace({
 
     const { years: _years, ...inventoryInput } = currentValues;
     const debugRequest = {
-      datasetKey: activeDataset.key,
+      datasetKey: debugDatasetKey,
       inventoryInput,
     };
 
@@ -411,9 +432,9 @@ export default function InventoryWorkspace({
 
       setDebugCalculationsByDatasetKey((current) => ({
         ...current,
-        [debugData.datasetKey]: {
+        [activeDataset.key]: {
           status: "success",
-          datasetKey: debugData.datasetKey,
+          datasetKey: debugDatasetKey,
           resultRows,
           warnings: debugData.warnings ?? [],
           formulaVersion: debugData.formulaVersion,
@@ -426,19 +447,41 @@ export default function InventoryWorkspace({
       if (error instanceof CollectivityApiError) {
         console.log("debugData", debugRequest);
         console.log("debugError", error.payload.error);
-        const reasons =
-          error.payload.error?.details?.reasons?.map((reason) =>
-            [reason.code, reason.path, reason.parameterKey].filter(Boolean).join(" · ")
-          ) ?? [];
+        const backendReasons = error.payload.error?.details?.reasons ?? [];
+        const reasons = wastewaterDataset
+          ? Array.from(
+              new Set(
+                backendReasons.map((reason) => {
+                  const message =
+                    reason.code === "RExceedInput"
+                      ? (t("inventoryWorkspace.debugCalculation.errors.RExceedInput") as string)
+                      : (t("inventoryWorkspace.debugCalculation.errors.unknown") as string);
+                  const paths = reason.paths ?? (reason.path ? [reason.path] : []);
+
+                  paths.forEach((path) => {
+                    mainForm.setError(path as FieldPath<InventoryFormValues>, {
+                      type: "server",
+                      message,
+                    });
+                  });
+
+                  return message;
+                })
+              )
+            )
+          : backendReasons.map((reason) =>
+              [reason.code, reason.path, reason.parameterKey].filter(Boolean).join(" · ")
+            );
 
         setDebugCalculationsByDatasetKey((current) => ({
           ...current,
           [activeDataset.key]: {
             status: "error",
-            datasetKey: activeDataset.key,
-            message:
-              error.payload.error?.message ??
-              (t("inventoryWorkspace.debugCalculation.calculationError") as string),
+            datasetKey: debugDatasetKey,
+            message: wastewaterDataset
+              ? (t("inventoryWorkspace.debugCalculation.calculationError") as string)
+              : (error.payload.error?.message ??
+                (t("inventoryWorkspace.debugCalculation.calculationError") as string)),
             reasons,
           },
         }));

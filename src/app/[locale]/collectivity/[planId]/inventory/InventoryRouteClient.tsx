@@ -51,7 +51,7 @@ export default function InventoryRouteClient() {
   const snapshotVersion = `${snapshot.currentInventory.id}:${snapshot.currentInventory.updatedAt}`;
   const inventoryYearPlan = useMemo(() => buildInventoryYearPlan(snapshot), [snapshot]);
   const years = useMemo(
-    () => [inventoryYearPlan.reference, ...inventoryYearPlan.comparisons],
+    () => [inventoryYearPlan.reference, ...inventoryYearPlan.comparisons].sort((a, b) => a - b),
     [inventoryYearPlan]
   );
   const { workspace } = useMemo(

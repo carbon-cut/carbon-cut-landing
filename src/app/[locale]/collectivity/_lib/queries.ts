@@ -36,6 +36,7 @@ type ApiErrorPayload = {
       fieldErrors?: Partial<Record<string, string>>;
       reasons?: Array<{
         code?: string;
+        paths?: string[];
         path?: string;
         parameterKey?: string;
       }>;

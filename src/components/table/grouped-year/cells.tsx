@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { useWatch, type FieldValues, type UseFormReturn } from "react-hook-form";
-import type { Row } from "@tanstack/react-table";
 
 import { TName } from "@/components/ui/forms";
 import InventoryTableInput from "../InventoryTableInput";
-import { InventoryTableSelectForm } from "../InventoryTableSelect";
-import type { InventoryTableRow } from "@/app/[locale]/collectivity/[planId]/inventory/types";
-import type { GroupedYearRowField } from "./types";
+export { renderEditableTableRowSelectCell as renderGroupedYearRowSelectCell } from "../editable-rows/cells";
 
 export function getGroupedYearFieldName<T extends FieldValues>({
   baseName,
@@ -103,51 +100,5 @@ export function renderGroupedYearInputCell<T extends FieldValues>({
 
   return (
     <InventoryTableInput unitAdornment={watchedUnit} type="number" form={form} name={fieldName} />
-  );
-}
-
-export function renderGroupedYearRowSelectCell<T extends FieldValues>({
-  form,
-  baseName,
-  row,
-  field,
-  disabled = false,
-}: {
-  form: UseFormReturn<T, undefined>;
-  baseName: TName<T>;
-  row: Row<InventoryTableRow>;
-  field: GroupedYearRowField;
-  disabled?: boolean;
-}) {
-  const fieldName = `${baseName}.${row.index}.${field.key}` as TName<T>;
-  const options = field.getOptions
-    ? field.getOptions({
-        form,
-        rowIndex: row.index,
-      })
-    : field.options;
-
-  return (
-    <InventoryTableSelectForm
-      form={form}
-      name={fieldName}
-      ariaLabel={field.label}
-      placeholder={field.placeholder ?? field.label}
-      options={options}
-      disabled={disabled}
-      preserveDisabledAppearance
-      onChange={(value) => {
-        if (!field.unitSubcolumnKey) return;
-
-        const option = options.find((currentOption) => currentOption.value === value);
-        if (!option?.unit) return;
-
-        form.setValue(
-          `${baseName}.${row.index}.value.${field.unitSubcolumnKey}.unit` as TName<T>,
-          // @ts-expect-error - dynamic grouped-year row unit path
-          option.unit
-        );
-      }}
-    />
   );
 }

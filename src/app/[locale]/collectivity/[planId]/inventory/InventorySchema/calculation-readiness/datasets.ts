@@ -23,6 +23,10 @@ import {
 import { publicTransport } from "../transport/config";
 import { getPath } from "./helpers";
 import type { CalculationReadinessResult } from "./types";
+import {
+  getDomesticLoadFallbackRulePaths,
+  validateDomesticLoadFallbackRule,
+} from "./rules/domestic-load-fallback";
 
 const fleetRule = atLeastOneFallbackActivityRule({
   activityBasePath: fleet.calculation.activityBasePath,
@@ -145,6 +149,10 @@ export function validateDatasetCalculationReadiness(
     );
   }
 
+  if (datasetKey === "wastewaterTreatment") {
+    return toResult(validateDomesticLoadFallbackRule(values));
+  }
+
   return { success: true };
 }
 
@@ -180,6 +188,10 @@ export function getDatasetCalculationReadinessPaths(datasetKey: string, values: 
     return getPublicTransportRules(values).flatMap((rule) =>
       getAtLeastOneFallbackActivityRulePaths(values, rule)
     );
+  }
+
+  if (datasetKey === "wastewaterTreatment") {
+    return getDomesticLoadFallbackRulePaths(values);
   }
 
   return [];

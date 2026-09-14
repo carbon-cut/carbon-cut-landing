@@ -398,6 +398,83 @@ function computeFertilizersProgress(
   return createProgress(completed, total);
 }
 
+function wastewaterTreatmentRows(values: Partial<InventoryFormValues> | undefined) {
+  const rows = values?.wastewaterSanitation?.treatmentDischarge?.dataSet;
+  return Array.isArray(rows) ? rows : [];
+}
+
+function annualValue(row: unknown, key: string, year: InventoryYear) {
+  if (!isRecord(row) || !isRecord(row.value)) return undefined;
+  const metric = row.value[key];
+  if (!isRecord(metric) || !isRecord(metric.value)) return undefined;
+
+  return metric.value[`y-${year}`];
+}
+
+function computeWastewaterTreatmentProgress(
+  values: Partial<InventoryFormValues> | undefined,
+  years: readonly InventoryYear[]
+) {
+  const rows = wastewaterTreatmentRows(values);
+  const total = rows.length * (2 + years.length);
+  const completed = rows.reduce((sum, row) => {
+    if (!isRecord(row)) return sum;
+
+    const loadType = typeof row.loadType === "string" ? row.loadType : "";
+    const fixedFields = countFilledField(row.system) + countFilledField(loadType);
+    const annualFields = years.reduce((yearSum, year) => {
+      const incomingLoad = annualValue(row, loadType, year);
+      const populationAllocation =
+        loadType === "domestic" ? annualValue(row, "populationAllocation", year) : undefined;
+      return (
+        yearSum + (isFilledScalar(incomingLoad) || isFilledScalar(populationAllocation) ? 1 : 0)
+      );
+    }, 0);
+
+    return sum + fixedFields + annualFields;
+  }, 0);
+
+  return createProgress(completed, total);
+}
+
+function computeWastewaterNitrogenProgress(
+  values: Partial<InventoryFormValues> | undefined,
+  years: readonly InventoryYear[]
+) {
+  const rows = wastewaterTreatmentRows(values);
+  const total = rows.length * years.length;
+  const completed = rows.reduce(
+    (sum, row) =>
+      sum +
+      years.reduce(
+        (yearSum, year) => yearSum + countFilledField(annualValue(row, "nitrogen", year)),
+        0
+      ),
+    0
+  );
+
+  return createProgress(completed, total);
+}
+
+function computeWastewaterSludgeProgress(
+  values: Partial<InventoryFormValues> | undefined,
+  years: readonly InventoryYear[]
+) {
+  const rows = values?.wastewaterSanitation?.sludgeDestination?.dataSet ?? [];
+  const total = rows.length * years.length;
+  const completed = rows.reduce(
+    (sum, row) =>
+      sum +
+      years.reduce(
+        (yearSum, year) => yearSum + countFilledField(annualValue(row, "mass", year)),
+        0
+      ),
+    0
+  );
+
+  return createProgress(completed, total);
+}
+
 const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
   fleet: computeFleetProgress,
   publicLighting: computePublicLightingProgress,
@@ -412,6 +489,9 @@ const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
   trees: computeTreesProgress,
   livestock: computeLivestockProgress,
   fertilizers: computeFertilizersProgress,
+  wastewaterTreatment: computeWastewaterTreatmentProgress,
+  wastewaterNitrogen: computeWastewaterNitrogenProgress,
+  wastewaterSludge: computeWastewaterSludgeProgress,
 };
 
 export function getInventoryDatasetProgress(

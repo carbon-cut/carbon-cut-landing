@@ -17,6 +17,9 @@ import {
   Car,
   TreePine,
   PlugZap,
+  Atom,
+  Layers3,
+  Waves,
   type LucideIcon,
 } from "lucide-react";
 
@@ -43,6 +46,9 @@ const datasetIconMap: Record<string, LucideIcon> = {
   trees: TreePine,
   livestock: Leaf,
   fertilizers: FlaskConical,
+  wastewaterTreatment: Waves,
+  wastewaterNitrogen: Atom,
+  wastewaterSludge: Layers3,
 };
 
 export function getInventoryFamilyNavIcon(familyKey: string): LucideIcon {

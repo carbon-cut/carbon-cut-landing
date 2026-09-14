@@ -22,9 +22,15 @@ export const futureYearSchema = yearSchema.refine(
 const emptyToUndefined = (value: unknown) => (value === "" || value === null ? undefined : value);
 const numberSchema = z.preprocess(
   emptyToUndefined,
-  z.coerce.number({ errorMap: () => ({ message: "Required" }) })
+  z.coerce
+    .number({ errorMap: () => ({ message: "Required" }) })
+    .finite()
+    .min(0, { message: "nonNegative" })
 );
-export const optionalNumberSchema = z.preprocess(emptyToUndefined, z.coerce.number().optional());
+export const optionalNumberSchema = z.preprocess(
+  emptyToUndefined,
+  z.coerce.number().finite().min(0, { message: "nonNegative" }).optional()
+);
 
 export const requiredStringSchema = z.string().min(1, { message: "Required" });
 

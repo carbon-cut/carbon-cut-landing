@@ -33,7 +33,7 @@ export function buildInventoryDefaults(
     energy: getActiveDatasetDefaults(energyDefault(years), activeDatasetKeys),
     transport: getActiveDatasetDefaults(transportDefault(years), activeDatasetKeys),
     afat: getActiveDatasetDefaults(afatDefault(years), activeDatasetKeys),
-    wastewaterSanitation: wastewaterSanitationDefault(),
+    wastewaterSanitation: wastewaterSanitationDefault(years),
     waste: wasteDefault(),
     sharedData: sharedDataDefault(years),
   };

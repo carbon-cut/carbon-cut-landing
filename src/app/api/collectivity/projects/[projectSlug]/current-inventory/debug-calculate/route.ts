@@ -23,6 +23,7 @@ const calculationDatasetKeys = [
   "trees",
   "livestock",
   "fertilizers",
+  "wastewaterSanitation",
 ] as const;
 
 type RouteContext = {

@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 
-import { type ArrayPath, type FieldValues, useFieldArray } from "react-hook-form";
+import { type FieldValues } from "react-hook-form";
 import { Plus } from "lucide-react";
 
 import { useInventoryContext } from "@/app/[locale]/collectivity/[planId]/inventory/context/inventory-context";
@@ -11,6 +11,7 @@ import InventoryTanstackTable from "../tanstack";
 import { createGroupedYearColumns } from "./columns";
 import type { GroupedYearEditableRows, GroupedYearTableProps } from "./types";
 import type { TName } from "@/components/ui/forms";
+import { useEditableTableRows } from "../editable-rows/useEditableTableRows";
 
 function EditableInventoryGroupedYearTable<T extends FieldValues>({
   title,
@@ -23,22 +24,8 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
   rowFields,
 }: GroupedYearTableProps<T> & { baseName: TName<T>; editableRows: GroupedYearEditableRows }) {
   const { years } = useInventoryContext();
-  const { fields, append, insert, remove } = useFieldArray({
-    control: form.control,
-    name: baseName as ArrayPath<T>,
-  });
-  const rowKeyFieldName = editableRows.rowKeyFieldName ?? "key";
-  const appendRow = (row: Record<string, unknown>) => {
-    // @ts-expect-error - dynamic grouped-year row structure depends on surface config
-    append(row, { shouldFocus: true });
-  };
-  const insertRow = (index: number, row: Record<string, unknown>) => {
-    // @ts-expect-error - dynamic grouped-year row structure depends on surface config
-    insert(index, row, { shouldFocus: true });
-  };
-  const handleAddRow = () => {
-    appendRow({ [rowKeyFieldName]: "", value: {} });
-  };
+  const { fields, remove, rowKeyFieldName, appendRow, insertRow, addEmptyRow } =
+    useEditableTableRows({ form, baseName, editableRows });
 
   const tableRows = useMemo(
     () =>
@@ -89,7 +76,7 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
             type="button"
             title={editableRows.addLabel}
             aria-label={editableRows.addLabel}
-            onClick={handleAddRow}
+            onClick={addEmptyRow}
           >
             <Plus aria-hidden="true" />
             {editableRows.addLabel}

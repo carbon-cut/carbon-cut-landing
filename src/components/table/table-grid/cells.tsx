@@ -17,9 +17,12 @@ export function NumberInputCell<T extends FieldValues>({
   row,
   column,
   selectedYear,
+  editableRows = false,
 }: TableGridCellRendererArgs<T>) {
   const yearSegment = selectedYear === undefined ? "" : `.y-${selectedYear}`;
-  const fieldName = `${baseName}.${row.original.key}.${column.key}.value${yearSegment}` as TName<T>;
+  const fieldName = editableRows
+    ? (`${baseName}.${row.index}.value.${column.key}.value${yearSegment}` as TName<T>)
+    : (`${baseName}.${row.original.key}.${column.key}.value${yearSegment}` as TName<T>);
   return (
     <InventoryTableInput
       form={form}

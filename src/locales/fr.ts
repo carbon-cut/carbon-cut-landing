@@ -1112,6 +1112,10 @@ export default {
           label: "Résultat debug temporaire",
           success: "Succès",
           error: "Impossible de lancer le calcul debug pour ce jeu de données.",
+          errors: {
+            RExceedInput: "Le méthane récupéré ne peut pas dépasser le méthane produit.",
+            unknown: "Une donnée ne respecte pas une règle de calcul.",
+          },
           validationError: "Ce jeu de données contient des champs à corriger.",
           calculationError: "Le serveur ne peut pas calculer ce jeu de données.",
           requestError: "La demande de calcul n'a pas abouti.",
@@ -1587,6 +1591,199 @@ export default {
                 other: "Autre",
               },
             },
+            wastewaterTreatment: {
+              discharge: {
+                title: "Rejet des effluents traités",
+                description:
+                  "Renseignez le rejet dans un milieu aquatique, lorsqu'il est applicable.",
+              },
+              nitrogen: {
+                title: "Azote et N₂O",
+                description: "Renseignez l'azote annuel lorsqu'il est connu.",
+              },
+              surface: {
+                title: "Eaux usées",
+              },
+              treatment: {
+                title: "Traitement et rejet des eaux usées",
+                description:
+                  "Ajoutez un système de traitement ou de rejet, puis renseignez les charges organiques annuelles connues.",
+                addLabel: "Ajouter un système",
+                rowLabelPrefix: "Système",
+                fields: {
+                  system: "Système de traitement",
+                  systemPlaceholder: "Choisir un système",
+                  loadType: "Type d'eau usée",
+                  loadTypePlaceholder: "Choisir un type",
+                },
+                columns: {
+                  organicLoad: "Charge organique",
+                  sludgeRemoved: "Charge organique retirée dans les boues (S)",
+                  nitrogen: "Azote des eaux usées",
+                  methaneRecovery: "Méthane récupéré",
+                  populationAllocation: "Part de la DBO domestique traitée par ce système",
+                  effluentPath: "Données sur l'effluent traité",
+                  outgoingLoad: "Charge organique sortante",
+                  effluentTreatmentLevel: "Niveau de traitement de l'effluent",
+                  biologicalTreatment: "Traitement biologique",
+                  receivingWaterCondition: "État du milieu récepteur",
+                  dischargesToWater: "L'effluent traité est-il rejeté dans un milieu aquatique ?",
+                  receivingWater: "Milieu récepteur",
+                },
+                yesNo: { no: "Non", yes: "Oui" },
+                receivingWater: {
+                  otherAquatic: "Autre milieu aquatique",
+                  reservoirLakeEstuary: "Réservoir, lac ou estuaire",
+                },
+                effluentPaths: {
+                  measuredOutgoingLoad: "Charge organique sortante mesurée",
+                  treatmentLevel: "Niveau de traitement connu",
+                },
+                effluentTreatmentLevels: {
+                  untreated: "Aucun traitement efficace",
+                  primaryMechanical: "Traitement mécanique de base",
+                  secondaryBiological: "Traitement biologique normal",
+                  advancedBiological: "Traitement biologique avancé",
+                  notEstimated: "Impossible à estimer",
+                },
+                biologicalTreatments: {
+                  standard: "Traitement biologique standard",
+                  advanced: "Traitement biologique avancé",
+                },
+                receivingWaterConditions: {
+                  normalOrUnknown: "Normal ou inconnu",
+                  nutrientImpactedOrHypoxic: "Impacté par les nutriments ou hypoxique",
+                },
+                loadTypes: {
+                  domestic: "Domestique",
+                  industrial: "Industriel",
+                  unclassified: "Eaux usées non classées",
+                },
+                help: {
+                  organicLoad:
+                    "Indiquez la charge annuelle connue. Elle est requise sauf si la saisie par population est utilisée.",
+                  organicLoadLabel: "Information sur la charge organique",
+                  loadType:
+                    "Dans les calculs, les eaux usées non classées sont traitées comme des eaux usées domestiques.",
+                  loadTypeLabel: "Information sur le type d'eau usée",
+                  sludgeRemoved:
+                    "Ce n'est pas une masse de boues. Renseignez la charge organique retirée dans les boues pour les systèmes concernés.",
+                  sludgeRemovedLabel: "Information sur la charge retirée dans les boues",
+                  nitrogen: "Facultatif : renseignez l'azote annuel seulement s'il est connu.",
+                  nitrogenLabel: "Information sur l'azote",
+                  methaneRecovery: "Facultatif : laissez vide si aucun méthane n'est récupéré.",
+                  methaneRecoveryLabel: "Information sur le méthane récupéré",
+                  populationAllocation:
+                    "Facultatif : inutile lorsque la charge organique domestique annuelle est connue directement.",
+                  populationAllocationLabel: "Information sur la part de la DBO domestique traitée",
+                  dischargesToWater:
+                    "Pour les systèmes autres qu'un rejet direct. Si la réponse est oui, indiquez ensuite le milieu récepteur.",
+                  dischargesToWaterLabel: "Information sur le rejet dans l'eau",
+                  receivingWater:
+                    "À renseigner pour un rejet direct, ou lorsque l'effluent traité rejoint un milieu aquatique.",
+                  receivingWaterLabel: "Information sur le milieu récepteur",
+                  effluentPath:
+                    "Choisissez une charge sortante mesurée si elle est disponible ; sinon, indiquez le niveau de traitement.",
+                  effluentPathLabel: "Information sur le chemin de l'effluent traité",
+                  outgoingLoad:
+                    "Charge organique annuelle mesurée après traitement. Elle remplace le niveau de traitement.",
+                  outgoingLoadLabel: "Information sur la charge organique sortante",
+                  effluentTreatmentLevel:
+                    "Choisissez le niveau connu. « Impossible à estimer » conserve le chemin comme non estimé, sans le remplacer par zéro.",
+                  effluentTreatmentLevelLabel: "Information sur le niveau de traitement",
+                  biologicalTreatment:
+                    "À renseigner pour un traitement aérobie centralisé lorsque l'azote est connu.",
+                  biologicalTreatmentLabel: "Information sur le traitement biologique",
+                  receivingWaterCondition:
+                    "À renseigner lorsque l'azote est connu et que le système rejette dans un milieu aquatique.",
+                  receivingWaterConditionLabel: "Information sur l'état du milieu récepteur",
+                },
+                systems: {
+                  centralizedAerobic: "Traitement aérobie centralisé",
+                  anaerobicReactor: "Réacteur anaérobie",
+                  anaerobicShallowFacultativeLagoon: "Lagune anaérobie peu profonde facultative",
+                  anaerobicDeepLagoon: "Lagune anaérobie profonde",
+                  constructedWetlandSurfaceFlow: "Zone humide construite à écoulement de surface",
+                  constructedWetlandHorizontalSubsurfaceFlow:
+                    "Zone humide construite à écoulement horizontal sous la surface",
+                  constructedWetlandVerticalSubsurfaceFlow:
+                    "Zone humide construite à écoulement vertical sous la surface",
+                  septicTank: "Fosse septique",
+                  septicTankLandDispersal: "Fosse septique avec épandage",
+                  stagnantSewer: "Égout stagnant",
+                  flowingSewer: "Égout à écoulement",
+                  latrineDryHousehold: "Latrine sèche domestique",
+                  latrineDryCommunal: "Latrine sèche collective",
+                  latrineWetOrFlush: "Latrine humide ou à chasse d'eau",
+                  aquaticDischarge: "Rejet direct dans un milieu aquatique",
+                },
+              },
+              sludge: {
+                title: "Destination des boues",
+                description:
+                  "Ajoutez les destinations physiques des boues et renseignez leur masse humide annuelle.",
+                addLabel: "Ajouter une destination",
+                rowLabelPrefix: "Destination",
+                fields: {
+                  destination: "Destination",
+                  destinationPlaceholder: "Choisir une destination",
+                },
+                columns: {
+                  mass: "Masse de boues humides",
+                  methaneRecovery: "Méthane récupéré",
+                  nitrogenApplied: "Azote appliqué",
+                  sludgeType: "Type de boues",
+                  climate: "Climat",
+                  landfillSiteType: "Type de site d'enfouissement",
+                  landfillIdentifier: "Identifiant du site",
+                },
+                destinations: {
+                  anaerobicDigestion: "Digestion anaérobie",
+                  composting: "Compostage",
+                  landfill: "Mise en décharge",
+                  incineration: "Incinération",
+                  landApplication: "Épandage",
+                  notEstimated: "Destination non estimée",
+                },
+                help: {
+                  mass: "Indiquez la masse annuelle de boues humides. Elle est indépendante de la charge organique retirée dans les boues (S).",
+                  massLabel: "Information sur la masse de boues",
+                  methaneRecovery: "Facultatif : laissez vide si aucun méthane n'est récupéré.",
+                  methaneRecoveryLabel: "Information sur le méthane récupéré",
+                  nitrogenApplied:
+                    "Facultatif : renseignez l'azote annuel appliqué lorsqu'il est connu.",
+                  nitrogenAppliedLabel: "Information sur l'azote appliqué",
+                  sludgeType: "Renseignez le type de boues envoyé en décharge.",
+                  sludgeTypeLabel: "Information sur le type de boues",
+                  climate: "Renseignez le climat du site d'enfouissement.",
+                  climateLabel: "Information sur le climat",
+                  landfillSiteType: "Renseignez le type de site d'enfouissement.",
+                  landfillSiteTypeLabel: "Information sur le type de site",
+                  landfillIdentifier: "Renseignez l'identifiant du site d'enfouissement.",
+                  landfillIdentifierLabel: "Information sur l'identifiant du site",
+                },
+              },
+              fallback: {
+                title: "Estimation à partir de la population",
+                description:
+                  "Utilisez les données de population déjà renseignées lorsque la charge organique domestique annuelle n'est pas connue.",
+                rows: {
+                  utility: "Réseau / service d'assainissement",
+                },
+                columns: {
+                  connectionPercentage: "Part de la population raccordée",
+                  foodWasteToSewer: "Déchets alimentaires dans le réseau",
+                },
+                help: {
+                  connectionPercentage:
+                    "Part annuelle de la population déjà renseignée qui est raccordée au réseau ou service d'assainissement.",
+                  connectionPercentageLabel: "Information sur le raccordement au réseau",
+                  foodWasteToSewer:
+                    "Indiquez si les déchets alimentaires sont éliminés dans le réseau. La valeur par défaut est non.",
+                  foodWasteToSewerLabel: "Information sur les déchets alimentaires",
+                },
+              },
+            },
             trees: {
               trackedTreeCrops: {
                 title: "Cultures arboricoles suivies",
@@ -1928,6 +2125,30 @@ export default {
             sourceMode: "TODO source-first, year-first ou hybride.",
             yearMode: "TODO logique proxys, comparaisons et validation annuelle.",
             implementationNote: "Placeholder transport general volontaire.",
+          },
+          wastewaterTreatment: {
+            title: "Traitement et rejet",
+            description: "Systèmes de traitement et rejets des effluents traités.",
+            sourceMode: "Saisie annuelle par système et par destination.",
+            yearMode: "Les charges et masses restent renseignées par année d'inventaire.",
+            implementationNote:
+              "Les détails conditionnels seront ajoutés au niveau de chaque système.",
+          },
+          wastewaterNitrogen: {
+            title: "Azote et N₂O",
+            description: "Données d'azote annuelles par système de traitement.",
+            sourceMode: "Saisie annuelle par système.",
+            yearMode: "Les données restent renseignées par année d'inventaire.",
+            implementationNote:
+              "Les détails conditionnels seront ajoutés au niveau de chaque système.",
+          },
+          wastewaterSludge: {
+            title: "Boues",
+            description: "Destinations physiques et masses annuelles des boues.",
+            sourceMode: "Saisie annuelle par destination.",
+            yearMode: "Les masses restent renseignées par année d'inventaire.",
+            implementationNote:
+              "Les détails conditionnels seront ajoutés au niveau de chaque destination.",
           },
           sanitation: {
             title: "Assainissement",
@@ -3481,6 +3702,7 @@ export default {
     submit: "Résultat",
     errors: {
       Required: "Obligatoire",
+      nonNegative: "0 ou plus",
       between0And100: "Valeur entre 0 et 100",
       manureManagementSharesMustTotal100:
         "La répartition des systèmes de gestion du fumier doit totaliser 100 %.",

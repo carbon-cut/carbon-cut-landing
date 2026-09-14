@@ -32,6 +32,9 @@ const datasetDefinitions = [
   { key: "trees", familyKey: "afat", applicability: "agriculture" },
   { key: "livestock", familyKey: "afat", applicability: "agriculture" },
   { key: "fertilizers", familyKey: "afat", applicability: "agriculture" },
+  { key: "wastewaterTreatment", familyKey: "wastewater" },
+  { key: "wastewaterNitrogen", familyKey: "wastewater" },
+  { key: "wastewaterSludge", familyKey: "wastewater" },
 ] as const satisfies readonly InventoryDatasetDefinition[];
 
 export type InventoryDatasetKey = (typeof datasetDefinitions)[number]["key"];

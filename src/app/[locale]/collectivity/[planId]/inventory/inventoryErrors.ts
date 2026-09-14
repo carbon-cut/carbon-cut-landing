@@ -12,6 +12,9 @@ const datasetErrorPaths: Partial<Record<string, readonly string[]>> = {
   trees: ["afat", "trees"],
   livestock: ["afat", "livestock"],
   fertilizers: ["afat", "fertilizers"],
+  wastewaterTreatment: ["wastewaterSanitation"],
+  wastewaterNitrogen: ["wastewaterSanitation"],
+  wastewaterSludge: ["wastewaterSanitation"],
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
