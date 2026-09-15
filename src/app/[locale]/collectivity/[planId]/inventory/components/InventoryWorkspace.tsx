@@ -30,8 +30,9 @@ import PublicLightingSurface from "../datasets/municipal/public-lighting/surface
 import TreesParksWasteSurface from "../datasets/municipal/trees-parks-waste/surface";
 import AirTransportSurface from "../datasets/transport/air-transport/surface";
 import PortSurface from "../datasets/transport/port/surface";
-import PublicTransportSurface from "../datasets/transport/public-transport/surface";
+import BusesSurface from "../datasets/transport/buses/surface";
 import TerritoryVehiclesSurface from "../datasets/transport/territory-vehicles/surface";
+import UrbanRailSurface from "../datasets/transport/urban-rail/surface";
 import WastewaterNitrogenSurface from "../datasets/wastewater-treatment/nitrogen/surface";
 import WastewaterSludgeSurface from "../datasets/wastewater-treatment/sludge/surface";
 import WastewaterTreatmentSurface from "../datasets/wastewater-treatment/treatment-discharge/surface";
@@ -131,8 +132,10 @@ function renderDatasetSurface(dataset: InventoryDataset | undefined) {
       return <NaturalGasSurface />;
     case "port":
       return <PortSurface />;
-    case "publicTransport":
-      return <PublicTransportSurface />;
+    case "buses":
+      return <BusesSurface />;
+    case "urbanRail":
+      return <UrbanRailSurface />;
     case "airTransport":
       return <AirTransportSurface />;
     case "territoryVehicles":

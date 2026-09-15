@@ -20,7 +20,7 @@ import {
   getAtLeastOneRecordColumnActivityRulePaths,
   validateAtLeastOneRecordColumnActivityRule,
 } from "./rules/at-least-one-record-column-activity";
-import { publicTransport } from "../transport/config";
+import { buses, urbanRail } from "../transport/config";
 import { getPath } from "./helpers";
 import type { CalculationReadinessResult } from "./types";
 import {
@@ -78,8 +78,8 @@ const airTransportNationalMovementsRule = atLeastOneRecordColumnActivityRule({
   ghostErrorPath: "transport.airTransport.__readiness.national",
 });
 
-function getPublicTransportRules(values: unknown) {
-  const operators = getPath(values, ["transport", "publicTransport", "dataSet"]);
+function getBusesRules(values: unknown) {
+  const operators = getPath(values, ["transport", "buses", "dataSet"]);
 
   if (!Array.isArray(operators)) {
     return [];
@@ -87,11 +87,29 @@ function getPublicTransportRules(values: unknown) {
 
   return operators.map((_, index) =>
     atLeastOneFallbackActivityRule({
-      activityBasePath: `transport.publicTransport.dataSet.${index}`,
+      activityBasePath: `transport.buses.dataSet.${index}`,
       priceBasePath: "priceAssumptions.energy",
       physicalGroupKey: "consumption",
       monetaryGroupKey: "spend",
-      keys: publicTransport.fuelKeys,
+      keys: buses.fuelKeys,
+    })
+  );
+}
+
+function getUrbanRailRules(values: unknown) {
+  const services = getPath(values, ["transport", "urbanRail", "dataSet"]);
+
+  if (!Array.isArray(services)) {
+    return [];
+  }
+
+  return services.map((_, index) =>
+    atLeastOneFallbackActivityRule({
+      activityBasePath: `transport.urbanRail.dataSet.${index}`,
+      priceBasePath: "priceAssumptions.energy",
+      physicalGroupKey: "energy",
+      monetaryGroupKey: "spend",
+      keys: urbanRail.energyKeys,
     })
   );
 }
@@ -102,8 +120,12 @@ function toResult(
   return issues.length > 0 ? { success: false, error: { issues } } : { success: true };
 }
 
-function isPublicTransportDatasetKey(datasetKey: string) {
-  return datasetKey === "publicTransport";
+function isBusesDatasetKey(datasetKey: string) {
+  return datasetKey === "buses";
+}
+
+function isUrbanRailDatasetKey(datasetKey: string) {
+  return datasetKey === "urbanRail";
 }
 
 export function validateDatasetCalculationReadiness(
@@ -141,9 +163,15 @@ export function validateDatasetCalculationReadiness(
     );
   }
 
-  if (isPublicTransportDatasetKey(datasetKey)) {
+  if (isBusesDatasetKey(datasetKey)) {
     return toResult(
-      getPublicTransportRules(values).flatMap((rule) =>
+      getBusesRules(values).flatMap((rule) => validateAtLeastOneFallbackActivityRule(values, rule))
+    );
+  }
+
+  if (isUrbanRailDatasetKey(datasetKey)) {
+    return toResult(
+      getUrbanRailRules(values).flatMap((rule) =>
         validateAtLeastOneFallbackActivityRule(values, rule)
       )
     );
@@ -184,8 +212,14 @@ export function getDatasetCalculationReadinessPaths(datasetKey: string, values: 
     return getAtLeastOneRecordColumnActivityRulePaths(airTransportNationalMovementsRule);
   }
 
-  if (isPublicTransportDatasetKey(datasetKey)) {
-    return getPublicTransportRules(values).flatMap((rule) =>
+  if (isBusesDatasetKey(datasetKey)) {
+    return getBusesRules(values).flatMap((rule) =>
+      getAtLeastOneFallbackActivityRulePaths(values, rule)
+    );
+  }
+
+  if (isUrbanRailDatasetKey(datasetKey)) {
+    return getUrbanRailRules(values).flatMap((rule) =>
       getAtLeastOneFallbackActivityRulePaths(values, rule)
     );
   }

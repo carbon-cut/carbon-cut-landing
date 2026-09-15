@@ -108,12 +108,12 @@ export function createTableGridColumns<T extends FieldValues>({
           type="button"
           title="Supprimer"
           aria-label={`Supprimer ${row.original.key}`}
-        disabled={
-          editableRows.rowCount <= (editableRows.minRows ?? 0) ||
-          editableRows.canRemoveRow?.(fieldRows[row.index], row.index) === false
-        }
-        onClick={() => {
-          editableRows.onRemoveRow(row.index);
+          disabled={
+            editableRows.rowCount <= (editableRows.minRows ?? 0) ||
+            editableRows.canRemoveRow?.(fieldRows[row.index], row.index) === false
+          }
+          onClick={() => {
+            editableRows.onRemoveRow(row.index);
           }}
         >
           <Trash2 aria-hidden="true" />

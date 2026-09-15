@@ -30,17 +30,17 @@ import { Plus, Trash2 } from "lucide-react";
 import { useScopedI18n } from "@/locales/client";
 import { cn } from "@/lib/utils";
 import {
-  buildPublicTransportEnergyByFuelSection,
-  buildPublicTransportExploitationRowsWithoutFuel,
-  buildPublicTransportFutureYears,
-  buildPublicTransportOperatorDefaultValues,
-  buildPublicTransportRenewalFutureRows,
-  buildPublicTransportRows,
+  buildBusesEnergyByFuelSection,
+  buildBusesExploitationRowsWithoutFuel,
+  buildBusesFutureYears,
+  buildBusesOperatorDefaultValues,
+  buildBusesRenewalFutureRows,
+  buildBusesRows,
 } from "./config";
 
 const inventoryName = (name: string) => name as TName<InventoryFormValues>;
 
-function PublicTransportOperatorSection({
+function BusesOperatorSection({
   fieldId,
   index,
   exploitationRows,
@@ -49,20 +49,20 @@ function PublicTransportOperatorSection({
   ageRows,
   renewalFutureRows,
   futureYears,
-  tPublicTransport,
+  tBuses,
 }: {
   fieldId: string;
   index: number;
-  exploitationRows: ReturnType<typeof buildPublicTransportExploitationRowsWithoutFuel>;
-  energyByFuelSection: ReturnType<typeof buildPublicTransportEnergyByFuelSection>;
-  renewalRows: ReturnType<typeof buildPublicTransportRows>;
-  ageRows: ReturnType<typeof buildPublicTransportRows>;
-  renewalFutureRows: ReturnType<typeof buildPublicTransportRenewalFutureRows>;
+  exploitationRows: ReturnType<typeof buildBusesExploitationRowsWithoutFuel>;
+  energyByFuelSection: ReturnType<typeof buildBusesEnergyByFuelSection>;
+  renewalRows: ReturnType<typeof buildBusesRows>;
+  ageRows: ReturnType<typeof buildBusesRows>;
+  renewalFutureRows: ReturnType<typeof buildBusesRenewalFutureRows>;
   futureYears: number[];
-  tPublicTransport: (...args: [string, ...any]) => string;
+  tBuses: (...args: [string, ...any]) => string;
 }) {
   const { mainForm } = useInventoryContext();
-  const operatorBaseNamePath = useMemo(() => `transport.publicTransport.dataSet.${index}`, [index]);
+  const operatorBaseNamePath = useMemo(() => `transport.buses.dataSet.${index}`, [index]);
   const operatorBaseName = useWatch({
     control: mainForm.control,
     name: inventoryName(`${operatorBaseNamePath}.name`),
@@ -90,13 +90,13 @@ function PublicTransportOperatorSection({
     >
       <AccordionTrigger icon="chevron-down" className="px-4 py-3 hover:no-underline">
         <Typography className="text-center" asChild variant="sectionTitle" size="xl">
-          <h4>{operatorBaseName || tPublicTransport("operators.default")}</h4>
+          <h4>{operatorBaseName || tBuses("operators.default")}</h4>
         </Typography>
       </AccordionTrigger>
       <AccordionContent className="space-y-4 px-4 pb-4">
         <div className="border-t border-border/10 pt-8">
           <MatrixTable
-            title={tPublicTransport("exploitation.title")}
+            title={tBuses("exploitation.title")}
             rows={exploitationRows}
             form={mainForm}
             baseName={inventoryName(`${operatorBaseNamePath}.exploitation`)}
@@ -116,7 +116,7 @@ function PublicTransportOperatorSection({
 
         <div className="border-t border-border/10 pt-8">
           <MatrixTable
-            title={tPublicTransport("renewal.title")}
+            title={tBuses("renewal.title")}
             rows={renewalRows}
             form={mainForm}
             baseName={inventoryName(`${operatorBaseNamePath}.renewal`)}
@@ -125,7 +125,7 @@ function PublicTransportOperatorSection({
 
         <div className="border-t border-border/10 pt-8">
           <MatrixTable
-            title={tPublicTransport("age.title")}
+            title={tBuses("age.title")}
             rows={ageRows}
             form={mainForm}
             baseName={inventoryName(`${operatorBaseNamePath}.age`)}
@@ -134,7 +134,7 @@ function PublicTransportOperatorSection({
 
         <div className="border-t border-border/10 pt-8">
           <MatrixTable
-            title={tPublicTransport("future.title")}
+            title={tBuses("future.title")}
             rows={renewalFutureRows}
             form={mainForm}
             baseName={inventoryName(operatorBaseNamePath)}
@@ -146,10 +146,10 @@ function PublicTransportOperatorSection({
   );
 }
 
-export default function PublicTransportSurface() {
+export default function BusesSurface() {
   const { mainForm, years } = useInventoryContext();
-  const tPublicTransport = useScopedI18n(
-    "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.publicTransport"
+  const tBuses = useScopedI18n(
+    "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.buses"
   );
 
   const {
@@ -160,24 +160,24 @@ export default function PublicTransportSurface() {
     ageRows,
     renewalFutureRows,
   } = useState(() => ({
-    futureYears: buildPublicTransportFutureYears(),
-    exploitationRows: buildPublicTransportExploitationRowsWithoutFuel(tPublicTransport),
-    energyByFuelSection: buildPublicTransportEnergyByFuelSection(tPublicTransport),
-    renewalRows: buildPublicTransportRows("renewal", tPublicTransport),
-    ageRows: buildPublicTransportRows("age", tPublicTransport),
-    renewalFutureRows: buildPublicTransportRenewalFutureRows(tPublicTransport),
+    futureYears: buildBusesFutureYears(),
+    exploitationRows: buildBusesExploitationRowsWithoutFuel(tBuses),
+    energyByFuelSection: buildBusesEnergyByFuelSection(tBuses),
+    renewalRows: buildBusesRows("renewal", tBuses),
+    ageRows: buildBusesRows("age", tBuses),
+    renewalFutureRows: buildBusesRenewalFutureRows(tBuses),
   }))[0];
 
   const { fields, append, remove } = useFieldArray({
     control: mainForm.control,
-    name: "transport.publicTransport.dataSet",
+    name: "transport.buses.dataSet",
   });
 
   return (
     <div className="space-y-8">
       <FormField
         control={mainForm.control}
-        name={inventoryName("transport.publicTransport.dataSet")}
+        name={inventoryName("transport.buses.dataSet")}
         render={({ fieldState }) => (
           <FormItem className="space-y-3">
             <InventoryTableHeader
@@ -187,20 +187,18 @@ export default function PublicTransportSurface() {
                   size="lg"
                   className="inline-flex items-center gap-1"
                 >
-                  <span>{tPublicTransport("operators.title")}</span>
+                  <span>{tBuses("operators.title")}</span>
                   <FieldRequired />
                 </Typography>
               }
-              description={tPublicTransport("operators.description")}
+              description={tBuses("operators.description")}
               endContent={
                 <InventoryTableActionButton
                   type="button"
-                  onClick={() =>
-                    append(buildPublicTransportOperatorDefaultValues(), { shouldFocus: false })
-                  }
+                  onClick={() => append(buildBusesOperatorDefaultValues(), { shouldFocus: false })}
                 >
                   <Plus aria-hidden="true" />
-                  {tPublicTransport("operators.addLabel")}
+                  {tBuses("operators.addLabel")}
                 </InventoryTableActionButton>
               }
             />
@@ -215,14 +213,14 @@ export default function PublicTransportSurface() {
                 >
                   <InventoryTableInput
                     form={mainForm}
-                    name={inventoryName(`transport.publicTransport.dataSet.${index}.name`)}
+                    name={inventoryName(`transport.buses.dataSet.${index}.name`)}
                     type="text"
-                    placeholder={tPublicTransport("operators.default")}
+                    placeholder={tBuses("operators.default")}
                   />
                   <InventoryTableIconButton
                     type="button"
                     title="Supprimer"
-                    aria-label={`Supprimer ${tPublicTransport("operators.rowPrefix")} ${index + 1}`}
+                    aria-label={`Supprimer ${tBuses("operators.rowPrefix")} ${index + 1}`}
                     disabled={fields.length <= 0}
                     onClick={() => remove(index)}
                   >
@@ -235,12 +233,10 @@ export default function PublicTransportSurface() {
                   type="button"
                   variant="outline"
                   className="justify-start rounded-xl border-dashed"
-                  onClick={() =>
-                    append(buildPublicTransportOperatorDefaultValues(), { shouldFocus: false })
-                  }
+                  onClick={() => append(buildBusesOperatorDefaultValues(), { shouldFocus: false })}
                 >
                   <Plus aria-hidden="true" />
-                  {tPublicTransport("operators.addLabel")}
+                  {tBuses("operators.addLabel")}
                 </Button>
               ) : null}
             </div>
@@ -255,7 +251,7 @@ export default function PublicTransportSurface() {
         defaultValue={fields.map((field) => field.id)}
       >
         {fields.map((field, index) => (
-          <PublicTransportOperatorSection
+          <BusesOperatorSection
             key={field.id}
             fieldId={field.id}
             index={index}
@@ -265,7 +261,7 @@ export default function PublicTransportSurface() {
             ageRows={ageRows}
             renewalFutureRows={renewalFutureRows}
             futureYears={futureYears}
-            tPublicTransport={tPublicTransport}
+            tBuses={tBuses}
           />
         ))}
       </Accordion>

@@ -1,6 +1,7 @@
 "use client";
 
 import Typography from "@/components/ui/typography";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 import InventoryDatasetButton from "./InventoryDatasetButton";
 import type { InventoryDataset, InventoryFamily, InventoryWorkspaceConfig } from "../types";
@@ -36,22 +37,25 @@ export default function InventoryDatasetNav({
         </h2>
       </Typography>
 
-      <div className="mt-3 flex items-end gap-x-8 gap-y-2 border-b border-border/10">
-        {datasets.map((dataset) => (
-          <InventoryDatasetButton
-            key={dataset.key}
-            active={dataset.key === activeDatasetKey}
-            hasError={dataset.hasError ?? false}
-            isComplete={dataset.isComplete ?? false}
-            datasetKey={dataset.key}
-            label={tDataset(`${dataset.key}.title`)}
-            statusText={dataset.navStatusLabel}
-            badgeText={dataset.progressLabel}
-            progressPercent={dataset.progressPercent}
-            onClick={() => onDatasetChange(dataset.key)}
-          />
-        ))}
-      </div>
+      <ScrollArea className="mt-3">
+        <div className="flex items-end gap-x-8 gap-y-2 border-b border-border/10 pb-3">
+          {datasets.map((dataset) => (
+            <InventoryDatasetButton
+              key={dataset.key}
+              active={dataset.key === activeDatasetKey}
+              hasError={dataset.hasError ?? false}
+              isComplete={dataset.isComplete ?? false}
+              datasetKey={dataset.key}
+              label={tDataset(`${dataset.key}.title`)}
+              statusText={dataset.navStatusLabel}
+              badgeText={dataset.progressLabel}
+              progressPercent={dataset.progressPercent}
+              onClick={() => onDatasetChange(dataset.key)}
+            />
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </section>
   );
 }

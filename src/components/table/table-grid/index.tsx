@@ -110,24 +110,21 @@ function StaticTableGrid<T extends FieldValues>({
 }: Omit<TableGridProps<T>, "rowFields">) {
   const { selectedYear, setSelectedYear } = useTableGridYear(yearSelector, selectedYearProp);
 
-  const tableColumns = useMemo(
-    () => {
-      const legacyEditableRows =
-        editableRows && !("addLabel" in editableRows)
-          ? { ...editableRows, rowCount: rows.length }
-          : undefined;
+  const tableColumns = useMemo(() => {
+    const legacyEditableRows =
+      editableRows && !("addLabel" in editableRows)
+        ? { ...editableRows, rowCount: rows.length }
+        : undefined;
 
-      return createTableGridColumns({
-        columns: columns,
-        form,
-        baseName,
-        editableRows: legacyEditableRows,
-        renderCell,
-        selectedYear,
-      });
-    },
-    [baseName, columns, editableRows, form, renderCell, rows.length, selectedYear]
-  );
+    return createTableGridColumns({
+      columns: columns,
+      form,
+      baseName,
+      editableRows: legacyEditableRows,
+      renderCell,
+      selectedYear,
+    });
+  }, [baseName, columns, editableRows, form, renderCell, rows.length, selectedYear]);
 
   return (
     <section className={className ?? "space-y-3"}>
@@ -174,7 +171,7 @@ function StaticTableGrid<T extends FieldValues>({
 
 function EditableTableGrid<T extends FieldValues>(
   props: Omit<TableGridProps<T>, "rows" | "addRow" | "editableRows"> & {
-  editableRows: EditableTableRows;
+    editableRows: EditableTableRows;
   }
 ) {
   const { editableRowState } = props;
@@ -235,7 +232,18 @@ function EditableTableGridContent<T extends FieldValues>({
         renderCell,
         selectedYear,
       }),
-    [baseName, columns, editableRows, fields, form, remove, renderCell, rowFields, rows.length, selectedYear]
+    [
+      baseName,
+      columns,
+      editableRows,
+      fields,
+      form,
+      remove,
+      renderCell,
+      rowFields,
+      rows.length,
+      selectedYear,
+    ]
   );
 
   return (

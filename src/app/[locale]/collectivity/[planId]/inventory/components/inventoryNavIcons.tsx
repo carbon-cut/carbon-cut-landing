@@ -20,6 +20,7 @@ import {
   Atom,
   Layers3,
   Waves,
+  TrainFront,
   type LucideIcon,
 } from "lucide-react";
 
@@ -40,7 +41,8 @@ const datasetIconMap: Record<string, LucideIcon> = {
   electricity: PlugZap,
   naturalGas: Flame,
   port: Sailboat,
-  publicTransport: Bus,
+  buses: Bus,
+  urbanRail: TrainFront,
   airTransport: Plane,
   territoryVehicles: Car,
   trees: TreePine,

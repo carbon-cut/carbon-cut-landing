@@ -3,7 +3,10 @@ import { airTransport, buildTerritoryVehicleDefaultRows, port } from "./config";
 
 export function transportDefault(years: readonly number[]) {
   return {
-    publicTransport: {
+    buses: {
+      dataSet: [],
+    },
+    urbanRail: {
       dataSet: [],
     },
     airTransport: {

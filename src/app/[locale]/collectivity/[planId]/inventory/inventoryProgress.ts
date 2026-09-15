@@ -1,10 +1,11 @@
 import { buildFertilizerRows } from "./datasets/afat/fertilizers/config";
-import { buildPublicTransportFutureYears } from "./datasets/transport/public-transport/config";
+import { buildBusesFutureYears } from "./datasets/transport/buses/config";
 import {
   airTransport,
   port,
-  publicTransport,
+  buses,
   territoryVehicles,
+  urbanRail,
 } from "./InventorySchema/transport/config";
 import {
   buildings,
@@ -30,7 +31,7 @@ type ProgressCalculator = (
 ) => InventoryDatasetProgress;
 
 const yearKeyPattern = /^y-\d{4}$/;
-const publicTransportFutureYearCount = buildPublicTransportFutureYears().length;
+const busesFutureYearCount = buildBusesFutureYears().length;
 const livestockRowCount = livestock.keys.length;
 const fertilizerRowCount = buildFertilizerRows((key) => key).length;
 
@@ -305,22 +306,42 @@ function computePortProgress(
   return createProgress(completed, total);
 }
 
-function computePublicTransportProgress(
+function computeBusesProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
 ) {
-  const operators = values?.transport?.publicTransport?.dataSet ?? [];
+  const operators = values?.transport?.buses?.dataSet ?? [];
   const totalPerOperator =
     1 +
-    publicTransport.exploitationRowKeys.length * years.length +
-    publicTransport.fuelKeys.length * years.length * 3 +
-    publicTransport.renewalRowKeys.length * years.length +
-    publicTransport.ageRowKeys.length * years.length +
-    publicTransportFutureYearCount;
+    buses.exploitationRowKeys.length * years.length +
+    buses.fuelKeys.length * years.length * 3 +
+    buses.renewalRowKeys.length * years.length +
+    buses.ageRowKeys.length * years.length +
+    busesFutureYearCount;
   const total = operators.length * totalPerOperator;
   const completed =
     operators.reduce((sum, operator) => sum + countFilledField(operator?.name), 0) +
     countFilledYearValues(operators);
+
+  return createProgress(completed, total);
+}
+
+function computeUrbanRailProgress(
+  values: Partial<InventoryFormValues> | undefined,
+  years: readonly InventoryYear[]
+) {
+  const services = values?.transport?.urbanRail?.dataSet ?? [];
+  const totalPerService = 2 + urbanRail.energyKeys.length * years.length * 2;
+  const total = services.length * totalPerService;
+  const completed = services.reduce(
+    (sum, service) =>
+      sum +
+      countFilledField(service?.name) +
+      countFilledField(service?.operationsWithinMunicipalBoundary) +
+      countFilledYearValues(service?.energy) +
+      countFilledYearValues(service?.spend),
+    0
+  );
 
   return createProgress(completed, total);
 }
@@ -483,7 +504,8 @@ const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
   electricity: computeElectricityProgress,
   naturalGas: computeNaturalGasProgress,
   port: computePortProgress,
-  publicTransport: computePublicTransportProgress,
+  buses: computeBusesProgress,
+  urbanRail: computeUrbanRailProgress,
   airTransport: computeAirTransportProgress,
   territoryVehicles: computeTerritoryVehiclesProgress,
   trees: computeTreesProgress,

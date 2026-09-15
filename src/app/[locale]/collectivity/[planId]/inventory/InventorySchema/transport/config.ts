@@ -8,15 +8,10 @@ type UnitConf = {
 
 const portFuelKeys = ["diesel"] as const;
 const portElectricityKeys = ["electricityConsumption", "electricityBill"] as const;
-const publicTransportExploitationRowKeys = [
-  "kmTravelled",
-  "staff",
-  "passengerKm",
-  "passengers",
-] as const;
-const publicTransportRenewalRowKeys = ["scrapped", "purchased", "purchaseCost"] as const;
-const publicTransportAgeRowKeys = ["age0to5", "age6to10", "age10plus"] as const;
-const publicTransportFuelKeys = ["diesel", "petrol", "gpl", "gnv", "electricity"] as const;
+const busesExploitationRowKeys = ["kmTravelled", "staff", "passengerKm", "passengers"] as const;
+const busesRenewalRowKeys = ["scrapped", "purchased", "purchaseCost"] as const;
+const busesAgeRowKeys = ["age0to5", "age6to10", "age10plus"] as const;
+const busesFuelKeys = ["diesel", "petrol", "gpl", "gnv", "electricity"] as const;
 const airTransportMovementColumnKeys = [/* "international", */ "national"] as const;
 const airTransportEnergyKeys = [
   "buildingElectricity",
@@ -25,6 +20,7 @@ const airTransportEnergyKeys = [
   "electricFleet",
   /* "kerosene", */
 ] as const;
+const urbanRailEnergyKeys = ["electricity", "diesel"] as const;
 const territoryVehicleAllowedFuelsByType = {
   motorcycles: ["petrol", "electricity"],
   publicTransportVehicles: ["diesel", "gpl", "gnv", "electricity"],
@@ -77,7 +73,7 @@ const portUnits: UnitConf = {
   },
 } as const;
 
-const publicTransportUnits: UnitConf = {
+const busesUnits: UnitConf = {
   exploitation: {
     kmTravelled: ["km"],
     staff: [""],
@@ -125,6 +121,16 @@ const airTransportUnits: UnitConf = {
   },
 } as const;
 
+const urbanRailUnits: UnitConf = {
+  energy: {
+    electricity: ["kWh", "MWh", "GWh"],
+    diesel: ["L", "m3", "t"],
+  },
+  spend: {
+    default: ["currency"],
+  },
+} as const;
+
 const territoryVehicleUnits: UnitConf = {
   measures: {
     vehicles: [""],
@@ -139,18 +145,23 @@ export const port = {
   units: portUnits,
 };
 
-export const publicTransport = {
-  exploitationRowKeys: publicTransportExploitationRowKeys,
-  fuelKeys: publicTransportFuelKeys,
-  renewalRowKeys: publicTransportRenewalRowKeys,
-  ageRowKeys: publicTransportAgeRowKeys,
-  units: publicTransportUnits,
+export const buses = {
+  exploitationRowKeys: busesExploitationRowKeys,
+  fuelKeys: busesFuelKeys,
+  renewalRowKeys: busesRenewalRowKeys,
+  ageRowKeys: busesAgeRowKeys,
+  units: busesUnits,
 };
 
 export const airTransport = {
   movementColumnKeys: airTransportMovementColumnKeys,
   energyKeys: airTransportEnergyKeys,
   units: airTransportUnits,
+};
+
+export const urbanRail = {
+  energyKeys: urbanRailEnergyKeys,
+  units: urbanRailUnits,
 };
 
 export const territoryVehicles = {

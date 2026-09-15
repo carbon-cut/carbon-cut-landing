@@ -46,10 +46,12 @@ export type TableGridProps<T extends FieldValues> = {
     ariaLabel?: string;
     className?: string;
   };
-  editableRows?: EditableTableRows | {
-    minRows: number;
-    onRemoveRow: (index: number) => void;
-  };
+  editableRows?:
+    | EditableTableRows
+    | {
+        minRows: number;
+        onRemoveRow: (index: number) => void;
+      };
   editableRowState?: EditableTableRowState;
   rowFields?: EditableTableRowField[];
   addRow?: {

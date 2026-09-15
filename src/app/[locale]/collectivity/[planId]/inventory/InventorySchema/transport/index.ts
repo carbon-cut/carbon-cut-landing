@@ -11,7 +11,7 @@ import {
   numberFutureOptionalSchema,
   requiredStringSchema,
 } from "../_shared";
-import { airTransport, port, publicTransport, territoryVehicles } from "./config";
+import { airTransport, buses, port, territoryVehicles, urbanRail } from "./config";
 export { transportDefault } from "./default";
 
 const territoryVehicleTypeKeys = Object.keys(territoryVehicles.allowedFuelsByType) as [
@@ -27,56 +27,56 @@ const territoryVehicleRequiredTypes = territoryVehicles.requiredDefaults.map(({ 
   ...(typeof territoryVehicles.requiredDefaults)[number]["key"][],
 ];
 
-const publicTransportSchema = z.object({
+const busesSchema = z.object({
   dataSet: z
     .array(
       z.object({
         name: requiredStringSchema,
         exploitation: createMatrixSchema(
-          publicTransport.exploitationRowKeys,
+          buses.exploitationRowKeys,
           {
-            unitsByKeys: publicTransport.units.exploitation,
+            unitsByKeys: buses.units.exploitation,
           },
           true
         ),
         buses: createMatrixSchema(
-          publicTransport.fuelKeys,
+          buses.fuelKeys,
           {
-            unit: publicTransport.units.buses.default,
+            unit: buses.units.buses.default,
           },
           true
         ),
         consumption: createMatrixSchema(
-          publicTransport.fuelKeys,
+          buses.fuelKeys,
           {
-            unitsByKeys: publicTransport.units.consumption,
+            unitsByKeys: buses.units.consumption,
           },
           true
         ),
         spend: createMatrixSchema(
-          publicTransport.fuelKeys,
+          buses.fuelKeys,
           {
-            unit: publicTransport.units.spend.default,
+            unit: buses.units.spend.default,
           },
           true
         ),
         renewal: createMatrixSchema(
-          publicTransport.renewalRowKeys,
+          buses.renewalRowKeys,
           {
-            unitsByKeys: publicTransport.units.renewal,
+            unitsByKeys: buses.units.renewal,
           },
           true
         ),
         age: createMatrixSchema(
-          publicTransport.ageRowKeys,
+          buses.ageRowKeys,
           {
-            unitsByKeys: publicTransport.units.age,
+            unitsByKeys: buses.units.age,
           },
           true
         ),
         renewalFuture: z.object({
           value: numberFutureOptionalSchema,
-          unit: constructUnit(publicTransport.units.future.default),
+          unit: constructUnit(buses.units.future.default),
         }),
       })
     )
@@ -120,6 +120,32 @@ const airTransportSchema = z.object({
   metadata,
 });
 
+const urbanRailSchema = z.object({
+  dataSet: z.array(
+    z.object({
+      name: requiredStringSchema,
+      operationsWithinMunicipalBoundary: z.boolean().refine((value) => value, {
+        message: "Required",
+      }),
+      energy: createMatrixSchema(
+        urbanRail.energyKeys,
+        {
+          unitsByKeys: urbanRail.units.energy,
+        },
+        true
+      ),
+      spend: createMatrixSchema(
+        urbanRail.energyKeys,
+        {
+          unit: urbanRail.units.spend.default,
+        },
+        true
+      ),
+    })
+  ),
+  metadata,
+});
+
 const territoryVehiclesSchema = z.object({
   dataSet: z.object({
     rows: createRecordGridSchema(
@@ -150,7 +176,8 @@ const territoryVehiclesSchema = z.object({
 });
 
 const transportSchema = createGroupSchema({
-  publicTransport: publicTransportSchema,
+  buses: busesSchema,
+  urbanRail: urbanRailSchema,
   airTransport: airTransportSchema.optional(),
   port: portSchema.optional(),
   territoryVehicles: territoryVehiclesSchema,

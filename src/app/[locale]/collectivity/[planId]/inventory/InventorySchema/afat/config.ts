@@ -46,11 +46,7 @@ const perennialPlantationPlantOptions = [
 export const trees = {
   trackedTreeCropOptions: perennialPlantationPlantOptions,
   trackedTreeCropMetricKeys: trackedTreeCropMetricKeys,
-  trackedTreeCropOptionalMetricKeys: [
-    "youngTrees",
-    "adultTrees",
-    "senescentTrees",
-  ] as const,
+  trackedTreeCropOptionalMetricKeys: ["youngTrees", "adultTrees", "senescentTrees"] as const,
   units: trackedTreeCropUnits,
 };
 

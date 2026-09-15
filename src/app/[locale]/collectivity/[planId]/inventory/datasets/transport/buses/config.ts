@@ -6,7 +6,7 @@ import type {
   InventoryTableRow,
   InventoryTableSectionData,
 } from "../../../types";
-import { publicTransport } from "../../../InventorySchema/transport/config";
+import { buses } from "../../../InventorySchema/transport/config";
 
 function createMatrixBranch<TKeys extends readonly string[]>(
   keys: TKeys,
@@ -23,46 +23,46 @@ function createMatrixBranch<TKeys extends readonly string[]>(
   );
 }
 
-export function buildPublicTransportFutureYears(): number[] {
+export function buildBusesFutureYears(): number[] {
   const currentYear = new Date().getFullYear();
   return [currentYear, currentYear + 1, currentYear + 2];
 }
 
-export function buildPublicTransportRows(
+export function buildBusesRows(
   input: "exploitation" | "renewal" | "age",
   labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   const rowKeys =
     input === "exploitation"
-      ? publicTransport.exploitationRowKeys
+      ? buses.exploitationRowKeys
       : input === "renewal"
-        ? publicTransport.renewalRowKeys
-        : publicTransport.ageRowKeys;
+        ? buses.renewalRowKeys
+        : buses.ageRowKeys;
 
   return rowKeys.map((key) => ({
     key,
     label: labelFunc(`${input}.${key}`),
-    unit: publicTransport.units[input][key][0],
+    unit: buses.units[input][key][0],
   }));
 }
 
-export function buildPublicTransportExploitationRowsWithoutFuel(
+export function buildBusesExploitationRowsWithoutFuel(
   labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
-  return buildPublicTransportRows("exploitation", labelFunc);
+  return buildBusesRows("exploitation", labelFunc);
 }
 
-export function buildPublicTransportEnergyRows(
+export function buildBusesEnergyRows(
   labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
-  return publicTransport.fuelKeys.map((key) => ({
+  return buses.fuelKeys.map((key) => ({
     key,
     label: labelFunc(`energyConsumption.${key}`),
-    unit: publicTransport.units.consumption[key][0],
+    unit: buses.units.consumption[key][0],
   }));
 }
 
-export function buildPublicTransportEnergyByFuelSection(
+export function buildBusesEnergyByFuelSection(
   labelFunc: (...args: [string, ...any]) => string
 ): InventoryGroupedYearTableData {
   return {
@@ -78,12 +78,12 @@ export function buildPublicTransportEnergyByFuelSection(
         content: labelFunc("energyByFuel.requirementTooltip"),
       })
     ),
-    rows: buildPublicTransportEnergyRows(labelFunc),
+    rows: buildBusesEnergyRows(labelFunc),
     subcolumns: [
       {
         key: "buses",
         label: labelFunc("energyByFuel.buses"),
-        unit: publicTransport.units.buses.default[0],
+        unit: buses.units.buses.default[0],
       },
       {
         key: "consumption",
@@ -92,19 +92,19 @@ export function buildPublicTransportEnergyByFuelSection(
       {
         key: "spend",
         label: labelFunc("energyByFuel.spend"),
-        unit: publicTransport.units.spend.default[0],
+        unit: buses.units.spend.default[0],
       },
     ],
   };
 }
 
-export function buildPublicTransportOperatorsSection(
+export function buildBusesOperatorsSection(
   labelFunc: (...args: [string, ...any]) => string
 ): Omit<InventoryTableSectionData, "rows"> {
   return {
     title: labelFunc("operators.title"),
     description: labelFunc("operators.description"),
-    fieldBaseName: "transport.publicTransport.dataSet",
+    fieldBaseName: "transport.buses.dataSet",
     columns: [{ key: "operator", label: labelFunc("operators.column"), type: "text" }],
     /* rows: [
       {
@@ -122,7 +122,7 @@ export function buildPublicTransportOperatorsSection(
   };
 }
 
-export function buildPublicTransportRenewalFutureRows(
+export function buildBusesRenewalFutureRows(
   labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
   return [
@@ -134,33 +134,21 @@ export function buildPublicTransportRenewalFutureRows(
   ];
 }
 
-export function buildPublicTransportOperatorDefaultValues() {
+export function buildBusesOperatorDefaultValues() {
   return {
     name: "",
     exploitation: createMatrixBranch(
-      publicTransport.exploitationRowKeys,
-      (key) => publicTransport.units.exploitation[key][0]
+      buses.exploitationRowKeys,
+      (key) => buses.units.exploitation[key][0]
     ),
-    buses: createMatrixBranch(
-      publicTransport.fuelKeys,
-      () => publicTransport.units.buses.default[0]
-    ),
-    consumption: createMatrixBranch(
-      publicTransport.fuelKeys,
-      (key) => publicTransport.units.consumption[key][0]
-    ),
-    spend: createMatrixBranch(
-      publicTransport.fuelKeys,
-      () => publicTransport.units.spend.default[0]
-    ),
-    renewal: createMatrixBranch(
-      publicTransport.renewalRowKeys,
-      (key) => publicTransport.units.renewal[key][0]
-    ),
-    age: createMatrixBranch(publicTransport.ageRowKeys, (key) => publicTransport.units.age[key][0]),
+    buses: createMatrixBranch(buses.fuelKeys, () => buses.units.buses.default[0]),
+    consumption: createMatrixBranch(buses.fuelKeys, (key) => buses.units.consumption[key][0]),
+    spend: createMatrixBranch(buses.fuelKeys, () => buses.units.spend.default[0]),
+    renewal: createMatrixBranch(buses.renewalRowKeys, (key) => buses.units.renewal[key][0]),
+    age: createMatrixBranch(buses.ageRowKeys, (key) => buses.units.age[key][0]),
     renewalFuture: {
       value: {},
-      unit: publicTransport.units.future.default[0],
+      unit: buses.units.future.default[0],
     },
   };
 }

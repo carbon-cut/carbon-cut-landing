@@ -1443,7 +1443,7 @@ export default {
                 },
               },
             },
-            publicTransport: {
+            buses: {
               operators: {
                 title: "Opérateurs",
                 description:
@@ -1495,6 +1495,31 @@ export default {
                 title: "Acquisitions / renouvellements prevus",
                 column: "Bus prevus",
                 renewalFuture: "Renouvellement futur",
+              },
+            },
+            urbanRail: {
+              services: {
+                title: "Services ferroviaires",
+                description: "Ajoutez les services de métro, tramway, train léger ou funiculaire.",
+                default: "Service ferroviaire urbain",
+                addLabel: "Ajouter un service",
+                removeLabel: "Supprimer le service",
+                operationsWithinMunicipalBoundary:
+                  "Je confirme que l'énergie indiquée correspond uniquement aux déplacements effectués à l'intérieur du périmètre municipal.",
+                operationsWithinMunicipalBoundaryHelp:
+                  "Si une ligne franchit le périmètre municipal, renseignez l'énergie consommée pendant les déplacements effectués à l'intérieur de ce périmètre.",
+                operationsWithinMunicipalBoundaryHelpLabel:
+                  "Information sur le périmètre municipal",
+              },
+              energy: {
+                title: "Énergie utilisée",
+                consumption: "Consommation",
+                spend: "Dépense",
+                electricity: "Électricité",
+                electricityHelp:
+                  "Électricité consommée par les véhicules ferroviaires. N'incluez pas les bâtiments ni les installations fixes.",
+                electricityHelpLabel: "Information sur la consommation électrique",
+                diesel: "Diesel",
               },
             },
             airTransport: {
@@ -1559,7 +1584,7 @@ export default {
               },
               vehicleTypes: {
                 motorcycles: "Motocycles",
-                publicTransportVehicles: "Véhicules transport public",
+                busesVehicles: "Véhicules transport public",
                 mopeds: "Cyclomoteurs",
                 agriculturalEquipment: "Matériel agricole",
                 privateVehicles: "Véhicules privés",
@@ -2104,12 +2129,15 @@ export default {
             yearMode: "TODO temporalite et carry-forward.",
             implementationNote: "Placeholder transport pour voir l'architecture complete.",
           },
-          publicTransport: {
-            title: "Transport public",
+          buses: {
+            title: "Transport public routier",
             description: "Jeu transport cite, sans structure de champs finalisee.",
             sourceMode: "TODO split par sous-mode ou operateur.",
             yearMode: "TODO blocs annuels et niveau de granularite.",
             implementationNote: "Placeholder transport public volontaire.",
+          },
+          urbanRail: {
+            title: "Transport ferroviaire urbain",
           },
           airTransport: {
             title: "Transport aerien",
