@@ -1427,13 +1427,16 @@ export default {
               },
             },
             port: {
-              fuelConsumption: {
-                title: "Consommation de diesel dans le perimetre",
-                fuelType: "Carburant",
-                fuelPlaceholder: "Choisir un carburant",
-                fuels: {
-                  diesel: "Diesel",
-                },
+              fuel: {
+                diesel: "Diesel",
+                splitHelp:
+                  "Si vous disposez seulement d'une consommation totale de diesel non répartie entre ces deux types de trajets, laissez les deux champs vides. Le résultat sera indiqué comme non estimé (NE), et non comme zéro.",
+              },
+              roundTripFuelConsumption: {
+                title: "Sorties avec retour au port",
+              },
+              outboundFuelConsumption: {
+                title: "Départs vers une destination hors du périmètre",
               },
               electricityConsumption: {
                 title: "Consommation électrique portuaire",

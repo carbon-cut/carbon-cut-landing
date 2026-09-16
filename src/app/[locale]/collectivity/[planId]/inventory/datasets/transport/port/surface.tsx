@@ -1,6 +1,7 @@
 "use client";
 
 import MatrixTable from "@/components/table/matrix";
+import { FieldHelp } from "@/components/ui/field-help";
 import { useInventoryContext } from "../../../context/inventory-context";
 import { useScopedI18n } from "@/locales/client";
 import PriceAssumptionsTable from "../../../components/PriceAssumptionsTable";
@@ -13,19 +14,32 @@ export default function PortSurface() {
     "(pages).collectivityDashboard.inventoryWorkspace.sections.entry.port"
   );
 
-  const { fuelConsumptionRows, electricityConsumptionRows } = useState(() => ({
-    fuelConsumptionRows: buildPortRows("fuelConsumption", tPort),
+  const { fuelRows, electricityConsumptionRows } = useState(() => ({
+    fuelRows: buildPortRows("fuel", tPort),
     electricityConsumptionRows: buildPortRows("electricityConsumption", tPort),
   }))[0];
 
   return (
     <div className="space-y-8">
       <MatrixTable
-        title={tPort("fuelConsumption.title")}
-        rows={fuelConsumptionRows}
+        title={
+          <span className="inline-flex items-center gap-1">
+            {tPort("roundTripFuelConsumption.title")}
+            <FieldHelp content={tPort("fuel.splitHelp")} />
+          </span>
+        }
+        rows={fuelRows}
         form={mainForm}
-        baseName="transport.port.dataSet.fuelConsumption"
+        baseName="transport.port.dataSet.roundTripFuelConsumption"
       />
+      <div className="border-t border-border/10 pt-8">
+        <MatrixTable
+          title={tPort("outboundFuelConsumption.title")}
+          rows={fuelRows}
+          form={mainForm}
+          baseName="transport.port.dataSet.outboundFuelConsumption"
+        />
+      </div>
       <div className="border-t border-border/10 pt-8">
         <MatrixTable
           title={tPort("electricityConsumption.title")}

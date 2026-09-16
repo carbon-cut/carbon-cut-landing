@@ -1,31 +1,16 @@
-import React from "react";
-import { FieldRequired } from "@/components/ui/field-help";
-import Typography from "@/components/ui/typography";
 import { port } from "../../../InventorySchema/transport/config";
 import type { InventoryTableRow } from "../../../types";
 
 const { electricityKeys, fuelKeys, units } = port;
 
 export function buildPortRows(
-  input: "electricityConsumption" | "fuelConsumption",
+  input: "electricityConsumption" | "fuel",
   labelFunc: (...args: [string, ...any]) => string
 ): InventoryTableRow[] {
-  if (input === "fuelConsumption") {
+  if (input === "fuel") {
     return fuelKeys.map((key) => ({
       key,
-      label:
-        key === "diesel"
-          ? React.createElement(
-              Typography,
-              {
-                variant: "label",
-                size: "sm",
-                className: "inline-flex items-center gap-1",
-              },
-              React.createElement("span", null, labelFunc(`fuelConsumption.fuels.${key}`)),
-              React.createElement(FieldRequired, null)
-            )
-          : labelFunc(`fuelConsumption.fuels.${key}`),
+      label: labelFunc(`fuel.${key}`),
       unit: units.fuelConsumption[key][0],
     }));
   }

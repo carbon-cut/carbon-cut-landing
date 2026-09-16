@@ -85,9 +85,20 @@ const busesSchema = z.object({
 
 const portSchema = z.object({
   dataSet: z.object({
-    fuelConsumption: createMatrixSchema(port.fuelKeys, {
-      unitsByKeys: port.units.fuelConsumption,
-    }),
+    roundTripFuelConsumption: createMatrixSchema(
+      port.fuelKeys,
+      {
+        unitsByKeys: port.units.fuelConsumption,
+      },
+      true
+    ),
+    outboundFuelConsumption: createMatrixSchema(
+      port.fuelKeys,
+      {
+        unitsByKeys: port.units.fuelConsumption,
+      },
+      true
+    ),
     electricityConsumption: createMatrixSchema(
       port.electricityKeys,
       {

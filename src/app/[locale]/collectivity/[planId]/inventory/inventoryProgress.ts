@@ -277,11 +277,15 @@ function computePortProgress(
   years: readonly InventoryYear[]
 ) {
   const dataSet = values?.transport?.port?.dataSet;
-  const fuelConsumption = dataSet?.fuelConsumption;
+  const roundTripFuelConsumption = dataSet?.roundTripFuelConsumption;
+  const outboundFuelConsumption = dataSet?.outboundFuelConsumption;
   const electricityConsumption = dataSet?.electricityConsumption;
-  const total = port.fuelKeys.length * years.length + port.electricityKeys.length * years.length;
+  const total =
+    port.fuelKeys.length * years.length * 2 + port.electricityKeys.length * years.length;
   const completed =
-    countFilledYearValues(fuelConsumption) + countFilledYearValues(electricityConsumption);
+    countFilledYearValues(roundTripFuelConsumption) +
+    countFilledYearValues(outboundFuelConsumption) +
+    countFilledYearValues(electricityConsumption);
 
   return createProgress(completed, total);
 }

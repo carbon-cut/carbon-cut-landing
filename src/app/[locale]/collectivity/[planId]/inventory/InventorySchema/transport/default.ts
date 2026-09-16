@@ -11,7 +11,12 @@ export function transportDefault(years: readonly number[]) {
     },
     port: {
       dataSet: {
-        fuelConsumption: createMatrixDefaults(
+        roundTripFuelConsumption: createMatrixDefaults(
+          port.fuelKeys,
+          { unitsByKeys: port.units.fuelConsumption },
+          years
+        ),
+        outboundFuelConsumption: createMatrixDefaults(
           port.fuelKeys,
           { unitsByKeys: port.units.fuelConsumption },
           years
