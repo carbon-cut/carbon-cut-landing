@@ -77,6 +77,21 @@ export function buildSludgeRowFields(t: LabelFunc): EditableTableRowField[] {
         label: t(`sludge.destinations.${value}`),
       })),
     },
+    {
+      key: "withinMunicipalBoundary",
+      type: "select",
+      label: t("sludge.fields.withinMunicipalBoundary"),
+      headerLabel: label(t("sludge.fields.withinMunicipalBoundary"), {
+        required: true,
+        help: t("sludge.help.withinMunicipalBoundary"),
+        helpLabel: t("sludge.help.withinMunicipalBoundaryLabel"),
+      }),
+      placeholder: t("sludge.fields.withinMunicipalBoundaryPlaceholder"),
+      options: ["true", "false"].map((value) => ({
+        value,
+        label: t(`sludge.withinMunicipalBoundary.${value}`),
+      })),
+    },
   ];
 }
 

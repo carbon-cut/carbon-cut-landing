@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import {
+  booleanSchema,
   createGroupSchema,
   createRecordGridSchemaByOptionalKeys,
   createYearValueSchema,
@@ -31,6 +32,7 @@ const treatmentDischargeDataSetSchema = createRecordGridSchemaByOptionalKeys(
   wastewaterSanitation.treatmentValueKeys,
   {
     loadType: z.enum(wastewaterSanitation.organicLoadKeys),
+    withinMunicipalBoundary: booleanSchema,
     dischargesToWater: z.enum(wastewaterSanitation.yesNoValues).optional(),
     receivingWater: z.enum(wastewaterSanitation.receivingWaterValues).optional(),
     effluentPath: z.enum(wastewaterSanitation.effluentPathValues).optional(),
@@ -170,6 +172,7 @@ const sludgeDestinationDataSetSchema = createRecordGridSchemaByOptionalKeys(
   },
   ["methaneRecovery", "nitrogenApplied"],
   {
+    withinMunicipalBoundary: booleanSchema,
     sludgeType: z.string().optional(),
     climate: z.string().optional(),
     landfillSiteType: z.string().optional(),

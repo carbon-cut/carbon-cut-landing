@@ -32,6 +32,11 @@ export const optionalNumberSchema = z.preprocess(
   z.coerce.number().finite().min(0, { message: "nonNegative" }).optional()
 );
 
+export const booleanSchema = z.preprocess(
+  (value) => (value === "true" ? true : value === "false" ? false : value),
+  z.boolean({ errorMap: () => ({ message: "Required" }) })
+);
+
 export const requiredStringSchema = z.string().min(1, { message: "Required" });
 
 export const numberFutureSchema = z.record(futureYearSchema, numberSchema);

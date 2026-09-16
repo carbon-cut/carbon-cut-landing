@@ -93,6 +93,21 @@ export function buildTreatmentRowFields(t: LabelFunc): EditableTableRowField[] {
         label: t(`treatment.loadTypes.${value}`),
       })),
     },
+    {
+      key: "withinMunicipalBoundary",
+      label: t("treatment.fields.withinMunicipalBoundary"),
+      type: "select",
+      headerLabel: label(t("treatment.fields.withinMunicipalBoundary"), {
+        required: true,
+        help: t("treatment.help.withinMunicipalBoundary"),
+        helpLabel: t("treatment.help.withinMunicipalBoundaryLabel"),
+      }),
+      placeholder: t("treatment.fields.withinMunicipalBoundaryPlaceholder"),
+      options: ["true", "false"].map((value) => ({
+        value,
+        label: t(`treatment.withinMunicipalBoundary.${value}`),
+      })),
+    },
   ];
 }
 

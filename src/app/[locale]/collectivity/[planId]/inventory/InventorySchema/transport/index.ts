@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import {
+  booleanSchema,
   constructUnit,
   createGroupSchema,
   createMatrixSchema,
@@ -114,7 +115,7 @@ const urbanRailSchema = z.object({
   dataSet: z.array(
     z.object({
       name: requiredStringSchema,
-      operationsWithinMunicipalBoundary: z.boolean().refine((value) => value, {
+      operationsWithinMunicipalBoundary: booleanSchema.refine((value) => value, {
         message: "Required",
       }),
       energy: createMatrixSchema(

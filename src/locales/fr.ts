@@ -1643,6 +1643,8 @@ export default {
                   systemPlaceholder: "Choisir un système",
                   loadType: "Type d'eau usée",
                   loadTypePlaceholder: "Choisir un type",
+                  withinMunicipalBoundary: "Dans le périmètre municipal",
+                  withinMunicipalBoundaryPlaceholder: "Choisir une réponse",
                 },
                 columns: {
                   organicLoad: "Charge organique",
@@ -1659,6 +1661,7 @@ export default {
                   receivingWater: "Milieu récepteur",
                 },
                 yesNo: { no: "Non", yes: "Oui" },
+                withinMunicipalBoundary: { true: "Oui", false: "Non" },
                 receivingWater: {
                   otherAquatic: "Autre milieu aquatique",
                   reservoirLakeEstuary: "Réservoir, lac ou estuaire",
@@ -1694,6 +1697,9 @@ export default {
                   loadType:
                     "Dans les calculs, les eaux usées non classées sont traitées comme des eaux usées domestiques.",
                   loadTypeLabel: "Information sur le type d'eau usée",
+                  withinMunicipalBoundary:
+                    "Indiquez si le système de traitement est situé dans le périmètre municipal.",
+                  withinMunicipalBoundaryLabel: "Information sur le périmètre municipal",
                   sludgeRemoved:
                     "Ce n'est pas une masse de boues. Renseignez la charge organique retirée dans les boues pour les systèmes concernés.",
                   sludgeRemovedLabel: "Information sur la charge retirée dans les boues",
@@ -1755,6 +1761,8 @@ export default {
                 fields: {
                   destination: "Destination",
                   destinationPlaceholder: "Choisir une destination",
+                  withinMunicipalBoundary: "Dans le périmètre municipal",
+                  withinMunicipalBoundaryPlaceholder: "Choisir une réponse",
                 },
                 columns: {
                   mass: "Masse de boues humides",
@@ -1773,6 +1781,7 @@ export default {
                   landApplication: "Épandage",
                   notEstimated: "Destination non estimée",
                 },
+                withinMunicipalBoundary: { true: "Oui", false: "Non" },
                 help: {
                   mass: "Indiquez la masse annuelle de boues humides. Elle est indépendante de la charge organique retirée dans les boues (S).",
                   massLabel: "Information sur la masse de boues",
@@ -1789,6 +1798,9 @@ export default {
                   landfillSiteTypeLabel: "Information sur le type de site",
                   landfillIdentifier: "Renseignez l'identifiant du site d'enfouissement.",
                   landfillIdentifierLabel: "Information sur l'identifiant du site",
+                  withinMunicipalBoundary:
+                    "Indiquez si cette destination des boues est située dans le périmètre municipal.",
+                  withinMunicipalBoundaryLabel: "Information sur le périmètre municipal",
                 },
               },
               fallback: {
