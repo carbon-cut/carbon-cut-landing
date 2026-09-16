@@ -74,7 +74,6 @@ function getSetupFormDefaultValues(
     referenceYear: initialValues?.referenceYear,
     inventoryYears: initialValues?.inventoryYears ?? [],
     applicability: {
-      airport: initialValues?.applicability?.airport ?? false,
       port: initialValues?.applicability?.port ?? false,
       agriculture: initialValues?.applicability?.agriculture ?? false,
     },
@@ -166,10 +165,6 @@ export default function CollectivitySetupForm({
 
     const initialApplicability = initialValues.applicability;
 
-    if (initialApplicability?.airport && !applicability.airport) {
-      warnings.push(t("setupWorkspace.destructiveWarnings.items.disableAirport") as string);
-    }
-
     if (initialApplicability?.port && !applicability.port) {
       warnings.push(t("setupWorkspace.destructiveWarnings.items.disablePort") as string);
     }
@@ -181,7 +176,6 @@ export default function CollectivitySetupForm({
     return warnings;
   }, [
     applicability.agriculture,
-    applicability.airport,
     applicability.port,
     currentPlanId,
     initialValues,
@@ -648,47 +642,7 @@ export default function CollectivitySetupForm({
                       content={t("setupWorkspace.sections.applicability.helper") as string}
                     />
                   </div>
-                  <div className="mt-4 grid gap-4 md:grid-cols-3">
-                    <FormField
-                      control={form.control}
-                      name="applicability.airport"
-                      render={({ field }) => (
-                        <FormItem className="rounded-md border border-border p-4">
-                          <div className="flex items-start gap-3">
-                            <FormControl>
-                              <CollectivityCheckbox
-                                checked={field.value}
-                                onCheckedChange={(checked) => field.onChange(Boolean(checked))}
-                              />
-                            </FormControl>
-                            <div className="space-y-1">
-                              <FormLabel>
-                                {
-                                  t(
-                                    "setupWorkspace.sections.applicability.options.airport.label"
-                                  ) as string
-                                }
-                              </FormLabel>
-                              <Typography
-                                asChild
-                                variant="caption"
-                                size="sm"
-                                className="text-secondary"
-                              >
-                                <p>
-                                  {
-                                    t(
-                                      "setupWorkspace.sections.applicability.options.airport.helper"
-                                    ) as string
-                                  }
-                                </p>
-                              </Typography>
-                            </div>
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-
+                  <div className="mt-4 grid gap-4 md:grid-cols-2">
                     <FormField
                       control={form.control}
                       name="applicability.port"

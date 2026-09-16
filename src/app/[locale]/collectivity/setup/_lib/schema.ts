@@ -69,7 +69,6 @@ export const collectivitySetupSchema = z
     }),
     inventoryYears: z.array(z.number().int("collectivityInventoryYearInvalid")).min(1, "Required"),
     applicability: z.object({
-      airport: z.boolean(),
       port: z.boolean(),
       agriculture: z.boolean(),
     }),

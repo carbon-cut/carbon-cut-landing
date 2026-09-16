@@ -1,5 +1,5 @@
 import { createMatrixDefaults } from "../_sharedDefaults";
-import { airTransport, buildTerritoryVehicleDefaultRows, port } from "./config";
+import { buildTerritoryVehicleDefaultRows, port } from "./config";
 
 export function transportDefault(years: readonly number[]) {
   return {
@@ -8,16 +8,6 @@ export function transportDefault(years: readonly number[]) {
     },
     urbanRail: {
       dataSet: [],
-    },
-    airTransport: {
-      dataSet: {
-        movements: {},
-        energy: createMatrixDefaults(
-          airTransport.energyKeys,
-          { unitsByKeys: airTransport.units.energy },
-          years
-        ),
-      },
     },
     port: {
       dataSet: {

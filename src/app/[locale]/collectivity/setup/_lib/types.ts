@@ -1,5 +1,4 @@
 export type CollectivitySetupApplicability = {
-  airport: boolean;
   port: boolean;
   agriculture: boolean;
 };

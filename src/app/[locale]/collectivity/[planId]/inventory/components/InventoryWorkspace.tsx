@@ -28,7 +28,6 @@ import BuildingsSurface from "../datasets/municipal/buildings/surface";
 import FleetSurface from "../datasets/municipal/fleet/surface";
 import PublicLightingSurface from "../datasets/municipal/public-lighting/surface";
 import TreesParksWasteSurface from "../datasets/municipal/trees-parks-waste/surface";
-import AirTransportSurface from "../datasets/transport/air-transport/surface";
 import PortSurface from "../datasets/transport/port/surface";
 import BusesSurface from "../datasets/transport/buses/surface";
 import TerritoryVehiclesSurface from "../datasets/transport/territory-vehicles/surface";
@@ -136,8 +135,6 @@ function renderDatasetSurface(dataset: InventoryDataset | undefined) {
       return <BusesSurface />;
     case "urbanRail":
       return <UrbanRailSurface />;
-    case "airTransport":
-      return <AirTransportSurface />;
     case "territoryVehicles":
       return <TerritoryVehiclesSurface />;
     case "trees":

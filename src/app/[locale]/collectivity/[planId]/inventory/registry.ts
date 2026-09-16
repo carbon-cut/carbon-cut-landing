@@ -28,7 +28,6 @@ const datasetDefinitions = [
   { key: "port", familyKey: "transportMobility", applicability: "port" },
   { key: "buses", familyKey: "transportMobility" },
   { key: "urbanRail", familyKey: "transportMobility" },
-  { key: "airTransport", familyKey: "transportMobility", applicability: "airport" },
   { key: "territoryVehicles", familyKey: "transportMobility" },
   { key: "trees", familyKey: "afat", applicability: "agriculture" },
   { key: "livestock", familyKey: "afat", applicability: "agriculture" },

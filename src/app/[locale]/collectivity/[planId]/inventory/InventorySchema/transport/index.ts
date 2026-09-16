@@ -2,7 +2,6 @@ import { z } from "zod";
 
 import {
   constructUnit,
-  createDynamicGridSchema,
   createGroupSchema,
   createMatrixSchema,
   createRecordGridSchema,
@@ -11,7 +10,7 @@ import {
   numberFutureOptionalSchema,
   requiredStringSchema,
 } from "../_shared";
-import { airTransport, buses, port, territoryVehicles, urbanRail } from "./config";
+import { buses, port, territoryVehicles, urbanRail } from "./config";
 export { transportDefault } from "./default";
 
 const territoryVehicleTypeKeys = Object.keys(territoryVehicles.allowedFuelsByType) as [
@@ -100,26 +99,6 @@ const portSchema = z.object({
   metadata,
 });
 
-const airTransportSchema = z.object({
-  dataSet: z.object({
-    movements: createDynamicGridSchema(
-      airTransport.movementColumnKeys,
-      {
-        unit: airTransport.units.movements.default,
-      },
-      true
-    ),
-    energy: createMatrixSchema(
-      airTransport.energyKeys,
-      {
-        unitsByKeys: airTransport.units.energy,
-      },
-      true
-    ),
-  }),
-  metadata,
-});
-
 const urbanRailSchema = z.object({
   dataSet: z.array(
     z.object({
@@ -178,7 +157,6 @@ const territoryVehiclesSchema = z.object({
 const transportSchema = createGroupSchema({
   buses: busesSchema,
   urbanRail: urbanRailSchema,
-  airTransport: airTransportSchema.optional(),
   port: portSchema.optional(),
   territoryVehicles: territoryVehiclesSchema,
 });

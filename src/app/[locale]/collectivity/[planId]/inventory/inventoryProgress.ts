@@ -1,12 +1,6 @@
 import { buildFertilizerRows } from "./datasets/afat/fertilizers/config";
 import { buildBusesFutureYears } from "./datasets/transport/buses/config";
-import {
-  airTransport,
-  port,
-  buses,
-  territoryVehicles,
-  urbanRail,
-} from "./InventorySchema/transport/config";
+import { port, buses, territoryVehicles, urbanRail } from "./InventorySchema/transport/config";
 import {
   buildings,
   fleet,
@@ -260,20 +254,6 @@ function computeNaturalGasProgress(
   return createProgress(bp.completed + mp.completed + hp.completed, bp.total + mp.total + hp.total);
 }
 
-function computeAirTransportProgress(
-  values: Partial<InventoryFormValues> | undefined,
-  years: readonly InventoryYear[]
-) {
-  const movementRows = Object.keys(
-    values?.transport?.airTransport?.dataSet?.movements ?? {}
-  ).length;
-  const total =
-    countGridTotal(movementRows, airTransport.movementColumnKeys.length, years.length) +
-    countMatrixTotal(airTransport.energyKeys.length, years.length);
-
-  return createProgress(countFilledYearValues(values?.transport?.airTransport?.dataSet), total);
-}
-
 function computeTerritoryVehiclesProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
@@ -506,7 +486,6 @@ const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
   port: computePortProgress,
   buses: computeBusesProgress,
   urbanRail: computeUrbanRailProgress,
-  airTransport: computeAirTransportProgress,
   territoryVehicles: computeTerritoryVehiclesProgress,
   trees: computeTreesProgress,
   livestock: computeLivestockProgress,

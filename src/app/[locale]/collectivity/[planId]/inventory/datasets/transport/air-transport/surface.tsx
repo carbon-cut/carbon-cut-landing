@@ -69,7 +69,7 @@ export default function AirTransportSurface() {
         rows={movementSection.rows}
         subcolumns={movementSection.subcolumns}
         form={mainForm}
-        baseName={"transport.airTransport.dataSet.movements"}
+        baseName={"transport.airTransport.dataSet.movements" as never}
         loadingRows={{
           isLoading: aircraftValuesQuery.isLoading,
           count: 8,
@@ -80,7 +80,7 @@ export default function AirTransportSurface() {
           title={tAirTransport("energy.title")}
           rows={energyRows}
           form={mainForm}
-          baseName="transport.airTransport.dataSet.energy"
+          baseName={"transport.airTransport.dataSet.energy" as never}
         />
       </div>
     </div>
