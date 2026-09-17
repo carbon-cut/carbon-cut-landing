@@ -21,6 +21,8 @@ import {
   Layers3,
   Waves,
   TrainFront,
+  SolarPanel,
+  Sun,
   type LucideIcon,
 } from "lucide-react";
 
@@ -39,7 +41,9 @@ const datasetIconMap: Record<string, LucideIcon> = {
   buildings: Building2,
   treesParksWaste: TreePine,
   electricity: PlugZap,
+  photovoltaic: SolarPanel,
   naturalGas: Flame,
+  solarWaterHeating: Sun,
   port: Sailboat,
   buses: Bus,
   urbanRail: TrainFront,

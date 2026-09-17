@@ -1,5 +1,5 @@
-import { createYearValueFieldDefaults } from "../_sharedDefaults";
-import { electricity, naturalGas } from "./config";
+import { createMatrixDefaults, createYearValueFieldDefaults } from "../_sharedDefaults";
+import { electricity, naturalGas, photovoltaic, solarWaterHeating } from "./config";
 
 export function energyDefault(years: readonly number[]) {
   return {
@@ -117,6 +117,39 @@ export function energyDefault(years: readonly number[]) {
             ])
           ),
         },
+      },
+    },
+    photovoltaic: {
+      dataSet: {
+        bt: createMatrixDefaults(
+          photovoltaic.btRowKeys,
+          { unitsByKeys: photovoltaic.units.tension },
+          years
+        ),
+        mt: createMatrixDefaults(
+          photovoltaic.mtRowKeys,
+          { unitsByKeys: photovoltaic.units.tension },
+          years
+        ),
+      },
+    },
+    solarWaterHeating: {
+      dataSet: {
+        residential: createMatrixDefaults(
+          solarWaterHeating.defaultRowKeys,
+          { unitsByKeys: solarWaterHeating.units.default },
+          years
+        ),
+        tertiary: createMatrixDefaults(
+          solarWaterHeating.defaultRowKeys,
+          { unitsByKeys: solarWaterHeating.units.default },
+          years
+        ),
+        industrial: createMatrixDefaults(
+          solarWaterHeating.defaultRowKeys,
+          { unitsByKeys: solarWaterHeating.units.default },
+          years
+        ),
       },
     },
   };

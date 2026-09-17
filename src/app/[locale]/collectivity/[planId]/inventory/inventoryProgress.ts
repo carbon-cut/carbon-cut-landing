@@ -7,7 +7,12 @@ import {
   publicLighting,
   treesParksWaste,
 } from "./InventorySchema/municipal/config";
-import { electricity, naturalGas } from "./InventorySchema/energy/config";
+import {
+  electricity,
+  naturalGas,
+  photovoltaic,
+  solarWaterHeating,
+} from "./InventorySchema/energy/config";
 import { livestock } from "./InventorySchema/afat/config";
 import type { InventoryFormValues } from "./context/inventory-context";
 import type { InventoryYear } from "./types";
@@ -254,6 +259,29 @@ function computeNaturalGasProgress(
   return createProgress(bp.completed + mp.completed + hp.completed, bp.total + mp.total + hp.total);
 }
 
+function computePhotovoltaicProgress(
+  values: Partial<InventoryFormValues> | undefined,
+  years: readonly InventoryYear[]
+) {
+  const dataSet = values?.energy?.photovoltaic?.dataSet;
+  const total = countMatrixTotal(
+    photovoltaic.btRowKeys.length + photovoltaic.mtRowKeys.length,
+    years.length
+  );
+
+  return createProgress(countFilledYearValues(dataSet), total);
+}
+
+function computeSolarWaterHeatingProgress(
+  values: Partial<InventoryFormValues> | undefined,
+  years: readonly InventoryYear[]
+) {
+  const dataSet = values?.energy?.solarWaterHeating?.dataSet;
+  const total = countMatrixTotal(solarWaterHeating.defaultRowKeys.length * 3, years.length);
+
+  return createProgress(countFilledYearValues(dataSet), total);
+}
+
 function computeTerritoryVehiclesProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
@@ -486,7 +514,9 @@ const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
   buildings: computeBuildingsProgress,
   treesParksWaste: computeTreesParksWasteProgress,
   electricity: computeElectricityProgress,
+  photovoltaic: computePhotovoltaicProgress,
   naturalGas: computeNaturalGasProgress,
+  solarWaterHeating: computeSolarWaterHeatingProgress,
   port: computePortProgress,
   buses: computeBusesProgress,
   urbanRail: computeUrbanRailProgress,
