@@ -35,16 +35,104 @@ const buttonVariants = cva(
   }
 );
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: VariantProps<typeof buttonVariants>["variant"] | SubframeVariant;
+  size?: VariantProps<typeof buttonVariants>["size"] | SubframeSize;
   asChild?: boolean;
+  icon?: React.ReactNode;
+  iconRight?: React.ReactNode;
 }
 
+type SubframeVariant =
+  | "brand-primary"
+  | "brand-secondary"
+  | "brand-tertiary"
+  | "neutral-primary"
+  | "neutral-secondary"
+  | "neutral-tertiary"
+  | "destructive-primary"
+  | "destructive-secondary"
+  | "destructive-tertiary"
+  | "inverse";
+
+type SubframeSize = "small" | "medium" | "large";
+
+const subframeVariants: Record<SubframeVariant, string> = {
+  "brand-primary": "bg-brand-600 text-white hover:bg-brand-500 active:bg-brand-600",
+  "brand-secondary": "bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-50",
+  "brand-tertiary": "bg-transparent text-brand-700 hover:bg-brand-50 active:bg-brand-100",
+  "neutral-primary": "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 active:bg-neutral-100",
+  "neutral-secondary":
+    "border border-solid border-neutral-border bg-default-background text-neutral-700 hover:bg-neutral-50 active:bg-default-background",
+  "neutral-tertiary": "bg-transparent text-neutral-700 hover:bg-neutral-100 active:bg-neutral-200",
+  "destructive-primary": "bg-error-600 text-white hover:bg-error-500 active:bg-error-600",
+  "destructive-secondary": "bg-error-50 text-error-800 hover:bg-error-100 active:bg-error-50",
+  "destructive-tertiary": "bg-transparent text-error-800 hover:bg-error-50 active:bg-error-100",
+  inverse: "bg-transparent text-white hover:bg-white/20 active:bg-white/25",
+};
+
+const subframeSizes: Record<SubframeSize, string> = {
+  small: "h-6 gap-1 px-2 text-caption-bold font-caption-bold",
+  medium: "h-8 px-3 text-body-bold font-body-bold",
+  large: "h-10 px-4 text-body-bold font-body-bold",
+};
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, icon, iconRight, children, ...props }, ref) => {
+    if (variant && variant in subframeVariants) {
+      const sourceVariant = variant as SubframeVariant;
+      const sourceSize = (size ?? "medium") as SubframeSize;
+
+      return (
+        <button
+          ref={ref}
+          type={props.type ?? "button"}
+          className={[
+            "flex cursor-pointer items-center justify-center gap-2 rounded-md border-none px-3 text-left disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-400",
+            subframeVariants[sourceVariant],
+            subframeSizes[sourceSize],
+            className,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          {...props}
+        >
+          {icon ? (
+            <span
+              className={`flex ${
+                sourceSize === "large" ? "text-heading-3 font-heading-3" : "text-body font-body"
+              }`}
+            >
+              {icon}
+            </span>
+          ) : null}
+          {children ? <span className="whitespace-nowrap">{children}</span> : null}
+          {iconRight ? (
+            <span
+              className={`flex ${
+                sourceSize === "large" ? "text-heading-3 font-heading-3" : "text-body font-body"
+              }`}
+            >
+              {iconRight}
+            </span>
+          ) : null}
+        </button>
+      );
+    }
+
     const Comp = asChild ? Slot : "button";
     return (
-      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+      <Comp
+        className={cn(
+          buttonVariants({
+            variant: variant as VariantProps<typeof buttonVariants>["variant"],
+            size: size as VariantProps<typeof buttonVariants>["size"],
+            className,
+          })
+        )}
+        ref={ref}
+        {...props}
+      />
     );
   }
 );

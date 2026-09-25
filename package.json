@@ -19,6 +19,7 @@
     "chromatic": "npx chromatic --project-token=chpt_fb6149d9ad50769"
   },
   "dependencies": {
+    "@base-ui/react": "^1.8.0",
     "@carbon-cut/types": "^0.1.6",
     "@emotion/is-prop-valid": "^1.4.0",
     "@formkit/auto-animate": "^0.9.0",
@@ -37,6 +38,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-switch": "^1.1.2",
     "@radix-ui/react-tabs": "^1.1.2",
+    "@subframe/core": "^1.155.0",
     "@tanstack/query-broadcast-client-experimental": "^5.101.4",
     "@tanstack/react-query": "^5.101.4",
     "@tanstack/react-table": "^8.21.3",

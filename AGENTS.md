@@ -14,6 +14,8 @@ Working notes for contributors to this codebase.
 
 - Prefer shared primitives/components before introducing local UI patterns.
 - Prefer the shared `Typography` primitive for text styling; do not introduce arbitrary text sizes, weights, or line-heights when an existing typography variant/size fits.
+- Default to compact product-UI spacing. Do not introduce large gaps, padding, control heights, or text separation (`space-y-8`, `gap-8`, generous card padding, etc.) unless the user explicitly asks for generous spacing or a supplied reference clearly requires it. Treat spacing as an intentional design decision for each region, not a component default.
+- Use visual hierarchy before verbal hierarchy. Do not add a heading, subheading, description, card title, or instructional sentence merely to explain the UI below it; use spacing, alignment, grouping, labels, and component structure first. Every heading must introduce a genuinely distinct concept or task. Prefer `page title → meaningful section titles → control labels`, without intermediate wrapper headings. Use one page title; add a section heading only when it separates multiple related controls or content from another meaningful group. Do not narrate the interface.
 - For product UI, arbitrary Tailwind values such as `text-[...]`, `h-[...]`, `rounded-[...]`, or `tracking-[...]` are forbidden by default. Use them only when the user explicitly approves them, or when the system cannot express the required reference and that limitation has been stated first.
 - Keep styling aligned with token semantics in `globals.css` and `tailwind.config.ts`.
 - Preserve accessibility (`aria-*`, alt text, keyboard focus visibility).

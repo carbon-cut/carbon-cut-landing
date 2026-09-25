@@ -73,7 +73,7 @@ function Footer() {
     return null;
   }
 
-  if (pathname.startsWith("/collectivity/")) {
+  if (pathname.startsWith("/collectivity/") && pathname !== "/collectivity/pricing") {
     return null;
   }
 

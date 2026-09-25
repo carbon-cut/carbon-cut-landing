@@ -6,6 +6,10 @@ Keep this file as the working index for open items. If another doc contains a ba
 
 ## Product Questions
 
+- Define and implement RGPD compliance for collectivity data.
+  Scope: privacy information, legal basis, retention, data-subject rights, security measures,
+  incident handling, processor contracts, and the conditions for making any compliance claim in the UI.
+
 - Clarify multi-collectivity identity rules for the same city:
   same ID or different IDs, whether data is shared, and how access is coordinated inside and outside the project ID.
 

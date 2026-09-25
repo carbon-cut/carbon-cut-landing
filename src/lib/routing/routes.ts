@@ -102,6 +102,10 @@ export function getCollectivityLandingRoute() {
   return "/collectivity";
 }
 
+export function getCollectivityPricingRoute() {
+  return "/collectivity/pricing";
+}
+
 export function getCollectivityStartRoute() {
   return "/collectivity/start";
 }

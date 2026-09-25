@@ -10,11 +10,18 @@ import React from "react";
  * - Body copy: variant="default" | "description" size="md" | "sm"
  * - Label/meta text: variant="label" | "caption" | "muted" size="xs" | "sm"
  * - Marketing hero (opt-in): variant="marketingTitle" size="huge"
+ * - Product screens based on the Subframe scale: use the additive, complete roles
+ *   `heading1`, `heading2`, `heading3`, `bodySubframe`, `bodyBold`,
+ *   `captionSubframe`, and `captionBold` without a `size` prop.
  *
  * Migration note:
  * - `size="huge"` is deprecated (kept as a compatibility alias for marketing hero usage).
  * - `variant="marketingTitle" | "marketingSubtitle"` are homepage/marketing-only opt-ins.
  * - Prefer `size="xl"` + explicit responsive overrides for future page-level headings.
+ * - The Subframe-aligned roles copy the source sizes, line heights, weights, letter spacing,
+ *   text colours, and Work Sans family. Manrope remains available as `font-manrope_sans` if
+ *   the previous application default needs to be restored. They preserve existing Typography
+ *   variants and may be adopted incrementally.
  */
 const typographyVariants = cva("", {
   variants: {
@@ -31,6 +38,13 @@ const typographyVariants = cva("", {
       muted: "font-normal text-foreground/60 leading-5 tracking-normal",
       marketingTitle: "font-bold text-foreground leading-[1.02] tracking-[-0.015em]",
       marketingSubtitle: "font-medium text-foreground leading-[1.2] tracking-[-0.01em]",
+      heading1: "text-heading-1 font-heading-1 mobile:text-heading-2 mobile:font-heading-2",
+      heading2: "text-heading-2 font-heading-2",
+      heading3: "text-heading-3 font-heading-3",
+      bodySubframe: "text-body font-body",
+      bodyBold: "text-body-bold font-body-bold",
+      captionSubframe: "text-caption font-caption",
+      captionBold: "text-caption-bold font-caption-bold",
     },
     size: {
       default: "text-base",
@@ -58,10 +72,22 @@ interface Props
 const Typography = React.forwardRef<HTMLDivElement, Props>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "span";
+    const isSubframeRole = [
+      "heading1",
+      "heading2",
+      "heading3",
+      "bodySubframe",
+      "bodyBold",
+      "captionSubframe",
+      "captionBold",
+    ].includes(variant ?? "");
+    const resolvedSize = size ?? (isSubframeRole ? null : undefined);
+    const variantClassName = typographyVariants({ variant, size: resolvedSize });
+    const resolvedClassName = isSubframeRole
+      ? [variantClassName, className].filter(Boolean).join(" ")
+      : cn(variantClassName, className);
 
-    return (
-      <Comp ref={ref} {...props} className={cn(typographyVariants({ variant, size }), className)} />
-    );
+    return <Comp ref={ref} {...props} className={resolvedClassName} />;
   }
 );
 
