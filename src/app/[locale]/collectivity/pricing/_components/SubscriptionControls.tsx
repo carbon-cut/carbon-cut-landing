@@ -6,26 +6,29 @@ import RadioCardGroup from "@/components/ui/radio-card-group";
 import SegmentedControl from "@/components/ui/segmentedControl";
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
-import type { ContractTerm, Perimeter, PricingConfiguration } from "../_lib/pricing";
-import { MAX_COMMUNES } from "../_lib/pricing";
+import type {
+  ContractTerm,
+  Perimeter,
+  PricingConfiguration,
+  SubscriptionCatalogue,
+} from "../_lib/pricing";
+import { getCommuneDiscountTiers } from "../_lib/pricing";
+
+const MAX_COMMUNES = 10;
 
 type SubscriptionControlsProps = {
   configuration: PricingConfiguration;
+  catalogue: SubscriptionCatalogue;
   onCommit: (next: Partial<PricingConfiguration>) => void;
 };
 
-const coverageTiers = [
-  { key: "one", min: 1, max: 1 },
-  { key: "twoToThree", min: 2, max: 3 },
-  { key: "fourToFive", min: 4, max: 5 },
-  { key: "sixToTen", min: 6, max: MAX_COMMUNES },
-] as const;
-
 export default function SubscriptionControls({
   configuration,
+  catalogue,
   onCommit,
 }: SubscriptionControlsProps) {
   const t = useScopedI18n("collectivityPricing");
+  const communeDiscountTiers = getCommuneDiscountTiers(catalogue, MAX_COMMUNES);
 
   return (
     <Card className="w-full border-solid border-neutral-border bg-default-background">
@@ -77,12 +80,12 @@ export default function SubscriptionControls({
               </div>
             </div>
             <div className="flex w-full flex-wrap items-center gap-2">
-              {coverageTiers.map((tier) => {
+              {communeDiscountTiers.map((tier) => {
                 const selected =
-                  configuration.communes >= tier.min && configuration.communes <= tier.max;
+                  configuration.communes >= tier.minimum && configuration.communes <= tier.maximum;
                 return (
                   <div
-                    key={tier.key}
+                    key={tier.minimum}
                     className={
                       selected
                         ? "flex items-center rounded-full border border-solid border-brand-600 bg-brand-50 px-3 py-1"
@@ -93,7 +96,16 @@ export default function SubscriptionControls({
                       variant={selected ? "captionBold" : "captionSubframe"}
                       className={selected ? "text-brand-700" : undefined}
                     >
-                      {t(`configuration.communes.tiers.${tier.key}`)}
+                      {tier.minimum === tier.maximum
+                        ? t("configuration.communes.tierSingle", {
+                            minimum: tier.minimum,
+                            discount: tier.discountBasisPoints / 100,
+                          })
+                        : t("configuration.communes.tierRange", {
+                            minimum: tier.minimum,
+                            maximum: tier.maximum,
+                            discount: tier.discountBasisPoints / 100,
+                          })}
                     </Typography>
                   </div>
                 );
@@ -145,10 +157,10 @@ export default function SubscriptionControls({
             <RadioCardGroup
               value={configuration.perimeter}
               onValueChange={(perimeter) => onCommit({ perimeter: perimeter as Perimeter })}
-              options={(["municipal_assets", "whole_territory"] as const).map((perimeter) => ({
+              options={catalogue.perimeters.map((perimeter) => ({
                 value: perimeter,
-                label: t(`configuration.perimeter.${perimeter}`),
-                description: t(`configuration.perimeter.${perimeter}_description`),
+                label: getPerimeterLabel(t, perimeter),
+                description: getPerimeterDescription(t, perimeter),
               }))}
             />
           </fieldset>
@@ -156,4 +168,20 @@ export default function SubscriptionControls({
       </CardContent>
     </Card>
   );
+}
+
+function getPerimeterLabel(t: ReturnType<typeof useScopedI18n>, perimeter: string) {
+  if (perimeter === "patrimoine_communal") return t("configuration.perimeter.municipal_assets");
+  if (perimeter === "territorial_communes") return t("configuration.perimeter.whole_territory");
+  return perimeter.replace(/_/g, " ");
+}
+
+function getPerimeterDescription(t: ReturnType<typeof useScopedI18n>, perimeter: string) {
+  if (perimeter === "patrimoine_communal") {
+    return t("configuration.perimeter.municipal_assets_description");
+  }
+  if (perimeter === "territorial_communes") {
+    return t("configuration.perimeter.whole_territory_description");
+  }
+  return perimeter.replace(/_/g, " ");
 }

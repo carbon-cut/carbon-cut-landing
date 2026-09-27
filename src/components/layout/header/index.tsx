@@ -33,8 +33,7 @@ function Header() {
   const pathName = usePathname();
   const router = useRouter();
   const { status, signOut } = useAuth();
-  const isCollectivityLanding =
-    pathName === "/collectivity" || pathName === "/collectivity/pricing";
+  const isCollectivityLanding = pathName === "/collectivity";
   const isLandingHeader = pathName === "/" || isCollectivityLanding;
   const primaryCtaHref = isCollectivityLanding ? getCollectivityStartRoute() : getFormRoute();
   const menu: MenuItem[] = isCollectivityLanding
@@ -96,7 +95,7 @@ function Header() {
     return null;
   }
 
-  if (pathName.startsWith("/collectivity/") && pathName !== "/collectivity/pricing") {
+  if (pathName.startsWith("/collectivity/")) {
     return null;
   }
 

@@ -106,6 +106,10 @@ export function getCollectivityPricingRoute() {
   return "/collectivity/pricing";
 }
 
+export function getCollectivityPricingConfigurationRoute() {
+  return getCollectivityPricingRoute();
+}
+
 export function getCollectivityStartRoute() {
   return "/collectivity/start";
 }

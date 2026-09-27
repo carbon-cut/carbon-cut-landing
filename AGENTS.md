@@ -20,6 +20,7 @@ Working notes for contributors to this codebase.
 - Keep styling aligned with token semantics in `globals.css` and `tailwind.config.ts`.
 - Preserve accessibility (`aria-*`, alt text, keyboard focus visibility).
 - Keep sections semantic and data-driven where possible.
+- For client-rendered data and mutations, use TanStack Query. Add reusable query keys, fetchers, and shared query options to the relevant `*_lib/queries.ts` module; do not issue ad-hoc `fetch` calls from UI components. Browser requests must use the same-origin Next.js API route layer rather than calling Strapi directly. Server-only loading is reserved for server-rendered initial data and must not replace the client query when the UI needs live API state.
 - Mocks must imitate the real backend/API contract exactly. Do not invent mock-only response shapes, UI convenience fields, shortcuts, or alternate data structures. If the contract is unclear, stop and clarify it before coding the mock or the UI parser.
 - Run `npm run lint` before shipping UI changes.
 - Only change files or code the user explicitly asked you to change.

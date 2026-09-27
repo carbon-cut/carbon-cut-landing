@@ -1,3 +1,5 @@
+@import "country-flag-icons/3x2/flags.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -284,6 +286,14 @@
 }
 
 @layer utilities {
+  .placeholder-subframe::placeholder {
+    @apply text-neutral-400;
+  }
+
+  .select-trigger-subframe[data-placeholder] [data-slot="select-value"] {
+    @apply text-neutral-400;
+  }
+
   .transition-discrete {
     transition-behavior: allow-discrete;
   }

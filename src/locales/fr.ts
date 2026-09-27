@@ -229,6 +229,90 @@ export default {
     title: "Configurer votre abonnement",
     description:
       "Composez un abonnement unique selon le nombre de communes, la durée, le périmètre et les modules souhaités. Le prix se met à jour à chaque modification.",
+    flow: {
+      progressLabel: "Progression du devis",
+      steps: {
+        configuration: "Configuration",
+        quoteInformation: "Informations du devis",
+        quoteVerification: "Vérification du devis",
+      },
+    },
+    quoteInformation: {
+      back: "Modifier la configuration",
+      title: "Informations du devis",
+      description:
+        "Complétez les informations client et les conditions commerciales. La configuration tarifaire est figée et ne sera pas recalculée.",
+      cards: {
+        legalIdentity: {
+          title: "Identité légale et facturation",
+          description: "Ces informations figureront sur le devis et la facture.",
+          customerType: "Type de client",
+          legalEntity: "Personne morale",
+          legalEntityDescription: "Entreprise ou collectivité",
+          individual: "Particulier",
+          individualDescription: "Non pris en charge pour ce service B2B",
+          legalName: "Raison sociale",
+          addressLine1: "Adresse",
+          addressLine2: "Complément d'adresse",
+          addressLine2Hint: "Facultatif",
+          addressLine2Placeholder: "Bâtiment, étage, service…",
+          postalCode: "Code postal",
+          city: "Ville",
+          countryCode: "Pays",
+          countryCodePlaceholder: "Sélectionner un pays",
+          contact: "Contact",
+          contactName: "Nom du contact",
+          contactEmail: "E-mail",
+          contactPhone: "Téléphone",
+          contactPhoneHint: "Facultatif",
+          taxIdentifiers: "Identifiants fiscaux",
+          taxIdentifiersDescription: "Les champs requis dépendent du pays du client.",
+          siren: "SIREN",
+          siret: "SIRET",
+          frenchRegistrationHint: "Requis pour les clients établis en France",
+          vatNumber: "N° de TVA intracommunautaire",
+          generalTaxIdentifier: "Numéro d'identification fiscale",
+          vatNumberHint:
+            "Recommandé en France · obligatoire pour un client UE hors France (autoliquidation)",
+          hasNoVatNumber: "Je ne dispose pas de n° de TVA intracommunautaire",
+          viesNotChecked: "À vérifier via VIES",
+          viesChecking: "Vérification VIES…",
+          viesVerified: "Vérifié VIES",
+          viesInvalid: "VIES invalide",
+          viesUnavailable: "VIES indisponible",
+          viesInvalidMessage: "Invalide",
+          taxTreatment: {
+            title: "Traitement fiscal (déterminé automatiquement)",
+            status: "TVA française applicable · 20 %",
+            description:
+              "Client professionnel établi en France. Le régime est calculé à partir du pays, du type de client et du n° de TVA — il n’est pas modifiable manuellement.",
+            pendingInformationStatus: "Informations fiscales requises",
+            pendingInformationDescription:
+              "Sélectionnez le pays du client pour déterminer le traitement fiscal.",
+            pendingViesStatus: "Vérification VIES requise",
+            pendingViesDescription:
+              "Le traitement fiscal sera déterminé après vérification du numéro de TVA.",
+            france: "France · TVA FR 20 %",
+            europeanUnion: "UE hors France · autoliquidation, n° TVA UE requis",
+            europeanUnionDescription:
+              "Client professionnel établi dans l’Union européenne hors France. La TVA est autoliquidée par le client.",
+            outsideEuropeanUnion: "Hors UE · TVA non applicable (art. 259 CGI)",
+            outsideEuropeanUnionDescription:
+              "Client professionnel établi hors de l’Union européenne. La TVA française n’est pas applicable.",
+            current: "Actuel",
+          },
+        },
+        quoteTerms: {
+          title: "Conditions du devis",
+          description: "Devise, validité, démarrage du contrat et modalités de paiement.",
+        },
+        selectedOffer: {
+          title: "Offre sélectionnée",
+        },
+      },
+    },
+    catalogueLoading: "Chargement du catalogue d’abonnement…",
+    catalogueLoadError: "Impossible de charger le catalogue d’abonnement.",
     configuration: {
       title: "Votre configuration",
       panelTitle: "Paramètres du contrat",
@@ -247,6 +331,8 @@ export default {
           fourToFive: "4–5 communes · −30 %",
           sixToTen: "6–10 communes · −40 %",
         },
+        tierSingle: "{minimum} commune · −{discount} %",
+        tierRange: "{minimum}–{maximum} communes · −{discount} %",
       },
       coverageDiscount: "Réduction couverture : −{discount} %",
       term: {
@@ -3862,6 +3948,7 @@ export default {
     submit: "Résultat",
     errors: {
       Required: "Obligatoire",
+      Invalid: "Invalide",
       nonNegative: "0 ou plus",
       between0And100: "Valeur entre 0 et 100",
       manureManagementSharesMustTotal100:

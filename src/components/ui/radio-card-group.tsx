@@ -34,14 +34,24 @@ function RadioCardGroup<T extends string>({
       {options.map((option) => (
         <label
           key={option.value}
-          className="flex h-full w-full cursor-pointer items-center gap-3 rounded-md border border-solid border-neutral-border bg-default-background px-4 py-3 has-[[data-state=checked]]:border-brand-300 has-[[data-state=checked]]:bg-brand-50 has-[[data-disabled]]:cursor-not-allowed has-[[data-disabled]]:opacity-50"
+          className="flex h-full w-full cursor-pointer items-center gap-3 rounded-md border border-solid border-neutral-border bg-default-background px-4 py-3 has-[[data-state=checked]]:border-brand-300 has-[[data-state=checked]]:bg-brand-50 has-[[data-disabled]]:cursor-default has-[[data-disabled]]:border-neutral-100 has-[[data-disabled]]:bg-neutral-50"
         >
-          <RadioGroupItem value={option.value} disabled={option.disabled} />
+          <RadioGroupItem
+            value={option.value}
+            disabled={option.disabled}
+            className="data-[disabled]:border-neutral-300 data-[disabled]:bg-neutral-100"
+          />
           <span className="flex flex-col items-start gap-1">
-            <Typography variant="bodyBold" className="text-default-font">
+            <Typography
+              variant="bodyBold"
+              className={option.disabled ? "text-neutral-400" : "text-default-font"}
+            >
               {option.label}
             </Typography>
-            <Typography variant="captionSubframe" className="text-subtext-color">
+            <Typography
+              variant="captionSubframe"
+              className={option.disabled ? "text-neutral-400" : "text-subtext-color"}
+            >
               {option.description}
             </Typography>
           </span>

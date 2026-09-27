@@ -29,16 +29,16 @@ Generated from project sources at 2026-09-23T21:55:13.224Z.
 ### Colors
 
 - `--linear-primary-diagonal`: `linear-gradient(
-    to bottom right,
-    hsl(var(--chart-1)),
-    hsl(var(--chart-2))
-  )` (src/app/globals.css)
+  to bottom right,
+  hsl(var(--chart-1)),
+  hsl(var(--chart-2))
+)` (src/app/globals.css)
 - `--linear-accent-horizontal`: `linear-gradient(to right, hsl(var(--chart-3)), hsl(17, 100%, 86%))` (src/app/globals.css)
 - `--linear-accent-diagonal`: `linear-gradient(
-    to bottom right,
-    hsl(var(--chart-3)),
-    hsl(17, 100%, 86%)
-  )` (src/app/globals.css)
+  to bottom right,
+  hsl(var(--chart-3)),
+  hsl(17, 100%, 86%)
+)` (src/app/globals.css)
 - `--workspace-background`: `222.2 20% 10%` (src/app/globals.css)
 - `--background`: `222.2 84% 4.9%` (src/app/globals.css)
 - `--foreground`: `210 40% 98%` (src/app/globals.css)

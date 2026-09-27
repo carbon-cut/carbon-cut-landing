@@ -1,5 +1,6 @@
 import { http, HttpResponse } from "msw";
 import type { CollectivitySetupData } from "@/app/[locale]/collectivity/setup/_lib/types";
+import type { SubscriptionCatalogue } from "@/app/[locale]/collectivity/pricing/_lib/pricing";
 import { getUserPlanIds } from "@/lib/auth/profile";
 import { getMockUserByAccessToken } from "@/mocks/auth";
 import {
@@ -12,6 +13,76 @@ import {
 } from "@/mocks/collectivity";
 
 const strapiUrl = process.env.STRAPI_INTERNAL_URL;
+
+const subscriptionCatalogue: SubscriptionCatalogue = {
+  catalogueVersion: "2026-09-adjusted-v1",
+  discountPolicyVersion: "2026-09-adjusted-v1",
+  perimeters: ["patrimoine_communal", "territorial_communes"],
+  modules: [
+    {
+      key: "ghg_inventory_scope_1_2",
+      status: "available",
+      annualRatesCents: { patrimoine_communal: 150000, territorial_communes: 350000 },
+      conditions: [],
+    },
+    {
+      key: "ghg_inventory_scope_3",
+      status: "planned_later",
+      annualRatesCents: { patrimoine_communal: 200000, territorial_communes: 600000 },
+      conditions: [],
+    },
+    {
+      key: "emission_factor_consolidation",
+      status: "available",
+      annualRatesCents: { patrimoine_communal: 60000, territorial_communes: 120000 },
+      conditions: [],
+    },
+    {
+      key: "prospective_objectives",
+      status: "in_development",
+      annualRatesCents: { patrimoine_communal: 80000, territorial_communes: 180000 },
+      conditions: [],
+    },
+    {
+      key: "ghg_mitigation_investment_plan",
+      status: "in_development",
+      annualRatesCents: { patrimoine_communal: 150000, territorial_communes: 450000 },
+      conditions: [],
+    },
+    {
+      key: "mrv_tracking",
+      status: "in_development",
+      annualRatesCents: { patrimoine_communal: 120000, territorial_communes: 350000 },
+      conditions: [],
+    },
+    {
+      key: "significant_indicators",
+      status: "coming_soon",
+      annualRatesCents: { patrimoine_communal: 70000, territorial_communes: 150000 },
+      conditions: [],
+    },
+    {
+      key: "scoring_100",
+      status: "coming_soon",
+      annualRatesCents: { patrimoine_communal: 80000, territorial_communes: 180000 },
+      conditions: [],
+    },
+    {
+      key: "intermunicipal_aggregation",
+      status: "in_development",
+      annualRatesCents: { patrimoine_communal: 40000, territorial_communes: 100000 },
+      conditions: [{ field: "commune_count", operator: "gte", value: 3 }],
+    },
+  ],
+  discountPolicy: {
+    termYears: { "3": 2000 },
+    communeCount: [
+      { minimum: 5, discountBasisPoints: 1000 },
+      { minimum: 10, discountBasisPoints: 2000 },
+    ],
+    maximumDiscountBasisPoints: 2500,
+  },
+};
 
 function error(status: number, message: string, details?: Record<string, unknown>) {
   return HttpResponse.json(
@@ -31,6 +102,9 @@ function projectSlug(params: Record<string, string | readonly string[] | undefin
 }
 
 export const collectivityHandlers = [
+  http.get(`${strapiUrl}/api/collectivity/subscription-catalogue`, () =>
+    HttpResponse.json({ data: subscriptionCatalogue })
+  ),
   http.get(`${strapiUrl}/api/collectivity/projects`, ({ request }) => {
     const user = authenticatedUser(request);
     if (!user) return error(401, "Authentication required");

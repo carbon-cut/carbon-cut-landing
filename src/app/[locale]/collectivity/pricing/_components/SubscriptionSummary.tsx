@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  FeatherArrowRight,
-  FeatherDownload,
-  FeatherReceipt,
-  FeatherShieldCheck,
-} from "@subframe/core";
+import { FeatherArrowRight, FeatherReceipt, FeatherShieldCheck } from "@subframe/core";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import Typography from "@/components/ui/typography";
@@ -57,11 +52,17 @@ export default function SubscriptionSummary({
           />
           <SummaryRow
             label={t("summary.perimeter")}
-            value={t(`configuration.perimeter.${configuration.perimeter}`)}
+            value={
+              configuration.perimeter === "patrimoine_communal"
+                ? t("configuration.perimeter.municipal_assets")
+                : configuration.perimeter === "territorial_communes"
+                  ? t("configuration.perimeter.whole_territory")
+                  : configuration.perimeter.replace(/_/g, " ")
+            }
           />
           <SummaryRow
             label={t("summary.selectedModules")}
-            value={String(configuration.moduleIds.length)}
+            value={String(configuration.moduleKeys.length)}
           />
         </dl>
 
@@ -71,23 +72,15 @@ export default function SubscriptionSummary({
           <SummaryRow
             align="start"
             label={t("summary.annualSubtotal")}
-            value={formatSubscriptionCurrency(pricing.baseAnnualTotalEur)}
+            value={formatSubscriptionCurrency(pricing.baseAnnualTotalCents)}
           />
-          {pricing.coverageDiscountPercent > 0 ? (
+          {pricing.discountBasisPoints > 0 ? (
             <SummaryRow
               align="start"
-              label={t("summary.coverageDiscount", {
-                discount: pricing.coverageDiscountPercent,
+              label={t("configuration.combinedDiscount", {
+                discount: pricing.discountBasisPoints / 100,
               })}
-              value={`−${formatSubscriptionCurrency(pricing.coverageDiscountEur)}`}
-              valueClassName="text-success-600"
-            />
-          ) : null}
-          {pricing.termDiscountPercent > 0 ? (
-            <SummaryRow
-              align="start"
-              label={t("summary.termDiscount", { discount: pricing.termDiscountPercent })}
-              value={`−${formatSubscriptionCurrency(pricing.termDiscountEur)}`}
+              value={`−${formatSubscriptionCurrency(pricing.discountAmountCents)}`}
               valueClassName="text-success-600"
             />
           ) : null}
@@ -102,7 +95,7 @@ export default function SubscriptionSummary({
             </Typography>
             <div className="flex items-end gap-2">
               <Typography variant="heading1" className="text-default-font">
-                {formatSubscriptionCurrency(pricing.annualTotalEur)} {t("summary.perYear")}
+                {formatSubscriptionCurrency(pricing.annualTotalCents)} {t("summary.perYear")}
               </Typography>
               {/* TODO: HT display is not confirmed. */}
               <Typography variant="captionSubframe" className="pb-1 text-subtext-color">
@@ -115,7 +108,7 @@ export default function SubscriptionSummary({
               {t("summary.contractTotal", { years: configuration.term })}
             </Typography>
             <Typography variant="heading3" className="whitespace-nowrap text-brand-800">
-              {formatSubscriptionCurrency(pricing.contractTotalEur)}
+              {formatSubscriptionCurrency(pricing.contractTotalCents)}
             </Typography>
           </div>
         </div>
@@ -123,25 +116,15 @@ export default function SubscriptionSummary({
         <Typography variant="captionSubframe" className="text-subtext-color">
           {t("summary.priceTaxNotice")}
         </Typography>
-        <div className="flex w-full flex-col items-start gap-2">
-          <Button
-            className="h-10 w-full flex-none"
-            variant="brand-primary"
-            size="large"
-            iconRight={<FeatherArrowRight />}
-            onClick={onContinue}
-          >
-            {t("action.continue")}
-          </Button>
-          <Button
-            className="h-10 w-full flex-none"
-            variant="neutral-secondary"
-            size="large"
-            icon={<FeatherDownload />}
-          >
-            {t("action.downloadQuote")}
-          </Button>
-        </div>
+        <Button
+          className="h-10 w-full flex-none"
+          variant="brand-primary"
+          size="large"
+          iconRight={<FeatherArrowRight />}
+          onClick={onContinue}
+        >
+          {t("action.continue")}
+        </Button>
         <div className="flex w-full items-center gap-2">
           <FeatherShieldCheck className="text-caption font-caption text-subtext-color" />
           <Typography variant="captionSubframe" className="text-subtext-color">

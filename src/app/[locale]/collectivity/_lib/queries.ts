@@ -1,5 +1,6 @@
 import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/setup/_lib/types";
 import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/setup/_lib/schema";
+import type { SubscriptionCatalogue } from "@/app/[locale]/collectivity/pricing/_lib/pricing";
 import type {
   CollectivityResultRow,
   CollectivityResultsByYear,
@@ -20,7 +21,13 @@ export const collectivityQueryOptions = {
   retry: 1,
 };
 
+export const subscriptionCatalogueQueryOptions = {
+  ...collectivityQueryOptions,
+  staleTime: 5 * 60 * 1000,
+};
+
 export const collectivityQueryKeys = {
+  subscriptionCatalogue: () => ["collectivity", "subscriptionCatalogue"] as const,
   currentInventory: (projectSlug: string) =>
     ["collectivity", "currentInventory", projectSlug] as const,
   result: (projectSlug: string) => ["collectivity", "result", projectSlug] as const,
@@ -89,6 +96,19 @@ export class CollectivityApiError extends Error {
     this.name = "CollectivityApiError";
     this.payload = payload;
   }
+}
+
+export async function fetchCollectivitySubscriptionCatalogue() {
+  const response = await fetch("/api/collectivity/subscription-catalogue", {
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data?: SubscriptionCatalogue }>(response);
+
+  if (!payload.data) {
+    throw new Error("Subscription catalogue not found");
+  }
+
+  return payload.data;
 }
 
 async function readApiJson<T>(response: Response): Promise<T> {

@@ -129,7 +129,7 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-caption font-caption text-subtext-color", className)}
       {...props}
     />
   );
@@ -158,7 +158,7 @@ const FormMessage = React.forwardRef<
       <p
         ref={ref}
         id={formMessageId}
-        className={cn("text-sm font-medium text-destructive", className)}
+        className={cn("text-caption font-caption text-subtext-color", className)}
         {...props}
       >
         {fallback ? "\u00A0" : ""}
@@ -171,8 +171,8 @@ const FormMessage = React.forwardRef<
       ref={ref}
       id={formMessageId}
       className={cn(
-        "text-sm font-medium data-[state=disabled]:text-destructive/60",
-        cn(className, "text-destructive")
+        "data-[state=disabled]:text-error-700 text-caption font-caption text-error-700",
+        className
       )}
       {...props}
     >

@@ -9,52 +9,52 @@ import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 import {
   formatSubscriptionCurrency,
-  REQUIRED_MODULE_ID,
-  subscriptionCatalogue,
-  type ModuleId,
+  formatSubscriptionLabel,
+  moduleMeetsConditions,
   type PricingConfiguration,
   type PricingResult,
+  type SubscriptionCatalogue,
 } from "../_lib/pricing";
 
 type ModulePricingTableProps = {
   configuration: PricingConfiguration;
+  catalogue: SubscriptionCatalogue;
   pricing: PricingResult;
-  onChange: (moduleIds: ModuleId[]) => void;
+  onChange: (moduleKeys: string[]) => void;
 };
 
 export default function ModulePricingTable({
   configuration,
+  catalogue,
   pricing,
   onChange,
 }: ModulePricingTableProps) {
   const t = useScopedI18n("collectivityPricing");
   const pricesPerCommune = new Map(
-    pricing.modules.map((module) => [module.id, module.annualPriceEur / configuration.communes])
+    pricing.modules.map((module) => [module.key, module.annualUnitAmountCents])
   );
-  const available = subscriptionCatalogue.modules.filter(
-    (module) => subscriptionCatalogue.availability[module.availability].purchasableInInitialFlow
+  const available = catalogue.modules.filter(
+    (module) =>
+      module.status === "available" && moduleMeetsConditions(module, configuration.communes)
   );
-  const upcoming = subscriptionCatalogue.modules.filter(
-    (module) => !subscriptionCatalogue.availability[module.availability].purchasableInInitialFlow
-  );
-  const moduleDescriptions: Partial<Record<ModuleId, string>> = {
+  const unavailable = catalogue.modules.filter((module) => !available.includes(module));
+  const moduleDescriptions: Record<string, string> = {
     ghg_inventory_scope_1_2: t("modules.descriptions.ghg_inventory_scope_1_2"),
     ghg_inventory_scope_3: t("modules.descriptions.ghg_inventory_scope_3"),
     emission_factor_consolidation: t("modules.descriptions.emission_factor_consolidation"),
-    prospective_and_objectives: t("modules.descriptions.prospective_and_objectives"),
+    prospective_objectives: t("modules.descriptions.prospective_and_objectives"),
     ghg_mitigation_investment_plan: t("modules.descriptions.ghg_mitigation_investment_plan"),
-    mrv_monitoring: t("modules.descriptions.mrv_monitoring"),
+    mrv_tracking: t("modules.descriptions.mrv_monitoring"),
     significant_indicators: t("modules.descriptions.significant_indicators"),
-    scoring_system: t("modules.descriptions.scoring_system"),
-    commune_aggregation: t("modules.descriptions.commune_aggregation"),
+    scoring_100: t("modules.descriptions.scoring_system"),
+    intermunicipal_aggregation: t("modules.descriptions.commune_aggregation"),
   };
 
-  function toggleModule(moduleId: ModuleId, checked: boolean) {
-    const moduleIds = checked
-      ? Array.from(new Set([...configuration.moduleIds, moduleId]))
-      : configuration.moduleIds.filter((id) => id !== moduleId);
+  function toggleModule(moduleKey: string, checked: boolean) {
     onChange(
-      moduleIds.includes(REQUIRED_MODULE_ID) ? moduleIds : [REQUIRED_MODULE_ID, ...moduleIds]
+      checked
+        ? Array.from(new Set([...configuration.moduleKeys, moduleKey]))
+        : configuration.moduleKeys.filter((key) => key !== moduleKey)
     );
   }
 
@@ -92,18 +92,18 @@ export default function ModulePricingTable({
           </div>
           {available.map((module, index) => (
             <ModuleRow
-              key={module.id}
+              key={module.key}
               divider={index === 0 ? "bottom" : undefined}
               density="available"
-              checked={configuration.moduleIds.includes(module.id)}
-              disabled={module.id === REQUIRED_MODULE_ID}
-              label={t(`modules.items.${module.id}`)}
-              description={moduleDescriptions[module.id]}
-              status={t(`availability.${module.availability}`)}
-              statusVariant={getAvailabilityBadgeVariant(module.availability)}
-              price={pricesPerCommune.get(module.id)}
+              checked={configuration.moduleKeys.includes(module.key)}
+              disabled={false}
+              label={getModuleLabel(t, module.key)}
+              description={moduleDescriptions[module.key]}
+              status={t("availability.available_at_launch")}
+              statusVariant="success"
+              price={pricesPerCommune.get(module.key)}
               perYear={t("summary.perYear")}
-              onCheckedChange={(checked) => toggleModule(module.id, checked)}
+              onCheckedChange={(checked) => toggleModule(module.key, checked)}
             />
           ))}
 
@@ -118,19 +118,19 @@ export default function ModulePricingTable({
               {t("modules.upcomingDescription")}
             </Typography>
           </div>
-          {upcoming.map((module) => (
+          {unavailable.map((module) => (
             <ModuleRow
-              key={module.id}
+              key={module.key}
               divider="top"
               density="upcoming"
-              isLast={module.id === upcoming.at(-1)?.id}
+              isLast={module.key === unavailable.at(-1)?.key}
               checked={false}
               disabled
               muted
-              label={t(`modules.items.${module.id}`)}
-              description={moduleDescriptions[module.id]}
-              status={t(`availability.${module.availability}`)}
-              statusVariant={getAvailabilityBadgeVariant(module.availability)}
+              label={getModuleLabel(t, module.key)}
+              description={moduleDescriptions[module.key]}
+              status={getModuleStatus(t, module, configuration.communes)}
+              statusVariant={getModuleStatusVariant(module, configuration.communes)}
             />
           ))}
         </section>
@@ -215,10 +215,43 @@ function ModuleRow({
   );
 }
 
-function getAvailabilityBadgeVariant(
-  availability: (typeof subscriptionCatalogue.modules)[number]["availability"]
+function getModuleLabel(t: ReturnType<typeof useScopedI18n>, key: string) {
+  const translationKeys: Record<string, string> = {
+    ghg_inventory_scope_1_2: "ghg_inventory_scope_1_2",
+    ghg_inventory_scope_3: "ghg_inventory_scope_3",
+    emission_factor_consolidation: "emission_factor_consolidation",
+    prospective_objectives: "prospective_and_objectives",
+    ghg_mitigation_investment_plan: "ghg_mitigation_investment_plan",
+    mrv_tracking: "mrv_monitoring",
+    significant_indicators: "significant_indicators",
+    scoring_100: "scoring_system",
+    intermunicipal_aggregation: "commune_aggregation",
+  };
+  const translationKey = translationKeys[key];
+  return translationKey ? t(`modules.items.${translationKey}`) : formatSubscriptionLabel(key);
+}
+
+function getModuleStatus(
+  t: ReturnType<typeof useScopedI18n>,
+  module: SubscriptionCatalogue["modules"][number],
+  communes: number
 ) {
-  if (availability === "available_at_launch") return "success" as const;
-  if (availability === "coming_very_soon") return "warning" as const;
-  return "neutral" as const;
+  if (module.status === "available" && !moduleMeetsConditions(module, communes)) {
+    return t("modules.upcoming");
+  }
+  if (module.status === "coming_soon") return t("availability.coming_very_soon");
+  return formatSubscriptionLabel(module.status);
+}
+
+function getModuleStatusVariant(
+  module: SubscriptionCatalogue["modules"][number],
+  communes: number
+): "success" | "neutral" | "warning" {
+  if (module.status === "available" && moduleMeetsConditions(module, communes)) {
+    return "success";
+  }
+  if (module.status === "coming_soon" || module.status === "available") {
+    return "warning";
+  }
+  return "neutral";
 }

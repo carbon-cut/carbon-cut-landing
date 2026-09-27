@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import * as React from "react";
 
 import {
@@ -15,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 type CollectivitySelectOption = {
   value: string;
-  label: string;
+  label: React.ReactNode;
 };
 
 type CollectivitySelectProps = {
@@ -34,11 +32,7 @@ const CollectivitySelect = React.forwardRef<HTMLButtonElement, CollectivitySelec
   ({ value, onValueChange, placeholder, options, className, disabled, ...triggerProps }, ref) => {
     return (
       <Select value={value} onValueChange={onValueChange} disabled={disabled}>
-        <SelectTrigger
-          ref={ref}
-          className={cn("h-10 w-full rounded-md bg-card shadow-none", className)}
-          {...triggerProps}
-        >
+        <SelectTrigger ref={ref} className={cn("w-full", className)} {...triggerProps}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

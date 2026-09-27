@@ -3,6 +3,7 @@ import "server-only";
 import { fetchWithAuth, UnauthenticatedRequestError } from "@/lib/auth/fetchWithAuth";
 import type { AuthUser } from "@/lib/auth/types";
 import type { CollectivityResultsByYear } from "@/lib/collectivity/result-types";
+import type { SubscriptionCatalogue } from "@/app/[locale]/collectivity/pricing/_lib/pricing";
 import type {
   CollectivityProjectSnapshot,
   CollectivitySetupData,
@@ -146,6 +147,33 @@ async function requestCollectivity<T>(path: string, init?: RequestInit) {
   }
 
   return body as T;
+}
+
+async function requestPublicCollectivity<T>(path: string) {
+  let response: Response;
+
+  try {
+    response = await fetch(`${getCollectivityBaseUrl()}${path}`, { cache: "no-store" });
+  } catch {
+    throw new CollectivityBackendError(503, {
+      error: { status: 503, message: "Collectivity backend unavailable" },
+    });
+  }
+
+  const body = await parseJson<T | CollectivityErrorBody>(response);
+
+  if (!response.ok) {
+    throw new CollectivityBackendError(response.status, (body ?? {}) as CollectivityErrorBody);
+  }
+
+  return body as T;
+}
+
+export async function getSubscriptionCatalogue(): Promise<SubscriptionCatalogue> {
+  const response = await requestPublicCollectivity<{ data: SubscriptionCatalogue }>(
+    "/api/collectivity/subscription-catalogue"
+  );
+  return response.data;
 }
 
 export async function listCollectivityProjects(

@@ -1,119 +1,140 @@
-import rawCatalogue from "./subscription-catalogue.json";
-
-export type Perimeter = "municipal_assets" | "whole_territory";
+export type Perimeter = string;
 export type ContractTerm = 1 | 3;
-export type ModuleId =
-  | "ghg_inventory_scope_1_2"
-  | "ghg_inventory_scope_3"
-  | "emission_factor_consolidation"
-  | "prospective_and_objectives"
-  | "ghg_mitigation_investment_plan"
-  | "mrv_monitoring"
-  | "significant_indicators"
-  | "scoring_system"
-  | "commune_aggregation";
 
-type Availability = "available_at_launch" | "coming_very_soon" | "in_development" | "planned_later";
+export type SubscriptionCondition = { field: string; operator: string; value: unknown };
 
-type SubscriptionModule = {
-  id: ModuleId;
-  translationKey: string;
-  scope: string;
-  availability: Availability;
-  pricingMethod: "core_reduction_ladder" | "commune_aggregation_rates";
-  oneCommuneOneYearBaselineEur?: Record<Perimeter, number>;
+export type SubscriptionModule = {
+  key: string;
+  status: string;
+  annualRatesCents: Record<string, number>;
+  conditions: SubscriptionCondition[];
 };
 
-type SubscriptionCatalogue = {
-  currency: "EUR";
-  availability: Record<Availability, { purchasableInInitialFlow: boolean; translationKey: string }>;
+export type SubscriptionCatalogue = {
+  catalogueVersion: string;
+  discountPolicyVersion: string;
+  perimeters: string[];
   modules: SubscriptionModule[];
-  pricingRules: {
-    core_reduction_ladder: {
-      coverageTiers: Array<{
-        id: string;
-        minCommunes: number;
-        maxCommunes: number | null;
-        annualMultiplier: number;
-      }>;
-      termMultipliers: Record<"1" | "3", number>;
-    };
+  discountPolicy: {
+    termYears: Record<string, number>;
+    communeCount: Array<{ minimum: number; discountBasisPoints: number }>;
+    maximumDiscountBasisPoints: number;
   };
 };
-
-export const subscriptionCatalogue = rawCatalogue as SubscriptionCatalogue;
-
-export const REQUIRED_MODULE_ID: ModuleId = "ghg_inventory_scope_1_2";
-export const MAX_COMMUNES = 10;
 
 export type PricingConfiguration = {
   communes: number;
   term: ContractTerm;
   perimeter: Perimeter;
-  moduleIds: ModuleId[];
+  moduleKeys: string[];
 };
 
 export type PricedModule = SubscriptionModule & {
-  annualPriceBeforeDiscountEur: number;
-  annualPriceEur: number;
+  annualUnitAmountCents: number;
+  annualAmountCents: number;
 };
 
 export type PricingResult = {
   modules: PricedModule[];
-  coverageDiscountPercent: number;
-  termDiscountPercent: number;
-  combinedDiscountPercent: number;
-  baseAnnualTotalEur: number;
-  coverageDiscountEur: number;
-  termDiscountEur: number;
-  annualTotalEur: number;
-  contractTotalEur: number;
+  discountBasisPoints: number;
+  baseAnnualTotalCents: number;
+  discountAmountCents: number;
+  annualTotalCents: number;
+  contractTotalCents: number;
 };
 
-export const defaultPricingConfiguration: PricingConfiguration = {
-  communes: 1,
-  term: 1,
-  perimeter: "municipal_assets",
-  moduleIds: [REQUIRED_MODULE_ID],
+export type CommuneDiscountTier = {
+  minimum: number;
+  maximum: number;
+  discountBasisPoints: number;
 };
 
-function isPerimeter(value: string | null): value is Perimeter {
-  return value === "municipal_assets" || value === "whole_territory";
+export function getDefaultPricingConfiguration(
+  catalogue: SubscriptionCatalogue
+): PricingConfiguration {
+  const firstAvailableModule = catalogue.modules.find(
+    (module) => module.status === "available" && moduleMeetsConditions(module, 1)
+  );
+
+  return {
+    communes: 1,
+    term: 1,
+    perimeter: catalogue.perimeters[0] ?? "patrimoine_communal",
+    moduleKeys: firstAvailableModule ? [firstAvailableModule.key] : [],
+  };
 }
 
 function isContractTerm(value: string | null): value is "1" | "3" {
   return value === "1" || value === "3";
 }
 
-function isModuleId(value: string): value is ModuleId {
-  return subscriptionCatalogue.modules.some((module) => module.id === value);
+export function moduleMeetsConditions(module: SubscriptionModule, communes: number) {
+  return module.conditions.every((condition) => {
+    if (condition.field !== "commune_count" || typeof condition.value !== "number") return false;
+    if (condition.operator === "gte") return communes >= condition.value;
+    if (condition.operator === "gt") return communes > condition.value;
+    if (condition.operator === "lte") return communes <= condition.value;
+    if (condition.operator === "lt") return communes < condition.value;
+    if (condition.operator === "eq") return communes === condition.value;
+    return false;
+  });
+}
+
+export function getCommuneDiscountBasisPoints(catalogue: SubscriptionCatalogue, communes: number) {
+  return catalogue.discountPolicy.communeCount.reduce(
+    (discount, tier) =>
+      communes >= tier.minimum ? Math.max(discount, tier.discountBasisPoints) : discount,
+    0
+  );
+}
+
+export function getCommuneDiscountTiers(
+  catalogue: SubscriptionCatalogue,
+  maximumCommunes: number
+): CommuneDiscountTier[] {
+  const starts = [{ minimum: 1, discountBasisPoints: 0 }, ...catalogue.discountPolicy.communeCount]
+    .filter((tier) => tier.minimum <= maximumCommunes)
+    .sort((left, right) => left.minimum - right.minimum);
+
+  return starts.map((tier, index) => ({
+    ...tier,
+    maximum:
+      index < starts.length - 1
+        ? Math.min(starts[index + 1].minimum - 1, maximumCommunes)
+        : maximumCommunes,
+  }));
 }
 
 export function normalizePricingConfiguration(
-  params: Pick<URLSearchParams, "get">
+  params: Pick<URLSearchParams, "get">,
+  catalogue: SubscriptionCatalogue
 ): PricingConfiguration {
+  const defaults = getDefaultPricingConfiguration(catalogue);
   const communes = Number(params.get("communes"));
-  const termValue = params.get("term");
-  const perimeterValue = params.get("perimeter");
-  const selectedModuleIds = (params.get("modules") ?? "")
+  const normalizedCommunes =
+    Number.isInteger(communes) && communes >= 1 ? communes : defaults.communes;
+  const selectedModuleKeys = (params.get("modules") ?? "")
     .split(",")
     .filter(Boolean)
-    .filter(isModuleId)
-    .filter((id) => {
-      const catalogueModule = subscriptionCatalogue.modules.find(
-        (candidate) => candidate.id === id
+    .filter((key, index, keys) => keys.indexOf(key) === index)
+    .filter((key) => {
+      const catalogueModule = catalogue.modules.find((candidate) => candidate.key === key);
+      return Boolean(
+        catalogueModule &&
+        catalogueModule.status === "available" &&
+        moduleMeetsConditions(catalogueModule, normalizedCommunes)
       );
-      return catalogueModule
-        ? subscriptionCatalogue.availability[catalogueModule.availability].purchasableInInitialFlow
-        : false;
     });
 
   return {
-    communes:
-      Number.isInteger(communes) && communes >= 1 && communes <= MAX_COMMUNES ? communes : 1,
-    term: isContractTerm(termValue) ? (Number(termValue) as ContractTerm) : 1,
-    perimeter: isPerimeter(perimeterValue) ? perimeterValue : "municipal_assets",
-    moduleIds: Array.from(new Set([REQUIRED_MODULE_ID, ...selectedModuleIds])),
+    communes: normalizedCommunes,
+    term: isContractTerm(params.get("term"))
+      ? (Number(params.get("term")) as ContractTerm)
+      : defaults.term,
+    perimeter: catalogue.perimeters.includes(params.get("perimeter") ?? "")
+      ? (params.get("perimeter") as Perimeter)
+      : defaults.perimeter,
+    moduleKeys: selectedModuleKeys.length > 0 ? selectedModuleKeys : defaults.moduleKeys,
   };
 }
 
@@ -123,65 +144,66 @@ export function toPricingSearchParams(configuration: PricingConfiguration) {
     term: String(configuration.term),
     perimeter: configuration.perimeter,
   });
-  const optionalModuleIds = configuration.moduleIds.filter((id) => id !== REQUIRED_MODULE_ID);
-
-  if (optionalModuleIds.length > 0) params.set("modules", optionalModuleIds.join(","));
+  if (configuration.moduleKeys.length > 0)
+    params.set("modules", configuration.moduleKeys.join(","));
   return params;
 }
 
-export function calculateSubscriptionPrice(configuration: PricingConfiguration): PricingResult {
-  const pricingRule = subscriptionCatalogue.pricingRules.core_reduction_ladder;
-  const coverageTier = pricingRule.coverageTiers.find(
-    (tier) =>
-      configuration.communes >= tier.minCommunes &&
-      (tier.maxCommunes === null || configuration.communes <= tier.maxCommunes)
-  );
-
-  if (!coverageTier) throw new Error("No pricing tier matches the commune count.");
-
-  const termMultiplier = pricingRule.termMultipliers[String(configuration.term) as "1" | "3"];
-  const modules = subscriptionCatalogue.modules
-    .filter((module) => configuration.moduleIds.includes(module.id))
+export function calculateSubscriptionPrice(
+  configuration: PricingConfiguration,
+  catalogue: SubscriptionCatalogue
+): PricingResult {
+  const modules = catalogue.modules
+    .filter((module) => configuration.moduleKeys.includes(module.key))
     .filter(
       (module) =>
-        module.pricingMethod === "core_reduction_ladder" && module.oneCommuneOneYearBaselineEur
+        module.status === "available" && moduleMeetsConditions(module, configuration.communes)
     )
-    .map((module) => ({
-      ...module,
-      annualPriceBeforeDiscountEur:
-        module.oneCommuneOneYearBaselineEur![configuration.perimeter] * configuration.communes,
-      annualPriceEur:
-        module.oneCommuneOneYearBaselineEur![configuration.perimeter] *
-        configuration.communes *
-        coverageTier.annualMultiplier *
-        termMultiplier,
-    }));
-  const baseAnnualTotalEur = modules.reduce(
-    (total, module) => total + module.annualPriceBeforeDiscountEur,
+    .map((module) => {
+      const annualUnitAmountCents = module.annualRatesCents[configuration.perimeter] ?? 0;
+      return {
+        ...module,
+        annualUnitAmountCents,
+        annualAmountCents: annualUnitAmountCents * configuration.communes,
+      };
+    });
+  const baseAnnualTotalCents = modules.reduce(
+    (total, module) => total + module.annualAmountCents,
     0
   );
-  const annualTotalEur = modules.reduce((total, module) => total + module.annualPriceEur, 0);
-  const annualTotalAfterCoverageEur = baseAnnualTotalEur * coverageTier.annualMultiplier;
-  const coverageDiscountEur = baseAnnualTotalEur - annualTotalAfterCoverageEur;
-  const termDiscountEur = annualTotalAfterCoverageEur - annualTotalEur;
+  const communeDiscountBasisPoints = getCommuneDiscountBasisPoints(
+    catalogue,
+    configuration.communes
+  );
+  const discountBasisPoints = Math.min(
+    catalogue.discountPolicy.maximumDiscountBasisPoints,
+    communeDiscountBasisPoints +
+      (catalogue.discountPolicy.termYears[String(configuration.term)] ?? 0)
+  );
+  const annualTotalCents = Math.round(
+    (baseAnnualTotalCents * (10000 - discountBasisPoints)) / 10000
+  );
+  const discountAmountCents = baseAnnualTotalCents - annualTotalCents;
 
   return {
     modules,
-    coverageDiscountPercent: Math.round((1 - coverageTier.annualMultiplier) * 100),
-    termDiscountPercent: Math.round((1 - termMultiplier) * 100),
-    combinedDiscountPercent: Math.round((1 - coverageTier.annualMultiplier * termMultiplier) * 100),
-    baseAnnualTotalEur,
-    coverageDiscountEur,
-    termDiscountEur,
-    annualTotalEur,
-    contractTotalEur: annualTotalEur * configuration.term,
+    discountBasisPoints,
+    baseAnnualTotalCents,
+    discountAmountCents,
+    annualTotalCents,
+    contractTotalCents: annualTotalCents * configuration.term,
   };
 }
 
-export function formatSubscriptionCurrency(amount: number) {
+export function formatSubscriptionCurrency(amountCents: number) {
   return new Intl.NumberFormat("fr-FR", {
     style: "currency",
-    currency: subscriptionCatalogue.currency,
-    maximumFractionDigits: 0,
-  }).format(amount);
+    currency: "EUR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(amountCents / 100);
+}
+
+export function formatSubscriptionLabel(key: string) {
+  return key.replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
