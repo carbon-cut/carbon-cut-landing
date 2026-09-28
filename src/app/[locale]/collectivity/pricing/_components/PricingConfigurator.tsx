@@ -22,10 +22,11 @@ import {
   toPricingSearchParams,
   type PricingConfiguration,
 } from "../_lib/pricing";
+import type { FrozenPricingSelection } from "./PricingFlowContext";
 
 type PricingConfiguratorProps = {
   isAuthenticated: boolean;
-  onAuthenticatedContinue: () => void;
+  onAuthenticatedContinue: (selection: FrozenPricingSelection) => void;
   pricingRoute: string;
 };
 
@@ -96,7 +97,7 @@ export default function PricingConfigurator({
     const returnTo = `${pricingRoute}?${toPricingSearchParams(currentConfiguration).toString()}`;
 
     if (isAuthenticated) {
-      onAuthenticatedContinue();
+      onAuthenticatedContinue({ configuration: currentConfiguration, pricing });
       return;
     }
 

@@ -12,7 +12,7 @@ export default function PricingConfigurationStep({
   isAuthenticated: boolean;
 }) {
   const t = useScopedI18n("collectivityPricing");
-  const { goToStep } = usePricingFlow();
+  const { goToStep, setFrozenSelection } = usePricingFlow();
 
   return (
     <div className="flex w-full flex-col items-start gap-6">
@@ -26,7 +26,10 @@ export default function PricingConfigurationStep({
       </header>
       <PricingConfigurator
         isAuthenticated={isAuthenticated}
-        onAuthenticatedContinue={() => goToStep("informations")}
+        onAuthenticatedContinue={(selection) => {
+          setFrozenSelection(selection);
+          goToStep("informations");
+        }}
         pricingRoute={getCollectivityPricingConfigurationRoute()}
       />
     </div>

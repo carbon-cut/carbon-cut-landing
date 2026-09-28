@@ -12,7 +12,7 @@ Working notes for contributors to this codebase.
 
 ## Implementation rules
 
-- Prefer shared primitives/components before introducing local UI patterns.
+- Use shared primitives/components whenever an equivalent exists. Do not introduce raw interactive HTML elements (such as `<button>`, `<input>`, `<select>`, or `<textarea>`) or local replacements when an equivalent shared primitive/component exists, unless the user explicitly approves an exception.
 - Prefer the shared `Typography` primitive for text styling; do not introduce arbitrary text sizes, weights, or line-heights when an existing typography variant/size fits.
 - Default to compact product-UI spacing. Do not introduce large gaps, padding, control heights, or text separation (`space-y-8`, `gap-8`, generous card padding, etc.) unless the user explicitly asks for generous spacing or a supplied reference clearly requires it. Treat spacing as an intentional design decision for each region, not a component default.
 - Use visual hierarchy before verbal hierarchy. Do not add a heading, subheading, description, card title, or instructional sentence merely to explain the UI below it; use spacing, alignment, grouping, labels, and component structure first. Every heading must introduce a genuinely distinct concept or task. Prefer `page title → meaningful section titles → control labels`, without intermediate wrapper headings. Use one page title; add a section heading only when it separates multiple related controls or content from another meaningful group. Do not narrate the interface.

@@ -18,7 +18,7 @@ const buttonVariants = cva(
         outline:
           "border border-primary-border bg-primary-subtle text-primary shadow-sm hover:border-primary hover:bg-primary-subtle-hover",
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        ghost: "hover:bg-brand-600/40 hover:text-accent-foreground",
         link: "text-foreground underline-offset-4 hover:underline",
       },
       size: {
@@ -43,7 +43,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   iconRight?: React.ReactNode;
 }
 
-type SubframeVariant =
+export type SubframeVariant =
   | "brand-primary"
   | "brand-secondary"
   | "brand-tertiary"
@@ -87,14 +87,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <button
           ref={ref}
           type={props.type ?? "button"}
-          className={[
+          className={cn(
             "flex cursor-pointer items-center justify-center gap-2 rounded-md border-none px-3 text-left disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-400",
             subframeVariants[sourceVariant],
             subframeSizes[sourceSize],
-            className,
-          ]
-            .filter(Boolean)
-            .join(" ")}
+            className
+          )}
           {...props}
         >
           {icon ? (
@@ -125,14 +123,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(
           buttonVariants({
-            variant: variant as VariantProps<typeof buttonVariants>["variant"],
-            size: size as VariantProps<typeof buttonVariants>["size"],
+            variant: variant,
+            size: size,
             className,
           })
         )}
         ref={ref}
         {...props}
-      />
+      >
+        {children}
+      </Comp>
     );
   }
 );

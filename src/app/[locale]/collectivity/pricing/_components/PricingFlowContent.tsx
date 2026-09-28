@@ -2,6 +2,7 @@
 
 import PricingConfigurationStep from "../_configuration/PricingConfigurationStep";
 import PricingInformationStep from "../_informations/PricingInformationStep";
+import PricingVerificationStep from "../_verification/page";
 import { usePricingFlow } from "./PricingFlowContext";
 
 export default function PricingFlowContent({ isAuthenticated }: { isAuthenticated: boolean }) {
@@ -15,7 +16,9 @@ export default function PricingFlowContent({ isAuthenticated }: { isAuthenticate
       <div hidden={activeStep !== "informations"} className="w-full">
         <PricingInformationStep />
       </div>
-      <div hidden={activeStep !== "verification"} />
+      <div hidden={activeStep !== "verification"} className="w-full">
+        <PricingVerificationStep />
+      </div>
     </>
   );
 }

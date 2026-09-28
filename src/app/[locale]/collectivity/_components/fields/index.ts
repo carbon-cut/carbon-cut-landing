@@ -3,6 +3,8 @@ export { default as CollectivityInput } from "./CollectivityInput";
 export { InventoryFieldFiles } from "./InventoryFieldFiles";
 export { default as InventoryFieldInput } from "./InventoryFieldInput";
 export { InventoryFieldCheckbox } from "./InventoryFieldCheckbox";
+export { default as InventoryFieldDatePicker } from "./InventoryFieldDatePicker";
 export { InventoryFieldSelect } from "./InventoryFieldSelect";
+export { default as CollectivityDatePicker } from "./CollectivityDatePicker";
 export { default as CollectivitySelect } from "./CollectivitySelect";
 export { default as CollectivityTextarea } from "./CollectivityTextarea";

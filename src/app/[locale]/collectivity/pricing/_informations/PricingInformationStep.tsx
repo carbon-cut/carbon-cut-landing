@@ -1,10 +1,19 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import {
+  FeatherArrowLeft,
+  FeatherArrowRight,
+  FeatherCheckCircle2,
+  FeatherInfo,
+  FeatherLock,
+} from "@subframe/core";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Circle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/forms";
 import RadioCardGroup from "@/components/ui/radio-card-group";
 import Typography from "@/components/ui/typography";
@@ -14,70 +23,217 @@ import { InventoryFieldSelect } from "@/app/[locale]/collectivity/_components/fi
 import { useCurrentLocale, useScopedI18n } from "@/locales/client";
 import countries from "../_lib/countries.json";
 import { getViesCountryCode, isEuMemberCountry } from "../_lib/countryRules";
-import { quoteInformationSchema, type QuoteInformationInput } from "../_lib/infoSchema";
+import type { QuoteInformationInput } from "../_lib/infoSchema";
+import type { PricingConfiguration, PricingResult } from "../_lib/pricing";
 import { validateViesVatNumber } from "../_lib/queries";
 import type { ViesStatus } from "../_lib/taxTreatment";
+import SelectedOfferSummaryContent from "../_components/SelectedOfferSummaryContent";
+import { usePricingFlow } from "../_components/PricingFlowContext";
 import TaxTreatment from "./TaxTreatment";
 import ViesVerification from "./ViesVerification";
+import QuoteTerms from "./QuoteTerms";
 
 export default function PricingInformationStep() {
   const t = useScopedI18n("collectivityPricing.quoteInformation.cards");
-  const form = useForm<QuoteInformationInput>({
-    resolver: zodResolver(quoteInformationSchema),
-    defaultValues: {
-      customerType: "LEGAL_ENTITY",
-      customer: {
-        legalName: "",
-        addressLine1: "",
-        addressLine2: "",
-        postalCode: "",
-        city: "",
-        countryCode: "",
-        siren: "",
-        siret: "",
-        vatNumber: "",
-        hasNoVatNumber: false,
-      },
-      contact: {
-        name: "",
-        email: "",
-        phone: "",
-      },
-      quoteTerms: {
-        contractStartDate: "",
-      },
-    },
-    mode: "onSubmit",
-  });
+  const {
+    frozenSelection,
+    goToStep,
+    quoteInformationForm: form,
+    viesStatus,
+    setViesStatus,
+  } = usePricingFlow();
 
   return (
     <Form {...form}>
       <form
         className="flex w-full items-start gap-8 mobile:flex-col mobile:gap-6"
-        onSubmit={(event) => event.preventDefault()}
+        onSubmit={handleSubmit}
       >
         <section className="flex min-w-0 grow shrink-0 basis-0 flex-col items-start gap-6 mobile:flex-none">
-          <LegalIdentityCard form={form} />
-          <Card className="w-full border-solid border-neutral-border bg-default-background shadow-sm">
-            <CardHeader className="px-6 py-6 mobile:px-4 mobile:py-4">
-              <CardTitle>{t("quoteTerms.title")}</CardTitle>
-              <CardDescription className="font-body">{t("quoteTerms.description")}</CardDescription>
-            </CardHeader>
-          </Card>
+          <LegalIdentityCard form={form} onViesStatusChange={setViesStatus} />
+          <QuoteTerms form={form} />
         </section>
-        <aside className="sticky top-6 flex w-96 flex-none mobile:static mobile:w-full">
-          <Card className="w-full border-solid border-neutral-border bg-default-background shadow-md">
-            <CardHeader className="px-6 py-6 mobile:px-4 mobile:py-4">
-              <CardTitle>{t("selectedOffer.title")}</CardTitle>
-            </CardHeader>
-          </Card>
-        </aside>
+        {frozenSelection ? (
+          <FrozenOfferSidebar
+            form={form}
+            viesStatus={viesStatus}
+            configuration={frozenSelection.configuration}
+            pricing={frozenSelection.pricing}
+            onBack={() => goToStep("configuration")}
+          />
+        ) : null}
       </form>
     </Form>
   );
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const isValid = await form.trigger();
+    const values = form.getValues();
+    const hasVatNumber = Boolean(values.customer.vatNumber?.trim());
+    const requiresViesVerification = isEuMemberCountry(values.customer.countryCode) && hasVatNumber;
+    const viesReady =
+      !requiresViesVerification || viesStatus === "verified" || viesStatus === "unavailable";
+
+    if (!viesReady) {
+      form.setError("customer.vatNumber", {
+        type: "vies",
+        message:
+          viesStatus === "invalid"
+            ? t("legalIdentity.viesInvalidMessage")
+            : t("legalIdentity.viesNotChecked"),
+      });
+    }
+
+    if (isValid && viesReady) goToStep("verification");
+  }
 }
 
-function LegalIdentityCard({ form }: { form: ReturnType<typeof useForm<QuoteInformationInput>> }) {
+function FrozenOfferSidebar({
+  form,
+  viesStatus,
+  configuration,
+  pricing,
+  onBack,
+}: {
+  form: ReturnType<typeof useForm<QuoteInformationInput>>;
+  viesStatus: ViesStatus;
+  configuration: PricingConfiguration;
+  pricing: PricingResult;
+  onBack: () => void;
+}) {
+  const t = useScopedI18n("collectivityPricing.quoteInformation.cards.selectedOffer");
+  const values = useWatch({ control: form.control });
+  const customer = values.customer ?? form.getValues("customer");
+  const contact = values.contact ?? form.getValues("contact");
+  const quoteTerms = values.quoteTerms ?? form.getValues("quoteTerms");
+  const isFrance = customer.countryCode === "FRA";
+  const isEuExceptFrance = isEuMemberCountry(customer.countryCode) && !isFrance;
+  const hasVatNumber = Boolean(customer.vatNumber?.trim());
+  const requiresViesVerification = isEuMemberCountry(customer.countryCode) && hasVatNumber;
+  const viesReady =
+    !requiresViesVerification || viesStatus === "verified" || viesStatus === "unavailable";
+  const identityComplete = Boolean(
+    customer.legalName?.trim() && contact.name?.trim() && contact.email?.trim()
+  );
+  const addressComplete = Boolean(
+    customer.addressLine1?.trim() &&
+    customer.postalCode?.trim() &&
+    customer.city?.trim() &&
+    customer.countryCode
+  );
+  const fiscalComplete = isFrance
+    ? Boolean(customer.siren?.trim() && customer.siret?.trim() && viesReady)
+    : isEuExceptFrance
+      ? Boolean(customer.vatNumber?.trim() && viesReady)
+      : Boolean(customer.vatNumber?.trim() || customer.hasNoVatNumber);
+  const contractDateComplete = Boolean(quoteTerms.contractStartDate);
+
+  return (
+    <aside className="sticky top-6 flex w-96 flex-none mobile:static mobile:w-full">
+      <Card className="flex w-full flex-col items-start gap-5 rounded-md border border-solid border-neutral-border bg-default-background px-6 py-6 shadow-md mobile:px-4 mobile:py-4">
+        <div className="flex w-full items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <FeatherLock
+              className="text-heading-3 font-heading-3 text-brand-600"
+              aria-hidden="true"
+            />
+            <CardTitle asChild>
+              <h2>{t("title")}</h2>
+            </CardTitle>
+          </div>
+          <Badge variant="neutral">
+            <FeatherLock className="size-3" aria-hidden="true" />
+            {t("frozen")}
+          </Badge>
+        </div>
+
+        <SelectedOfferSummaryContent
+          configuration={configuration}
+          pricing={pricing}
+          showModuleBreakdown
+        />
+
+        <div className="h-px w-full flex-none bg-neutral-border" />
+
+        <section
+          className="flex w-full flex-col items-start gap-3"
+          aria-labelledby="quote-checklist"
+        >
+          <Typography asChild variant="bodyBold" className="text-default-font">
+            <h3 id="quote-checklist">{t("checklistTitle")}</h3>
+          </Typography>
+          <div className="flex w-full flex-col items-start gap-2">
+            <ChecklistItem complete={identityComplete} label={t("checklistIdentity")} />
+            <ChecklistItem complete={addressComplete} label={t("checklistAddress")} />
+            <ChecklistItem complete={fiscalComplete} label={t("checklistTax")} />
+            <ChecklistItem complete={contractDateComplete} label={t("checklistDates")} />
+            <ChecklistItem complete label={t("checklistTerms")} />
+          </div>
+        </section>
+
+        <div className="flex w-full flex-col items-start gap-2">
+          <Button
+            type="submit"
+            className="h-10 w-full flex-none"
+            variant="brand-primary"
+            size="large"
+            iconRight={<FeatherArrowRight />}
+          >
+            {t("continue")}
+          </Button>
+          <Button
+            type="button"
+            className="h-10 w-full flex-none"
+            variant="neutral-secondary"
+            size="large"
+            icon={<FeatherArrowLeft />}
+            onClick={onBack}
+          >
+            {t("back")}
+          </Button>
+        </div>
+
+        <div className="flex w-full items-center gap-2">
+          <FeatherInfo
+            className="text-caption font-caption text-subtext-color"
+            aria-hidden="true"
+          />
+          <Typography variant="captionSubframe" className="text-subtext-color">
+            {t("notice")}
+          </Typography>
+        </div>
+      </Card>
+    </aside>
+  );
+}
+
+function ChecklistItem({ complete, label }: { complete: boolean; label: string }) {
+  const Icon = complete ? FeatherCheckCircle2 : Circle;
+
+  return (
+    <div className="flex w-full items-center gap-2">
+      <Icon
+        className={complete ? "text-body font-body text-success-600" : "size-4 text-neutral-400"}
+        aria-hidden="true"
+      />
+      <Typography
+        variant="bodySubframe"
+        className={complete ? "text-default-font" : "text-subtext-color"}
+      >
+        {label}
+      </Typography>
+    </div>
+  );
+}
+
+function LegalIdentityCard({
+  form,
+  onViesStatusChange,
+}: {
+  form: ReturnType<typeof useForm<QuoteInformationInput>>;
+  onViesStatusChange: (status: ViesStatus) => void;
+}) {
   const t = useScopedI18n("collectivityPricing.quoteInformation.cards.legalIdentity");
   const locale = useCurrentLocale();
   const countryCode = useWatch({ control: form.control, name: "customer.countryCode" });
@@ -143,6 +299,7 @@ function LegalIdentityCard({ form }: { form: ReturnType<typeof useForm<QuoteInfo
             : viesMutation.data?.status === "verified"
               ? "verified"
               : "notChecked";
+  useEffect(() => onViesStatusChange(viesStatus), [onViesStatusChange, viesStatus]);
   const countryOptions = useMemo(() => {
     const displayNames = new Intl.DisplayNames([locale], { type: "region" });
 

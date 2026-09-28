@@ -131,6 +131,20 @@ The three-year `Agrégation Communes` prices are 80% of the corresponding one-ye
 - Do not derive a green-heavy visual system from the pricing spreadsheets.
 - The subscription route is a dedicated pre-workspace route, not a route under `[planId]`.
 
+# Workflow
+
+1. Client configures and fills in quote information.
+2. Client accepts the quote, with no payment.
+3. Admin approves or declines.
+4. If approved, payment becomes due within the configured term.
+5. Once payment is received, activate the service and issue the accounting document at the appropriate billing point.
+   Now the fields have their normal meanings:
+
+- Durée de validité: deadline for the client to accept the quote.
+- Conditions de paiement: deadline to pay after approval/payment request.
+- Moyen de paiement: bank transfer.
+  The quote must make clear that acceptance is subject to your admin approval, and the payment deadline should come from your backend policy.
+
 ## Open questions
 
 - At launch, which legal entity sells the Carbone Cut subscription and issues invoices to collectivités?

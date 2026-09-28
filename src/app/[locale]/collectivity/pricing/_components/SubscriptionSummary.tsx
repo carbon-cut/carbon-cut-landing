@@ -5,11 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
-import {
-  formatSubscriptionCurrency,
-  type PricingConfiguration,
-  type PricingResult,
-} from "../_lib/pricing";
+import type { PricingConfiguration, PricingResult } from "../_lib/pricing";
+import SelectedOfferSummaryContent from "./SelectedOfferSummaryContent";
 
 type SubscriptionSummaryProps = {
   configuration: PricingConfiguration;
@@ -40,82 +37,11 @@ export default function SubscriptionSummary({
           </CardTitle>
         </div>
 
-        <dl className="flex w-full flex-col items-start gap-3">
-          <SummaryRow label={t("summary.communes")} value={String(configuration.communes)} />
-          <SummaryRow
-            label={t("summary.duration")}
-            value={
-              configuration.term === 1
-                ? t("configuration.term.oneYear")
-                : t("configuration.term.threeYears")
-            }
-          />
-          <SummaryRow
-            label={t("summary.perimeter")}
-            value={
-              configuration.perimeter === "patrimoine_communal"
-                ? t("configuration.perimeter.municipal_assets")
-                : configuration.perimeter === "territorial_communes"
-                  ? t("configuration.perimeter.whole_territory")
-                  : configuration.perimeter.replace(/_/g, " ")
-            }
-          />
-          <SummaryRow
-            label={t("summary.selectedModules")}
-            value={String(configuration.moduleKeys.length)}
-          />
-        </dl>
-
-        <div className="h-px w-full flex-none bg-neutral-border" />
-
-        <div className="flex w-full flex-col items-start gap-3">
-          <SummaryRow
-            align="start"
-            label={t("summary.annualSubtotal")}
-            value={formatSubscriptionCurrency(pricing.baseAnnualTotalCents)}
-          />
-          {pricing.discountBasisPoints > 0 ? (
-            <SummaryRow
-              align="start"
-              label={t("configuration.combinedDiscount", {
-                discount: pricing.discountBasisPoints / 100,
-              })}
-              value={`−${formatSubscriptionCurrency(pricing.discountAmountCents)}`}
-              valueClassName="text-success-600"
-            />
-          ) : null}
-        </div>
-
-        <div className="h-px w-full flex-none bg-neutral-border" />
-
-        <div className="flex w-full flex-col items-start gap-4">
-          <div className="flex w-full flex-col items-start gap-1">
-            <Typography variant="captionBold" className="text-subtext-color">
-              {t("summary.annualTotal")}
-            </Typography>
-            <div className="flex items-end gap-2">
-              <Typography variant="heading1" className="text-default-font">
-                {formatSubscriptionCurrency(pricing.annualTotalCents)} {t("summary.perYear")}
-              </Typography>
-              {/* TODO: HT display is not confirmed. */}
-              <Typography variant="captionSubframe" className="pb-1 text-subtext-color">
-                {t("summary.taxSuffix")}
-              </Typography>
-            </div>
-          </div>
-          <div className="flex w-full items-center justify-between gap-2 rounded-sm bg-brand-50 px-4 py-3">
-            <Typography variant="bodySubframe" className="text-brand-800">
-              {t("summary.contractTotal", { years: configuration.term })}
-            </Typography>
-            <Typography variant="heading3" className="whitespace-nowrap text-brand-800">
-              {formatSubscriptionCurrency(pricing.contractTotalCents)}
-            </Typography>
-          </div>
-        </div>
-
-        <Typography variant="captionSubframe" className="text-subtext-color">
-          {t("summary.priceTaxNotice")}
-        </Typography>
+        <SelectedOfferSummaryContent
+          configuration={configuration}
+          pricing={pricing}
+          showSelectedModuleCount
+        />
         <Button
           className="h-10 w-full flex-none"
           variant="brand-primary"
@@ -144,36 +70,5 @@ export default function SubscriptionSummary({
         */}
       </Card>
     </aside>
-  );
-}
-
-function SummaryRow({
-  label,
-  value,
-  valueClassName,
-  align = "center",
-}: {
-  label: string;
-  value: string;
-  valueClassName?: string;
-  align?: "center" | "start";
-}) {
-  return (
-    <div
-      className={`flex w-full justify-between gap-2 ${
-        align === "center" ? "items-center" : "items-start"
-      }`}
-    >
-      <Typography asChild variant="bodySubframe" className="text-subtext-color">
-        <dt>{label}</dt>
-      </Typography>
-      <Typography
-        asChild
-        variant="bodyBold"
-        className={`whitespace-nowrap ${valueClassName ?? "text-default-font"}`}
-      >
-        <dd className="text-right">{value}</dd>
-      </Typography>
-    </div>
   );
 }
