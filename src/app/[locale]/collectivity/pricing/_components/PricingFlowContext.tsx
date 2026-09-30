@@ -1,17 +1,23 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type UseFormReturn } from "react-hook-form";
+import {
+  collectivityQueryKeys,
+  collectivityQueryOptions,
+  fetchCollectivityQuoteContext,
+} from "@/app/[locale]/collectivity/_lib/queries";
 import { quoteInformationSchema, type QuoteInformationInput } from "../_lib/infoSchema";
 import developmentQuoteInformation from "../_lib/developmentQuoteInformation.json";
-import type { PricingConfiguration, PricingResult } from "../_lib/pricing";
+import type { PricingConfiguration, PricedSelection, QuoteContext } from "../_lib/pricing";
 import type { ViesStatus } from "../_lib/taxTreatment";
 
 export type PricingFlowStep = "configuration" | "informations" | "verification";
 export type FrozenPricingSelection = {
   configuration: PricingConfiguration;
-  pricing: PricingResult;
+  pricing: PricedSelection;
 };
 
 // Development convenience only. Keep false unless manually exercising the verification step.
@@ -28,12 +34,21 @@ const PricingFlowContext = createContext<{
   quoteInformationForm: UseFormReturn<QuoteInformationInput>;
   viesStatus: ViesStatus;
   setViesStatus: (status: ViesStatus) => void;
+  quoteContext: QuoteContext | undefined;
+  isQuoteContextPending: boolean;
+  isQuoteContextError: boolean;
+  refetchQuoteContext: () => void;
 } | null>(null);
 
 export function PricingFlowProvider({ children }: { children: ReactNode }) {
   const [activeStep, setActiveStep] = useState<PricingFlowStep>("configuration");
   const [frozenSelection, setFrozenSelection] = useState<FrozenPricingSelection | null>(null);
   const [viesStatus, setViesStatus] = useState<ViesStatus>("notChecked");
+  const quoteContextQuery = useQuery({
+    ...collectivityQueryOptions,
+    queryKey: collectivityQueryKeys.quoteContext(),
+    queryFn: fetchCollectivityQuoteContext,
+  });
   const quoteInformationForm = useForm<QuoteInformationInput>({
     resolver: zodResolver(quoteInformationSchema),
     defaultValues: useDevelopmentQuoteDefaults
@@ -68,6 +83,12 @@ export function PricingFlowProvider({ children }: { children: ReactNode }) {
         quoteInformationForm,
         viesStatus,
         setViesStatus,
+        quoteContext: quoteContextQuery.data,
+        isQuoteContextPending: quoteContextQuery.isPending,
+        isQuoteContextError: quoteContextQuery.isError,
+        refetchQuoteContext: () => {
+          void quoteContextQuery.refetch();
+        },
       }}
     >
       {children}

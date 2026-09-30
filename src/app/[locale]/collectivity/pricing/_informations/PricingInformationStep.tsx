@@ -24,7 +24,7 @@ import { useCurrentLocale, useScopedI18n } from "@/locales/client";
 import countries from "../_lib/countries.json";
 import { getViesCountryCode, isEuMemberCountry } from "../_lib/countryRules";
 import type { QuoteInformationInput } from "../_lib/infoSchema";
-import type { PricingConfiguration, PricingResult } from "../_lib/pricing";
+import type { PricingConfiguration, PricedSelection } from "../_lib/pricing";
 import { validateViesVatNumber } from "../_lib/queries";
 import type { ViesStatus } from "../_lib/taxTreatment";
 import SelectedOfferSummaryContent from "../_components/SelectedOfferSummaryContent";
@@ -41,7 +41,10 @@ export default function PricingInformationStep() {
     quoteInformationForm: form,
     viesStatus,
     setViesStatus,
+    quoteContext,
   } = usePricingFlow();
+
+  if (!quoteContext) return null;
 
   return (
     <Form {...form}>
@@ -51,7 +54,7 @@ export default function PricingInformationStep() {
       >
         <section className="flex min-w-0 grow shrink-0 basis-0 flex-col items-start gap-6 mobile:flex-none">
           <LegalIdentityCard form={form} onViesStatusChange={setViesStatus} />
-          <QuoteTerms form={form} />
+          <QuoteTerms form={form} quoteContext={quoteContext} />
         </section>
         {frozenSelection ? (
           <FrozenOfferSidebar
@@ -99,7 +102,7 @@ function FrozenOfferSidebar({
   form: ReturnType<typeof useForm<QuoteInformationInput>>;
   viesStatus: ViesStatus;
   configuration: PricingConfiguration;
-  pricing: PricingResult;
+  pricing: PricedSelection;
   onBack: () => void;
 }) {
   const t = useScopedI18n("collectivityPricing.quoteInformation.cards.selectedOffer");

@@ -1,6 +1,0 @@
-{
-  "currency": "EUR",
-  "quoteValidityDays": 30,
-  "paymentTermsDays": 30,
-  "paymentMethod": "BANK_TRANSFER"
-}

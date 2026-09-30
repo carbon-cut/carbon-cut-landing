@@ -53,7 +53,10 @@ export type SubframeVariant =
   | "destructive-primary"
   | "destructive-secondary"
   | "destructive-tertiary"
-  | "inverse";
+  | "inverse"
+  | "link-neutral"
+  | "link-brand"
+  | "link-inverse";
 
 type SubframeSize = "small" | "medium" | "large";
 
@@ -69,6 +72,9 @@ const subframeVariants: Record<SubframeVariant, string> = {
   "destructive-secondary": "bg-error-50 text-error-800 hover:bg-error-100 active:bg-error-50",
   "destructive-tertiary": "bg-transparent text-error-800 hover:bg-error-50 active:bg-error-100",
   inverse: "bg-transparent text-white hover:bg-white/20 active:bg-white/25",
+  "link-neutral": "",
+  "link-brand": "",
+  "link-inverse": "",
 };
 
 const subframeSizes: Record<SubframeSize, string> = {
@@ -79,6 +85,42 @@ const subframeSizes: Record<SubframeSize, string> = {
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, icon, iconRight, children, ...props }, ref) => {
+    if (variant === "link-neutral" || variant === "link-brand" || variant === "link-inverse") {
+      const sourceSize = (size ?? "medium") as SubframeSize;
+      const contentClassName = cn(
+        "text-body font-body text-neutral-700 group-hover/link-button:text-brand-700 group-disabled/link-button:text-neutral-400 group-hover/link-button:group-disabled/link-button:text-neutral-400",
+        sourceSize === "small" && "text-caption font-caption",
+        sourceSize === "large" && "text-heading-3 font-heading-3",
+        variant === "link-brand" && "text-brand-700",
+        variant === "link-inverse" && "text-white group-hover/link-button:text-white"
+      );
+
+      return (
+        <button
+          ref={ref}
+          type={props.type ?? "button"}
+          className={cn(
+            "group/link-button flex cursor-pointer items-center gap-1 border-none bg-transparent text-left disabled:cursor-default",
+            className
+          )}
+          {...props}
+        >
+          {icon ? <span className={cn("flex", contentClassName)}>{icon}</span> : null}
+          {children ? (
+            <span
+              className={cn(
+                contentClassName,
+                "group-hover/link-button:underline group-hover/link-button:group-disabled/link-button:no-underline"
+              )}
+            >
+              {children}
+            </span>
+          ) : null}
+          {iconRight ? <span className={cn("flex", contentClassName)}>{iconRight}</span> : null}
+        </button>
+      );
+    }
+
     if (variant && variant in subframeVariants) {
       const sourceVariant = variant as SubframeVariant;
       const sourceSize = (size ?? "medium") as SubframeSize;

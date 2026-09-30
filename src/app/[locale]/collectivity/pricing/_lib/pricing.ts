@@ -34,14 +34,144 @@ export type PricedModule = SubscriptionModule & {
   annualAmountCents: number;
 };
 
-export type PricingResult = {
-  modules: PricedModule[];
+export type PricedSelectionModule = Pick<
+  PricedModule,
+  "key" | "annualUnitAmountCents" | "annualAmountCents"
+>;
+
+export type PricedSelection = {
+  modules: PricedSelectionModule[];
   discountBasisPoints: number;
   baseAnnualTotalCents: number;
   discountAmountCents: number;
   annualTotalCents: number;
   contractTotalCents: number;
 };
+
+export type PricingResult = Omit<PricedSelection, "modules"> & {
+  modules: PricedModule[];
+};
+
+export type QuoteContext = {
+  issuer: {
+    legalName: string;
+    registeredOffice: string;
+    siren: string;
+    rcs: string;
+    vatNumber: string | null;
+  };
+  currency: "EUR";
+  quoteValidityDays: number;
+  paymentTermsDays: number;
+  paymentMethod: "BANK_TRANSFER";
+};
+
+export type SubscriptionPricePreviewRequest = {
+  communeQuantity: number;
+  termYears: ContractTerm;
+  perimeter: Perimeter;
+  moduleKeys: string[];
+};
+
+export type SubscriptionPricePreview = {
+  catalogueVersion: string;
+  discountPolicyVersion: string;
+  selection: SubscriptionPricePreviewRequest;
+  lines: Array<{
+    key: string;
+    annualUnitAmountCents: number;
+    annualAmountCents: number;
+    conditions: SubscriptionCondition[];
+  }>;
+  annualSubtotalCents: number;
+  discountBasisPoints: number;
+  quotedAnnualAmountCents: number;
+  quotedContractAmountCents: number;
+};
+
+export type CreateCollectivitySubscriptionRequest = {
+  configuration: SubscriptionPricePreviewRequest;
+  buyer: {
+    customerType: "LEGAL_ENTITY";
+    legalName: string;
+    addressLine1: string;
+    addressLine2?: string;
+    postalCode: string;
+    city: string;
+    countryCode: string;
+    siren?: string;
+    siret?: string;
+    vatNumber?: string;
+    hasNoVatNumber: boolean;
+    contact: {
+      name: string;
+      email: string;
+      phone?: string;
+    };
+  };
+  requestedContractStartDate: string;
+};
+
+export type PublicCollectivitySubscriptionStatus =
+  | "under_review"
+  | "accepted"
+  | "paid"
+  | "rejected"
+  | "expired"
+  | "active";
+
+export type PublicCollectivitySubscription = {
+  id: number;
+  reference: string;
+  status: PublicCollectivitySubscriptionStatus;
+  cancelled: boolean;
+  cancelledAt: string | null;
+  submittedAt: string | null;
+  acceptedAt: string | null;
+  paidAt: string | null;
+  rejectedAt: string | null;
+  requestedContractStartDate: string;
+  startsAt: string | null;
+  endsAt: string | null;
+  paymentConfirmedAt: string | null;
+  buyerSnapshot: CreateCollectivitySubscriptionRequest["buyer"];
+  sellerSnapshot: QuoteContext["issuer"];
+  termsSnapshot: {
+    quoteValidityEndsAt: string;
+    paymentMethod: "BANK_TRANSFER";
+    paymentTermsDays: number;
+  };
+  pricingSnapshot: SubscriptionPricePreview & {
+    amounts: {
+      currency: "EUR";
+      annualSubtotalExcludingTaxCents: number;
+      annualDiscountCents: number;
+      annualTotalExcludingTaxCents: number;
+      contractTotalExcludingTaxCents: number;
+      vatRateBasisPoints: number;
+      vatAmountCents: number;
+      totalIncludingTaxCents: number;
+      taxTreatment: "france" | "european_union" | "outside_european_union";
+      legalTaxMention: string;
+    };
+  };
+  refusalReasonForCustomer: string | null;
+};
+
+export function toPricedSelection(preview: SubscriptionPricePreview): PricedSelection {
+  return {
+    modules: preview.lines.map(({ key, annualUnitAmountCents, annualAmountCents }) => ({
+      key,
+      annualUnitAmountCents,
+      annualAmountCents,
+    })),
+    discountBasisPoints: preview.discountBasisPoints,
+    baseAnnualTotalCents: preview.annualSubtotalCents,
+    discountAmountCents: preview.annualSubtotalCents - preview.quotedAnnualAmountCents,
+    annualTotalCents: preview.quotedAnnualAmountCents,
+    contractTotalCents: preview.quotedContractAmountCents,
+  };
+}
 
 export type CommuneDiscountTier = {
   minimum: number;

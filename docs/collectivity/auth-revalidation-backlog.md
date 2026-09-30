@@ -85,3 +85,8 @@ If two concurrent requests see an expired access token, both can submit the same
 - After a successful rotation, the next browser request uses the new token pair.
 - A refresh failure results in a clean, consistent signed-out state instead of a protected action repeatedly returning `401`.
 - Concurrent protected requests do not race one refresh token into an unexpected logout.
+
+### my note
+
+-invalid tokken break the app. strapi return 500 (500 is weird)
+-next just break instead of logout or auth redirection

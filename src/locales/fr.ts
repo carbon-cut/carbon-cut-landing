@@ -394,7 +394,7 @@ export default {
           description: "Votre acceptation ne déclenche aucun paiement.",
         },
         review: {
-          title: "Vérification par le fournisseur",
+          title: "Vérification par notre équipe",
           description:
             "Nous vérifions votre organisation et les informations fournies, puis approuvons ou refusons la demande.",
         },
@@ -408,11 +408,148 @@ export default {
         accept: "Accepter et soumettre pour approbation",
         back: "Retour aux informations du devis",
         notice:
-          "L’acceptation du devis est soumise à vérification et approbation par le fournisseur. Aucun paiement n’est dû avant cette approbation.",
+          "L’acceptation du devis est soumise à vérification et approbation par notre équipe. Aucun paiement n’est dû avant cette approbation.",
       },
+    },
+    underReviewQuote: {
+      back: "Retour à l’abonnement",
+      title: "Devis {reference}",
+      description:
+        "Devis accepté et figé. Son contenu n’est plus modifiable pendant que notre équipe le vérifie.",
+      badge: "En attente de vérification",
+      acceptedAt: "Accepté le {date}",
+      sirenSiret: "SIREN / SIRET",
+      taxDescription: "Déterminé automatiquement à partir des informations client",
+      notice: {
+        summary:
+          "Votre demande a été transmise pour vérification. Aucun paiement n’est requis à ce stade.",
+        description:
+          "Notre équipe vérifie votre organisation et les informations fournies. Vous serez notifié dès que la demande sera approuvée ou refusée.",
+      },
+      progress: {
+        title: "Suivi de votre demande",
+        accepted: {
+          title: "Devis accepté",
+          description: "{date}",
+        },
+        review: {
+          title: "Vérification par notre équipe",
+          description: "En cours",
+        },
+        payment: {
+          title: "Paiement par virement",
+          description: "Échéance calculée après approbation ({count} jours fin de mois)",
+        },
+      },
+      cancel: {
+        action: "Annuler ma demande",
+        title: "Annuler cette demande ?",
+        description:
+          "Votre demande ne pourra plus être approuvée. Vous pourrez ensuite préparer un nouveau devis.",
+        confirm: "Annuler la demande",
+        dismiss: "Conserver la demande",
+        error: "Impossible d’annuler votre demande pour le moment.",
+      },
+      download: "Télécharger le devis accepté (PDF)",
+    },
+    acceptedQuote: {
+      description:
+        "Votre demande a été approuvée. Le paiement est désormais dû selon les conditions du devis.",
+      badge: "Approuvé — paiement requis",
+      approvedAt: "Approuvé le {date}",
+      notice: {
+        description:
+          "Votre organisation et les informations fournies ont été vérifiées. Le paiement est dû au plus tard le {dueDate}, selon les conditions du devis approuvé le {approvedDate}.",
+      },
+      paymentInstructions: {
+        title: "Instructions de virement bancaire",
+        beneficiary: "Bénéficiaire",
+        bank: "Banque",
+        iban: "IBAN",
+        bic: "BIC",
+        amount: "Montant à régler",
+        reference: "Référence à indiquer",
+        dueDate: "Date limite de paiement",
+        copy: "Copier",
+        referenceNotice:
+          "Indiquez impérativement la référence du devis dans le libellé du virement.",
+      },
+      progress: {
+        reviewDescription: "Approuvé le {date}",
+        paymentDescription: "Échéance : {date}",
+        paymentStatus: "À régler",
+      },
+      amountDue: {
+        label: "Montant dû",
+        dueDate: "avant le {date}",
+      },
+      paymentNotice:
+        "Le paiement s’effectue exclusivement par virement bancaire. Le délai est calculé à partir de la date d’approbation selon les conditions de paiement du devis.",
+    },
+    paidQuote: {
+      description: "Votre paiement a été confirmé. Votre abonnement est désormais actif.",
+      badge: "Paiement confirmé",
+      paidAt: "Paiement confirmé le {date}",
+      notice: {
+        description:
+          "Votre paiement a été confirmé. Vous pouvez désormais accéder aux services inclus dans votre abonnement.",
+        footer:
+          "Votre abonnement est actif. Retrouvez vos projets et les services inclus dans votre espace collectivité.",
+      },
+      progress: {
+        paymentDescription: "Paiement confirmé le {date}",
+      },
+      activePeriod: {
+        label: "Abonnement actif",
+        value: "Du {startDate} au {endDate}",
+        description: "Période d’abonnement",
+      },
+      openProjects: "Accéder à vos projets",
+    },
+    rejectedQuote: {
+      description: "Votre demande n’a pas été approuvée. Aucun paiement n’est requis.",
+      badge: "Demande refusée",
+      rejectedAt: "Refusée le {date}",
+      notice: {
+        description:
+          "Notre équipe n’a pas pu approuver votre demande. Consultez le motif ci-dessous ou contactez-nous pour être accompagné.",
+        footer:
+          "Aucun paiement n’est dû. Vous pouvez contacter notre équipe ou préparer un nouveau devis.",
+      },
+      reason: {
+        title: "Motif du refus",
+        label: "Information communiquée",
+        unavailable: "Le motif du refus n’est pas disponible pour le moment.",
+      },
+      progress: {
+        reviewStatus: "Refusée",
+      },
+      contactTeam: "Contacter notre équipe",
+      newQuote: "Créer un nouveau devis",
+    },
+    expiredQuote: {
+      description: "Votre abonnement a expiré. L’accès aux services n’est plus disponible.",
+      badge: "Abonnement expiré",
+      expiredAt: "Expiré le {date}",
+      notice: {
+        description:
+          "La période de votre abonnement est terminée. L’accès aux services inclus n’est plus disponible.",
+        footer: "Votre abonnement est expiré. Contactez notre équipe ou préparez un nouveau devis.",
+      },
+      activePeriod: {
+        label: "Abonnement expiré",
+        description: "Période d’abonnement terminée",
+      },
+      progress: {
+        paymentDescription: "Paiement confirmé avant l’expiration le {date}",
+      },
+      contactTeam: "Contacter notre équipe",
+      newQuote: "Créer un nouveau devis",
     },
     catalogueLoading: "Chargement du catalogue d’abonnement…",
     catalogueLoadError: "Impossible de charger le catalogue d’abonnement.",
+    quoteContextLoadError: "Impossible de préparer les conditions du devis.",
+    pricePreviewLoadError: "Impossible de calculer le prix de votre configuration.",
     configuration: {
       title: "Votre configuration",
       panelTitle: "Paramètres du contrat",
@@ -521,6 +658,7 @@ export default {
       signIn: "Se connecter pour continuer",
       signedIn: "Votre configuration est prête à être poursuivie.",
       continue: "Continuer",
+      retry: "Réessayer",
       downloadQuote: "Télécharger le devis",
     },
   },

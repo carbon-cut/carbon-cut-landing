@@ -5,22 +5,25 @@ import { Fragment } from "react";
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 import { cn } from "@/lib/utils";
-import { usePricingFlow } from "./PricingFlowContext";
+import type { PricingFlowStep } from "./PricingFlowContext";
 
-type StepStatus = "completed" | "active" | "upcoming";
+export type PricingStepStatus = "completed" | "active" | "upcoming";
 
 type PricingStepperProps = {
   className?: string;
+  activeStep?: PricingFlowStep;
+  statuses?: PricingStepStatus[];
 };
 
-export default function PricingStepper({ className }: PricingStepperProps) {
-  const { activeStep } = usePricingFlow();
+export default function PricingStepper({ className, activeStep, statuses }: PricingStepperProps) {
   const t = useScopedI18n("collectivityPricing.flow");
-  const activeIndex = ["configuration", "informations", "verification"].indexOf(activeStep);
+  const activeIndex = ["configuration", "informations", "verification"].indexOf(
+    activeStep ?? "configuration"
+  );
   const steps = [
-    { label: t("steps.configuration"), status: getStepStatus(0, activeIndex) },
-    { label: t("steps.quoteInformation"), status: getStepStatus(1, activeIndex) },
-    { label: t("steps.quoteVerification"), status: getStepStatus(2, activeIndex) },
+    { label: t("steps.configuration"), status: statuses?.[0] ?? getStepStatus(0, activeIndex) },
+    { label: t("steps.quoteInformation"), status: statuses?.[1] ?? getStepStatus(1, activeIndex) },
+    { label: t("steps.quoteVerification"), status: statuses?.[2] ?? getStepStatus(2, activeIndex) },
   ];
 
   return (
@@ -32,7 +35,7 @@ export default function PricingStepper({ className }: PricingStepperProps) {
         <Fragment key={step.label}>
           <div
             aria-current={step.status === "active" ? "step" : undefined}
-            className="group/c1145464 flex w-full cursor-pointer flex-col items-center justify-center gap-1"
+            className="group/c1145464 flex w-full flex-col items-center justify-center gap-1"
           >
             <div className="flex w-full items-center justify-center gap-2">
               <div
@@ -80,7 +83,7 @@ export default function PricingStepper({ className }: PricingStepperProps) {
   );
 }
 
-function getStepStatus(index: number, activeIndex: number): StepStatus {
+function getStepStatus(index: number, activeIndex: number): PricingStepStatus {
   if (index < activeIndex) {
     return "completed";
   }

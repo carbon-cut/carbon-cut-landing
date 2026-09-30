@@ -1,6 +1,13 @@
 import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/setup/_lib/types";
 import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/setup/_lib/schema";
-import type { SubscriptionCatalogue } from "@/app/[locale]/collectivity/pricing/_lib/pricing";
+import type {
+  CreateCollectivitySubscriptionRequest,
+  PublicCollectivitySubscription,
+  QuoteContext,
+  SubscriptionCatalogue,
+  SubscriptionPricePreview,
+  SubscriptionPricePreviewRequest,
+} from "@/app/[locale]/collectivity/pricing/_lib/pricing";
 import type {
   CollectivityResultRow,
   CollectivityResultsByYear,
@@ -28,6 +35,7 @@ export const subscriptionCatalogueQueryOptions = {
 
 export const collectivityQueryKeys = {
   subscriptionCatalogue: () => ["collectivity", "subscriptionCatalogue"] as const,
+  quoteContext: () => ["collectivity", "quoteContext"] as const,
   currentInventory: (projectSlug: string) =>
     ["collectivity", "currentInventory", projectSlug] as const,
   result: (projectSlug: string) => ["collectivity", "result", projectSlug] as const,
@@ -108,6 +116,64 @@ export async function fetchCollectivitySubscriptionCatalogue() {
     throw new Error("Subscription catalogue not found");
   }
 
+  return payload.data;
+}
+
+export async function fetchCollectivityQuoteContext() {
+  const response = await fetch("/api/collectivity/quote-context", {
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data?: QuoteContext }>(response);
+
+  if (!payload.data) {
+    throw new Error("Quote context not found");
+  }
+
+  return payload.data;
+}
+
+export async function fetchCollectivitySubscriptionPricePreview(
+  request: SubscriptionPricePreviewRequest
+) {
+  const response = await fetch("/api/collectivity/subscription-prices", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify(request),
+  });
+  const payload = await readApiJson<{ data?: SubscriptionPricePreview }>(response);
+
+  if (!payload.data) {
+    throw new Error("Subscription price preview not found");
+  }
+
+  return payload.data;
+}
+
+export async function createCollectivitySubscription(
+  request: CreateCollectivitySubscriptionRequest
+): Promise<PublicCollectivitySubscription> {
+  const response = await fetch("/api/collectivity/subscriptions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify(request),
+  });
+  const payload = await readApiJson<{ data: PublicCollectivitySubscription }>(response);
+  return payload.data;
+}
+
+export async function cancelCollectivitySubscription(
+  subscriptionId: number
+): Promise<PublicCollectivitySubscription> {
+  const response = await fetch(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/cancel`,
+    {
+      method: "POST",
+      credentials: "same-origin",
+    }
+  );
+  const payload = await readApiJson<{ data: PublicCollectivitySubscription }>(response);
   return payload.data;
 }
 

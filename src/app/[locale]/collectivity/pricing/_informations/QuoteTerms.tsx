@@ -11,7 +11,7 @@ import {
 } from "@/app/[locale]/collectivity/_components/fields";
 import { useScopedI18n } from "@/locales/client";
 import type { QuoteInformationInput } from "../_lib/infoSchema";
-import quoteTerms from "../_lib/quoteTerms.json";
+import type { QuoteContext } from "../_lib/pricing";
 
 function addDays(date: Date, days: number) {
   const result = new Date(date);
@@ -19,10 +19,19 @@ function addDays(date: Date, days: number) {
   return result;
 }
 
-export default function QuoteTerms({ form }: { form: UseFormReturn<QuoteInformationInput> }) {
+export default function QuoteTerms({
+  form,
+  quoteContext,
+}: {
+  form: UseFormReturn<QuoteInformationInput>;
+  quoteContext: QuoteContext;
+}) {
   const t = useScopedI18n("collectivityPricing.quoteInformation.cards.quoteTerms");
   const issueDate = useMemo(() => new Date(), []);
-  const validUntil = useMemo(() => addDays(issueDate, quoteTerms.quoteValidityDays), [issueDate]);
+  const validUntil = useMemo(
+    () => addDays(issueDate, quoteContext.quoteValidityDays),
+    [issueDate, quoteContext.quoteValidityDays]
+  );
   const firstAllowedContractStartDate = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -37,7 +46,10 @@ export default function QuoteTerms({ form }: { form: UseFormReturn<QuoteInformat
           <CardDescription className="font-body">{t("description")}</CardDescription>
         </div>
         <div className="grid w-full grid-cols-2 items-start gap-x-4 gap-y-5 mobile:grid-cols-1">
-          <StaticSelectField label={t("currency")} value={t("currencyEur")} />
+          <StaticSelectField
+            label={t("currency")}
+            value={quoteContext.currency === "EUR" ? t("currencyEur") : quoteContext.currency}
+          />
           <CollectivityDatePicker
             label={t("issueDate")}
             value={issueDate}
@@ -46,7 +58,7 @@ export default function QuoteTerms({ form }: { form: UseFormReturn<QuoteInformat
           />
           <StaticSelectField
             label={t("validityDuration")}
-            value={t("validityDurationValue", { count: quoteTerms.quoteValidityDays })}
+            value={t("validityDurationValue", { count: quoteContext.quoteValidityDays })}
           />
           <CollectivityDatePicker
             label={t("validUntil")}
@@ -63,7 +75,7 @@ export default function QuoteTerms({ form }: { form: UseFormReturn<QuoteInformat
           />
           <StaticSelectField
             label={t("paymentTerms")}
-            value={t("paymentTermsValue", { count: quoteTerms.paymentTermsDays })}
+            value={t("paymentTermsValue", { count: quoteContext.paymentTermsDays })}
           />
           <StaticSelectField label={t("paymentMethod")} value={t("bankTransfer")} />
         </div>

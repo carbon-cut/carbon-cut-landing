@@ -110,6 +110,10 @@ export function getCollectivityPricingConfigurationRoute() {
   return getCollectivityPricingRoute();
 }
 
+export function getCollectivityPricingSubscriptionRoute(subscriptionId: string | number) {
+  return `${getCollectivityPricingRoute()}/${encodeURIComponent(subscriptionId)}`;
+}
+
 export function getCollectivityStartRoute() {
   return "/collectivity/start";
 }

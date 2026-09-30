@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   collectivityQueryKeys,
+  fetchCollectivitySubscriptionPricePreview,
   fetchCollectivitySubscriptionCatalogue,
   subscriptionCatalogueQueryOptions,
 } from "@/app/[locale]/collectivity/_lib/queries";
@@ -19,6 +20,7 @@ import SubscriptionSummary from "./SubscriptionSummary";
 import {
   calculateSubscriptionPrice,
   normalizePricingConfiguration,
+  toPricedSelection,
   toPricingSearchParams,
   type PricingConfiguration,
 } from "../_lib/pricing";
@@ -28,12 +30,20 @@ type PricingConfiguratorProps = {
   isAuthenticated: boolean;
   onAuthenticatedContinue: (selection: FrozenPricingSelection) => void;
   pricingRoute: string;
+  quoteContextReady: boolean;
+  quoteContextPending: boolean;
+  quoteContextError: boolean;
+  onRetryQuoteContext: () => void;
 };
 
 export default function PricingConfigurator({
   isAuthenticated,
   onAuthenticatedContinue,
   pricingRoute,
+  quoteContextReady,
+  quoteContextPending,
+  quoteContextError,
+  onRetryQuoteContext,
 }: PricingConfiguratorProps) {
   const t = useScopedI18n("collectivityPricing");
   const router = useRouter();
@@ -45,6 +55,9 @@ export default function PricingConfigurator({
     queryFn: fetchCollectivitySubscriptionCatalogue,
   });
   const catalogue = catalogueQuery.data;
+  const pricePreviewMutation = useMutation({
+    mutationFn: fetchCollectivitySubscriptionPricePreview,
+  });
   const [configuration, setConfiguration] = useState(() =>
     catalogue ? normalizePricingConfiguration(searchParams, catalogue) : null
   );
@@ -93,16 +106,40 @@ export default function PricingConfigurator({
     }
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     const returnTo = `${pricingRoute}?${toPricingSearchParams(currentConfiguration).toString()}`;
 
-    if (isAuthenticated) {
-      onAuthenticatedContinue({ configuration: currentConfiguration, pricing });
+    if (!isAuthenticated) {
+      router.push(getAuthSignUpRoute(returnTo));
       return;
     }
 
-    router.push(getAuthSignUpRoute(returnTo));
+    if (!quoteContextReady) return;
+
+    try {
+      const preview = await pricePreviewMutation.mutateAsync({
+        communeQuantity: currentConfiguration.communes,
+        termYears: currentConfiguration.term,
+        perimeter: currentConfiguration.perimeter,
+        moduleKeys: currentConfiguration.moduleKeys,
+      });
+      onAuthenticatedContinue({
+        configuration: currentConfiguration,
+        pricing: toPricedSelection(preview),
+      });
+    } catch {
+      // The mutation state renders the localized retry treatment below the action.
+    }
   }
+
+  const quotePreparationError = quoteContextError
+    ? t("quoteContextLoadError")
+    : pricePreviewMutation.isError
+      ? t("pricePreviewLoadError")
+      : undefined;
+  const continueBusy = isAuthenticated && (quoteContextPending || pricePreviewMutation.isPending);
+  const continueDisabled =
+    isAuthenticated && (continueBusy || quoteContextError || !quoteContextReady);
 
   return (
     <div className="flex w-full items-start gap-8 mobile:flex-col mobile:gap-6">
@@ -123,6 +160,16 @@ export default function PricingConfigurator({
         configuration={currentConfiguration}
         pricing={pricing}
         onContinue={handleContinue}
+        continueDisabled={continueDisabled}
+        continueBusy={continueBusy}
+        continueError={quotePreparationError}
+        onRetry={
+          quoteContextError
+            ? onRetryQuoteContext
+            : pricePreviewMutation.isError
+              ? handleContinue
+              : undefined
+        }
       />
     </div>
   );

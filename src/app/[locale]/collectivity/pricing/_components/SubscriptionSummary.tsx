@@ -12,12 +12,20 @@ type SubscriptionSummaryProps = {
   configuration: PricingConfiguration;
   pricing: PricingResult;
   onContinue: () => void;
+  continueDisabled?: boolean;
+  continueBusy?: boolean;
+  continueError?: string;
+  onRetry?: () => void;
 };
 
 export default function SubscriptionSummary({
   configuration,
   pricing,
   onContinue,
+  continueDisabled = false,
+  continueBusy = false,
+  continueError,
+  onRetry,
 }: SubscriptionSummaryProps) {
   const t = useScopedI18n("collectivityPricing");
 
@@ -48,9 +56,23 @@ export default function SubscriptionSummary({
           size="large"
           iconRight={<FeatherArrowRight />}
           onClick={onContinue}
+          disabled={continueDisabled}
+          aria-busy={continueBusy}
         >
           {t("action.continue")}
         </Button>
+        {continueError ? (
+          <div className="flex w-full items-center justify-between gap-2">
+            <Typography variant="captionSubframe" className="text-error-600" role="alert">
+              {continueError}
+            </Typography>
+            {onRetry ? (
+              <Button type="button" variant="neutral-tertiary" size="small" onClick={onRetry}>
+                {t("action.retry")}
+              </Button>
+            ) : null}
+          </div>
+        ) : null}
         <div className="flex w-full items-center gap-2">
           <FeatherShieldCheck className="text-caption font-caption text-subtext-color" />
           <Typography variant="captionSubframe" className="text-subtext-color">

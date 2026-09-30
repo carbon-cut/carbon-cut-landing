@@ -12,7 +12,14 @@ export default function PricingConfigurationStep({
   isAuthenticated: boolean;
 }) {
   const t = useScopedI18n("collectivityPricing");
-  const { goToStep, setFrozenSelection } = usePricingFlow();
+  const {
+    goToStep,
+    setFrozenSelection,
+    quoteContext,
+    isQuoteContextPending,
+    isQuoteContextError,
+    refetchQuoteContext,
+  } = usePricingFlow();
 
   return (
     <div className="flex w-full flex-col items-start gap-6">
@@ -31,6 +38,10 @@ export default function PricingConfigurationStep({
           goToStep("informations");
         }}
         pricingRoute={getCollectivityPricingConfigurationRoute()}
+        quoteContextReady={Boolean(quoteContext)}
+        quoteContextPending={isQuoteContextPending}
+        quoteContextError={isQuoteContextError}
+        onRetryQuoteContext={refetchQuoteContext}
       />
     </div>
   );

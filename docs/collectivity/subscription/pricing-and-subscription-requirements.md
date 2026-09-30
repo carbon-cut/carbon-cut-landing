@@ -144,10 +144,3 @@ The three-year `Agrégation Communes` prices are 80% of the corresponding one-ye
 - Conditions de paiement: deadline to pay after approval/payment request.
 - Moyen de paiement: bank transfer.
   The quote must make clear that acceptance is subject to your admin approval, and the payment deadline should come from your backend policy.
-
-## Open questions
-
-- At launch, which legal entity sells the Carbone Cut subscription and issues invoices to collectivités?
-- What tax/VAT treatment applies by buyer country and buyer status?
-- May prices be presented as excluding tax (`HT`) in the subscription summary?
-- What exact route name and information architecture should the subscription journey use?

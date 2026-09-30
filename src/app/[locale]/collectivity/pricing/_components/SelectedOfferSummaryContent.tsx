@@ -6,12 +6,12 @@ import {
   formatSubscriptionCurrency,
   formatSubscriptionLabel,
   type PricingConfiguration,
-  type PricingResult,
+  type PricedSelection,
 } from "../_lib/pricing";
 
 type SelectedOfferSummaryContentProps = {
   configuration: PricingConfiguration;
-  pricing: PricingResult;
+  pricing: PricedSelection;
   showSelectedModuleCount?: boolean;
   showModuleBreakdown?: boolean;
 };

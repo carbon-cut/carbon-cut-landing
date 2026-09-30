@@ -2,34 +2,47 @@
 
 import {
   FeatherArrowLeft,
-  FeatherCalendarRange,
   FeatherFileText,
   FeatherInfo,
   FeatherLock,
-  FeatherMap,
-  FeatherMapPin,
   FeatherPencil,
-  FeatherQuote,
   FeatherSend,
-  FeatherShieldCheck,
 } from "@subframe/core";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useWatch } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import Typography from "@/components/ui/typography";
+import { createCollectivitySubscription } from "@/app/[locale]/collectivity/_lib/queries";
 import { useCurrentLocale, useScopedI18n } from "@/locales/client";
-import countries from "../_lib/countries.json";
-import issuer from "../_lib/issuer.json";
-import quoteTerms from "../_lib/quoteTerms.json";
+import { getCollectivityPricingSubscriptionRoute } from "@/lib/routing/routes";
 import {
   formatSubscriptionCurrency,
-  formatSubscriptionLabel,
-  type PricedModule,
+  type CreateCollectivitySubscriptionRequest,
 } from "../_lib/pricing";
 import { getTaxTreatment } from "../_lib/taxTreatment";
+import {
+  formatQuoteAddress,
+  formatQuoteDate,
+  getQuoteCountryName,
+  isEuQuoteCountry,
+} from "../_lib/quotePresentation";
 import { usePricingFlow } from "../_components/PricingFlowContext";
 import ViesVerification from "../_informations/ViesVerification";
+import { QuoteReviewCard, QuoteTotalRow } from "../_components/QuoteReviewPrimitives";
+import {
+  QuoteConfigurationTiles,
+  QuoteOfferTable,
+  QuoteOfferTotals,
+} from "../_components/QuoteOfferReview";
+import {
+  QuoteClientReviewCard,
+  QuoteIssuerReviewCard,
+  QuoteTaxTreatmentReviewCard,
+  QuoteTermsReviewCard,
+} from "../_components/QuoteReviewCards";
 
 export default function PricingVerificationStep() {
   const t = useScopedI18n("collectivityPricing.quoteVerification");
@@ -37,10 +50,13 @@ export default function PricingVerificationStep() {
   const termsLabels = useScopedI18n("collectivityPricing.quoteInformation.cards.quoteTerms");
   const pricingLabels = useScopedI18n("collectivityPricing");
   const locale = useCurrentLocale();
-  const { frozenSelection, quoteInformationForm, viesStatus, goToStep } = usePricingFlow();
+  const router = useRouter();
+  const { frozenSelection, quoteInformationForm, viesStatus, goToStep, quoteContext } =
+    usePricingFlow();
   const values = useWatch({ control: quoteInformationForm.control });
+  const subscriptionMutation = useMutation({ mutationFn: createCollectivitySubscription });
 
-  if (!frozenSelection) return null;
+  if (!frozenSelection || !quoteContext) return null;
 
   const { configuration, pricing } = frozenSelection;
   const customer = values.customer ?? quoteInformationForm.getValues("customer");
@@ -49,6 +65,45 @@ export default function PricingVerificationStep() {
   const treatment = getTaxTreatment(customer.countryCode, viesStatus);
   const vatAmountCents = treatment === "france" ? Math.round(pricing.contractTotalCents * 0.2) : 0;
   const taxSummary = getTaxSummary(t, treatment);
+
+  function submitSubscription() {
+    const submittedValues = quoteInformationForm.getValues();
+    const submittedCustomer = submittedValues.customer;
+    const submittedContact = submittedValues.contact;
+    const request: CreateCollectivitySubscriptionRequest = {
+      configuration: {
+        communeQuantity: configuration.communes,
+        termYears: configuration.term,
+        perimeter: configuration.perimeter,
+        moduleKeys: configuration.moduleKeys,
+      },
+      buyer: {
+        customerType: submittedValues.customerType,
+        legalName: submittedCustomer.legalName,
+        addressLine1: submittedCustomer.addressLine1,
+        addressLine2: submittedCustomer.addressLine2 || undefined,
+        postalCode: submittedCustomer.postalCode,
+        city: submittedCustomer.city,
+        countryCode: submittedCustomer.countryCode,
+        siren: submittedCustomer.siren || undefined,
+        siret: submittedCustomer.siret || undefined,
+        vatNumber: submittedCustomer.vatNumber || undefined,
+        hasNoVatNumber: submittedCustomer.hasNoVatNumber ?? false,
+        contact: {
+          name: submittedContact.name,
+          email: submittedContact.email,
+          phone: submittedContact.phone || undefined,
+        },
+      },
+      requestedContractStartDate: submittedValues.quoteTerms.contractStartDate,
+    };
+
+    subscriptionMutation.mutate(request, {
+      onSuccess: (subscription) => {
+        router.push(getCollectivityPricingSubscriptionRoute(subscription.id));
+      },
+    });
+  }
 
   return (
     <div className="flex w-full flex-col items-start gap-8 mobile:gap-6">
@@ -83,35 +138,30 @@ export default function PricingVerificationStep() {
 
       <div className="flex w-full items-start gap-8 mobile:flex-col mobile:gap-6">
         <main className="flex min-w-0 grow shrink-0 basis-0 flex-col items-start gap-6 mobile:flex-none">
-          <ReviewCard
+          <QuoteClientReviewCard
             title={t("client.title")}
-            onEdit={() => goToStep("informations")}
-            editLabel={t("edit")}
-          >
-            <ReviewGrid>
-              <ReviewValue label={taxLabels("legalName")} value={customer.legalName} />
-              <ReviewValue label={taxLabels("customerType")} value={taxLabels("legalEntity")} />
-              <ReviewValue label={taxLabels("addressLine1")} value={formatAddress(customer)} />
-              <ReviewValue
-                label={taxLabels("countryCode")}
-                value={getCountryName(customer.countryCode, locale)}
-              />
-              {customer.countryCode === "FRA" ? (
-                <>
-                  <ReviewValue label={taxLabels("siren")} value={customer.siren} />
-                  <ReviewValue label={taxLabels("siret")} value={customer.siret} />
-                </>
-              ) : null}
-              {customer.vatNumber ? (
-                <ReviewValue
-                  label={
-                    isEuCountry(customer.countryCode)
+            action={<EditAction label={t("edit")} onClick={() => goToStep("informations")} />}
+            entries={[
+              { label: taxLabels("legalName"), value: customer.legalName },
+              { label: taxLabels("customerType"), value: taxLabels("legalEntity") },
+              { label: taxLabels("addressLine1"), value: formatQuoteAddress(customer) },
+              {
+                label: taxLabels("countryCode"),
+                value: getQuoteCountryName(customer.countryCode, locale),
+              },
+              ...(customer.countryCode === "FRA"
+                ? [
+                    { label: taxLabels("siren"), value: customer.siren },
+                    { label: taxLabels("siret"), value: customer.siret },
+                  ]
+                : []),
+              customer.vatNumber
+                ? {
+                    label: isEuQuoteCountry(customer.countryCode)
                       ? taxLabels("vatNumber")
-                      : taxLabels("generalTaxIdentifier")
-                  }
-                  value={customer.vatNumber}
-                  detail={
-                    isEuCountry(customer.countryCode) ? (
+                      : taxLabels("generalTaxIdentifier"),
+                    value: customer.vatNumber,
+                    detail: isEuQuoteCountry(customer.countryCode) ? (
                       <ViesVerification
                         status={viesStatus}
                         labels={{
@@ -122,130 +172,90 @@ export default function PricingVerificationStep() {
                           unavailable: taxLabels("viesUnavailable"),
                         }}
                       />
-                    ) : undefined
+                    ) : undefined,
                   }
-                />
-              ) : (
-                <ReviewValue
-                  label={taxLabels("generalTaxIdentifier")}
-                  value={taxLabels("hasNoVatNumber")}
-                />
-              )}
-              <ReviewValue label={taxLabels("contact")} value={contact.name} />
-              <ReviewValue label={taxLabels("contactEmail")} value={contact.email} />
-              {contact.phone ? (
-                <ReviewValue label={taxLabels("contactPhone")} value={contact.phone} />
-              ) : null}
-            </ReviewGrid>
-          </ReviewCard>
+                : { label: taxLabels("generalTaxIdentifier"), value: taxLabels("hasNoVatNumber") },
+              { label: taxLabels("contact"), value: contact.name },
+              { label: taxLabels("contactEmail"), value: contact.email },
+              ...(contact.phone
+                ? [{ label: taxLabels("contactPhone"), value: contact.phone }]
+                : []),
+            ]}
+          />
 
-          <ReviewCard
+          <QuoteReviewCard
             title={t("offer.title")}
-            onEdit={() => goToStep("configuration")}
-            editLabel={t("offer.edit")}
+            action={
+              <EditAction label={t("offer.edit")} onClick={() => goToStep("configuration")} />
+            }
           >
-            <div className="flex w-full items-stretch gap-3 mobile:flex-col">
-              <OfferTile
-                icon={<FeatherMapPin />}
-                label={pricingLabels("summary.communes")}
-                value={String(configuration.communes)}
-              />
-              <OfferTile
-                icon={<FeatherCalendarRange />}
-                label={pricingLabels("summary.duration")}
-                value={
-                  configuration.term === 1
-                    ? pricingLabels("configuration.term.oneYear")
-                    : pricingLabels("configuration.term.threeYears")
-                }
-              />
-              <OfferTile
-                icon={<FeatherMap />}
-                label={pricingLabels("summary.perimeter")}
-                value={formatPerimeter(pricingLabels, configuration.perimeter)}
-              />
-            </div>
-            <SelectedModulesTable
-              modules={pricing.modules}
-              communes={configuration.communes}
-              t={t}
-              pricingLabels={pricingLabels}
+            <QuoteConfigurationTiles
+              communeQuantity={configuration.communes}
+              termYears={configuration.term}
+              perimeter={configuration.perimeter}
             />
-            <OfferTotals
-              pricing={pricing}
-              years={configuration.term}
-              t={t}
-              pricingLabels={pricingLabels}
+            <QuoteOfferTable modules={pricing.modules} communeQuantity={configuration.communes} />
+            <QuoteOfferTotals
+              annualSubtotalCents={pricing.baseAnnualTotalCents}
+              discountBasisPoints={pricing.discountBasisPoints}
+              discountAmountCents={pricing.discountAmountCents}
+              annualTotalCents={pricing.annualTotalCents}
+              contractTotalCents={pricing.contractTotalCents}
+              termYears={configuration.term}
             />
-          </ReviewCard>
+          </QuoteReviewCard>
 
-          <ReviewCard
+          <QuoteTermsReviewCard
             title={termsLabels("title")}
-            onEdit={() => goToStep("informations")}
-            editLabel={t("edit")}
-          >
-            <ReviewGrid>
-              <ReviewValue label={termsLabels("currency")} value={termsLabels("currencyEur")} />
-              <ReviewValue
-                label={termsLabels("contractStartDate")}
-                value={formatDate(contractStartDate, locale)}
-              />
-              <ReviewValue
-                label={t("terms.validity")}
-                value={t("terms.validityValue", { count: quoteTerms.quoteValidityDays })}
-              />
-              <ReviewValue
-                label={termsLabels("paymentTerms")}
-                value={termsLabels("paymentTermsValue", { count: quoteTerms.paymentTermsDays })}
-              />
-              <ReviewValue
-                label={termsLabels("paymentMethod")}
-                value={termsLabels("bankTransfer")}
-              />
-            </ReviewGrid>
-          </ReviewCard>
+            action={<EditAction label={t("edit")} onClick={() => goToStep("informations")} />}
+            entries={[
+              {
+                label: termsLabels("currency"),
+                value:
+                  quoteContext.currency === "EUR"
+                    ? termsLabels("currencyEur")
+                    : quoteContext.currency,
+              },
+              {
+                label: termsLabels("contractStartDate"),
+                value: formatQuoteDate(contractStartDate, locale),
+              },
+              {
+                label: t("terms.validity"),
+                value: t("terms.validityValue", { count: quoteContext.quoteValidityDays }),
+              },
+              {
+                label: termsLabels("paymentTerms"),
+                value: termsLabels("paymentTermsValue", {
+                  count: quoteContext.paymentTermsDays,
+                }),
+              },
+              {
+                label: termsLabels("paymentMethod"),
+                value: termsLabels("bankTransfer"),
+              },
+            ]}
+          />
 
-          <ReviewCard
+          <QuoteTaxTreatmentReviewCard
             title={t("tax.title")}
-            onEdit={() => goToStep("informations")}
-            editLabel={t("tax.edit")}
-          >
-            <div className="flex w-full flex-col items-start gap-3 rounded-sm border border-solid border-brand-200 bg-brand-50 px-4 py-4">
-              <div className="flex w-full items-center gap-3">
-                <div className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-brand-100">
-                  <FeatherShieldCheck
-                    className="text-heading-3 font-heading-3 text-brand-700"
-                    aria-hidden="true"
-                  />
-                </div>
-                <Typography variant="heading3" className="text-default-font">
-                  {taxSummary.label}
-                </Typography>
-              </div>
-              <div className="flex w-full items-start gap-2 border-t border-solid border-brand-200 pt-3">
-                <FeatherQuote className="text-body font-body text-neutral-400" aria-hidden="true" />
-                <div className="flex min-w-0 grow flex-col items-start gap-1">
-                  <Typography variant="captionBold" className="text-brand-800">
-                    {t("tax.quoteMention")}
-                  </Typography>
-                  <Typography variant="bodySubframe" className="text-default-font">
-                    {taxSummary.mention}
-                  </Typography>
-                </div>
-              </div>
-            </div>
-          </ReviewCard>
+            label={taxSummary.label}
+            quoteMentionLabel={t("tax.quoteMention")}
+            quoteMention={taxSummary.mention}
+            action={<EditAction label={t("tax.edit")} onClick={() => goToStep("informations")} />}
+          />
 
-          <ReviewCard title={t("issuer.title")}>
-            <CardDescription>{t("issuer.description")}</CardDescription>
-            <ReviewGrid>
-              <ReviewValue label={taxLabels("legalName")} value={issuer.legalName} />
-              <ReviewValue label={t("issuer.registeredOffice")} value={issuer.registeredOffice} />
-              <ReviewValue label={taxLabels("siren")} value={issuer.siren} />
-              <ReviewValue label={t("issuer.rcs")} value={issuer.rcs} />
-              <ReviewValue label={taxLabels("vatNumber")} value={issuer.vatNumber} />
-            </ReviewGrid>
-          </ReviewCard>
+          <QuoteIssuerReviewCard
+            title={t("issuer.title")}
+            description={t("issuer.description")}
+            entries={[
+              { label: taxLabels("legalName"), value: quoteContext.issuer.legalName },
+              { label: t("issuer.registeredOffice"), value: quoteContext.issuer.registeredOffice },
+              { label: taxLabels("siren"), value: quoteContext.issuer.siren },
+              { label: t("issuer.rcs"), value: quoteContext.issuer.rcs },
+              { label: taxLabels("vatNumber"), value: quoteContext.issuer.vatNumber ?? undefined },
+            ]}
+          />
         </main>
 
         <VerificationSidebar
@@ -253,6 +263,9 @@ export default function PricingVerificationStep() {
           contractTotalCents={pricing.contractTotalCents}
           vatAmountCents={vatAmountCents}
           years={configuration.term}
+          paymentTermsDays={quoteContext.paymentTermsDays}
+          isSubmitting={subscriptionMutation.isPending}
+          onSubmit={submitSubscription}
           onBack={() => goToStep("informations")}
           t={t}
           pricingLabels={pricingLabels}
@@ -262,188 +275,17 @@ export default function PricingVerificationStep() {
   );
 }
 
-function ReviewCard({
-  title,
-  children,
-  onEdit,
-  editLabel,
-}: {
-  title: string;
-  children: React.ReactNode;
-  onEdit?: () => void;
-  editLabel?: string;
-}) {
+function EditAction({ label, onClick }: { label: string; onClick: () => void }) {
   return (
-    <Card className="flex w-full flex-col items-start gap-6 rounded-md border border-solid border-neutral-border bg-default-background px-6 py-6 shadow-sm mobile:px-4 mobile:py-4">
-      <div className="flex w-full items-start justify-between gap-4 mobile:flex-col mobile:gap-2">
-        <CardTitle asChild>
-          <h2>{title}</h2>
-        </CardTitle>
-        {onEdit && editLabel ? (
-          <Button
-            type="button"
-            variant="neutral-tertiary"
-            size="small"
-            icon={<FeatherPencil />}
-            onClick={onEdit}
-          >
-            {editLabel}
-          </Button>
-        ) : null}
-      </div>
-      {children}
-    </Card>
-  );
-}
-
-function ReviewGrid({ children }: { children: React.ReactNode }) {
-  return (
-    <dl className="grid w-full grid-cols-2 items-start gap-x-6 gap-y-5 mobile:grid-cols-1">
-      {children}
-    </dl>
-  );
-}
-
-function ReviewValue({
-  label,
-  value,
-  detail,
-}: {
-  label: string;
-  value?: string;
-  detail?: React.ReactNode;
-}) {
-  return (
-    <div className="flex min-w-0 flex-col items-start gap-1">
-      <Typography asChild variant="captionSubframe" className="text-subtext-color">
-        <dt>{label}</dt>
-      </Typography>
-      <Typography asChild variant="bodyBold" className="break-words text-default-font">
-        <dd>{value || "—"}</dd>
-      </Typography>
-      {detail ? <div className="pt-1">{detail}</div> : null}
-    </div>
-  );
-}
-
-function OfferTile({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex grow basis-0 items-center gap-3 rounded-sm bg-neutral-50 px-4 py-3">
-      <span className="text-heading-3 font-heading-3 text-brand-600" aria-hidden="true">
-        {icon}
-      </span>
-      <div className="flex min-w-0 flex-col items-start gap-0.5">
-        <Typography variant="captionSubframe" className="text-subtext-color">
-          {label}
-        </Typography>
-        <Typography variant="bodyBold" className="text-default-font">
-          {value}
-        </Typography>
-      </div>
-    </div>
-  );
-}
-
-function SelectedModulesTable({
-  modules,
-  communes,
-  t,
-  pricingLabels,
-}: {
-  modules: PricedModule[];
-  communes: number;
-  t: ReturnType<typeof useScopedI18n>;
-  pricingLabels: ReturnType<typeof useScopedI18n>;
-}) {
-  return (
-    <div className="w-full overflow-x-auto rounded-sm border border-solid border-neutral-border">
-      <div className="min-w-[640px]">
-        <div className="grid grid-cols-[minmax(0,1fr)_7rem_9rem_9rem] gap-4 border-b border-solid border-neutral-border bg-neutral-50 px-4 py-2">
-          {(["service", "quantity", "annualUnitPrice", "annualAmount"] as const).map((key) => (
-            <Typography
-              key={key}
-              variant="captionBold"
-              className={`text-subtext-color ${key.includes("Price") || key === "annualAmount" ? "text-right" : ""}`}
-            >
-              {t(`offer.table.${key}`)}
-            </Typography>
-          ))}
-        </div>
-        {modules.map((module, index) => (
-          <div
-            key={module.key}
-            className={`grid grid-cols-[minmax(0,1fr)_7rem_9rem_9rem] items-center gap-4 px-4 py-3 ${index < modules.length - 1 ? "border-b border-solid border-neutral-border" : ""}`}
-          >
-            <Typography variant="bodyBold" className="text-default-font">
-              {getModuleLabel(pricingLabels, module.key)}
-            </Typography>
-            <Typography variant="bodySubframe" className="text-subtext-color">
-              {t("offer.communesValue", { count: communes })}
-            </Typography>
-            <Typography variant="bodySubframe" className="text-right text-default-font">
-              {formatSubscriptionCurrency(module.annualUnitAmountCents)}
-            </Typography>
-            <Typography variant="bodyBold" className="text-right text-default-font">
-              {formatSubscriptionCurrency(module.annualAmountCents)}
-            </Typography>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function OfferTotals({
-  pricing,
-  years,
-  t,
-  pricingLabels,
-}: {
-  pricing: {
-    baseAnnualTotalCents: number;
-    discountBasisPoints: number;
-    discountAmountCents: number;
-    annualTotalCents: number;
-    contractTotalCents: number;
-  };
-  years: number;
-  t: ReturnType<typeof useScopedI18n>;
-  pricingLabels: ReturnType<typeof useScopedI18n>;
-}) {
-  return (
-    <dl className="ml-auto flex w-full max-w-md flex-col items-start gap-3">
-      <TotalRow
-        label={pricingLabels("summary.annualSubtotal")}
-        value={formatSubscriptionCurrency(pricing.baseAnnualTotalCents)}
-      />
-      {pricing.discountBasisPoints > 0 ? (
-        <TotalRow
-          label={t("offer.discount", { discount: pricing.discountBasisPoints / 100 })}
-          value={`−${formatSubscriptionCurrency(pricing.discountAmountCents)}`}
-          success
-        />
-      ) : null}
-      <TotalRow
-        label={t("offer.annualAfterDiscount")}
-        value={`${formatSubscriptionCurrency(pricing.annualTotalCents)} HT`}
-      />
-      <div className="flex w-full items-center justify-between gap-4 rounded-sm bg-brand-50 px-4 py-3">
-        <Typography variant="bodyBold" className="text-brand-800">
-          {pricingLabels("summary.contractTotal", { years })}
-        </Typography>
-        <Typography variant="heading3" className="whitespace-nowrap text-brand-800">
-          {formatSubscriptionCurrency(pricing.contractTotalCents)} HT
-        </Typography>
-      </div>
-    </dl>
+    <Button
+      type="button"
+      variant="neutral-tertiary"
+      size="small"
+      icon={<FeatherPencil />}
+      onClick={onClick}
+    >
+      {label}
+    </Button>
   );
 }
 
@@ -456,20 +298,7 @@ function TotalRow({
   value: string;
   success?: boolean;
 }) {
-  return (
-    <div className="flex w-full items-center justify-between gap-4">
-      <Typography asChild variant="bodySubframe" className="text-subtext-color">
-        <dt>{label}</dt>
-      </Typography>
-      <Typography
-        asChild
-        variant="bodyBold"
-        className={`whitespace-nowrap ${success ? "text-success-600" : "text-default-font"}`}
-      >
-        <dd>{value}</dd>
-      </Typography>
-    </div>
-  );
+  return <QuoteTotalRow label={label} value={value} success={success} />;
 }
 
 function VerificationSidebar({
@@ -477,6 +306,9 @@ function VerificationSidebar({
   contractTotalCents,
   vatAmountCents,
   years,
+  paymentTermsDays,
+  isSubmitting,
+  onSubmit,
   onBack,
   t,
   pricingLabels,
@@ -485,6 +317,9 @@ function VerificationSidebar({
   contractTotalCents: number;
   vatAmountCents: number;
   years: number;
+  paymentTermsDays: number;
+  isSubmitting: boolean;
+  onSubmit: () => void;
   onBack: () => void;
   t: ReturnType<typeof useScopedI18n>;
   pricingLabels: ReturnType<typeof useScopedI18n>;
@@ -563,7 +398,7 @@ function VerificationSidebar({
               number="3"
               title={t("afterAcceptance.payment.title")}
               description={t("afterAcceptance.payment.description", {
-                count: quoteTerms.paymentTermsDays,
+                count: paymentTermsDays,
               })}
             />
           </div>
@@ -575,7 +410,9 @@ function VerificationSidebar({
             variant="brand-primary"
             size="large"
             icon={<FeatherSend />}
-            onClick={() => undefined}
+            onClick={onSubmit}
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
           >
             {t("actions.accept")}
           </Button>
@@ -636,32 +473,6 @@ function AcceptanceStep({
   );
 }
 
-function getCountryName(countryCode: string | undefined, locale: string) {
-  const country = countries.find((candidate) => candidate.alpha3 === countryCode);
-  return country
-    ? (new Intl.DisplayNames([locale], { type: "region" }).of(country.alpha2) ?? country.alpha3)
-    : "—";
-}
-function formatAddress(customer: {
-  addressLine1?: string;
-  addressLine2?: string;
-  postalCode?: string;
-  city?: string;
-}) {
-  return [
-    customer.addressLine1,
-    customer.addressLine2,
-    [customer.postalCode, customer.city].filter(Boolean).join(" "),
-  ]
-    .filter(Boolean)
-    .join(", ");
-}
-function formatDate(value: string, locale: string) {
-  return value ? new Date(`${value}T00:00:00`).toLocaleDateString(locale) : "—";
-}
-function isEuCountry(countryCode: string | undefined) {
-  return countries.some((country) => country.alpha3 === countryCode && country.isEuMember);
-}
 function getTaxSummary(
   t: ReturnType<typeof useScopedI18n>,
   treatment: ReturnType<typeof getTaxTreatment>
@@ -670,24 +481,4 @@ function getTaxSummary(
   if (treatment === "europeanUnion")
     return { label: t("tax.europeanUnion"), mention: t("tax.europeanUnionMention") };
   return { label: t("tax.outsideEuropeanUnion"), mention: t("tax.outsideEuropeanUnionMention") };
-}
-function formatPerimeter(t: ReturnType<typeof useScopedI18n>, perimeter: string) {
-  if (perimeter === "patrimoine_communal") return t("configuration.perimeter.municipal_assets");
-  if (perimeter === "territorial_communes") return t("configuration.perimeter.whole_territory");
-  return formatSubscriptionLabel(perimeter);
-}
-function getModuleLabel(t: ReturnType<typeof useScopedI18n>, key: string) {
-  const translationKeys: Record<string, string> = {
-    ghg_inventory_scope_1_2: "ghg_inventory_scope_1_2",
-    ghg_inventory_scope_3: "ghg_inventory_scope_3",
-    emission_factor_consolidation: "emission_factor_consolidation",
-    prospective_objectives: "prospective_and_objectives",
-    ghg_mitigation_investment_plan: "ghg_mitigation_investment_plan",
-    mrv_tracking: "mrv_monitoring",
-    significant_indicators: "significant_indicators",
-    scoring_100: "scoring_system",
-    intermunicipal_aggregation: "commune_aggregation",
-  };
-  const translationKey = translationKeys[key];
-  return translationKey ? t(`modules.items.${translationKey}`) : formatSubscriptionLabel(key);
 }
