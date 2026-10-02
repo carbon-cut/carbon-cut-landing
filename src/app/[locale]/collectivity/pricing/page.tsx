@@ -2,12 +2,9 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import PricingFlowShell from "./_components/PricingFlowShell";
-import {
-  CollectivityBackendError,
-  getLatestCollectivitySubscription,
-} from "@/lib/collectivity/backend";
+import { CollectivityBackendError, getLatestCollectivityQuote } from "@/lib/collectivity/backend";
 import { getServerSession } from "@/lib/auth/session";
-import { getCollectivityPricingSubscriptionRoute } from "@/lib/routing/routes";
+import { getCollectivityPricingQuoteRoute } from "@/lib/routing/routes";
 import { getScopedI18n } from "@/locales/server";
 import { setStaticParamsLocale } from "next-international/server";
 
@@ -32,16 +29,15 @@ export default async function CollectivityPricingPage({
   const session = await getServerSession();
 
   if (session.authenticated) {
-    let latestSubscriptionId: number | null = null;
+    let latestQuoteId: number | null = null;
 
     try {
-      const subscription = await getLatestCollectivitySubscription();
+      const quote = await getLatestCollectivityQuote();
       if (
-        !subscription.cancelled &&
-        subscription.status !== "rejected" &&
-        subscription.status !== "expired"
+        !quote.cancelled &&
+        (quote.status === "under_review" || quote.status === "accepted" || quote.status === "paid")
       ) {
-        latestSubscriptionId = subscription.id;
+        latestQuoteId = quote.id;
       }
     } catch (error) {
       if (!(error instanceof CollectivityBackendError) || error.status !== 404) {
@@ -49,8 +45,8 @@ export default async function CollectivityPricingPage({
       }
     }
 
-    if (latestSubscriptionId) {
-      redirect(getCollectivityPricingSubscriptionRoute(latestSubscriptionId));
+    if (latestQuoteId) {
+      redirect(getCollectivityPricingQuoteRoute(latestQuoteId));
     }
   }
 

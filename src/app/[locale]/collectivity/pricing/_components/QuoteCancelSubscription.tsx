@@ -1,9 +1,12 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-import { cancelCollectivitySubscription } from "@/app/[locale]/collectivity/_lib/queries";
+import {
+  cancelCollectivityQuote,
+  collectivityQueryKeys,
+} from "@/app/[locale]/collectivity/_lib/queries";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,10 +22,10 @@ import Typography from "@/components/ui/typography";
 import { getCollectivityPricingRoute } from "@/lib/routing/routes";
 
 export function QuoteCancelSubscription({
-  subscriptionId,
+  quoteId,
   labels,
 }: {
-  subscriptionId: number;
+  quoteId: number;
   labels: {
     action: string;
     title: string;
@@ -33,9 +36,13 @@ export function QuoteCancelSubscription({
   };
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: () => cancelCollectivitySubscription(subscriptionId),
-    onSuccess: () => router.push(getCollectivityPricingRoute()),
+    mutationFn: () => cancelCollectivityQuote(quoteId),
+    onSuccess: (quote) => {
+      queryClient.setQueryData(collectivityQueryKeys.latestQuote(), quote);
+      router.push(getCollectivityPricingRoute());
+    },
   });
 
   return (

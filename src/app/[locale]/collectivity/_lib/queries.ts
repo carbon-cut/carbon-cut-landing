@@ -1,8 +1,8 @@
 import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/setup/_lib/types";
 import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/setup/_lib/schema";
 import type {
-  CreateCollectivitySubscriptionRequest,
-  PublicCollectivitySubscription,
+  CreateCollectivityQuoteRequest,
+  PublicCollectivityQuote,
   QuoteContext,
   SubscriptionCatalogue,
   SubscriptionPricePreview,
@@ -33,9 +33,15 @@ export const subscriptionCatalogueQueryOptions = {
   staleTime: 5 * 60 * 1000,
 };
 
+export const latestQuoteQueryOptions = {
+  ...collectivityQueryOptions,
+  staleTime: 30 * 1000,
+};
+
 export const collectivityQueryKeys = {
   subscriptionCatalogue: () => ["collectivity", "subscriptionCatalogue"] as const,
   quoteContext: () => ["collectivity", "quoteContext"] as const,
+  latestQuote: () => ["collectivity", "latestQuote"] as const,
   currentInventory: (projectSlug: string) =>
     ["collectivity", "currentInventory", projectSlug] as const,
   result: (projectSlug: string) => ["collectivity", "result", projectSlug] as const,
@@ -150,30 +156,38 @@ export async function fetchCollectivitySubscriptionPricePreview(
   return payload.data;
 }
 
-export async function createCollectivitySubscription(
-  request: CreateCollectivitySubscriptionRequest
-): Promise<PublicCollectivitySubscription> {
-  const response = await fetch("/api/collectivity/subscriptions", {
+export async function createCollectivityQuote(
+  request: CreateCollectivityQuoteRequest
+): Promise<PublicCollectivityQuote> {
+  const response = await fetch("/api/collectivity/quotes", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "same-origin",
     body: JSON.stringify(request),
   });
-  const payload = await readApiJson<{ data: PublicCollectivitySubscription }>(response);
+  const payload = await readApiJson<{ data: PublicCollectivityQuote }>(response);
   return payload.data;
 }
 
-export async function cancelCollectivitySubscription(
-  subscriptionId: number
-): Promise<PublicCollectivitySubscription> {
-  const response = await fetch(
-    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/cancel`,
-    {
-      method: "POST",
-      credentials: "same-origin",
-    }
-  );
-  const payload = await readApiJson<{ data: PublicCollectivitySubscription }>(response);
+export async function fetchLatestCollectivityQuote() {
+  const response = await fetch("/api/collectivity/quotes/latest", {
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data?: PublicCollectivityQuote }>(response);
+
+  if (!payload.data) {
+    throw new Error("Latest collectivity quote not found");
+  }
+
+  return payload.data;
+}
+
+export async function cancelCollectivityQuote(quoteId: number): Promise<PublicCollectivityQuote> {
+  const response = await fetch(`/api/collectivity/quotes/${encodeURIComponent(quoteId)}/cancel`, {
+    method: "POST",
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data: PublicCollectivityQuote }>(response);
   return payload.data;
 }
 

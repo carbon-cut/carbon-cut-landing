@@ -41,6 +41,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   asChild?: boolean;
   icon?: React.ReactNode;
   iconRight?: React.ReactNode;
+  loading?: boolean;
 }
 
 export type SubframeVariant =
@@ -70,7 +71,7 @@ const subframeVariants: Record<SubframeVariant, string> = {
   "neutral-tertiary": "bg-transparent text-neutral-700 hover:bg-neutral-100 active:bg-neutral-200",
   "destructive-primary": "bg-error-600 text-white hover:bg-error-500 active:bg-error-600",
   "destructive-secondary": "bg-error-50 text-error-800 hover:bg-error-100 active:bg-error-50",
-  "destructive-tertiary": "bg-transparent text-error-800 hover:bg-error-50 active:bg-error-100",
+  "destructive-tertiary": "bg-transparent text-error-700 hover:bg-error-50 active:bg-error-100",
   inverse: "bg-transparent text-white hover:bg-white/20 active:bg-white/25",
   "link-neutral": "",
   "link-brand": "",
@@ -84,7 +85,21 @@ const subframeSizes: Record<SubframeSize, string> = {
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, icon, iconRight, children, ...props }, ref) => {
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      icon,
+      iconRight,
+      children,
+      loading = false,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
     if (variant === "link-neutral" || variant === "link-brand" || variant === "link-inverse") {
       const sourceSize = (size ?? "medium") as SubframeSize;
       const contentClassName = cn(
@@ -103,6 +118,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             "group/link-button flex cursor-pointer items-center gap-1 border-none bg-transparent text-left disabled:cursor-default",
             className
           )}
+          disabled={disabled || loading}
           {...props}
         >
           {icon ? <span className={cn("flex", contentClassName)}>{icon}</span> : null}
@@ -135,6 +151,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             subframeSizes[sourceSize],
             className
           )}
+          disabled={disabled || loading}
           {...props}
         >
           {icon ? (
@@ -171,6 +188,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           })
         )}
         ref={ref}
+        disabled={disabled || loading}
         {...props}
       >
         {children}

@@ -8,20 +8,20 @@ import {
   FeatherPencil,
   FeatherSend,
 } from "@subframe/core";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useWatch } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import Typography from "@/components/ui/typography";
-import { createCollectivitySubscription } from "@/app/[locale]/collectivity/_lib/queries";
-import { useCurrentLocale, useScopedI18n } from "@/locales/client";
-import { getCollectivityPricingSubscriptionRoute } from "@/lib/routing/routes";
 import {
-  formatSubscriptionCurrency,
-  type CreateCollectivitySubscriptionRequest,
-} from "../_lib/pricing";
+  collectivityQueryKeys,
+  createCollectivityQuote,
+} from "@/app/[locale]/collectivity/_lib/queries";
+import { useCurrentLocale, useScopedI18n } from "@/locales/client";
+import { getCollectivityPricingQuoteRoute } from "@/lib/routing/routes";
+import { formatSubscriptionCurrency, type CreateCollectivityQuoteRequest } from "../_lib/pricing";
 import { getTaxTreatment } from "../_lib/taxTreatment";
 import {
   formatQuoteAddress,
@@ -51,10 +51,11 @@ export default function PricingVerificationStep() {
   const pricingLabels = useScopedI18n("collectivityPricing");
   const locale = useCurrentLocale();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { frozenSelection, quoteInformationForm, viesStatus, goToStep, quoteContext } =
     usePricingFlow();
   const values = useWatch({ control: quoteInformationForm.control });
-  const subscriptionMutation = useMutation({ mutationFn: createCollectivitySubscription });
+  const quoteMutation = useMutation({ mutationFn: createCollectivityQuote });
 
   if (!frozenSelection || !quoteContext) return null;
 
@@ -66,11 +67,11 @@ export default function PricingVerificationStep() {
   const vatAmountCents = treatment === "france" ? Math.round(pricing.contractTotalCents * 0.2) : 0;
   const taxSummary = getTaxSummary(t, treatment);
 
-  function submitSubscription() {
+  function submitQuote() {
     const submittedValues = quoteInformationForm.getValues();
     const submittedCustomer = submittedValues.customer;
     const submittedContact = submittedValues.contact;
-    const request: CreateCollectivitySubscriptionRequest = {
+    const request: CreateCollectivityQuoteRequest = {
       configuration: {
         communeQuantity: configuration.communes,
         termYears: configuration.term,
@@ -98,9 +99,10 @@ export default function PricingVerificationStep() {
       requestedContractStartDate: submittedValues.quoteTerms.contractStartDate,
     };
 
-    subscriptionMutation.mutate(request, {
-      onSuccess: (subscription) => {
-        router.push(getCollectivityPricingSubscriptionRoute(subscription.id));
+    quoteMutation.mutate(request, {
+      onSuccess: (quote) => {
+        queryClient.setQueryData(collectivityQueryKeys.latestQuote(), quote);
+        router.push(getCollectivityPricingQuoteRoute(quote.id));
       },
     });
   }
@@ -264,8 +266,8 @@ export default function PricingVerificationStep() {
           vatAmountCents={vatAmountCents}
           years={configuration.term}
           paymentTermsDays={quoteContext.paymentTermsDays}
-          isSubmitting={subscriptionMutation.isPending}
-          onSubmit={submitSubscription}
+          isSubmitting={quoteMutation.isPending}
+          onSubmit={submitQuote}
           onBack={() => goToStep("informations")}
           t={t}
           pricingLabels={pricingLabels}

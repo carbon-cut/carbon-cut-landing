@@ -7,10 +7,12 @@ import {
   FeatherHourglass,
   FeatherX,
 } from "@subframe/core";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import acceptedPaymentInstructions from "../_lib/temporaryAcceptedPaymentInstructions";
-import { formatSubscriptionCurrency, type PublicCollectivitySubscription } from "../_lib/pricing";
+import { formatSubscriptionCurrency, type PublicCollectivityQuote } from "../_lib/pricing";
 import {
   formatQuoteAddress,
   formatQuoteDate,
@@ -38,13 +40,21 @@ import { QuoteStatusHeader } from "../_components/QuoteStatusHeader";
 import { QuoteStatusNotice } from "../_components/QuoteStatusNotice";
 import { QuoteStatusSidebar } from "../_components/QuoteStatusSidebar";
 import { useCurrentLocale, useScopedI18n } from "@/locales/client";
-import { getCollectivityProjectsRoute } from "@/app/[locale]/collectivity/_lib/routing";
-import { getCollectivityPricingRoute, getContactRoute } from "@/lib/routing/routes";
+import {
+  collectivityQueryKeys,
+  fetchLatestCollectivityQuote,
+  latestQuoteQueryOptions,
+} from "@/app/[locale]/collectivity/_lib/queries";
+import {
+  getCollectivityPricingRoute,
+  getCollectivitySubscriptionRoute,
+  getContactRoute,
+} from "@/lib/routing/routes";
 
 export default function QuoteStatusPage({
-  subscription,
+  subscription: initialSubscription,
 }: {
-  subscription: PublicCollectivitySubscription;
+  subscription: PublicCollectivityQuote;
 }) {
   const shared = useScopedI18n("collectivityPricing.underReviewQuote");
   const accepted = useScopedI18n("collectivityPricing.acceptedQuote");
@@ -57,10 +67,22 @@ export default function QuoteStatusPage({
   const pricing = useScopedI18n("collectivityPricing");
   const locale = useCurrentLocale();
   const router = useRouter();
+  const latestSubscriptionQuery = useQuery({
+    ...latestQuoteQueryOptions,
+    queryKey: collectivityQueryKeys.latestQuote(),
+    queryFn: fetchLatestCollectivityQuote,
+    initialData: initialSubscription,
+    refetchInterval: (query) => {
+      const status = query.state.data?.status;
+      return status === "under_review" || status === "accepted" ? 30 * 1000 : false;
+    },
+  });
+  const subscription = latestSubscriptionQuery.data ?? initialSubscription;
   const isAccepted = subscription.status === "accepted";
   const isPaid = subscription.status === "paid";
   const isRejected = subscription.status === "rejected";
-  const isExpired = subscription.status === "expired";
+  const isExpired =
+    isPaid && Boolean(subscription.endsAt && new Date(subscription.endsAt) < new Date());
   const {
     buyerSnapshot: buyer,
     sellerSnapshot: seller,
@@ -71,10 +93,7 @@ export default function QuoteStatusPage({
   const amounts = pricingSnapshot.amounts;
   const submittedDate = formatQuoteDateTime(subscription.submittedAt, locale);
   const approvedDate = formatQuoteDateTime(subscription.acceptedAt, locale);
-  const paidDate = formatQuoteDateTime(
-    subscription.paidAt ?? subscription.paymentConfirmedAt,
-    locale
-  );
+  const paidDate = formatQuoteDateTime(subscription.paidAt, locale);
   const rejectedDate = formatQuoteDateTime(subscription.rejectedAt, locale);
   const expiredDate = formatQuoteDate(subscription.endsAt, locale);
   const subscriptionPeriod = paid("activePeriod.value", {
@@ -386,10 +405,24 @@ export default function QuoteStatusPage({
                   onClick: () => router.push(getContactRoute()),
                 }
               : isPaid
-                ? {
-                    label: paid("openProjects"),
-                    onClick: () => router.push(getCollectivityProjectsRoute()),
-                  }
+                ? subscription.subscriptionId && !isExpired
+                  ? {
+                      label: paid("manageSubscription"),
+                      onClick: () => {
+                        if (
+                          subscription.startsAt &&
+                          new Date(subscription.startsAt).getTime() > Date.now()
+                        ) {
+                          toast.info(
+                            `${terms("contractStartDate")} : ${formatQuoteDate(subscription.startsAt, locale)}`
+                          );
+                          return;
+                        }
+
+                        router.push(getCollectivitySubscriptionRoute());
+                      },
+                    }
+                  : undefined
                 : undefined
           }
           secondaryAction={
@@ -403,7 +436,7 @@ export default function QuoteStatusPage({
           additionalAction={
             !isAccepted && !isPaid && !isRejected ? (
               <QuoteCancelSubscription
-                subscriptionId={subscription.id}
+                quoteId={subscription.id}
                 labels={{
                   action: shared("cancel.action"),
                   title: shared("cancel.title"),
@@ -436,7 +469,7 @@ export default function QuoteStatusPage({
 
 function getTaxLabel(
   t: ReturnType<typeof useScopedI18n>,
-  treatment: PublicCollectivitySubscription["pricingSnapshot"]["amounts"]["taxTreatment"]
+  treatment: PublicCollectivityQuote["pricingSnapshot"]["amounts"]["taxTreatment"]
 ) {
   if (treatment === "france") return t("tax.france");
   if (treatment === "european_union") return t("tax.europeanUnion");

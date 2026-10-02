@@ -1,14 +1,11 @@
 import { notFound, redirect } from "next/navigation";
 
 import QuoteStatusPage from "./QuoteStatusPage";
-import {
-  getLatestCollectivitySubscription,
-  CollectivityBackendError,
-} from "@/lib/collectivity/backend";
+import { getLatestCollectivityQuote, CollectivityBackendError } from "@/lib/collectivity/backend";
 import { getServerSession } from "@/lib/auth/session";
 import {
   getCollectivityPricingRoute,
-  getCollectivityPricingSubscriptionRoute,
+  getCollectivityPricingQuoteRoute,
 } from "@/lib/routing/routes";
 import { setStaticParamsLocale } from "next-international/server";
 
@@ -26,24 +23,23 @@ export default async function CollectivityPricingSubscriptionPage({
   }
 
   try {
-    const subscription = await getLatestCollectivitySubscription();
+    const quote = await getLatestCollectivityQuote();
 
-    if (String(subscription.id) !== id) {
-      redirect(getCollectivityPricingSubscriptionRoute(subscription.id));
+    if (String(quote.id) !== id) {
+      redirect(getCollectivityPricingQuoteRoute(quote.id));
     }
 
     if (
-      subscription.cancelled ||
-      (subscription.status !== "under_review" &&
-        subscription.status !== "accepted" &&
-        subscription.status !== "paid" &&
-        subscription.status !== "rejected" &&
-        subscription.status !== "expired")
+      quote.cancelled ||
+      (quote.status !== "under_review" &&
+        quote.status !== "accepted" &&
+        quote.status !== "paid" &&
+        quote.status !== "rejected")
     ) {
       notFound();
     }
 
-    return <QuoteStatusPage subscription={subscription} />;
+    return <QuoteStatusPage subscription={quote} />;
   } catch (error) {
     if (error instanceof CollectivityBackendError && error.status === 404) {
       redirect(getCollectivityPricingRoute());

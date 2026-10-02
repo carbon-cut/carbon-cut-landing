@@ -89,7 +89,7 @@ export type SubscriptionPricePreview = {
   quotedContractAmountCents: number;
 };
 
-export type CreateCollectivitySubscriptionRequest = {
+export type CreateCollectivityQuoteRequest = {
   configuration: SubscriptionPricePreviewRequest;
   buyer: {
     customerType: "LEGAL_ENTITY";
@@ -112,18 +112,13 @@ export type CreateCollectivitySubscriptionRequest = {
   requestedContractStartDate: string;
 };
 
-export type PublicCollectivitySubscriptionStatus =
-  | "under_review"
-  | "accepted"
-  | "paid"
-  | "rejected"
-  | "expired"
-  | "active";
+export type PublicCollectivityQuoteStatus = "under_review" | "accepted" | "paid" | "rejected";
 
-export type PublicCollectivitySubscription = {
+export type PublicCollectivityQuote = {
   id: number;
+  productKey: "collectivity";
   reference: string;
-  status: PublicCollectivitySubscriptionStatus;
+  status: PublicCollectivityQuoteStatus;
   cancelled: boolean;
   cancelledAt: string | null;
   submittedAt: string | null;
@@ -131,10 +126,10 @@ export type PublicCollectivitySubscription = {
   paidAt: string | null;
   rejectedAt: string | null;
   requestedContractStartDate: string;
+  subscriptionId: number | null;
   startsAt: string | null;
   endsAt: string | null;
-  paymentConfirmedAt: string | null;
-  buyerSnapshot: CreateCollectivitySubscriptionRequest["buyer"];
+  buyerSnapshot: CreateCollectivityQuoteRequest["buyer"];
   sellerSnapshot: QuoteContext["issuer"];
   termsSnapshot: {
     quoteValidityEndsAt: string;

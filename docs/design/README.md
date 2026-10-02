@@ -9,6 +9,7 @@ This folder contains the active design documentation for the project.
 - `01-design-principles.md`: brand/design principles and UI behavior rules.
 - `02-homepage-spec.md`: homepage-specific structure, content boundaries, and acceptance checks.
 - `03-workflow.md`: process for UI exploration, reference gathering, and iterative build/review.
+- `subframe-token-mapping.md`: required local token equivalents when implementing from Subframe.
 - `logs/ui-criticism-log.md`: implementation feedback history.
 
 ## Precedence order

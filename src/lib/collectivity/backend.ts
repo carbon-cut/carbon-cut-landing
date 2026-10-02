@@ -4,8 +4,8 @@ import { fetchWithAuth, UnauthenticatedRequestError } from "@/lib/auth/fetchWith
 import type { AuthUser } from "@/lib/auth/types";
 import type { CollectivityResultsByYear } from "@/lib/collectivity/result-types";
 import type {
-  CreateCollectivitySubscriptionRequest,
-  PublicCollectivitySubscription,
+  CreateCollectivityQuoteRequest,
+  PublicCollectivityQuote,
   QuoteContext,
   SubscriptionCatalogue,
   SubscriptionPricePreview,
@@ -16,6 +16,11 @@ import type {
   CollectivitySetupData,
   CollectivitySetupSnapshot,
 } from "@/app/[locale]/collectivity/setup/_lib/types";
+import type {
+  CollectivitySubscriptionClaim,
+  CollectivitySubscriptionDetail,
+  CollectivitySubscriptionInvitationLink,
+} from "@/app/[locale]/collectivity/subscription/_lib/claims";
 
 type CollectivityErrorBody = {
   error?: {
@@ -203,11 +208,11 @@ export async function getSubscriptionPricePreview(
   return response.data;
 }
 
-export async function createCollectivitySubscription(
-  request: CreateCollectivitySubscriptionRequest
-): Promise<PublicCollectivitySubscription> {
-  const response = await requestCollectivity<{ data: PublicCollectivitySubscription }>(
-    "/api/collectivity/subscriptions",
+export async function createCollectivityQuote(
+  request: CreateCollectivityQuoteRequest
+): Promise<PublicCollectivityQuote> {
+  const response = await requestCollectivity<{ data: PublicCollectivityQuote }>(
+    "/api/collectivity/quotes",
     {
       method: "POST",
       body: JSON.stringify(request),
@@ -216,19 +221,105 @@ export async function createCollectivitySubscription(
   return response.data;
 }
 
-export async function getLatestCollectivitySubscription(): Promise<PublicCollectivitySubscription> {
-  const response = await requestCollectivity<{ data: PublicCollectivitySubscription }>(
-    "/api/collectivity/subscriptions/latest"
+export async function getLatestCollectivityQuote(): Promise<PublicCollectivityQuote> {
+  const response = await requestCollectivity<{ data: PublicCollectivityQuote }>(
+    "/api/collectivity/quotes/latest"
   );
-  console.log("collectivityLatestSubscription", response.data);
   return response.data;
 }
 
-export async function cancelCollectivitySubscription(
+export async function getCollectivitySubscriptionDetail(
   subscriptionId: number
-): Promise<PublicCollectivitySubscription> {
-  const response = await requestCollectivity<{ data: PublicCollectivitySubscription }>(
-    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/cancel`,
+): Promise<CollectivitySubscriptionDetail> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionDetail }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}`
+  );
+  return response.data;
+}
+
+export async function getCollectivitySubscriptionClaims(
+  subscriptionId: number
+): Promise<CollectivitySubscriptionClaim[]> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim[] }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims`
+  );
+  return response.data;
+}
+
+export async function assignCollectivitySubscriptionPlaceToSelf(
+  subscriptionId: number
+): Promise<CollectivitySubscriptionClaim> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/self-claims`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function assignCollectivitySubscriptionPlaceDirectly(
+  subscriptionId: number,
+  claimantUserId: number
+): Promise<CollectivitySubscriptionClaim> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/direct`,
+    {
+      method: "POST",
+      body: JSON.stringify({ claimantUserId }),
+    }
+  );
+  return response.data;
+}
+
+export async function createCollectivitySubscriptionInvitationLink(
+  subscriptionId: number
+): Promise<CollectivitySubscriptionInvitationLink> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionInvitationLink }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claim-link`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function revokeCollectivitySubscriptionInvitationLink(subscriptionId: number) {
+  await requestCollectivity<unknown>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claim-link`,
+    { method: "DELETE" }
+  );
+}
+
+export async function revokeCollectivitySubscriptionClaim(
+  subscriptionId: number,
+  claimId: number
+): Promise<CollectivitySubscriptionClaim> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/${encodeURIComponent(claimId)}/revoke`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function approveCollectivitySubscriptionClaim(
+  subscriptionId: number,
+  claimId: number
+) {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/${encodeURIComponent(claimId)}/approve`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function denyCollectivitySubscriptionClaim(subscriptionId: number, claimId: number) {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/${encodeURIComponent(claimId)}/deny`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function cancelCollectivityQuote(quoteId: number): Promise<PublicCollectivityQuote> {
+  const response = await requestCollectivity<{ data: PublicCollectivityQuote }>(
+    `/api/collectivity/quotes/${encodeURIComponent(quoteId)}/cancel`,
     { method: "POST" }
   );
   return response.data;

@@ -18,6 +18,7 @@ Working notes for contributors to this codebase.
 - Use visual hierarchy before verbal hierarchy. Do not add a heading, subheading, description, card title, or instructional sentence merely to explain the UI below it; use spacing, alignment, grouping, labels, and component structure first. Every heading must introduce a genuinely distinct concept or task. Prefer `page title → meaningful section titles → control labels`, without intermediate wrapper headings. Use one page title; add a section heading only when it separates multiple related controls or content from another meaningful group. Do not narrate the interface.
 - For product UI, arbitrary Tailwind values such as `text-[...]`, `h-[...]`, `rounded-[...]`, or `tracking-[...]` are forbidden by default. Use them only when the user explicitly approves them, or when the system cannot express the required reference and that limitation has been stated first.
 - Keep styling aligned with token semantics in `globals.css` and `tailwind.config.ts`.
+- When implementing from a Subframe reference, read `docs/design/subframe-token-mapping.md` before copying token classes.
 - Preserve accessibility (`aria-*`, alt text, keyboard focus visibility).
 - Keep sections semantic and data-driven where possible.
 - For client-rendered data and mutations, use TanStack Query. Add reusable query keys, fetchers, and shared query options to the relevant `*_lib/queries.ts` module; do not issue ad-hoc `fetch` calls from UI components. Browser requests must use the same-origin Next.js API route layer rather than calling Strapi directly. Server-only loading is reserved for server-rendered initial data and must not replace the client query when the UI needs live API state.
@@ -26,6 +27,8 @@ Working notes for contributors to this codebase.
 - Only change files or code the user explicitly asked you to change.
 - Do not overreach; if the task is simple, do the simple task and do not go wild.
 - When the user names a specific layer, file, region, or subsystem, treat that as a hard scope boundary.
+- Do not explore another repository without the user's permission. A path the user shares in another repository authorizes reading that specific file only, not searching or inspecting the surrounding repository.
+- Read a user-provided file first and use it as the supplied context. If the task cannot be completed reliably without looking beyond it, stop and explain why, then ask before expanding the search.
 - Do not modify shared components, locales, schemas, APIs, tests, or adjacent files unless the user explicitly approves that scope expansion.
 - If the requested change cannot be completed without crossing the stated scope, stop and ask before editing outside it.
 - Do not "clean up", "align", or "follow through" into neighboring layers unless the user explicitly asks for that additional work.

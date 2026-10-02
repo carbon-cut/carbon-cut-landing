@@ -70,6 +70,14 @@ export const COLLECTIVITY_MOCK_USERS = {
       municipalElectricityConsumptionKwh: 42000,
     },
   },
+  subscriptionDemo: {
+    id: 8,
+    username: "sub-test-user",
+    email: "subTest@example.com",
+    planId: undefined,
+    setup: null,
+    inventory: null,
+  },
 };
 
 export type MockCollectivityUserState = {
@@ -235,7 +243,7 @@ function buildSetupSnapshot(
 
 const collectivityStateByEmail = new Map<string, MockCollectivityUserState>(
   Object.values(COLLECTIVITY_MOCK_USERS).map((user) => [
-    user.email,
+    user.email.toLowerCase(),
     (() => {
       const createdAt = "2026-01-01T00:00:00.000Z";
       const updatedAt = user.inventory ? "2026-06-01T00:00:00.000Z" : createdAt;
