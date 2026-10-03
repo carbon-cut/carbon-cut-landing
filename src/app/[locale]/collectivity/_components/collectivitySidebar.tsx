@@ -2,16 +2,22 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ClipboardList,
   ChartColumn,
+  ChevronUp,
   FileSpreadsheet,
+  FolderKanban,
   SlidersHorizontal,
   Target,
   type LucideIcon,
 } from "lucide-react";
 
 import Logo from "@/components/Logo";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Sidebar,
   SidebarContent,
@@ -27,7 +33,11 @@ import {
 import { cn } from "@/lib/utils";
 import { useScopedI18n } from "@/locales/client";
 
-import { getCollectivityModuleRoute, type CollectivityModuleSlug } from "../_lib/routing";
+import {
+  getCollectivityModuleRoute,
+  getCollectivityProjectsRoute,
+  type CollectivityModuleSlug,
+} from "../_lib/routing";
 import Typography from "@/components/ui/typography";
 
 export type CollectivityRouteItem = {
@@ -71,11 +81,15 @@ export function useCollectivityRouteItems(planId: string) {
 export default function CollectivitySidebar({
   routeItems,
   pathname,
+  userName,
 }: {
   routeItems: CollectivityRouteItem[];
   pathname: string;
+  userName: string;
 }) {
   const { state } = useSidebar();
+  const router = useRouter();
+  const t = useScopedI18n("(pages).collectivityDashboard");
   const isCollapsed = state === "collapsed";
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -171,7 +185,52 @@ export default function CollectivitySidebar({
             </SidebarMenu>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter className="relative z-10 h-16 group-data-[collapsible=icon]:hidden" />
+        <SidebarFooter className="relative z-10 px-3 pb-3">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="neutral-tertiary"
+                    className="h-10 w-full hover:bg-brand-100/20 active:bg-brand-300/20 justify-start gap-2 rounded-md group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                    aria-label={userName}
+                    icon={
+                      <Avatar className="h-7 w-7 flex-none">
+                        <AvatarFallback className="bg-brand-100 text-brand-700">
+                          <Typography variant="captionBold">
+                            {userName.slice(0, 2).toUpperCase()}
+                          </Typography>
+                        </AvatarFallback>
+                      </Avatar>
+                    }
+                    iconRight={
+                      <ChevronUp className="size-4 text-subtext-color group-data-[collapsible=icon]:hidden" />
+                    }
+                  >
+                    <Typography
+                      variant="bodyBold"
+                      className="min-w-0 flex-1 truncate self-center text-left group-data-[collapsible=icon]:hidden"
+                    >
+                      {userName}
+                    </Typography>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent side="top" align="start" className="w-56 p-1">
+                  <Button
+                    type="button"
+                    variant="neutral-tertiary"
+                    className="w-full justify-start"
+                    icon={<FolderKanban size={16} aria-hidden="true" />}
+                    onClick={() => router.push(getCollectivityProjectsRoute())}
+                  >
+                    {t("planSidebar.projects") as string}
+                  </Button>
+                </PopoverContent>
+              </Popover>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </div>
 
       <SidebarRail className="cursor-ew-resize in-data-[side=left]:cursor-ew-resize in-data-[side=right]:cursor-ew-resize [[data-side=left][data-state=collapsed]_&]:cursor-ew-resize [[data-side=right][data-state=collapsed]_&]:cursor-ew-resize" />

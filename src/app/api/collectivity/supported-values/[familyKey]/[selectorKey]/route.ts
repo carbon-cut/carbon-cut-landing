@@ -5,7 +5,6 @@ import {
   listCollectivitySupportedValues,
 } from "@/lib/collectivity/backend";
 import { getServerSession } from "@/lib/auth/session";
-import { hasUserProductAccess } from "@/lib/auth/profile";
 
 type RouteContext = {
   params: Promise<{
@@ -27,18 +26,6 @@ export async function GET(_request: Request, context: RouteContext) {
         },
       },
       { status: 401 }
-    );
-  }
-
-  if (!hasUserProductAccess(session.user, "collectivity")) {
-    return NextResponse.json(
-      {
-        error: {
-          status: 403,
-          message: "Collectivity access required",
-        },
-      },
-      { status: 403 }
     );
   }
 

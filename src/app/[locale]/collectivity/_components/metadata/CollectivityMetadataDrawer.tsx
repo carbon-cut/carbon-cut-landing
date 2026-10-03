@@ -23,7 +23,7 @@ import {
   metadataConfidenceValues,
   metadataQualityStatusValues,
   metadataSourceTypeValues,
-} from "@/app/[locale]/collectivity/[planId]/inventory/InventorySchema/_shared";
+} from "@/app/[locale]/collectivity/projects/[planId]/inventory/InventorySchema/_shared";
 
 import { EMPTY_METADATA_VALUE, cloneCollectivityMetadataValue } from "./utils";
 import type { CollectivityMetadataDrawerLabels, CollectivityMetadataValue } from "./types";

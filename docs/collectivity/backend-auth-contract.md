@@ -34,7 +34,7 @@ type AuthUser = {
 ## Frontend routing rules already implemented
 
 - `household` users are redirected away from collectivity workspace routes to `/form`.
-- `collectivity` users are redirected away from household routes to `/collectivity/start`.
+- `collectivity` users are redirected away from household routes to `/collectivity/projects/start`.
 - `collectivity` users with no `planId` are redirected from normal collectivity workspace routes to `/collectivity/setup/cadrage`.
 - `collectivity` users with existing `planId` values are redirected away from setup to their first allowed collectivity plan.
 
@@ -50,7 +50,7 @@ type AuthUser = {
 
 These are frontend routes, but they imply backend data and permission checks:
 
-- `/collectivity/start`
+- `/collectivity/projects/start`
 - `/collectivity/setup/cadrage`
 - `/collectivity/[planId]`
 - `/collectivity/[planId]/cadrage`

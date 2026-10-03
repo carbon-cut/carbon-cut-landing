@@ -5,6 +5,11 @@ import type {
   CollectivitySubscriptionDetail,
   CollectivitySubscriptionInvitationLink,
 } from "@/app/[locale]/collectivity/subscription/_lib/claims";
+import type {
+  AvailableCollectivityClaim,
+  CollectivityInvitationClaim,
+  CollectivityInvitationPreview,
+} from "@/app/[locale]/collectivity/invitation/_lib/types";
 import { COLLECTIVITY_MOCK_USERS } from "@/mocks/collectivity";
 
 export const MOCK_SUBSCRIPTION_ID = 9001;
@@ -135,12 +140,160 @@ function createInitialState(): MockSubscriptionState {
 
 let state = createInitialState();
 
+const mockInviter = {
+  firstName: "Claire",
+  lastName: "Dumont",
+  organization: "Communauté de communes du Pays de Gex",
+};
+const validInvitationPreview: CollectivityInvitationPreview = {
+  state: "valid",
+  inviter: mockInviter,
+  createdAt: "2026-10-02T09:00:00.000Z",
+  expiresAt: "2026-10-31T23:59:59.999Z",
+  stateChangedAt: null,
+};
+let invitationClaims = new Map<number, CollectivityInvitationClaim>();
+let invitationClaimOwnerById = new Map<number, number>();
+let nextInvitationClaimId = 7001;
+
 export function resetMockCollectivitySubscription() {
   state = createInitialState();
+  invitationClaims = new Map();
+  invitationClaimOwnerById = new Map();
+  nextInvitationClaimId = 7001;
 }
 
 function clone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
+}
+
+export function getMockCollectivityInvitationPreview(
+  token: string
+): CollectivityInvitationPreview | null {
+  const states: Record<string, CollectivityInvitationPreview> = {
+    "mock-invitation-valid": validInvitationPreview,
+    "mock-invitation-expired": {
+      ...validInvitationPreview,
+      state: "expired",
+      expiresAt: "2026-09-30T23:59:59.999Z",
+      stateChangedAt: "2026-10-01T00:00:00.000Z",
+    },
+    "mock-invitation-replaced": {
+      ...validInvitationPreview,
+      state: "replaced",
+      stateChangedAt: "2026-10-02T12:00:00.000Z",
+    },
+    "mock-invitation-disabled": {
+      ...validInvitationPreview,
+      state: "disabled",
+      stateChangedAt: "2026-10-02T12:00:00.000Z",
+    },
+    "mock-invitation-valid-no-organization": {
+      ...validInvitationPreview,
+      inviter: { ...mockInviter, organization: null },
+    },
+  };
+  if (state.invitationLink?.token === token) {
+    return clone({
+      ...validInvitationPreview,
+      expiresAt: state.invitationLink.expiresAt,
+    });
+  }
+
+  return states[token] ? clone(states[token]) : null;
+}
+
+function makeInvitationClaim(
+  status: CollectivityInvitationClaim["status"],
+  id = nextInvitationClaimId++
+): CollectivityInvitationClaim {
+  const createdAt = "2026-10-03T09:00:00.000Z";
+  return {
+    id,
+    status,
+    source: "invite_link",
+    createdAt,
+    approvedAt:
+      status === "approved" || status === "consumed" || status === "revoked"
+        ? "2026-10-04T09:00:00.000Z"
+        : null,
+    deniedAt: status === "denied" ? "2026-10-04T09:00:00.000Z" : null,
+    revokedAt: status === "revoked" ? "2026-10-05T09:00:00.000Z" : null,
+    consumedAt: status === "consumed" ? "2026-10-05T09:00:00.000Z" : null,
+    project:
+      status === "consumed"
+        ? { id: 71, slug: "bilan-carbone-saint-genis", name: "Bilan carbone — Saint-Genis" }
+        : null,
+    subscriptionStatus: "active",
+    canCreateProject: status === "approved",
+    inviter: clone(mockInviter),
+    invitation: clone(validInvitationPreview),
+  };
+}
+
+export function createMockCollectivityInvitationRequest(
+  user: Pick<AuthUser, "id" | "email"> | null,
+  token: string
+) {
+  if (!user) return { kind: "unauthenticated" as const };
+  if (getMockCollectivityInvitationPreview(token)?.state !== "valid")
+    return { kind: "invalid" as const };
+  const existing = [...invitationClaims.values()].find(
+    (claim) => invitationClaimOwnerById.get(claim.id) === user.id
+  );
+  if (existing) return { kind: "exists" as const, claim: clone(existing) };
+  const claim = makeInvitationClaim("pending", state.nextClaimId++);
+  invitationClaims.set(claim.id, claim);
+  invitationClaimOwnerById.set(claim.id, user.id);
+  state.assignments.push({
+    id: claim.id,
+    claimantEmail: user.email,
+    claimantUserId: user.id,
+    claimantFullName: null,
+    projectId: null,
+    source: "invite_link",
+    status: "pending",
+    approvedAt: null,
+    deniedAt: null,
+    consumedAt: null,
+    revokedAt: null,
+    createdAt: claim.createdAt,
+  });
+  return { kind: "success" as const, claim: clone(claim) };
+}
+
+export function getMockCollectivityInvitationClaim(
+  user: Pick<AuthUser, "id"> | null,
+  claimId: number
+) {
+  if (!user) return null;
+  const claim = invitationClaims.get(claimId) ?? null;
+  return claim && invitationClaimOwnerById.get(claimId) === user.id ? clone(claim) : null;
+}
+
+export function retryMockCollectivityInvitationRequest(
+  user: Pick<AuthUser, "id"> | null,
+  claimId: number,
+  token: string
+) {
+  const claim = getMockCollectivityInvitationClaim(user, claimId);
+  if (
+    !claim ||
+    claim.status !== "denied" ||
+    getMockCollectivityInvitationPreview(token)?.state !== "valid"
+  )
+    return null;
+  const next = makeInvitationClaim("pending");
+  invitationClaims.set(next.id, next);
+  invitationClaimOwnerById.set(next.id, user!.id);
+  return clone(next);
+}
+
+export function seedMockCollectivityInvitationClaim(status: CollectivityInvitationClaim["status"]) {
+  const claim = makeInvitationClaim(status);
+  invitationClaims.set(claim.id, claim);
+  invitationClaimOwnerById.set(claim.id, 1);
+  return clone(claim);
 }
 
 function isOwner(user: Pick<AuthUser, "id"> | null, subscriptionId: number) {
@@ -199,12 +352,79 @@ export function getMockCollectivitySubscriptionClaims(
   return isOwner(user, subscriptionId) ? clone(state.assignments) : null;
 }
 
+export function getMockAvailableCollectivityClaims(
+  user: Pick<AuthUser, "id"> | null
+): AvailableCollectivityClaim[] {
+  if (!user) return [];
+
+  return state.assignments
+    .filter(
+      (claim) =>
+        claim.claimantUserId === user.id && claim.status === "approved" && claim.projectId == null
+    )
+    .map((claim) => ({
+      id: claim.id,
+      source: claim.source,
+      approvedAt: claim.approvedAt!,
+      subscription: {
+        purchaserName: `${mockInviter.firstName} ${mockInviter.lastName}`,
+        organization: mockInviter.organization,
+      },
+    }));
+}
+
+export function consumeMockCollectivitySubscriptionClaim(
+  user: Pick<AuthUser, "id"> | null,
+  claimId: number,
+  project: { id: number; slug: string; name: string }
+) {
+  const claim = findClaim(claimId);
+  if (
+    !user ||
+    !claim ||
+    claim.claimantUserId !== user.id ||
+    claim.status !== "approved" ||
+    claim.projectId != null
+  ) {
+    return false;
+  }
+
+  const consumedAt = new Date().toISOString();
+  claim.status = "consumed";
+  claim.projectId = project.id;
+  claim.consumedAt = consumedAt;
+
+  const invitationClaim = invitationClaims.get(claimId);
+  if (invitationClaim) {
+    invitationClaim.status = "consumed";
+    invitationClaim.consumedAt = consumedAt;
+    invitationClaim.canCreateProject = false;
+    invitationClaim.project = project;
+  }
+
+  return true;
+}
+
 function canReserveCredit() {
   return credits().available > 0;
 }
 
 function findClaim(claimId: number) {
   return state.assignments.find((claim) => claim.id === claimId) ?? null;
+}
+
+function updateInvitationClaimStatus(
+  claimId: number,
+  status: CollectivityInvitationClaim["status"],
+  timestamp: string
+) {
+  const invitationClaim = invitationClaims.get(claimId);
+  if (!invitationClaim) return;
+
+  invitationClaim.status = status;
+  if (status === "approved") invitationClaim.approvedAt = timestamp;
+  if (status === "denied") invitationClaim.deniedAt = timestamp;
+  if (status === "revoked") invitationClaim.revokedAt = timestamp;
 }
 
 export function approveMockCollectivitySubscriptionClaim(
@@ -219,8 +439,10 @@ export function approveMockCollectivitySubscriptionClaim(
   if (claim.status !== "pending") return { kind: "invalid" as const };
   if (!canReserveCredit()) return { kind: "capacity_full" as const };
 
+  const approvedAt = new Date().toISOString();
   claim.status = "approved";
-  claim.approvedAt = new Date().toISOString();
+  claim.approvedAt = approvedAt;
+  updateInvitationClaimStatus(claim.id, "approved", approvedAt);
   return { kind: "success" as const, claim: clone(claim) };
 }
 
@@ -235,8 +457,10 @@ export function denyMockCollectivitySubscriptionClaim(
   if (!claim) return { kind: "not_found" as const };
   if (claim.status !== "pending") return { kind: "invalid" as const };
 
+  const deniedAt = new Date().toISOString();
   claim.status = "denied";
-  claim.deniedAt = new Date().toISOString();
+  claim.deniedAt = deniedAt;
+  updateInvitationClaimStatus(claim.id, "denied", deniedAt);
   return { kind: "success" as const, claim: clone(claim) };
 }
 
@@ -252,8 +476,10 @@ export function revokeMockCollectivitySubscriptionClaim(
   if (claim.status === "revoked") return { kind: "success" as const, claim: clone(claim) };
   if (claim.status !== "approved" || claim.projectId != null) return { kind: "invalid" as const };
 
+  const revokedAt = new Date().toISOString();
   claim.status = "revoked";
-  claim.revokedAt = new Date().toISOString();
+  claim.revokedAt = revokedAt;
+  updateInvitationClaimStatus(claim.id, "revoked", revokedAt);
   return { kind: "success" as const, claim: clone(claim) };
 }
 

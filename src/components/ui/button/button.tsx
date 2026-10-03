@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
@@ -140,11 +140,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     if (variant && variant in subframeVariants) {
       const sourceVariant = variant as SubframeVariant;
       const sourceSize = (size ?? "medium") as SubframeSize;
+      const Comp = asChild ? Slot : "button";
 
       return (
-        <button
+        <Comp
           ref={ref}
-          type={props.type ?? "button"}
+          {...(!asChild ? { type: props.type ?? "button" } : {})}
           className={cn(
             "flex cursor-pointer items-center justify-center gap-2 rounded-md border-none px-3 text-left disabled:cursor-default disabled:bg-neutral-200 disabled:text-neutral-400",
             subframeVariants[sourceVariant],
@@ -156,24 +157,30 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         >
           {icon ? (
             <span
-              className={`flex ${
+              className={`flex shrink-0 ${
                 sourceSize === "large" ? "text-heading-3 font-heading-3" : "text-body font-body"
               }`}
             >
               {icon}
             </span>
           ) : null}
-          {children ? <span className="whitespace-nowrap">{children}</span> : null}
+          {children ? (
+            asChild ? (
+              <Slottable>{children}</Slottable>
+            ) : (
+              <span className="min-w-0 flex-1 truncate">{children}</span>
+            )
+          ) : null}
           {iconRight ? (
             <span
-              className={`flex ${
+              className={`flex shrink-0 ${
                 sourceSize === "large" ? "text-heading-3 font-heading-3" : "text-body font-body"
               }`}
             >
               {iconRight}
             </span>
           ) : null}
-        </button>
+        </Comp>
       );
     }
 

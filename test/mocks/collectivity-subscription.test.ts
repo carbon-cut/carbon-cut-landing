@@ -27,6 +27,17 @@ describe.sequential("collectivity subscription mock", () => {
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
+  it("returns the supported collectivity country codes without authentication", async () => {
+    const response = await fetch(`${origin}/api/collectivity/countries`);
+    await expect(response.json()).resolves.toEqual({
+      data: [
+        { code: "FRA", name: "France" },
+        { code: "SEN", name: "Senegal" },
+        { code: "TUN", name: "Tunisia" },
+      ],
+    });
+  });
+
   it("authenticates the subscription demo user and serves its paid latest quote", async () => {
     const response = await fetch(`${origin}/api/collectivity/quotes/latest`, {
       headers: authorizedHeaders(),
@@ -86,6 +97,14 @@ describe.sequential("collectivity subscription mock", () => {
     expect(
       (await post(`/api/collectivity/subscriptions/${MOCK_SUBSCRIPTION_ID}/self-claims`)).status
     ).toBe(200);
+    const available = await fetch(`${origin}/api/collectivity/subscription-claims/available`, {
+      headers,
+    });
+    await expect(available.json()).resolves.toEqual(
+      expect.objectContaining({
+        data: [expect.objectContaining({ source: "self_assignment" })],
+      })
+    );
     expect(
       (
         await post(`/api/collectivity/subscriptions/${MOCK_SUBSCRIPTION_ID}/claims/direct`, {

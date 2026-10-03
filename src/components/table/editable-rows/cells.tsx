@@ -3,7 +3,7 @@ import type { Row } from "@tanstack/react-table";
 
 import { InventoryTableSelectForm } from "../InventoryTableSelect";
 import type { TName } from "@/components/ui/forms";
-import type { InventoryTableRow } from "@/app/[locale]/collectivity/[planId]/inventory/types";
+import type { InventoryTableRow } from "@/app/[locale]/collectivity/projects/[planId]/inventory/types";
 import type { EditableTableRowField } from "./types";
 
 export function renderEditableTableRowSelectCell<T extends FieldValues>({

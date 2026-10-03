@@ -119,7 +119,7 @@ export function getCollectivitySubscriptionRoute() {
 }
 
 export function getCollectivityStartRoute() {
-  return "/collectivity/start";
+  return "/collectivity/projects/start";
 }
 
 export function getCollectivitySetupEntryRoute() {

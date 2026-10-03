@@ -22,6 +22,9 @@ export function InventoryFieldSelect<TFieldValues extends FieldValues>({
   description,
   required = false,
   disabled = false,
+  value,
+  onValueChange,
+  showError = true,
 }: {
   form: UseFormReturn<TFieldValues, undefined>;
   name: TName<TFieldValues>;
@@ -31,6 +34,9 @@ export function InventoryFieldSelect<TFieldValues extends FieldValues>({
   description?: string;
   required?: boolean;
   disabled?: boolean;
+  value?: string;
+  onValueChange?: (value: string) => void;
+  showError?: boolean;
 }) {
   return (
     <FormField
@@ -39,7 +45,7 @@ export function InventoryFieldSelect<TFieldValues extends FieldValues>({
       render={({ field, fieldState }) => (
         <FormItem className="w-full space-y-1">
           <FormLabel
-            data-state={fieldState.error && "error"}
+            data-state={showError && fieldState.error && "error"}
             className={cn(
               `text-caption-bold font-caption-bold leading-4 text-default-font ${
                 disabled ? "text-neutral-400 data-[state=error]:text-error-700" : ""
@@ -51,16 +57,22 @@ export function InventoryFieldSelect<TFieldValues extends FieldValues>({
           </FormLabel>
           <FormControl>
             <CollectivitySelect
-              value={field.value ?? ""}
-              onValueChange={field.onChange}
+              value={value ?? field.value ?? ""}
+              onValueChange={(nextValue) => {
+                if (onValueChange) {
+                  onValueChange(nextValue);
+                  return;
+                }
+                field.onChange(nextValue);
+              }}
               placeholder={placeholder}
               options={options}
               disabled={disabled}
-              aria-invalid={!!fieldState.error}
+              aria-invalid={showError && !!fieldState.error}
             />
           </FormControl>
           {description ? <FormDescription>{description}</FormDescription> : null}
-          <FormMessage data-state={disabled && "disabled"} />
+          {showError ? <FormMessage data-state={disabled && "disabled"} /> : null}
         </FormItem>
       )}
     />

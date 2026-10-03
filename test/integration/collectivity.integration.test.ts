@@ -163,7 +163,7 @@ async function signInCollectivity(identifier: string, password: string) {
   expect(response.status).toBe(200);
   const body = (await response.json()) as {
     authenticated: boolean;
-    user: { email: string; allowedProducts?: string[] };
+    user: { email: string };
   };
 
   expect(body.authenticated).toBe(true);

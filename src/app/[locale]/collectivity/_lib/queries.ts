@@ -1,5 +1,6 @@
-import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/setup/_lib/types";
-import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/setup/_lib/schema";
+import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/projects/setup/_lib/schema";
+import type { AvailableCollectivityClaim } from "@/app/[locale]/collectivity/invitation/_lib/types";
 import type {
   CreateCollectivityQuoteRequest,
   PublicCollectivityQuote,
@@ -47,6 +48,7 @@ export const collectivityQueryKeys = {
   result: (projectSlug: string) => ["collectivity", "result", projectSlug] as const,
   supportedValues: (familyKey: string, selectorKey: string) =>
     ["collectivity", "supportedValues", familyKey, selectorKey] as const,
+  availableClaims: () => ["collectivity", "availableClaims"] as const,
 };
 
 type ApiErrorPayload = {
@@ -238,11 +240,26 @@ export async function fetchCollectivityCurrentInventory(projectSlug: string) {
   return fetchCollectivitySetupSnapshot(projectSlug);
 }
 
+export async function fetchAvailableCollectivityClaims() {
+  const response = await fetch("/api/collectivity/subscription-claims/available", {
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data?: AvailableCollectivityClaim[] }>(response);
+
+  if (!payload.data) {
+    throw new Error("Available collectivity claims not found");
+  }
+
+  return payload.data;
+}
+
 export async function saveCollectivitySetupRequest({
   currentPlanId,
+  approvedClaimId,
   values,
 }: {
   currentPlanId?: string | null;
+  approvedClaimId?: number | null;
   values: CollectivitySetupValues;
 }) {
   const response = await fetch(
@@ -255,7 +272,7 @@ export async function saveCollectivitySetupRequest({
         "Content-Type": "application/json",
       },
       credentials: "same-origin",
-      body: JSON.stringify(values),
+      body: JSON.stringify(currentPlanId ? values : { ...values, approvedClaimId }),
     }
   );
   const payload = await readApiJson<{ data?: CollectivitySetupSnapshot }>(response);

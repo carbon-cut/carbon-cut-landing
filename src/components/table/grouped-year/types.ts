@@ -1,7 +1,7 @@
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 
 import type { TName } from "@/components/ui/forms";
-import type { InventoryGroupedYearTableData } from "@/app/[locale]/collectivity/[planId]/inventory/types";
+import type { InventoryGroupedYearTableData } from "@/app/[locale]/collectivity/projects/[planId]/inventory/types";
 import type { EditableTableRowField, EditableTableRows } from "../editable-rows/types";
 
 export type GroupedYearEditableRows = EditableTableRows;

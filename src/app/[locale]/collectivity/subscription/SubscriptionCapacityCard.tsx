@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  FeatherCheck,
+  FeatherCheckCircle,
   FeatherLayers,
   FeatherPlus,
   FeatherUserMinus,
@@ -8,6 +10,7 @@ import {
   FeatherUsers,
 } from "@subframe/core";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -28,6 +31,14 @@ import {
   subscriptionDetailQueryKey,
   subscriptionDetailQueryOptions,
 } from "./_lib/queries";
+
+function formatShortMonthDate(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
+    day: "2-digit",
+    month: "short",
+  }).format(new Date(value));
+}
+import { cn } from "@/lib/utils";
 
 export default function SubscriptionCapacityCard({
   initialSubscription,
@@ -143,16 +154,28 @@ export default function SubscriptionCapacityCard({
               return claim ? (
                 <div
                   key={claim.id}
-                  className="flex min-w-0 flex-col items-start gap-3 self-stretch rounded-md border border-solid border-success-200 bg-brand-50 px-3 py-3"
+                  className={cn(
+                    "flex min-w-0 flex-col items-start gap-3 self-stretch rounded-md border-solid px-3 py-3",
+                    claim.status === "consumed"
+                      ? "border-2 border-success-600 bg-success-50"
+                      : "border border-success-200 bg-brand-50"
+                  )}
                 >
                   <div className="flex w-full items-center justify-between gap-2">
-                    <Avatar className="h-6 w-6">
-                      <AvatarFallback className="bg-brand-100 text-brand-700">
-                        <Typography variant="captionBold">
-                          {initialsFromEmail(claim.claimantEmail)}
-                        </Typography>
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="relative h-6 w-6">
+                      <Avatar className="h-6 w-6">
+                        <AvatarFallback className="bg-brand-100 text-brand-700">
+                          <Typography variant="captionBold">
+                            {initialsFromEmail(claim.claimantEmail)}
+                          </Typography>
+                        </AvatarFallback>
+                      </Avatar>
+                      {claim.status === "consumed" ? (
+                        <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-success-50 bg-success-600">
+                          <FeatherCheck className="text-[10px] text-white" aria-hidden="true" />
+                        </span>
+                      ) : null}
+                    </div>
                     <Typography variant="captionSubframe" className="text-brand-700">
                       {t("place", { number: index + 1 })}
                     </Typography>
@@ -174,18 +197,43 @@ export default function SubscriptionCapacityCard({
                     </Typography>
                   </div>
                   {claim.status === "approved" && claim.projectId == null ? (
-                    <Button
-                      type="button"
-                      variant="destructive-tertiary"
-                      size="small"
-                      className="h-6 rounded-xl md:w-full flex-none"
-                      icon={<FeatherUserMinus />}
-                      aria-label={t("revokeFor", { email: claim.claimantEmail })}
-                      disabled={revokeAssignment.isPending || isAssigning}
-                      onClick={() => revokeAssignment.mutate(claim.id)}
-                    >
-                      {t("revoke")}
-                    </Button>
+                    <div className="flex w-full flex-col gap-2">
+                      {claim.source === "self_assignment" ? (
+                        <Button
+                          asChild
+                          variant="brand-primary"
+                          size="small"
+                          className="w-full flex-none"
+                        >
+                          <Link href={`/collectivity/setup?claimId=${claim.id}`}>
+                            {t("createProject")}
+                          </Link>
+                        </Button>
+                      ) : null}
+                      <Button
+                        type="button"
+                        variant="destructive-tertiary"
+                        size="small"
+                        className="h-6 w-full rounded-xl flex-none"
+                        icon={<FeatherUserMinus />}
+                        aria-label={t("revokeFor", { email: claim.claimantEmail })}
+                        disabled={revokeAssignment.isPending || isAssigning}
+                        onClick={() => revokeAssignment.mutate(claim.id)}
+                      >
+                        {t("revoke")}
+                      </Button>
+                    </div>
+                  ) : claim.status === "consumed" ? (
+                    <div className="flex h-6 w-full flex-none items-center justify-center gap-1.5 rounded-sm bg-success-600">
+                      <FeatherCheckCircle className="text-caption text-white" aria-hidden="true" />
+                      <Typography variant="captionBold" className="whitespace-nowrap text-white">
+                        {t("projectCreated", {
+                          date: claim.consumedAt
+                            ? formatShortMonthDate(claim.consumedAt, locale)
+                            : t("projectCreatedWithoutDate"),
+                        })}
+                      </Typography>
+                    </div>
                   ) : null}
                 </div>
               ) : (

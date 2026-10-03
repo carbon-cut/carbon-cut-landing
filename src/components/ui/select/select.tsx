@@ -19,7 +19,7 @@ function SelectValue({ className, ...props }: React.ComponentProps<typeof Select
     <span
       data-slot="select-value"
       className={cn(
-        "w-full whitespace-nowrap data-[placeholder]:text-neutral-400 text-body font-body text-default-font",
+        "w-full whitespace-nowrap truncate data-[placeholder]:text-neutral-400 text-body font-body text-default-font",
         className
       )}
     >
@@ -41,7 +41,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "select-trigger-subframe flex h-8 w-full items-center gap-2 rounded-md border border-solid border-neutral-border bg-default-background px-3 text-left outline-none focus:border-brand-600 aria-invalid:border-error-600 disabled:cursor-not-allowed disabled:bg-neutral-200",
+        "select-trigger-subframe flex h-8 w-full items-center gap-2 rounded-md border border-solid border-neutral-border aria-[invalid=true]:border-error-600 bg-default-background px-3 text-left outline-none focus:border-brand-600 aria-invalid:border-error-600 disabled:cursor-not-allowed disabled:bg-neutral-200",
         className
       )}
       {...props}

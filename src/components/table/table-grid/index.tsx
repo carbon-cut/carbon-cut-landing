@@ -10,7 +10,7 @@ import { InventoryTableActionButton, InventoryTableHeader } from "../InventoryTa
 import { createTableGridColumns } from "./columns";
 import type { TableGridProps, TableGridRow } from "./types";
 import { Plus } from "lucide-react";
-import InventoryYearSelector from "@/app/[locale]/collectivity/[planId]/inventory/components/InventoryYearSelector";
+import InventoryYearSelector from "@/app/[locale]/collectivity/projects/[planId]/inventory/components/InventoryYearSelector";
 import type { EditableTableRows } from "../editable-rows/types";
 import { useEditableTableRows } from "../editable-rows/useEditableTableRows";
 

@@ -41,7 +41,6 @@ describe("AuthProvider signOut", () => {
             provider: "local",
             confirmed: true,
             blocked: false,
-            allowedProducts: ["household", "collectivity"],
             planId: ["grand-sfax"],
           },
         }),
