@@ -1,8 +1,8 @@
 # Design Docs Map
 
-This folder contains the active design documentation for the project.
+This folder contains the existing design documentation. Its content still needs a freshness audit; the list below is a navigation map, not confirmation that each rule or claim remains current.
 
-## Active docs
+## Previously designated primary docs
 
 - `00-product-truth.md`: product capability truth and claim boundaries.
 - `house-style-overrides.md`: local UI house rules and primitive-level overrides.
@@ -12,7 +12,7 @@ This folder contains the active design documentation for the project.
 - `subframe-token-mapping.md`: required local token equivalents when implementing from Subframe.
 - `logs/ui-criticism-log.md`: implementation feedback history.
 
-## Precedence order
+## Existing precedence order, pending review
 
 If rules conflict, resolve in this order:
 
@@ -27,3 +27,5 @@ If rules conflict, resolve in this order:
 
 `archive/` contains prior docs that were merged, deprecated, or replaced.
 They are historical context, not active source-of-truth docs.
+
+The freshness of these primary documents has not yet been audited.

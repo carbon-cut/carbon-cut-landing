@@ -245,15 +245,15 @@ export default function SubscriptionCapacityCard({
                 >
                   <div className="relative w-full spce-y-2">
                     <div className="absolute flex w-full items-center justify-between gap-2">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full border border-dashed border-neutral-400">
-                      <FeatherPlus className="size-3 text-subtext-color" aria-hidden="true" />
-                    </span>
-                    <Typography
-                      variant="captionSubframe"
-                      className={showSelfAction ? "text-brand-700" : "text-subtext-color"}
-                    >
-                      {t("place", { number: index + 1 })}
-                    </Typography>
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full border border-dashed border-neutral-400">
+                        <FeatherPlus className="size-3 text-subtext-color" aria-hidden="true" />
+                      </span>
+                      <Typography
+                        variant="captionSubframe"
+                        className={showSelfAction ? "text-brand-700" : "text-subtext-color"}
+                      >
+                        {t("place", { number: index + 1 })}
+                      </Typography>
                     </div>
                   </div>
                   {showSelfAction ? (

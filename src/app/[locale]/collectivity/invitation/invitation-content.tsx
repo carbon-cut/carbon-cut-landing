@@ -215,9 +215,8 @@ export default function InvitationContent({
                 {t("pendingHelp")}
               </Typography>
             ) : null}
-          {(["expired", "disabled", "revoked", "denied"] as ViewState[]).includes(
-              state
-            ) && inviter ? (
+            {(["expired", "disabled", "revoked", "denied"] as ViewState[]).includes(state) &&
+            inviter ? (
               <Typography variant="bodySubframe" className="text-center text-subtext-color">
                 {t("contact", { name: `${inviter.firstName} ${inviter.lastName}` })}
               </Typography>
@@ -274,7 +273,11 @@ function InviterContext({
         </AvatarFallback>
       </Avatar>
       <div className="min-w-0 w-full">
-        {name ? <Typography className="w-full" variant="bodyBold">{t("inviter", { name })}</Typography> : null}
+        {name ? (
+          <Typography className="w-full" variant="bodyBold">
+            {t("inviter", { name })}
+          </Typography>
+        ) : null}
         {inviter.organization ? (
           <Typography variant="bodySubframe" className="text-subtext-color">
             <p>{inviter.organization}</p>
