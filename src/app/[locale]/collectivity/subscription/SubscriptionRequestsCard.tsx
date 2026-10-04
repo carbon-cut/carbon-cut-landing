@@ -156,47 +156,49 @@ export default function SubscriptionRequestsCard({
             ))}
           </TableBody>
         </Table>
-        <div className="flex flex-col items-start gap-2 border-t border-solid border-neutral-border pt-4">
-          <Typography variant="captionBold" className="text-subtext-color">
-            {t("recentlyDeclined")}
-          </Typography>
-          <table className="w-full border-separate border-spacing-y-2">
-            <tbody>
-              {declined.map((request) => (
-                <tr key={request.id}>
-                  <td className="w-full min-w-0 py-2 pr-2">
-                    <div className="flex min-w-0 items-center gap-3">
-                      <Avatar className="h-6 w-6">
-                        <AvatarFallback className="bg-neutral-100">
-                          <Typography variant="captionBold">
-                            {initials(request.claimantFullName ?? request.claimantEmail)}
-                          </Typography>
-                        </AvatarFallback>
-                      </Avatar>
-                      <Typography
-                        variant="bodySubframe"
-                        className="min-w-0 truncate text-subtext-color"
-                      >
-                        {request.claimantFullName ?? request.claimantEmail}
+        {declined.length > 0 && (
+          <div className="flex flex-col items-start gap-2 border-t border-solid border-neutral-border pt-4">
+            <Typography variant="captionBold" className="text-subtext-color">
+              {t("recentlyDeclined")}
+            </Typography>
+            <table className="w-full border-separate border-spacing-y-2">
+              <tbody>
+                {declined.map((request) => (
+                  <tr key={request.id}>
+                    <td className="w-full min-w-0 py-2 pr-2">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <Avatar className="h-6 w-6">
+                          <AvatarFallback className="bg-neutral-100">
+                            <Typography variant="captionBold">
+                              {initials(request.claimantFullName ?? request.claimantEmail)}
+                            </Typography>
+                          </AvatarFallback>
+                        </Avatar>
+                        <Typography
+                          variant="bodySubframe"
+                          className="min-w-0 truncate text-subtext-color"
+                        >
+                          {request.claimantFullName ?? request.claimantEmail}
+                        </Typography>
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap py-2 pr-2">
+                      <Badge variant="neutral">
+                        <FeatherX className="size-3" aria-hidden="true" />
+                        {t("declined")}
+                      </Badge>
+                    </td>
+                    <td className="whitespace-nowrap py-2 text-right">
+                      <Typography variant="captionSubframe" className="text-subtext-color">
+                        {request.deniedAt ? formatQuoteDate(request.deniedAt, locale) : null}
                       </Typography>
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap py-2 pr-2">
-                    <Badge variant="neutral">
-                      <FeatherX className="size-3" aria-hidden="true" />
-                      {t("declined")}
-                    </Badge>
-                  </td>
-                  <td className="whitespace-nowrap py-2 text-right">
-                    <Typography variant="captionSubframe" className="text-subtext-color">
-                      {request.deniedAt ? formatQuoteDate(request.deniedAt, locale) : null}
-                    </Typography>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
         {approve.isError || deny.isError ? (
           <Typography role="alert" variant="captionSubframe" className="text-error-700">
             <FeatherInfo className="inline size-3" aria-hidden="true" /> {t("error")}

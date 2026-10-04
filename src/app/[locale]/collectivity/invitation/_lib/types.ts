@@ -1,17 +1,15 @@
-export type InvitationPreviewState = "valid" | "invalid" | "expired" | "replaced" | "disabled";
+export type InvitationPreviewState = "valid" | "expired" | "disabled";
 
 export type InvitationInviter = {
-  firstName: string;
-  lastName: string;
+  firstName: string | null;
+  lastName: string | null;
   organization: string | null;
 };
 
 export type CollectivityInvitationPreview = {
   state: InvitationPreviewState;
-  inviter: InvitationInviter | null;
-  createdAt: string | null;
-  expiresAt: string | null;
-  stateChangedAt: string | null;
+  inviter?: InvitationInviter | null;
+  expiresAt?: string;
 };
 
 export type CollectivityInvitationClaim = {

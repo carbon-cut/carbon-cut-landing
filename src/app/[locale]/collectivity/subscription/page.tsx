@@ -47,7 +47,6 @@ export default async function CollectivitySubscriptionPage({
 
   try {
     quote = await getLatestCollectivityQuote();
-    console.log("collectivitySubscriptionLatestQuoteResponse", quote);
   } catch (error) {
     if (error instanceof CollectivityBackendError && error.status === 404) {
       redirect(getCollectivityPricingRoute());
@@ -121,7 +120,7 @@ export default async function CollectivitySubscriptionPage({
           </div>
         </header>
         <SubscriptionCapacityCard initialSubscription={subscription} />
-        <SubscriptionInvitationLinkCard subscriptionId={subscription.id} />
+        <SubscriptionInvitationLinkCard initialSubscription={subscription} />
         <SubscriptionRequestsCard initialSubscription={subscription} />
       </div>
     </main>

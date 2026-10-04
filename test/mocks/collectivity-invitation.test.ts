@@ -22,29 +22,32 @@ describe.sequential("collectivity invitation mock", () => {
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
-  it("serves safe invitation preview states without exposing the token", async () => {
+  it("serves the documented invitation preview payloads", async () => {
     const response = await fetch(
       `${origin}/api/collectivity/subscription-invitations/preview?token=mock-invitation-valid`
     );
     expect(response.status).toBe(200);
-    await expect(response.json()).resolves.toEqual(
-      expect.objectContaining({
-        data: expect.objectContaining({
-          state: "valid",
-          inviter: expect.objectContaining({
-            firstName: "Claire",
-            organization: expect.any(String),
-          }),
-        }),
-      })
-    );
+    await expect(response.json()).resolves.toEqual({
+      data: {
+        state: "valid",
+        inviter: {
+          firstName: "Claire",
+          lastName: "Dumont",
+          organization: "Communauté de communes du Pays de Gex",
+        },
+        expiresAt: "2026-10-31T23:59:59.999Z",
+      },
+    });
 
     const expired = await fetch(
       `${origin}/api/collectivity/subscription-invitations/preview?token=mock-invitation-expired`
     );
-    await expect(expired.json()).resolves.toEqual(
-      expect.objectContaining({ data: expect.objectContaining({ state: "expired" }) })
+    await expect(expired.json()).resolves.toEqual({ data: { state: "expired" } });
+
+    const disabled = await fetch(
+      `${origin}/api/collectivity/subscription-invitations/preview?token=mock-invitation-disabled`
     );
+    await expect(disabled.json()).resolves.toEqual({ data: { state: "disabled" } });
   });
 
   it("creates a pending request and recovers its claim id on a duplicate request", async () => {

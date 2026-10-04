@@ -34,6 +34,7 @@ export type CollectivitySubscriptionDetail = {
     used: number;
     available: number;
   };
+  claimLink: CollectivitySubscriptionInvitationLink | null;
   assignments: CollectivitySubscriptionClaim[];
   projects: Array<{
     id: number;

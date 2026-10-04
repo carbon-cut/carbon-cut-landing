@@ -77,7 +77,7 @@ export default function CompactSelect({
               <SelectPrimitive.Item
                 key={option.value}
                 value={option.value}
-                className="group flex h-8 w-full cursor-pointer items-center gap-2 rounded-md px-3 outline-none hover:bg-neutral-100 active:bg-neutral-50 data-[highlighted]:bg-neutral-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                className="group flex py-1 w-full cursor-pointer items-center gap-2 rounded-md px-3 outline-none hover:bg-neutral-100 active:bg-neutral-50 data-[highlighted]:bg-neutral-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
               >
                 {option.icon ? (
                   <span
@@ -88,7 +88,7 @@ export default function CompactSelect({
                   </span>
                 ) : null}
                 <SelectPrimitive.ItemText>
-                  <span className="line-clamp-1 grow shrink-0 basis-0 text-body font-body text-default-font">
+                  <span className="line-clamp-1 grow shrink-0 basis-0 text-body font-body text-xs text-default-font">
                     {option.label}
                   </span>
                 </SelectPrimitive.ItemText>

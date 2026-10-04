@@ -1,7 +1,8 @@
 "use client";
 
 import { FeatherCircleSlash, FeatherLink, FeatherRadio, FeatherRefreshCw } from "@subframe/core";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,25 +12,53 @@ import Typography from "@/components/ui/typography";
 import { useCurrentLocale, useScopedI18n } from "@/locales/client";
 
 import { formatQuoteDate } from "../pricing/_lib/quotePresentation";
-import { createSubscriptionInvitationLink, revokeSubscriptionInvitationLink } from "./_lib/queries";
+import type { CollectivitySubscriptionDetail } from "./_lib/claims";
+import {
+  createSubscriptionInvitationLink,
+  fetchSubscriptionDetail,
+  revokeSubscriptionInvitationLink,
+  subscriptionDetailQueryKey,
+  subscriptionDetailQueryOptions,
+} from "./_lib/queries";
 
 export default function SubscriptionInvitationLinkCard({
-  subscriptionId,
+  initialSubscription,
 }: {
-  subscriptionId: number;
+  initialSubscription: CollectivitySubscriptionDetail;
 }) {
   const t = useScopedI18n("collectivitySubscription.invitationLink");
   const locale = useCurrentLocale();
+  const queryClient = useQueryClient();
+  const subscriptionId = initialSubscription.id;
+  const detailQueryKey = subscriptionDetailQueryKey(subscriptionId);
+  const detailQuery = useQuery({
+    ...subscriptionDetailQueryOptions,
+    queryKey: detailQueryKey,
+    queryFn: () => fetchSubscriptionDetail(subscriptionId),
+    initialData: initialSubscription,
+  });
   const createLink = useMutation({
     mutationFn: () => createSubscriptionInvitationLink(subscriptionId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: detailQueryKey });
+    },
   });
   const revokeLink = useMutation({
     mutationFn: () => revokeSubscriptionInvitationLink(subscriptionId),
-    onSuccess: () => createLink.reset(),
+    onSuccess: async () => {
+      createLink.reset();
+      await queryClient.invalidateQueries({ queryKey: detailQueryKey });
+    },
   });
-  const invitationLink = createLink.data;
-  const link = invitationLink ? buildInvitationUrl(invitationLink.token) : null;
-  const displayedLink = link?.replace(/^https?:\/\//, "");
+  const subscription = detailQuery.data ?? initialSubscription;
+  const invitationLink = createLink.data ?? subscription.claimLink;
+  const invitationPath = invitationLink ? buildInvitationPath(invitationLink.token) : null;
+  const [origin, setOrigin] = useState<string | null>(null);
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
+  const link = invitationPath && origin ? `${origin}${invitationPath}` : null;
+  const displayedLink = link?.replace(/^https?:\/\//, "") ?? invitationPath;
   const isMutating = createLink.isPending || revokeLink.isPending;
 
   return (
@@ -48,7 +77,11 @@ export default function SubscriptionInvitationLinkCard({
               >
                 {displayedLink}
               </Typography>
-              <CopyClipboard value={link} ariaLabel={t("copy")} disabled={isMutating} />
+              <CopyClipboard
+                value={link ?? ""}
+                ariaLabel={t("copy")}
+                disabled={isMutating || !link}
+              />
             </div>
             <Typography variant="captionSubframe" className="text-subtext-color">
               {t("expiresAt", { date: formatQuoteDate(invitationLink.expiresAt, locale) })}
@@ -109,8 +142,8 @@ export default function SubscriptionInvitationLinkCard({
   );
 }
 
-function buildInvitationUrl(token: string) {
+function buildInvitationPath(token: string) {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const params = new URLSearchParams({ token });
-  return `${window.location.origin}${basePath}/collectivity/invitation?${params.toString()}`;
+  return `${basePath}/collectivity/invitation?${params.toString()}`;
 }

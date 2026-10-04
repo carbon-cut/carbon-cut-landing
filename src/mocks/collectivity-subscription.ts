@@ -148,9 +148,7 @@ const mockInviter = {
 const validInvitationPreview: CollectivityInvitationPreview = {
   state: "valid",
   inviter: mockInviter,
-  createdAt: "2026-10-02T09:00:00.000Z",
   expiresAt: "2026-10-31T23:59:59.999Z",
-  stateChangedAt: null,
 };
 let invitationClaims = new Map<number, CollectivityInvitationClaim>();
 let invitationClaimOwnerById = new Map<number, number>();
@@ -173,20 +171,10 @@ export function getMockCollectivityInvitationPreview(
   const states: Record<string, CollectivityInvitationPreview> = {
     "mock-invitation-valid": validInvitationPreview,
     "mock-invitation-expired": {
-      ...validInvitationPreview,
       state: "expired",
-      expiresAt: "2026-09-30T23:59:59.999Z",
-      stateChangedAt: "2026-10-01T00:00:00.000Z",
-    },
-    "mock-invitation-replaced": {
-      ...validInvitationPreview,
-      state: "replaced",
-      stateChangedAt: "2026-10-02T12:00:00.000Z",
     },
     "mock-invitation-disabled": {
-      ...validInvitationPreview,
       state: "disabled",
-      stateChangedAt: "2026-10-02T12:00:00.000Z",
     },
     "mock-invitation-valid-no-organization": {
       ...validInvitationPreview,
@@ -340,6 +328,7 @@ export function getMockCollectivitySubscriptionDetail(
     activatedAt: subscriptionStartsAt,
     communeQuantity: 5,
     credits: credits(),
+    claimLink: clone(state.invitationLink),
     assignments: clone(state.assignments),
     projects: [],
   };

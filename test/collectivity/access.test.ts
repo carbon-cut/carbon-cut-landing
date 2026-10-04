@@ -81,7 +81,7 @@ describe("auth access helpers", () => {
       returnTo: "/collectivity/grand-sfax/inventory",
     });
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/setup");
+    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/projects/setup");
   });
 
   it("redirects collectivity users with projects but a bad slug to the selector page", async () => {

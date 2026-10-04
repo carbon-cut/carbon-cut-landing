@@ -52,8 +52,11 @@ type ViewState =
   | "revoked"
   | "invalid"
   | "expired"
-  | "replaced"
   | "disabled";
+
+type InvitationPreviewView =
+  | CollectivityInvitationPreview
+  | { state: "invalid"; inviter: null; expiresAt?: undefined };
 
 export default function InvitationContent({
   token,
@@ -104,7 +107,7 @@ export default function InvitationContent({
   const claim = claimQuery.data;
   const preview = claim?.invitation ?? previewQuery.data ?? invalidPreview();
   const state = getViewState(claim, preview, Boolean(token));
-  const inviter = claim?.inviter ?? preview.inviter;
+  const inviter = claim?.inviter ?? preview.inviter ?? null;
   const details = detailRows(state, claim, preview, locale, t);
   const config = stateConfig(state, t);
   const returnTo = token
@@ -179,7 +182,7 @@ export default function InvitationContent({
                 variant="brand-primary"
                 size="large"
                 icon={<FeatherTicket />}
-                onClick={() => router.push(`/collectivity/setup?claimId=${claim.id}`)}
+                onClick={() => router.push(`/collectivity/projects/setup?claimId=${claim.id}`)}
               >
                 {t("createProject")}
               </Button>
@@ -212,7 +215,7 @@ export default function InvitationContent({
                 {t("pendingHelp")}
               </Typography>
             ) : null}
-            {(["expired", "replaced", "disabled", "revoked", "denied"] as ViewState[]).includes(
+          {(["expired", "disabled", "revoked", "denied"] as ViewState[]).includes(
               state
             ) && inviter ? (
               <Typography variant="bodySubframe" className="text-center text-subtext-color">
@@ -255,7 +258,14 @@ function InviterContext({
 }: {
   inviter: NonNullable<CollectivityInvitationPreview["inviter"]>;
 }) {
-  const initials = `${inviter.firstName[0] ?? ""}${inviter.lastName[0] ?? ""}`.toUpperCase();
+  const t = useScopedI18n("collectivityInvitation");
+  const initials = `${inviter.firstName?.[0] ?? ""}${inviter.lastName?.[0] ?? ""}`.toUpperCase();
+  const name = [inviter.firstName, inviter.lastName].filter(Boolean).join(" ");
+
+  if (!name && !inviter.organization) {
+    return null;
+  }
+
   return (
     <div className="flex w-full items-center gap-3 rounded-sm bg-neutral-50 px-4 py-3">
       <Avatar className="h-10 w-10">
@@ -263,13 +273,11 @@ function InviterContext({
           <Typography variant="captionBold">{initials}</Typography>
         </AvatarFallback>
       </Avatar>
-      <div className="min-w-0">
-        <Typography variant="bodyBold">
-          {inviter.firstName} {inviter.lastName} vous invite
-        </Typography>
+      <div className="min-w-0 w-full">
+        {name ? <Typography className="w-full" variant="bodyBold">{t("inviter", { name })}</Typography> : null}
         {inviter.organization ? (
-          <Typography variant="captionSubframe" className="text-subtext-color">
-            {inviter.organization}
+          <Typography variant="bodySubframe" className="text-subtext-color">
+            <p>{inviter.organization}</p>
           </Typography>
         ) : null}
       </div>
@@ -326,18 +334,15 @@ function DetailList({ details }: { details: Array<[string, string]> }) {
     </div>
   );
 }
-function invalidPreview(): CollectivityInvitationPreview {
+function invalidPreview(): InvitationPreviewView {
   return {
     state: "invalid",
     inviter: null,
-    createdAt: null,
-    expiresAt: null,
-    stateChangedAt: null,
   };
 }
 function getViewState(
   claim: CollectivityInvitationClaim | undefined,
-  preview: CollectivityInvitationPreview,
+  preview: InvitationPreviewView,
   hasToken: boolean
 ): ViewState {
   if (claim) return claim.status;
@@ -347,7 +352,7 @@ function getViewState(
 function detailRows(
   state: ViewState,
   claim: CollectivityInvitationClaim | undefined,
-  preview: CollectivityInvitationPreview,
+  preview: InvitationPreviewView,
   locale: string,
   t: ReturnType<typeof useScopedI18n>
 ) {
@@ -361,10 +366,8 @@ function detailRows(
     add("details.denied", claim.deniedAt);
     add("details.revoked", claim.revokedAt);
     add("details.project", claim.consumedAt);
-  } else {
-    add("details.created", preview.createdAt);
-    if (state === "valid") add("details.expires", preview.expiresAt);
-    else add("details.changed", preview.stateChangedAt);
+  } else if (state === "valid") {
+    add("details.expires", preview.expiresAt);
   }
   return rows;
 }
@@ -452,16 +455,6 @@ function stateConfig(state: ViewState, t: ReturnType<typeof useScopedI18n>) {
       badge: t("states.expired.badge"),
       title: t("states.expired.title"),
       description: () => t("states.expired.description"),
-    },
-    replaced: {
-      Icon: FeatherRefreshCw,
-      BadgeIcon: FeatherRefreshCw,
-      badgeVariant: "neutral",
-      iconClassName: "border-neutral-200 bg-neutral-100",
-      iconColor: "text-subtext-color",
-      badge: t("states.replaced.badge"),
-      title: t("states.replaced.title"),
-      description: () => t("states.replaced.description"),
     },
     disabled: {
       Icon: FeatherPauseCircle,

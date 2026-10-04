@@ -123,5 +123,5 @@ export function getCollectivityStartRoute() {
 }
 
 export function getCollectivitySetupEntryRoute() {
-  return "/collectivity/setup";
+  return "/collectivity/projects/setup";
 }

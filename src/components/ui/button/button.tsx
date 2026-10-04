@@ -168,7 +168,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             asChild ? (
               <Slottable>{children}</Slottable>
             ) : (
-              <span className="min-w-0 flex-1 truncate">{children}</span>
+              <span className="min-w-0 truncate">{children}</span>
             )
           ) : null}
           {iconRight ? (

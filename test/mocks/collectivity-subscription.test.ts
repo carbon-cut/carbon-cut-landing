@@ -153,11 +153,23 @@ describe.sequential("collectivity subscription mock", () => {
     expect(second.data.token).not.toBe(first.data.token);
     expect(new Date(second.data.expiresAt).getTime()).toBeGreaterThan(Date.now());
 
+    const detailAfterRotation = await responseJson<{
+      data: { claimLink: { token: string; expiresAt: string } | null };
+    }>(
+      await fetch(`${origin}/api/collectivity/subscriptions/${MOCK_SUBSCRIPTION_ID}`, { headers })
+    );
+    expect(detailAfterRotation.data.claimLink).toEqual(second.data);
+
     const revokeResponse = await fetch(
       `${origin}/api/collectivity/subscriptions/${MOCK_SUBSCRIPTION_ID}/claim-link`,
       { method: "DELETE", headers }
     );
     expect(revokeResponse.status).toBe(204);
+
+    const detailAfterRevoke = await responseJson<{ data: { claimLink: null } }>(
+      await fetch(`${origin}/api/collectivity/subscriptions/${MOCK_SUBSCRIPTION_ID}`, { headers })
+    );
+    expect(detailAfterRevoke.data.claimLink).toBeNull();
   });
 
   it("returns a capacity error after all five places are reserved", async () => {

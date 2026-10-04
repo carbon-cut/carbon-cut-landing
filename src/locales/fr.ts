@@ -307,6 +307,7 @@ export default {
     retry: "Envoyer une nouvelle demande",
     home: "Retour à l’accueil",
     pendingHelp: "Aucune action n’est requise de votre part pour le moment.",
+    inviter: "Invitation de {name}",
     contact: "Pour toute question, contactez directement {name}.",
     error: "Impossible de mettre à jour votre demande pour le moment.",
     steps: {

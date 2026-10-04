@@ -57,6 +57,6 @@ describe("collectivity start route", () => {
     const page = (await import("@/app/collectivity/projects/start/page")).default;
     await page();
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/setup");
+    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/projects/setup");
   });
 });

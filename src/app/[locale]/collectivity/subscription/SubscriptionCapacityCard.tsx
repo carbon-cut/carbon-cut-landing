@@ -197,7 +197,7 @@ export default function SubscriptionCapacityCard({
                     </Typography>
                   </div>
                   {claim.status === "approved" && claim.projectId == null ? (
-                    <div className="flex w-full flex-col gap-2">
+                    <div className="flex w-full flex-col gap-2 justify-end grow">
                       {claim.source === "self_assignment" ? (
                         <Button
                           asChild
@@ -205,7 +205,7 @@ export default function SubscriptionCapacityCard({
                           size="small"
                           className="w-full flex-none"
                         >
-                          <Link href={`/collectivity/setup?claimId=${claim.id}`}>
+                          <Link href={`/collectivity/projects/setup?claimId=${claim.id}`}>
                             {t("createProject")}
                           </Link>
                         </Button>
@@ -243,7 +243,8 @@ export default function SubscriptionCapacityCard({
                     showSelfAction ? "border-brand-300" : "border-neutral-300"
                   }`}
                 >
-                  <div className="flex w-full items-center justify-between gap-2">
+                  <div className="relative w-full spce-y-2">
+                    <div className="absolute flex w-full items-center justify-between gap-2">
                     <span className="flex h-6 w-6 items-center justify-center rounded-full border border-dashed border-neutral-400">
                       <FeatherPlus className="size-3 text-subtext-color" aria-hidden="true" />
                     </span>
@@ -253,9 +254,10 @@ export default function SubscriptionCapacityCard({
                     >
                       {t("place", { number: index + 1 })}
                     </Typography>
+                    </div>
                   </div>
                   {showSelfAction ? (
-                    <>
+                    <div className="flex w-full flex-col gap-2 h-full justify-center items-center">
                       <Button
                         type="button"
                         variant="brand-secondary"
@@ -278,9 +280,9 @@ export default function SubscriptionCapacityCard({
                           assignDirectly.mutate(Number(claimantUserId))
                         }
                       />
-                    </>
+                    </div>
                   ) : (
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1 h-full w-full justify-center items-center text-center">
                       <Typography variant="bodyBold" className="text-subtext-color">
                         {t("available")}
                       </Typography>

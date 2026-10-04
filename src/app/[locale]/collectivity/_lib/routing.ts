@@ -23,7 +23,7 @@ export function getCollectivityModuleRoute(planId: string, moduleSlug: Collectiv
 }
 
 export function getCollectivitySetupRoute() {
-  return "/collectivity/setup";
+  return "/collectivity/projects/setup";
 }
 
 export function getCollectivityProjectsRoute(moduleSlug?: CollectivityModuleSlug | null) {

@@ -74,7 +74,7 @@ export default function CollectivityStartContent() {
                         className="rounded-full"
                         variant="brand-primary"
                         iconRight={<FeatherArrowRight />}
-                        onClick={() => router.push(`/collectivity/setup?claimId=${claim.id}`)}
+                        onClick={() => router.push(`/collectivity/projects/setup?claimId=${claim.id}`)}
                       >
                         {t("createProject") as string}
                       </Button>

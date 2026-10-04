@@ -128,7 +128,7 @@ describe.sequential("auth integration", () => {
       const response = await fetchFrontend("/collectivity/projects/start", undefined, jar);
 
       expect(response.status).toBe(307);
-      expect(response.headers.get("location")).toBe("/collectivity/setup");
+      expect(response.headers.get("location")).toBe("/collectivity/projects/setup");
     });
 
     it("logs out and clears the auth session", async () => {
