@@ -341,6 +341,7 @@ Canonical full plan:
 <repository> — `docs/fullPlans/<feature-slug>.md`
 
 Related plans:
+
 - <repository> — `docs/plans/<feature-slug>.md`
 ```
 
