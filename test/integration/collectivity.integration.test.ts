@@ -76,7 +76,7 @@ describe.sequential("collectivity integration", () => {
     };
 
     const createResponse = await fetchFrontend(
-      "/api/collectivity/setup",
+      "/api/collectivity/projects/setup",
       {
         method: "POST",
         headers: {
@@ -109,7 +109,7 @@ describe.sequential("collectivity integration", () => {
     expect(created.data.currentInventory.inventoryInput).toBeNull();
 
     const reloadResponse = await fetchFrontend(
-      `/api/collectivity/setup?planId=${encodeURIComponent(payload.slug)}`,
+      `/api/collectivity/projects/setup?planId=${encodeURIComponent(payload.slug)}`,
       undefined,
       jar
     );
@@ -163,7 +163,7 @@ async function signInCollectivity(identifier: string, password: string) {
   expect(response.status).toBe(200);
   const body = (await response.json()) as {
     authenticated: boolean;
-    user: { email: string; allowedProducts?: string[] };
+    user: { email: string };
   };
 
   expect(body.authenticated).toBe(true);

@@ -2,7 +2,7 @@
 
 This file defines active design principles for Carbon Cut.
 
-Use this with `00-product-truth.md` and `house-style-overrides.md`.
+Use this with `house-style-overrides.md`. The local `00-product-truth.md` describes the retired household flow and is historical only. For collectivity scope, consult [collectivity product assumptions](../collectivity/product/00-product-truth.md) and verify open decisions.
 If there is a conflict, `house-style-overrides.md` wins for house-level UI decisions.
 
 ## Design intent

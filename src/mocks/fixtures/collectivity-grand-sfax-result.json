@@ -304,7 +304,7 @@
                 }
               },
               "consumption": {
-                "gnv": { "unit": "Nm3", "value": {} },
+                "gnv": { "unit": "kg", "value": {} },
                 "gpl": { "unit": "L", "value": {} },
                 "diesel": {
                   "unit": "L",
@@ -489,7 +489,7 @@
                   "purchaseCost": { "unit": "currency", "value": {} }
                 },
                 "consumption": {
-                  "gnv": { "unit": "Nm3", "value": {} },
+                  "gnv": { "unit": "kg", "value": {} },
                   "gpl": { "unit": "kg", "value": {} },
                   "diesel": { "unit": "L", "value": { "y-2019": 3102705, "y-2020": 2369973 } },
                   "petrol": { "unit": "L", "value": {} },
@@ -574,7 +574,7 @@
         },
         "priceAssumptions": {
           "energy": {
-            "gnv": { "unit": "currency/Nm3", "value": {} },
+            "gnv": { "unit": "currency/kg", "value": {} },
             "gpl": { "unit": "currency/L", "value": {} },
             "diesel": { "unit": "currency/L", "value": {} },
             "petrol": { "unit": "currency/L", "value": {} },

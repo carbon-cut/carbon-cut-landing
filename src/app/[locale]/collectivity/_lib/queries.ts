@@ -1,5 +1,14 @@
-import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/setup/_lib/types";
-import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/setup/_lib/schema";
+import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/projects/setup/_lib/schema";
+import type { AvailableCollectivityClaim } from "@/app/[locale]/collectivity/invitation/_lib/types";
+import type {
+  CreateCollectivityQuoteRequest,
+  PublicCollectivityQuote,
+  QuoteContext,
+  SubscriptionCatalogue,
+  SubscriptionPricePreview,
+  SubscriptionPricePreviewRequest,
+} from "@/app/[locale]/collectivity/pricing/_lib/pricing";
 import type {
   CollectivityResultRow,
   CollectivityResultsByYear,
@@ -20,12 +29,26 @@ export const collectivityQueryOptions = {
   retry: 1,
 };
 
+export const subscriptionCatalogueQueryOptions = {
+  ...collectivityQueryOptions,
+  staleTime: 5 * 60 * 1000,
+};
+
+export const latestQuoteQueryOptions = {
+  ...collectivityQueryOptions,
+  staleTime: 30 * 1000,
+};
+
 export const collectivityQueryKeys = {
+  subscriptionCatalogue: () => ["collectivity", "subscriptionCatalogue"] as const,
+  quoteContext: () => ["collectivity", "quoteContext"] as const,
+  latestQuote: () => ["collectivity", "latestQuote"] as const,
   currentInventory: (projectSlug: string) =>
     ["collectivity", "currentInventory", projectSlug] as const,
   result: (projectSlug: string) => ["collectivity", "result", projectSlug] as const,
   supportedValues: (familyKey: string, selectorKey: string) =>
     ["collectivity", "supportedValues", familyKey, selectorKey] as const,
+  availableClaims: () => ["collectivity", "availableClaims"] as const,
 };
 
 type ApiErrorPayload = {
@@ -36,6 +59,7 @@ type ApiErrorPayload = {
       fieldErrors?: Partial<Record<string, string>>;
       reasons?: Array<{
         code?: string;
+        paths?: string[];
         path?: string;
         parameterKey?: string;
       }>;
@@ -90,6 +114,85 @@ export class CollectivityApiError extends Error {
   }
 }
 
+export async function fetchCollectivitySubscriptionCatalogue() {
+  const response = await fetch("/api/collectivity/subscription-catalogue", {
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data?: SubscriptionCatalogue }>(response);
+
+  if (!payload.data) {
+    throw new Error("Subscription catalogue not found");
+  }
+
+  return payload.data;
+}
+
+export async function fetchCollectivityQuoteContext() {
+  const response = await fetch("/api/collectivity/quote-context", {
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data?: QuoteContext }>(response);
+
+  if (!payload.data) {
+    throw new Error("Quote context not found");
+  }
+
+  return payload.data;
+}
+
+export async function fetchCollectivitySubscriptionPricePreview(
+  request: SubscriptionPricePreviewRequest
+) {
+  const response = await fetch("/api/collectivity/subscription-prices", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify(request),
+  });
+  const payload = await readApiJson<{ data?: SubscriptionPricePreview }>(response);
+
+  if (!payload.data) {
+    throw new Error("Subscription price preview not found");
+  }
+
+  return payload.data;
+}
+
+export async function createCollectivityQuote(
+  request: CreateCollectivityQuoteRequest
+): Promise<PublicCollectivityQuote> {
+  const response = await fetch("/api/collectivity/quotes", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify(request),
+  });
+  const payload = await readApiJson<{ data: PublicCollectivityQuote }>(response);
+  return payload.data;
+}
+
+export async function fetchLatestCollectivityQuote() {
+  const response = await fetch("/api/collectivity/quotes/latest", {
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data?: PublicCollectivityQuote }>(response);
+
+  if (!payload.data) {
+    throw new Error("Latest collectivity quote not found");
+  }
+
+  return payload.data;
+}
+
+export async function cancelCollectivityQuote(quoteId: number): Promise<PublicCollectivityQuote> {
+  const response = await fetch(`/api/collectivity/quotes/${encodeURIComponent(quoteId)}/cancel`, {
+    method: "POST",
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data: PublicCollectivityQuote }>(response);
+  return payload.data;
+}
+
 async function readApiJson<T>(response: Response): Promise<T> {
   const payload = (await response.json()) as T & ApiErrorPayload;
 
@@ -137,11 +240,26 @@ export async function fetchCollectivityCurrentInventory(projectSlug: string) {
   return fetchCollectivitySetupSnapshot(projectSlug);
 }
 
+export async function fetchAvailableCollectivityClaims() {
+  const response = await fetch("/api/collectivity/subscription-claims/available", {
+    credentials: "same-origin",
+  });
+  const payload = await readApiJson<{ data?: AvailableCollectivityClaim[] }>(response);
+
+  if (!payload.data) {
+    throw new Error("Available collectivity claims not found");
+  }
+
+  return payload.data;
+}
+
 export async function saveCollectivitySetupRequest({
   currentPlanId,
+  approvedClaimId,
   values,
 }: {
   currentPlanId?: string | null;
+  approvedClaimId?: number | null;
   values: CollectivitySetupValues;
 }) {
   const response = await fetch(
@@ -154,7 +272,7 @@ export async function saveCollectivitySetupRequest({
         "Content-Type": "application/json",
       },
       credentials: "same-origin",
-      body: JSON.stringify(values),
+      body: JSON.stringify(currentPlanId ? values : { ...values, approvedClaimId }),
     }
   );
   const payload = await readApiJson<{ data?: CollectivitySetupSnapshot }>(response);

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import Providers from "@/lib/partials/Providers";
-import { manropeSans } from "@/lib/fonts";
+import { manropeSans, workSans } from "@/lib/fonts";
 import { getScopedI18n, getStaticParams } from "@/locales/server";
 import { toKeywordArray } from "@/lib/seo";
 import { Toaster } from "@/components/ui/sonner";
@@ -52,7 +52,7 @@ export default async function RootLayout({
           content="SoS9lEY4Q1vtAs6pZxz6wGH0BKOiFj2cU2hj71xMGHg"
         />
       </head>
-      <body className={`${manropeSans.variable} antialiased`}>
+      <body className={`${workSans.variable} ${manropeSans.variable} antialiased`}>
         <Toaster />
         <Providers locale={locale}>
           <a

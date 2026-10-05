@@ -28,8 +28,6 @@ describe("collectivity start route", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
-        allowedProducts: ["collectivity"],
-        productType: "collectivity",
       },
     });
   });
@@ -44,23 +42,21 @@ describe("collectivity start route", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
-        allowedProducts: ["collectivity"],
-        productType: "collectivity",
         planId: ["grand-sfax"],
       },
     });
 
-    const page = (await import("@/app/collectivity/start/page")).default;
+    const page = (await import("@/app/collectivity/projects/start/page")).default;
     await page();
 
-    expect(mockRequireCollectivitySession).toHaveBeenCalledWith("/collectivity/start");
+    expect(mockRequireCollectivitySession).toHaveBeenCalledWith("/collectivity/projects/start");
     expect(mockRedirect).toHaveBeenCalledWith("/collectivity/grand-sfax/setup");
   });
 
   it("sends collectivity users without a plan to the setup route", async () => {
-    const page = (await import("@/app/collectivity/start/page")).default;
+    const page = (await import("@/app/collectivity/projects/start/page")).default;
     await page();
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/setup");
+    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/projects/setup");
   });
 });

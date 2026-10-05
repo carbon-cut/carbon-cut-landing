@@ -178,7 +178,7 @@ describe("auth pages", () => {
   it("preserves collectivity returnTo on the sign-in signup link", async () => {
     const SignInPage = (await import("@/app/auth/(compact)/sign-in/page")).default;
     mockSearchParamsGet.mockImplementation((key: string) => {
-      if (key === "returnTo") return "/collectivity/start";
+      if (key === "returnTo") return "/collectivity/projects/start";
       return null;
     });
 
@@ -193,7 +193,7 @@ describe("auth pages", () => {
   it("preserves collectivity returnTo when sign-up redirects to confirmation-required", async () => {
     const SignUpPage = (await import("@/app/auth/(shell)/sign-up/page")).default;
     mockSearchParamsGet.mockImplementation((key: string) => {
-      if (key === "returnTo") return "/collectivity/start";
+      if (key === "returnTo") return "/collectivity/projects/start";
       return null;
     });
     mockPostAuth.mockResolvedValue({
@@ -319,7 +319,7 @@ describe("auth pages", () => {
     const ConfirmEmailPage = (await import("@/app/auth/(compact)/confirm-email/page")).default;
     mockSearchParamsGet.mockImplementation((key: string) => {
       if (key === "email") return "pending@example.com";
-      if (key === "returnTo") return "/collectivity/start";
+      if (key === "returnTo") return "/collectivity/projects/start";
       return null;
     });
 

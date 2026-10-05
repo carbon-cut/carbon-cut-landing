@@ -1,0 +1,23 @@
+{
+  "customerType": "LEGAL_ENTITY",
+  "customer": {
+    "legalName": "TotalEnergies SE",
+    "addressLine1": "2 place Jean Millier",
+    "addressLine2": "",
+    "postalCode": "92400",
+    "city": "Courbevoie",
+    "countryCode": "FRA",
+    "siren": "542051180",
+    "siret": "54205118000009",
+    "vatNumber": "FR59542051180",
+    "hasNoVatNumber": false
+  },
+  "contact": {
+    "name": "Marie Dupont",
+    "email": "marie.dupont@example.com",
+    "phone": "+33 2 38 00 00 00"
+  },
+  "quoteTerms": {
+    "contractStartDate": "2027-01-01"
+  }
+}
