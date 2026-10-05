@@ -24,7 +24,6 @@
 .DS_Store
 *.pem
 /local-notes/
-/.codex/
 
 # debug
 npm-debug.log*

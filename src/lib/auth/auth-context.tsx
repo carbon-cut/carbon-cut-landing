@@ -1,6 +1,7 @@
 "use client";
 
-import {
+import React, {
+  type ReactNode,
   createContext,
   startTransition,
   useCallback,
@@ -8,7 +9,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
 import type { AuthUser, SessionState } from "@/lib/auth/types";
 
@@ -18,7 +18,7 @@ type AuthContextValue = {
   status: AuthStatus;
   user: AuthUser | null;
   refetchSession: () => Promise<void>;
-  signOut: () => Promise<void>;
+  signOut: () => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -66,15 +66,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [applySession]);
 
   const signOut = useCallback(async () => {
-    await fetch("/api/auth/logout", {
+    const response = await fetch("/api/auth/logout", {
       method: "POST",
       credentials: "same-origin",
     });
+
+    if (!response.ok) {
+      return false;
+    }
 
     startTransition(() => {
       setStatus("unauthenticated");
       setUser(null);
     });
+
+    return true;
   }, []);
 
   useEffect(() => {

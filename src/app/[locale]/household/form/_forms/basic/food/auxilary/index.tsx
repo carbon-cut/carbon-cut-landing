@@ -1,0 +1,57 @@
+import { useScopedI18n } from "@/locales/client";
+import React from "react";
+import { QuestionProps, QuestionFC } from "../../../types";
+import Question from "../../../components/QuestionPrompt";
+import Content from "../../../components/QuestionContent";
+import { FieldRadio as Radio } from "@/components/forms";
+import { FieldAlert as FormAlert } from "@/components/forms";
+import { useSubmit } from "@/lib/hooks/useSubmit";
+
+const options = [0, 20, 40, 60, 80, 100] as const;
+
+const Output: QuestionFC = ({ mainForm }: QuestionProps) => {
+  const t = useScopedI18n("forms.basic.food.auxilary");
+
+  useSubmit();
+
+  return (
+    <div>
+      <FormAlert
+        title=""
+        variant="note"
+        description={"indication que le remplissage est approximative"}
+      />
+      <Question>{t("q1.text")}</Question>
+      <Content>
+        <Radio
+          form={mainForm}
+          name={"food.auxilary.seasonProducts"}
+          className="flex md:justify-between justify-center self-center md:w-1/2 w-full"
+          options={options.map((e) => ({
+            value: e,
+            label: `${e}%`,
+          }))}
+        />
+      </Content>
+      <Question>{t("q2.text")}</Question>
+      <Content>
+        <Radio
+          form={mainForm}
+          name={"food.auxilary.localProducts"}
+          className="flex md:justify-between justify-center self-center md:w-1/2 w-full"
+          options={options.map((e) => ({
+            value: e,
+            label: `${e}%`,
+          }))}
+        />
+      </Content>
+    </div>
+  );
+};
+
+Output["Symbol"] = {
+  question: "forms.basic.food.auxilary.q1.title",
+  fields: ["food.auxilary", "food.auxilary.seasonProducts", "food.auxilary.localProducts"],
+};
+
+export default Output;

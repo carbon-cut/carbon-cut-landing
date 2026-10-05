@@ -12,19 +12,6 @@ import type {
   SignInRequest,
   SignUpRequest,
 } from "@/lib/auth/types";
-import { isMockBackendEnabled } from "@/mocks/config";
-import {
-  MockAuthError,
-  mockChangePassword,
-  mockConfirmEmail,
-  mockForgotPassword,
-  mockLogout,
-  mockResetPassword,
-  mockResendConfirmation,
-  mockRotateRefreshToken,
-  mockSignIn,
-  mockSignUp,
-} from "@/mocks/auth";
 
 type JsonObject = Record<string, unknown>;
 const AUTH_TEST_SUPPORT_HEADER = "x-auth-test-support-key";
@@ -67,7 +54,7 @@ export class StrapiTransportError extends Error {
 }
 
 function getStrapiBaseUrl() {
-  const baseUrl = process.env.STRAPI_INTERNAL_URL ?? process.env.NEXT_PUBLIC_SERVER;
+  const baseUrl = process.env.STRAPI_INTERNAL_URL;
 
   if (!baseUrl) {
     throw new Error("Missing STRAPI_INTERNAL_URL or NEXT_PUBLIC_SERVER");
@@ -140,70 +127,11 @@ function withPostBody(body: JsonObject, init?: RequestInit): RequestInit {
   };
 }
 
-function toBody(init?: RequestInit) {
-  if (!init?.body || typeof init.body !== "string") {
-    return {} as JsonObject;
-  }
-
-  return JSON.parse(init.body) as JsonObject;
-}
-
-function mockRequest<T>(path: string, init?: RequestInit) {
-  try {
-    switch (path) {
-      case "/api/auth/local":
-        return mockSignIn(toBody(init) as SignInRequest) as T;
-      case "/api/auth/local/register":
-        return mockSignUp(toBody(init) as SignUpRequest) as T;
-      case "/api/auth/send-email-confirmation":
-        return mockResendConfirmation(toBody(init) as ResendConfirmationRequest) as T;
-      case "/api/auth/email-confirmation":
-        return mockConfirmEmail(toBody(init) as EmailConfirmationRequest) as T;
-      case "/api/auth/forgot-password":
-        return mockForgotPassword(toBody(init) as ForgotPasswordRequest) as T;
-      case "/api/auth/reset-password":
-        return mockResetPassword(toBody(init) as ResetPasswordRequest) as T;
-      case "/api/refresh-token-rotation":
-        return mockRotateRefreshToken(String(toBody(init).refresh_token ?? "")) as T;
-      case "/api/auth/logout":
-        return mockLogout(String(toBody(init).refresh_token ?? "")) as T;
-      case "/api/auth/change-password": {
-        const authorization = new Headers(init?.headers).get("Authorization") ?? "";
-        const accessToken = authorization.replace(/^Bearer\s+/i, "");
-        return mockChangePassword(accessToken, toBody(init) as ChangePasswordRequest) as T;
-      }
-      default:
-        throw new StrapiTransportError(
-          "AUTH_UPSTREAM_INVALID_RESPONSE",
-          `No mock handler configured for ${path}`,
-          501
-        );
-    }
-  } catch (error) {
-    if (error instanceof MockAuthError) {
-      throw new StrapiAuthError(error.status, error.body);
-    }
-
-    throw error;
-  }
-}
-
 export function signIn(body: SignInRequest) {
-  if (isMockBackendEnabled()) {
-    return Promise.resolve(mockRequest<AuthSessionResponse>("/api/auth/local", withPostBody(body)));
-  }
   return request<AuthSessionResponse>("/api/auth/local", withPostBody(body));
 }
 
 export function signUp(body: SignUpRequest) {
-  if (isMockBackendEnabled()) {
-    return Promise.resolve(
-      mockRequest<AuthSessionResponse | RegistrationPendingResponse>(
-        "/api/auth/local/register",
-        withPostBody(body)
-      )
-    );
-  }
   return request<AuthSessionResponse | RegistrationPendingResponse>(
     "/api/auth/local/register",
     withPostBody(body)
@@ -211,14 +139,6 @@ export function signUp(body: SignUpRequest) {
 }
 
 export function resendConfirmation(body: ResendConfirmationRequest) {
-  if (isMockBackendEnabled()) {
-    return Promise.resolve(
-      mockRequest<{ email: string; sent: true }>(
-        "/api/auth/send-email-confirmation",
-        withPostBody(body)
-      )
-    );
-  }
   return request<{ email: string; sent: true }>(
     "/api/auth/send-email-confirmation",
     withPostBody(body)
@@ -226,41 +146,18 @@ export function resendConfirmation(body: ResendConfirmationRequest) {
 }
 
 export function confirmEmail(body: EmailConfirmationRequest) {
-  if (isMockBackendEnabled()) {
-    return Promise.resolve(
-      mockRequest<AuthSessionResponse>("/api/auth/email-confirmation", withPostBody(body))
-    );
-  }
   return request<AuthSessionResponse>("/api/auth/email-confirmation", withPostBody(body));
 }
 
 export function forgotPassword(body: ForgotPasswordRequest) {
-  if (isMockBackendEnabled()) {
-    return Promise.resolve(
-      mockRequest<{ ok: true }>("/api/auth/forgot-password", withPostBody(body))
-    );
-  }
   return request<{ ok: true }>("/api/auth/forgot-password", withPostBody(body));
 }
 
 export function resetPassword(body: ResetPasswordRequest) {
-  if (isMockBackendEnabled()) {
-    return Promise.resolve(
-      mockRequest<AuthSessionResponse>("/api/auth/reset-password", withPostBody(body))
-    );
-  }
   return request<AuthSessionResponse>("/api/auth/reset-password", withPostBody(body));
 }
 
 export function rotateRefreshToken(refreshToken: string) {
-  if (isMockBackendEnabled()) {
-    return Promise.resolve(
-      mockRequest<AuthSessionResponse>(
-        "/api/refresh-token-rotation",
-        withPostBody({ refresh_token: refreshToken })
-      )
-    );
-  }
   return request<AuthSessionResponse>(
     "/api/refresh-token-rotation",
     withPostBody({ refresh_token: refreshToken })
@@ -268,25 +165,10 @@ export function rotateRefreshToken(refreshToken: string) {
 }
 
 export function logout(refreshToken: string) {
-  if (isMockBackendEnabled()) {
-    return Promise.resolve(
-      mockRequest<{ ok: true }>("/api/auth/logout", withPostBody({ refresh_token: refreshToken }))
-    );
-  }
   return request<{ ok: true }>("/api/auth/logout", withPostBody({ refresh_token: refreshToken }));
 }
 
 export function changePassword(accessToken: string, body: ChangePasswordRequest) {
-  if (isMockBackendEnabled()) {
-    return Promise.resolve(
-      mockRequest<AuthSessionResponse>("/api/auth/change-password", {
-        ...withPostBody(body),
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-    );
-  }
   return request<AuthSessionResponse>("/api/auth/change-password", {
     ...withPostBody(body),
     headers: {

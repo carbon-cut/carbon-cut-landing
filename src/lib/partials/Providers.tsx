@@ -1,12 +1,16 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { broadcastQueryClient } from "@tanstack/query-broadcast-client-experimental";
 import { AuthProvider } from "@/lib/auth/auth-context";
 import { isMockBackendEnabled } from "@/mocks/config";
 import { worker } from "@/mocks/worker";
+import { I18nProviderClient } from "@/locales/client";
 
-const Providers = ({ children }: { children: ReactNode }) => {
+const Providers = ({ children, locale }: { children: ReactNode; locale: string }) => {
+  const [queryClient] = useState(() => new QueryClient());
+
   useEffect(() => {
     if (!isMockBackendEnabled()) {
       return;
@@ -19,12 +23,23 @@ const Providers = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  const queryClient = new QueryClient();
+  useEffect(() => {
+    try {
+      broadcastQueryClient({
+        queryClient,
+        broadcastChannel: "carbon-cut",
+      });
+    } catch {
+      // Cross-tab sync is best-effort only.
+    }
+  }, [queryClient]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>{children}</AuthProvider>
-    </QueryClientProvider>
+    <I18nProviderClient locale={locale}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>{children}</AuthProvider>
+      </QueryClientProvider>
+    </I18nProviderClient>
   );
 };
 

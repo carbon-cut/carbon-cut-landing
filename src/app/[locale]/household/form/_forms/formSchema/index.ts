@@ -1,0 +1,15 @@
+import { z } from "zod";
+import { transport } from "./transport";
+import { energy } from "./energy";
+import { waste } from "./waste";
+import { food } from "./food";
+import { holiday } from "./holiday";
+
+export const formSchema = z.object({
+  uid: z.string(),
+  transport,
+  energy,
+  food,
+  waste: waste.optional(),
+  //holiday,
+});

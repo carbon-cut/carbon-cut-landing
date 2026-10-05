@@ -1,0 +1,36 @@
+@startuml CalculationSequence
+title Calculation Sequence
+
+actor User
+participant UI
+participant ProjectStorage as "Project / Inventory Storage"
+participant CalculationService as "Calculation Service"
+participant ParameterCatalog as "Calculation Parameter Catalog"
+participant CalculationEngine as "Calculation Engine"
+participant RunStore as "CalculationRun Store"
+participant ResultStore as "CalculationResult Store"
+
+User -> UI : Submit input and calculate
+UI -> CalculationService : Calculate(projectId, setup, inventoryInput)
+CalculationService -> ProjectStorage : Save / update current Inventory(status=draft)
+ProjectStorage --> CalculationService : Saved Inventory
+
+CalculationService -> ParameterCatalog : Acquire parameters for inventory scope
+ParameterCatalog --> CalculationService : Resolved parameter set
+
+CalculationService -> CalculationEngine : Calculate(setup, inventoryInput, parameterSnapshot)
+CalculationEngine --> CalculationService : emissionsOutput + formulaVersion + parameterSnapshot
+
+CalculationService -> RunStore : Create CalculationRun(status=succeeded, parameterSnapshot, formulaVersion)
+RunStore --> CalculationService : calculationRunId
+
+CalculationService -> ResultStore : Create CalculationResult(calculationRunId, emissionsOutput)
+ResultStore --> CalculationService : calculationResultId
+
+CalculationService -> ProjectStorage : Update Inventory(status=calculated, latestCalculationRunId, lockedYears)
+ProjectStorage --> CalculationService : Updated Inventory
+
+CalculationService --> UI : Calculation completed
+UI --> User : Show result
+
+@enduml

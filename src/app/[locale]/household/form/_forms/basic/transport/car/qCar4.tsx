@@ -1,0 +1,30 @@
+import React, { useEffect } from "react";
+import Question from "../../../components/QuestionPrompt";
+import { useScopedI18n } from "@/locales/client";
+import Content from "../../../components/QuestionContent";
+import { QuestionProps, QuestionFC } from "../../../types";
+import { FieldInput as Input } from "@/components/forms";
+import CarTitle from "./components/carTitle";
+
+const QCar4 = (index: number) => {
+  const CarComponent: QuestionFC = ({ mainForm }: QuestionProps) => {
+    const t = useScopedI18n("forms.basic.transport.qCar4");
+
+    return (
+      <div className="mb-12">
+        <CarTitle mainForm={mainForm} index={index} />
+        <Question>{t("q")}</Question>
+        <Content>
+          <Input form={mainForm} name={`transport.cars.${index}.mileage`} type="number" />
+        </Content>
+      </div>
+    );
+  };
+  CarComponent["Symbol"] = {
+    question: ["forms.basic.transport.qCar4.title", { index: index + 1 }],
+    fields: [`transport.cars.${index}.mileage`],
+  };
+  return CarComponent;
+};
+
+export default QCar4;

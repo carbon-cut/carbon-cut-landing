@@ -1,4 +1,3 @@
-import { useScopedI18n } from "@/locales/client";
 import { TabValues } from "./types";
 import { Car, Zap, UtensilsCrossed, Trash2, Plane } from "lucide-react";
 
@@ -10,15 +9,11 @@ export const getColor = (tab: TabValues | string) => {
       return "#003A52";
     case "vacation":
       return "#004DC2";
-    case "energie":
+    case "energy":
       return "#FF6034";
     case "waste":
       return "#CC552A";
   }
-};
-
-export const getName = (tab: TabValues | string) => {
-  return useScopedI18n("sections")(tab);
 };
 
 export const getSvg = (tab: TabValues | string) => {
@@ -29,7 +24,7 @@ export const getSvg = (tab: TabValues | string) => {
       return "utensils-crossed";
     case "vacation":
       return "plane";
-    case "energie":
+    case "energy":
       return "zap";
     case "waste":
       return "trash-2";
@@ -46,7 +41,7 @@ export const getIcon = (tab: TabValues | string) => {
       return UtensilsCrossed;
     case "vacation":
       return Plane;
-    case "energie":
+    case "energy":
       return Zap;
     case "waste":
       return Trash2;
@@ -63,7 +58,7 @@ export const getIndex = (tab: TabValues | string) => {
       return 2;
     case "vacation":
       return 4;
-    case "energie":
+    case "energy":
       return 1;
     case "waste":
       return 3;

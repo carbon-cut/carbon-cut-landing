@@ -1,0 +1,170 @@
+.prevButton {
+  @apply text-lg w-48 relative overflow-hidden px-0 py-0;
+
+  border: double 0.14em transparent;
+  background-image:
+    linear-gradient(hsl(var(--background)), hsl(var(--background))),
+    linear-gradient(hsl(var(--background)), hsl(var(--background))), var(--linear-primary-diagonal);
+  background-origin: content-box, content-box, border-box;
+  background-clip: content-box, content-box, border-box;
+}
+
+.prevButton:hover {
+  background-image:
+    linear-gradient(
+      hsl(var(--card-primary-foreground) / 0.2),
+      hsl(var(--card-primary-foreground) / 0.2)
+    ),
+    linear-gradient(hsl(var(--background)), hsl(var(--background))), var(--linear-primary-diagonal);
+}
+
+.body {
+  @apply bg-background text-foreground py-8 px-4 max-w-[100vw] overflow-x-hidden overflow-y-hidden;
+  --form-backdrop: linear-gradient(
+    90deg,
+    hsl(var(--background)) 0%,
+    hsl(var(--muted)) 25%,
+    hsl(var(--background)) 50%,
+    hsl(var(--muted)) 75%,
+    hsl(var(--background)) 100%
+  );
+  background: var(--form-backdrop);
+  background-attachment: fixed;
+  position: relative;
+}
+
+.backgroundLayers {
+  @apply md:min-h-[150vh];
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.sky {
+  @apply top-0 opacity-80;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: auto;
+  max-width: none;
+}
+
+.skyPhone {
+  @apply top-0 opacity-80;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150vw;
+  height: auto;
+  max-width: none;
+  display: none;
+}
+
+.landSkyMask {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  aspect-ratio: 1536 / 1024;
+  background: var(--form-backdrop);
+  background-attachment: fixed;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  mask-position: center bottom;
+  mask-mode: alpha;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: center bottom;
+  -webkit-mask-mode: alpha;
+}
+
+.landSkyMaskPhone {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  aspect-ratio: 1536 / 1024;
+  background: var(--form-backdrop);
+  background-attachment: fixed;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  mask-position: center bottom;
+  mask-mode: alpha;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-position: center bottom;
+  -webkit-mask-mode: alpha;
+  display: none;
+}
+
+.sun {
+  @apply opacity-70 md:size-[180px] size-[120px];
+  position: absolute;
+  left: 10vw;
+  top: 16vh;
+}
+
+.land {
+  @apply opacity-30;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: auto;
+  max-width: none;
+}
+
+.landPhone {
+  @apply opacity-30;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: auto;
+  max-width: none;
+  display: none;
+}
+
+.content {
+  @apply md:min-h-[120vh] min-h-[100vh];
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .sky {
+    display: none;
+  }
+
+  .skyPhone {
+    display: block;
+  }
+
+  .landSkyMask {
+    display: none;
+  }
+
+  .landSkyMaskPhone {
+    display: block;
+    background-attachment: scroll;
+  }
+
+  .land {
+    display: none;
+  }
+
+  .landPhone {
+    display: block;
+  }
+
+  .body {
+    background: var(--form-backdrop);
+    background-attachment: scroll;
+  }
+}

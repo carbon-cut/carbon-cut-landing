@@ -1,0 +1,140 @@
+{
+  "currency": "EUR",
+  "taxTreatment": "pending",
+  "perimeters": [
+    { "id": "municipal_assets", "translationKey": "subscription.perimeters.municipalAssets" },
+    { "id": "whole_territory", "translationKey": "subscription.perimeters.wholeTerritory" }
+  ],
+  "contractTerms": [
+    { "years": 1, "translationKey": "subscription.terms.oneYear" },
+    { "years": 3, "translationKey": "subscription.terms.threeYears" }
+  ],
+  "availability": {
+    "available_at_launch": {
+      "purchasableInInitialFlow": true,
+      "translationKey": "subscription.availability.availableAtLaunch"
+    },
+    "coming_very_soon": {
+      "purchasableInInitialFlow": false,
+      "translationKey": "subscription.availability.comingVerySoon"
+    },
+    "in_development": {
+      "purchasableInInitialFlow": false,
+      "translationKey": "subscription.availability.inDevelopment"
+    },
+    "planned_later": {
+      "purchasableInInitialFlow": false,
+      "translationKey": "subscription.availability.plannedLater"
+    }
+  },
+  "modules": [
+    {
+      "id": "ghg_inventory_scope_1_2",
+      "translationKey": "subscription.modules.ghgInventoryScope12",
+      "scope": "scope_1_2",
+      "availability": "available_at_launch",
+      "pricingMethod": "core_reduction_ladder",
+      "currentCatalogueAnnualPriceEur": { "municipal_assets": 1500, "whole_territory": 3500 },
+      "oneCommuneOneYearBaselineEur": { "municipal_assets": 3000, "whole_territory": 5000 }
+    },
+    {
+      "id": "ghg_inventory_scope_3",
+      "translationKey": "subscription.modules.ghgInventoryScope3",
+      "scope": "scope_3",
+      "availability": "planned_later",
+      "pricingMethod": "core_reduction_ladder",
+      "currentCatalogueAnnualPriceEur": { "municipal_assets": 2000, "whole_territory": 6000 },
+      "oneCommuneOneYearBaselineEur": { "municipal_assets": 7000, "whole_territory": 15000 }
+    },
+    {
+      "id": "emission_factor_consolidation",
+      "translationKey": "subscription.modules.emissionFactorConsolidation",
+      "scope": "scope_1_2",
+      "availability": "available_at_launch",
+      "pricingMethod": "core_reduction_ladder",
+      "currentCatalogueAnnualPriceEur": { "municipal_assets": 600, "whole_territory": 1200 },
+      "oneCommuneOneYearBaselineEur": { "municipal_assets": 500, "whole_territory": 1500 }
+    },
+    {
+      "id": "prospective_and_objectives",
+      "translationKey": "subscription.modules.prospectiveAndObjectives",
+      "scope": "scope_1_2",
+      "availability": "in_development",
+      "pricingMethod": "core_reduction_ladder",
+      "currentCatalogueAnnualPriceEur": { "municipal_assets": 800, "whole_territory": 1800 },
+      "oneCommuneOneYearBaselineEur": { "municipal_assets": 1500, "whole_territory": 2500 }
+    },
+    {
+      "id": "ghg_mitigation_investment_plan",
+      "translationKey": "subscription.modules.ghgMitigationInvestmentPlan",
+      "scope": "scope_1_2",
+      "availability": "in_development",
+      "pricingMethod": "core_reduction_ladder",
+      "currentCatalogueAnnualPriceEur": { "municipal_assets": 1500, "whole_territory": 4500 },
+      "oneCommuneOneYearBaselineEur": { "municipal_assets": 3000, "whole_territory": 5000 }
+    },
+    {
+      "id": "mrv_monitoring",
+      "translationKey": "subscription.modules.mrvMonitoring",
+      "scope": "scope_1_2",
+      "availability": "in_development",
+      "pricingMethod": "core_reduction_ladder",
+      "currentCatalogueAnnualPriceEur": { "municipal_assets": 1200, "whole_territory": 3500 },
+      "oneCommuneOneYearBaselineEur": { "municipal_assets": 3000, "whole_territory": 5000 }
+    },
+    {
+      "id": "significant_indicators",
+      "translationKey": "subscription.modules.significantIndicators",
+      "scope": "scope_1_2",
+      "availability": "coming_very_soon",
+      "pricingMethod": "core_reduction_ladder",
+      "currentCatalogueAnnualPriceEur": { "municipal_assets": 700, "whole_territory": 1500 },
+      "oneCommuneOneYearBaselineEur": { "municipal_assets": 1000, "whole_territory": 2500 }
+    },
+    {
+      "id": "scoring_system",
+      "translationKey": "subscription.modules.scoringSystem",
+      "scope": "scope_1_2",
+      "availability": "coming_very_soon",
+      "pricingMethod": "core_reduction_ladder",
+      "currentCatalogueAnnualPriceEur": { "municipal_assets": 800, "whole_territory": 1800 },
+      "oneCommuneOneYearBaselineEur": { "municipal_assets": 500, "whole_territory": 3500 }
+    },
+    {
+      "id": "commune_aggregation",
+      "translationKey": "subscription.modules.communeAggregation",
+      "scope": "scope_1_2",
+      "availability": "in_development",
+      "pricingMethod": "commune_aggregation_rates",
+      "currentCatalogueAnnualPriceEur": { "municipal_assets": 400, "whole_territory": 1000 }
+    }
+  ],
+  "pricingRules": {
+    "core_reduction_ladder": {
+      "priceUnit": "per_commune_per_subscription_year",
+      "combination": "multiplicative",
+      "coverageTiers": [
+        { "id": "one_commune", "minCommunes": 1, "maxCommunes": 1, "annualMultiplier": 1 },
+        {
+          "id": "up_to_three_communes",
+          "minCommunes": 2,
+          "maxCommunes": 3,
+          "annualMultiplier": 0.8
+        },
+        {
+          "id": "up_to_five_communes",
+          "minCommunes": 4,
+          "maxCommunes": 5,
+          "annualMultiplier": 0.7
+        },
+        {
+          "id": "more_than_five_communes",
+          "minCommunes": 6,
+          "maxCommunes": null,
+          "annualMultiplier": 0.6
+        }
+      ],
+      "termMultipliers": { "1": 1, "3": 0.8 }
+    }
+  }
+}

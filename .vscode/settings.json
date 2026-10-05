@@ -5,5 +5,8 @@
     ["Classes \\=([^;]*);", "\\`([^\\`]*)\\`"]
   ],
   "editor.fontSize": 14,
-  "chatgpt.runCodexInWindowsSubsystemForLinux": true
+  "chatgpt.runCodexInWindowsSubsystemForLinux": true,
+  "todo-tree.ripgrep.ripgrep": "/usr/bin/rg",
+  "plantuml.render": "PlantUMLServer",
+  "plantuml.server": "https://www.plantuml.com/plantuml"
 }

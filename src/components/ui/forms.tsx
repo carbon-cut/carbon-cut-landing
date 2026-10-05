@@ -93,7 +93,7 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn("data-[state=error]:text-destructive", className)}
+      className={cn("text-foreground/80 data-[state=error]:text-error-600", className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -129,7 +129,7 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-caption font-caption text-subtext-color", className)}
       {...props}
     />
   );
@@ -144,14 +144,15 @@ const FormMessage = React.forwardRef<
 >(({ className, children, fallback, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
   const t = useScopedI18n("forms.errors");
-  const body = error?.message ?? children;
+  const rawMessage = error?.message;
+  const body = rawMessage ?? children;
 
   if (!body) {
     return (
       <p
         ref={ref}
         id={formMessageId}
-        className={cn("text-sm font-medium text-destructive", className)}
+        className={cn("text-caption font-caption text-subtext-color", className)}
         {...props}
       >
         {fallback ? "\u00A0" : ""}
@@ -164,12 +165,17 @@ const FormMessage = React.forwardRef<
       ref={ref}
       id={formMessageId}
       className={cn(
-        "text-sm font-medium data-[state=disabled]:text-destructive/60",
-        cn(className, "text-destructive")
+        "data-[state=disabled]:text-error-700 text-caption font-caption text-error-600",
+        className
       )}
       {...props}
     >
-      {error ? t(String(error?.message)) : children}
+      {error
+        ? t(
+            //@ts-ignore - expensive
+            String(rawMessage)
+          )
+        : children}
     </p>
   );
 });

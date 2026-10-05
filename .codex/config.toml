@@ -1,0 +1,27 @@
+[[skills.config]]
+path = "/root/.codex/skills/21st-ai/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/root/.codex/skills/21st-cli-use/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/root/.codex/skills/21st-design-sync/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/root/.codex/skills/21st-registry/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/root/.codex/skills/21st-ui-build/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/root/.codex/skills/21st-ui-explore/SKILL.md"
+enabled = false
+
+[[skills.config]]
+path = "/root/.codex/skills/21st-ui-review/SKILL.md"
+enabled = false

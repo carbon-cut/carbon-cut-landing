@@ -28,12 +28,10 @@ describe.sequential("auth integration", () => {
   describe("session and guard flows", () => {
     let confirmedUser: ManagedUser;
     let authenticatedJar: CookieJar;
-    let authenticatedSession:
-      | {
-          user: { email: string };
-          setCookies: string[];
-        }
-      | null = null;
+    let authenticatedSession: {
+      user: { email: string };
+      setCookies: string[];
+    } | null = null;
 
     beforeAll(async () => {
       confirmedUser = await createTestUser({
@@ -107,6 +105,15 @@ describe.sequential("auth integration", () => {
       expect(response.headers.get("location")).toBe("/auth/sign-in?returnTo=%2Fform");
     });
 
+    it("redirects unauthenticated users from /collectivity/projects/start to sign-in with returnTo", async () => {
+      const response = await fetchFrontend("/collectivity/projects/start");
+
+      expect(response.status).toBe(307);
+      expect(response.headers.get("location")).toBe(
+        "/auth/sign-in?returnTo=%2Fcollectivity%2Fstart"
+      );
+    });
+
     it("allows authenticated users to access /form", async () => {
       const jar = authenticatedJar.clone();
       const response = await fetchFrontend("/form", undefined, jar);
@@ -114,6 +121,14 @@ describe.sequential("auth integration", () => {
       expect(response.status).toBe(200);
       expect(response.headers.get("location")).toBeNull();
       expect(response.headers.get("content-type")).toContain("text/html");
+    });
+
+    it("sends an authenticated user without a project to collectivity setup", async () => {
+      const jar = authenticatedJar.clone();
+      const response = await fetchFrontend("/collectivity/projects/start", undefined, jar);
+
+      expect(response.status).toBe(307);
+      expect(response.headers.get("location")).toBe("/collectivity/projects/setup");
     });
 
     it("logs out and clears the auth session", async () => {
@@ -410,7 +425,10 @@ describe.sequential("auth integration", () => {
     });
 
     it("changes the password, rotates session cookies, invalidates the old password, and accepts the new one", async () => {
-      const initialSignIn = await signIn(changePasswordUser.user.email, changePasswordUser.password);
+      const initialSignIn = await signIn(
+        changePasswordUser.user.email,
+        changePasswordUser.password
+      );
       const jar = initialSignIn.jar;
       const newPassword = uniquePassword();
 

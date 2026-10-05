@@ -9,6 +9,11 @@ import MenuHamburger from "./_menuHamburger";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
+import {
+  getCollectivityLandingRoute,
+  getCollectivityStartRoute,
+  getFormRoute,
+} from "@/lib/routing/routes";
 
 type MenuItem = {
   title: string;
@@ -18,25 +23,9 @@ type MenuItem = {
 function Header() {
   const tNav = useScopedI18n("home.nav");
   const tPrimaryCta = useScopedI18n("home.hero.primaryCta");
+  const tCollectivityNav = useScopedI18n("collectivityLanding.nav");
+  const tCollectivityPrimaryCta = useScopedI18n("collectivityLanding.hero.primaryCta");
   const tAuth = useScopedI18n("(auth).common");
-  const menu: MenuItem[] = [
-    {
-      title: tNav("features"),
-      url: "/#features",
-    },
-    {
-      title: tNav("testimonials"),
-      url: "/#testimonials",
-    },
-    {
-      title: tNav("pricing"),
-      url: "/#pricing",
-    },
-    {
-      title: tNav("faq"),
-      url: "/#faq",
-    },
-  ];
   const [dataState, setDataState] = React.useState("big");
   const [show, setShow] = React.useState(false);
   const [isDesktop, setIsDesktop] = React.useState(false);
@@ -44,15 +33,42 @@ function Header() {
   const pathName = usePathname();
   const router = useRouter();
   const { status, signOut } = useAuth();
+  const isCollectivityLanding = pathName === "/collectivity";
+  const isLandingHeader = pathName === "/" || isCollectivityLanding;
+  const primaryCtaHref = isCollectivityLanding ? getCollectivityStartRoute() : getFormRoute();
+  const menu: MenuItem[] = isCollectivityLanding
+    ? [
+        {
+          title: tCollectivityNav("prototype"),
+          url: `${getCollectivityLandingRoute()}#proof`,
+        },
+        {
+          title: tCollectivityNav("setup"),
+          url: `${getCollectivityLandingRoute()}#cta`,
+        },
+      ]
+    : [
+        {
+          title: tNav("features"),
+          url: "/#features",
+        },
+        {
+          title: tNav("trust"),
+          url: "/#trust",
+        },
+        {
+          title: tNav("results"),
+          url: "/#cta",
+        },
+      ];
 
   useEffect(() => {
-    const isHome = pathName === "/";
-    if (!isHome && isDesktop) {
+    if (!isLandingHeader && isDesktop) {
       setDataState("small");
-    } else if (!isHome && !isDesktop) {
+    } else if (!isLandingHeader && !isDesktop) {
       setDataState("bigSticky");
     } else setDataState("big");
-  }, [pathName, isDesktop]);
+  }, [isLandingHeader, isDesktop]);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 768px)");
@@ -65,14 +81,27 @@ function Header() {
   const navHidden = !show && !isDesktop;
 
   async function handleSignOut() {
-    await signOut();
+    const signedOut = await signOut();
+
+    if (!signedOut) {
+      return;
+    }
+
     setShow(false);
-    router.push("/auth/sign-in");
+    router.push("/");
+  }
+
+  if (pathName.startsWith("/auth")) {
+    return null;
+  }
+
+  if (pathName.startsWith("/collectivity/")) {
+    return null;
   }
 
   return (
     <header /* ref={headerDiv} */ data-state={dataState} className={style.header}>
-      <Link className="z-50" href={"/"} onClick={() => setShow(false)}>
+      <Link className="z-50" href="/" onClick={() => setShow(false)}>
         <Image
           data-state={dataState}
           src={`${process.env.NEXT_PUBLIC_BASE_PATH}/logo/logoLight.svg`}
@@ -113,20 +142,25 @@ function Header() {
           </Button>
         ) : (
           <Button
-            data-state={dataState}
             asChild
+            data-state={dataState}
+            variant="cta"
             className={style.button}
             size={"lg"}
             tabIndex={navHidden ? -1 : 0}
-            aria-label={tPrimaryCta("aria")}
+            aria-label={
+              isCollectivityLanding ? tCollectivityPrimaryCta("aria") : tPrimaryCta("aria")
+            }
             onClick={() => setShow(false)}
           >
-            <Link href={"/form"}>{tPrimaryCta("label")}</Link>
+            <Link href={primaryCtaHref}>
+              {isCollectivityLanding ? tCollectivityPrimaryCta("label") : tPrimaryCta("label")}
+            </Link>
           </Button>
         )}
       </nav>
       <Button
-        className="md:hidden z-10 hover:bg-transparent flex flex-col items-center justify-center"
+        className="md:hidden z-10 flex flex-col items-center justify-center hover:bg-transparent"
         variant={"ghost"}
         type="button"
         aria-label={tNav("toggleLabel")}
