@@ -1,5 +1,6 @@
 import { http, HttpResponse } from "msw";
 import type { CollectivitySetupData } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+import type { operations } from "@/generated/backend-api";
 import type { SubscriptionCatalogue } from "@/app/[locale]/collectivity/pricing/_lib/pricing";
 import { getUserPlanIds } from "@/lib/auth/profile";
 import { getMockUserByAccessToken } from "@/mocks/auth";
@@ -30,7 +31,7 @@ import {
   retryMockCollectivityInvitationRequest,
 } from "@/mocks/collectivity-subscription";
 
-const strapiUrl = process.env.STRAPI_INTERNAL_URL ?? "http://localhost:1337";
+const strapiUrl = process.env.BACKEND_URL ?? "http://localhost:1337";
 
 const subscriptionCatalogue: SubscriptionCatalogue = {
   catalogueVersion: "2026-09-adjusted-v1",
@@ -458,9 +459,21 @@ export const collectivityHandlers = [
         payload.inventoryInput
       );
 
-      return snapshot
-        ? HttpResponse.json({ data: snapshot })
-        : error(404, "Collectivity inventory draft not found");
+      if (!snapshot) return error(404, "Collectivity inventory draft not found");
+
+      const response = {
+        data: {
+          project: {
+            id: snapshot.project.id,
+            slug: snapshot.project.slug,
+            currentInventoryId: snapshot.project.currentInventoryId,
+            updatedAt: snapshot.project.updatedAt,
+          },
+          currentInventory: snapshot.currentInventory,
+        },
+      } satisfies operations["saveCollectivityInventoryInput"]["responses"][200]["content"]["application/json"];
+
+      return HttpResponse.json(response);
     }
   ),
   http.post(`${strapiUrl}/api/collectivity/projects/:projectSlug/current-inventory/calculate`, () =>

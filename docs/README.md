@@ -5,7 +5,8 @@ Start with the area you are working on:
 | Area                | Entry point                                 | Contents                                                                                                     |
 | ------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | Design and homepage | [Design docs](design/README.md)             | Product claims, house style, design principles, homepage guidance, workflow, and historical design material. |
-| Collectivity        | [Collectivity docs](collectivity/README.md) | Product specs, API contracts, architecture, planning notes, and source references.                           |
+| Collectivity        | [Collectivity docs](collectivity/README.md) | Product specs, API integration notes, architecture, planning notes, and source references.                   |
+| Backend HTTP API    | [OpenAPI guidance](openapi.md)              | Contract coverage, generated types, and synchronization with the backend-owned source.                       |
 | Household (retired) | [Household docs](household/README.md)       | Historical form architecture and planning notes; household is not active product scope.                      |
 
 ## How to read status
