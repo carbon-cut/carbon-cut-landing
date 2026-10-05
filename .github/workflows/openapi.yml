@@ -2,13 +2,9 @@ name: OpenAPI generated types
 
 on:
   pull_request:
+    branches: [main, develop]
   push:
-  workflow_dispatch:
-    inputs:
-      backend_ref:
-        description: Backend branch to check instead of automatic selection
-        required: false
-        type: string
+    branches: [main, develop]
 
 permissions:
   contents: read
@@ -27,19 +23,11 @@ jobs:
             echo "Configure BACKEND_CONTRACT_READ_TOKEN with read access to carbon-cut-backend."
             exit 1
           fi
-      - name: Resolve backend branch
-        id: backend
-        env:
-          BACKEND_CONTRACT_READ_TOKEN: ${{ secrets.BACKEND_CONTRACT_READ_TOKEN }}
-          FRONTEND_REF: ${{ github.head_ref || github.ref_name }}
-          BASE_REF: ${{ github.base_ref }}
-          MANUAL_BACKEND_REF: ${{ inputs.backend_ref }}
-        run: node scripts/resolve-backend-openapi-ref.mjs
       - name: Checkout backend contract
         uses: actions/checkout@v4
         with:
           repository: carbon-cut/carbon-cut-backend
-          ref: ${{ steps.backend.outputs.ref }}
+          ref: ${{ github.base_ref || github.ref_name }}
           token: ${{ secrets.BACKEND_CONTRACT_READ_TOKEN }}
           path: backend-contract
           persist-credentials: false
