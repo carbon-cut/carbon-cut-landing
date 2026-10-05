@@ -14,7 +14,7 @@
     "start": "next start",
     "lint": "next lint",
     "api:sync": "node scripts/sync-backend-openapi.mjs && npm run api:generate",
-    "api:generate": "openapi-typescript openapi/backend.yaml -o src/generated/backend-api.ts",
+    "api:generate": "openapi-typescript openapi/backend.yaml -o src/generated/backend-api.ts && prettier --write src/generated/backend-api.ts",
     "api:check:source": "node scripts/check-backend-openapi.mjs",
     "api:check": "npm run api:generate && git diff --exit-code -- src/generated/backend-api.ts",
     "format": "prettier --write .",

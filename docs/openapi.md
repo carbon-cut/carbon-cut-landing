@@ -4,7 +4,7 @@ The backend owns the source contract in `carbon-cut-backend/openapi/openapi.yaml
 
 Run `npm run api:sync` from this repository after changing the backend contract. The command copies the sibling backend source and generates types. Set `BACKEND_OPENAPI_FILE` to the YAML path when the backend checkout is elsewhere. Run `npm run api:check` to verify generated types match the committed copy; CI runs this check.
 
-Run `npm run api:check:source` to compare the committed copy with the sibling backend source. Frontend CI checks the backend branch with the same name as the frontend branch when it exists. Otherwise, it checks the pull request's target branch, then the backend default branch. If branch names differ, add `openapi/backend-ref.txt` on the frontend branch with the backend branch name. A manual workflow run can also select a backend branch with its `backend_ref` input. The matching backend contract must be pushed before the frontend check can pass.
+Run `npm run api:check:source` to compare the committed copy with the sibling backend source. Frontend CI runs on pushes to `main` and `develop` and on pull requests targeting either branch. It checks the backend branch with the same name as the push branch or pull request target. The matching backend contract must reach that branch before the frontend check can pass.
 
 Because the backend repository is private, configure a **frontend repository Actions secret** named `BACKEND_CONTRACT_READ_TOKEN` with read-only `Contents` access to `carbon-cut/carbon-cut-backend`. A value in `.env.local` is only available to local processes and does not configure GitHub Actions.
 
