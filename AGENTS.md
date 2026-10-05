@@ -1,55 +1,97 @@
 # AGENTS
 
-Working notes for contributors to this codebase.
+## Repository overview
+
+Carbon Cut's frontend is a TypeScript Next.js App Router application. It serves localized household and collectivity flows. Browser requests to the backend go through this application's same-origin API routes.
 
 ## Project map
 
-- Next.js App Router in `src/app`; root layout wires `Header`, `Footer`, `ScrollToTopButton`, and `Providers`.
-- Design system uses Tailwind + CSS variables from `src/app/globals.css`; shared primitives are in `src/components/ui`.
-- Home page is assembled from `src/app/_home/sections/*` and sibling presentational folders.
-- Forms use `react-hook-form` + `zod` schemas from `src/app/_forms/formSchema` with shared form context.
+- `src/app/[locale]` contains localized pages; its layout wires `Header`, `Footer`, and `Providers`.
+- `src/app/[locale]/_home/sections` assembles the home page; `src/app/[locale]/household/form` contains the questionnaire; `src/app/[locale]/collectivity` contains collectivity flows.
+- `src/app/api` contains the same-origin API routes. Shared UI primitives are in `src/components/ui`.
+
+## Commands
+
+- `npm run dev` starts the development server; with `NEXT_PUBLIC_ENABLE_MSW=true`, it also starts the local mock Strapi server.
+- `npm run build` builds the application; `npm run lint` runs lint.
+- `npm run test` runs frontend Vitest tests. `npm run test:integration` runs real auth integration tests and requires a running frontend and Strapi backend; see `README.md` for the required environment.
+
+## Architecture
+
+- For client-rendered data and mutations, use TanStack Query. Add reusable query keys, fetchers, and shared query options to the relevant `*_lib/queries.ts` module; do not issue ad-hoc `fetch` calls from UI components.
+- Browser requests must use the same-origin Next.js API route layer rather than calling Strapi directly.
+- Server-only loading is reserved for server-rendered initial data and must not replace the client query when the UI needs live API state.
+
+## Code placement
+
+- Keep route-specific components, state, and supporting code close to the route or flow that owns them. Use its existing `_components`, `_lib`, or form directories when they fit.
+- Prefer solving a feature requirement within its owning surface before considering a change to foundation code.
+- Put application components shared across flows in `src/components`; put generic design-system primitives in `src/components/ui`. Do not move feature-specific code into shared infrastructure merely because it could theoretically be reused.
+- Keep feature-specific logic in the owning flow's existing `_lib` location rather than creating a generic `utils`, `helpers`, or `common` module for it.
+- Put reusable client query keys, fetchers, and options in the relevant `*_lib/queries.ts` module, as described under Architecture.
+- Keep validation and form-specific code with the owning form or flow, following its established schema structure. Use the `frontend-forms` skill for form conventions.
 - Static assets should respect `NEXT_PUBLIC_BASE_PATH`.
+- Source of truth for localization: `src/locales/fr.ts`. All user-facing strings must go through `useScopedI18n` or `getScopedI18n`; do not hard-code UI strings.
 
-## Implementation rules
+## API contracts and mocks
 
-- Use shared primitives/components whenever an equivalent exists. Do not introduce raw interactive HTML elements (such as `<button>`, `<input>`, `<select>`, or `<textarea>`) or local replacements when an equivalent shared primitive/component exists, unless the user explicitly approves an exception.
-- Prefer the shared `Typography` primitive for text styling; do not introduce arbitrary text sizes, weights, or line-heights when an existing typography variant/size fits.
-- Default to compact product-UI spacing. Do not introduce large gaps, padding, control heights, or text separation (`space-y-8`, `gap-8`, generous card padding, etc.) unless the user explicitly asks for generous spacing or a supplied reference clearly requires it. Treat spacing as an intentional design decision for each region, not a component default.
-- Use visual hierarchy before verbal hierarchy. Do not add a heading, subheading, description, card title, or instructional sentence merely to explain the UI below it; use spacing, alignment, grouping, labels, and component structure first. Every heading must introduce a genuinely distinct concept or task. Prefer `page title → meaningful section titles → control labels`, without intermediate wrapper headings. Use one page title; add a section heading only when it separates multiple related controls or content from another meaningful group. Do not narrate the interface.
-- For product UI, arbitrary Tailwind values such as `text-[...]`, `h-[...]`, `rounded-[...]`, or `tracking-[...]` are forbidden by default. Use them only when the user explicitly approves them, or when the system cannot express the required reference and that limitation has been stated first.
-- Keep styling aligned with token semantics in `globals.css` and `tailwind.config.ts`.
-- When implementing from a Subframe reference, read `docs/design/subframe-token-mapping.md` before copying token classes.
-- Preserve accessibility (`aria-*`, alt text, keyboard focus visibility).
-- Keep sections semantic and data-driven where possible.
-- For client-rendered data and mutations, use TanStack Query. Add reusable query keys, fetchers, and shared query options to the relevant `*_lib/queries.ts` module; do not issue ad-hoc `fetch` calls from UI components. Browser requests must use the same-origin Next.js API route layer rather than calling Strapi directly. Server-only loading is reserved for server-rendered initial data and must not replace the client query when the UI needs live API state.
-- Mocks must imitate the real backend/API contract exactly. Do not invent mock-only response shapes, UI convenience fields, shortcuts, or alternate data structures. If the contract is unclear, stop and clarify it before coding the mock or the UI parser.
-- Run `npm run lint` before shipping UI changes.
-- Only change files or code the user explicitly asked you to change.
-- Do not overreach; if the task is simple, do the simple task and do not go wild.
-- When the user names a specific layer, file, region, or subsystem, treat that as a hard scope boundary.
-- Do not explore another repository without the user's permission. A path the user shares in another repository authorizes reading that specific file only, not searching or inspecting the surrounding repository.
+- Treat the backend/API contract as authoritative for request and response shapes. Frontend integration types, parsers, validation, mocks, and behavior must reflect the real contract.
+- Mocks must imitate the real backend/API contract exactly. Do not invent frontend-only or mock-only response fields, UI convenience shapes, aliases, shortcuts, or alternate data structures.
+- Do not silently compensate for an uncertain or inconsistent contract in UI code. Investigate using in-scope sources; if the contract remains unknown, treat it as an unresolved dependency rather than inventing one.
+- Browser-facing backend integration must remain behind the same-origin Next.js API route layer.
+- The backend is a separate repository. Do not inspect or modify it unless the repository or a specific backend resource has explicitly been brought into scope.
+
+## Scope discipline
+
+The repository distinguishes between surface code and foundation code. Classify code by its ownership and consumers, not just its directory name.
+
+### Surface code
+
+Pages, route-specific components, feature-specific logic, local queries, local schemas, feature-owned translation entries, and other code owned by one flow may be changed as needed to complete the requested task, within the user's stated scope.
+
+- Keep changes within the requested feature, flow, page, or region. Only change files or code needed for that request; do not overreach.
+- Do not "clean up", "align", refactor, or follow through into neighboring features or unrelated surfaces.
+- When the user names a specific file, layer, region, or subsystem as the scope, treat it as a hard boundary. If the change cannot be completed within it, ask before editing outside it.
+
+### Foundation code
+
+Shared or cross-cutting code that multiple parts of the application depend on is protected. Foundation code includes, where applicable:
+
+- shared components and design-system primitives;
+- shared schemas, validation, query, or data infrastructure;
+- API contracts and shared API behavior;
+- localization structure or shared locale infrastructure;
+- global providers, root layouts, configuration, and application-wide infrastructure;
+- shared abstractions with multiple consumers.
+
+Do not modify foundation code merely because it would make a surface task easier. A request that explicitly names a foundation change authorizes that change; do not ask for the same approval again. If an otherwise requested surface change requires an unapproved foundation change, stop before making it and explain the specific change required.
+
+### Repository boundaries
+
+- Do not explore another repository without the user's permission. A path the user shares from another repository authorizes reading that specific resource only, not searching or inspecting the surrounding repository.
 - Read a user-provided file first and use it as the supplied context. If the task cannot be completed reliably without looking beyond it, stop and explain why, then ask before expanding the search.
-- Do not modify shared components, locales, schemas, APIs, tests, or adjacent files unless the user explicitly approves that scope expansion.
-- If the requested change cannot be completed without crossing the stated scope, stop and ask before editing outside it.
-- Do not "clean up", "align", or "follow through" into neighboring layers unless the user explicitly asks for that additional work.
-- When a user requests changes to a specific UI region, do not modify adjacent regions, shared shells, headers, sidebars, or unrelated surfaces unless the user explicitly includes them.
-- If a reference image is provided, apply it only to the named region in scope, not to the whole screen or neighboring UI.
 
-## Localization
+## Verification
 
-- Source of truth: `src/locales/fr.ts`.
-- Use `useScopedI18n` and `getScopedI18n`; avoid hard-coded UI strings.
+Use verification proportional to the behavior changed.
 
-## Design docs entrypoint
+- Run `npm run lint` for implementation changes.
+- Run relevant targeted Vitest tests when tested frontend behavior changes.
+- Run `npm run test:integration` when the change affects behavior covered by the real frontend/Strapi integration suite and the required environment is available.
+- Run `npm run build` when the change could affect routing, server/client boundaries, bundling, configuration, or production build behavior.
+- Do not claim that a command or test passed unless it was actually run.
+- If an applicable check cannot run because its environment or a dependency is unavailable, state that explicitly.
+- Report failures unrelated to the requested change separately; do not fix them as collateral work.
 
-Use docs in `docs/design/` with precedence defined in:
+## Definition of done
 
-- `docs/design/README.md`
+A task is complete when:
 
-Primary files:
+- the requested behavior is implemented within the approved scope;
+- applicable verification has been run, or any check that could not be run is reported;
+- unresolved dependencies, assumptions, or failures affecting the result are reported.
 
-- `docs/design/00-product-truth.md`
-- `docs/design/house-style-overrides.md`
-- `docs/design/01-design-principles.md`
-- `docs/design/02-homepage-spec.md`
-- `docs/design/03-workflow.md`
+## Specialized skills
+
+- For UI implementation, styling, layout, visual hierarchy, design-system components or tokens, or implementation from a Subframe, image, or other design reference, read and follow `.codex/skills/frontend-ui/SKILL.md`.
+- For forms, React Hook Form, Zod validation, form schemas, field arrays, form state, or form submission behavior, read and follow `.codex/skills/frontend-forms/SKILL.md`.
