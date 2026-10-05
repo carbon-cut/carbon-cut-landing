@@ -30,7 +30,7 @@ import {
   retryMockCollectivityInvitationRequest,
 } from "@/mocks/collectivity-subscription";
 
-const strapiUrl = process.env.STRAPI_INTERNAL_URL ?? "http://localhost:1337";
+const strapiUrl = process.env.BACKEND_URL ?? "http://localhost:1337";
 
 const subscriptionCatalogue: SubscriptionCatalogue = {
   catalogueVersion: "2026-09-adjusted-v1",
