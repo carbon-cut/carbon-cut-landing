@@ -276,11 +276,11 @@ Treat a cross-repository feature as one feature, not as unrelated frontend and b
 
 Establish shared behavior and contracts before dependent implementations are allowed to diverge.
 
-The canonical full feature plan is the source of truth for cross-repository behavior, architecture, contracts, responsibilities, and sequencing.
+The canonical full feature plan records cross-repository behavior, architecture, responsibilities, sequencing, and the decisions behind the API. For operations covered by the backend-owned OpenAPI source (copied here at `openapi/backend.yaml`), OpenAPI specifies the HTTP request, response, status, and authorization contract. Plans reference those operations instead of duplicating their wire shapes.
 
 Repository plans must not invent alternate API shapes, semantics, ownership rules, or compatibility assumptions.
 
-If the shared contract changes materially, update the canonical full plan and affected repository plans before continuing implementation. Obtain approval when required by `AGENTS.md`.
+If shared behavior or an API contract changes materially, update the backend OpenAPI operation when covered, sync the frontend copy, and update affected plans for their decisions and impact before continuing implementation. Obtain approval when required by `AGENTS.md`.
 
 The planning workflow may begin from any participating repository. This must not change the rules above.
 
