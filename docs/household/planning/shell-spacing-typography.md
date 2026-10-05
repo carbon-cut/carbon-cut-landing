@@ -1,5 +1,7 @@
 # Target A Plan: Shell Spacing + Typography Baseline
 
+Household is retired. This proposal is historical context, not an active implementation plan.
+
 ## Goal
 
 Create one consistent baseline for form shell spacing and typography across active form flow, while preserving the current UI character.

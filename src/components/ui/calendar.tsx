@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
+import type { VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { DayPicker, getDefaultClassNames, type DayButton, type Locale } from "react-day-picker";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { SubframeVariant } from "./button/button";
 
 function Calendar({
   className,
@@ -19,7 +19,7 @@ function Calendar({
   components,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
-  buttonVariant?: React.ComponentProps<typeof Button>["variant"] | SubframeVariant;
+  buttonVariant?: VariantProps<typeof buttonVariants>["variant"];
 }) {
   const defaultClassNames = getDefaultClassNames();
 

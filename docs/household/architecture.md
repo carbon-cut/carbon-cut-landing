@@ -1,6 +1,6 @@
-# Household Form Architecture
+# Household Form Architecture (historical)
 
-This document describes the current architecture of the household form flow in code.
+Household is retired and is not an active product flow. This document describes an older architecture and references paths that no longer exist; all references to "current" below describe the former state, not today's product scope or code.
 
 It is meant to explain the structure and hierarchy of the system so similar flows can be built in the same spirit, even if the exact UI or domain changes.
 

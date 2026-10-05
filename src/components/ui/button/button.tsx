@@ -84,6 +84,14 @@ const subframeSizes: Record<SubframeSize, string> = {
   large: "h-10 px-4 text-body-bold font-body-bold",
 };
 
+function isSubframeVariant(variant: ButtonProps["variant"]): variant is SubframeVariant {
+  return variant != null && variant in subframeVariants;
+}
+
+function isSubframeSize(size: ButtonProps["size"]): size is SubframeSize {
+  return size === "small" || size === "medium" || size === "large";
+}
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -137,8 +145,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
 
-    if (variant && variant in subframeVariants) {
-      const sourceVariant = variant as SubframeVariant;
+    if (isSubframeVariant(variant)) {
+      const sourceVariant = variant;
       const sourceSize = (size ?? "medium") as SubframeSize;
       const Comp = asChild ? Slot : "button";
 
@@ -189,8 +197,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(
           buttonVariants({
-            variant: variant,
-            size: size,
+            variant: isSubframeVariant(variant) ? null : variant,
+            size: isSubframeSize(size) ? null : size,
             className,
           })
         )}

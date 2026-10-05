@@ -1,5 +1,7 @@
 # Target B Question Layout/Content Archetypes (Transport + Energy)
 
+Household is retired. These archetypes are historical context, not active product requirements.
+
 ## Purpose
 
 Lock representative question layout/content archetypes for Target B so migration can be done pattern-first and section-by-section.

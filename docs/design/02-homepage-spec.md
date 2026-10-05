@@ -1,10 +1,10 @@
-# Homepage Spec
+# Homepage Spec (historical)
 
-This file defines the active homepage spec for Carbon Cut.
+**Status: superseded.** This spec was written for the retired household assessment and is not an active homepage requirement. Household is not an active product flow. Do not use the personal-assessment positioning, section plan, or CTA guidance below as current product direction.
 
-Use together with:
+The following references and requirements are preserved as historical context:
 
-- `00-product-truth.md` for claim safety and capability boundaries
+- `00-product-truth.md` for historical claim and capability boundaries
 - `01-design-principles.md` for style/behavior direction
 
 ## Core goal

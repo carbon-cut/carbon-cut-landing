@@ -1,5 +1,7 @@
 # Form Standardization Plan (What, Not How)
 
+Household is retired. This proposal is historical context, not an active implementation plan.
+
 ## Objective
 
 Standardize the full form system end-to-end so it is consistent in layout, component usage, spacing rhythm, and question code quality, while preserving the current UI character.

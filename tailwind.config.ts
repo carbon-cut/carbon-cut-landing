@@ -50,7 +50,6 @@ export default {
         "neutral-border": "rgb(228 228 231)",
         "error-100": "rgb(254 226 226)",
         "error-50": "rgb(254 242 242)",
-        "error-100": "rgb(254 226 226)",
         "error-200": "rgb(254 202 202)",
         "error-300": "rgb(252 165 165)",
         "error-400": "rgb(248 113 113)",

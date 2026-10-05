@@ -1,3 +1,7 @@
+# Form primitives plan (historical)
+
+Household is retired. This proposal is historical context, not an active implementation plan.
+
 How we should start (proposed execution order)
 
 1-Define the canonical form primitives contract (input/select/combo/radio/alert/unit + error/disabled/focus behavior).

@@ -2,12 +2,12 @@
 
 ## Repository overview
 
-Carbon Cut's frontend is a TypeScript Next.js App Router application. It serves localized household and collectivity flows. Browser requests to the backend go through this application's same-origin API routes.
+Carbon Cut's frontend is a TypeScript Next.js App Router application. Collectivity is the active product flow. Household is retired; its remaining routes and code are legacy, not active product scope. Browser requests to the backend go through this application's same-origin API routes.
 
 ## Project map
 
 - `src/app/[locale]` contains localized pages; its layout wires `Header`, `Footer`, and `Providers`.
-- `src/app/[locale]/_home/sections` assembles the home page; `src/app/[locale]/household/form` contains the questionnaire; `src/app/[locale]/collectivity` contains collectivity flows.
+- `src/app/[locale]/_home/sections` assembles the home page; `src/app/[locale]/household/form` contains the retired household questionnaire; `src/app/[locale]/collectivity` contains the active collectivity flows.
 - `src/app/api` contains the same-origin API routes. Shared UI primitives are in `src/components/ui`.
 
 ## Commands

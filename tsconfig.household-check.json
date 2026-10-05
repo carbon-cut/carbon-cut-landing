@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "include": [
-    "css.d.ts",
-    "src/app/[locale]/household/**/*.ts",
-    "src/app/[locale]/household/**/*.tsx"
-  ]
-}
