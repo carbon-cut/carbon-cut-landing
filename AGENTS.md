@@ -35,6 +35,7 @@ Carbon Cut's frontend is a TypeScript Next.js App Router application. Collectivi
 
 ## API contracts and mocks
 
+- For covered operations, read `openapi/backend.yaml` before editing integration types, API routes, or mocks. The backend owns the source at `openapi/openapi.yaml`; run `npm run api:sync` after a backend contract change and commit the refreshed snapshot and generated types. Coverage is listed in `docs/openapi.md`.
 - Treat the backend/API contract as authoritative for request and response shapes. Frontend integration types, parsers, validation, mocks, and behavior must reflect the real contract.
 - Mocks must imitate the real backend/API contract exactly. Do not invent frontend-only or mock-only response fields, UI convenience shapes, aliases, shortcuts, or alternate data structures.
 - Do not silently compensate for an uncertain or inconsistent contract in UI code. Investigate using in-scope sources; if the contract remains unknown, treat it as an unresolved dependency rather than inventing one.

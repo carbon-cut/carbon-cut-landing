@@ -2,6 +2,7 @@ import "server-only";
 
 import { fetchWithAuth, UnauthenticatedRequestError } from "@/lib/auth/fetchWithAuth";
 import type { AuthUser } from "@/lib/auth/types";
+import type { operations } from "@/generated/backend-api";
 import type { CollectivityResultsByYear } from "@/lib/collectivity/result-types";
 import type {
   CreateCollectivityQuoteRequest,
@@ -56,9 +57,8 @@ type UpdateProjectSetupResponse = {
   data: CollectivitySetupSnapshot;
 };
 
-type SaveInventoryInputResponse = {
-  data: CollectivitySetupSnapshot;
-};
+type SaveInventoryInputResponse =
+  operations["saveCollectivityInventoryInput"]["responses"][200]["content"]["application/json"];
 
 type CalculateInventoryResponse = Record<string, unknown>;
 
@@ -432,7 +432,7 @@ export async function saveCollectivityInventoryInput(
   _user: Pick<AuthUser, "email">,
   projectSlug: string,
   inventoryInput: Record<string, unknown>
-): Promise<CollectivitySetupSnapshot> {
+): Promise<SaveInventoryInputResponse["data"]> {
   const response = await requestCollectivity<SaveInventoryInputResponse>(
     `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/input`,
     {

@@ -52,28 +52,22 @@ export const authHandlers = [
       return jsonError(error);
     }
   }),
-  http.post(
-    `${process.env.BACKEND_URL}/api/auth/send-email-confirmation`,
-    async ({ request }) => {
-      try {
-        return HttpResponse.json(
-          mockResendConfirmation(await body<ResendConfirmationRequest>(request))
-        );
-      } catch (error) {
-        return jsonError(error);
-      }
+  http.post(`${process.env.BACKEND_URL}/api/auth/send-email-confirmation`, async ({ request }) => {
+    try {
+      return HttpResponse.json(
+        mockResendConfirmation(await body<ResendConfirmationRequest>(request))
+      );
+    } catch (error) {
+      return jsonError(error);
     }
-  ),
-  http.post(
-    `${process.env.BACKEND_URL}/api/auth/email-confirmation`,
-    async ({ request }) => {
-      try {
-        return HttpResponse.json(mockConfirmEmail(await body<EmailConfirmationRequest>(request)));
-      } catch (error) {
-        return jsonError(error);
-      }
+  }),
+  http.post(`${process.env.BACKEND_URL}/api/auth/email-confirmation`, async ({ request }) => {
+    try {
+      return HttpResponse.json(mockConfirmEmail(await body<EmailConfirmationRequest>(request)));
+    } catch (error) {
+      return jsonError(error);
     }
-  ),
+  }),
   http.post(`${process.env.BACKEND_URL}/api/auth/forgot-password`, async ({ request }) => {
     try {
       return HttpResponse.json(mockForgotPassword(await body<ForgotPasswordRequest>(request)));
@@ -88,17 +82,14 @@ export const authHandlers = [
       return jsonError(error);
     }
   }),
-  http.post(
-    `${process.env.BACKEND_URL}/api/refresh-token-rotation`,
-    async ({ request }) => {
-      try {
-        const payload = await body<{ refresh_token?: string }>(request);
-        return HttpResponse.json(mockRotateRefreshToken(payload.refresh_token ?? ""));
-      } catch (error) {
-        return jsonError(error);
-      }
+  http.post(`${process.env.BACKEND_URL}/api/refresh-token-rotation`, async ({ request }) => {
+    try {
+      const payload = await body<{ refresh_token?: string }>(request);
+      return HttpResponse.json(mockRotateRefreshToken(payload.refresh_token ?? ""));
+    } catch (error) {
+      return jsonError(error);
     }
-  ),
+  }),
   http.post(`${process.env.BACKEND_URL}/api/auth/logout`, async ({ request }) => {
     try {
       const payload = await body<{ refresh_token?: string }>(request);

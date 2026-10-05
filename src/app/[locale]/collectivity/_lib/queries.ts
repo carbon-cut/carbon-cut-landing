@@ -1,4 +1,5 @@
 import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+import type { operations } from "@/generated/backend-api";
 import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/projects/setup/_lib/schema";
 import type { AvailableCollectivityClaim } from "@/app/[locale]/collectivity/invitation/_lib/types";
 import type {
@@ -304,7 +305,10 @@ export async function saveCollectivityInventoryDraftRequest({
       }),
     }
   );
-  const payload = await readApiJson<{ data?: CollectivitySetupSnapshot }>(response);
+  const payload =
+    await readApiJson<
+      operations["saveCollectivityInventoryInput"]["responses"][200]["content"]["application/json"]
+    >(response);
 
   if (!payload.data) {
     throw new Error("Collectivity inventory draft save returned no data");
