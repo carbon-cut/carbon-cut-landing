@@ -4,7 +4,7 @@ import {
   calculateCollectivityInventory,
   CollectivityBackendError,
 } from "@/lib/collectivity/backend";
-import { getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
+import { getUserPlanIds } from "@/lib/auth/profile";
 import { getServerSession } from "@/lib/auth/session";
 
 type RouteContext = {
@@ -26,18 +26,6 @@ export async function POST(request: Request, context: RouteContext) {
         },
       },
       { status: 401 }
-    );
-  }
-
-  if (!hasUserProductAccess(session.user, "collectivity")) {
-    return NextResponse.json(
-      {
-        error: {
-          status: 403,
-          message: "Collectivity access required",
-        },
-      },
-      { status: 403 }
     );
   }
 

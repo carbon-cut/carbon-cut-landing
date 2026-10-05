@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 import {
   collectivitySetupSchema,
   type CollectivitySetupValues,
-} from "@/app/[locale]/collectivity/setup/_lib/schema";
+} from "@/app/[locale]/collectivity/projects/setup/_lib/schema";
 import { CollectivityBackendError, saveCollectivitySetup } from "@/lib/collectivity/backend";
 import { writeUserCookie } from "@/lib/auth/cookies";
-import { getUserAllowedProducts, getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
+import { getUserPlanIds } from "@/lib/auth/profile";
 import { getServerSession } from "@/lib/auth/session";
 
 function flattenFieldErrors(fieldErrors: Record<string, string[] | undefined>) {
@@ -34,18 +34,6 @@ export async function PUT(request: Request, context: RouteContext) {
         },
       },
       { status: 401 }
-    );
-  }
-
-  if (!hasUserProductAccess(session.user, "collectivity")) {
-    return NextResponse.json(
-      {
-        error: {
-          status: 403,
-          message: "Collectivity access required",
-        },
-      },
-      { status: 403 }
     );
   }
 
@@ -88,9 +76,6 @@ export async function PUT(request: Request, context: RouteContext) {
 
     writeUserCookie(response.cookies, {
       ...session.user,
-      allowedProducts: Array.from(
-        new Set([...getUserAllowedProducts(session.user), "collectivity"])
-      ),
       planId: nextPlanIds,
     });
 

@@ -9,7 +9,7 @@ import {
   getCollectivitySetupRoute,
   type CollectivityModuleSlug,
 } from "@/app/[locale]/collectivity/_lib/routing";
-import { getPrimaryPlanId, getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
+import { getPrimaryPlanId, getUserPlanIds } from "@/lib/auth/profile";
 import { getServerSession, requireServerSession } from "@/lib/auth/session";
 import type { AuthUser } from "@/lib/auth/types";
 import { getHomeRoute } from "@/lib/routing/routes";
@@ -20,7 +20,7 @@ function getNeutralAuthenticatedRoute() {
 }
 
 export function getCollectivityDefaultRoute(
-  user: Pick<AuthUser, "allowedProducts" | "productType" | "planId">,
+  user: Pick<AuthUser, "planId">,
   moduleSlug: CollectivityModuleSlug = "setup"
 ) {
   const primaryPlanId = getPrimaryPlanId(user);
@@ -32,10 +32,8 @@ export function getCollectivityDefaultRoute(
   return getCollectivityModuleRoute(primaryPlanId, moduleSlug);
 }
 
-export function getAuthenticatedUserHomeRoute(
-  user: Pick<AuthUser, "allowedProducts" | "productType" | "planId">
-) {
-  if (hasUserProductAccess(user, "collectivity")) {
+export function getAuthenticatedUserHomeRoute(user: Pick<AuthUser, "planId">) {
+  if (getPrimaryPlanId(user)) {
     return getCollectivityDefaultRoute(user, "setup");
   }
 
@@ -51,27 +49,11 @@ export async function redirectAuthenticatedUserFromAuth() {
 }
 
 export async function requireHouseholdSession(returnTo?: string | null) {
-  const session = await requireServerSession(returnTo);
-
-  if (hasUserProductAccess(session.user, "household")) {
-    return session;
-  }
-
-  if (hasUserProductAccess(session.user, "collectivity")) {
-    redirect(getCollectivityDefaultRoute(session.user, "setup"));
-  }
-
-  redirect(getNeutralAuthenticatedRoute());
+  return requireServerSession(returnTo);
 }
 
 export async function requireCollectivitySession(returnTo?: string | null) {
-  const session = await requireServerSession(returnTo);
-
-  if (!hasUserProductAccess(session.user, "collectivity")) {
-    redirect(getNeutralAuthenticatedRoute());
-  }
-
-  return session;
+  return requireServerSession(returnTo);
 }
 
 export async function requireCollectivitySetupSession(returnTo?: string | null) {

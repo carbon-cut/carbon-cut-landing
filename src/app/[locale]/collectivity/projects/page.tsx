@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { FeatherPlus } from "@subframe/core";
 
 import AuthBrand from "@/app/[locale]/auth/_components/auth-brand";
 import CollectivityAccessNotice from "@/app/[locale]/collectivity/_components/CollectivityAccessNotice";
@@ -15,7 +16,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { requireCollectivitySession } from "@/lib/auth/access";
-import { CollectivityBackendError } from "@/lib/collectivity/backend";
+import {
+  CollectivityBackendError,
+  getAvailableCollectivityClaims,
+} from "@/lib/collectivity/backend";
 import { buildLogoutRedirect } from "@/lib/auth/redirect";
 import { getScopedI18n } from "@/locales/server";
 import { setStaticParamsLocale } from "next-international/server";
@@ -65,18 +69,24 @@ export default async function CollectivityProjectsPage({
     redirect(getCollectivitySetupRoute());
   }
 
+  let canCreateProject = false;
+
+  try {
+    canCreateProject = (await getAvailableCollectivityClaims()).length > 0;
+  } catch {
+    // The project list remains usable when creation availability cannot be loaded.
+  }
+
   const resolvedSearchParams = await searchParams;
   const moduleSlug = normalizeModuleParam(resolvedSearchParams.module);
   const t = await getScopedI18n("(pages).collectivityDashboard");
-  const moduleTitle = t(`workflow.sections.${moduleSlug}.title`);
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-5xl items-center justify-center px-4 py-10 md:px-6">
       <section className="w-full rounded-[2rem] border border-border bg-card px-5 py-6 shadow-[0_20px_60px_rgba(9,35,31,0.06)] md:px-8 md:py-8">
-        <div className="mx-auto mb-7 w-fit">
+        <div className="mx-auto w-fit">
           <AuthBrand />
         </div>
-
         <div className="mx-auto max-w-3xl text-center">
           <Typography asChild variant="eyebrow" size="xxs" className="text-secondary">
             <p>{t("projectSelector.eyebrow") as string}</p>
@@ -84,14 +94,7 @@ export default async function CollectivityProjectsPage({
           <Typography asChild variant="title" size="md" className="mt-3">
             <h1>{t("projectSelector.title") as string}</h1>
           </Typography>
-          <Typography asChild variant="description" size="md" className="mt-3">
-            <p>{t("projectSelector.description") as string}</p>
-          </Typography>
-          <div className="mt-4 flex justify-center">
-            <Badge variant="outline">{moduleTitle}</Badge>
-          </div>
         </div>
-
         <div className="mt-8 grid gap-4">
           {projects.map((project) => (
             <article
@@ -99,17 +102,17 @@ export default async function CollectivityProjectsPage({
               className="rounded-2xl border border-border bg-background/60 px-4 py-4 md:px-5"
             >
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div className="min-w-0">
+                <div className="min-w-0 space-y-2">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Typography asChild variant="sectionTitle" size="sm">
+                    <Typography asChild variant="heading2" size="sm">
                       <h2>{project.name}</h2>
                     </Typography>
-                    <Badge variant="outline">{project.slug}</Badge>
+                    <Badge variant="neutral">{project.slug}</Badge>
                   </div>
-                  <Typography asChild variant="body" size="body" className="mt-2 text-secondary">
+                  <Typography asChild variant="bodySubframe" className="">
                     <p>{project.territory}</p>
                   </Typography>
-                  <div className="mt-3 flex flex-wrap gap-3 text-sm text-secondary">
+                  <div className="flex flex-wrap gap-3 text-sm text-secondary">
                     <span>
                       {t("planMarkers.referenceYear") as string}: {project.referenceYear}
                     </span>
@@ -119,7 +122,11 @@ export default async function CollectivityProjectsPage({
                   </div>
                 </div>
 
-                <Button asChild className="min-w-40 self-start md:self-center">
+                <Button
+                  variant={"brand-primary"}
+                  asChild
+                  className="min-w-40 self-start md:self-center rounded-full"
+                >
                   <Link href={getCollectivityModuleRoute(project.slug, moduleSlug)}>
                     {t("projectSelector.openAction") as string}
                   </Link>
@@ -128,6 +135,20 @@ export default async function CollectivityProjectsPage({
             </article>
           ))}
         </div>
+        {canCreateProject ? (
+          <div className="mt-6 flex justify-center">
+            <Button
+              asChild
+              variant="brand-primary"
+              size="medium"
+              icon={<FeatherPlus aria-hidden="true" />}
+            >
+              <Link href="/collectivity/projects/start">
+                {t("projectSelector.createAction") as string}
+              </Link>
+            </Button>
+          </div>
+        ) : null}
       </section>
     </main>
   );

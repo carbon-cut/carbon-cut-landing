@@ -11,7 +11,7 @@ import {
 import type {
   CollectivityProjectSnapshot,
   CollectivitySetupSnapshot,
-} from "@/app/[locale]/collectivity/setup/_lib/types";
+} from "@/app/[locale]/collectivity/projects/setup/_lib/types";
 
 type CollectivityProjectContextValue = {
   project: CollectivityProjectSnapshot;

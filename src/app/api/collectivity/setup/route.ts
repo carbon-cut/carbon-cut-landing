@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 import {
   collectivitySetupSchema,
   type CollectivitySetupValues,
-} from "@/app/[locale]/collectivity/setup/_lib/schema";
+} from "@/app/[locale]/collectivity/projects/setup/_lib/schema";
 import {
   CollectivityBackendError,
   getCollectivitySetupSnapshot,
   saveCollectivitySetup,
 } from "@/lib/collectivity/backend";
 import { writeUserCookie } from "@/lib/auth/cookies";
-import { getUserAllowedProducts, getUserPlanIds, hasUserProductAccess } from "@/lib/auth/profile";
+import { getUserPlanIds } from "@/lib/auth/profile";
 import { getServerSession } from "@/lib/auth/session";
 
 function flattenFieldErrors(fieldErrors: Record<string, string[] | undefined>) {
@@ -35,18 +35,6 @@ export async function GET(request: Request) {
         },
       },
       { status: 401 }
-    );
-  }
-
-  if (!hasUserProductAccess(session.user, "collectivity")) {
-    return NextResponse.json(
-      {
-        error: {
-          status: 403,
-          message: "Collectivity access required",
-        },
-      },
-      { status: 403 }
     );
   }
 
@@ -116,18 +104,6 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!hasUserProductAccess(session.user, "collectivity")) {
-    return NextResponse.json(
-      {
-        error: {
-          status: 403,
-          message: "Collectivity access required",
-        },
-      },
-      { status: 403 }
-    );
-  }
-
   if (currentPlanId && !getUserPlanIds(session.user).includes(currentPlanId)) {
     return NextResponse.json(
       {
@@ -140,7 +116,21 @@ export async function POST(request: Request) {
     );
   }
 
-  const body = (await request.json()) as CollectivitySetupValues;
+  const body = (await request.json()) as CollectivitySetupValues & { approvedClaimId?: unknown };
+  const approvedClaimId = Number(body.approvedClaimId);
+
+  if (!currentPlanId && (!Number.isSafeInteger(approvedClaimId) || approvedClaimId < 1)) {
+    return NextResponse.json(
+      {
+        error: {
+          status: 400,
+          message: "Missing approved claim id",
+          details: { fieldErrors: { approvedClaimId: "Missing approved claim id" } },
+        },
+      },
+      { status: 400 }
+    );
+  }
   const parsed = collectivitySetupSchema.safeParse(body);
 
   if (!parsed.success) {
@@ -159,7 +149,12 @@ export async function POST(request: Request) {
   }
 
   try {
-    const saved = await saveCollectivitySetup(session.user, parsed.data, currentPlanId);
+    const saved = await saveCollectivitySetup(
+      session.user,
+      parsed.data,
+      currentPlanId,
+      currentPlanId ? null : approvedClaimId
+    );
     const response = NextResponse.json({ data: saved });
     const sessionPlanIds = getUserPlanIds(session.user);
     const nextPlanIds =
@@ -171,9 +166,6 @@ export async function POST(request: Request) {
 
     writeUserCookie(response.cookies, {
       ...session.user,
-      allowedProducts: Array.from(
-        new Set([...getUserAllowedProducts(session.user), "collectivity"])
-      ),
       planId: nextPlanIds,
     });
 

@@ -140,6 +140,11 @@ export default {
           "outil climat municipal",
         ],
       },
+      collectivityPricing: {
+        title: "Abonnement collectivité | Carbon Cut",
+        description:
+          "Configurez le périmètre, la durée et les modules de votre abonnement collectivité.",
+      },
       collectivityDashboard: {
         title: "Collectivity Inventory (Draft) | Carbon Cut",
         description:
@@ -219,6 +224,600 @@ export default {
       "Avant d'ouvrir l'espace de travail complet, renseignez le projet, le territoire, les années d'inventaire et les sections applicables.",
     primaryCta: "Continuer",
     submitError: "Impossible d'enregistrer la configuration du projet pour le moment.",
+  },
+  collectivityStart: {
+    title: "Créer un projet",
+    description: "Sélectionnez l’accès à utiliser pour créer votre projet.",
+    createProject: "Créer mon projet",
+    assignmentFrom: "Accès accordé par {name}",
+    organization: "{organization}",
+    emptyTitle: "Aucune attribution disponible",
+    emptyDescription:
+      "Vous ne disposez actuellement d’aucune attribution permettant de créer un projet.",
+    loading: "Chargement de vos attributions…",
+    error: "Impossible de charger vos attributions pour le moment.",
+    retry: "Réessayer",
+  },
+  collectivitySubscription: {
+    eyebrow: "Gestion des accès",
+    title: "Accès de l’abonnement",
+    description:
+      "Gérez les accès permettant de créer un projet communal. L’approbation d’une demande donne accès à la création d’un projet.",
+    active: "Abonnement actif",
+    period: "Du {startDate} au {endDate} · {years} ans",
+    capacity: {
+      title: "Capacité de l’abonnement",
+      description: "Qui peut transformer cette capacité d’abonnement en projet communal ?",
+      assignedOfPurchased: "{assigned} sur {purchased}",
+      availabilitySummary: "actifs · {available} disponibles",
+      assignedLegend: "{count} actifs",
+      availableLegend: "{count} disponibles",
+      purchasedLegend: "Quantité : {count}",
+      progressLabel: "Accès actifs sur la quantité souscrite",
+      place: "N° {number}",
+      assigned: "Accès accordé",
+      assignedSince: "Accès accordé le {date}",
+      projectCreated: "Projet créé · {date}",
+      projectCreatedWithoutDate: "Projet créé",
+      available: "Disponible",
+      unassigned: "Disponible",
+      assignSelf: "M’accorder l’accès",
+      createProject: "Créer mon projet",
+      usesOnePlace: "Utilise un accès disponible",
+      assignApproved: "Choisir un membre",
+      revoke: "Retirer l’accès",
+      revokeFor: "Retirer l’accès de {email}",
+      revokeError:
+        "Impossible de retirer cet accès pour le moment. Actualisez la page et réessayez.",
+      selfPending: "Votre demande est en attente.",
+      refreshError: "Impossible d’actualiser les accès pour le moment.",
+      capacityError: "Aucun accès n’est disponible. Actualisez la page et réessayez.",
+      assignError: "Impossible de vous accorder l’accès pour le moment.",
+    },
+    invitationLink: {
+      create: "Créer un lien d’invitation",
+      copy: "Copier le lien",
+      expiresAt: "Expire le {date}",
+      accepting: "Demandes ouvertes",
+      replace: "Remplacer le lien",
+      stop: "Arrêter les demandes",
+      error: "Impossible de mettre à jour le lien d’invitation pour le moment.",
+    },
+    requests: {
+      title: "Demandes entrantes",
+      description: "Demandes reçues via le lien de demande réutilisable",
+      awaiting: "{count} en attente",
+      approvalNotice: "Approuver cette demande autorise la création d’un projet communal.",
+      name: "Nom",
+      email: "E-mail",
+      requested: "Demandée le",
+      approve: "Approuver",
+      deny: "Refuser",
+      recentlyDeclined: "Refusées récemment",
+      declined: "Refusée",
+      error: "Impossible de mettre à jour cette demande pour le moment.",
+    },
+  },
+  collectivityInvitation: {
+    label: "Invitation",
+    request: "Envoyer ma demande",
+    signIn: "Se connecter pour continuer",
+    createProject: "Créer mon projet",
+    openProject: "Ouvrir le projet",
+    retry: "Envoyer une nouvelle demande",
+    home: "Retour à l’accueil",
+    pendingHelp: "Aucune action n’est requise de votre part pour le moment.",
+    inviter: "Invitation de {name}",
+    contact: "Pour toute question, contactez directement {name}.",
+    error: "Impossible de mettre à jour votre demande pour le moment.",
+    steps: {
+      invitation: "Invitation",
+      request: "Demande",
+      approval: "Approbation",
+      project: "Projet",
+    },
+    details: {
+      created: "Invitation créée le",
+      expires: "Valable jusqu’au",
+      changed: "Mise à jour le",
+      requested: "Demande envoyée le",
+      approved: "Approuvée le",
+      denied: "Refusée le",
+      revoked: "Annulée le",
+      project: "Projet créé le",
+    },
+    states: {
+      valid: {
+        badge: "Invitation valide",
+        title: "Rejoindre cet abonnement",
+        description: "{name} vous invite à envoyer une demande pour rejoindre cet abonnement.",
+      },
+      pending: {
+        badge: "En attente d’approbation",
+        title: "Votre demande a bien été envoyée",
+        description: "Votre demande est en cours d’examen.",
+      },
+      approved: {
+        badge: "Demande approuvée",
+        title: "Votre demande est approuvée",
+        description: "Vous pouvez maintenant créer votre projet communal.",
+      },
+      consumed: {
+        badge: "Projet créé",
+        title: "Votre projet est créé",
+        description: "Cette approbation a déjà servi à créer votre projet.",
+      },
+      denied: {
+        badge: "Demande refusée",
+        title: "Votre demande a été refusée",
+        description:
+          "Vous pouvez envoyer une nouvelle demande avec cette invitation si elle est toujours valable.",
+      },
+      revoked: {
+        badge: "Approbation annulée",
+        title: "Votre approbation a été annulée",
+        description: "Vous ne pouvez plus créer de projet avec cette invitation.",
+      },
+      invalid: {
+        badge: "Invitation invalide",
+        title: "Ce lien d’invitation n’est pas valide",
+        description:
+          "Vérifiez que le lien est complet ou demandez-en un nouveau à la personne qui vous a invité.",
+      },
+      expired: {
+        badge: "Invitation expirée",
+        title: "Cette invitation a expiré",
+        description: "Cette invitation ne permet plus d’envoyer de demande.",
+      },
+      replaced: {
+        badge: "Invitation remplacée",
+        title: "Cette invitation a été remplacée",
+        description:
+          "Ce lien ne peut plus être utilisé. Demandez le nouveau lien à la personne qui vous a invité.",
+      },
+      disabled: {
+        badge: "Demandes fermées",
+        title: "Cette invitation ne reçoit plus de demandes",
+        description: "Cette invitation ne permet plus d’envoyer de demande.",
+      },
+    },
+  },
+  collectivityPricing: {
+    title: "Configurer votre abonnement",
+    description:
+      "Composez un abonnement unique selon le nombre de communes, la durée, le périmètre et les modules souhaités. Le prix se met à jour à chaque modification.",
+    flow: {
+      progressLabel: "Progression du devis",
+      steps: {
+        configuration: "Configuration",
+        quoteInformation: "Informations du devis",
+        quoteVerification: "Vérification du devis",
+      },
+    },
+    quoteInformation: {
+      back: "Modifier la configuration",
+      title: "Informations du devis",
+      description:
+        "Complétez les informations client et les conditions commerciales. La configuration tarifaire est figée et ne sera pas recalculée.",
+      cards: {
+        legalIdentity: {
+          title: "Identité légale et facturation",
+          description: "Ces informations figureront sur le devis et la facture.",
+          customerType: "Type de client",
+          legalEntity: "Personne morale",
+          legalEntityDescription: "Entreprise ou collectivité",
+          individual: "Particulier",
+          individualDescription: "Non pris en charge pour ce service B2B",
+          legalName: "Raison sociale",
+          addressLine1: "Adresse",
+          addressLine2: "Complément d'adresse",
+          addressLine2Hint: "Facultatif",
+          addressLine2Placeholder: "Bâtiment, étage, service…",
+          postalCode: "Code postal",
+          city: "Ville",
+          countryCode: "Pays",
+          countryCodePlaceholder: "Sélectionner un pays",
+          contact: "Contact",
+          contactName: "Nom du contact",
+          contactEmail: "E-mail",
+          contactPhone: "Téléphone",
+          contactPhoneHint: "Facultatif",
+          taxIdentifiers: "Identifiants fiscaux",
+          taxIdentifiersDescription: "Les champs requis dépendent du pays du client.",
+          siren: "SIREN",
+          siret: "SIRET",
+          frenchRegistrationHint: "Requis pour les clients établis en France",
+          vatNumber: "N° de TVA intracommunautaire",
+          generalTaxIdentifier: "Numéro d'identification fiscale",
+          vatNumberHint:
+            "Recommandé en France · obligatoire pour un client UE hors France (autoliquidation)",
+          hasNoVatNumber: "Je ne dispose pas de n° de TVA intracommunautaire",
+          viesNotChecked: "À vérifier via VIES",
+          viesChecking: "Vérification VIES…",
+          viesVerified: "Vérifié VIES",
+          viesInvalid: "VIES invalide",
+          viesUnavailable: "VIES indisponible",
+          viesInvalidMessage: "Invalide",
+          taxTreatment: {
+            title: "Traitement fiscal (déterminé automatiquement)",
+            status: "TVA française applicable · 20 %",
+            description:
+              "Client professionnel établi en France. Le régime est calculé à partir du pays, du type de client et du n° de TVA — il n’est pas modifiable manuellement.",
+            pendingInformationStatus: "Informations fiscales requises",
+            pendingInformationDescription:
+              "Sélectionnez le pays du client pour déterminer le traitement fiscal.",
+            pendingViesStatus: "Vérification VIES requise",
+            pendingViesDescription:
+              "Le traitement fiscal sera déterminé après vérification du numéro de TVA.",
+            france: "France · TVA FR 20 %",
+            europeanUnion: "UE hors France · autoliquidation, n° TVA UE requis",
+            europeanUnionDescription:
+              "Client professionnel établi dans l’Union européenne hors France. La TVA est autoliquidée par le client.",
+            outsideEuropeanUnion: "Hors UE · TVA non applicable (art. 259 CGI)",
+            outsideEuropeanUnionDescription:
+              "Client professionnel établi hors de l’Union européenne. La TVA française n’est pas applicable.",
+            current: "Actuel",
+          },
+        },
+        quoteTerms: {
+          title: "Conditions du devis",
+          description: "Devise, validité, démarrage du contrat et modalités de paiement.",
+          currency: "Devise",
+          currencyEur: "EUR — Euro",
+          issueDate: "Date d’émission",
+          issueDateHint: "Renseignée automatiquement",
+          validityDuration: "Durée de validité",
+          validityDurationValue: "{count} jours",
+          validUntil: "Valable jusqu’au",
+          validUntilHint: "Calculée à partir de la durée de validité",
+          contractStartDate: "Date de début du contrat",
+          paymentTerms: "Conditions de paiement",
+          paymentTermsValue: "Paiement dans les {count} jours suivant l’approbation",
+          paymentMethod: "Moyen de paiement",
+          bankTransfer: "Virement bancaire",
+        },
+        selectedOffer: {
+          title: "Offre sélectionnée",
+          frozen: "Figée",
+          checklistTitle: "Avant de continuer",
+          checklistIdentity: "Identité du client",
+          checklistAddress: "Adresse et pays",
+          checklistTax: "Identifiant fiscal requis",
+          checklistDates: "Dates de validité et de début",
+          checklistTerms: "Devise et conditions de paiement",
+          continue: "Continuer vers la vérification",
+          back: "Retour à la configuration",
+          notice: "Aucun devis n’est émis à cette étape.",
+        },
+      },
+    },
+    quoteVerification: {
+      backToInformation: "Modifier les informations du devis",
+      title: "Vérification du devis",
+      description:
+        "Vérifiez l’ensemble du devis avant de l’accepter. Aucune donnée n’est modifiable sur cet écran : utilisez les liens « Modifier » pour revenir à l’étape concernée.",
+      draft: "Brouillon · non émis",
+      draftHint: "N° de devis et date d’émission attribués à l’émission",
+      edit: "Modifier",
+      client: {
+        title: "Client",
+      },
+      offer: {
+        title: "Offre commerciale",
+        edit: "Modifier la configuration",
+        communesValue: "{count} communes",
+        table: {
+          service: "Module / service",
+          quantity: "Qté",
+          annualUnitPrice: "Prix unitaire annuel",
+          annualAmount: "Montant annuel HT",
+        },
+        discount: "Remise volume (−{discount} %)",
+        annualAfterDiscount: "Prix annuel après remise",
+      },
+      terms: {
+        validity: "Durée de validité",
+        validityValue: "{count} jours à compter de la date d’émission",
+      },
+      tax: {
+        title: "Traitement fiscal",
+        edit: "Modifier les informations client",
+        france: "TVA française applicable · 20 %",
+        europeanUnion: "Autoliquidation",
+        outsideEuropeanUnion: "TVA non applicable – art. 259-1 du CGI",
+        quoteMention: "Mention figurant sur le devis",
+        franceMention: "« TVA française au taux normal de 20 % »",
+        europeanUnionMention: "« Autoliquidation — article 283-2 du CGI »",
+        outsideEuropeanUnionMention: "« TVA non applicable — article 259-1 du CGI »",
+      },
+      issuer: {
+        title: "Émetteur",
+        description: "Informations vendeur issues des paramètres de la société",
+        registeredOffice: "Siège social",
+        rcs: "RCS",
+      },
+      sidebar: {
+        title: "Totaux du devis",
+        frozen: "Figé",
+        totalHt: "Total HT",
+        vat: "TVA",
+        totalTtc: "Total TTC",
+        totalTtcDescription: "Montant total du contrat sur {years} ans",
+      },
+      afterAcceptance: {
+        title: "Après votre acceptation",
+        acceptance: {
+          title: "Acceptation du devis",
+          description: "Votre acceptation ne déclenche aucun paiement.",
+        },
+        review: {
+          title: "Vérification par notre équipe",
+          description:
+            "Nous vérifions votre organisation et les informations fournies, puis approuvons ou refusons la demande.",
+        },
+        payment: {
+          title: "Paiement après approbation",
+          description:
+            "Par virement bancaire. L’échéance est calculée à partir de l’approbation selon vos conditions de paiement ({count} jours).",
+        },
+      },
+      actions: {
+        accept: "Accepter et soumettre pour approbation",
+        back: "Retour aux informations du devis",
+        notice:
+          "L’acceptation du devis est soumise à vérification et approbation par notre équipe. Aucun paiement n’est dû avant cette approbation.",
+      },
+    },
+    underReviewQuote: {
+      back: "Retour à l’abonnement",
+      title: "Devis {reference}",
+      description:
+        "Devis accepté et figé. Son contenu n’est plus modifiable pendant que notre équipe le vérifie.",
+      badge: "En attente de vérification",
+      acceptedAt: "Accepté le {date}",
+      sirenSiret: "SIREN / SIRET",
+      taxDescription: "Déterminé automatiquement à partir des informations client",
+      notice: {
+        summary:
+          "Votre demande a été transmise pour vérification. Aucun paiement n’est requis à ce stade.",
+        description:
+          "Notre équipe vérifie votre organisation et les informations fournies. Vous serez notifié dès que la demande sera approuvée ou refusée.",
+      },
+      progress: {
+        title: "Suivi de votre demande",
+        accepted: {
+          title: "Devis accepté",
+          description: "{date}",
+        },
+        review: {
+          title: "Vérification par notre équipe",
+          description: "En cours",
+        },
+        payment: {
+          title: "Paiement par virement",
+          description: "Échéance calculée après approbation ({count} jours fin de mois)",
+        },
+      },
+      cancel: {
+        action: "Annuler ma demande",
+        title: "Annuler cette demande ?",
+        description:
+          "Votre demande ne pourra plus être approuvée. Vous pourrez ensuite préparer un nouveau devis.",
+        confirm: "Annuler la demande",
+        dismiss: "Conserver la demande",
+        error: "Impossible d’annuler votre demande pour le moment.",
+      },
+      download: "Télécharger le devis accepté (PDF)",
+    },
+    acceptedQuote: {
+      description:
+        "Votre demande a été approuvée. Le paiement est désormais dû selon les conditions du devis.",
+      badge: "Approuvé — paiement requis",
+      approvedAt: "Approuvé le {date}",
+      notice: {
+        description:
+          "Votre organisation et les informations fournies ont été vérifiées. Le paiement est dû au plus tard le {dueDate}, selon les conditions du devis approuvé le {approvedDate}.",
+      },
+      paymentInstructions: {
+        title: "Instructions de virement bancaire",
+        beneficiary: "Bénéficiaire",
+        bank: "Banque",
+        iban: "IBAN",
+        bic: "BIC",
+        amount: "Montant à régler",
+        reference: "Référence à indiquer",
+        dueDate: "Date limite de paiement",
+        copy: "Copier",
+        referenceNotice:
+          "Indiquez impérativement la référence du devis dans le libellé du virement.",
+      },
+      progress: {
+        reviewDescription: "Approuvé le {date}",
+        paymentDescription: "Échéance : {date}",
+        paymentStatus: "À régler",
+      },
+      amountDue: {
+        label: "Montant dû",
+        dueDate: "avant le {date}",
+      },
+      paymentNotice:
+        "Le paiement s’effectue exclusivement par virement bancaire. Le délai est calculé à partir de la date d’approbation selon les conditions de paiement du devis.",
+    },
+    paidQuote: {
+      description: "Votre paiement a été confirmé. Votre abonnement est désormais actif.",
+      badge: "Paiement confirmé",
+      paidAt: "Paiement confirmé le {date}",
+      notice: {
+        description:
+          "Votre paiement a été confirmé. Vous pouvez désormais accéder aux services inclus dans votre abonnement.",
+        footer:
+          "Votre abonnement est actif. Retrouvez vos projets et les services inclus dans votre espace collectivité.",
+      },
+      progress: {
+        paymentDescription: "Paiement confirmé le {date}",
+      },
+      activePeriod: {
+        label: "Abonnement actif",
+        value: "Du {startDate} au {endDate}",
+        description: "Période d’abonnement",
+      },
+      manageSubscription: "Gérer l’abonnement",
+    },
+    rejectedQuote: {
+      description: "Votre demande n’a pas été approuvée. Aucun paiement n’est requis.",
+      badge: "Demande refusée",
+      rejectedAt: "Refusée le {date}",
+      notice: {
+        description:
+          "Notre équipe n’a pas pu approuver votre demande. Consultez le motif ci-dessous ou contactez-nous pour être accompagné.",
+        footer:
+          "Aucun paiement n’est dû. Vous pouvez contacter notre équipe ou préparer un nouveau devis.",
+      },
+      reason: {
+        title: "Motif du refus",
+        label: "Information communiquée",
+        unavailable: "Le motif du refus n’est pas disponible pour le moment.",
+      },
+      progress: {
+        reviewStatus: "Refusée",
+      },
+      contactTeam: "Contacter notre équipe",
+      newQuote: "Créer un nouveau devis",
+    },
+    expiredQuote: {
+      description: "Votre abonnement a expiré. L’accès aux services n’est plus disponible.",
+      badge: "Abonnement expiré",
+      expiredAt: "Expiré le {date}",
+      notice: {
+        description:
+          "La période de votre abonnement est terminée. L’accès aux services inclus n’est plus disponible.",
+        footer: "Votre abonnement est expiré. Contactez notre équipe ou préparez un nouveau devis.",
+      },
+      activePeriod: {
+        label: "Abonnement expiré",
+        description: "Période d’abonnement terminée",
+      },
+      progress: {
+        paymentDescription: "Paiement confirmé avant l’expiration le {date}",
+      },
+      contactTeam: "Contacter notre équipe",
+      newQuote: "Créer un nouveau devis",
+    },
+    catalogueLoading: "Chargement du catalogue d’abonnement…",
+    catalogueLoadError: "Impossible de charger le catalogue d’abonnement.",
+    quoteContextLoadError: "Impossible de préparer les conditions du devis.",
+    pricePreviewLoadError: "Impossible de calculer le prix de votre configuration.",
+    configuration: {
+      title: "Votre configuration",
+      panelTitle: "Paramètres du contrat",
+      panelDescription: "Définissez le cadre général de votre abonnement.",
+      communes: {
+        label: "Nombre de communes",
+        description: "De 1 à 10 communes",
+        valueOne: "{count} commune",
+        valueOther: "{count} communes",
+        aria: "Nombre de communes couvertes",
+        decrease: "Réduire le nombre de communes",
+        increase: "Augmenter le nombre de communes",
+        tiers: {
+          one: "1 commune · 0 %",
+          twoToThree: "2–3 communes · −20 %",
+          fourToFive: "4–5 communes · −30 %",
+          sixToTen: "6–10 communes · −40 %",
+        },
+        tierSingle: "{minimum} commune · −{discount} %",
+        tierRange: "{minimum}–{maximum} communes · −{discount} %",
+      },
+      coverageDiscount: "Réduction couverture : −{discount} %",
+      term: {
+        label: "Durée du contrat",
+        description: "Engagement annuel ou pluriannuel",
+        oneYear: "1 an",
+        threeYears: "3 ans",
+      },
+      termDiscount: "Réduction engagement : −{discount} %",
+      perimeter: {
+        label: "Périmètre",
+        description: "Étendue des émissions couvertes par l’inventaire",
+        municipal_assets: "Patrimoine communal",
+        municipal_assets_description: "Bâtiments, flotte et équipements de la commune",
+        whole_territory: "Territoire complet",
+        whole_territory_description: "Ensemble des émissions du territoire",
+      },
+      combinedDiscount: "Réduction totale appliquée : −{discount} %",
+    },
+    modules: {
+      title: "Modules et services",
+      description:
+        "Sélectionnez les modules inclus dans votre abonnement. Prix par commune et par an.",
+      selection: "Sélection",
+      service: "Module",
+      annualPrice: "Prix",
+      status: "Statut",
+      available: "Modules disponibles",
+      upcoming: "Fonctionnalités à venir",
+      upcomingDescription: "Présentées à titre informatif, non sélectionnables",
+      required: "Inclus",
+      items: {
+        ghg_inventory_scope_1_2: "Inventaire GES — Scope 1+2",
+        ghg_inventory_scope_3: "Inventaire GES — Scope 3",
+        emission_factor_consolidation: "Consolidation et validation des facteurs d’émission",
+        prospective_and_objectives: "Prospective et objectifs",
+        ghg_mitigation_investment_plan: "Plan d’investissement atténuation GES",
+        mrv_monitoring: "Suivi MRV",
+        significant_indicators: "Indicateurs significatifs",
+        scoring_system: "Système de notation sur 100",
+        commune_aggregation: "Agrégation intercommunale",
+      },
+      descriptions: {
+        ghg_inventory_scope_1_2: "Bilan des émissions directes et liées à l’énergie",
+        ghg_inventory_scope_3: "Émissions indirectes de la chaîne de valeur",
+        emission_factor_consolidation: "Référentiel de facteurs vérifiés",
+        prospective_and_objectives: "Trajectoires de réduction et cibles",
+        ghg_mitigation_investment_plan: "Priorisation des actions et des budgets",
+        mrv_monitoring: "Mesure, rapportage et vérification",
+        significant_indicators: "Tableau de bord des indicateurs clés",
+        scoring_system: "Score synthétique de performance climat",
+        commune_aggregation: "Consolidation à l’échelle de l’intercommunalité",
+      },
+    },
+    availability: {
+      available_at_launch: "Disponible",
+      coming_very_soon: "Bientôt disponible",
+      in_development: "En développement",
+      planned_later: "Prévu ultérieurement",
+    },
+    totals: {
+      aria: "Récapitulatif du prix de l’abonnement",
+      annual: "Total annuel",
+      contract: "Total du contrat sur {years} ans",
+    },
+    summary: {
+      title: "Récapitulatif",
+      communes: "Communes",
+      duration: "Durée",
+      perimeter: "Périmètre",
+      selectedModules: "Modules sélectionnés",
+      moduleQuantityPrice: "{count} × {price}",
+      annualSubtotal: "Sous-total annuel",
+      coverageDiscount: "Remise volume (−{discount} %)",
+      termDiscount: "Remise engagement (−{discount} %)",
+      annualTotal: "Prix annuel",
+      perYear: "/ an",
+      contractTotal: "Total du contrat ({years} ans)",
+      priceTaxNotice:
+        "Prix HT. Le montant est recalculé à chaque modification de la configuration.",
+      taxSuffix: "HT",
+      hostingCompliance: "Données hébergées dans l’Union européenne · Conforme RGPD",
+      hostingEu: "Données hébergées dans l’Union européenne",
+    },
+    action: {
+      signIn: "Se connecter pour continuer",
+      signedIn: "Votre configuration est prête à être poursuivie.",
+      continue: "Continuer",
+      retry: "Réessayer",
+      downloadQuote: "Télécharger le devis",
+    },
   },
   householdUnderDevelopment: {
     title: "Household Calculator Is Under Development",
@@ -1036,9 +1635,8 @@ export default {
       projectSelector: {
         eyebrow: "Espace collectivité",
         title: "Choisissez un projet",
-        description:
-          "Le projet demandé n'est pas disponible pour le moment. Sélectionnez un projet existant pour continuer dans le bon espace de travail.",
         openAction: "Ouvrir le projet",
+        createAction: "Créer un projet",
       },
       accessNotice: {
         eyebrow: "Espace collectivité",
@@ -1058,6 +1656,7 @@ export default {
         title: "Lecture du rapport",
         description:
           "Quatre modules visibles au démarrage : configuration, inventaire, scénarios et plan d'action. Les routes d'entrée restent non modulaires.",
+        projects: "Mes projets",
       },
       planMarkers: {
         territory: "Territoire de référence",
@@ -1112,6 +1711,10 @@ export default {
           label: "Résultat debug temporaire",
           success: "Succès",
           error: "Impossible de lancer le calcul debug pour ce jeu de données.",
+          errors: {
+            RExceedInput: "Le méthane récupéré ne peut pas dépasser le méthane produit.",
+            unknown: "Une donnée ne respecte pas une règle de calcul.",
+          },
           validationError: "Ce jeu de données contient des champs à corriger.",
           calculationError: "Le serveur ne peut pas calculer ce jeu de données.",
           requestError: "La demande de calcul n'a pas abouti.",
@@ -1423,13 +2026,16 @@ export default {
               },
             },
             port: {
-              fuelConsumption: {
-                title: "Consommation de diesel dans le perimetre",
-                fuelType: "Carburant",
-                fuelPlaceholder: "Choisir un carburant",
-                fuels: {
-                  diesel: "Diesel",
-                },
+              fuel: {
+                diesel: "Diesel",
+                splitHelp:
+                  "Si vous disposez seulement d'une consommation totale de diesel non répartie entre ces deux types de trajets, laissez les deux champs vides. Le résultat sera indiqué comme non estimé (NE), et non comme zéro.",
+              },
+              roundTripFuelConsumption: {
+                title: "Sorties avec retour au port",
+              },
+              outboundFuelConsumption: {
+                title: "Départs vers une destination hors du périmètre",
               },
               electricityConsumption: {
                 title: "Consommation électrique portuaire",
@@ -1439,7 +2045,7 @@ export default {
                 },
               },
             },
-            publicTransport: {
+            buses: {
               operators: {
                 title: "Opérateurs",
                 description:
@@ -1491,6 +2097,31 @@ export default {
                 title: "Acquisitions / renouvellements prevus",
                 column: "Bus prevus",
                 renewalFuture: "Renouvellement futur",
+              },
+            },
+            urbanRail: {
+              services: {
+                title: "Services ferroviaires",
+                description: "Ajoutez les services de métro, tramway, train léger ou funiculaire.",
+                default: "Service ferroviaire urbain",
+                addLabel: "Ajouter un service",
+                removeLabel: "Supprimer le service",
+                operationsWithinMunicipalBoundary:
+                  "Je confirme que l'énergie indiquée correspond uniquement aux déplacements effectués à l'intérieur du périmètre municipal.",
+                operationsWithinMunicipalBoundaryHelp:
+                  "Si une ligne franchit le périmètre municipal, renseignez l'énergie consommée pendant les déplacements effectués à l'intérieur de ce périmètre.",
+                operationsWithinMunicipalBoundaryHelpLabel:
+                  "Information sur le périmètre municipal",
+              },
+              energy: {
+                title: "Énergie utilisée",
+                consumption: "Consommation",
+                spend: "Dépense",
+                electricity: "Électricité",
+                electricityHelp:
+                  "Électricité consommée par les véhicules ferroviaires. N'incluez pas les bâtiments ni les installations fixes.",
+                electricityHelpLabel: "Information sur la consommation électrique",
+                diesel: "Diesel",
               },
             },
             airTransport: {
@@ -1555,7 +2186,7 @@ export default {
               },
               vehicleTypes: {
                 motorcycles: "Motocycles",
-                publicTransportVehicles: "Véhicules transport public",
+                busesVehicles: "Véhicules transport public",
                 mopeds: "Cyclomoteurs",
                 agriculturalEquipment: "Matériel agricole",
                 privateVehicles: "Véhicules privés",
@@ -1587,6 +2218,211 @@ export default {
                 other: "Autre",
               },
             },
+            wastewaterTreatment: {
+              discharge: {
+                title: "Rejet des effluents traités",
+                description:
+                  "Renseignez le rejet dans un milieu aquatique, lorsqu'il est applicable.",
+              },
+              nitrogen: {
+                title: "Azote et N₂O",
+                description: "Renseignez l'azote annuel lorsqu'il est connu.",
+              },
+              surface: {
+                title: "Eaux usées",
+              },
+              treatment: {
+                title: "Traitement et rejet des eaux usées",
+                description:
+                  "Ajoutez un système de traitement ou de rejet, puis renseignez les charges organiques annuelles connues.",
+                addLabel: "Ajouter un système",
+                rowLabelPrefix: "Système",
+                fields: {
+                  system: "Système de traitement",
+                  systemPlaceholder: "Choisir un système",
+                  loadType: "Type d'eau usée",
+                  loadTypePlaceholder: "Choisir un type",
+                  withinMunicipalBoundary: "Dans le périmètre municipal",
+                  withinMunicipalBoundaryPlaceholder: "Choisir une réponse",
+                },
+                columns: {
+                  organicLoad: "Charge organique",
+                  sludgeRemoved: "Charge organique retirée dans les boues (S)",
+                  nitrogen: "Azote des eaux usées",
+                  methaneRecovery: "Méthane récupéré",
+                  populationAllocation: "Part de la DBO domestique traitée par ce système",
+                  effluentPath: "Données sur l'effluent traité",
+                  outgoingLoad: "Charge organique sortante",
+                  effluentTreatmentLevel: "Niveau de traitement de l'effluent",
+                  biologicalTreatment: "Traitement biologique",
+                  receivingWaterCondition: "État du milieu récepteur",
+                  dischargesToWater: "L'effluent traité est-il rejeté dans un milieu aquatique ?",
+                  receivingWater: "Milieu récepteur",
+                },
+                yesNo: { no: "Non", yes: "Oui" },
+                withinMunicipalBoundary: { true: "Oui", false: "Non" },
+                receivingWater: {
+                  otherAquatic: "Autre milieu aquatique",
+                  reservoirLakeEstuary: "Réservoir, lac ou estuaire",
+                },
+                effluentPaths: {
+                  measuredOutgoingLoad: "Charge organique sortante mesurée",
+                  treatmentLevel: "Niveau de traitement connu",
+                },
+                effluentTreatmentLevels: {
+                  untreated: "Aucun traitement efficace",
+                  primaryMechanical: "Traitement mécanique de base",
+                  secondaryBiological: "Traitement biologique normal",
+                  advancedBiological: "Traitement biologique avancé",
+                  notEstimated: "Impossible à estimer",
+                },
+                biologicalTreatments: {
+                  standard: "Traitement biologique standard",
+                  advanced: "Traitement biologique avancé",
+                },
+                receivingWaterConditions: {
+                  normalOrUnknown: "Normal ou inconnu",
+                  nutrientImpactedOrHypoxic: "Impacté par les nutriments ou hypoxique",
+                },
+                loadTypes: {
+                  domestic: "Domestique",
+                  industrial: "Industriel",
+                  unclassified: "Eaux usées non classées",
+                },
+                help: {
+                  organicLoad:
+                    "Indiquez la charge annuelle connue. Elle est requise sauf si la saisie par population est utilisée.",
+                  organicLoadLabel: "Information sur la charge organique",
+                  loadType:
+                    "Dans les calculs, les eaux usées non classées sont traitées comme des eaux usées domestiques.",
+                  loadTypeLabel: "Information sur le type d'eau usée",
+                  withinMunicipalBoundary:
+                    "Indiquez si le système de traitement est situé dans le périmètre municipal.",
+                  withinMunicipalBoundaryLabel: "Information sur le périmètre municipal",
+                  sludgeRemoved:
+                    "Ce n'est pas une masse de boues. Renseignez la charge organique retirée dans les boues pour les systèmes concernés.",
+                  sludgeRemovedLabel: "Information sur la charge retirée dans les boues",
+                  nitrogen: "Facultatif : renseignez l'azote annuel seulement s'il est connu.",
+                  nitrogenLabel: "Information sur l'azote",
+                  methaneRecovery: "Facultatif : laissez vide si aucun méthane n'est récupéré.",
+                  methaneRecoveryLabel: "Information sur le méthane récupéré",
+                  populationAllocation:
+                    "Facultatif : inutile lorsque la charge organique domestique annuelle est connue directement.",
+                  populationAllocationLabel: "Information sur la part de la DBO domestique traitée",
+                  dischargesToWater:
+                    "Pour les systèmes autres qu'un rejet direct. Si la réponse est oui, indiquez ensuite le milieu récepteur.",
+                  dischargesToWaterLabel: "Information sur le rejet dans l'eau",
+                  receivingWater:
+                    "À renseigner pour un rejet direct, ou lorsque l'effluent traité rejoint un milieu aquatique.",
+                  receivingWaterLabel: "Information sur le milieu récepteur",
+                  effluentPath:
+                    "Choisissez une charge sortante mesurée si elle est disponible ; sinon, indiquez le niveau de traitement.",
+                  effluentPathLabel: "Information sur le chemin de l'effluent traité",
+                  outgoingLoad:
+                    "Charge organique annuelle mesurée après traitement. Elle remplace le niveau de traitement.",
+                  outgoingLoadLabel: "Information sur la charge organique sortante",
+                  effluentTreatmentLevel:
+                    "Choisissez le niveau connu. « Impossible à estimer » conserve le chemin comme non estimé, sans le remplacer par zéro.",
+                  effluentTreatmentLevelLabel: "Information sur le niveau de traitement",
+                  biologicalTreatment:
+                    "À renseigner pour un traitement aérobie centralisé lorsque l'azote est connu.",
+                  biologicalTreatmentLabel: "Information sur le traitement biologique",
+                  receivingWaterCondition:
+                    "À renseigner lorsque l'azote est connu et que le système rejette dans un milieu aquatique.",
+                  receivingWaterConditionLabel: "Information sur l'état du milieu récepteur",
+                },
+                systems: {
+                  centralizedAerobic: "Traitement aérobie centralisé",
+                  anaerobicReactor: "Réacteur anaérobie",
+                  anaerobicShallowFacultativeLagoon: "Lagune anaérobie peu profonde facultative",
+                  anaerobicDeepLagoon: "Lagune anaérobie profonde",
+                  constructedWetlandSurfaceFlow: "Zone humide construite à écoulement de surface",
+                  constructedWetlandHorizontalSubsurfaceFlow:
+                    "Zone humide construite à écoulement horizontal sous la surface",
+                  constructedWetlandVerticalSubsurfaceFlow:
+                    "Zone humide construite à écoulement vertical sous la surface",
+                  septicTank: "Fosse septique",
+                  septicTankLandDispersal: "Fosse septique avec épandage",
+                  stagnantSewer: "Égout stagnant",
+                  flowingSewer: "Égout à écoulement",
+                  latrineDryHousehold: "Latrine sèche domestique",
+                  latrineDryCommunal: "Latrine sèche collective",
+                  latrineWetOrFlush: "Latrine humide ou à chasse d'eau",
+                  aquaticDischarge: "Rejet direct dans un milieu aquatique",
+                },
+              },
+              sludge: {
+                title: "Destination des boues",
+                description:
+                  "Ajoutez les destinations physiques des boues et renseignez leur masse humide annuelle.",
+                addLabel: "Ajouter une destination",
+                rowLabelPrefix: "Destination",
+                fields: {
+                  destination: "Destination",
+                  destinationPlaceholder: "Choisir une destination",
+                  withinMunicipalBoundary: "Dans le périmètre municipal",
+                  withinMunicipalBoundaryPlaceholder: "Choisir une réponse",
+                },
+                columns: {
+                  mass: "Masse de boues humides",
+                  methaneRecovery: "Méthane récupéré",
+                  nitrogenApplied: "Azote appliqué",
+                  sludgeType: "Type de boues",
+                  climate: "Climat",
+                  landfillSiteType: "Type de site d'enfouissement",
+                  landfillIdentifier: "Identifiant du site",
+                },
+                destinations: {
+                  anaerobicDigestion: "Digestion anaérobie",
+                  composting: "Compostage",
+                  landfill: "Mise en décharge",
+                  incineration: "Incinération",
+                  landApplication: "Épandage",
+                  notEstimated: "Destination non estimée",
+                },
+                withinMunicipalBoundary: { true: "Oui", false: "Non" },
+                help: {
+                  mass: "Indiquez la masse annuelle de boues humides. Elle est indépendante de la charge organique retirée dans les boues (S).",
+                  massLabel: "Information sur la masse de boues",
+                  methaneRecovery: "Facultatif : laissez vide si aucun méthane n'est récupéré.",
+                  methaneRecoveryLabel: "Information sur le méthane récupéré",
+                  nitrogenApplied:
+                    "Facultatif : renseignez l'azote annuel appliqué lorsqu'il est connu.",
+                  nitrogenAppliedLabel: "Information sur l'azote appliqué",
+                  sludgeType: "Renseignez le type de boues envoyé en décharge.",
+                  sludgeTypeLabel: "Information sur le type de boues",
+                  climate: "Renseignez le climat du site d'enfouissement.",
+                  climateLabel: "Information sur le climat",
+                  landfillSiteType: "Renseignez le type de site d'enfouissement.",
+                  landfillSiteTypeLabel: "Information sur le type de site",
+                  landfillIdentifier: "Renseignez l'identifiant du site d'enfouissement.",
+                  landfillIdentifierLabel: "Information sur l'identifiant du site",
+                  withinMunicipalBoundary:
+                    "Indiquez si cette destination des boues est située dans le périmètre municipal.",
+                  withinMunicipalBoundaryLabel: "Information sur le périmètre municipal",
+                },
+              },
+              fallback: {
+                title: "Estimation à partir de la population",
+                description:
+                  "Utilisez les données de population déjà renseignées lorsque la charge organique domestique annuelle n'est pas connue.",
+                rows: {
+                  utility: "Réseau / service d'assainissement",
+                },
+                columns: {
+                  connectionPercentage: "Part de la population raccordée",
+                  foodWasteToSewer: "Déchets alimentaires dans le réseau",
+                },
+                help: {
+                  connectionPercentage:
+                    "Part annuelle de la population déjà renseignée qui est raccordée au réseau ou service d'assainissement.",
+                  connectionPercentageLabel: "Information sur le raccordement au réseau",
+                  foodWasteToSewer:
+                    "Indiquez si les déchets alimentaires sont éliminés dans le réseau. La valeur par défaut est non.",
+                  foodWasteToSewerLabel: "Information sur les déchets alimentaires",
+                },
+              },
+            },
             trees: {
               trackedTreeCrops: {
                 title: "Cultures arboricoles suivies",
@@ -1598,12 +2434,12 @@ export default {
                   treeTypePlaceholder: "Choisir un type d'arbre",
                 },
                 columns: {
-                  youngHectares: "Jeunes (ha)",
-                  adultHectares: "Adultes (ha)",
-                  senescentHectares: "Sénescents (ha)",
-                  youngTrees: "Jeunes (nb)",
-                  adultTrees: "Adultes (nb)",
-                  senescentTrees: "Sénescents (nb)",
+                  youngTreeCanopyArea: "Canopée jeunes (ha)",
+                  adultTreeCanopyArea: "Canopée adultes (ha)",
+                  senescentTreeCanopyArea: "Canopée sénescents (ha)",
+                  youngTrees: "Jeunes (nb, facultatif)",
+                  adultTrees: "Adultes (nb, facultatif)",
+                  senescentTrees: "Sénescents (nb, facultatif)",
                 },
                 treeTypes: {
                   oliveTrees: "Oliviers",
@@ -1626,8 +2462,12 @@ export default {
               },
               fruitTrees: {
                 title: "Arbres fruitiers",
-                countLabel: "Nombre d'arbres fruitiers",
+                treeCanopyAreaLabel: "Surface de canopée",
+                countLabel: "Nombre d'arbres fruitiers (facultatif)",
               },
+              treeCanopyAreaHelpLabel: "Définition de la surface de canopée",
+              treeCanopyAreaHelp:
+                "La surface de canopée correspond à la surface au sol couverte par les couronnes des arbres, et non à la superficie totale de la parcelle.",
             },
             perennialPlantationStock: {
               title: "Plantations perennes",
@@ -1674,14 +2514,40 @@ export default {
             },
             livestock: {
               title: "Cheptel",
-              description: "Renseigner les effectifs annuels et la part confinée.",
+              description: "Renseigner les effectifs annuels et les systèmes de gestion du fumier.",
               yearSelector: "Choisir une année",
               columns: {
                 count: "Effectif",
-                confinedTimeShare: "Temps confiné (%)",
               },
-              confinedTimeShareHelp:
-                "Cette information permettra de déterminer la proportion de la quantité de fumier générée en étable, et celle générée sur les champs (ou éventuellement parcours). Le calcul des émissions dues au fumier en dépendra. À titre d'exemple, une valeur de 25% signifie que les ovins sont en étable en moyenne 25% du temps.",
+              manureManagement: {
+                title: "Systèmes de gestion du fumier",
+                description:
+                  "La répartition est généralement stable : renseignez une année, sauf si les pratiques changent selon les années.",
+                tier2Notice: {
+                  title: "Données de niveau 2.",
+                  description:
+                    "Contrairement au niveau 1, qui applique un facteur global par type d'animal, le niveau 2 distingue chaque système de gestion du fumier pour une estimation plus précise.",
+                },
+                systems: {
+                  solidStorage: "Stockage solide",
+                  liquidSlurry: "Lisier",
+                  dryLot: "Parc d'engraissement sec",
+                  pastureRangePaddock: "Pâturage, parcours ou enclos",
+                  burnedForFuel: "Brûlé comme combustible",
+                },
+              },
+              poultryManureManagement: {
+                title: "Systèmes de gestion du fumier de volaille",
+                description:
+                  "La répartition est généralement stable : renseignez une année, sauf si les pratiques changent selon les années.",
+                systems: {
+                  poultryManureWithLitter: "Fumier de volaille avec litière",
+                  poultryManureWithoutLitter: "Fumier de volaille sans litière",
+                  dryLot: "Parc d'engraissement sec",
+                  anaerobicLagoon: "Lagon anaérobie",
+                  pastureRangePaddock: "Pâturage, parcours ou enclos",
+                },
+              },
               rows: {
                 dairyCattle: "Bovins laitiers",
                 otherCattle: "Autres bovins",
@@ -1736,12 +2602,16 @@ export default {
               yearlyDescription:
                 "Structure issue du document d'entree: arbres urbains, dechets verts et destinations annuelles.",
               yearly: {
-                urbanTrees: "Nombre d'arbres urbains",
+                treeCanopyArea: "Surface de canopée des arbres urbains",
+                urbanTrees: "Nombre d'arbres urbains (facultatif)",
                 greenWaste: "Quantite de dechets verts urbains",
                 composting: "Destination compostage",
                 controlledLandfill: "Destination décharge contrôlée",
                 uncontrolledLandfill: "Destination décharge décontrôlée",
               },
+              treeCanopyAreaHelpLabel: "Définition de la surface de canopée",
+              treeCanopyAreaHelp:
+                "La surface de canopée correspond à la surface au sol couverte par les couronnes des arbres, et non à la superficie totale de la parcelle.",
             },
           },
           evidence: {
@@ -1873,12 +2743,15 @@ export default {
             yearMode: "TODO temporalite et carry-forward.",
             implementationNote: "Placeholder transport pour voir l'architecture complete.",
           },
-          publicTransport: {
-            title: "Transport public",
+          buses: {
+            title: "Transport public routier",
             description: "Jeu transport cite, sans structure de champs finalisee.",
             sourceMode: "TODO split par sous-mode ou operateur.",
             yearMode: "TODO blocs annuels et niveau de granularite.",
             implementationNote: "Placeholder transport public volontaire.",
+          },
+          urbanRail: {
+            title: "Transport ferroviaire urbain",
           },
           airTransport: {
             title: "Transport aerien",
@@ -1894,6 +2767,30 @@ export default {
             sourceMode: "TODO source-first, year-first ou hybride.",
             yearMode: "TODO logique proxys, comparaisons et validation annuelle.",
             implementationNote: "Placeholder transport general volontaire.",
+          },
+          wastewaterTreatment: {
+            title: "Traitement et rejet",
+            description: "Systèmes de traitement et rejets des effluents traités.",
+            sourceMode: "Saisie annuelle par système et par destination.",
+            yearMode: "Les charges et masses restent renseignées par année d'inventaire.",
+            implementationNote:
+              "Les détails conditionnels seront ajoutés au niveau de chaque système.",
+          },
+          wastewaterNitrogen: {
+            title: "Azote et N₂O",
+            description: "Données d'azote annuelles par système de traitement.",
+            sourceMode: "Saisie annuelle par système.",
+            yearMode: "Les données restent renseignées par année d'inventaire.",
+            implementationNote:
+              "Les détails conditionnels seront ajoutés au niveau de chaque système.",
+          },
+          wastewaterSludge: {
+            title: "Boues",
+            description: "Destinations physiques et masses annuelles des boues.",
+            sourceMode: "Saisie annuelle par destination.",
+            yearMode: "Les masses restent renseignées par année d'inventaire.",
+            implementationNote:
+              "Les détails conditionnels seront ajoutés au niveau de chaque destination.",
           },
           sanitation: {
             title: "Assainissement",
@@ -3447,7 +4344,11 @@ export default {
     submit: "Résultat",
     errors: {
       Required: "Obligatoire",
+      Invalid: "Invalide",
+      nonNegative: "0 ou plus",
       between0And100: "Valeur entre 0 et 100",
+      manureManagementSharesMustTotal100:
+        "La répartition des systèmes de gestion du fumier doit totaliser 100 %.",
       collectivityCountryInvalid: "Choisissez un pays valide.",
       collectivityProjectSlugInvalid:
         "Utilisez uniquement des lettres minuscules, des chiffres et des tirets.",

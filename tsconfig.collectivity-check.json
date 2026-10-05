@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "include": [
-    "src/app/[locale]/collectivity/**/*.ts",
-    "src/app/[locale]/collectivity/**/*.tsx",
-    "src/lib/collectivity/**/*.ts",
-    "src/lib/collectivity/**/*.tsx"
-  ]
-}

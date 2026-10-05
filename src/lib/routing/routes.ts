@@ -102,10 +102,26 @@ export function getCollectivityLandingRoute() {
   return "/collectivity";
 }
 
+export function getCollectivityPricingRoute() {
+  return "/collectivity/pricing";
+}
+
+export function getCollectivityPricingConfigurationRoute() {
+  return getCollectivityPricingRoute();
+}
+
+export function getCollectivityPricingQuoteRoute(quoteId: string | number) {
+  return `${getCollectivityPricingRoute()}/${encodeURIComponent(quoteId)}`;
+}
+
+export function getCollectivitySubscriptionRoute() {
+  return "/collectivity/subscription";
+}
+
 export function getCollectivityStartRoute() {
-  return "/collectivity/start";
+  return "/collectivity/projects/start";
 }
 
 export function getCollectivitySetupEntryRoute() {
-  return "/collectivity/setup";
+  return "/collectivity/projects/setup";
 }

@@ -15,7 +15,7 @@ export function isCollectivityModuleSlug(value: string): value is CollectivityMo
 }
 
 export function getCollectivityPlanRoute(planId: string) {
-  return `/collectivity/${planId}`;
+  return `/collectivity/projects/${planId}`;
 }
 
 export function getCollectivityModuleRoute(planId: string, moduleSlug: CollectivityModuleSlug) {
@@ -23,7 +23,7 @@ export function getCollectivityModuleRoute(planId: string, moduleSlug: Collectiv
 }
 
 export function getCollectivitySetupRoute() {
-  return "/collectivity/setup";
+  return "/collectivity/projects/setup";
 }
 
 export function getCollectivityProjectsRoute(moduleSlug?: CollectivityModuleSlug | null) {

@@ -6,8 +6,13 @@ import type { TName } from "@/components/ui/forms";
 import type {
   InventoryTableColumn,
   InventoryTableRow,
-} from "@/app/[locale]/collectivity/[planId]/inventory/types";
+} from "@/app/[locale]/collectivity/projects/[planId]/inventory/types";
 import { Row } from "@tanstack/react-table";
+import type {
+  EditableTableRowField,
+  EditableTableRows,
+  EditableTableRowState,
+} from "../editable-rows/types";
 
 export type TableGridRow = InventoryTableRow & { id?: string };
 export type TableGridColumn = InventoryTableColumn & { type?: "number" | "text"; id?: string };
@@ -18,6 +23,7 @@ export type TableGridCellRendererArgs<T extends FieldValues> = {
   column: TableGridColumn;
   name: TName<T>;
   selectedYear?: number;
+  editableRows?: boolean;
 };
 
 export type TableGridCellRenderer<T extends FieldValues> = (
@@ -32,6 +38,7 @@ export type TableGridProps<T extends FieldValues> = {
   columns: TableGridColumn[];
   form: UseFormReturn<T, undefined>;
   baseName: TName<T>;
+  selectedYear?: number;
   yearSelector?: {
     datasetKey: string;
     years: number[];
@@ -39,10 +46,14 @@ export type TableGridProps<T extends FieldValues> = {
     ariaLabel?: string;
     className?: string;
   };
-  editableRows?: {
-    minRows: number;
-    onRemoveRow: (index: number) => void;
-  };
+  editableRows?:
+    | EditableTableRows
+    | {
+        minRows: number;
+        onRemoveRow: (index: number) => void;
+      };
+  editableRowState?: EditableTableRowState;
+  rowFields?: EditableTableRowField[];
   addRow?: {
     label: string;
     onAdd: () => void;

@@ -1,5 +1,6 @@
 import { http, HttpResponse } from "msw";
-import type { CollectivitySetupData } from "@/app/[locale]/collectivity/setup/_lib/types";
+import type { CollectivitySetupData } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+import type { SubscriptionCatalogue } from "@/app/[locale]/collectivity/pricing/_lib/pricing";
 import { getUserPlanIds } from "@/lib/auth/profile";
 import { getMockUserByAccessToken } from "@/mocks/auth";
 import {
@@ -10,12 +11,106 @@ import {
   saveMockCollectivityInventoryInput,
   saveMockCollectivitySetup,
 } from "@/mocks/collectivity";
+import {
+  approveMockCollectivitySubscriptionClaim,
+  assignMockCollectivitySubscriptionPlaceDirectly,
+  assignMockCollectivitySubscriptionPlaceToSelf,
+  createMockCollectivitySubscriptionInvitationLink,
+  denyMockCollectivitySubscriptionClaim,
+  getMockCollectivitySubscriptionClaims,
+  getMockAvailableCollectivityClaims,
+  getMockCollectivitySubscriptionDetail,
+  getMockLatestCollectivityQuote,
+  revokeMockCollectivitySubscriptionClaim,
+  revokeMockCollectivitySubscriptionInvitationLink,
+  createMockCollectivityInvitationRequest,
+  getMockCollectivityInvitationClaim,
+  getMockCollectivityInvitationPreview,
+  consumeMockCollectivitySubscriptionClaim,
+  retryMockCollectivityInvitationRequest,
+} from "@/mocks/collectivity-subscription";
 
-const strapiUrl = process.env.STRAPI_INTERNAL_URL;
+const strapiUrl = process.env.STRAPI_INTERNAL_URL ?? "http://localhost:1337";
+
+const subscriptionCatalogue: SubscriptionCatalogue = {
+  catalogueVersion: "2026-09-adjusted-v1",
+  discountPolicyVersion: "2026-09-adjusted-v1",
+  perimeters: ["patrimoine_communal", "territorial_communes"],
+  modules: [
+    {
+      key: "ghg_inventory_scope_1_2",
+      status: "available",
+      annualRatesCents: { patrimoine_communal: 150000, territorial_communes: 350000 },
+      conditions: [],
+    },
+    {
+      key: "ghg_inventory_scope_3",
+      status: "planned_later",
+      annualRatesCents: { patrimoine_communal: 200000, territorial_communes: 600000 },
+      conditions: [],
+    },
+    {
+      key: "emission_factor_consolidation",
+      status: "available",
+      annualRatesCents: { patrimoine_communal: 60000, territorial_communes: 120000 },
+      conditions: [],
+    },
+    {
+      key: "prospective_objectives",
+      status: "in_development",
+      annualRatesCents: { patrimoine_communal: 80000, territorial_communes: 180000 },
+      conditions: [],
+    },
+    {
+      key: "ghg_mitigation_investment_plan",
+      status: "in_development",
+      annualRatesCents: { patrimoine_communal: 150000, territorial_communes: 450000 },
+      conditions: [],
+    },
+    {
+      key: "mrv_tracking",
+      status: "in_development",
+      annualRatesCents: { patrimoine_communal: 120000, territorial_communes: 350000 },
+      conditions: [],
+    },
+    {
+      key: "significant_indicators",
+      status: "coming_soon",
+      annualRatesCents: { patrimoine_communal: 70000, territorial_communes: 150000 },
+      conditions: [],
+    },
+    {
+      key: "scoring_100",
+      status: "coming_soon",
+      annualRatesCents: { patrimoine_communal: 80000, territorial_communes: 180000 },
+      conditions: [],
+    },
+    {
+      key: "intermunicipal_aggregation",
+      status: "in_development",
+      annualRatesCents: { patrimoine_communal: 40000, territorial_communes: 100000 },
+      conditions: [{ field: "commune_count", operator: "gte", value: 3 }],
+    },
+  ],
+  discountPolicy: {
+    termYears: { "3": 2000 },
+    communeCount: [
+      { minimum: 5, discountBasisPoints: 1000 },
+      { minimum: 10, discountBasisPoints: 2000 },
+    ],
+    maximumDiscountBasisPoints: 2500,
+  },
+};
+
+const supportedCollectivityCountries = [
+  { code: "FRA", name: "France" },
+  { code: "SEN", name: "Senegal" },
+  { code: "TUN", name: "Tunisia" },
+] as const;
 
 function error(status: number, message: string, details?: Record<string, unknown>) {
   return HttpResponse.json(
-    { error: { status, message, ...(details ? { details } : {}) } },
+    { data: null, error: { status, message, ...(details ? { details } : {}) } },
     { status }
   );
 }
@@ -30,7 +125,250 @@ function projectSlug(params: Record<string, string | readonly string[] | undefin
   return typeof value === "string" ? value : "";
 }
 
+function numericParam(params: Record<string, string | readonly string[] | undefined>, key: string) {
+  const value = params[key];
+  const parsed = typeof value === "string" ? Number(value) : NaN;
+  return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : null;
+}
+
+function mutationError(result: { kind: string }) {
+  if (result.kind === "capacity_full") {
+    return error(409, "Subscription capacity is full", { code: "SUBSCRIPTION_CAPACITY_FULL" });
+  }
+
+  if (result.kind === "not_invited") {
+    return error(409, "Claimant has no invitation history", { code: "CLAIMANT_NOT_INVITED" });
+  }
+
+  return error(409, "Subscription claim cannot be changed", { code: "INVALID_CLAIM_STATE" });
+}
+
 export const collectivityHandlers = [
+  http.get(`${strapiUrl}/api/collectivity/countries`, () =>
+    HttpResponse.json({ data: supportedCollectivityCountries })
+  ),
+  http.get(`${strapiUrl}/api/collectivity/subscription-catalogue`, () =>
+    HttpResponse.json({ data: subscriptionCatalogue })
+  ),
+  http.get(`${strapiUrl}/api/collectivity/subscription-invitations/preview`, ({ request }) => {
+    const token = new URL(request.url).searchParams.get("token")?.trim() ?? "";
+    const preview = getMockCollectivityInvitationPreview(token);
+    return preview
+      ? HttpResponse.json({ data: preview })
+      : error(404, "Invitation not found", { code: "INVITATION_INVALID" });
+  }),
+  http.post(`${strapiUrl}/api/collectivity/subscription-claims`, async ({ request }) => {
+    const user = authenticatedUser(request);
+    if (!user) return error(401, "Authentication required");
+    const body = (await request.json().catch(() => null)) as { token?: unknown } | null;
+    const token = typeof body?.token === "string" ? body.token : "";
+    const result = createMockCollectivityInvitationRequest(user, token);
+    if (result.kind === "success")
+      return HttpResponse.json({
+        data: {
+          id: result.claim.id,
+          status: result.claim.status,
+          createdAt: result.claim.createdAt,
+        },
+      });
+    if (result.kind === "exists")
+      return error(409, "Claim already exists", {
+        code: "CLAIM_ALREADY_EXISTS",
+        claimId: result.claim.id,
+        status: result.claim.status,
+      });
+    return error(result.kind === "unauthenticated" ? 401 : 400, "Invitation cannot be used");
+  }),
+  http.get(`${strapiUrl}/api/collectivity/subscription-claims/available`, ({ request }) => {
+    const user = authenticatedUser(request);
+    if (!user) return error(401, "Authentication required");
+    return HttpResponse.json({ data: getMockAvailableCollectivityClaims(user) });
+  }),
+  http.get(`${strapiUrl}/api/collectivity/subscription-claims/:claimId`, ({ request, params }) => {
+    const user = authenticatedUser(request);
+    if (!user) return error(401, "Authentication required");
+    const claimId = numericParam(params, "claimId");
+    const claim = claimId === null ? null : getMockCollectivityInvitationClaim(user, claimId);
+    return claim ? HttpResponse.json({ data: claim }) : error(404, "Subscription claim not found");
+  }),
+  http.post(
+    `${strapiUrl}/api/collectivity/subscription-claims/:claimId/retry`,
+    async ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+      const claimId = numericParam(params, "claimId");
+      const body = (await request.json().catch(() => null)) as { token?: unknown } | null;
+      const token = typeof body?.token === "string" ? body.token : "";
+      const claim =
+        claimId === null ? null : retryMockCollectivityInvitationRequest(user, claimId, token);
+      return claim
+        ? HttpResponse.json({
+            data: { id: claim.id, status: claim.status, createdAt: claim.createdAt },
+          })
+        : error(409, "Invitation request cannot be retried");
+    }
+  ),
+  http.get(`${strapiUrl}/api/collectivity/quotes/latest`, ({ request }) => {
+    const user = authenticatedUser(request);
+    if (!user) return error(401, "Authentication required");
+
+    const quote = getMockLatestCollectivityQuote(user);
+    return quote ? HttpResponse.json({ data: quote }) : error(404, "Collectivity quote not found");
+  }),
+  http.get(`${strapiUrl}/api/collectivity/subscriptions/:subscriptionId`, ({ request, params }) => {
+    const user = authenticatedUser(request);
+    if (!user) return error(401, "Authentication required");
+
+    const subscriptionId = numericParam(params, "subscriptionId");
+    if (subscriptionId === null) return error(404, "Collectivity subscription not found");
+
+    const subscription = getMockCollectivitySubscriptionDetail(user, subscriptionId);
+    return subscription
+      ? HttpResponse.json({ data: subscription })
+      : error(404, "Collectivity subscription not found");
+  }),
+  http.get(
+    `${strapiUrl}/api/collectivity/subscriptions/:subscriptionId/claims`,
+    ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+
+      const subscriptionId = numericParam(params, "subscriptionId");
+      if (subscriptionId === null) return error(404, "Collectivity subscription not found");
+
+      const claims = getMockCollectivitySubscriptionClaims(user, subscriptionId);
+      return claims
+        ? HttpResponse.json({ data: claims })
+        : error(404, "Collectivity subscription not found");
+    }
+  ),
+  http.post(
+    `${strapiUrl}/api/collectivity/subscriptions/:subscriptionId/claim-link`,
+    ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+
+      const subscriptionId = numericParam(params, "subscriptionId");
+      if (subscriptionId === null) return error(404, "Collectivity subscription not found");
+
+      const invitationLink = createMockCollectivitySubscriptionInvitationLink(user, subscriptionId);
+      return invitationLink
+        ? HttpResponse.json({ data: invitationLink })
+        : error(404, "Collectivity subscription not found");
+    }
+  ),
+  http.delete(
+    `${strapiUrl}/api/collectivity/subscriptions/:subscriptionId/claim-link`,
+    ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+
+      const subscriptionId = numericParam(params, "subscriptionId");
+      if (subscriptionId === null) return error(404, "Collectivity subscription not found");
+
+      return revokeMockCollectivitySubscriptionInvitationLink(user, subscriptionId)
+        ? new HttpResponse(null, { status: 204 })
+        : error(404, "Collectivity subscription not found");
+    }
+  ),
+  http.post(
+    `${strapiUrl}/api/collectivity/subscriptions/:subscriptionId/self-claims`,
+    ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+
+      const subscriptionId = numericParam(params, "subscriptionId");
+      if (subscriptionId === null) return error(404, "Collectivity subscription not found");
+
+      const result = assignMockCollectivitySubscriptionPlaceToSelf(user, subscriptionId);
+      if (result.kind === "success") return HttpResponse.json({ data: result.claim });
+      if (result.kind === "not_found") return error(404, "Collectivity subscription not found");
+      return mutationError(result);
+    }
+  ),
+  http.post(
+    `${strapiUrl}/api/collectivity/subscriptions/:subscriptionId/claims/direct`,
+    async ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+
+      const subscriptionId = numericParam(params, "subscriptionId");
+      const body = (await request.json().catch(() => null)) as { claimantUserId?: unknown } | null;
+      const claimantUserId =
+        typeof body?.claimantUserId === "number" && Number.isSafeInteger(body.claimantUserId)
+          ? body.claimantUserId
+          : null;
+      if (subscriptionId === null || claimantUserId === null || claimantUserId < 1) {
+        return error(400, "Invalid subscription or claimant user id");
+      }
+
+      const result = assignMockCollectivitySubscriptionPlaceDirectly(
+        user,
+        subscriptionId,
+        claimantUserId
+      );
+      if (result.kind === "success") return HttpResponse.json({ data: result.claim });
+      if (result.kind === "not_found") return error(404, "Collectivity subscription not found");
+      return mutationError(result);
+    }
+  ),
+  http.post(
+    `${strapiUrl}/api/collectivity/subscriptions/:subscriptionId/claims/:claimId/approve`,
+    ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+
+      const subscriptionId = numericParam(params, "subscriptionId");
+      const claimId = numericParam(params, "claimId");
+      if (subscriptionId === null || claimId === null) {
+        return error(404, "Collectivity subscription claim not found");
+      }
+
+      const result = approveMockCollectivitySubscriptionClaim(user, subscriptionId, claimId);
+      if (result.kind === "success") return HttpResponse.json({ data: result.claim });
+      if (result.kind === "not_found")
+        return error(404, "Collectivity subscription claim not found");
+      return mutationError(result);
+    }
+  ),
+  http.post(
+    `${strapiUrl}/api/collectivity/subscriptions/:subscriptionId/claims/:claimId/deny`,
+    ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+
+      const subscriptionId = numericParam(params, "subscriptionId");
+      const claimId = numericParam(params, "claimId");
+      if (subscriptionId === null || claimId === null) {
+        return error(404, "Collectivity subscription claim not found");
+      }
+
+      const result = denyMockCollectivitySubscriptionClaim(user, subscriptionId, claimId);
+      if (result.kind === "success") return HttpResponse.json({ data: result.claim });
+      if (result.kind === "not_found")
+        return error(404, "Collectivity subscription claim not found");
+      return mutationError(result);
+    }
+  ),
+  http.post(
+    `${strapiUrl}/api/collectivity/subscriptions/:subscriptionId/claims/:claimId/revoke`,
+    ({ request, params }) => {
+      const user = authenticatedUser(request);
+      if (!user) return error(401, "Authentication required");
+
+      const subscriptionId = numericParam(params, "subscriptionId");
+      const claimId = numericParam(params, "claimId");
+      if (subscriptionId === null || claimId === null) {
+        return error(404, "Collectivity subscription claim not found");
+      }
+
+      const result = revokeMockCollectivitySubscriptionClaim(user, subscriptionId, claimId);
+      if (result.kind === "success") return HttpResponse.json({ data: result.claim });
+      if (result.kind === "not_found")
+        return error(404, "Collectivity subscription claim not found");
+      return mutationError(result);
+    }
+  ),
   http.get(`${strapiUrl}/api/collectivity/projects`, ({ request }) => {
     const user = authenticatedUser(request);
     if (!user) return error(401, "Authentication required");
@@ -56,14 +394,39 @@ export const collectivityHandlers = [
     const user = authenticatedUser(request);
     if (!user) return error(401, "Authentication required");
 
-    const setup = (await request.json()) as CollectivitySetupData;
+    const body = (await request.json()) as CollectivitySetupData & { approvedClaimId?: unknown };
+    const approvedClaimId = Number(body.approvedClaimId);
+    if (!Number.isSafeInteger(approvedClaimId) || approvedClaimId < 1) {
+      return error(400, "Missing approved claim id");
+    }
+    if (!getMockAvailableCollectivityClaims(user).some((claim) => claim.id === approvedClaimId)) {
+      return error(409, "Approved claim cannot create a project");
+    }
+    const setup = body;
+    if (!supportedCollectivityCountries.some((country) => country.code === setup.country)) {
+      return error(400, "projectCountryInvalid", {
+        fieldErrors: { country: "projectCountryInvalid" },
+      });
+    }
     if (!isMockCollectivityPlanIdUnique(user, setup.slug)) {
       return error(409, "collectivityProjectSlugNotUnique", {
         fieldErrors: { slug: "collectivityProjectSlugNotUnique" },
       });
     }
 
-    return HttpResponse.json({ data: saveMockCollectivitySetup(user, setup) });
+    const snapshot = saveMockCollectivitySetup(user, setup);
+    const projectId = Number.parseInt(snapshot.project.id, 10) || approvedClaimId;
+    if (
+      !consumeMockCollectivitySubscriptionClaim(user, approvedClaimId, {
+        id: projectId,
+        slug: snapshot.project.slug,
+        name: snapshot.project.name,
+      })
+    ) {
+      return error(409, "Approved claim cannot create a project");
+    }
+
+    return HttpResponse.json({ data: snapshot });
   }),
   http.put(
     `${strapiUrl}/api/collectivity/projects/:projectSlug/setup`,

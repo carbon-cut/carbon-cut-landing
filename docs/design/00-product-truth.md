@@ -1,10 +1,10 @@
-# Carbon Cut Product Truth Source
+# Retired Household Product Truth (historical)
 
-This file defines the current product truth for Carbon Cut.
+**Status: superseded.** Household is retired and is not an active product flow. The personal assessment, results, audience, and homepage claims below describe an earlier product direction. Do not use them as current product truth or current copy guidance, even if the old routes or UI still exist.
 
-Use it as the reference before writing homepage copy, product copy, sales copy, or UI messaging.
+For active collectivity scope, consult [collectivity product assumptions](../collectivity/product/00-product-truth.md) and [routes](../collectivity/product/routes.md). Verify open assumptions before treating them as product decisions.
 
-If a marketing claim conflicts with this file, this file wins.
+## Historical snapshot
 
 Carbon Cut is still in testing.
 

@@ -26,11 +26,13 @@ type Props<T extends FieldValues> = {
   unitAdornmentPlacement?: "start" | "end";
   disabled?: boolean;
   onChange?: (v: any) => void;
+  onBlur?: (value: string) => void;
   size?: "xl" | "sm";
   labelClassName?: string;
   className?: string;
   fallback?: boolean;
   valueControl?: (v: any) => boolean;
+  required?: boolean;
 };
 
 function InventoryFieldInput<T extends FieldValues>({
@@ -45,9 +47,11 @@ function InventoryFieldInput<T extends FieldValues>({
   unitAdornmentPlacement = "end",
   disabled = false,
   onChange,
+  onBlur,
   size = "xl",
   className,
   fallback = false,
+  required = false,
   valueControl = (v: any) => v >= 0 || v === "",
 }: Props<T>) {
   const unitRef = React.useRef<HTMLSpanElement>(null);
@@ -80,79 +84,91 @@ function InventoryFieldInput<T extends FieldValues>({
       control={form.control}
       name={name}
       render={({ field, fieldState }) => (
-        <FormItem className="space-y-1.5">
+        <FormItem className="space-y-1 w-full">
           {label ? (
             <FormLabel
               data-state={fieldState.error && "error"}
               className={cn(
-                `text-sm font-medium ${
-                  disabled ? "text-muted-foreground data-[state=error]:text-destructive/60" : ""
+                `text-caption-bold font-caption-bold leading-4 text-default-font ${
+                  disabled ? "text-neutral-400 data-[state=error]:text-error-700" : ""
                 }`,
                 labelClassName
               )}
             >
               {label}
+              {required && <span className="text-error-600"> *</span>}
             </FormLabel>
           ) : null}
 
           <div className={cn("w-full inline-block")}>
             <FormControl>
-              <div className="relative">
-                <InputRoot
-                  ref={field.ref}
-                  disabled={disabled}
-                  placeholder={placeholder}
-                  type={type}
-                  value={field.value ?? ""}
-                  style={
-                    unitAdornment && unitPx
-                      ? ({
-                          ...(unitAdornmentPlacement === "end"
-                            ? { paddingRight: `${unitPx}px` }
-                            : { paddingLeft: `${unitPx}px` }),
-                        } as React.CSSProperties)
-                      : undefined
-                  }
-                  className={cn(
-                    "w-full h-9 rounded-lg bg-card",
-                    fieldState.error ? "outline-none ring-1 ring-destructive/60" : "",
-                    unitAdornment
-                      ? unitPx
-                        ? ""
-                        : unitAdornmentPlacement === "end"
-                          ? "pr-16"
-                          : "pl-16"
-                      : "",
-                    size === "sm" ? "h-8 text-xs" : "",
-                    className
-                  )}
-                  inputMode={type === "number" ? "decimal" : undefined}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    if (type === "number") {
-                      const value = event.target.value;
+              <div
+                className={cn(
+                  "relative flex h-8 w-full items-center gap-1 rounded-md border border-solid border-neutral-border bg-default-background px-2 focus-within:border-brand-600",
+                  fieldState.error ? "border-error-600" : "",
+                  disabled ? "border-neutral-200 bg-neutral-200" : ""
+                )}
+              >
+                <div className="flex grow shrink-0 basis-0 self-stretch px-1">
+                  <InputRoot
+                    ref={field.ref}
+                    disabled={disabled}
+                    required={required}
+                    placeholder={placeholder}
+                    type={type}
+                    value={field.value ?? ""}
+                    style={
+                      unitAdornment && unitPx
+                        ? ({
+                            ...(unitAdornmentPlacement === "end"
+                              ? { paddingRight: `${unitPx}px` }
+                              : { paddingLeft: `${unitPx}px` }),
+                          } as React.CSSProperties)
+                        : undefined
+                    }
+                    className={cn(
+                      "h-full rounded-none border-none bg-transparent px-0 py-0 shadow-none",
+                      unitAdornment
+                        ? unitPx
+                          ? ""
+                          : unitAdornmentPlacement === "end"
+                            ? "pr-16"
+                            : "pl-16"
+                        : "",
+                      size === "sm" ? "text-xs" : "",
+                      className
+                    )}
+                    inputMode={type === "number" ? "decimal" : undefined}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      if (type === "number") {
+                        const value = event.target.value;
 
-                      if (value === "") {
-                        field.onChange("");
-                        onChange?.("");
+                        if (value === "") {
+                          field.onChange("");
+                          onChange?.("");
+                          return;
+                        }
+
+                        if (!valueControl(value)) return;
+
+                        const parsedValue = Number(value);
+                        if (!Number.isNaN(parsedValue)) {
+                          field.onChange(parsedValue);
+                          onChange?.(parsedValue);
+                        }
                         return;
                       }
 
-                      if (!valueControl(value)) return;
-
-                      const parsedValue = Number(value);
-                      if (!Number.isNaN(parsedValue)) {
-                        field.onChange(parsedValue);
-                        onChange?.(parsedValue);
-                      }
-                      return;
-                    }
-
-                    field.onChange(event.target.value);
-                    onChange?.(event.target.value);
-                  }}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                />
+                      field.onChange(event.target.value);
+                      onChange?.(event.target.value);
+                    }}
+                    onBlur={(event) => {
+                      field.onBlur();
+                      onBlur?.(event.target.value);
+                    }}
+                    name={field.name}
+                  />
+                </div>
 
                 {unitAdornment ? (
                   <div
@@ -177,11 +193,7 @@ function InventoryFieldInput<T extends FieldValues>({
           </div>
 
           {description ? <FormDescription>{description}</FormDescription> : null}
-          <FormMessage
-            className={labelClassName}
-            fallback={fallback}
-            data-state={disabled && "disabled"}
-          />
+          <FormMessage fallback={fallback} data-state={disabled && "disabled"} />
         </FormItem>
       )}
     />

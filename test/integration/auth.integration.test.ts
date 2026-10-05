@@ -105,8 +105,8 @@ describe.sequential("auth integration", () => {
       expect(response.headers.get("location")).toBe("/auth/sign-in?returnTo=%2Fform");
     });
 
-    it("redirects unauthenticated users from /collectivity/start to sign-in with returnTo", async () => {
-      const response = await fetchFrontend("/collectivity/start");
+    it("redirects unauthenticated users from /collectivity/projects/start to sign-in with returnTo", async () => {
+      const response = await fetchFrontend("/collectivity/projects/start");
 
       expect(response.status).toBe(307);
       expect(response.headers.get("location")).toBe(
@@ -123,12 +123,12 @@ describe.sequential("auth integration", () => {
       expect(response.headers.get("content-type")).toContain("text/html");
     });
 
-    it("redirects a household user away from collectivity start", async () => {
+    it("sends an authenticated user without a project to collectivity setup", async () => {
       const jar = authenticatedJar.clone();
-      const response = await fetchFrontend("/collectivity/start", undefined, jar);
+      const response = await fetchFrontend("/collectivity/projects/start", undefined, jar);
 
       expect(response.status).toBe(307);
-      expect(response.headers.get("location")).toBe("/form");
+      expect(response.headers.get("location")).toBe("/collectivity/projects/setup");
     });
 
     it("logs out and clears the auth session", async () => {

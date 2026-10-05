@@ -4,7 +4,7 @@ import type {
   CollectivityProjectSnapshot,
   CollectivitySetupData,
   CollectivitySetupSnapshot,
-} from "@/app/[locale]/collectivity/setup/_lib/types";
+} from "@/app/[locale]/collectivity/projects/setup/_lib/types";
 import grandSfaxResult from "@/mocks/fixtures/collectivity-grand-sfax-result.json";
 
 export const COLLECTIVITY_MOCK_PASSWORD = "123";
@@ -69,6 +69,14 @@ export const COLLECTIVITY_MOCK_USERS = {
     inventory: {
       municipalElectricityConsumptionKwh: 42000,
     },
+  },
+  subscriptionDemo: {
+    id: 8,
+    username: "sub-test-user",
+    email: "subTest@example.com",
+    planId: undefined,
+    setup: null,
+    inventory: null,
   },
 };
 
@@ -235,7 +243,7 @@ function buildSetupSnapshot(
 
 const collectivityStateByEmail = new Map<string, MockCollectivityUserState>(
   Object.values(COLLECTIVITY_MOCK_USERS).map((user) => [
-    user.email,
+    user.email.toLowerCase(),
     (() => {
       const createdAt = "2026-01-01T00:00:00.000Z";
       const updatedAt = user.inventory ? "2026-06-01T00:00:00.000Z" : createdAt;

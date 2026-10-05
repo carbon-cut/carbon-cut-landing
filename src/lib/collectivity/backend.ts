@@ -4,10 +4,28 @@ import { fetchWithAuth, UnauthenticatedRequestError } from "@/lib/auth/fetchWith
 import type { AuthUser } from "@/lib/auth/types";
 import type { CollectivityResultsByYear } from "@/lib/collectivity/result-types";
 import type {
+  CreateCollectivityQuoteRequest,
+  PublicCollectivityQuote,
+  QuoteContext,
+  SubscriptionCatalogue,
+  SubscriptionPricePreview,
+  SubscriptionPricePreviewRequest,
+} from "@/app/[locale]/collectivity/pricing/_lib/pricing";
+import type {
   CollectivityProjectSnapshot,
   CollectivitySetupData,
   CollectivitySetupSnapshot,
-} from "@/app/[locale]/collectivity/setup/_lib/types";
+} from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+import type {
+  CollectivitySubscriptionClaim,
+  CollectivitySubscriptionDetail,
+  CollectivitySubscriptionInvitationLink,
+} from "@/app/[locale]/collectivity/subscription/_lib/claims";
+import type {
+  AvailableCollectivityClaim,
+  CollectivityInvitationClaim,
+  CollectivityInvitationPreview,
+} from "@/app/[locale]/collectivity/invitation/_lib/types";
 
 type CollectivityErrorBody = {
   error?: {
@@ -15,6 +33,11 @@ type CollectivityErrorBody = {
     message?: string;
     details?: Record<string, unknown>;
   };
+};
+
+export type CollectivityCountry = {
+  code: string;
+  name: string;
 };
 
 type ListProjectsResponse = {
@@ -148,6 +171,218 @@ async function requestCollectivity<T>(path: string, init?: RequestInit) {
   return body as T;
 }
 
+async function requestPublicCollectivity<T>(path: string) {
+  let response: Response;
+
+  try {
+    response = await fetch(`${getCollectivityBaseUrl()}${path}`, { cache: "no-store" });
+  } catch {
+    throw new CollectivityBackendError(503, {
+      error: { status: 503, message: "Collectivity backend unavailable" },
+    });
+  }
+
+  const body = await parseJson<T | CollectivityErrorBody>(response);
+
+  if (!response.ok) {
+    throw new CollectivityBackendError(response.status, (body ?? {}) as CollectivityErrorBody);
+  }
+
+  return body as T;
+}
+
+export async function getSubscriptionCatalogue(): Promise<SubscriptionCatalogue> {
+  const response = await requestPublicCollectivity<{ data: SubscriptionCatalogue }>(
+    "/api/collectivity/subscription-catalogue"
+  );
+  return response.data;
+}
+
+export async function getCollectivityCountries(): Promise<CollectivityCountry[]> {
+  const response = await requestPublicCollectivity<{ data: CollectivityCountry[] }>(
+    "/api/collectivity/countries"
+  );
+  return response.data;
+}
+
+export async function getQuoteContext(): Promise<QuoteContext> {
+  const response = await requestPublicCollectivity<{ data: QuoteContext }>(
+    "/api/collectivity/quote-context"
+  );
+  return response.data;
+}
+
+export async function getCollectivityInvitationPreview(token: string) {
+  const response = await requestPublicCollectivity<{ data: CollectivityInvitationPreview }>(
+    `/api/collectivity/subscription-invitations/preview?${new URLSearchParams({ token })}`
+  );
+  return response.data;
+}
+
+export async function submitCollectivityInvitationRequest(token: string) {
+  const response = await requestCollectivity<{
+    data: Pick<CollectivityInvitationClaim, "id" | "status" | "createdAt">;
+  }>("/api/collectivity/subscription-claims", {
+    method: "POST",
+    body: JSON.stringify({ token }),
+  });
+  return response.data;
+}
+
+export async function getCollectivityInvitationClaim(claimId: number) {
+  const response = await requestCollectivity<{ data: CollectivityInvitationClaim }>(
+    `/api/collectivity/subscription-claims/${encodeURIComponent(claimId)}`
+  );
+  return response.data;
+}
+
+export async function getAvailableCollectivityClaims(): Promise<AvailableCollectivityClaim[]> {
+  const response = await requestCollectivity<{ data: AvailableCollectivityClaim[] }>(
+    "/api/collectivity/subscription-claims/available"
+  );
+  return response.data;
+}
+
+export async function retryCollectivityInvitationRequest(claimId: number, token: string) {
+  const response = await requestCollectivity<{
+    data: Pick<CollectivityInvitationClaim, "id" | "status" | "createdAt">;
+  }>(`/api/collectivity/subscription-claims/${encodeURIComponent(claimId)}/retry`, {
+    method: "POST",
+    body: JSON.stringify({ token }),
+  });
+  return response.data;
+}
+
+export async function getSubscriptionPricePreview(
+  request: SubscriptionPricePreviewRequest
+): Promise<SubscriptionPricePreview> {
+  const response = await requestCollectivity<{ data: SubscriptionPricePreview }>(
+    "/api/collectivity/subscription-prices",
+    {
+      method: "POST",
+      body: JSON.stringify(request),
+    }
+  );
+  return response.data;
+}
+
+export async function createCollectivityQuote(
+  request: CreateCollectivityQuoteRequest
+): Promise<PublicCollectivityQuote> {
+  const response = await requestCollectivity<{ data: PublicCollectivityQuote }>(
+    "/api/collectivity/quotes",
+    {
+      method: "POST",
+      body: JSON.stringify(request),
+    }
+  );
+  return response.data;
+}
+
+export async function getLatestCollectivityQuote(): Promise<PublicCollectivityQuote> {
+  const response = await requestCollectivity<{ data: PublicCollectivityQuote }>(
+    "/api/collectivity/quotes/latest"
+  );
+  return response.data;
+}
+
+export async function getCollectivitySubscriptionDetail(
+  subscriptionId: number
+): Promise<CollectivitySubscriptionDetail> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionDetail }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}`
+  );
+  return response.data;
+}
+
+export async function getCollectivitySubscriptionClaims(
+  subscriptionId: number
+): Promise<CollectivitySubscriptionClaim[]> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim[] }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims`
+  );
+  return response.data;
+}
+
+export async function assignCollectivitySubscriptionPlaceToSelf(
+  subscriptionId: number
+): Promise<CollectivitySubscriptionClaim> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/self-claims`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function assignCollectivitySubscriptionPlaceDirectly(
+  subscriptionId: number,
+  claimantUserId: number
+): Promise<CollectivitySubscriptionClaim> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/direct`,
+    {
+      method: "POST",
+      body: JSON.stringify({ claimantUserId }),
+    }
+  );
+  return response.data;
+}
+
+export async function createCollectivitySubscriptionInvitationLink(
+  subscriptionId: number
+): Promise<CollectivitySubscriptionInvitationLink> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionInvitationLink }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claim-link`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function revokeCollectivitySubscriptionInvitationLink(subscriptionId: number) {
+  await requestCollectivity<unknown>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claim-link`,
+    { method: "DELETE" }
+  );
+}
+
+export async function revokeCollectivitySubscriptionClaim(
+  subscriptionId: number,
+  claimId: number
+): Promise<CollectivitySubscriptionClaim> {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/${encodeURIComponent(claimId)}/revoke`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function approveCollectivitySubscriptionClaim(
+  subscriptionId: number,
+  claimId: number
+) {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/${encodeURIComponent(claimId)}/approve`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function denyCollectivitySubscriptionClaim(subscriptionId: number, claimId: number) {
+  const response = await requestCollectivity<{ data: CollectivitySubscriptionClaim }>(
+    `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/${encodeURIComponent(claimId)}/deny`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
+export async function cancelCollectivityQuote(quoteId: number): Promise<PublicCollectivityQuote> {
+  const response = await requestCollectivity<{ data: PublicCollectivityQuote }>(
+    `/api/collectivity/quotes/${encodeURIComponent(quoteId)}/cancel`,
+    { method: "POST" }
+  );
+  return response.data;
+}
+
 export async function listCollectivityProjects(
   _user: Pick<AuthUser, "planId">
 ): Promise<CollectivityProjectSnapshot[]> {
@@ -167,7 +402,8 @@ export async function getCollectivitySetupSnapshot(
 export async function saveCollectivitySetup(
   _user: Pick<AuthUser, "id" | "email">,
   setup: CollectivitySetupData,
-  currentPlanId?: string | null
+  currentPlanId?: string | null,
+  approvedClaimId?: number | null
 ): Promise<CollectivitySetupSnapshot> {
   if (currentPlanId) {
     const response = await requestCollectivity<UpdateProjectSetupResponse>(
@@ -185,7 +421,7 @@ export async function saveCollectivitySetup(
     "/api/collectivity/projects/init",
     {
       method: "POST",
-      body: JSON.stringify(setup),
+      body: JSON.stringify({ ...setup, approvedClaimId }),
     }
   );
 

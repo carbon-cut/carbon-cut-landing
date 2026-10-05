@@ -20,7 +20,7 @@ describe("auth access helpers", () => {
     mockRequireServerSession.mockReset();
   });
 
-  it("redirects collectivity users away from household routes", async () => {
+  it("allows authenticated users to access household routes", async () => {
     mockRequireServerSession.mockResolvedValue({
       authenticated: true,
       user: {
@@ -30,19 +30,18 @@ describe("auth access helpers", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
-        allowedProducts: ["collectivity"],
-        productType: "collectivity",
         planId: ["grand-sfax"],
       },
     });
 
     const { requireHouseholdSession } = await import("@/lib/auth/access");
-    await requireHouseholdSession("/form");
+    const session = await requireHouseholdSession("/form");
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/grand-sfax/setup");
+    expect(session.user.email).toBe("collectivity.ready@example.com");
+    expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it("redirects household users away from collectivity routes", async () => {
+  it("allows authenticated users to access collectivity entry routes", async () => {
     mockRequireServerSession.mockResolvedValue({
       authenticated: true,
       user: {
@@ -52,15 +51,14 @@ describe("auth access helpers", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
-        allowedProducts: ["household"],
-        productType: "household",
       },
     });
 
     const { requireCollectivitySession } = await import("@/lib/auth/access");
-    await requireCollectivitySession("/collectivity/start");
+    const session = await requireCollectivitySession("/collectivity/projects/start");
 
-    expect(mockRedirect).toHaveBeenCalledWith("/form");
+    expect(session.user.email).toBe("demo@example.com");
+    expect(mockRedirect).not.toHaveBeenCalled();
   });
 
   it("redirects collectivity users without a plan from plan routes to setup", async () => {
@@ -73,8 +71,6 @@ describe("auth access helpers", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
-        allowedProducts: ["collectivity"],
-        productType: "collectivity",
       },
     });
 
@@ -85,7 +81,7 @@ describe("auth access helpers", () => {
       returnTo: "/collectivity/grand-sfax/inventory",
     });
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/setup");
+    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/projects/setup");
   });
 
   it("redirects collectivity users with projects but a bad slug to the selector page", async () => {
@@ -98,8 +94,6 @@ describe("auth access helpers", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
-        allowedProducts: ["collectivity"],
-        productType: "collectivity",
         planId: ["grand-sfax"],
       },
     });
@@ -114,7 +108,7 @@ describe("auth access helpers", () => {
     expect(mockRedirect).toHaveBeenCalledWith("/collectivity/projects?module=inventory");
   });
 
-  it("allows a super user to access both household and collectivity products", async () => {
+  it("allows an authenticated user to access both household and collectivity routes", async () => {
     mockRequireServerSession.mockResolvedValue({
       authenticated: true,
       user: {
@@ -124,7 +118,6 @@ describe("auth access helpers", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
-        allowedProducts: ["household", "collectivity"],
         planId: ["grand-sfax"],
       },
     });
@@ -133,7 +126,7 @@ describe("auth access helpers", () => {
       await import("@/lib/auth/access");
 
     const householdSession = await requireHouseholdSession("/form");
-    const collectivitySession = await requireCollectivitySession("/collectivity/start");
+    const collectivitySession = await requireCollectivitySession("/collectivity/projects/start");
 
     expect(householdSession.user.email).toBe("collectivity.super@example.com");
     expect(collectivitySession.user.email).toBe("collectivity.super@example.com");
@@ -143,7 +136,7 @@ describe("auth access helpers", () => {
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it("sends authenticated users away from auth pages based on their allowed products", async () => {
+  it("sends authenticated users with a project to its setup page", async () => {
     mockRequireServerSession.mockResolvedValue({
       authenticated: true,
       user: {
@@ -153,23 +146,16 @@ describe("auth access helpers", () => {
         provider: "local",
         confirmed: true,
         blocked: false,
-        allowedProducts: ["collectivity"],
         planId: ["grand-sfax"],
       },
     });
 
     const { getAuthenticatedUserHomeRoute } = await import("@/lib/auth/access");
 
-    expect(
-      getAuthenticatedUserHomeRoute({
-        allowedProducts: ["household"],
-      })
-    ).toBe("/form");
-    expect(getAuthenticatedUserHomeRoute({ allowedProducts: ["household", "collectivity"] })).toBe(
-      "/form"
+    expect(getAuthenticatedUserHomeRoute({})).toBe("/");
+    expect(getAuthenticatedUserHomeRoute({})).toBe("/");
+    expect(getAuthenticatedUserHomeRoute({ planId: ["grand-sfax"] })).toBe(
+      "/collectivity/grand-sfax/setup"
     );
-    expect(
-      getAuthenticatedUserHomeRoute({ allowedProducts: ["collectivity"], planId: ["grand-sfax"] })
-    ).toBe("/collectivity/grand-sfax/setup");
   });
 });
