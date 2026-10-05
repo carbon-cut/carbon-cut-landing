@@ -38,68 +38,59 @@ function bearerToken(request: Request) {
 }
 
 export const authHandlers = [
-  http.post(`${process.env.STRAPI_INTERNAL_URL}/api/auth/local`, async ({ request }) => {
+  http.post(`${process.env.BACKEND_URL}/api/auth/local`, async ({ request }) => {
     try {
       return HttpResponse.json(mockSignIn(await body<SignInRequest>(request)));
     } catch (error) {
       return jsonError(error);
     }
   }),
-  http.post(`${process.env.STRAPI_INTERNAL_URL}/api/auth/local/register`, async ({ request }) => {
+  http.post(`${process.env.BACKEND_URL}/api/auth/local/register`, async ({ request }) => {
     try {
       return HttpResponse.json(mockSignUp(await body<SignUpRequest>(request)));
     } catch (error) {
       return jsonError(error);
     }
   }),
-  http.post(
-    `${process.env.STRAPI_INTERNAL_URL}/api/auth/send-email-confirmation`,
-    async ({ request }) => {
-      try {
-        return HttpResponse.json(
-          mockResendConfirmation(await body<ResendConfirmationRequest>(request))
-        );
-      } catch (error) {
-        return jsonError(error);
-      }
+  http.post(`${process.env.BACKEND_URL}/api/auth/send-email-confirmation`, async ({ request }) => {
+    try {
+      return HttpResponse.json(
+        mockResendConfirmation(await body<ResendConfirmationRequest>(request))
+      );
+    } catch (error) {
+      return jsonError(error);
     }
-  ),
-  http.post(
-    `${process.env.STRAPI_INTERNAL_URL}/api/auth/email-confirmation`,
-    async ({ request }) => {
-      try {
-        return HttpResponse.json(mockConfirmEmail(await body<EmailConfirmationRequest>(request)));
-      } catch (error) {
-        return jsonError(error);
-      }
+  }),
+  http.post(`${process.env.BACKEND_URL}/api/auth/email-confirmation`, async ({ request }) => {
+    try {
+      return HttpResponse.json(mockConfirmEmail(await body<EmailConfirmationRequest>(request)));
+    } catch (error) {
+      return jsonError(error);
     }
-  ),
-  http.post(`${process.env.STRAPI_INTERNAL_URL}/api/auth/forgot-password`, async ({ request }) => {
+  }),
+  http.post(`${process.env.BACKEND_URL}/api/auth/forgot-password`, async ({ request }) => {
     try {
       return HttpResponse.json(mockForgotPassword(await body<ForgotPasswordRequest>(request)));
     } catch (error) {
       return jsonError(error);
     }
   }),
-  http.post(`${process.env.STRAPI_INTERNAL_URL}/api/auth/reset-password`, async ({ request }) => {
+  http.post(`${process.env.BACKEND_URL}/api/auth/reset-password`, async ({ request }) => {
     try {
       return HttpResponse.json(mockResetPassword(await body<ResetPasswordRequest>(request)));
     } catch (error) {
       return jsonError(error);
     }
   }),
-  http.post(
-    `${process.env.STRAPI_INTERNAL_URL}/api/refresh-token-rotation`,
-    async ({ request }) => {
-      try {
-        const payload = await body<{ refresh_token?: string }>(request);
-        return HttpResponse.json(mockRotateRefreshToken(payload.refresh_token ?? ""));
-      } catch (error) {
-        return jsonError(error);
-      }
+  http.post(`${process.env.BACKEND_URL}/api/refresh-token-rotation`, async ({ request }) => {
+    try {
+      const payload = await body<{ refresh_token?: string }>(request);
+      return HttpResponse.json(mockRotateRefreshToken(payload.refresh_token ?? ""));
+    } catch (error) {
+      return jsonError(error);
     }
-  ),
-  http.post(`${process.env.STRAPI_INTERNAL_URL}/api/auth/logout`, async ({ request }) => {
+  }),
+  http.post(`${process.env.BACKEND_URL}/api/auth/logout`, async ({ request }) => {
     try {
       const payload = await body<{ refresh_token?: string }>(request);
       return HttpResponse.json(mockLogout(payload.refresh_token ?? ""));
@@ -107,7 +98,7 @@ export const authHandlers = [
       return jsonError(error);
     }
   }),
-  http.post(`${process.env.STRAPI_INTERNAL_URL}/api/auth/change-password`, async ({ request }) => {
+  http.post(`${process.env.BACKEND_URL}/api/auth/change-password`, async ({ request }) => {
     try {
       return HttpResponse.json(
         mockChangePassword(bearerToken(request), await body<ChangePasswordRequest>(request))
