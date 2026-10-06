@@ -1,4 +1,5 @@
 import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+import { fetchAuthenticated } from "@/lib/auth/browser-request";
 import type { operations } from "@/generated/backend-api";
 import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/projects/setup/_lib/schema";
 import type { AvailableCollectivityClaim } from "@/app/[locale]/collectivity/invitation/_lib/types";
@@ -57,6 +58,7 @@ type ApiErrorPayload = {
     status?: number;
     message?: string;
     details?: {
+      code?: string;
       fieldErrors?: Partial<Record<string, string>>;
       reasons?: Array<{
         code?: string;
@@ -106,17 +108,21 @@ export type CollectivitySupportedValue = {
 };
 
 export class CollectivityApiError extends Error {
+  status: number;
+  code: string | null;
   payload: ApiErrorPayload;
 
-  constructor(payload: ApiErrorPayload) {
+  constructor(status: number, payload: ApiErrorPayload) {
     super(payload.error?.message ?? "Collectivity request failed");
     this.name = "CollectivityApiError";
+    this.status = status;
+    this.code = payload.error?.details?.code ?? null;
     this.payload = payload;
   }
 }
 
 export async function fetchCollectivitySubscriptionCatalogue() {
-  const response = await fetch("/api/collectivity/subscription-catalogue", {
+  const response = await fetchAuthenticated("/api/collectivity/subscription-catalogue", {
     credentials: "same-origin",
   });
   const payload = await readApiJson<{ data?: SubscriptionCatalogue }>(response);
@@ -129,7 +135,7 @@ export async function fetchCollectivitySubscriptionCatalogue() {
 }
 
 export async function fetchCollectivityQuoteContext() {
-  const response = await fetch("/api/collectivity/quote-context", {
+  const response = await fetchAuthenticated("/api/collectivity/quote-context", {
     credentials: "same-origin",
   });
   const payload = await readApiJson<{ data?: QuoteContext }>(response);
@@ -144,7 +150,7 @@ export async function fetchCollectivityQuoteContext() {
 export async function fetchCollectivitySubscriptionPricePreview(
   request: SubscriptionPricePreviewRequest
 ) {
-  const response = await fetch("/api/collectivity/subscription-prices", {
+  const response = await fetchAuthenticated("/api/collectivity/subscription-prices", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "same-origin",
@@ -162,7 +168,7 @@ export async function fetchCollectivitySubscriptionPricePreview(
 export async function createCollectivityQuote(
   request: CreateCollectivityQuoteRequest
 ): Promise<PublicCollectivityQuote> {
-  const response = await fetch("/api/collectivity/quotes", {
+  const response = await fetchAuthenticated("/api/collectivity/quotes", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "same-origin",
@@ -173,7 +179,7 @@ export async function createCollectivityQuote(
 }
 
 export async function fetchLatestCollectivityQuote() {
-  const response = await fetch("/api/collectivity/quotes/latest", {
+  const response = await fetchAuthenticated("/api/collectivity/quotes/latest", {
     credentials: "same-origin",
   });
   const payload = await readApiJson<{ data?: PublicCollectivityQuote }>(response);
@@ -186,10 +192,13 @@ export async function fetchLatestCollectivityQuote() {
 }
 
 export async function cancelCollectivityQuote(quoteId: number): Promise<PublicCollectivityQuote> {
-  const response = await fetch(`/api/collectivity/quotes/${encodeURIComponent(quoteId)}/cancel`, {
-    method: "POST",
-    credentials: "same-origin",
-  });
+  const response = await fetchAuthenticated(
+    `/api/collectivity/quotes/${encodeURIComponent(quoteId)}/cancel`,
+    {
+      method: "POST",
+      credentials: "same-origin",
+    }
+  );
   const payload = await readApiJson<{ data: PublicCollectivityQuote }>(response);
   return payload.data;
 }
@@ -198,14 +207,14 @@ async function readApiJson<T>(response: Response): Promise<T> {
   const payload = (await response.json()) as T & ApiErrorPayload;
 
   if (!response.ok) {
-    throw new CollectivityApiError(payload);
+    throw new CollectivityApiError(response.status, payload);
   }
 
   return payload;
 }
 
 export async function fetchCollectivityInventoryResult(projectSlug: string) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/result`,
     {
       credentials: "same-origin",
@@ -222,7 +231,7 @@ export async function fetchCollectivityInventoryResult(projectSlug: string) {
 }
 
 export async function fetchCollectivitySetupSnapshot(projectSlug: string) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory`,
     {
       credentials: "same-origin",
@@ -242,7 +251,7 @@ export async function fetchCollectivityCurrentInventory(projectSlug: string) {
 }
 
 export async function fetchAvailableCollectivityClaims() {
-  const response = await fetch("/api/collectivity/subscription-claims/available", {
+  const response = await fetchAuthenticated("/api/collectivity/subscription-claims/available", {
     credentials: "same-origin",
   });
   const payload = await readApiJson<{ data?: AvailableCollectivityClaim[] }>(response);
@@ -263,10 +272,10 @@ export async function saveCollectivitySetupRequest({
   approvedClaimId?: number | null;
   values: CollectivitySetupValues;
 }) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     currentPlanId
       ? `/api/collectivity/projects/${encodeURIComponent(currentPlanId)}/setup`
-      : "/api/collectivity/setup",
+      : "/api/collectivity/projects/setup",
     {
       method: currentPlanId ? "PUT" : "POST",
       headers: {
@@ -292,7 +301,7 @@ export async function saveCollectivityInventoryDraftRequest({
   projectSlug: string;
   inventoryInput: Record<string, unknown>;
 }) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/input`,
     {
       method: "PUT",
@@ -324,7 +333,7 @@ export async function calculateCollectivityInventoryRequest({
   projectSlug: string;
   inventoryInput: Record<string, unknown>;
 }) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/calculate`,
     {
       method: "POST",
@@ -350,7 +359,7 @@ export async function debugCalculateCollectivityDatasetRequest({
   datasetKey: string;
   inventoryInput: Record<string, unknown>;
 }) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory/debug-calculate`,
     {
       method: "POST",
@@ -384,7 +393,7 @@ export async function debugCalculateCollectivityDatasetRequest({
 }
 
 export async function fetchCollectivitySupportedValues(familyKey: string, selectorKey: string) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/supported-values/${encodeURIComponent(familyKey)}/${encodeURIComponent(selectorKey)}`,
     {
       credentials: "same-origin",

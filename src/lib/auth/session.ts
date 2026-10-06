@@ -2,13 +2,10 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import {
-  clearSessionCookiesIfPossible,
-  readAuthCookies,
-  writeSessionCookiesIfPossible,
-} from "@/lib/auth/cookies";
-import { buildSignInRedirect } from "@/lib/auth/redirect";
+import { readAuthCookies } from "@/lib/auth/cookies";
+import { buildRecoveryRedirect, buildSignInRedirect } from "@/lib/auth/redirect";
 import { logout, rotateRefreshToken, StrapiAuthError } from "@/lib/auth/strapi";
+import { isAccessTokenCurrent } from "@/lib/auth/token";
 import type { AuthSessionResponse, SessionState } from "@/lib/auth/types";
 
 type CookieReader = {
@@ -17,9 +14,9 @@ type CookieReader = {
 
 export async function getServerSession(): Promise<SessionState> {
   const cookieStore = await cookies();
-  const { accessToken, refreshToken, user } = readAuthCookies(cookieStore);
+  const { accessToken, user } = readAuthCookies(cookieStore);
 
-  if ((accessToken || refreshToken) && user) {
+  if (accessToken && user && isAccessTokenCurrent(accessToken)) {
     return {
       authenticated: true,
       user,
@@ -36,6 +33,10 @@ export async function requireServerSession(returnTo?: string | null) {
   const session = await getServerSession();
 
   if (!session.authenticated) {
+    const cookieStore = await cookies();
+    if (readAuthCookies(cookieStore).refreshToken) {
+      redirect(buildRecoveryRedirect(returnTo));
+    }
     redirect(buildSignInRedirect(returnTo));
   }
 
@@ -53,11 +54,9 @@ export async function refreshSessionFromCookies(
 
   try {
     const refreshedSession = await rotateRefreshToken(refreshToken);
-    writeSessionCookiesIfPossible(cookieStore, refreshedSession);
     return refreshedSession;
   } catch (error) {
     if (error instanceof StrapiAuthError) {
-      clearSessionCookiesIfPossible(cookieStore);
       return null;
     }
 
@@ -74,8 +73,7 @@ export async function logoutAndClearSession() {
       await logout(refreshToken);
     }
   } catch (error) {
-    if (!(error instanceof StrapiAuthError)) {
-      throw error;
-    }
+    // Local logout must succeed even when revocation or the backend is unavailable.
+    void error;
   }
 }

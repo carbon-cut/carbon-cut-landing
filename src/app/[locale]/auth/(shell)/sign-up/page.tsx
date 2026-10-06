@@ -81,7 +81,7 @@ export default function SignUpPage() {
         return;
       }
 
-      setErrorMessage(result.error.error?.message ?? t("error.generic"));
+      setErrorMessage(t("error.generic"));
       return;
     }
 

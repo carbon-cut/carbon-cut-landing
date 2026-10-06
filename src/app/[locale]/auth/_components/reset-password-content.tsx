@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import AuthBrand from "@/app/[locale]/auth/_components/auth-brand";
 import {
   getErrorCode,
@@ -16,20 +18,28 @@ import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
 import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
-import { getHomeRoute } from "@/lib/routing/routes";
+import { getAuthForgotPasswordRoute, getHomeRoute } from "@/lib/routing/routes";
 
 export function ResetPasswordPageContent() {
   const tReset = useScopedI18n("(auth).resetPassword");
   const tForgot = useScopedI18n("(auth).forgetPassword");
   const tCommon = useScopedI18n("(auth).common");
   const router = useRouter();
+  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const { refetchSession } = useAuth();
-  const [code, setCode] = useState(searchParams.get("code") ?? "");
+  const [code] = useState(searchParams.get("code") ?? "");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (!url.searchParams.has("code")) return;
+    url.searchParams.delete("code");
+    window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -62,7 +72,7 @@ export function ResetPasswordPageContent() {
       const codeValue = getErrorCode(result.error);
 
       if (codeValue === "AUTH_INVALID_RESET_PASSWORD_CODE") {
-        setErrorMessage(tForgot("error.invalidCode"));
+        setErrorMessage(tReset("error.invalidLink"));
         return;
       }
 
@@ -71,10 +81,11 @@ export function ResetPasswordPageContent() {
         return;
       }
 
-      setErrorMessage(result.error.error?.message ?? tReset("error.generic"));
+      setErrorMessage(tReset("error.generic"));
       return;
     }
 
+    queryClient.clear();
     await refetchSession();
     const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
     router.replace(returnTo ?? getHomeRoute());
@@ -93,6 +104,19 @@ export function ResetPasswordPageContent() {
           <p>{tReset("description")}</p>
         </Typography>
 
+        {!code ? (
+          <Alert className="mt-6" variant="destructive">
+            <AlertDescription>{tReset("error.missingLink")}</AlertDescription>
+          </Alert>
+        ) : null}
+        {!code || errorMessage === tReset("error.invalidLink") ? (
+          <Link
+            href={getAuthForgotPasswordRoute()}
+            className="mt-3 inline-block text-primary underline-offset-4 hover:underline"
+          >
+            {tReset("requestNewLink")}
+          </Link>
+        ) : null}
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {errorMessage ? (
             <Alert variant="destructive">
@@ -100,17 +124,6 @@ export function ResetPasswordPageContent() {
               <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           ) : null}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground/80" htmlFor="code">
-              {tReset("form.code")}
-            </label>
-            <Input
-              id="code"
-              value={code}
-              onChange={(event) => setCode(event.target.value)}
-              required
-            />
-          </div>
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground/80" htmlFor="password">
               {tReset("form.password")}
@@ -138,7 +151,7 @@ export function ResetPasswordPageContent() {
               required
             />
           </div>
-          <Button type="submit" disabled={submitting} className="h-11 w-full">
+          <Button type="submit" disabled={submitting || !code} className="h-11 w-full">
             {tReset("form.submit")}
           </Button>
         </form>

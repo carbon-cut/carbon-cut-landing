@@ -43,7 +43,15 @@ function buildError(status: number, message: string, code: AuthErrorCode): AuthE
 }
 
 function makeSession(user: AuthUser): AuthSessionResponse {
-  const access_token = `mock-access-${user.id}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const payload = btoa(JSON.stringify({ id: user.id, exp: Math.floor(Date.now() / 1000) + 300 }))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+  const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+  const access_token = `${header}.${payload}.${Math.random().toString(36).slice(2, 8)}`;
   const refresh_token = `mock-refresh-${user.id}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
   refreshTokens.forEach((email, token) => {
@@ -340,12 +348,20 @@ export function mockLogout(refreshToken: string) {
 
 export function getMockUserByAccessToken(accessToken: string): AuthUser | null {
   const email = accessTokens.get(accessToken);
-  const tokenUserId = /^mock-access-(\d+)-/.exec(accessToken)?.[1];
+  let tokenUserId: number | null = null;
+  try {
+    if (accessToken.split(".").length === 3) {
+      tokenUserId = JSON.parse(
+        atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+      ).id;
+    }
+  } catch {
+    tokenUserId = null;
+  }
   const user =
     (email ? requireUser(email) : null) ??
     (tokenUserId
-      ? (Array.from(users.values()).find((candidate) => candidate.id === Number(tokenUserId)) ??
-        null)
+      ? (Array.from(users.values()).find((candidate) => candidate.id === tokenUserId) ?? null)
       : null);
 
   return user ? publicUser(user) : null;

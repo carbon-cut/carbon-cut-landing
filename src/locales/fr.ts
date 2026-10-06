@@ -3432,6 +3432,7 @@ export default {
     login: {
       title: "Se connecter",
       description: "Connectez-vous pour commencer votre pre-evaluation carbone.",
+      sessionExpired: "Votre session a expiré. Connectez-vous pour reprendre votre parcours.",
       form: {
         email: "E-mail",
         password: "Mot de passe",
@@ -3552,7 +3553,8 @@ export default {
     },
     resetPassword: {
       title: "Definir un nouveau mot de passe",
-      description: "Entrez le code recu et choisissez un nouveau mot de passe.",
+      description: "Choisissez un nouveau mot de passe pour votre compte.",
+      requestNewLink: "Demander un nouveau lien",
       form: {
         code: "Code de reinitialisation",
         password: "Nouveau mot de passe",
@@ -3561,6 +3563,8 @@ export default {
       },
       error: {
         generic: "Impossible de reinitialiser le mot de passe pour le moment.",
+        invalidLink: "Ce lien de réinitialisation est invalide ou expiré.",
+        missingLink: "Ouvrez le lien reçu par e-mail pour réinitialiser votre mot de passe.",
       },
     },
     common: {
