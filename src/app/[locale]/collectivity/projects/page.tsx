@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FeatherPlus } from "@subframe/core";
 
 import AuthBrand from "@/app/[locale]/auth/_components/auth-brand";
+import RecoverCurrentPath from "@/app/[locale]/auth/_components/recover-current-path";
 import CollectivityAccessNotice from "@/app/[locale]/collectivity/_components/CollectivityAccessNotice";
 import { loadCollectivityProjectsForUser } from "@/app/[locale]/collectivity/_lib/loadCollectivitySetupSnapshot";
 import {
@@ -20,7 +21,6 @@ import {
   CollectivityBackendError,
   getAvailableCollectivityClaims,
 } from "@/lib/collectivity/backend";
-import { buildLogoutRedirect } from "@/lib/auth/redirect";
 import { getScopedI18n } from "@/locales/server";
 import { setStaticParamsLocale } from "next-international/server";
 
@@ -54,7 +54,7 @@ export default async function CollectivityProjectsPage({
   } catch (error) {
     if (error instanceof CollectivityBackendError) {
       if (error.status === 401) {
-        redirect(buildLogoutRedirect(getCollectivityProjectsRoute()));
+        return <RecoverCurrentPath />;
       }
 
       return (

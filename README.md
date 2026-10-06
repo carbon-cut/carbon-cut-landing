@@ -26,34 +26,25 @@ Frontend-only tests stay under the default test command:
 npm run test
 ```
 
-Real auth integration tests run separately:
+Real frontend/Strapi integration tests run separately:
 
 ```bash
 npm run test:integration
 ```
 
-Integration test requirements:
+The command verifies the backend's configured test database, starts Strapi with `NODE_ENV=test`, starts Next.js with MSW disabled, waits for both, runs the integration suite and the Chromium browser recovery check, and stops only those two server processes. PostgreSQL and the existing test database remain running. Default factors are not seeded or checked by this command.
 
-- Next frontend must already be running
-- Strapi backend must already be running
-- the frontend must be pointed at the real backend, not MSW
-- backend auth test support must be enabled
+The backend must be checked out next to the frontend at `../carbon-cut-backend`, or `INTEGRATION_BACKEND_DIR` must point to it. Its `.env` must contain a complete `DATABASE_TEST_*` connection. The backend owns database verification and refuses to start test mode with a missing or matching normal database name.
 
 Required env vars for the integration suite:
 
 ```bash
-FRONTEND_URL=http://localhost:3000
-BACKEND_URL=http://localhost:1337
 AUTH_TEST_SUPPORT_KEY=your-test-support-secret
 ```
 
-If you run the frontend in development mode, disable local mock auth before running integration tests:
+The key must match the backend's `AUTH_TEST_SUPPORT_KEY`. The runner uses ports 3001 (frontend) and 1338 (backend) by default; set `INTEGRATION_FRONTEND_PORT` and `INTEGRATION_BACKEND_PORT` to change them. It fails if either port is already occupied.
 
-```bash
-NEXT_PUBLIC_ENABLE_MSW=false
-```
-
-The integration suite creates and cleans up its own auth users through the backend test-support HTTP surface.
+Install the Playwright browser once with `npx playwright install chromium`. The recovery browser test creates and cleans up its own auth user through the backend test-support HTTP surface. The collectivity project-creation integration test is skipped because project creation now depends on subscriptions; cover that flow with subscription tests.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

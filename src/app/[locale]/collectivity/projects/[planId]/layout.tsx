@@ -3,13 +3,13 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import CollectivityAccessNotice from "@/app/[locale]/collectivity/_components/CollectivityAccessNotice";
+import RecoverCurrentPath from "@/app/[locale]/auth/_components/recover-current-path";
 import { loadCollectivitySetupSnapshot } from "@/app/[locale]/collectivity/_lib/loadCollectivitySetupSnapshot";
 import {
   getCollectivityPlanRoute,
   getCollectivityProjectsRoute,
 } from "@/app/[locale]/collectivity/_lib/routing";
 import { requireCollectivityPlanSession } from "@/lib/auth/access";
-import { buildLogoutRedirect } from "@/lib/auth/redirect";
 import { CollectivityBackendError } from "@/lib/collectivity/backend";
 import { toKeywordArray } from "@/lib/seo";
 import { getScopedI18n } from "@/locales/server";
@@ -62,7 +62,7 @@ export default async function CollectivityPlanLayout({
   } catch (error) {
     if (error instanceof CollectivityBackendError) {
       if (error.status === 401) {
-        redirect(buildLogoutRedirect(getCollectivityPlanRoute(planId)));
+        return <RecoverCurrentPath />;
       }
       return (
         <CollectivityAccessNotice

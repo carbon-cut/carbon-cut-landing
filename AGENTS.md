@@ -14,7 +14,8 @@ Carbon Cut's frontend is a TypeScript Next.js App Router application. Collectivi
 
 - `npm run dev` starts the development server; with `NEXT_PUBLIC_ENABLE_MSW=true`, it also starts the local mock Strapi server.
 - `npm run build` builds the application; `npm run lint` runs lint.
-- `npm run test` runs frontend Vitest tests. `npm run test:integration` runs real auth integration tests and requires a running frontend and Strapi backend; see `README.md` for the required environment.
+- `npm run test` runs frontend Vitest tests. `npm run test:integration` verifies the backend test database, starts Strapi and Next.js, runs the real integration suite, and stops those servers; see `README.md` for the required environment.
+- The backend selects `DATABASE_TEST_*` only when `NODE_ENV=test`. `DEV_INTEGRATION_SEED_ENABLED` controls seed data only and does not select a database. The integration runner does not create, drop, or seed the test database.
 
 ## Architecture
 
@@ -96,3 +97,24 @@ A task is complete when:
 
 - For UI implementation, styling, layout, visual hierarchy, design-system components or tokens, or implementation from a Subframe, image, or other design reference, read and follow `.codex/skills/frontend-ui/SKILL.md`.
 - For forms, React Hook Form, Zod validation, form schemas, field arrays, form state, or form submission behavior, read and follow `.codex/skills/frontend-forms/SKILL.md`.
+
+## Planning
+
+When a persistent implementation plan is requested, read `.codex/PLANS.md`
+from this repository.
+
+If another Carbon Cut repository is also in scope and contains an identical
+mirrored `PLANS.md`, do not read that duplicate unless there is evidence that
+the planning protocols differ which at this point there is none.
+
+## Planning and implementation plans
+
+Persistent implementation plans follow `.codex/PLANS.md`.
+
+When asked to create, execute, resume, review, or update a plan under
+`docs/plans/` or `docs/fullPlans/`, read and follow `.codex/PLANS.md`
+before proceeding.
+
+A repository plan may reference a canonical full feature plan in another
+in-scope repository. Follow that full plan for shared behavior, contracts,
+responsibilities, sequencing, and cross-repository decisions.

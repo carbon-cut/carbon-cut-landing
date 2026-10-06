@@ -1,8 +1,12 @@
 import { redirect } from "next/navigation";
+import RecoverCurrentPath from "@/app/[locale]/auth/_components/recover-current-path";
 
 import { requireCollectivitySession } from "@/lib/auth/access";
 import { getUserPlanIds } from "@/lib/auth/profile";
-import { getAvailableCollectivityClaims } from "@/lib/collectivity/backend";
+import {
+  CollectivityBackendError,
+  getAvailableCollectivityClaims,
+} from "@/lib/collectivity/backend";
 import { getCollectivityStartRoute } from "@/lib/routing/routes";
 
 import { getCollectivityProjectsRoute } from "../../_lib/routing";
@@ -20,7 +24,10 @@ export default async function CollectivityStartPage() {
     if (availableClaims.length > 0) {
       return <CollectivityStartContent />;
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof CollectivityBackendError && error.status === 401) {
+      return <RecoverCurrentPath />;
+    }
     return <CollectivityStartContent />;
   }
 

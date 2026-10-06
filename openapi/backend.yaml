@@ -11,6 +11,217 @@ servers:
 security:
   - bearerAuth: []
 paths:
+  /api/auth/local:
+    post:
+      operationId: login
+      tags: [Authentication]
+      summary: Sign in with email and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [identifier, password]
+              properties:
+                identifier: { type: string, format: email }
+                password: { type: string }
+      responses:
+        "200":
+          description: Session
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthSession" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+  /api/auth/local/register:
+    post:
+      operationId: register
+      tags: [Authentication]
+      summary: Create a local account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, firstName, lastName, password]
+              properties:
+                email: { type: string, format: email }
+                firstName: { type: string }
+                lastName: { type: string }
+                organisation: { type: string, nullable: true }
+                password: { type: string }
+      responses:
+        "200":
+          description: Pending confirmation or session when confirmation is disabled
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/RegistrationPending"
+                  - $ref: "#/components/schemas/AuthSession"
+        "400": { $ref: "#/components/responses/Error" }
+  /api/auth/email-confirmation:
+    post:
+      operationId: confirmEmail
+      tags: [Authentication]
+      summary: Confirm email and start a session
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, confirmation]
+              properties:
+                email: { type: string, format: email }
+                confirmation: { type: string }
+      responses:
+        "200":
+          description: Session
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthSession" }
+        "400": { $ref: "#/components/responses/Error" }
+  /api/auth/send-email-confirmation:
+    post:
+      operationId: resendEmailConfirmation
+      tags: [Authentication]
+      summary: Resend a confirmation email
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        "200":
+          description: Confirmation email requested
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [email, sent]
+                properties:
+                  email: { type: string, format: email }
+                  sent: { type: boolean, enum: [true] }
+        "400": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+  /api/auth/forgot-password:
+    post:
+      operationId: forgotPassword
+      tags: [Authentication]
+      summary: Email a password reset link
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        "200":
+          description: Neutral acknowledgement, including unknown and blocked accounts
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OkResponse" }
+        "400": { $ref: "#/components/responses/Error" }
+  /api/auth/reset-password:
+    post:
+      operationId: resetPassword
+      tags: [Authentication]
+      summary: Consume a single-use reset link and start a new session
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code, password, passwordConfirmation]
+              properties:
+                code: { type: string, description: Random token from the emailed link }
+                password: { type: string }
+                passwordConfirmation: { type: string }
+      responses:
+        "200":
+          description: Session
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthSession" }
+        "400": { $ref: "#/components/responses/Error" }
+  /api/auth/change-password:
+    post:
+      operationId: changePassword
+      tags: [Authentication]
+      summary: Change password and invalidate earlier sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, password, passwordConfirmation]
+              properties:
+                currentPassword: { type: string }
+                password: { type: string }
+                passwordConfirmation: { type: string }
+      responses:
+        "200":
+          description: Replacement session
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthSession" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+  /api/auth/logout:
+    post:
+      operationId: logout
+      tags: [Authentication]
+      summary: Revoke one refresh token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RefreshRequest" }
+      responses:
+        "200":
+          description: Revoked
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OkResponse" }
+        "401": { $ref: "#/components/responses/Error" }
+  /api/refresh-token-rotation:
+    post:
+      operationId: refreshSession
+      tags: [Authentication]
+      summary: Rotate a refresh token once
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RefreshRequest" }
+      responses:
+        "200":
+          description: Replacement session
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AuthSession" }
+        "401": { $ref: "#/components/responses/Error" }
   /api/collectivity/projects:
     get:
       operationId: listCollectivityProjects
@@ -132,6 +343,45 @@ components:
         application/json:
           schema: { $ref: "#/components/schemas/ErrorResponse" }
   schemas:
+    RegistrationPending:
+      type: object
+      required: [user, confirmation_required, confirmation_email_sent]
+      properties:
+        user: { $ref: "#/components/schemas/AuthUser" }
+        confirmation_required: { type: boolean, enum: [true] }
+        confirmation_email_sent: { type: boolean, enum: [true] }
+    RefreshRequest:
+      type: object
+      required: [refresh_token]
+      properties:
+        refresh_token: { type: string }
+    OkResponse:
+      type: object
+      required: [ok]
+      properties:
+        ok: { type: boolean, enum: [true] }
+    AuthUser:
+      type: object
+      required: [id, firstName, lastName, email, provider, confirmed, blocked]
+      properties:
+        id: { type: integer }
+        firstName: { type: string }
+        lastName: { type: string }
+        organisation: { type: string, nullable: true }
+        email: { type: string, format: email }
+        provider: { type: string }
+        confirmed: { type: boolean }
+        blocked: { type: boolean }
+        planId:
+          type: array
+          items: { type: string }
+    AuthSession:
+      type: object
+      required: [access_token, refresh_token, user]
+      properties:
+        access_token: { type: string }
+        refresh_token: { type: string }
+        user: { $ref: "#/components/schemas/AuthUser" }
     JsonObject:
       type: object
       additionalProperties: true

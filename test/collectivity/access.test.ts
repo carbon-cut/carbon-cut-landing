@@ -61,7 +61,7 @@ describe("auth access helpers", () => {
     expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it("redirects collectivity users without a plan from plan routes to setup", async () => {
+  it("defers project authorization to the backend when cached plan IDs are absent", async () => {
     mockRequireServerSession.mockResolvedValue({
       authenticated: true,
       user: {
@@ -81,10 +81,10 @@ describe("auth access helpers", () => {
       returnTo: "/collectivity/grand-sfax/inventory",
     });
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/projects/setup");
+    expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it("redirects collectivity users with projects but a bad slug to the selector page", async () => {
+  it("defers a mismatched cached project slug to the backend", async () => {
     mockRequireServerSession.mockResolvedValue({
       authenticated: true,
       user: {
@@ -105,7 +105,7 @@ describe("auth access helpers", () => {
       returnTo: "/collectivity/wrong-slug/inventory",
     });
 
-    expect(mockRedirect).toHaveBeenCalledWith("/collectivity/projects?module=inventory");
+    expect(mockRedirect).not.toHaveBeenCalled();
   });
 
   it("allows an authenticated user to access both household and collectivity routes", async () => {
@@ -131,7 +131,7 @@ describe("auth access helpers", () => {
     expect(householdSession.user.email).toBe("collectivity.super@example.com");
     expect(collectivitySession.user.email).toBe("collectivity.super@example.com");
     expect(getCollectivityDefaultRoute(collectivitySession.user)).toBe(
-      "/collectivity/grand-sfax/setup"
+      "/collectivity/projects/grand-sfax/setup"
     );
     expect(mockRedirect).not.toHaveBeenCalled();
   });
@@ -155,7 +155,7 @@ describe("auth access helpers", () => {
     expect(getAuthenticatedUserHomeRoute({})).toBe("/");
     expect(getAuthenticatedUserHomeRoute({})).toBe("/");
     expect(getAuthenticatedUserHomeRoute({ planId: ["grand-sfax"] })).toBe(
-      "/collectivity/grand-sfax/setup"
+      "/collectivity/projects/grand-sfax/setup"
     );
   });
 });

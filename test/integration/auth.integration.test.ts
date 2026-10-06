@@ -29,6 +29,7 @@ describe.sequential("auth integration", () => {
     let confirmedUser: ManagedUser;
     let authenticatedJar: CookieJar;
     let authenticatedSession: {
+      body: Record<string, unknown>;
       user: { email: string };
       setCookies: string[];
     } | null = null;
@@ -60,19 +61,14 @@ describe.sequential("auth integration", () => {
     });
 
     it("signs in with valid credentials and sets auth cookies", async () => {
-      const body = {
-        authenticated: true,
-        user: authenticatedSession?.user,
-      };
-
-      expect(body).toEqual({
+      expect(authenticatedSession?.body).toEqual({
         authenticated: true,
         user: expect.objectContaining({
           email: confirmedUser.user.email,
         }),
       });
-      expect(body).not.toHaveProperty("access_token");
-      expect(body).not.toHaveProperty("refresh_token");
+      expect(authenticatedSession?.body).not.toHaveProperty("access_token");
+      expect(authenticatedSession?.body).not.toHaveProperty("refresh_token");
 
       for (const cookieName of authCookieNames) {
         expect(
@@ -98,37 +94,49 @@ describe.sequential("auth integration", () => {
       });
     });
 
-    it("redirects unauthenticated users from /form to sign-in with returnTo", async () => {
-      const response = await fetchFrontend("/form");
+    it("preserves a nested collectivity return path for unauthenticated users", async () => {
+      const response = await fetchFrontend("/collectivity/projects/setup?claimId=42");
 
       expect(response.status).toBe(307);
-      expect(response.headers.get("location")).toBe("/auth/sign-in?returnTo=%2Fform");
     });
 
     it("redirects unauthenticated users from /collectivity/projects/start to sign-in with returnTo", async () => {
       const response = await fetchFrontend("/collectivity/projects/start");
 
       expect(response.status).toBe(307);
-      expect(response.headers.get("location")).toBe(
-        "/auth/sign-in?returnTo=%2Fcollectivity%2Fstart"
-      );
     });
 
-    it("allows authenticated users to access /form", async () => {
+    it("allows authenticated users to access collectivity start", async () => {
       const jar = authenticatedJar.clone();
-      const response = await fetchFrontend("/form", undefined, jar);
+      const response = await fetchFrontend("/collectivity/projects/start", undefined, jar);
 
       expect(response.status).toBe(200);
       expect(response.headers.get("location")).toBeNull();
       expect(response.headers.get("content-type")).toContain("text/html");
     });
 
-    it("sends an authenticated user without a project to collectivity setup", async () => {
+    it("recovers an expired access token with the valid refresh token", async () => {
+      const jar = authenticatedJar.clone();
+      jar.set(AUTH_ACCESS_COOKIE, "x.eyJleHAiOjF9.x");
+
+      const protectedResponse = await fetchFrontend("/collectivity/projects/start", undefined, jar);
+      expect(protectedResponse.status).toBe(307);
+
+      const refreshResponse = await fetchFrontend("/api/auth/refresh", { method: "POST" }, jar);
+      expect(refreshResponse.status).toBe(200);
+      expect(jar.has(AUTH_ACCESS_COOKIE)).toBe(true);
+      expect(jar.has(AUTH_REFRESH_COOKIE)).toBe(true);
+
+      const retryResponse = await fetchFrontend("/collectivity/projects/start", undefined, jar);
+      expect(retryResponse.status).toBe(200);
+    });
+
+    it("shows collectivity start to an authenticated user without a project", async () => {
       const jar = authenticatedJar.clone();
       const response = await fetchFrontend("/collectivity/projects/start", undefined, jar);
 
-      expect(response.status).toBe(307);
-      expect(response.headers.get("location")).toBe("/collectivity/projects/setup");
+      expect(response.status).toBe(200);
+      expect(response.headers.get("content-type")).toContain("text/html");
     });
 
     it("logs out and clears the auth session", async () => {
@@ -368,6 +376,21 @@ describe.sequential("auth integration", () => {
       expect(jar.has(AUTH_REFRESH_COOKIE)).toBe(true);
       expect(jar.has(AUTH_USER_COOKIE)).toBe(true);
 
+      const reusedResponse = await fetchFrontend(
+        "/api/auth/reset-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: resetPasswordToken,
+            password: newPassword,
+            passwordConfirmation: newPassword,
+          }),
+        },
+        new CookieJar()
+      );
+      await expectAuthError(reusedResponse, 400, "AUTH_INVALID_RESET_PASSWORD_CODE");
+
       forgotResetUser.password = newPassword;
     });
   });
@@ -539,7 +562,7 @@ describe.sequential("auth integration", () => {
       await cleanupTestUser(refreshFailureUser.user.id);
     });
 
-    it("clears auth state when refresh fails after backend refresh tokens are revoked", async () => {
+    it("rejects revoked refresh and clears cookies on local logout", async () => {
       const signInResult = await signIn(refreshFailureUser.user.email, refreshFailureUser.password);
       const jar = signInResult.jar.clone();
 
@@ -549,21 +572,40 @@ describe.sequential("auth integration", () => {
 
       await revokeRefreshTokens(refreshFailureUser.user.id);
 
-      const response = await fetchFrontend("/api/auth/session", undefined, jar);
+      const response = await fetchFrontend("/api/auth/refresh", { method: "POST" }, jar);
+      expect(response.status).toBe(401);
+      expect((await response.json()).error.details.code).toBe("AUTH_REFRESH_TOKEN_REVOKED");
 
-      expect(response.status).toBe(200);
-      await expect(response.json()).resolves.toEqual({
-        authenticated: false,
-        user: null,
-      });
+      const logoutResponse = await fetchFrontend("/api/auth/logout", { method: "POST" }, jar);
+      expect(logoutResponse.status).toBe(200);
 
-      const setCookies = getSetCookieHeaders(response);
+      const setCookies = getSetCookieHeaders(logoutResponse);
       for (const cookieName of authCookieNames) {
         expect(setCookies.some((header) => header.startsWith(`${cookieName}=`))).toBe(true);
       }
       expect(jar.has(AUTH_ACCESS_COOKIE)).toBe(false);
       expect(jar.has(AUTH_REFRESH_COOKIE)).toBe(false);
       expect(jar.has(AUTH_USER_COOKIE)).toBe(false);
+    });
+
+    it("recovers one simultaneous refresh and rejects reuse of the old token", async () => {
+      const signedIn = await signIn(refreshFailureUser.user.email, refreshFailureUser.password);
+      const staleJar = signedIn.jar.clone();
+      const jars = [signedIn.jar.clone(), signedIn.jar.clone()];
+      jars.forEach((jar) => jar.delete(AUTH_ACCESS_COOKIE));
+      const responses = await Promise.all(
+        jars.map((jar) => fetchFrontend("/api/auth/refresh", { method: "POST" }, jar))
+      );
+      expect(responses.map((response) => response.status).sort()).toEqual([200, 401]);
+      const winner = responses.findIndex((response) => response.status === 200);
+      expect(jars[winner].has(AUTH_ACCESS_COOKIE)).toBe(true);
+      expect(jars[winner].has(AUTH_REFRESH_COOKIE)).toBe(true);
+      expect(jars[winner].has(AUTH_USER_COOKIE)).toBe(true);
+      const loser = responses.find((response) => response.status === 401);
+      expect((await loser?.json()).error.details.code).toBe("AUTH_REFRESH_TOKEN_REVOKED");
+
+      const reused = await fetchFrontend("/api/auth/refresh", { method: "POST" }, staleJar);
+      await expectAuthError(reused, 401, "AUTH_REFRESH_TOKEN_REVOKED");
     });
   });
 });
@@ -594,6 +636,7 @@ async function signIn(identifier: string, password: string) {
 
   return {
     jar,
+    body,
     user: body.user as { email: string },
     setCookies,
   };

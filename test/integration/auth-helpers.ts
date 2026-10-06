@@ -124,6 +124,10 @@ export class CookieJar {
     this.cookies.delete(name);
   }
 
+  set(name: string, value: string) {
+    this.cookies.set(name, value);
+  }
+
   clone() {
     const next = new CookieJar();
 
@@ -200,6 +204,8 @@ export type TestSupportUser = {
 export async function createTestUser(params: {
   email?: string;
   username?: string;
+  firstName?: string;
+  lastName?: string;
   password: string;
   confirmed: boolean;
   blocked: boolean;
@@ -216,6 +222,8 @@ export async function createTestUser(params: {
     body: JSON.stringify({
       email,
       username,
+      firstName: params.firstName ?? "Integration",
+      lastName: params.lastName ?? suffix,
       password: params.password,
       confirmed: params.confirmed,
       blocked: params.blocked,

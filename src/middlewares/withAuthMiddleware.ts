@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { clearSessionCookies, readAuthCookies, writeSessionCookies } from "@/lib/auth/cookies";
-import { buildSignInRedirect } from "@/lib/auth/redirect";
+import { buildRecoveryRedirect, buildSignInRedirect } from "@/lib/auth/redirect";
+import { isAccessTokenCurrent } from "@/lib/auth/token";
 import type { AuthSessionResponse } from "@/lib/auth/types";
 import { isMockBackendEnabled } from "@/mocks/config";
 import { mockRotateRefreshToken, MockAuthError } from "@/mocks/auth";
@@ -25,6 +26,15 @@ function normalizeLocalePathname(pathname: string) {
 
 function isProtectedFormPath(pathname: string) {
   return pathname === "/household/form" || pathname.startsWith("/household/form/");
+}
+
+function isProtectedCollectivityPath(pathname: string) {
+  return (
+    pathname === "/collectivity/projects" ||
+    pathname.startsWith("/collectivity/projects/") ||
+    pathname === "/collectivity/subscription" ||
+    pathname.startsWith("/collectivity/subscription/")
+  );
 }
 
 function getStrapiBaseUrl() {
@@ -84,6 +94,21 @@ async function rotateSession(refreshToken: string) {
 export function withAuthMiddleware(middleware: CustomMiddleware): CustomMiddleware {
   return async (request: NextRequest, event, response) => {
     const normalizedPathname = normalizeLocalePathname(request.nextUrl.pathname);
+
+    if (isProtectedCollectivityPath(normalizedPathname)) {
+      const { accessToken, refreshToken, user } = readAuthCookies(request.cookies);
+      if (accessToken && user && isAccessTokenCurrent(accessToken)) {
+        return middleware(request, event, response);
+      }
+      const originalUrl = new URL(request.url);
+      const returnTo = `${originalUrl.pathname}${originalUrl.search}`;
+      return NextResponse.redirect(
+        new URL(
+          refreshToken ? buildRecoveryRedirect(returnTo) : buildSignInRedirect(returnTo),
+          request.url
+        )
+      );
+    }
 
     if (!isProtectedFormPath(normalizedPathname)) {
       return middleware(request, event, response);
