@@ -8,7 +8,7 @@ const {
   I18nProviderClient,
   useCurrentLocale,
 } = createI18nClient({
-  fr: () => import("./fr"),
+  fr: () => import("./translations/fr"),
 });
 
 const modifiedUseI18n: () => ((key: string, ...args: any[]) => string) = () => originalUseI18n();

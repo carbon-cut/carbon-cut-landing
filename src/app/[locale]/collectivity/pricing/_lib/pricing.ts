@@ -320,8 +320,8 @@ export function calculateSubscriptionPrice(
   };
 }
 
-export function formatSubscriptionCurrency(amountCents: number) {
-  return new Intl.NumberFormat("fr-FR", {
+export function formatSubscriptionCurrency(amountCents: number, locale = "fr") {
+  return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "EUR",
     minimumFractionDigits: 0,

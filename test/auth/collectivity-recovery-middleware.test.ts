@@ -29,14 +29,14 @@ describe("collectivity recovery redirects", () => {
     );
   });
 
-  it("preserves the locale prefix of a deep link", async () => {
+  it("removes the locale prefix before guarding a deep link", async () => {
     const request = new NextRequest(
       "http://localhost/fr/collectivity/projects/grand-sfax/actions?tab=next",
       { headers: { cookie: "cc_refresh_token=refresh-token" } }
     );
     const response = await middleware(request, event);
     expect(response.headers.get("location")).toBe(
-      "http://localhost/auth/recover?returnTo=%2Ffr%2Fcollectivity%2Fprojects%2Fgrand-sfax%2Factions%3Ftab%3Dnext"
+      "http://localhost/collectivity/projects/grand-sfax/actions?tab=next"
     );
   });
 

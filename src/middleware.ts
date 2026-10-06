@@ -7,8 +7,10 @@ import { withAuthMiddleware } from "@/middlewares/withAuthMiddleware";
 const middlewareChain = chain([withI18nMiddleware, withAuthMiddleware]);
 
 function getHouseholdRedirectPath(pathname: string) {
-  if (pathname.startsWith("/fr/household/")) {
-    return "/fr/household";
+  for (const locale of ["fr", "en"] as const) {
+    if (pathname.startsWith(`/${locale}/household/`)) {
+      return `/${locale}/household`;
+    }
   }
 
   if (pathname.startsWith("/household/")) {

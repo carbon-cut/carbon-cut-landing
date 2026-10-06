@@ -8,7 +8,7 @@ import { mockRotateRefreshToken, MockAuthError } from "@/mocks/auth";
 import { CustomMiddleware } from "./chain";
 
 const AUTH_TEST_SUPPORT_HEADER = "x-auth-test-support-key";
-const appLocales = ["fr"] as const;
+const appLocales = ["fr", "en"] as const;
 
 function normalizeLocalePathname(pathname: string) {
   for (const locale of appLocales) {
