@@ -108,8 +108,8 @@ export default function TerritoryVehiclesAddRow({
               form.reset(defaultValues);
             })();
           }}
+          icon={<Plus aria-hidden="true" className="h-4 w-4" />}
         >
-          <Plus aria-hidden="true" />
           {addLabel}
         </InventoryTableActionButton>
       </div>

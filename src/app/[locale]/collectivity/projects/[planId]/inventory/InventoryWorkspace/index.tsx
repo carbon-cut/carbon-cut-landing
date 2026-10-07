@@ -17,8 +17,8 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useScopedI18n } from "@/locales/client";
 
-import InventoryDatasetNav from "./InventoryDatasetNav";
-import InventoryDomainNav from "./InventoryDomainNav";
+import InventoryDatasetNav from "../components/InventoryDatasetNav";
+import InventoryDomainNav from "../components/InventoryDomainNav";
 import FertilizersSurface from "../datasets/afat/fertilizers/surface";
 import LivestockSurface from "../datasets/afat/livestock/surface";
 import TreesSurface from "../datasets/afat/trees/surface";
@@ -48,32 +48,8 @@ import {
 import { getInventoryDatasetProgress } from "../inventoryProgress";
 import type { InventoryDataset, InventoryWorkspaceConfig } from "../types";
 import type { InventoryFamilyKey } from "../registry";
-
-type DebugCalculationPanelState =
-  | {
-      status: "success";
-      datasetKey: string;
-      resultRows: DebugResultRow[];
-      warnings: DebugCalculationWarning[];
-      formulaVersion: string;
-      parameterCount: number;
-    }
-  | {
-      status: "error";
-      datasetKey: string;
-      message: string;
-      reasons: string[];
-    };
-
-type DebugResultRow = CollectivityResultRow & { year: CollectivityResultYearKey };
-
-type DebugCalculationWarning = {
-  code?: string;
-  itemId?: string;
-  path?: string;
-  message?: string;
-  details?: Record<string, unknown>;
-};
+import { DebugCalculationPanel } from "./debugCalc";
+import { DebugCalculationPanelState, DebugResultRow } from "./types";
 
 function getDisplayResultRows(resultRows: CollectivityResultsByYear): DebugResultRow[] {
   return Object.entries(resultRows)
@@ -86,23 +62,6 @@ function getDisplayResultRows(resultRows: CollectivityResultsByYear): DebugResul
         left.key.localeCompare(right.key) ||
         left.direction.localeCompare(right.direction)
     );
-}
-
-function getResultRowLabel(row: DebugResultRow) {
-  return [
-    row.year,
-    row.key,
-    row.owner,
-    row.family,
-    row.sector,
-    row.scope,
-    row.energy,
-    row.activity,
-    row.afatSource,
-    row.direction,
-  ]
-    .filter(Boolean)
-    .join(" · ");
 }
 
 function getDefaultDataset(datasets: InventoryDataset[]) {
@@ -152,94 +111,6 @@ function renderDatasetSurface(dataset: InventoryDataset | undefined) {
     default:
       return <></>; //<PlaceholderSurface dataset={dataset} />;
   }
-}
-
-function DebugCalculationPanel({
-  result,
-  label,
-  formulaVersionLabel,
-  parametersLabel,
-  warningsLabel,
-}: {
-  result: DebugCalculationPanelState;
-  label: string;
-  formulaVersionLabel: string;
-  parametersLabel: string;
-  warningsLabel: string;
-}) {
-  return (
-    <aside className="space-y-1.5">
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <Typography asChild variant="eyebrow" size="xxs" className="text-secondary">
-          <p>{label}</p>
-        </Typography>
-        <Typography asChild variant="caption" size="sm">
-          <p>{result.datasetKey}</p>
-        </Typography>
-      </div>
-
-      {result.status === "success" ? (
-        <div className="space-y-1.5">
-          {result.resultRows.map((row) => (
-            <div
-              key={`${row.year}-${row.key}-${row.owner}-${row.family}-${row.scope ?? ""}-${row.energy ?? ""}-${row.activity ?? ""}-${row.afatSource ?? ""}-${row.direction}`}
-              className="flex flex-wrap gap-x-3 gap-y-1"
-            >
-              <Typography asChild variant="caption" size="sm" className="text-secondary">
-                <span>{getResultRowLabel(row)}</span>
-              </Typography>
-              <Typography asChild variant="label" size="sm">
-                <span>
-                  {row.value} {row.unit}
-                </span>
-              </Typography>
-            </div>
-          ))}
-          <div className="flex flex-wrap gap-x-4 gap-y-1">
-            <Typography asChild variant="caption" size="sm">
-              <span>
-                {formulaVersionLabel}: {result.formulaVersion}
-              </span>
-            </Typography>
-            <Typography asChild variant="caption" size="sm">
-              <span>
-                {parametersLabel}: {result.parameterCount}
-              </span>
-            </Typography>
-          </div>
-          {result.warnings.length > 0 ? (
-            <div className="space-y-1 pt-1">
-              <Typography asChild variant="caption" size="sm" className="text-amber-700">
-                <p>{warningsLabel}</p>
-              </Typography>
-              {result.warnings.map((warning, index) => (
-                <Typography
-                  key={`${warning.code ?? "warning"}-${warning.itemId ?? index}`}
-                  asChild
-                  variant="caption"
-                  size="sm"
-                  className="text-amber-700"
-                >
-                  <p>{warning.message ?? warning.code ?? "Warning"}</p>
-                </Typography>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      ) : (
-        <div className="space-y-1">
-          <Typography asChild variant="caption" size="sm" className="text-destructive">
-            <p>{result.message}</p>
-          </Typography>
-          {result.reasons.length > 0 ? (
-            <Typography asChild variant="caption" size="sm" className="text-destructive">
-              <p>{result.reasons.join(", ")}</p>
-            </Typography>
-          ) : null}
-        </div>
-      )}
-    </aside>
-  );
 }
 
 export default function InventoryWorkspace({
@@ -512,7 +383,7 @@ export default function InventoryWorkspace({
         <div className="my-auto flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <Typography asChild variant="subtitle" size="md">
             <h1>
-              {tFamily(`municipalPatrimoine.title`)}
+              {tFamily(`${activeFamily.key}.title`)}
               {activeDataset ? " · " : ""}
               {tDataSet(`${activeDataset.key}.title`)}
             </h1>
@@ -521,23 +392,22 @@ export default function InventoryWorkspace({
           <div className="flex flex-wrap items-center gap-2.5 md:justify-end">
             <Button
               type="button"
-              variant="outline"
-              size="sm"
-              className="h-8 rounded-md px-4 shadow-none"
+              variant="brand-secondary"
+              size="medium"
               disabled={isSaving || isSubmitting}
               onClick={onSaveDraft}
+              icon={<Save aria-hidden="true" className="size-4 shrink-0" />}
             >
-              <Save aria-hidden="true" />
               {t("actions.save") as string}
             </Button>
             <Button
               type="button"
-              size="sm"
-              className="h-8 rounded-md px-4"
+              variant="brand-primary"
+              size="medium"
               disabled={isSaving || isSubmitting}
               onClick={onSubmitInventory}
+              icon={<CloudUpload aria-hidden="true" className="size-4 shrink-0" />}
             >
-              <CloudUpload aria-hidden="true" />
               {t("actions.submitData") as string}
             </Button>
           </div>
@@ -560,45 +430,21 @@ export default function InventoryWorkspace({
               onDatasetChange={setActiveDatasetKey}
             />
 
-            <div className="flex flex-col gap-3 border-t border-border/10 pt-3 md:flex-row md:items-start md:justify-between">
-              <div className="min-w-0 flex-1">
-                {activeDebugCalculation ? (
-                  <DebugCalculationPanel
-                    result={activeDebugCalculation}
-                    label={t("inventoryWorkspace.debugCalculation.label") as string}
-                    formulaVersionLabel={
-                      t("inventoryWorkspace.debugCalculation.formulaVersion") as string
-                    }
-                    parametersLabel={t("inventoryWorkspace.debugCalculation.parameters") as string}
-                    warningsLabel={t("inventoryWorkspace.debugCalculation.warnings") as string}
-                  />
-                ) : (
-                  <Typography asChild variant="body" size="sm" className="text-muted-foreground">
-                    <p>{tDataSet(`${activeDataset.key}.title`)}</p>
-                  </Typography>
-                )}
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="h-8 shrink-0 rounded-md px-4 shadow-none"
-                disabled={
-                  debugCalculationMutation.isPending ||
-                  !activeDataset ||
-                  !getInventoryDatasetFieldName(activeDataset.key)
-                }
-                onClick={handleDebugCalculate}
-              >
-                <Calculator aria-hidden="true" />
-                {t("inventoryWorkspace.debugCalculation.action") as string}
-              </Button>
-            </div>
+            {/* <DebugCalculationPanel
+              disabled={
+                debugCalculationMutation.isPending ||
+                !activeDataset ||
+                !getInventoryDatasetFieldName(activeDataset.key)
+              }
+              result={activeDebugCalculation}
+              t={t}
+              handleDebugCalculate={handleDebugCalculate}
+              tDataSet={tDataSet}
+              activeDataset={activeDataset}
+            /> */}
           </div>
 
-          <div className="space-y-4 px-6 py-3 md:px-8 md:py-4">
-            {renderDatasetSurface(activeDataset)}
-          </div>
+          <div className="space-y-4 px-6 md:px-8">{renderDatasetSurface(activeDataset)}</div>
         </section>
       </section>
     </section>

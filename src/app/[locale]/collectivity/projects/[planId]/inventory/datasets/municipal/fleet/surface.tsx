@@ -50,7 +50,7 @@ export default function FleetSurface() {
         />
         <MatrixTable
           title={
-            <Typography variant="sectionTitle" size="lg" className="inline-flex items-center gap-1">
+            <Typography variant="heading3" className="inline-flex items-center gap-1">
               <span>{tFleet("yearlyEnergyTitle")}</span>
               <FieldRequired content={tFleet("yearlyEnergyRequirementTooltip")} />
             </Typography>

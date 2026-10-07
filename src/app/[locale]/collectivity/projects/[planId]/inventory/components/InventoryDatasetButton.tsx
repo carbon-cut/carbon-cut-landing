@@ -79,7 +79,7 @@ export default function InventoryDatasetButton({
         )}
       />
       <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
-        <Typography variant="label" size="sm" className="text-inherit leading-none">
+        <Typography variant="bodyBold" className="text-inherit leading-none">
           <span className="truncate">{label}</span>
         </Typography>
         {statusText || badgeText ? (

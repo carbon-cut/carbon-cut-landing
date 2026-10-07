@@ -116,8 +116,7 @@ export function buildNaturalGasTitleWithRequirement(title: string, requirement: 
   return React.createElement(
     Typography,
     {
-      variant: "sectionTitle",
-      size: "lg",
+      variant: "heading2",
       className: "inline-flex items-center gap-1",
     },
     React.createElement("span", null, title),

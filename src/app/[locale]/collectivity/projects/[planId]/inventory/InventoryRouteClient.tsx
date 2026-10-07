@@ -19,7 +19,7 @@ import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/proj
 import { Form } from "@/components/ui/forms";
 import { useScopedI18n } from "@/locales/client";
 
-import InventoryWorkspace from "./components/InventoryWorkspace";
+import InventoryWorkspace from "./InventoryWorkspace";
 import { InventoryProvider, type InventoryFormValues } from "./context/inventory-context";
 import { buildInventoryDefaultValues } from "./inventoryDefaultValues";
 import { inventorySchema } from "./InventorySchema";

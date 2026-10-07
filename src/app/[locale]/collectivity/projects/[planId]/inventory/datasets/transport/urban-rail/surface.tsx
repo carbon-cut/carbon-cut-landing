@@ -70,7 +70,7 @@ function UrbanRailServiceSection({
       )}
     >
       <AccordionTrigger icon="chevron-down" className="px-4 py-3 hover:no-underline">
-        <Typography className="text-center" asChild variant="sectionTitle" size="xl">
+        <Typography className="text-center" asChild variant="heading2" size="xl">
           <h4>{serviceName || tUrbanRail("services.default")}</h4>
         </Typography>
       </AccordionTrigger>
@@ -130,11 +130,7 @@ export default function UrbanRailSurface() {
         render={({ fieldState }) => (
           <FormItem className="space-y-3">
             <InventoryTableHeader
-              title={
-                <Typography variant="sectionTitle" size="lg">
-                  {tUrbanRail("services.title")}
-                </Typography>
-              }
+              title={<Typography variant="heading2">{tUrbanRail("services.title")}</Typography>}
               description={tUrbanRail("services.description")}
               endContent={
                 <InventoryTableActionButton
@@ -142,8 +138,8 @@ export default function UrbanRailSurface() {
                   onClick={() =>
                     append(buildUrbanRailServiceDefaultValues(), { shouldFocus: false })
                   }
+                  icon={<Plus aria-hidden="true" className="size-4" />}
                 >
-                  <Plus aria-hidden="true" />
                   {tUrbanRail("services.addLabel")}
                 </InventoryTableActionButton>
               }
@@ -168,21 +164,21 @@ export default function UrbanRailSurface() {
                     title={tUrbanRail("services.removeLabel")}
                     aria-label={`${tUrbanRail("services.removeLabel")} ${index + 1}`}
                     onClick={() => remove(index)}
-                  >
-                    <Trash2 aria-hidden="true" />
-                  </InventoryTableIconButton>
+                    className="h-9 w-9"
+                    icon={<Trash2 aria-hidden="true" className="size-5" />}
+                  ></InventoryTableIconButton>
                 </div>
               ))}
               {fields.length === 0 ? (
                 <Button
                   type="button"
-                  variant="outline"
-                  className="justify-start rounded-xl border-dashed"
+                  variant="brand-secondary"
+                  className="justify-start rounded-xl border-2 border-brand-600/70 border-dashed"
                   onClick={() =>
                     append(buildUrbanRailServiceDefaultValues(), { shouldFocus: false })
                   }
+                  icon={<Plus aria-hidden="true" className="size-4" />}
                 >
-                  <Plus aria-hidden="true" />
                   {tUrbanRail("services.addLabel")}
                 </Button>
               ) : null}

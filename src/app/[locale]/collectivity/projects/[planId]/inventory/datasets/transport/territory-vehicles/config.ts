@@ -115,8 +115,7 @@ export function buildTerritoryVehiclesSection(
     title: React.createElement(
       Typography,
       {
-        variant: "sectionTitle",
-        size: "lg",
+        variant: "heading3",
         className: "inline-flex items-center gap-1",
       },
       React.createElement("span", null, labelFunc("title")),
