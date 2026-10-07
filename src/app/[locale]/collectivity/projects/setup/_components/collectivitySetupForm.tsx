@@ -311,7 +311,11 @@ export default function CollectivitySetupForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className={cn("space-y-5", variant === "workspace" && "space-y-0")}
       >
-        <div className={cn(variant === "workspace" && "grid xl:grid-cols-[minmax(0,1fr)_320px]")}>
+        <div
+          className={cn(
+            /* variant === "workspace" && "grid xl:grid-cols-[minmax(0,1fr)_320px]" */ ""
+          )}
+        >
           <div className="min-w-0 space-y-5">
             <section
               className={cn(variant === "workspace" && "border-b border-border px-5 py-5 md:px-6")}
@@ -620,7 +624,8 @@ export default function CollectivitySetupForm({
                 ) : null}
                 <Button
                   type="submit"
-                  className={cn("h-11", variant === "setup" ? "w-full" : "min-w-44")}
+                  variant="brand-primary"
+                  className={cn("", variant === "setup" ? "w-full rounded-full" : "")}
                   disabled={setupMutation.isPending}
                 >
                   {variant === "setup"
@@ -653,19 +658,16 @@ export default function CollectivitySetupForm({
   }
 
   return (
-    <section className="border border-border bg-card">
-      <header className="border-b border-border px-5 py-5 md:px-6">
-        <Typography asChild variant="captionBold">
-          <p>{t("setupWorkspace.eyebrow") as string}</p>
-        </Typography>
-        <Typography asChild variant="heading2" className="mt-2">
+    <section className="">
+      <header className="px-5 py-5 md:px-6">
+        <Typography asChild variant="heading1">
           <h2>{t("setupWorkspace.title") as string}</h2>
         </Typography>
         <Typography asChild variant="bodySubframe" className="mt-3 max-w-3xl">
           <p>{t("setupWorkspace.description") as string}</p>
         </Typography>
       </header>
-      {formBody}
+      <div className="bg-card rounded-xl">{formBody}</div>
     </section>
   );
 }
