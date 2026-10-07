@@ -5,6 +5,7 @@ export type AuthUser = {
   provider: string;
   confirmed: boolean;
   blocked: boolean;
+  planId?: string[];
 };
 
 export type AuthSessionResponse = {

@@ -1,0 +1,111 @@
+// Scope note:
+// Shared reference tables already defined elsewhere, such as Country,
+// are intentionally not expanded in this ERD.
+// This diagram stays focused on collectivity architecture entities.
+
+Table User {
+  id uuid [pk]
+  username text
+  email text
+  provider text
+  confirmed boolean
+  blocked boolean
+}
+
+Table Project {
+  id uuid [pk]
+  name text
+  slug text
+  ownerUserId uuid [not null]
+  territory text
+  country text
+  referenceYear int
+  inventoryYears int[]
+  currentInventoryId uuid
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table Inventory {
+  id uuid [pk]
+  projectId uuid [not null]
+  setupPayload jsonb
+  inventoryInput jsonb
+  status text [note: 'draft | calculated | outdated']
+  lockedYears int[]
+  latestCalculationRunId uuid
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table CalculationParameterFamily {
+  id uuid [pk]
+  key text
+  kind text
+  selectorSchema jsonb
+  gas text
+  emissionScope text
+  unit text
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table CalculationParameterEntry {
+  id uuid [pk]
+  familyId uuid [not null]
+  selector jsonb
+  applicability text
+  country text
+  value numeric
+  sourceReferenceId uuid
+  validFromYear int
+  validToYear int
+  createdBy uuid
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table CalculationRun {
+  id uuid [pk]
+  projectId uuid [not null]
+  inventoryId uuid [not null]
+  startedAt timestamp
+  completedAt timestamp
+  status text [note: 'succeeded | failed']
+  parameterSnapshot jsonb
+  formulaVersion text
+}
+
+Table CalculationResult {
+  id uuid [pk]
+  calculationRunId uuid [not null]
+  projectId uuid [not null]
+  emissionsPayload jsonb
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+Table SourceReference {
+  id uuid [pk]
+  title text
+  type text
+  publisher text
+  year int
+  url text
+  filePath text
+  note text
+}
+
+Ref: Project.ownerUserId > User.id
+Ref: Inventory.projectId > Project.id
+Ref: Project.currentInventoryId - Inventory.id
+Ref: CalculationRun.projectId > Project.id
+Ref: CalculationRun.inventoryId > Inventory.id
+Ref: Inventory.latestCalculationRunId - CalculationRun.id
+Ref: CalculationResult.calculationRunId - CalculationRun.id
+Ref: CalculationResult.projectId > Project.id
+Ref: CalculationParameterEntry.familyId > CalculationParameterFamily.id
+Ref: CalculationParameterEntry.sourceReferenceId > SourceReference.id
+
+// TODO: normalized relation between CalculationRun and CalculationParameterEntry is unresolved.
+// Current architecture stores parameter usage inside CalculationRun.parameterSnapshot.

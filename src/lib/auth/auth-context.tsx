@@ -1,15 +1,21 @@
 "use client";
 
-import {
+import React, {
+  type ReactNode,
   createContext,
   startTransition,
   useCallback,
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
-  type ReactNode,
 } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { SESSION_EXPIRED_EVENT } from "@/lib/auth/browser-request";
+import { sanitizeReturnTo } from "@/lib/auth/redirect";
+import { getAuthSignInRoute } from "@/lib/routing/routes";
 import type { AuthUser, SessionState } from "@/lib/auth/types";
 
 type AuthStatus = "loading" | "authenticated" | "unauthenticated";
@@ -18,7 +24,7 @@ type AuthContextValue = {
   status: AuthStatus;
   user: AuthUser | null;
   refetchSession: () => Promise<void>;
-  signOut: () => Promise<void>;
+  signOut: () => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -37,6 +43,9 @@ async function readSession(): Promise<SessionState> {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const endingSession = useRef(false);
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [user, setUser] = useState<AuthUser | null>(null);
 
@@ -66,16 +75,58 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [applySession]);
 
   const signOut = useCallback(async () => {
-    await fetch("/api/auth/logout", {
-      method: "POST",
-      credentials: "same-origin",
-    });
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "same-origin",
+      });
+    } catch {
+      // Cookie cleanup is attempted locally; browser state is still cleared.
+    } finally {
+      queryClient.clear();
+      localStorage.setItem("carbon-cut-auth-logout", String(Date.now()));
+      startTransition(() => {
+        setStatus("unauthenticated");
+        setUser(null);
+      });
+    }
+    return true;
+  }, [queryClient]);
 
-    startTransition(() => {
-      setStatus("unauthenticated");
-      setUser(null);
-    });
-  }, []);
+  useEffect(() => {
+    const onExpired = async () => {
+      if (endingSession.current) return;
+      endingSession.current = true;
+      const returnTo = sanitizeReturnTo(window.location.pathname + window.location.search);
+      try {
+        await signOut();
+      } catch {
+        queryClient.clear();
+      }
+      const destination = new URL(getAuthSignInRoute(returnTo), window.location.origin);
+      destination.searchParams.set("reason", "expired");
+      router.replace(destination.pathname + destination.search);
+      endingSession.current = false;
+    };
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === "carbon-cut-auth-logout") {
+        queryClient.clear();
+        startTransition(() => {
+          setStatus("unauthenticated");
+          setUser(null);
+        });
+        router.replace(
+          getAuthSignInRoute(sanitizeReturnTo(window.location.pathname + window.location.search))
+        );
+      }
+    };
+    window.addEventListener(SESSION_EXPIRED_EVENT, onExpired);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener(SESSION_EXPIRED_EVENT, onExpired);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [queryClient, router, signOut]);
 
   useEffect(() => {
     void refetchSession();

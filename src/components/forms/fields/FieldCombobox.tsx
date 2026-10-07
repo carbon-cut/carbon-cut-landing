@@ -92,7 +92,7 @@ function FieldCombobox<T extends FieldValues>({
                     <span className="truncate">
                       {field.value
                         ? data.find((elem) => field.value === elem.value)?.label
-                        : t("value", { label })}
+                        : t("value")}
                     </span>
                     <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
@@ -101,7 +101,7 @@ function FieldCombobox<T extends FieldValues>({
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Command>
-                <CommandInput placeholder={t("placeholder", { label })} />
+                <CommandInput placeholder={t("placeholder")} />
                 <CommandList>
                   {loading ? (
                     <div className="flex items-center gap-2 px-4 py-6 text-sm text-muted-foreground">
@@ -110,7 +110,7 @@ function FieldCombobox<T extends FieldValues>({
                     </div>
                   ) : (
                     <>
-                      <CommandEmpty>{t("notFound", { label })}</CommandEmpty>
+                      <CommandEmpty>{t("notFound")}</CommandEmpty>
                       <CommandGroup>
                         {data.map((element, index) => (
                           <CommandItem

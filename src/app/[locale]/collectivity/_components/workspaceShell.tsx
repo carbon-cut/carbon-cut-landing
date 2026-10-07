@@ -1,0 +1,49 @@
+"use client";
+
+import type { CSSProperties, ReactNode } from "react";
+import { usePathname } from "next/navigation";
+
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+
+import CollectivitySidebar, { useCollectivityRouteItems } from "./collectivitySidebar";
+import { CollectivityProjectProvider } from "./collectivityProjectContext";
+
+const sidebarStyle = {
+  "--sidebar-width": "13.5rem",
+  "--sidebar-width-icon": "3.5rem",
+} as CSSProperties & Record<"--sidebar-width" | "--sidebar-width-icon", string>;
+
+export default function WorkspaceShell({
+  children,
+  initialSnapshot,
+  planId,
+  userName,
+}: {
+  children: ReactNode;
+  initialSnapshot: CollectivitySetupSnapshot;
+  planId: string;
+  userName: string;
+}) {
+  const pathname = usePathname();
+  const routeItems = useCollectivityRouteItems(planId);
+
+  return (
+    <CollectivityProjectProvider initialSnapshot={initialSnapshot}>
+      <SidebarProvider defaultOpen style={sidebarStyle}>
+        <TooltipProvider delayDuration={150}>
+          <CollectivitySidebar routeItems={routeItems} pathname={pathname} userName={userName} />
+
+          <SidebarInset className="min-w-0 bg-workspace">
+            <main id="content" className="min-h-screen bg-workspace text-foreground">
+              <div className="mx-auto w-full max-w-[1500px] px-4 py-3 md:px-8 md:py-4">
+                {children}
+              </div>
+            </main>
+          </SidebarInset>
+        </TooltipProvider>
+      </SidebarProvider>
+    </CollectivityProjectProvider>
+  );
+}

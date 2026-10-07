@@ -1,4 +1,3 @@
-import { useScopedI18n } from "@/locales/client";
 import { TabValues } from "./types";
 import { Car, Zap, UtensilsCrossed, Trash2, Plane } from "lucide-react";
 
@@ -15,10 +14,6 @@ export const getColor = (tab: TabValues | string) => {
     case "waste":
       return "#CC552A";
   }
-};
-
-export const getName = (tab: TabValues | string) => {
-  return useScopedI18n("sections")(tab);
 };
 
 export const getSvg = (tab: TabValues | string) => {

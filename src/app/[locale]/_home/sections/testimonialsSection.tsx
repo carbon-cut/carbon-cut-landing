@@ -1,0 +1,25 @@
+import { Badge } from "@/components/ui/badge";
+import { getScopedI18n } from "@/locales/server";
+import Testimonials from "../_testimonials";
+
+export default async function TestimonialsSection() {
+  const t = await getScopedI18n("home.testimonials");
+
+  return (
+    <section
+      id="testimonials"
+      aria-labelledby="testimonials-heading"
+      className="bg-surface-warm py-12"
+    >
+      <div className="flex flex-col justify-center mb-4">
+        <Badge
+          variant="default"
+          className="w-fit timeline-view range-on-entry/20vh_50vh translate-y-3 scale-90 opacity-0 animate-rise-in motion-reduce:animate-none no-animations:translate-y-0 no-animations:opacity-100"
+        >
+          {t("badge")}
+        </Badge>
+      </div>
+      <Testimonials />
+    </section>
+  );
+}

@@ -1,0 +1,46 @@
+name: OpenAPI generated types
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  generated-types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require backend read token
+        env:
+          BACKEND_CONTRACT_READ_TOKEN: ${{ secrets.BACKEND_CONTRACT_READ_TOKEN }}
+        run: |
+          if [ -z "$BACKEND_CONTRACT_READ_TOKEN" ]; then
+            echo "Configure BACKEND_CONTRACT_READ_TOKEN with read access to carbon-cut-backend."
+            exit 1
+          fi
+      - name: Checkout backend contract
+        uses: actions/checkout@v4
+        with:
+          repository: carbon-cut/carbon-cut-backend
+          ref: ${{ github.base_ref || github.ref_name }}
+          token: ${{ secrets.BACKEND_CONTRACT_READ_TOKEN }}
+          path: backend-contract
+          persist-credentials: false
+          sparse-checkout: openapi/openapi.yaml
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm run api:check:source
+        env:
+          BACKEND_OPENAPI_FILE: backend-contract/openapi/openapi.yaml
+      - run: npm run api:check

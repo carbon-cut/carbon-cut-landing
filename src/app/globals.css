@@ -1,3 +1,5 @@
+@import "country-flag-icons/3x2/flags.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -61,13 +63,22 @@
       hsl(var(--section-waste-light))
     );
     --surface-warm: 49 41% 95%;
-    --background: 210 30% 96%;
+    --workspace-background: 105 28.6% 97.3%;
+    --background: 210 0% 94%;
     --foreground: 170 61% 10%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-    --card-primary: 230 8% 14%;
-    --card-primary-foreground: 0 0% 69%;
+    --card-primary: 167.73 37.25% 10%;
+    --card-primary-foreground: 0 0% 90%;
     --card-primary-muted: 0 0% 62%;
+    --sidebar-background: var(--card);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--primary-subtle);
+    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 156 100% 32%;
@@ -90,6 +101,7 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
+    --border-light: 0 0% 100% / 0.12;
     --input: 214.3 51.8% 91.4%;
     --ring: 156 100% 32%;
     --chart-1: 126 75% 64%; /* light green */
@@ -100,6 +112,7 @@
     --radius: 0.5rem;
   }
   .dark {
+    --workspace-background: 222.2 20% 10%;
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
@@ -107,6 +120,14 @@
     --card-primary: 0 0% 100%;
     --card-primary-foreground: 222.2 84% 4.9%;
     --card-primary-muted: 0 0% 62%;
+    --sidebar-background: var(--card);
+    --sidebar-foreground: var(--foreground);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--primary-subtle);
+    --sidebar-accent-foreground: var(--foreground);
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
     --primary: 156 70% 45%;
@@ -129,6 +150,7 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
+    --border-light: 210 40% 98% / 0.14;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     --chart-1: 220 70% 50%;
@@ -144,7 +166,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-manrope_sans overflow-x-hidden max-w-[100vw];
+    @apply bg-background text-foreground font-sans overflow-x-hidden max-w-[100vw];
   }
   a:focus-visible {
     @apply outline-none ring-2 ring-chart-3 ring-offset-2 ring-offset-background rounded-md;
@@ -157,8 +179,72 @@
 }
 
 @layer components {
+  .chart-tooltip-surface {
+    --chart-tooltip-background: hsl(var(--foreground));
+    --chart-tooltip-foreground: hsl(var(--background));
+    --chart-tooltip-radius: calc(var(--radius) - 2px);
+    --chart-tooltip-padding: 0.375rem 0.75rem;
+    --chart-tooltip-font-size: 0.85rem;
+    --chart-tooltip-line-height: 1.25rem;
+
+    background-color: var(--chart-tooltip-background) !important;
+    border: 0 !important;
+    border-radius: var(--chart-tooltip-radius) !important;
+    box-sizing: border-box;
+    color: var(--chart-tooltip-foreground) !important;
+    font-size: var(--chart-tooltip-font-size) !important;
+    line-height: var(--chart-tooltip-line-height) !important;
+    padding: var(--chart-tooltip-padding) !important;
+  }
+
+  .chart-tooltip-arrow {
+    background-color: var(--chart-tooltip-background);
+    fill: var(--chart-tooltip-background);
+  }
+
+  .chart-tooltip-row {
+    align-items: center;
+    display: flex;
+    line-height: 1.25rem;
+  }
+
+  .chart-tooltip-identity {
+    align-items: center;
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .chart-tooltip-marker {
+    align-self: center;
+    border-radius: 9999px;
+    flex: none;
+    height: 0.7rem;
+    width: 0.7rem;
+    margin-top: 0.1rem;
+  }
+
+  .chart-tooltip-label {
+    font-weight: 400;
+  }
+
+  .chart-tooltip-measure {
+    align-items: baseline;
+    display: flex;
+    gap: 0.25rem;
+    margin-left: 0.75rem;
+  }
+
+  .chart-tooltip-value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .chart-tooltip-unit {
+    opacity: 0.75;
+  }
+
   .home-section {
-    @apply flex flex-1 flex-wrap justify-center px-3 md:px-24 md:py-8;
+    @apply flex flex-1 flex-wrap justify-center px-3 md:px-44 md:py-8;
   }
 
   .content-width {
@@ -200,6 +286,14 @@
 }
 
 @layer utilities {
+  .placeholder-subframe::placeholder {
+    @apply text-neutral-400;
+  }
+
+  .select-trigger-subframe[data-placeholder] [data-slot="select-value"] {
+    @apply text-neutral-400;
+  }
+
   .transition-discrete {
     transition-behavior: allow-discrete;
   }

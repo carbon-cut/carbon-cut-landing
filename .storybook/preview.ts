@@ -42,6 +42,6 @@ const preview: Preview = {
   },
 };
 
-/* export const decorators = [Wrapper]; */
+export const decorators = [Wrapper];
 
 export default preview;

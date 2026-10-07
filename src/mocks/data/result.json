@@ -46,5 +46,13 @@
         "covoiturage": []
       }
     }
+  },
+  "waste": {
+    "waste": {
+      "scope3": 416
+    },
+    "water": {
+      "scope3": 15
+    }
   }
 }

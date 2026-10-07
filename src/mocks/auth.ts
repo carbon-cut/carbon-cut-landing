@@ -12,6 +12,7 @@ import type {
   SignInRequest,
   SignUpRequest,
 } from "@/lib/auth/types";
+import { COLLECTIVITY_MOCK_PASSWORD, COLLECTIVITY_MOCK_USERS } from "@/mocks/collectivity";
 
 type MockUserRecord = AuthUser & {
   password: string;
@@ -42,7 +43,15 @@ function buildError(status: number, message: string, code: AuthErrorCode): AuthE
 }
 
 function makeSession(user: AuthUser): AuthSessionResponse {
-  const access_token = `mock-access-${user.id}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const payload = btoa(JSON.stringify({ id: user.id, exp: Math.floor(Date.now() / 1000) + 300 }))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+  const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+  const access_token = `${header}.${payload}.${Math.random().toString(36).slice(2, 8)}`;
   const refresh_token = `mock-refresh-${user.id}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
   refreshTokens.forEach((email, token) => {
@@ -118,10 +127,70 @@ function ensureSeedUsers() {
       confirmationToken: defaultConfirmationToken,
       resetCode: defaultResetCode,
     },
+    {
+      id: COLLECTIVITY_MOCK_USERS.developedInventory.id,
+      username: COLLECTIVITY_MOCK_USERS.developedInventory.username,
+      email: COLLECTIVITY_MOCK_USERS.developedInventory.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      planId: COLLECTIVITY_MOCK_USERS.developedInventory.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
+    {
+      id: COLLECTIVITY_MOCK_USERS.noInventory.id,
+      username: COLLECTIVITY_MOCK_USERS.noInventory.username,
+      email: COLLECTIVITY_MOCK_USERS.noInventory.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      planId: COLLECTIVITY_MOCK_USERS.noInventory.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
+    {
+      id: COLLECTIVITY_MOCK_USERS.newlyCreated.id,
+      username: COLLECTIVITY_MOCK_USERS.newlyCreated.username,
+      email: COLLECTIVITY_MOCK_USERS.newlyCreated.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      planId: COLLECTIVITY_MOCK_USERS.newlyCreated.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
+    {
+      id: COLLECTIVITY_MOCK_USERS.superUser.id,
+      username: COLLECTIVITY_MOCK_USERS.superUser.username,
+      email: COLLECTIVITY_MOCK_USERS.superUser.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      planId: COLLECTIVITY_MOCK_USERS.superUser.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
+    {
+      id: COLLECTIVITY_MOCK_USERS.subscriptionDemo.id,
+      username: COLLECTIVITY_MOCK_USERS.subscriptionDemo.username,
+      email: COLLECTIVITY_MOCK_USERS.subscriptionDemo.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      planId: COLLECTIVITY_MOCK_USERS.subscriptionDemo.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
   ] satisfies MockUserRecord[];
 
   seed.forEach((user) => users.set(user.email.toLowerCase(), user));
-  nextUserId = 4;
+  nextUserId = 9;
 }
 
 ensureSeedUsers();
@@ -275,6 +344,27 @@ export function mockRotateRefreshToken(refreshToken: string): AuthSessionRespons
 export function mockLogout(refreshToken: string) {
   refreshTokens.delete(refreshToken);
   return { ok: true as const };
+}
+
+export function getMockUserByAccessToken(accessToken: string): AuthUser | null {
+  const email = accessTokens.get(accessToken);
+  let tokenUserId: number | null = null;
+  try {
+    if (accessToken.split(".").length === 3) {
+      tokenUserId = JSON.parse(
+        atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+      ).id;
+    }
+  } catch {
+    tokenUserId = null;
+  }
+  const user =
+    (email ? requireUser(email) : null) ??
+    (tokenUserId
+      ? (Array.from(users.values()).find((candidate) => candidate.id === tokenUserId) ?? null)
+      : null);
+
+  return user ? publicUser(user) : null;
 }
 
 export function mockChangePassword(
