@@ -1,4 +1,5 @@
 import type { TerritorialEnergyLineDefinitions } from "./territorial-energy";
+import { electricityConsumptionUnits } from "../_sharedUnits";
 
 type UnitConf = {
   [key: string]: {
@@ -66,7 +67,7 @@ const electricityHtLines = {
 
 const electricityUnits: UnitConf = {
   tensions: {
-    consumption: ["GWh"],
+    consumption: electricityConsumptionUnits,
     subscribers: [""],
   },
 } as const;
@@ -90,7 +91,7 @@ const photovoltaicUnits: UnitConf = {
   tension: {
     subscribers: [""],
     capacity: ["kWc"],
-    production: ["MWh"],
+    production: electricityConsumptionUnits,
     balance: ["currency"],
   },
 } as const;

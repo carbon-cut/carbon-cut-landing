@@ -1,3 +1,5 @@
+import { electricityConsumptionUnits } from "../_sharedUnits";
+
 type UnitConf = {
   [key: string]: {
     [key: string]: [string, ...string[]];
@@ -8,7 +10,7 @@ const consumptionUnitByFuel: { [key: string]: [string, ...string[]] } = {
   petrol: ["L"],
   diesel: ["L"],
   gpl: ["L"],
-  electricity: ["kWh"],
+  electricity: electricityConsumptionUnits,
   gnv: ["kg"],
 };
 const fleetFuelKeys = ["petrol", "diesel", "gpl", "electricity", "gnv"] as const;
@@ -55,7 +57,7 @@ const publicLightingUnits: UnitConf = {
     number: [""],
   },
   yearly: {
-    consumption: ["kWh"],
+    consumption: electricityConsumptionUnits,
     bill: ["currency"],
   },
 } as const;
@@ -99,7 +101,7 @@ const buildingsUnits: UnitConf = {
     closedSurface: ["m²"],
   },
   consumption: {
-    electricityConsumption: ["kWh"],
+    electricityConsumption: electricityConsumptionUnits,
     electricityBill: ["currency"],
     gasConsumption: ["Nm3"],
     gasBill: ["currency"],

@@ -126,29 +126,29 @@ export default {
         ],
       },
       collectivityLanding: {
-        title: "Local authority | Carbon inventory prototype | Carbon Cut",
+        title: "Municipality | Carbon inventory prototype | Carbon Cut",
         description:
-          "Discover the Carbon Cut prototype to configure the territory of a local authority and prepare a municipal carbon inventory.",
+          "Discover the Carbon Cut prototype to configure a municipality's territory and prepare a municipal carbon inventory.",
         keywords: [
-          "carbon local authority prototype",
+          "municipality carbon inventory prototype",
           "municipal carbon inventory",
           "territory configuration",
           "climate data collection",
-          "local authority carbon footprint",
+          "municipal carbon footprint",
           "municipal climate tool",
         ],
       },
       collectivityPricing: {
-        title: "Local authority subscription | Carbon Cut",
+        title: "Municipality subscription | Carbon Cut",
         description:
-          "Configure the scope, duration and modules of your local authority subscription.",
+          "Configure the scope, duration and modules of your municipality's subscription.",
       },
       collectivityDashboard: {
-        title: "Collectivity Inventory (Draft) | Carbon Cut",
+        title: "Municipal Inventory (Draft) | Carbon Cut",
         description:
           "UI prototype for collecting city data to build a baseline inventory. This is a draft experience.",
         keywords: [
-          "local authority inventory",
+          "municipal inventory",
           "city baseline",
           "public lighting",
           "fleet inventory",
@@ -164,29 +164,28 @@ export default {
       setup: "Setup",
     },
     hero: {
-      badge: "Local authority prototype",
+      badge: "Municipal prototype",
       title: {
-        line1: "Configure your",
-        highlight: "carbon inventory",
-        line2: "for your territory.",
+        text: "Build a {inventory} you can understand, explain and improve over time.",
+        highlight: "municipal GHG inventory",
       },
       description:
-        "A first proof of concept to help a local authority establish its perimeter, organize useful data and enter into a guided municipal configuration.",
-      imageAlt: "Landscape illustrating the Carbon Cut local authority entrance",
+        "Carbon Cut helps municipalities turn energy, transport, agriculture, wastewater and other local activity data into a structured emissions inventory — with every result traceable to its data, parameters and sources.",
+      imageAlt: "Landscape illustrating the Carbon Cut municipality entrance",
       primaryCta: {
-        label: "Open configuration",
-        aria: "Open local authority configuration",
+        label: "View pricing",
+        aria: "View pricing options",
       },
       secondaryCta: {
-        label: "View the prototype",
-        aria: "See what the local authority prototype covers",
+        label: "Request prototype access",
+        aria: "Request access to the municipality prototype",
       },
     },
     proof: {
       badge: "What this version covers",
       title: "A simple entry point before the workspace.",
       description:
-        "This page remains deliberately minimal: it presents the prototype, clarifies its current scope and leads to the configuration, without promising a complete local authority platform.",
+        "This page remains deliberately minimal: it presents the prototype, clarifies its current scope and leads to the configuration, without promising a complete municipal platform.",
       points: {
         territory: {
           title: "Define the perimeter",
@@ -208,16 +207,16 @@ export default {
     cta: {
       title: "Start by setting up the territory.",
       description:
-        "For this first version, the call to action leads to the configuration module associated with your local authority.",
+        "For this first version, the call to action leads to the configuration module for your municipality.",
       primaryCta: {
         label: "Access configuration",
-        aria: "Access the local authority configuration",
+        aria: "Access the municipality configuration",
       },
-      imageAlt: "Closing illustration to access the Carbon Cut local authority configuration",
+      imageAlt: "Closing illustration to access the Carbon Cut municipality configuration",
     },
   },
   collectivitySetup: {
-    title: "Configure the local authority",
+    title: "Configure the municipality",
     description:
       "Before opening the full workspace, fill in the project, territory, inventory years and applicable sections.",
     primaryCta: "Continue",
@@ -645,7 +644,7 @@ export default {
         description:
           "Your payment has been confirmed. You can now access the services included in your subscription.",
         footer:
-          "Your subscription is active. Find your projects and services included in your local authority space.",
+          "Your subscription is active. Find your projects and services included in your municipality's space.",
       },
       progress: {
         paymentDescription: "Payment confirmed on {date}",
@@ -732,7 +731,7 @@ export default {
       perimeter: {
         label: "Perimeter",
         description: "Scope of emissions covered by the inventory",
-        municipal_assets: "Municipal heritage",
+        municipal_assets: "Municipal assets",
         municipal_assets_description: "Municipal buildings, fleet and equipment",
         whole_territory: "Complete territory",
         whole_territory_description: "All of the territory's emissions",
@@ -1263,9 +1262,9 @@ export default {
     },
     collectivityDashboard: {
       header: {
-        badge: "Local authority space",
+        badge: "Municipality space",
         status: "Draft · Interface prototype (without backend)",
-        title: "Local authority climate plan",
+        title: "Municipal climate plan",
         meta: "Territory to be defined · Framing in progress · Horizon to be set",
       },
       actions: {
@@ -1281,7 +1280,7 @@ export default {
         submitData: "Submit data",
       },
       workflow: {
-        eyebrow: "Local authority space",
+        eyebrow: "Municipality space",
         title: "Plan modules",
         description:
           "The plan follows the progress of the report: configuration, inventory, scenarios and action plan.",
@@ -1348,7 +1347,7 @@ export default {
             industry: "Industry",
             tertiary: "Tertiary",
             agriculture: "Agriculture",
-            municipal: "Municipal heritage",
+            municipal: "Municipal assets",
           },
         },
         ghgDevelopmentChart: {
@@ -1407,9 +1406,9 @@ export default {
             crops: "Crops",
             urbanTrees: "Urban trees",
           },
-          municipalTab: "Municipal heritage",
-          municipalAriaLabel: "Graph of municipal heritage emissions by energy",
-          municipalErrorTitle: "Unable to load municipal heritage graph",
+          municipalTab: "Municipal assets",
+          municipalAriaLabel: "Graph of municipal assets emissions by energy",
+          municipalErrorTitle: "Unable to load municipal assets graph",
         },
         summaryCards: {
           ariaLabel: "Main results indicators",
@@ -1462,8 +1461,8 @@ export default {
                 "Aggregated view of Greater Sfax at the territorial level in the same workspace.",
             },
             {
-              title: "Municipal heritage reading",
-              description: "Municipal cuts targeting the municipal heritage of each municipality.",
+              title: "Municipal assets reading",
+              description: "Municipal cuts targeting the municipal assets of each municipality.",
             },
           ],
           scenarios: [
@@ -1581,7 +1580,7 @@ export default {
             helper:
               "These choices are used to decide which entry sections should exist in the current inventory.",
             footer:
-              "You can only check the sections that actually exist within the scope of the local authority.",
+              "You can only check the sections that actually exist within the municipality's scope.",
             options: {
               airport: {
                 label: "Airport",
@@ -1614,21 +1613,21 @@ export default {
         },
       },
       projectSelector: {
-        eyebrow: "Local authority space",
+        eyebrow: "Municipality space",
         title: "Choose a project",
         openAction: "Open project",
         createAction: "Create a project",
       },
       accessNotice: {
-        eyebrow: "Local authority space",
-        authTitle: "Local authority session unavailable",
+        eyebrow: "Municipality space",
+        authTitle: "Municipality session unavailable",
         authDescription: "The page was unable to load project data with your current session.",
-        unavailableTitle: "Local authority data unavailable",
+        unavailableTitle: "Municipality data unavailable",
         unavailableDescription: "Failed to load the project before opening the workspace.",
         alertTitle: "Interrupted access",
         authAlertDescription: "Server authentication is not available for this page at this time.",
         unavailableAlertDescription: "The server is unavailable or returned an error.",
-        returnAction: "Return to the local authority area",
+        returnAction: "Return to the municipality area",
       },
       planSidebar: {
         title: "Reading the report",
@@ -1681,7 +1680,7 @@ export default {
           lensPlaceholder: "Choose a reading",
           lenses: {
             territorial: "Territorial",
-            municipal: "Municipal heritage",
+            municipal: "Municipal assets",
           },
         },
         debugCalculation: {
@@ -2162,7 +2161,7 @@ export default {
               },
               vehicleTypes: {
                 motorcycles: "Motorcycles",
-                busesVehicles: "Public transport vehicles",
+                publicTransportVehicles: "Public transport vehicles",
                 mopeds: "Mopeds",
                 agriculturalEquipment: "Agricultural equipment",
                 privateVehicles: "Private vehicles",
@@ -2410,12 +2409,10 @@ export default {
                   treeTypePlaceholder: "Choose a type of tree",
                 },
                 columns: {
-                  youngTreeCanopyArea: "Young canopy (ha)",
-                  adultTreeCanopyArea: "Adult canopy (ha)",
-                  senescentTreeCanopyArea: "Senescent canopy (ha)",
-                  youngTrees: "Young people (nb, optional)",
-                  adultTrees: "Adults (nb, optional)",
-                  senescentTrees: "Senescent (nb, optional)",
+                  treeCanopyArea: "Tree canopy area (ha)",
+                  youngTrees: "Young trees (count, optional)",
+                  adultTrees: "Adult trees (count, optional)",
+                  senescentTrees: "Senescent trees (count, optional)",
                 },
                 treeTypes: {
                   oliveTrees: "Olive trees",
@@ -2625,7 +2622,7 @@ export default {
         },
         families: {
           municipalPatrimoine: {
-            title: "Municipal heritage",
+            title: "Municipal assets",
           },
           territorialEnergy: {
             title: "Territorial energy",
@@ -2923,7 +2920,7 @@ export default {
           outputs: [
             "One deployment sequence per period.",
             "Milestones and dependencies between actions.",
-            "A roadmap usable by the local authority.",
+            "A roadmap the municipality can use.",
           ],
         },
         "action-plan": {
@@ -2970,18 +2967,18 @@ export default {
             description: "Basic information for setting up inventory.",
             count: "4 confirmed configuration fields",
             scope:
-              "Use this domain to establish local authority identity, boundary context and reference year before examining heritage or territorial datasets.",
+              "Use this domain to establish the municipality's identity, boundaries and reference year before examining assets or territorial datasets.",
             readiness: "The scope and reference year are already aligned.",
             summary:
               "The inventory is currently configured around Sfax, Tunisia, with 2023 as the base year and a fixed reference population.",
             checklist: [
-              "Official name of the local authority and geographical perimeter.",
+              "Official name of the municipality and geographical boundaries.",
               "Reference year used in all collection areas.",
               "Population value or most recent demographic proxy.",
               "Short governance note for the inventory holder.",
             ],
             evidence: [
-              "Local authority identification note and administrative perimeter reference.",
+              "Municipality identification note and administrative boundary reference.",
               "Decision note on the reference year shared for the entire inventory.",
               "Population source or planning document used for configuration.",
             ],
@@ -3001,11 +2998,11 @@ export default {
               "Tip: keep the same reference year in all modules to maintain a comparable basis.",
           },
           "collectivity-assets": {
-            title: "Local authority heritage",
+            title: "Municipal assets",
             description: "Level 1 — Mandatory: buildings, public lighting, fleet, green spaces.",
             count: "3 datasets assembled, fleet still partial",
             scope:
-              "Gather assets that the local authority directly owns or operates. This area must remain focused on controlled infrastructure and service equipment.",
+              "Gather assets that the municipality directly owns or operates. This area must remain focused on controlled infrastructure and service equipment.",
             readiness:
               "Buildings and lighting are usable; fleet data still needs to be consolidated.",
             summary:
@@ -3014,7 +3011,7 @@ export default {
               "Buildings by use, surface area and annual consumption of electricity, gas or fuel if available.",
               "Public lighting points, types of lamps, installed power and annual electricity consumption.",
               "Fleet inventory by vehicle type, fuel, annual mileage and owner service.",
-              "Green spaces, trees and green waste management for areas managed by the local authority.",
+              "Green spaces, trees and green waste management for areas managed by the municipality.",
             ],
             evidence: [
               "Electricity and gas bills for municipal buildings.",

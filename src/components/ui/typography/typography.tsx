@@ -10,13 +10,14 @@ import React from "react";
  * - Body copy: variant="default" | "description" size="md" | "sm"
  * - Label/meta text: variant="label" | "caption" | "muted" size="xs" | "sm"
  * - Marketing hero (opt-in): variant="marketingTitle" size="huge"
+ * - Marketing display heading from Subframe: variant="marketingDisplay" without a `size` prop.
  * - Product screens based on the Subframe scale: use the additive, complete roles
  *   `heading1`, `heading2`, `heading3`, `bodySubframe`, `bodyBold`,
  *   `captionSubframe`, and `captionBold` without a `size` prop.
  *
  * Migration note:
  * - `size="huge"` is deprecated (kept as a compatibility alias for marketing hero usage).
- * - `variant="marketingTitle" | "marketingSubtitle"` are homepage/marketing-only opt-ins.
+ * - `variant="marketingTitle" | "marketingSubtitle"` are older marketing opt-ins.
  * - Prefer `size="xl"` + explicit responsive overrides for future page-level headings.
  * - The Subframe-aligned roles copy the source sizes, line heights, weights, letter spacing,
  *   text colours, and Work Sans family. Manrope remains available as `font-manrope_sans` if
@@ -38,6 +39,8 @@ const typographyVariants = cva("", {
       muted: "font-normal text-foreground/60 leading-5 tracking-normal",
       marketingTitle: "font-bold text-foreground leading-[1.02] tracking-[-0.015em]",
       marketingSubtitle: "font-medium text-foreground leading-[1.2] tracking-[-0.01em]",
+      marketingDisplay:
+        "font-heading-1 text-marketing-display-mobile text-default-font md:text-marketing-display",
       heading1: "text-heading-1 font-heading-1 mobile:text-heading-2 mobile:font-heading-2",
       heading2: "text-heading-2 font-heading-2",
       heading3: "text-heading-3 font-heading-3",
@@ -74,6 +77,7 @@ const Typography = React.forwardRef<HTMLDivElement, Props>(
     const Comp = asChild ? Slot : "span";
     const isSubframeRole = [
       "heading1",
+      "marketingDisplay",
       "heading2",
       "heading3",
       "bodySubframe",

@@ -1,4 +1,5 @@
 import { createYearValueDefaults } from "../_sharedDefaults";
+import { electricityConsumptionUnits } from "../_sharedUnits";
 
 type UnitConf = {
   [key: string]: {
@@ -68,7 +69,7 @@ const portUnits: UnitConf = {
     diesel: ["L"],
   },
   electricityConsumption: {
-    electricityConsumption: ["kWh"],
+    electricityConsumption: electricityConsumptionUnits,
     electricityBill: ["currency"],
   },
 } as const;
@@ -88,7 +89,7 @@ const busesUnits: UnitConf = {
     petrol: ["L"],
     gpl: ["kg"],
     gnv: ["kg"],
-    electricity: ["kWh"],
+    electricity: electricityConsumptionUnits,
   },
   spend: {
     default: ["currency"],
@@ -113,17 +114,17 @@ const airTransportUnits: UnitConf = {
     default: [""],
   },
   energy: {
-    buildingElectricity: ["kWh"],
+    buildingElectricity: electricityConsumptionUnits,
     diesel: ["L"],
     petrol: ["L"],
-    electricFleet: ["kWh"],
+    electricFleet: electricityConsumptionUnits,
     kerosene: ["L"],
   },
 } as const;
 
 const urbanRailUnits: UnitConf = {
   energy: {
-    electricity: ["kWh", "MWh", "GWh"],
+    electricity: electricityConsumptionUnits,
     diesel: ["L", "m3", "t"],
   },
   spend: {

@@ -118,7 +118,7 @@ const fertilizersSchema = z.object({
       { unit: fertilizers.units.quantity.default },
       true
     ),
-    tenure: createFixedKeyRecordSchema(fertilizers.keys, percentScalarSchema.shape),
+    tenure: createFixedKeyRecordSchema(fertilizers.keys, percentScalarSchema.shape).optional(),
   }),
   metadata,
 });

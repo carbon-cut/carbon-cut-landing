@@ -220,10 +220,12 @@ export function createRecordGridSchemaByOptionalKeys<
   GridSchemaOptions: RecordGridSchemaOptions,
   optionalKeys: readonly string[],
   rowFields?: RowFields,
-  rowKeyFieldName: string = "key"
+  rowKeyFieldName: string = "key",
+  optionalMetricObjectKeys: readonly string[] = []
 ) {
   const { unit, unitsByKeys } = GridSchemaOptions;
   const optionalKeySet = new Set(optionalKeys);
+  const optionalMetricObjectKeySet = new Set(optionalMetricObjectKeys);
 
   return z.array(
     z.object({
@@ -231,13 +233,19 @@ export function createRecordGridSchemaByOptionalKeys<
       ...(rowFields ?? {}),
       value: z.object(
         Object.fromEntries(
-          keys.map((key) => [
-            key,
-            z.object({
+          keys.map((key) => {
+            const metricObjectSchema = z.object({
               value: optionalKeySet.has(key) ? numberByYearOptionalSchema : numberByYearSchema,
               unit: constructUnit(unit ?? unitsByKeys?.[key]),
-            }),
-          ])
+            });
+
+            return [
+              key,
+              optionalMetricObjectKeySet.has(key)
+                ? metricObjectSchema.optional()
+                : metricObjectSchema,
+            ];
+          })
         )
       ),
     } as Record<string, ZodTypeAny>)

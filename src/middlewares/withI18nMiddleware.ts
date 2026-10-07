@@ -25,7 +25,8 @@ export function withI18nMiddleware(middleware: CustomMiddleware): CustomMiddlewa
 
     if (localePrefix) {
       const url = request.nextUrl.clone();
-      url.pathname = pathname.slice(localePrefix.length + 1) || "/";
+      const localizedPath = pathname.slice(localePrefix.length + 1) || "/";
+      url.pathname = localizedPath === "/" ? "/collectivity" : localizedPath;
       const redirectResponse = NextResponse.redirect(url);
 
       if (supportedLocales.some((locale) => locale === localePrefix)) {
@@ -33,6 +34,10 @@ export function withI18nMiddleware(middleware: CustomMiddleware): CustomMiddlewa
       }
 
       return redirectResponse;
+    }
+
+    if (pathname === "/") {
+      return NextResponse.redirect(new URL("/collectivity", request.url));
     }
 
     const i18nResponse = (I18nMiddleware(request) as NextResponse | undefined) ?? response;

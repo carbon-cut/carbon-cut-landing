@@ -244,7 +244,7 @@
   }
 
   .home-section {
-    @apply flex flex-1 flex-wrap justify-center px-3 md:px-24 md:py-8;
+    @apply flex flex-1 flex-wrap justify-center px-3 md:px-44 md:py-8;
   }
 
   .content-width {

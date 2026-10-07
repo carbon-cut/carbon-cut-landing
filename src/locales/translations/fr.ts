@@ -168,20 +168,19 @@ export default {
     hero: {
       badge: "Prototype collectivité",
       title: {
-        line1: "Configurez votre",
-        highlight: "inventaire carbone",
-        line2: "territorial.",
+        text: "Construisez un {inventory} que vous pouvez comprendre, expliquer et améliorer au fil du temps.",
+        highlight: "inventaire carbone municipal",
       },
       description:
-        "Une première preuve de concept pour aider une collectivité à poser son périmètre, organiser les données utiles et entrer dans une configuration municipale guidée.",
+        "Carbon Cut aide les municipalités à transformer leurs données locales sur l’énergie, les transports, l’agriculture, les eaux usées et d’autres activités en un inventaire structuré des émissions — chaque résultat restant relié à ses données, paramètres et sources.",
       imageAlt: "Paysage illustrant l'entrée collectivité de Carbon Cut",
       primaryCta: {
-        label: "Ouvrir la configuration",
-        aria: "Ouvrir la configuration de la collectivité",
+        label: "Voir le catalogue",
+        aria: "Voir le catalogue des offres",
       },
       secondaryCta: {
-        label: "Voir le prototype",
-        aria: "Voir ce que couvre le prototype collectivité",
+        label: "Demander un accès au prototype",
+        aria: "Demander un accès au prototype collectivité",
       },
     },
     proof: {
@@ -2186,7 +2185,7 @@ export default {
               },
               vehicleTypes: {
                 motorcycles: "Motocycles",
-                busesVehicles: "Véhicules transport public",
+                publicTransportVehicles: "Véhicules de transport public",
                 mopeds: "Cyclomoteurs",
                 agriculturalEquipment: "Matériel agricole",
                 privateVehicles: "Véhicules privés",
@@ -2434,9 +2433,7 @@ export default {
                   treeTypePlaceholder: "Choisir un type d'arbre",
                 },
                 columns: {
-                  youngTreeCanopyArea: "Canopée jeunes (ha)",
-                  adultTreeCanopyArea: "Canopée adultes (ha)",
-                  senescentTreeCanopyArea: "Canopée sénescents (ha)",
+                  treeCanopyArea: "Surface de canopée (ha)",
                   youngTrees: "Jeunes (nb, facultatif)",
                   adultTrees: "Adultes (nb, facultatif)",
                   senescentTrees: "Sénescents (nb, facultatif)",

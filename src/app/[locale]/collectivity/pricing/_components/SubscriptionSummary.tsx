@@ -32,7 +32,7 @@ export default function SubscriptionSummary({
   return (
     <aside
       aria-label={t("totals.aria")}
-      className="sticky top-24 flex w-96 flex-none mobile:static mobile:w-full mobile:flex-none"
+      className="sticky top-8 flex w-96 flex-none mobile:static mobile:w-full mobile:flex-none"
     >
       <Card className="flex w-full flex-col items-start gap-5 rounded-md border border-solid border-neutral-border bg-default-background px-6 py-6 shadow-md mobile:px-4 mobile:py-4">
         <div className="flex w-full items-center gap-2">

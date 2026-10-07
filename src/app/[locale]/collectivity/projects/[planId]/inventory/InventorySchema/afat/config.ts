@@ -5,9 +5,7 @@ type UnitConf = {
 };
 
 const trackedTreeCropMetricKeys = [
-  "youngTreeCanopyArea",
-  "adultTreeCanopyArea",
-  "senescentTreeCanopyArea",
+  "treeCanopyArea",
   "youngTrees",
   "adultTrees",
   "senescentTrees",
@@ -15,9 +13,7 @@ const trackedTreeCropMetricKeys = [
 
 const trackedTreeCropUnits: UnitConf = {
   metrics: {
-    youngTreeCanopyArea: ["ha"],
-    adultTreeCanopyArea: ["ha"],
-    senescentTreeCanopyArea: ["ha"],
+    treeCanopyArea: ["ha"],
     youngTrees: [""],
     adultTrees: [""],
     senescentTrees: [""],

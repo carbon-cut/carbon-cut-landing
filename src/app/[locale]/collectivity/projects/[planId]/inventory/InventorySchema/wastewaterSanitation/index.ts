@@ -40,7 +40,8 @@ const treatmentDischargeDataSetSchema = createRecordGridSchemaByOptionalKeys(
     biologicalTreatment: z.enum(wastewaterSanitation.biologicalTreatmentValues).optional(),
     receivingWaterCondition: z.enum(wastewaterSanitation.receivingWaterConditionValues).optional(),
   },
-  "system"
+  "system",
+  wastewaterSanitation.treatmentValueKeys
 )
   .min(1, { message: "Required" })
   .superRefine((rows, ctx) => {
@@ -49,9 +50,9 @@ const treatmentDischargeDataSetSchema = createRecordGridSchemaByOptionalKeys(
       const loadKey = row.loadType as (typeof wastewaterSanitation.organicLoadKeys)[number];
       const sludgeRemovedKey = wastewaterSanitation.sludgeRemovedKeyByOrganicLoadKey[loadKey];
       const outgoingLoadKey = wastewaterSanitation.outgoingLoadKeyByOrganicLoadKey[loadKey];
-      const loadValues = row.value[loadKey].value;
-      const nitrogenValues = row.value.nitrogen.value;
-      const populationAllocationValues = row.value.populationAllocation.value;
+      const loadValues = row.value[loadKey]?.value ?? {};
+      const nitrogenValues = row.value.nitrogen?.value ?? {};
+      const populationAllocationValues = row.value.populationAllocation?.value ?? {};
       const requiresSludgeRemoved = wastewaterSanitation.sludgeRemovedSystemValues.includes(
         row.system as (typeof wastewaterSanitation.sludgeRemovedSystemValues)[number]
       );
@@ -66,11 +67,26 @@ const treatmentDischargeDataSetSchema = createRecordGridSchemaByOptionalKeys(
       );
 
       if (!hasIncomingLoad && (loadKey !== "domestic" || !hasPopulationAllocation)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: [rowIndex, "value", loadKey, "value"],
-          message: "Required",
-        });
+        const rowYears = wastewaterSanitation.treatmentValueKeys.flatMap((key) =>
+          Object.keys(row.value[key]?.value ?? {})
+        );
+        const missingLoadYears = [...new Set([...Object.keys(loadValues), ...rowYears])];
+
+        if (missingLoadYears.length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [rowIndex, "value", loadKey, "value"],
+            message: "Required",
+          });
+        } else {
+          missingLoadYears.forEach((year) => {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: [rowIndex, "value", loadKey, "value", year],
+              message: "Required",
+            });
+          });
+        }
       }
 
       if (isDirectDischarge || row.dischargesToWater === "yes") {
@@ -104,7 +120,7 @@ const treatmentDischargeDataSetSchema = createRecordGridSchemaByOptionalKeys(
       Object.entries(loadValues).forEach(([year, value]) => {
         if (value === undefined) return;
 
-        if (requiresSludgeRemoved && row.value[sludgeRemovedKey].value[year] === undefined) {
+        if (requiresSludgeRemoved && row.value[sludgeRemovedKey]?.value[year] === undefined) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: [rowIndex, "value", sludgeRemovedKey, "value", year],
@@ -116,7 +132,7 @@ const treatmentDischargeDataSetSchema = createRecordGridSchemaByOptionalKeys(
           !isDirectDischarge &&
           row.dischargesToWater === "yes" &&
           row.effluentPath === "measuredOutgoingLoad" &&
-          row.value[outgoingLoadKey].value[year] === undefined
+          row.value[outgoingLoadKey]?.value[year] === undefined
         ) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -237,7 +253,7 @@ const wastewaterSanitationSchema = createGroupSchema({
   const connectionPercentage = data.populationFallback.dataSet.utility.connectionPercentage.value;
 
   data.treatmentDischarge.dataSet.forEach((row) => {
-    Object.entries(row.value.populationAllocation.value).forEach(([year, value]) => {
+    Object.entries(row.value.populationAllocation?.value ?? {}).forEach(([year, value]) => {
       if (
         value === undefined ||
         connectionPercentage[year as keyof typeof connectionPercentage] !== undefined

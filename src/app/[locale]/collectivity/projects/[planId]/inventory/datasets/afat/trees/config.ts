@@ -18,9 +18,7 @@ export function buildTrackedTreeCropsSection(labelFunc: LabelFunc): InventoryGro
     subcolumns: trees.trackedTreeCropMetricKeys.map((key) => ({
       key,
       label:
-        key === "youngTreeCanopyArea" ||
-        key === "adultTreeCanopyArea" ||
-        key === "senescentTreeCanopyArea"
+        key === "treeCanopyArea"
           ? React.createElement(
               Typography,
               {

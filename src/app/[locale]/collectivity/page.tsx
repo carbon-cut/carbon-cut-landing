@@ -7,10 +7,15 @@ import ScrollToTopButton from "@/components/layout/scrollToTopButton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
-import { getCollectivityStartRoute } from "@/lib/routing/routes";
+import {
+  getCollectivityPricingRoute,
+  getCollectivityStartRoute,
+  getContactRoute,
+} from "@/lib/routing/routes";
 import { toKeywordArray } from "@/lib/seo";
 import { getScopedI18n } from "@/locales/server";
 import { setStaticParamsLocale } from "next-international/server";
+import { BrowserWindow } from "@/components/advanced/mock-browser-window";
 
 export async function generateMetadata({
   params,
@@ -35,7 +40,7 @@ export async function generateMetadata({
 }
 
 const heroSectionClass =
-  "home-section section-hero relative overflow-hidden bg-surface-warm pt-24 pb-0 flex flex-row md:pt-32 md:pb-0";
+  "home-section section-hero relative flex overflow-hidden justify-start bg-surface-warm pt-72 md:pt-32";
 
 const heroOverlayClass =
   "absolute top-0 left-0 z-10 h-[18rem] w-full [background:linear-gradient(180deg,rgba(217,255,249,0.14)_0%,rgba(248,248,236,0.32)_55%,rgba(248,248,236,0.98)_100%)] md:h-full md:[clip-path:none] md:[background:linear-gradient(0deg,rgba(10,41,36,79%)_-30%,rgba(217,255,249,0.34)_100%)]";
@@ -43,8 +48,7 @@ const heroOverlayClass =
 const heroBackgroundClass =
   "absolute bottom-auto top-0 left-0 z-0 h-[18rem] w-full object-cover object-center blur-[1px] md:-bottom-48 md:top-auto md:left-0 md:h-auto md:w-screen md:max-h-none md:object-contain md:origin-bottom-left md:scale-100 md:blur-[2px]";
 
-const heroContentWrapperClass =
-  "relative z-20 mt-[14.5rem] -translate-y-6 flex w-full flex-col items-center rounded-t-[2.25rem] bg-surface-warm px-4 pb-10 pt-7 shadow-[0_-18px_42px_rgba(248,248,236,0.92)] md:static md:mt-0 md:translate-y-0 md:rounded-none md:bg-transparent md:px-6 md:pb-0 md:pt-0 md:shadow-none";
+const heroContentWrapperClass = "relative z-20 w-full max-w-3xl pt-8";
 
 const proofPoints = [
   {
@@ -89,51 +93,50 @@ export default async function CollectivityIndexPage({
           className={heroBackgroundClass}
         />
         <div className={heroContentWrapperClass}>
-          <Badge variant="default" className="mb-2">
-            {t("hero.badge")}
-          </Badge>
-          <div className="my-3 max-w-5xl md:my-6">
-            <Typography asChild variant="title" size="huge" className="text-center">
+          <div className="flex w-full max-w-4xl flex-col items-start gap-7">
+            <Typography asChild variant="marketingDisplay" className="text-left">
               <h1 id="collectivity-hero-heading">
-                <span>{t("hero.title.line1")}</span>{" "}
-                <span className="text-chart-3">{t("hero.title.highlight")}</span>{" "}
-                <span className="block">{t("hero.title.line2")}</span>
+                {t("hero.title.text", {
+                  inventory: <span className="text-chart-3">{t("hero.title.highlight")}</span>,
+                })}
               </h1>
             </Typography>
-          </div>
-          <Typography
-            asChild
-            variant="subtitle"
-            size="md"
-            className="my-4 max-w-3xl text-center md:my-12"
-          >
-            <p>{t("hero.description")}</p>
-          </Typography>
-          <div className="my-4 flex w-full max-w-lg flex-col justify-center gap-4 sm:w-auto sm:flex-row md:my-6">
-            <Button
-              asChild
-              variant="cta"
-              size="lg"
-              className="justify-center py-6"
-              aria-label={t("hero.primaryCta.aria")}
-            >
-              <Link href={getCollectivityStartRoute()}>
-                {t("hero.primaryCta.label")} <ArrowRight />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="cta"
-              size="lg"
-              className="justify-center bg-linear-accent-diagonal py-6"
-              aria-label={t("hero.secondaryCta.aria")}
-            >
-              <Link href="#proof">{t("hero.secondaryCta.label")}</Link>
-            </Button>
+            <Typography asChild variant="bodyBold" size="lg" className="text-foreground">
+              <p>{t("hero.description")}</p>
+            </Typography>
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <Button
+                asChild
+                variant="cta"
+                size="large"
+                className="rounded-2xl"
+                aria-label={t("hero.primaryCta.aria")}
+                //iconRight={<ArrowRight className="!size-4" />}
+              >
+                <Link href={getCollectivityPricingRoute()}>{t("hero.primaryCta.label")}</Link>
+              </Button>
+              <Button
+                asChild
+                variant="neutral-tertiary"
+                size="large"
+                className="rounded-2xl"
+                aria-label={t("hero.secondaryCta.aria")}
+              >
+                <Link href={getContactRoute()}>{t("hero.secondaryCta.label")}</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
+      <section className="home-section block bg-surface-warm">
+        <BrowserWindow
+          className="mx-auto mt-10 h-[28rem] w-full max-w-6xl md:h-[32rem]"
+          url="pathToResult"
+          size="lg"
+          headerStyle="full"
+        />
+      </section>
       <section
         id="proof"
         aria-labelledby="collectivity-proof-heading"
