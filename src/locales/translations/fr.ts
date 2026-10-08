@@ -235,6 +235,11 @@ export default {
       footnote:
         "Structure illustrative. La comparaison s’inscrit dans un travail de développement en cours et ne constitue pas une certification.",
     },
+    coverageCountries: {
+      title: "Au service des collectivités dans plusieurs pays",
+      description: "Découvrez les pays pris en charge par Carbon Cut pour le calcul des émissions.",
+      mapLabel: "Pays pris en charge par Carbon Cut",
+    },
     inventoryFlow: {
       connectionsLabel:
         "Sources de données municipales reliées à un inventaire des émissions de gaz à effet de serre",

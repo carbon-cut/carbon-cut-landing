@@ -24,6 +24,9 @@ import { toKeywordArray } from "@/lib/seo";
 import { getScopedI18n } from "@/locales/server";
 import { setStaticParamsLocale } from "next-international/server";
 import { BrowserWindow } from "@/components/advanced/mock-browser-window";
+import { getCollectivityCountries } from "@/lib/collectivity/backend";
+import type { CollectivityCountry } from "@/lib/collectivity/backend";
+import CountrySupport from "./_components/homeSections/countrySupport";
 
 export async function generateMetadata({
   params,
@@ -66,6 +69,7 @@ export default async function CollectivityIndexPage({
   const { locale } = await params;
   setStaticParamsLocale(locale);
   const t = await getScopedI18n("collectivityLanding");
+  const supportedCountries = await getCollectivityCountries().catch(() => []);
   const validationRows = [
     {
       key: "stationaryEnergy",
@@ -318,6 +322,8 @@ export default async function CollectivityIndexPage({
           </div>
         </div>
       </section>
+
+      <CountrySupport supportedCountries={supportedCountries} />
 
       <section
         id="cta"

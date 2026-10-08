@@ -232,6 +232,11 @@ export default {
       footnote:
         "Illustrative structure. Comparison is part of ongoing development, not a certification.",
     },
+    coverageCountries: {
+      title: "Supporting municipalities across countries",
+      description: "Explore the countries supported by Carbon Cut for emissions calculations.",
+      mapLabel: "Countries supported by Carbon Cut",
+    },
     inventoryFlow: {
       connectionsLabel: "Municipal data sources connected to a greenhouse gas inventory",
       sources: {
