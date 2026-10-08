@@ -157,13 +157,22 @@ export default {
           "buildings energy data",
           "territorial data collection",
         ],
+        soon: "À venir",
       },
     },
   },
   collectivityLanding: {
     nav: {
-      prototype: "Prototype",
-      setup: "Configuration",
+      product: "Produit",
+      methodology: "Méthodologie",
+      contact: "Contact",
+      language: "Langue",
+    },
+    footerLinks: {
+      explore: "Découvrir",
+      account: "Votre espace",
+      projects: "Ouvrir mes projets",
+      subscription: "Gérer mon abonnement",
     },
     hero: {
       badge: "Prototype collectivité",
@@ -183,33 +192,93 @@ export default {
         aria: "Demander un accès au prototype collectivité",
       },
     },
-    proof: {
-      badge: "Ce que couvre cette version",
-      title: "Un point d'entrée simple avant l'espace de travail.",
+    screenshot: {
+      alt: "Capture d’écran des résultats d’émissions d’un projet de collectivité, avec des indicateurs clés et un graphique des émissions de GES.",
+    },
+    afatSection: {
+      title: "Au-delà d’un bilan limité à l’électricité et aux carburants.",
       description:
-        "Cette page reste volontairement minimale : elle présente le prototype, clarifie son périmètre actuel et mène vers la configuration, sans promettre une plateforme collectivité complète.",
-      points: {
-        territory: {
-          title: "Définir le périmètre",
-          description:
-            "La configuration commence par le territoire, les années d'inventaire et les informations de base nécessaires avant la saisie.",
+        "L’agriculture, l’utilisation des terres, les déchets et les eaux usées sont structurés avec le même soin que l’énergie et les transports.",
+      imageAlt:
+        "Graphique des émissions AFAT par catégories agricoles, cultures, déchets et arbres.",
+      municipalAssetsImageAlt: "Graphique des émissions des actifs de la collectivité.",
+    },
+    references: {
+      title: "Fondé sur des références reconnues en comptabilité climatique.",
+      description:
+        "Carbon Cut intègre des méthodes, des paramètres et des concepts issus de références internationales reconnues.",
+      ipcc: "IPCC / GIEC",
+      jrc: "JRC",
+      ghgProtocol: "GHG Protocol for Cities (GPC)",
+      ireBei: "Approches IRE / BEI",
+    },
+    validation: {
+      title: "Mis à l’épreuve de travaux réels d’inventaire municipal.",
+      claim:
+        "Le moteur de calcul est développé et vérifié à partir de jeux de données municipaux réels et de calculs de référence, notamment le cas du Grand Sfax — et pas uniquement d’exemples théoriques. Cette validation est en cours et ne constitue pas une certification externe.",
+      cardTitle: "Grand Sfax · journal de validation",
+      caseStudy: "Étude de cas",
+      columns: {
+        sector: "Secteur",
+        comparedAgainst: "Comparé à",
+        status: "Statut",
+      },
+      rows: {
+        stationaryEnergy: { sector: "Énergie stationnaire" },
+        transport: { sector: "Transports" },
+        afolu: { sector: "AFAT" },
+        wastewater: { sector: "Déchets et eaux usées" },
+      },
+      referenceCalculation: "Calcul de référence",
+      municipalDatasets: "Données municipales",
+      compared: "Comparé",
+      footnote:
+        "Structure illustrative. La comparaison s’inscrit dans un travail de développement en cours et ne constitue pas une certification.",
+    },
+    inventoryFlow: {
+      connectionsLabel:
+        "Sources de données municipales reliées à un inventaire des émissions de gaz à effet de serre",
+      sources: {
+        energy: {
+          title: "Consommation d’électricité et d’énergie",
+          detail: "Exports des fournisseurs, .xlsx",
         },
-        inventory: {
-          title: "Préparer la collecte",
-          description:
-            "Le prototype structure les familles de données pour faciliter la suite du travail d'inventaire.",
+        buildings: { title: "Bâtiments municipaux", detail: "Relevés de compteurs" },
+        lighting: { title: "Éclairage public", detail: "Inventaire des points lumineux" },
+        fleet: { title: "Flotte et transports", detail: "Registres de carburant" },
+        agriculture: {
+          title: "Statistiques agricoles",
+          detail: "Direction régionale de l’agriculture",
         },
-        review: {
-          title: "Rester en preuve de concept",
-          description:
-            "La version actuelle montre une direction produit, avec un périmètre limité et encore en amélioration.",
+        wastewater: {
+          title: "Eaux usées et autres données locales",
+          detail: "Rapports des opérateurs",
         },
+      },
+      output: {
+        title: "Inventaire municipal des GES",
+        year: "2025",
+        status: "Structuré",
+        columns: { sector: "Secteur", emissions: "t éq. CO₂" },
+        rows: {
+          stationaryEnergy: { label: "Énergie stationnaire", value: "512 300" },
+          residentialBuildings: { label: "Bâtiments résidentiels", value: "278 336" },
+          municipalBuildings: { label: "Bâtiments municipaux et éclairage", value: "21 650" },
+          transport: { label: "Transports", value: "398 700" },
+          municipalFleet: { label: "Flotte municipale", value: "4 870" },
+          afolu: { label: "AFAT", value: "214 900" },
+          wastewater: { label: "Déchets et eaux usées", value: "121 280" },
+          industry: { label: "Procédés industriels", value: "37 420" },
+        },
+        total: "Total",
+        totalValue: "1 284 600",
+        note: "Données illustratives",
       },
     },
     cta: {
-      title: "Commencez par configurer le territoire.",
+      title: "Construisez un inventaire climatique qui gagne en utilité au fil du temps.",
       description:
-        "Pour cette première version, l'appel à l'action mène vers le module de configuration associé à votre collectivité.",
+        "Rassemblez les données de votre collectivité, établissez un inventaire clair des émissions et gardez les résultats à disposition pour éclairer vos prochaines décisions.",
       primaryCta: {
         label: "Accéder à la configuration",
         aria: "Accéder à la configuration de la collectivité",
@@ -1052,10 +1121,11 @@ export default {
       ],
     },
     footer: {
+      copyright: "© 2026 Carbon Cut. Tous droits réservés.",
       brand: {
         name: "Carbon Cut",
         description:
-          "Tableau de bord carbone personnel pour suivre, comprendre et réduire vos émissions.",
+          "Des inventaires municipaux de gaz à effet de serre structurés, traçables et réutilisables.",
       },
       headings: {
         quickLinks: "Liens rapides",
@@ -1268,6 +1338,13 @@ export default {
       contactBridge: {
         text: "Besoin d'aide supplémentaire ?",
         linkText: "Consultez la page Contact.",
+      },
+      underDevelopment: {
+        title: "Le centre d’aide est en cours de préparation",
+        description:
+          "Nous préparons le centre d’aide. En attendant, contactez-nous si vous avez besoin d’aide.",
+        primaryButton: "Retour à l’accueil",
+        secondaryButton: "Nous contacter",
       },
     },
     collectivityDashboard: {
@@ -1656,6 +1733,11 @@ export default {
         description:
           "Quatre modules visibles au démarrage : configuration, inventaire, scénarios et plan d'action. Les routes d'entrée restent non modulaires.",
         projects: "Mes projets",
+      },
+      profilePopover: {
+        subscription: "Mon abonnement",
+        projects: "Mes projets",
+        help: "Aide",
       },
       planMarkers: {
         territory: "Territoire de référence",
@@ -3465,9 +3547,10 @@ export default {
     },
     contact: {
       badge: "Contact",
+      eyebrow: "Support & contact",
       title: "Contactez l'équipe Carbon Cut",
       description:
-        "Envoyez votre demande via le formulaire ci-dessous. Le traitement se fait par email pendant la phase de test.",
+        "Une question, un retour ou besoin d'aide ? Écrivez-nous directement ou remplissez le formulaire, nous vous répondons sous 48 h ouvrées.",
       emailLabel: "Contact direct",
       responseTime: "Réponse généralement sous 24 à 48h ouvrées.",
       checklistTitle: "Cette page est pour envoyer une demande claire avec :",
@@ -3481,12 +3564,13 @@ export default {
       scopeDescription:
         "Cette page est pour les utilisateurs du parcours personnel en test (transport et énergie du foyer).",
       form: {
+        title: "Formulaire de contact",
+        description: "Tous les champs sont nécessaires pour traiter votre demande.",
         name: "Nom",
         email: "Email",
         topic: "Sujet",
         message: "Message",
         submit: "Envoyer la demande",
-        notLive: "Le formulaire est en place, l'envoi sera activé bientôt.",
       },
       actions: {
         goHelp: "Aller au centre d'aide",

@@ -19,9 +19,9 @@ export default async function CollectivityResultPocPage({
 
   return (
     <>
-      <Typography asChild size="lg" variant="title">
+      {/* <Typography asChild size="lg" variant="title">
         <h1>{t("title")}</h1>
-      </Typography>
+      </Typography> */}
       <ResultRouteClient projectSlug={planId} />
     </>
   );

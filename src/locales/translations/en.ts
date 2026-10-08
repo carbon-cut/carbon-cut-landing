@@ -155,13 +155,22 @@ export default {
           "buildings energy data",
           "territorial data collection",
         ],
+        soon: "soon",
       },
     },
   },
   collectivityLanding: {
     nav: {
-      prototype: "Prototype",
-      setup: "Setup",
+      product: "Product",
+      methodology: "Methodology",
+      contact: "Contact",
+      language: "Language",
+    },
+    footerLinks: {
+      explore: "Explore",
+      account: "Your account",
+      projects: "Open my projects",
+      subscription: "Manage subscription",
     },
     hero: {
       badge: "Municipal prototype",
@@ -181,33 +190,82 @@ export default {
         aria: "Request access to the municipality prototype",
       },
     },
-    proof: {
-      badge: "What this version covers",
-      title: "A simple entry point before the workspace.",
+    screenshot: {
+      alt: "Screenshot of a municipal project's emissions results, with summary metrics and a GHG emissions chart.",
+    },
+    afatSection: {
+      title: "Beyond an electricity-and-fuel footprint.",
       description:
-        "This page remains deliberately minimal: it presents the prototype, clarifies its current scope and leads to the configuration, without promising a complete municipal platform.",
-      points: {
-        territory: {
-          title: "Define the perimeter",
-          description:
-            "Setup begins with territory, inventory years, and basic information needed before entry.",
+        "Agriculture, land use, waste and wastewater are structured with the same care as energy and transport.",
+      imageAlt: "AFOLU emissions chart showing agriculture, crops, waste and tree categories.",
+      municipalAssetsImageAlt: "Municipal assets emissions chart.",
+    },
+    references: {
+      title: "Built on recognised climate-accounting references.",
+      description:
+        "Carbon Cut incorporates methods, parameters and concepts derived from recognised international references.",
+      ipcc: "IPCC / GIEC",
+      jrc: "JRC",
+      ghgProtocol: "GHG Protocol for Cities (GPC)",
+      ireBei: "IRE / BEI approaches",
+    },
+    validation: {
+      title: "Tested against real municipal inventory work.",
+      claim:
+        "The calculation engine is developed and checked against actual municipal datasets and reference calculations, including the Grand Sfax case — not only theoretical examples. This is ongoing validation, not an external certification.",
+      cardTitle: "Grand Sfax · validation log",
+      caseStudy: "Case study",
+      columns: {
+        sector: "Sector",
+        comparedAgainst: "Compared against",
+        status: "Status",
+      },
+      rows: {
+        stationaryEnergy: { sector: "Stationary energy" },
+        transport: { sector: "Transport" },
+        afolu: { sector: "AFOLU" },
+        wastewater: { sector: "Waste & wastewater" },
+      },
+      referenceCalculation: "Reference calculation",
+      municipalDatasets: "Municipal datasets",
+      compared: "Compared",
+      footnote:
+        "Illustrative structure. Comparison is part of ongoing development, not a certification.",
+    },
+    inventoryFlow: {
+      connectionsLabel: "Municipal data sources connected to a greenhouse gas inventory",
+      sources: {
+        energy: { title: "Electricity & energy consumption", detail: "Utility exports, .xlsx" },
+        buildings: { title: "Municipal buildings", detail: "Meter readings" },
+        lighting: { title: "Public lighting", detail: "Inventory of lighting points" },
+        fleet: { title: "Fleet & transport", detail: "Fuel logs" },
+        agriculture: { title: "Agricultural statistics", detail: "Regional agriculture office" },
+        wastewater: { title: "Wastewater & other local datasets", detail: "Operator reports" },
+      },
+      output: {
+        title: "Municipal GHG inventory",
+        year: "2025",
+        status: "Structured",
+        columns: { sector: "Sector", emissions: "tCO₂e" },
+        rows: {
+          stationaryEnergy: { label: "Stationary energy", value: "512,300" },
+          residentialBuildings: { label: "Residential buildings", value: "278,336" },
+          municipalBuildings: { label: "Municipal buildings & lighting", value: "21,650" },
+          transport: { label: "Transport", value: "398,700" },
+          municipalFleet: { label: "Municipal fleet", value: "4,870" },
+          afolu: { label: "AFOLU", value: "214,900" },
+          wastewater: { label: "Waste & wastewater", value: "121,280" },
+          industry: { label: "Industrial processes", value: "37,420" },
         },
-        inventory: {
-          title: "Prepare the collection",
-          description:
-            "The prototype structures the data families to facilitate the rest of the inventory work.",
-        },
-        review: {
-          title: "Stay in proof of concept",
-          description:
-            "The current version shows a product direction, with a limited scope and still improving.",
-        },
+        total: "Total",
+        totalValue: "1,284,600",
+        note: "Illustrative data",
       },
     },
     cta: {
-      title: "Start by setting up the territory.",
+      title: "Build a climate inventory that grows more useful over time.",
       description:
-        "For this first version, the call to action leads to the configuration module for your municipality.",
+        "Bring your municipal data together, build a clear emissions inventory, and keep the results ready for the decisions ahead.",
       primaryCta: {
         label: "Access configuration",
         aria: "Access the municipality configuration",
@@ -1044,9 +1102,10 @@ export default {
       ],
     },
     footer: {
+      copyright: "© 2026 Carbon Cut. All rights reserved.",
       brand: {
         name: "Carbon Cut",
-        description: "Personal carbon dashboard to track, understand and reduce your emissions.",
+        description: "Structured, traceable and reusable municipal greenhouse-gas inventories.",
       },
       headings: {
         quickLinks: "Quick links",
@@ -1259,6 +1318,13 @@ export default {
         text: "Need additional help?",
         linkText: "Visit the Contact page.",
       },
+      underDevelopment: {
+        title: "The Help Center is under development",
+        description:
+          "We’re preparing the Help Center. In the meantime, contact us if you need help.",
+        primaryButton: "Back to home",
+        secondaryButton: "Contact us",
+      },
     },
     collectivityDashboard: {
       header: {
@@ -1399,10 +1465,10 @@ export default {
           transportAriaLabel: "Graph of transport emissions by owner",
           transportErrorTitle: "Unable to load transport emissions graph",
           afatTab: "AFOLU",
-          afatAriaLabel: "AFOLU graph by breeding, crops and tree absorptions",
+          afatAriaLabel: "AFOLU graph by Animal Husbandry, crops and tree absorptions",
           afatErrorTitle: "Unable to load AFOLU chart",
           afatSeries: {
-            livestock: "Breeding",
+            livestock: "Animal Husbandry",
             crops: "Crops",
             urbanTrees: "Urban trees",
           },
@@ -1634,6 +1700,11 @@ export default {
         description:
           "Four modules visible at startup: configuration, inventory, scenarios and action plan. Entry routes remain non-modular.",
         projects: "My projects",
+      },
+      profilePopover: {
+        subscription: "My subscription",
+        projects: "My projects",
+        help: "Help",
       },
       planMarkers: {
         territory: "Reference territory",
@@ -2871,7 +2942,7 @@ export default {
             implementationNote: "The panel combines monitored crops and fruit trees.",
           },
           livestock: {
-            title: "Breeding",
+            title: "Livestock",
             description: "AFAT game quotes, still without product field contract.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO temporality and classifications.",
@@ -3425,9 +3496,10 @@ export default {
     },
     contact: {
       badge: "Contact",
+      eyebrow: "Support & contact",
       title: "Contact the Carbon Cut team",
       description:
-        "Send your request via the form below. Processing is done by email during the testing phase.",
+        "Have a question, feedback, or need help? Write to us directly or fill out the form. We’ll reply within 48 business hours.",
       emailLabel: "Direct contact",
       responseTime: "Response generally within 24 to 48 working hours.",
       checklistTitle: "This page is for sending a clear request with:",
@@ -3441,12 +3513,13 @@ export default {
       scopeDescription:
         "This page is for users of the personal journey under test (transport and household energy).",
       form: {
+        title: "Contact form",
+        description: "All fields are required so we can process your request.",
         name: "Name",
         email: "Email",
         topic: "Subject",
         message: "Message",
         submit: "Send request",
-        notLive: "The form is in place, sending will be activated soon.",
       },
       actions: {
         goHelp: "Go to help center",

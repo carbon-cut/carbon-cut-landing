@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ClipboardCheck, FileSearch, MapPinned } from "lucide-react";
+import { ArrowRight, GitCompareArrows } from "lucide-react";
 
 import ScrollToTopButton from "@/components/layout/scrollToTopButton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import Typography from "@/components/ui/typography";
 import {
   getCollectivityPricingRoute,
@@ -50,27 +58,6 @@ const heroBackgroundClass =
 
 const heroContentWrapperClass = "relative z-20 w-full max-w-3xl pt-8";
 
-const proofPoints = [
-  {
-    key: "territory",
-    Icon: MapPinned,
-    className:
-      "border border-section-food-3/18 bg-section-food-3/14 text-section-food shadow-[0_8px_18px_rgba(255,111,51,0.12)]",
-  },
-  {
-    key: "inventory",
-    Icon: ClipboardCheck,
-    className:
-      "border border-[hsl(var(--chart-1))]/18 bg-[hsl(var(--chart-1))]/14 text-[hsl(var(--chart-1))] shadow-[0_8px_18px_rgba(168,183,106,0.16)]",
-  },
-  {
-    key: "review",
-    Icon: FileSearch,
-    className:
-      "border border-chart-2/18 bg-chart-2/16 text-chart-2 shadow-[0_8px_18px_rgba(0,186,190,0.1)]",
-  },
-] as const;
-
 export default async function CollectivityIndexPage({
   params,
 }: {
@@ -79,6 +66,28 @@ export default async function CollectivityIndexPage({
   const { locale } = await params;
   setStaticParamsLocale(locale);
   const t = await getScopedI18n("collectivityLanding");
+  const validationRows = [
+    {
+      key: "stationaryEnergy",
+      sector: t("validation.rows.stationaryEnergy.sector"),
+      comparedAgainst: t("validation.referenceCalculation"),
+    },
+    {
+      key: "transport",
+      sector: t("validation.rows.transport.sector"),
+      comparedAgainst: t("validation.referenceCalculation"),
+    },
+    {
+      key: "afolu",
+      sector: t("validation.rows.afolu.sector"),
+      comparedAgainst: t("validation.municipalDatasets"),
+    },
+    {
+      key: "wastewater",
+      sector: t("validation.rows.wastewater.sector"),
+      comparedAgainst: t("validation.municipalDatasets"),
+    },
+  ];
 
   return (
     <main id="content">
@@ -129,52 +138,183 @@ export default async function CollectivityIndexPage({
         </div>
       </section>
 
-      <section className="home-section block bg-surface-warm">
+      <section id="product" className="home-section block bg-surface-warm">
         <BrowserWindow
-          className="mx-auto mt-10 h-[28rem] w-full max-w-6xl md:h-[32rem]"
-          url="pathToResult"
+          className="mx-auto mt-10 h-[28rem] overflow-hidden w-fit max-w-6xl md:h-[40rem]"
+          url={`${process.env.NEXT_PUBLIC_APP_URL}/collectivity/projects/sfax/result`}
           size="lg"
           headerStyle="full"
-        />
+        >
+          <Image
+            src={`home/screenshots/${locale}_collectivity_projects_sfax-end-to-end_result.png`}
+            width={1050}
+            height={595}
+            alt={t("screenshot.alt")}
+          />
+        </BrowserWindow>
       </section>
+      {/* <section>
+        <CircuitBoard />
+      </section> */}
       <section
-        id="proof"
-        aria-labelledby="collectivity-proof-heading"
-        className="home-section bg-background py-14 md:py-16"
+        id="coverage"
+        aria-labelledby="collectivity-afat-heading"
+        className="flex w-full justify-center border-t border-border bg-background py-14 md:py-28"
       >
-        <div className="content-width flex flex-col items-center">
-          <Badge variant="default">{t("proof.badge")}</Badge>
-          <Typography asChild variant="title" size="md" className="mt-4 max-w-3xl text-center">
-            <h2 id="collectivity-proof-heading">{t("proof.title")}</h2>
-          </Typography>
-          <Typography
-            asChild
-            variant="description"
-            size="md"
-            className="mt-3 max-w-3xl text-center"
-          >
-            <p>{t("proof.description")}</p>
-          </Typography>
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-10 md:gap-12 mobile:px-4">
+          <div className="flex w-full items-end justify-between gap-8 mobile:flex-col mobile:items-start mobile:justify-start mobile:gap-4">
+            <Typography asChild variant="marketingSectionTitle" className="max-w-[640px]">
+              <h2 id="collectivity-afat-heading">{t("afatSection.title")}</h2>
+            </Typography>
+            <Typography asChild variant="marketingSectionDescription" className="max-w-[420px]">
+              <p>{t("afatSection.description")}</p>
+            </Typography>
+          </div>
+          <div className="flex w-full items-center justify-between gap-4 overflow-hidden">
+            <div className="rounded-md border overflow-hidden -p-1 h-full border-border bg-card">
+              <Image
+                src={`home/screenshots/${locale}_MunAsset.png`}
+                width={525}
+                height={130}
+                alt={t("afatSection.municipalAssetsImageAlt")}
+                className=""
+              />
+            </div>
+            <div className="rounded-md overflow-hidden -p-1 border h-full border-border bg-card ">
+              <Image
+                src={`home/screenshots/${locale}_AFAT.png`}
+                width={525}
+                height={130}
+                alt={t("afatSection.imageAlt")}
+                className="h-full"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <div className="mt-10 grid w-full gap-4 md:grid-cols-3 md:gap-5">
-            {proofPoints.map(({ key, Icon, className }) => (
-              <article
-                key={key}
-                className="rounded-[1.4rem] border border-border/7 bg-card/65 p-5 shadow-[0_10px_22px_rgba(9,35,31,0.025)]"
+      <section
+        id="methodology"
+        aria-labelledby="collectivity-references-heading"
+        className="flex w-full flex-col items-center border-t border-border bg-neutral-50 px-10 py-20 mobile:px-4 mobile:py-12"
+      >
+        <div className="flex w-full max-w-[1200px] flex-col items-start gap-8 mobile:gap-6">
+          <div className="flex w-full max-w-[640px] flex-col items-start gap-2">
+            <Typography asChild variant="heading2" className="text-default-font">
+              <h2 id="collectivity-references-heading">{t("references.title")}</h2>
+            </Typography>
+            <Typography asChild variant="bodySubframe" className="text-subtext-color">
+              <p>{t("references.description")}</p>
+            </Typography>
+          </div>
+          <div className="flex w-full flex-wrap items-center gap-y-3 border-t border-border pt-8">
+            <Typography
+              asChild
+              variant="heading3"
+              className="pr-6 text-lg leading-5 tracking-[0.02em] text-secondary"
+            >
+              <span>{t("references.ipcc")}</span>
+            </Typography>
+            <div className="h-6 w-px flex-none bg-neutral-300" />
+            <Typography
+              asChild
+              variant="heading3"
+              className="px-6 text-lg leading-5 tracking-[0.02em] text-secondary"
+            >
+              <span>{t("references.jrc")}</span>
+            </Typography>
+            <div className="h-6 w-px flex-none bg-neutral-300" />
+            <Typography
+              asChild
+              variant="heading3"
+              className="px-6 text-lg leading-5 tracking-[0.02em] text-secondary"
+            >
+              <span>{t("references.ghgProtocol")}</span>
+            </Typography>
+            <div className="h-6 w-px flex-none bg-neutral-300" />
+            <Typography
+              asChild
+              variant="heading3"
+              className="pl-6 text-lg leading-5 tracking-[0.02em] text-secondary"
+            >
+              <span>{t("references.ireBei")}</span>
+            </Typography>
+          </div>
+        </div>
+      </section>
+
+      <section
+        aria-labelledby="collectivity-validation-heading"
+        className="flex w-full flex-col items-center border-t border-borde px-10 py-28 mobile:px-4 mobile:py-14"
+      >
+        <div className="flex w-full max-w-[1200px] items-start gap-20 mobile:flex-col mobile:gap-10">
+          <div className="flex grow shrink-0 basis-0 flex-col items-start gap-6">
+            <Typography asChild variant="marketingSectionTitle">
+              <h2 id="collectivity-validation-heading">{t("validation.title")}</h2>
+            </Typography>
+            <div className="flex w-full items-start border-l-2 border-neutral-300 pl-5">
+              <Typography
+                asChild
+                variant="body"
+                className="font-body text-[17px] leading-7 text-neutral-700"
               >
-                <div
-                  className={`flex h-11 w-11 items-center justify-center rounded-full ${className}`}
-                >
-                  <Icon className="h-5 w-5" strokeWidth={1.8} />
-                </div>
-                <Typography asChild variant="title" size="sm" className="mt-4 text-left">
-                  <h3>{t(`proof.points.${key}.title`)}</h3>
-                </Typography>
-                <Typography asChild variant="description" size="md" className="mt-3 text-left">
-                  <p>{t(`proof.points.${key}.description`)}</p>
-                </Typography>
-              </article>
-            ))}
+                <p>{t("validation.claim")}</p>
+              </Typography>
+            </div>
+          </div>
+          <div className="flex w-[520px] flex-none flex-col items-start gap-3 bg-card rounded-md border border-border px-6 py-6 mobile:w-full mobile:px-4">
+            <div className="flex w-full items-center justify-between gap-3">
+              <Typography asChild variant="bodyBold" className="text-default-font">
+                <h3>{t("validation.cardTitle")}</h3>
+              </Typography>
+              <Typography asChild variant="captionSubframe" className="text-subtext-color">
+                <span>{t("validation.caseStudy")}</span>
+              </Typography>
+            </div>
+            <div className="w-full overflow-x-auto ">
+              <Table className="w-full">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead scope="col">{t("validation.columns.sector")}</TableHead>
+                    <TableHead scope="col">{t("validation.columns.comparedAgainst")}</TableHead>
+                    <TableHead scope="col">{t("validation.columns.status")}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {validationRows.map((row) => (
+                    <TableRow key={row.key}>
+                      <TableCell>
+                        <Typography
+                          asChild
+                          variant="bodyBold"
+                          className="whitespace-nowrap text-default-font"
+                        >
+                          <span>{row.sector}</span>
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography
+                          asChild
+                          variant="bodySubframe"
+                          className="whitespace-nowrap text-subtext-color"
+                        >
+                          <span>{row.comparedAgainst}</span>
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="neutral">
+                          <GitCompareArrows aria-hidden="true" className="size-3.5" />
+                          {t("validation.compared")}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <Typography asChild variant="captionSubframe" className="text-subtext-color">
+              <p>{t("validation.footnote")}</p>
+            </Typography>
           </div>
         </div>
       </section>
@@ -182,44 +322,55 @@ export default async function CollectivityIndexPage({
       <section
         id="cta"
         aria-labelledby="collectivity-cta-heading"
-        className="home-section my-6 mb-0 bg-surface-warm"
+        className="my-6 mb-0 w-full bg-surface-warm py-8"
       >
-        <div className="z-0 w-full md:px-20 md:py-8 xl:px-32 xl:py-0">
-          <div className="grid w-full grid-rows-2 gap-8 md:h-fit md:grid-cols-2 md:grid-rows-1 md:items-center">
-            <div className="order-2 grid gap-4 md:order-1 md:block">
-              <Typography asChild variant="title" size="xl" className="text-center md:text-left">
+        <div className="relative z-0 mx-auto w-full max-w-7xl px-4 md:px-8">
+          <div className="grid w-full gap-10 md:grid-cols-2 md:items-center md:gap-16">
+            <div className="order-2 flex flex-col items-center gap-6 md:order-1 md:items-start">
+              <Typography
+                asChild
+                variant="title"
+                className="max-w-[720px] text-center font-heading-1 text-[40px] font-medium leading-[48px] tracking-[-0.01em] text-default-font md:text-left"
+              >
                 <h2 id="collectivity-cta-heading">{t("cta.title")}</h2>
               </Typography>
               <Typography
                 asChild
                 variant="description"
                 size="md"
-                className="my-3 text-center md:max-w-xl md:text-left"
+                className="max-w-xl text-center md:text-left"
               >
                 <p>{t("cta.description")}</p>
               </Typography>
-              <div className="mt-4 flex justify-center md:justify-start">
+              <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row md:justify-start">
                 <Button
                   asChild
                   variant="cta"
-                  size="lg"
-                  className="bg-linear-accent-diagonal"
-                  aria-label={t("cta.primaryCta.aria")}
+                  size="large"
+                  className="rounded-2xl"
+                  aria-label={t("hero.primaryCta.aria")}
+                  //iconRight={<ArrowRight className="!size-4" />}
                 >
-                  <Link href={getCollectivityStartRoute()}>
-                    {t("cta.primaryCta.label")} <ArrowRight />
-                  </Link>
+                  <Link href={getCollectivityPricingRoute()}>{t("hero.primaryCta.label")}</Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="neutral-tertiary"
+                  size="large"
+                  className="rounded-2xl"
+                  aria-label={t("hero.secondaryCta.aria")}
+                >
+                  <Link href={getContactRoute()}>{t("hero.secondaryCta.label")}</Link>
                 </Button>
               </div>
             </div>
             <div className="order-1 md:order-2">
-              <div className="relative h-full min-h-[18rem] md:min-h-[24rem]">
+              <div className="relative min-h-[18rem] md:min-h-[24rem] px-8">
                 <Image
                   alt={t("cta.imageAlt")}
                   src={"home/image 5.png"}
                   fill
                   sizes="(min-width: 1024px) 50vw, 100vw"
-                  className="absolute top-0 -z-10 mt-8 w-full object-contain md:mt-0 md:scale-110"
                 />
               </div>
             </div>

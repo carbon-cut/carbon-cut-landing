@@ -4,18 +4,25 @@ import React, { useEffect } from "react";
 import style from "./header.module.css";
 import { Button } from "../../ui/button";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import MenuHamburger from "./_menuHamburger";
 import NavItem from "./_NavItem";
 import { useAuth } from "@/lib/auth/auth-context";
-import { useScopedI18n } from "@/locales/client";
+import { useChangeLocale, useCurrentLocale, useScopedI18n } from "@/locales/client";
 import {
   getCollectivityLandingRoute,
   getCollectivityPricingRoute,
   getAuthSignInRoute,
+  getContactRoute,
 } from "@/lib/routing/routes";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/Logo";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import Typography from "@/components/ui/typography";
+import { ProfilePopoverContent } from "@/app/[locale]/collectivity/_components/ui/profile";
+import { CollectivitySelect } from "@/app/[locale]/collectivity/_components/fields";
+import { supportedLocales } from "@/locales/supportedLocales";
 
 type MenuItem = {
   title: string;
@@ -27,24 +34,28 @@ function Header() {
   const tCollectivityNav = useScopedI18n("collectivityLanding.nav");
   const tCollectivityPrimaryCta = useScopedI18n("collectivityLanding.hero.primaryCta");
   const tAuth = useScopedI18n("(auth).common");
+  const locale = useCurrentLocale();
+  const changeLocale = useChangeLocale();
   const [dataState, setDataState] = React.useState("big");
   const [show, setShow] = React.useState(false);
   const [isDesktop, setIsDesktop] = React.useState(false);
-
   const pathName = usePathname();
-  const router = useRouter();
-  const { status, signOut } = useAuth();
+  const { status, user } = useAuth();
   const isCollectivityLanding = pathName === "/collectivity";
   const isLandingHeader = pathName === "/" || isCollectivityLanding;
   const menu: MenuItem[] = isCollectivityLanding
     ? [
         {
-          title: tCollectivityNav("prototype"),
-          url: `${getCollectivityLandingRoute()}#proof`,
+          title: tCollectivityNav("product"),
+          url: `${getCollectivityLandingRoute()}#product`,
         },
         {
-          title: tCollectivityNav("setup"),
-          url: `${getCollectivityLandingRoute()}#cta`,
+          title: tCollectivityNav("methodology"),
+          url: `${getCollectivityLandingRoute()}#methodology`,
+        },
+        {
+          title: tCollectivityNav("contact"),
+          url: getContactRoute(),
         },
       ]
     : [
@@ -80,17 +91,6 @@ function Header() {
 
   const navHidden = !show && !isDesktop;
 
-  async function handleSignOut() {
-    const signedOut = await signOut();
-
-    if (!signedOut) {
-      return;
-    }
-
-    setShow(false);
-    router.push("/");
-  }
-
   if (pathName.startsWith("/auth")) {
     return null;
   }
@@ -101,7 +101,7 @@ function Header() {
 
   return (
     <header data-state={dataState} className={style.header}>
-      <div className={style.headerInner}>
+      <div data-state={dataState} className={style.headerInner}>
         <div className={style.logoRegion}>
           <Link className="z-50 shrink-0" href="/" onClick={() => setShow(false)}>
             <Logo bg="light" size={dataState === "small" ? 40 : 42} variant="full" />
@@ -129,15 +129,30 @@ function Header() {
         </nav>
         <div className={style.navActions}>
           {status === "authenticated" ? (
-            <Button
-              data-state={dataState}
-              className={style.button}
-              size="large"
-              tabIndex={navHidden ? -1 : 0}
-              onClick={handleSignOut}
-            >
-              {tAuth("cta.logout")}
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="neutral-tertiary"
+                  className="size-10 rounded-full p-0"
+                  tabIndex={navHidden ? -1 : 0}
+                  aria-label={user?.username || user?.email || tAuth("cta.signIn")}
+                >
+                  <Avatar className="size-8">
+                    <AvatarFallback className="bg-brand-100 text-brand-700">
+                      <Typography variant="captionBold">
+                        {(user?.username || user?.email || "?").slice(0, 2).toUpperCase()}
+                      </Typography>
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </PopoverTrigger>
+              <ProfilePopoverContent
+                userName={user?.username || user?.email || ""}
+                side="bottom"
+                align="end"
+              />
+            </Popover>
           ) : (
             <>
               <Button
@@ -176,6 +191,26 @@ function Header() {
         >
           <MenuHamburger isOpen={show} />
         </Button> */}
+      </div>
+      <div className="absolute right-6 top-1/2 w-[140px] -translate-y-1/2">
+        <CollectivitySelect
+          className="h-10"
+          options={supportedLocales.map((supportedLocale) => ({
+            value: supportedLocale,
+            label: (
+              <span className="inline-flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className={`flag:${supportedLocale === "en" ? "GB" : supportedLocale.toUpperCase()}`}
+                />
+                {new Intl.DisplayNames([supportedLocale], { type: "language" }).of(supportedLocale)}
+              </span>
+            ),
+          }))}
+          placeholder={tCollectivityNav("language")}
+          value={locale}
+          onValueChange={changeLocale}
+        />
       </div>
     </header>
   );

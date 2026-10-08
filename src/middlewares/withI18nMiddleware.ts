@@ -1,8 +1,7 @@
 import { createI18nMiddleware } from "next-international/middleware";
 import { NextResponse } from "next/server";
 import { CustomMiddleware } from "./chain";
-
-const supportedLocales = ["fr", "en"] as const;
+import { supportedLocales } from "../locales/supportedLocales";
 
 const I18nMiddleware = createI18nMiddleware({
   locales: [...supportedLocales],

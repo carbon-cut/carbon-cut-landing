@@ -39,6 +39,10 @@ const typographyVariants = cva("", {
       muted: "font-normal text-foreground/60 leading-5 tracking-normal",
       marketingTitle: "font-bold text-foreground leading-[1.02] tracking-[-0.015em]",
       marketingSubtitle: "font-medium text-foreground leading-[1.2] tracking-[-0.01em]",
+      marketingSectionTitle:
+        "font-heading-1 text-default-font text-[36px] font-medium leading-[44px] tracking-[-0.01em]",
+      marketingSectionDescription:
+        "font-body text-subtext-color text-[17px] font-medium leading-[26px]",
       marketingDisplay:
         "font-heading-1 text-marketing-display-mobile text-default-font md:text-marketing-display",
       heading1: "text-heading-1 font-heading-1 mobile:text-heading-2 mobile:font-heading-2",
@@ -78,6 +82,8 @@ const Typography = React.forwardRef<HTMLDivElement, Props>(
     const isSubframeRole = [
       "heading1",
       "marketingDisplay",
+      "marketingSectionTitle",
+      "marketingSectionDescription",
       "heading2",
       "heading3",
       "bodySubframe",

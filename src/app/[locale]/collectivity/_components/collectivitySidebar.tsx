@@ -2,13 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   ClipboardList,
   ChartColumn,
   ChevronUp,
   FileSpreadsheet,
-  FolderKanban,
   SlidersHorizontal,
   Target,
   type LucideIcon,
@@ -17,7 +15,7 @@ import {
 import Logo from "@/components/Logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import {
   Sidebar,
   SidebarContent,
@@ -39,6 +37,8 @@ import {
   type CollectivityModuleSlug,
 } from "../_lib/routing";
 import Typography from "@/components/ui/typography";
+import { Badge } from "@/components/ui/badge";
+import { ProfilePopoverContent } from "./ui/profile";
 
 export type CollectivityRouteItem = {
   key: CollectivityModuleSlug;
@@ -46,17 +46,19 @@ export type CollectivityRouteItem = {
   title: string;
   status: string;
   icon: LucideIcon;
+  available: boolean;
 };
 
 const routeDefinitions: Array<{
   key: CollectivityModuleSlug;
   icon: LucideIcon;
+  available: boolean;
 }> = [
-  { key: "setup", icon: SlidersHorizontal },
-  { key: "inventory", icon: FileSpreadsheet },
-  { key: "result", icon: ChartColumn },
-  { key: "scenarios", icon: Target },
-  { key: "actions", icon: ClipboardList },
+  { key: "setup", icon: SlidersHorizontal, available: true },
+  { key: "inventory", icon: FileSpreadsheet, available: true },
+  { key: "result", icon: ChartColumn, available: true },
+  { key: "scenarios", icon: Target, available: false },
+  { key: "actions", icon: ClipboardList, available: false },
 ];
 
 const BRAND_MARK_SIZE = 40;
@@ -68,12 +70,12 @@ export function useCollectivityRouteItems(planId: string) {
 
   return routeDefinitions.map((route) => {
     const routeKey = `workflow.sections.${route.key}` as const;
-
     return {
       ...route,
       href: getCollectivityModuleRoute(planId, route.key),
       title: t(`${routeKey}.title`) as string,
       status: t(`${routeKey}.status`) as string,
+      available: route.available,
     };
   });
 }
@@ -88,7 +90,6 @@ export default function CollectivitySidebar({
   userName: string;
 }) {
   const { state } = useSidebar();
-  const router = useRouter();
   const t = useScopedI18n("(pages).collectivityDashboard");
   const isCollapsed = state === "collapsed";
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -143,6 +144,7 @@ export default function CollectivitySidebar({
                       isActive={isActive}
                       size="lg"
                       tooltip={route.title}
+                      disabled={!route.available}
                       className={cn(
                         "relative gap-4 h-9 w-full overflow-hidden rounded-md px-4 text-sm transition-all duration-200 group-data-[collapsible=icon]:h-fit group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:rounded-xl group-data-[collapsible=icon]:px-0",
                         NAV_ICON_SIZE_CLASS,
@@ -177,6 +179,11 @@ export default function CollectivitySidebar({
                         >
                           <span className="truncate">{route.title}</span>
                         </Typography>
+                        {!route.available && !isCollapsed && (
+                          <Badge className="rounded-full" variant="warning">
+                            {t("soon")}
+                          </Badge>
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -193,10 +200,10 @@ export default function CollectivitySidebar({
                   <Button
                     type="button"
                     variant="neutral-tertiary"
-                    className="h-10 w-full hover:bg-brand-100/20 active:bg-brand-300/20 justify-start gap-2 rounded-md group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                    className="h-10 w-full hover:bg-brand-100/20 active:bg-brand-300/20 justify-start group-data-[collapsible=icon]:block max-w-full  rounded-md  group-data-[collapsible=icon]:h-8  group-data-[collapsible=icon]:px-0"
                     aria-label={userName}
                     icon={
-                      <Avatar className="h-7 w-7 flex-none">
+                      <Avatar className="h-7 w-7 flex-none group-data-[collapsible=icon]:mx-auto">
                         <AvatarFallback className="bg-brand-100 text-brand-700">
                           <Typography variant="captionBold">
                             {userName.slice(0, 2).toUpperCase()}
@@ -216,17 +223,7 @@ export default function CollectivitySidebar({
                     </Typography>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent side="top" align="start" className="w-56 p-1">
-                  <Button
-                    type="button"
-                    variant="neutral-tertiary"
-                    className="w-full justify-start"
-                    icon={<FolderKanban size={16} aria-hidden="true" />}
-                    onClick={() => router.push(getCollectivityProjectsRoute())}
-                  >
-                    {t("planSidebar.projects") as string}
-                  </Button>
-                </PopoverContent>
+                <ProfilePopoverContent userName={userName} />
               </Popover>
             </SidebarMenuItem>
           </SidebarMenu>
