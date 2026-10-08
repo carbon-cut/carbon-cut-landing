@@ -171,9 +171,9 @@ export default function CollectivitySidebar({
                           )}
                         />
                         <Typography
-                          variant={"title"}
+                          variant={"bodyBold"}
                           size="xs"
-                          className="text-foreground group-data-[collapsible=icon]:hidden"
+                          className="text-foreground  group-data-[collapsible=icon]:hidden"
                         >
                           <span className="truncate">{route.title}</span>
                         </Typography>

@@ -89,7 +89,7 @@ function BusesOperatorSection({
       )}
     >
       <AccordionTrigger icon="chevron-down" className="px-4 py-3 hover:no-underline">
-        <Typography className="text-center" asChild variant="sectionTitle" size="xl">
+        <Typography className="text-center" asChild variant="heading2" size="xl">
           <h4>{operatorBaseName || tBuses("operators.default")}</h4>
         </Typography>
       </AccordionTrigger>
@@ -182,11 +182,7 @@ export default function BusesSurface() {
           <FormItem className="space-y-3">
             <InventoryTableHeader
               title={
-                <Typography
-                  variant="sectionTitle"
-                  size="lg"
-                  className="inline-flex items-center gap-1"
-                >
+                <Typography variant="heading2" className="inline-flex items-center gap-1">
                   <span>{tBuses("operators.title")}</span>
                   <FieldRequired />
                 </Typography>
@@ -196,8 +192,8 @@ export default function BusesSurface() {
                 <InventoryTableActionButton
                   type="button"
                   onClick={() => append(buildBusesOperatorDefaultValues(), { shouldFocus: false })}
+                  icon={<Plus aria-hidden="true" className="size-4" />}
                 >
-                  <Plus aria-hidden="true" />
                   {tBuses("operators.addLabel")}
                 </InventoryTableActionButton>
               }
@@ -207,10 +203,7 @@ export default function BusesSurface() {
               className="space-y-3 rounded-2xl border border-border/10 bg-card p-4 data-[state=error]:border-destructive/70"
             >
               {fields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="grid items-center gap-3 md:grid-cols-[minmax(0,1fr)_auto]"
-                >
+                <div key={field.id} className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto]">
                   <InventoryTableInput
                     form={mainForm}
                     name={inventoryName(`transport.buses.dataSet.${index}.name`)}
@@ -223,19 +216,19 @@ export default function BusesSurface() {
                     aria-label={`Supprimer ${tBuses("operators.rowPrefix")} ${index + 1}`}
                     disabled={fields.length <= 0}
                     onClick={() => remove(index)}
-                  >
-                    <Trash2 aria-hidden="true" />
-                  </InventoryTableIconButton>
+                    className="h-9 w-9"
+                    icon={<Trash2 aria-hidden="true" className="size-5" />}
+                  ></InventoryTableIconButton>
                 </div>
               ))}
               {fields.length === 0 ? (
                 <Button
                   type="button"
-                  variant="outline"
-                  className="justify-start rounded-xl border-dashed"
+                  variant="brand-secondary"
+                  className="justify-start rounded-xl border-2 border-brand-600/70 border-dashed"
                   onClick={() => append(buildBusesOperatorDefaultValues(), { shouldFocus: false })}
+                  icon={<Plus aria-hidden="true" className="size-4" />}
                 >
-                  <Plus aria-hidden="true" />
                   {tBuses("operators.addLabel")}
                 </Button>
               ) : null}

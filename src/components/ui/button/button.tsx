@@ -72,7 +72,8 @@ const subframeVariants: Record<SubframeVariant, string> = {
   "neutral-tertiary": "bg-transparent text-neutral-700 hover:bg-neutral-100 active:bg-neutral-200",
   "destructive-primary": "bg-error-600 text-white hover:bg-error-500 active:bg-error-600",
   "destructive-secondary": "bg-error-50 text-error-800 hover:bg-error-100 active:bg-error-50",
-  "destructive-tertiary": "bg-transparent text-error-700 hover:bg-error-50 active:bg-error-100",
+  "destructive-tertiary":
+    "bg-transparent text-error-700 hover:bg-error-50 active:bg-error-100 disabled:cursor-default disabled:bg-transparent disabled:text-error-700/40",
   inverse: "bg-transparent text-white hover:bg-white/20 active:bg-white/25",
   "link-neutral": "",
   "link-brand": "",

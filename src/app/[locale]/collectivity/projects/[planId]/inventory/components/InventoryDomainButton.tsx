@@ -50,7 +50,7 @@ export default function InventoryDomainButton({
           aria-hidden="true"
           className={cn("h-4 w-4", hasError ? "text-destructive" : active && "text-primary")}
         />
-        <Typography variant="label" size="sm" className="min-w-0 text-inherit block truncate">
+        <Typography variant="bodyBold" className="min-w-0 text-inherit block truncate">
           {label}
         </Typography>
       </div>

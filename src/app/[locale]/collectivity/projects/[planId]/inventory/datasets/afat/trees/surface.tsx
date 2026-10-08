@@ -41,7 +41,7 @@ export default function TreesSurface() {
 
       <MatrixTable
         title={
-          <Typography variant="sectionTitle" size="lg" className="inline-flex items-center gap-1">
+          <Typography variant="heading3" className="inline-flex items-center gap-1">
             <span>{tTrees("fruitTrees.title")}</span>
             <FieldRequired />
           </Typography>

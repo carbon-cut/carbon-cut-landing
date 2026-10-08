@@ -11,6 +11,7 @@ import PriceAssumptionsTable from "../../../components/PriceAssumptionsTable";
 
 import { useInventoryContext } from "../../../context/inventory-context";
 import { buildPublicLightingRows, buildPublicLightingColumns } from "./config";
+import { Separator } from "@/components/ui/separator";
 
 export default function PublicLightingSurface() {
   const { mainForm } = useInventoryContext();
@@ -29,7 +30,7 @@ export default function PublicLightingSurface() {
     <div className="space-y-8">
       <MatrixTable
         title={
-          <Typography variant="sectionTitle" size="lg" className="inline-flex items-center gap-1">
+          <Typography variant="heading2" className="inline-flex items-center gap-1">
             <span>{tLighting("yearlyTitle")}</span>
             <FieldRequired content={tLighting("yearlyRequirementTooltip")} />
           </Typography>
@@ -38,6 +39,7 @@ export default function PublicLightingSurface() {
         form={mainForm}
         baseName={"municipal.publicLighting.dataSet.yearly"}
       />
+      <Separator />
       <PriceAssumptionsTable titleKey="electricity" priceKeys={["electricity"]} />
       <MatrixTable
         title={tLighting("infrastructureTitle")}

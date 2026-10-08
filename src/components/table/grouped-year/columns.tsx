@@ -122,9 +122,8 @@ export function createGroupedYearColumns<T extends FieldValues>({
             aria-label={`Supprimer ${row.original.label}`}
             disabled={!canRemove}
             onClick={() => onRemoveRow(row.index)}
-          >
-            <Trash2 aria-hidden="true" />
-          </InventoryTableIconButton>
+            icon={<Trash2 aria-hidden="true" className="h-4 w-4" />}
+          ></InventoryTableIconButton>
         );
       },
     });

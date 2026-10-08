@@ -29,9 +29,7 @@ export default function ScalarTable<T extends FieldValues>({
   return (
     <section className="space-y-2">
       <div className="flex items-start gap-2">
-        <Typography variant="sectionTitle" size="lg">
-          {title}
-        </Typography>
+        <Typography variant="heading3">{title}</Typography>
         {help ? <FieldHelp content={help} side="right" align="start" /> : null}
       </div>
       <InventoryTanstackTable

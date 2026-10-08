@@ -38,7 +38,7 @@ function FieldCheckbox<T extends FieldValues>({
             <Checkbox id={id} checked={field.value} onCheckedChange={field.onChange} />
           </FormControl>
           {label && (
-            <FormLabel className={cn("", labelClassName)}>
+            <FormLabel className={cn("!mt-0", labelClassName)}>
               {label} {isRequired && <span className="text-destructive">*</span>}
             </FormLabel>
           )}

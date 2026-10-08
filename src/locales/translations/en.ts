@@ -1792,7 +1792,7 @@ export default {
               },
             },
             buildings: {
-              areasTitle: "Building heritage",
+              areasTitle: "Municipal Buildings",
               areasDescription:
                 "Structure from the input document: total buildings, open area and covered area.",
               areas: {
@@ -2472,7 +2472,7 @@ export default {
             },
             trees: {
               trackedTreeCrops: {
-                title: "Tree crops monitored",
+                title: "Monitored tree crops ",
                 description: "Add the species monitored in detail in the territory.",
                 addLabel: "Add an essence",
                 rowLabelPrefix: "Gasoline",
