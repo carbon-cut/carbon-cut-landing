@@ -1357,7 +1357,7 @@ export default {
           errorTitle: "Unable to load GHG emissions graph",
           series: {
             energy: "Energy",
-            afatEmissions: "AFAT (emissions)",
+            afatEmissions: "AFOLU (emissions)",
             waste: "Waste",
             absorptions: "Absorptions",
             totalGrossEmissions: "Total gross emissions",
@@ -1375,7 +1375,7 @@ export default {
           },
         },
         territorialEnergyChart: {
-          title: "Details of broadcasts",
+          title: "Emissions details",
           description: "By category, source and sector.",
           ariaLabel: "Graph of territorial energy emissions by source and sector",
           tabListAriaLabel: "Emission Detail Categories",
@@ -1398,9 +1398,9 @@ export default {
           transportTab: "Transportation",
           transportAriaLabel: "Graph of transport emissions by owner",
           transportErrorTitle: "Unable to load transport emissions graph",
-          afatTab: "AFAT",
-          afatAriaLabel: "AFAT graph by breeding, crops and tree absorptions",
-          afatErrorTitle: "Unable to load AFAT chart",
+          afatTab: "AFOLU",
+          afatAriaLabel: "AFOLU graph by breeding, crops and tree absorptions",
+          afatErrorTitle: "Unable to load AFOLU chart",
           afatSeries: {
             livestock: "Breeding",
             crops: "Crops",
@@ -1412,7 +1412,7 @@ export default {
         },
         summaryCards: {
           ariaLabel: "Main results indicators",
-          emissions: "Broadcasts",
+          emissions: "Emissions",
           netEmissions: "Net emissions",
           absorptions: "Absorptions",
           emissionsPerCapita: "Emissions per capita",
@@ -1595,7 +1595,7 @@ export default {
               agriculture: {
                 label: "Agriculture",
                 helper:
-                  "Activates AFAT sections related to production and agricultural activities.",
+                  "Activates AFOLU sections related to production and agricultural activities.",
               },
             },
           },
@@ -2223,6 +2223,7 @@ export default {
                   organicLoad: "Organic load",
                   sludgeRemoved: "Organic load removed in sludge (S)",
                   nitrogen: "Nitrogen from wastewater",
+                  outgoingNitrogen: "Outgoing nitrogen",
                   methaneRecovery: "Methane recovered",
                   populationAllocation: "Share of domestic BOD treated by this system",
                   effluentPath: "Treated effluent data",
@@ -2239,6 +2240,7 @@ export default {
                 receivingWater: {
                   otherAquatic: "Other aquatic environment",
                   reservoirLakeEstuary: "Reservoir, lake or estuary",
+                  unknown: "Unknown receiving water",
                 },
                 effluentPaths: {
                   measuredOutgoingLoad: "Outgoing organic load measured",
@@ -2279,6 +2281,9 @@ export default {
                   sludgeRemovedLabel: "Information on load removed in sludge",
                   nitrogen: "Optional: enter the annual nitrogen only if it is known.",
                   nitrogenLabel: "Nitrogen Information",
+                  outgoingNitrogen:
+                    "Enter the annual nitrogen leaving the constructed wetland when known.",
+                  outgoingNitrogenLabel: "Outgoing nitrogen information",
                   methaneRecovery: "Optional: leave blank if no methane is recovered.",
                   methaneRecoveryLabel: "Information on recovered methane",
                   populationAllocation:
@@ -2357,6 +2362,24 @@ export default {
                   notEstimated: "Destination not estimated",
                 },
                 withinMunicipalBoundary: { true: "Yes", false: "No" },
+                options: {
+                  sludgeType: {
+                    domestic: "Domestic sludge",
+                    industrial: "Industrial sludge",
+                  },
+                  climate: {
+                    temperateDry: "Temperate dry",
+                    temperateWet: "Temperate wet",
+                    tropicalDry: "Tropical dry",
+                    tropicalWet: "Tropical wet",
+                  },
+                  landfillSiteType: {
+                    managedAnaerobic: "Managed anaerobic site",
+                    unmanagedDeep: "Unmanaged deep site",
+                    unmanagedShallow: "Unmanaged shallow site",
+                    uncategorised: "Uncategorised site",
+                  },
+                },
                 help: {
                   mass: "Indicate the annual mass of wet sludge. It is independent of the organic load removed in the sludge (S).",
                   massLabel: "Information on sludge mass",
@@ -2375,6 +2398,55 @@ export default {
                   withinMunicipalBoundary:
                     "Indicate whether this sludge destination is located within the municipal perimeter.",
                   withinMunicipalBoundaryLabel: "Information on the municipal perimeter",
+                },
+                history: {
+                  title: "Landfill site history",
+                  description:
+                    "Enter annual quantities from each site's commissioning year, including explicit zero years.",
+                  add: "Add a site",
+                  remove: "Remove site",
+                  fields: {
+                    landfillIdentifier: "Site identifier",
+                    commissioningYear: "Commissioning year",
+                    climate: "Climate",
+                    landfillSiteType: "Site type",
+                    oxidationCover: "Oxidation cover",
+                  },
+                  help: {
+                    commissioningYear:
+                      "History starts at the commissioning year, even when it predates the inventory.",
+                    oxidationCover:
+                      "Indicate whether the managed site is covered with methane-oxidising material.",
+                  },
+                  options: {
+                    climate: {
+                      temperateDry: "Temperate dry",
+                      temperateWet: "Temperate wet",
+                      tropicalDry: "Tropical dry",
+                      tropicalWet: "Tropical wet",
+                    },
+                    landfillSiteType: {
+                      managedAnaerobic: "Managed anaerobic site",
+                      unmanagedDeep: "Unmanaged deep site",
+                      unmanagedShallow: "Unmanaged shallow site",
+                      uncategorised: "Uncategorised site",
+                    },
+                    oxidationCover: {
+                      noneOrUnspecified: "None or unspecified",
+                      managedCoveredWithOxidizingMaterial: "Managed site with oxidising material",
+                    },
+                  },
+                  columns: {
+                    year: "Year",
+                    domestic: "Domestic sludge",
+                    industrial: "Industrial sludge",
+                    methaneRecovery: "Methane recovered",
+                  },
+                  aria: {
+                    domestic: "Domestic sludge in {year}",
+                    industrial: "Industrial sludge in {year}",
+                    methaneRecovery: "Methane recovered in {year}",
+                  },
                 },
               },
               fallback: {
@@ -2807,10 +2879,10 @@ export default {
           },
           fertilizers: {
             title: "Fertilizer",
-            description: "AFAT game quotes, still in provisional block produced.",
+            description: "AFOLU game quotes, still in provisional block produced.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO annual logic and scope.",
-            implementationNote: "Voluntary AFAT placeholder.",
+            implementationNote: "Voluntary AFOLU placeholder.",
           },
         },
       },

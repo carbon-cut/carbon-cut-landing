@@ -2248,6 +2248,7 @@ export default {
                   organicLoad: "Charge organique",
                   sludgeRemoved: "Charge organique retirée dans les boues (S)",
                   nitrogen: "Azote des eaux usées",
+                  outgoingNitrogen: "Azote sortant",
                   methaneRecovery: "Méthane récupéré",
                   populationAllocation: "Part de la DBO domestique traitée par ce système",
                   effluentPath: "Données sur l'effluent traité",
@@ -2263,6 +2264,7 @@ export default {
                 receivingWater: {
                   otherAquatic: "Autre milieu aquatique",
                   reservoirLakeEstuary: "Réservoir, lac ou estuaire",
+                  unknown: "Milieu récepteur inconnu",
                 },
                 effluentPaths: {
                   measuredOutgoingLoad: "Charge organique sortante mesurée",
@@ -2303,6 +2305,9 @@ export default {
                   sludgeRemovedLabel: "Information sur la charge retirée dans les boues",
                   nitrogen: "Facultatif : renseignez l'azote annuel seulement s'il est connu.",
                   nitrogenLabel: "Information sur l'azote",
+                  outgoingNitrogen:
+                    "Renseignez l'azote annuel sortant de la zone humide lorsqu'il est connu.",
+                  outgoingNitrogenLabel: "Information sur l'azote sortant",
                   methaneRecovery: "Facultatif : laissez vide si aucun méthane n'est récupéré.",
                   methaneRecoveryLabel: "Information sur le méthane récupéré",
                   populationAllocation:
@@ -2380,6 +2385,24 @@ export default {
                   notEstimated: "Destination non estimée",
                 },
                 withinMunicipalBoundary: { true: "Oui", false: "Non" },
+                options: {
+                  sludgeType: {
+                    domestic: "Boues domestiques",
+                    industrial: "Boues industrielles",
+                  },
+                  climate: {
+                    temperateDry: "Tempéré sec",
+                    temperateWet: "Tempéré humide",
+                    tropicalDry: "Tropical sec",
+                    tropicalWet: "Tropical humide",
+                  },
+                  landfillSiteType: {
+                    managedAnaerobic: "Site géré anaérobie",
+                    unmanagedDeep: "Site non géré profond",
+                    unmanagedShallow: "Site non géré peu profond",
+                    uncategorised: "Site non catégorisé",
+                  },
+                },
                 help: {
                   mass: "Indiquez la masse annuelle de boues humides. Elle est indépendante de la charge organique retirée dans les boues (S).",
                   massLabel: "Information sur la masse de boues",
@@ -2399,6 +2422,55 @@ export default {
                   withinMunicipalBoundary:
                     "Indiquez si cette destination des boues est située dans le périmètre municipal.",
                   withinMunicipalBoundaryLabel: "Information sur le périmètre municipal",
+                },
+                history: {
+                  title: "Historique des sites d'enfouissement",
+                  description:
+                    "Renseignez les quantités annuelles depuis la mise en service de chaque site, y compris les années à zéro.",
+                  add: "Ajouter un site",
+                  remove: "Supprimer le site",
+                  fields: {
+                    landfillIdentifier: "Identifiant du site",
+                    commissioningYear: "Année de mise en service",
+                    climate: "Climat",
+                    landfillSiteType: "Type de site",
+                    oxidationCover: "Couverture oxydante",
+                  },
+                  help: {
+                    commissioningYear:
+                      "L'historique commence à l'année de mise en service, même si elle précède l'inventaire.",
+                    oxidationCover:
+                      "Indiquez si le site géré est couvert par un matériau favorisant l'oxydation du méthane.",
+                  },
+                  options: {
+                    climate: {
+                      temperateDry: "Tempéré sec",
+                      temperateWet: "Tempéré humide",
+                      tropicalDry: "Tropical sec",
+                      tropicalWet: "Tropical humide",
+                    },
+                    landfillSiteType: {
+                      managedAnaerobic: "Site géré anaérobie",
+                      unmanagedDeep: "Site non géré profond",
+                      unmanagedShallow: "Site non géré peu profond",
+                      uncategorised: "Site non catégorisé",
+                    },
+                    oxidationCover: {
+                      noneOrUnspecified: "Aucune ou non précisée",
+                      managedCoveredWithOxidizingMaterial: "Site géré avec matériau oxydant",
+                    },
+                  },
+                  columns: {
+                    year: "Année",
+                    domestic: "Boues domestiques",
+                    industrial: "Boues industrielles",
+                    methaneRecovery: "Méthane récupéré",
+                  },
+                  aria: {
+                    domestic: "Boues domestiques en {year}",
+                    industrial: "Boues industrielles en {year}",
+                    methaneRecovery: "Méthane récupéré en {year}",
+                  },
                 },
               },
               fallback: {

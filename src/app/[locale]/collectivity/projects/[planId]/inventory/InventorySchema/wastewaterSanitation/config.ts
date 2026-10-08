@@ -16,7 +16,12 @@ const sludgeRemovedKeyByOrganicLoadKey = {
   industrial: "sludgeRemovedIndustrial",
   unclassified: "sludgeRemovedUnclassified",
 } as const;
-const treatmentAdditionalKeys = ["nitrogen", "methaneRecovery", "populationAllocation"] as const;
+const treatmentAdditionalKeys = [
+  "nitrogen",
+  "outgoingNitrogen",
+  "methaneRecovery",
+  "populationAllocation",
+] as const;
 const outgoingLoadKeys = [
   "outgoingDomestic",
   "outgoingIndustrial",
@@ -32,7 +37,7 @@ const treatmentValueKeys = [
   ...treatmentAdditionalKeys,
   ...outgoingLoadKeys,
 ] as const;
-const receivingWaterValues = ["otherAquatic", "reservoirLakeEstuary"] as const;
+const receivingWaterValues = ["otherAquatic", "reservoirLakeEstuary", "unknown"] as const;
 const yesNoValues = ["no", "yes"] as const;
 const effluentPathValues = ["measuredOutgoingLoad", "treatmentLevel"] as const;
 const effluentTreatmentLevelValues = [
@@ -64,6 +69,16 @@ const treatmentSystemValues = [
   "latrineWetOrFlush",
   "aquaticDischarge",
 ] as const;
+const industrialTreatmentSystemValues = [
+  "centralizedAerobic",
+  "anaerobicReactor",
+  "anaerobicShallowFacultativeLagoon",
+  "anaerobicDeepLagoon",
+  "constructedWetlandSurfaceFlow",
+  "constructedWetlandHorizontalSubsurfaceFlow",
+  "constructedWetlandVerticalSubsurfaceFlow",
+  "aquaticDischarge",
+] as const;
 const sludgeRemovedSystemValues = [
   "centralizedAerobic",
   "anaerobicShallowFacultativeLagoon",
@@ -77,6 +92,12 @@ const automaticEffluentDefaultSystemValues = [
   "latrineDryCommunal",
   "latrineWetOrFlush",
 ] as const;
+const methaneRecoverySystemValues = ["anaerobicReactor", "anaerobicDeepLagoon"] as const;
+const constructedWetlandSystemValues = [
+  "constructedWetlandSurfaceFlow",
+  "constructedWetlandHorizontalSubsurfaceFlow",
+  "constructedWetlandVerticalSubsurfaceFlow",
+] as const;
 const sludgeDestinationKeys = [
   "anaerobicDigestion",
   "composting",
@@ -84,6 +105,23 @@ const sludgeDestinationKeys = [
   "incineration",
   "landApplication",
   "notEstimated",
+] as const;
+const sludgeTypeValues = ["domestic", "industrial"] as const;
+const landfillClimateValues = [
+  "temperateDry",
+  "temperateWet",
+  "tropicalDry",
+  "tropicalWet",
+] as const;
+const landfillSiteTypeValues = [
+  "managedAnaerobic",
+  "unmanagedDeep",
+  "unmanagedShallow",
+  "uncategorised",
+] as const;
+const landfillOxidationCoverValues = [
+  "noneOrUnspecified",
+  "managedCoveredWithOxidizingMaterial",
 ] as const;
 
 const wastewaterUnits: UnitConf = {
@@ -95,6 +133,7 @@ const wastewaterUnits: UnitConf = {
     sludgeRemovedIndustrial: ["kg COD"],
     sludgeRemovedUnclassified: ["kg BOD"],
     nitrogen: ["kg N"],
+    outgoingNitrogen: ["kg N"],
     methaneRecovery: ["kg CH4"],
     populationAllocation: ["%"],
     outgoingDomestic: ["kg BOD"],
@@ -130,8 +169,15 @@ export const wastewaterSanitation = {
   populationFallbackMetricKeys,
   populationFallbackRowKeys,
   treatmentSystemValues,
+  industrialTreatmentSystemValues,
   sludgeRemovedSystemValues,
   automaticEffluentDefaultSystemValues,
+  methaneRecoverySystemValues,
+  constructedWetlandSystemValues,
   sludgeDestinationKeys,
+  sludgeTypeValues,
+  landfillClimateValues,
+  landfillSiteTypeValues,
+  landfillOxidationCoverValues,
   units: wastewaterUnits,
 };

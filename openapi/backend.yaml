@@ -324,6 +324,57 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /api/collectivity/projects/{projectSlug}/current-inventory/debug-calculate:
+    parameters:
+      - $ref: "#/components/parameters/ProjectSlug"
+    post:
+      operationId: debugCalculateCollectivityInventory
+      summary: Calculate one inventory dataset without persistence
+      tags: [Collectivity projects]
+      x-calculation-contract:
+        $ref: "#/components/schemas/WastewaterCalculationContract"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DebugCalculationRequest" }
+      responses:
+        "200":
+          description: Debug calculation output
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DebugCalculationResponse" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/CalculationCannotRun" }
+  /api/collectivity/projects/{projectSlug}/current-inventory/calculate:
+    parameters:
+      - $ref: "#/components/parameters/ProjectSlug"
+    post:
+      operationId: calculateCollectivityInventory
+      summary: Save and calculate the current inventory
+      description: The submitted input remains saved as a draft when calculation readiness fails.
+      tags: [Collectivity projects]
+      x-calculation-contract:
+        $ref: "#/components/schemas/WastewaterCalculationContract"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/InventoryInputRequest" }
+      responses:
+        "200":
+          description: Stored calculation artifacts
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CalculationResponse" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/CalculationCannotRun" }
 components:
   securitySchemes:
     bearerAuth:
@@ -342,6 +393,11 @@ components:
       content:
         application/json:
           schema: { $ref: "#/components/schemas/ErrorResponse" }
+    CalculationCannotRun:
+      description: The submitted inventory cannot be calculated
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/CalculationCannotRunResponse" }
   schemas:
     RegistrationPending:
       type: object
@@ -385,6 +441,263 @@ components:
     JsonObject:
       type: object
       additionalProperties: true
+    WastewaterLoadType:
+      type: string
+      enum: [domestic, industrial, unclassified]
+    WastewaterTreatmentSystem:
+      type: string
+      enum:
+        - centralizedAerobic
+        - anaerobicReactor
+        - anaerobicShallowFacultativeLagoon
+        - anaerobicDeepLagoon
+        - constructedWetlandSurfaceFlow
+        - constructedWetlandHorizontalSubsurfaceFlow
+        - constructedWetlandVerticalSubsurfaceFlow
+        - septicTank
+        - septicTankLandDispersal
+        - stagnantSewer
+        - flowingSewer
+        - latrineDryHousehold
+        - latrineDryCommunal
+        - latrineWetOrFlush
+        - aquaticDischarge
+    WastewaterIndustrialTreatmentSystem:
+      type: string
+      enum:
+        - centralizedAerobic
+        - anaerobicReactor
+        - anaerobicShallowFacultativeLagoon
+        - anaerobicDeepLagoon
+        - constructedWetlandSurfaceFlow
+        - constructedWetlandHorizontalSubsurfaceFlow
+        - constructedWetlandVerticalSubsurfaceFlow
+        - aquaticDischarge
+    WastewaterReceivingWater:
+      type: string
+      enum: [otherAquatic, reservoirLakeEstuary, unknown]
+    WastewaterEffluentPath:
+      type: string
+      enum: [measuredOutgoingLoad, treatmentLevel]
+    WastewaterEffluentTreatmentLevel:
+      type: string
+      enum: [untreated, primaryMechanical, secondaryBiological, advancedBiological, notEstimated]
+    WastewaterSludgePathway:
+      type: string
+      enum: [anaerobicDigestion, composting, landfill, incineration, landApplication, notEstimated]
+    WastewaterLandfillClimate:
+      type: string
+      enum: [temperateDry, temperateWet, tropicalDry, tropicalWet]
+    WastewaterLandfillSiteType:
+      type: string
+      enum: [managedAnaerobic, unmanagedDeep, unmanagedShallow, uncategorised]
+    WastewaterLandfillOxidationCover:
+      type: string
+      enum: [noneOrUnspecified, managedCoveredWithOxidizingMaterial]
+    WastewaterUnit:
+      type: string
+      enum: [kg BOD, kg COD, kg N, kg CH4, t wet sludge, "%", capita]
+    WastewaterCapabilityMatrix:
+      type: object
+      readOnly: true
+      required: [domesticBod, industrialCod, unclassifiedBodDomesticProxy]
+      properties:
+        domesticBod:
+          type: array
+          uniqueItems: true
+          minItems: 15
+          maxItems: 15
+          items: { $ref: "#/components/schemas/WastewaterTreatmentSystem" }
+          example:
+            - centralizedAerobic
+            - anaerobicReactor
+            - anaerobicShallowFacultativeLagoon
+            - anaerobicDeepLagoon
+            - constructedWetlandSurfaceFlow
+            - constructedWetlandHorizontalSubsurfaceFlow
+            - constructedWetlandVerticalSubsurfaceFlow
+            - septicTank
+            - septicTankLandDispersal
+            - stagnantSewer
+            - flowingSewer
+            - latrineDryHousehold
+            - latrineDryCommunal
+            - latrineWetOrFlush
+            - aquaticDischarge
+        industrialCod:
+          type: array
+          uniqueItems: true
+          minItems: 8
+          maxItems: 8
+          items: { $ref: "#/components/schemas/WastewaterIndustrialTreatmentSystem" }
+          example:
+            - centralizedAerobic
+            - anaerobicReactor
+            - anaerobicShallowFacultativeLagoon
+            - anaerobicDeepLagoon
+            - constructedWetlandSurfaceFlow
+            - constructedWetlandHorizontalSubsurfaceFlow
+            - constructedWetlandVerticalSubsurfaceFlow
+            - aquaticDischarge
+        unclassifiedBodDomesticProxy:
+          type: array
+          uniqueItems: true
+          minItems: 15
+          maxItems: 15
+          items: { $ref: "#/components/schemas/WastewaterTreatmentSystem" }
+          description: Unclassified BOD is calculated through the explicit domestic-method proxy.
+          example:
+            - centralizedAerobic
+            - anaerobicReactor
+            - anaerobicShallowFacultativeLagoon
+            - anaerobicDeepLagoon
+            - constructedWetlandSurfaceFlow
+            - constructedWetlandHorizontalSubsurfaceFlow
+            - constructedWetlandVerticalSubsurfaceFlow
+            - septicTank
+            - septicTankLandDispersal
+            - stagnantSewer
+            - flowingSewer
+            - latrineDryHousehold
+            - latrineDryCommunal
+            - latrineWetOrFlush
+            - aquaticDischarge
+    WastewaterWetSludgeAnnualSeries:
+      type: object
+      required: [value, unit]
+      properties:
+        value:
+          type: object
+          description: Complete y-YYYY map from site commissioning through the maximum calculated year.
+          additionalProperties: { type: number, minimum: 0 }
+        unit: { type: string, enum: [t wet sludge] }
+    WastewaterMethaneRecoveryAnnualSeries:
+      type: object
+      required: [value, unit]
+      properties:
+        value:
+          type: object
+          additionalProperties: { type: number, minimum: 0 }
+        unit: { type: string, enum: [kg CH4] }
+    WastewaterLandfillSite:
+      type: object
+      required:
+        [
+          landfillIdentifier,
+          commissioningYear,
+          climate,
+          landfillSiteType,
+          oxidationCover,
+          disposalHistory,
+          methaneRecovery,
+        ]
+      properties:
+        landfillIdentifier: { type: string, minLength: 1 }
+        commissioningYear: { type: integer }
+        climate: { $ref: "#/components/schemas/WastewaterLandfillClimate" }
+        landfillSiteType: { $ref: "#/components/schemas/WastewaterLandfillSiteType" }
+        oxidationCover: { $ref: "#/components/schemas/WastewaterLandfillOxidationCover" }
+        disposalHistory:
+          type: object
+          required: [domestic, industrial]
+          properties:
+            domestic: { $ref: "#/components/schemas/WastewaterWetSludgeAnnualSeries" }
+            industrial: { $ref: "#/components/schemas/WastewaterWetSludgeAnnualSeries" }
+        methaneRecovery: { $ref: "#/components/schemas/WastewaterMethaneRecoveryAnnualSeries" }
+    WastewaterLandfillSites:
+      type: object
+      required: [dataSet]
+      properties:
+        dataSet:
+          type: array
+          items: { $ref: "#/components/schemas/WastewaterLandfillSite" }
+    CalculationReasonCode:
+      type: string
+      enum:
+        - missingCalculationInput
+        - invalidInput
+        - missingParameter
+        - unsupportedDataset
+        - RExceedInput
+        - invalidControlledValue
+        - unsupportedWastewaterMethod
+        - missingAnnualDependency
+        - orphanAnnualValue
+        - invalidUnit
+        - invalidRange
+        - populationAllocationExceeded
+        - populationActivityConflict
+        - methaneRecoveryNotSupported
+        - missingLandfillSite
+        - landfillSiteConflict
+        - landfillHistoryMismatch
+    CalculationWarningCode:
+      type: string
+      enum:
+        - negativeEstimatedActivityClamped
+        - missingLtoCorrectionFactorDefaulted
+        - treeAbsorptionFactorFallbackUsed
+        - greenWasteAbsorptionFallbackUsed
+        - wastewaterEffluentNotEstimated
+        - wastewaterEffluentNitrogenNotEstimated
+        - wastewaterLandfillNotEstimated
+        - wastewaterPopulationUnallocated
+        - wastewaterUnclassifiedDomesticProxyUsed
+        - wastewaterReceivingWaterTier1FallbackUsed
+        - wastewaterRecoveryIncludedInFactor
+        - manureBeddingNitrogenNotEstimated
+        - portNavigationNotEstimated
+    WastewaterCalculationContract:
+      type: object
+      readOnly: true
+      description: >-
+        Backend-owned calculation-readiness contract. Draft inventory storage remains a permissive
+        JsonObject; zero is an explicitly supplied annual value and validation is limited to active
+        inventory years and in-boundary rows.
+      required: [controlledValues, capabilityMatrix, landfillSites, reasonCodes, warningCodes]
+      properties:
+        controlledValues:
+          type: object
+          required:
+            [
+              loadTypes,
+              treatmentSystems,
+              receivingWaters,
+              effluentPaths,
+              effluentTreatmentLevels,
+              sludgePathways,
+              units,
+            ]
+          properties:
+            loadTypes:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterLoadType" }
+            treatmentSystems:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterTreatmentSystem" }
+            receivingWaters:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterReceivingWater" }
+            effluentPaths:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterEffluentPath" }
+            effluentTreatmentLevels:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterEffluentTreatmentLevel" }
+            sludgePathways:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterSludgePathway" }
+            units:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterUnit" }
+        capabilityMatrix: { $ref: "#/components/schemas/WastewaterCapabilityMatrix" }
+        landfillSites: { $ref: "#/components/schemas/WastewaterLandfillSites" }
+        reasonCodes:
+          type: array
+          items: { $ref: "#/components/schemas/CalculationReasonCode" }
+        warningCodes:
+          type: array
+          items: { $ref: "#/components/schemas/CalculationWarningCode" }
     ProjectSetup:
       type: object
       required: [name, slug, country, territory, referenceYear, inventoryYears, applicability]
@@ -488,6 +801,82 @@ components:
       required: [inventoryInput]
       properties:
         inventoryInput: { $ref: "#/components/schemas/JsonObject" }
+    DebugCalculationRequest:
+      type: object
+      required: [datasetKey, inventoryInput]
+      properties:
+        datasetKey: { type: string, minLength: 1 }
+        inventoryInput: { $ref: "#/components/schemas/JsonObject" }
+    CalculationWarning:
+      type: object
+      required: [code, message]
+      properties:
+        code: { $ref: "#/components/schemas/CalculationWarningCode" }
+        itemId: { type: string }
+        path: { type: string }
+        message: { type: string }
+        details: { $ref: "#/components/schemas/JsonObject" }
+    DebugCalculationResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [datasetKey, resultRows, energyRows, parameterSnapshot, formulaVersion]
+          properties:
+            datasetKey: { type: string }
+            resultRows: { $ref: "#/components/schemas/JsonObject" }
+            energyRows: { $ref: "#/components/schemas/JsonObject" }
+            parameterSnapshot: { $ref: "#/components/schemas/JsonObject" }
+            formulaVersion: { type: string }
+            warnings:
+              type: array
+              items: { $ref: "#/components/schemas/CalculationWarning" }
+    CalculationResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [context, output, runData, resultData, persisted]
+          properties:
+            context: { $ref: "#/components/schemas/JsonObject" }
+            output: { $ref: "#/components/schemas/JsonObject" }
+            runData: { $ref: "#/components/schemas/JsonObject" }
+            resultData: { $ref: "#/components/schemas/JsonObject" }
+            persisted: { $ref: "#/components/schemas/JsonObject" }
+    CalculationCannotRunReason:
+      type: object
+      required: [code]
+      properties:
+        code: { $ref: "#/components/schemas/CalculationReasonCode" }
+        path: { type: string }
+        paths:
+          type: array
+          items: { type: string }
+        parameterKey: { type: string }
+        year: { type: integer }
+        details: { $ref: "#/components/schemas/JsonObject" }
+    CalculationCannotRunResponse:
+      type: object
+      required: [data, error]
+      properties:
+        data: { type: object, nullable: true }
+        error:
+          type: object
+          required: [status, name, message, details]
+          properties:
+            status: { type: integer, enum: [422] }
+            name: { type: string, enum: [ApplicationError] }
+            message: { type: string, enum: [calculationCannotRun, debugCalculationCannotRun] }
+            details:
+              type: object
+              required: [datasetKey, reasons]
+              properties:
+                datasetKey: { type: string }
+                reasons:
+                  type: array
+                  items: { $ref: "#/components/schemas/CalculationCannotRunReason" }
     InventorySaveProject:
       type: object
       required: [id, slug, currentInventoryId, updatedAt]

@@ -37,8 +37,11 @@ export function buildNitrogenSection(t: LabelFunc) {
       help: t(`treatment.help.${key}`),
       helpLabel: t(`treatment.help.${key}Label`),
     }),
-    unit: key === "nitrogen" ? wastewaterSanitation.units.organicLoad.nitrogen[0] : undefined,
-    className: key === "nitrogen" ? "min-w-[200px]" : undefined,
+    unit:
+      key === "nitrogen" || key === "outgoingNitrogen"
+        ? wastewaterSanitation.units.organicLoad[key][0]
+        : undefined,
+    className: key === "nitrogen" || key === "outgoingNitrogen" ? "min-w-48" : undefined,
   });
 
   return {
@@ -47,6 +50,7 @@ export function buildNitrogenSection(t: LabelFunc) {
     rows: [],
     columns: [
       column("nitrogen"),
+      column("outgoingNitrogen"),
       column("biologicalTreatment", true),
       column("receivingWaterCondition", true),
     ],
@@ -61,10 +65,17 @@ export function buildTreatmentRowFields(t: LabelFunc): EditableTableRowField[] {
       label: t("treatment.fields.system"),
       headerLabel: label(t("treatment.fields.system"), { required: true }),
       placeholder: t("treatment.fields.systemPlaceholder"),
-      options: wastewaterSanitation.treatmentSystemValues.map((value) => ({
-        value,
-        label: t(`treatment.systems.${value}`),
-      })),
+      options: [],
+      getOptions: ({ form, rowIndex }) => {
+        const loadType = form.getValues(
+          `wastewaterSanitation.treatmentDischarge.dataSet.${rowIndex}.loadType` as never
+        );
+        const values =
+          loadType === "industrial"
+            ? wastewaterSanitation.industrialTreatmentSystemValues
+            : wastewaterSanitation.treatmentSystemValues;
+        return values.map((value) => ({ value, label: t(`treatment.systems.${value}`) }));
+      },
     },
     {
       key: "loadType",

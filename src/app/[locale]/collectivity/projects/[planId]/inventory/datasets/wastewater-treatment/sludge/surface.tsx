@@ -5,6 +5,7 @@ import { useWatch } from "react-hook-form";
 
 import InventoryTableInput from "@/components/table/InventoryTableInput";
 import { InventoryTableHeader } from "@/components/table/InventoryTableHeader";
+import { InventoryTableSelectForm } from "@/components/table/InventoryTableSelect";
 import TableGrid from "@/components/table/table-grid";
 import { NumberInputCell } from "@/components/table/table-grid/cells";
 import type { TableGridCellRendererArgs } from "@/components/table/table-grid/types";
@@ -14,7 +15,9 @@ import { useScopedI18n } from "@/locales/client";
 import InventoryYearSelector from "../../../components/InventoryYearSelector";
 import type { InventoryFormValues } from "../../../context/inventory-context";
 import { useInventoryContext } from "../../../context/inventory-context";
+import { wastewaterSanitation } from "../../../InventorySchema/wastewaterSanitation/config";
 import { buildSludgeEditableRows, buildSludgeRowFields, buildSludgeSection } from "./config";
+import LandfillHistoryEditor from "./landfill-history";
 
 const inventoryName = (name: string) => name as TName<InventoryFormValues>;
 const i18nScope =
@@ -28,6 +31,7 @@ function SludgeCell({
   name,
   selectedYear,
 }: TableGridCellRendererArgs<InventoryFormValues>) {
+  const t = useScopedI18n(i18nScope);
   const destination = useWatch({
     control: form.control,
     name: `${baseName}.${row.index}.destination` as TName<InventoryFormValues>,
@@ -36,7 +40,32 @@ function SludgeCell({
   if (column.key === "methaneRecovery" && destination !== "anaerobicDigestion" && !landfill)
     return null;
   if (column.key === "nitrogenApplied" && destination !== "landApplication") return null;
-  if (["sludgeType", "climate", "landfillSiteType", "landfillIdentifier"].includes(column.key))
+  if (
+    column.key === "sludgeType" ||
+    column.key === "climate" ||
+    column.key === "landfillSiteType"
+  ) {
+    if (!landfill) return null;
+    const values =
+      column.key === "sludgeType"
+        ? wastewaterSanitation.sludgeTypeValues
+        : column.key === "climate"
+          ? wastewaterSanitation.landfillClimateValues
+          : wastewaterSanitation.landfillSiteTypeValues;
+    return (
+      <InventoryTableSelectForm
+        form={form}
+        name={`${baseName}.${row.index}.${column.key}` as TName<InventoryFormValues>}
+        ariaLabel={t(`sludge.columns.${column.key}`)}
+        placeholder=""
+        options={values.map((value) => ({
+          value,
+          label: t(`sludge.options.${column.key}.${value}`),
+        }))}
+      />
+    );
+  }
+  if (column.key === "landfillIdentifier")
     return landfill ? (
       <InventoryTableInput
         form={form}
@@ -113,6 +142,7 @@ export default function WastewaterSludgeSurface() {
           </FormItem>
         )}
       />
+      <LandfillHistoryEditor />
     </div>
   );
 }

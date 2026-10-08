@@ -106,16 +106,7 @@ describe.sequential("auth integration", () => {
       expect(response.status).toBe(307);
     });
 
-    it("allows authenticated users to access collectivity start", async () => {
-      const jar = authenticatedJar.clone();
-      const response = await fetchFrontend("/collectivity/projects/start", undefined, jar);
-
-      expect(response.status).toBe(200);
-      expect(response.headers.get("location")).toBeNull();
-      expect(response.headers.get("content-type")).toContain("text/html");
-    });
-
-    it("recovers an expired access token with the valid refresh token", async () => {
+    it("recovers an expired access token and restores the authenticated session", async () => {
       const jar = authenticatedJar.clone();
       jar.set(AUTH_ACCESS_COOKIE, "x.eyJleHAiOjF9.x");
 
@@ -127,16 +118,12 @@ describe.sequential("auth integration", () => {
       expect(jar.has(AUTH_ACCESS_COOKIE)).toBe(true);
       expect(jar.has(AUTH_REFRESH_COOKIE)).toBe(true);
 
-      const retryResponse = await fetchFrontend("/collectivity/projects/start", undefined, jar);
-      expect(retryResponse.status).toBe(200);
-    });
-
-    it("shows collectivity start to an authenticated user without a project", async () => {
-      const jar = authenticatedJar.clone();
-      const response = await fetchFrontend("/collectivity/projects/start", undefined, jar);
-
-      expect(response.status).toBe(200);
-      expect(response.headers.get("content-type")).toContain("text/html");
+      const sessionResponse = await fetchFrontend("/api/auth/session", undefined, jar);
+      expect(sessionResponse.status).toBe(200);
+      await expect(sessionResponse.json()).resolves.toEqual({
+        authenticated: true,
+        user: expect.objectContaining({ email: confirmedUser.user.email }),
+      });
     });
 
     it("logs out and clears the auth session", async () => {

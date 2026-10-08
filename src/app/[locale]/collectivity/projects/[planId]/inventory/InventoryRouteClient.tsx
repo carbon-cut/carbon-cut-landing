@@ -90,7 +90,7 @@ export default function InventoryRouteClient() {
       void queryClient.invalidateQueries({
         queryKey: collectivityQueryKeys.currentInventory(variables.projectSlug),
       });
-      router.push(`/collectivity/${variables.projectSlug}/result`);
+      router.push(`/collectivity/projects/${variables.projectSlug}/result`);
     },
   });
   useEffect(() => {

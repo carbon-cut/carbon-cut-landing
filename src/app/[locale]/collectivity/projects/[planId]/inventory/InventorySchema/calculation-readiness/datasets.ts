@@ -24,9 +24,9 @@ import { buses, urbanRail } from "../transport/config";
 import { getPath } from "./helpers";
 import type { CalculationReadinessResult } from "./types";
 import {
-  getDomesticLoadFallbackRulePaths,
-  validateDomesticLoadFallbackRule,
-} from "./rules/domestic-load-fallback";
+  getWastewaterCalculationReadinessPaths,
+  validateWastewaterCalculation,
+} from "../wastewaterSanitation";
 
 const fleetRule = atLeastOneFallbackActivityRule({
   activityBasePath: fleet.calculation.activityBasePath,
@@ -178,7 +178,7 @@ export function validateDatasetCalculationReadiness(
   }
 
   if (datasetKey === "wastewaterTreatment") {
-    return toResult(validateDomesticLoadFallbackRule(values));
+    return toResult(validateWastewaterCalculation(values).issues);
   }
 
   return { success: true };
@@ -225,7 +225,7 @@ export function getDatasetCalculationReadinessPaths(datasetKey: string, values: 
   }
 
   if (datasetKey === "wastewaterTreatment") {
-    return getDomesticLoadFallbackRulePaths(values);
+    return getWastewaterCalculationReadinessPaths();
   }
 
   return [];

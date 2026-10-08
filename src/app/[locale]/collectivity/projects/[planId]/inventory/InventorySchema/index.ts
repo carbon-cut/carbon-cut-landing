@@ -4,12 +4,12 @@ import { municipalSchema } from "./municipal";
 import { energySchema } from "./energy";
 import { transportSchema } from "./transport";
 import { afatSchema } from "./afat";
-import { wastewaterSanitationSchema } from "./wastewaterSanitation";
+import { validateWastewaterCalculation, wastewaterSanitationSchema } from "./wastewaterSanitation";
 import { wasteSchema } from "./waste";
 import { priceAssumptionsSchema } from "./price-assumptions";
 import { sharedDataSchema } from "./shared-data";
 
-const inventorySchema = createGroupSchema({
+const inventorySchemaBase = createGroupSchema({
   years: yearsSchema,
   municipal: municipalSchema,
   energy: energySchema,
@@ -21,7 +21,17 @@ const inventorySchema = createGroupSchema({
   priceAssumptions: priceAssumptionsSchema.optional(),
 });
 
-const inventoryInputSchema = inventorySchema.omit({
+const inventorySchema = inventorySchemaBase.superRefine((data, ctx) => {
+  for (const issue of validateWastewaterCalculation(data).issues) {
+    ctx.addIssue({
+      code: "custom",
+      path: issue.path,
+      message: issue.message,
+    });
+  }
+});
+
+const inventoryInputSchema = inventorySchemaBase.omit({
   years: true,
 });
 

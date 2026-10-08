@@ -73,10 +73,17 @@ export function buildTreatmentRowFields(t: LabelFunc): EditableTableRowField[] {
       type: "select",
       headerLabel: label(t("treatment.fields.system"), { required: true }),
       placeholder: t("treatment.fields.systemPlaceholder"),
-      options: wastewaterSanitation.treatmentSystemValues.map((value) => ({
-        value,
-        label: t(`treatment.systems.${value}`),
-      })),
+      options: [],
+      getOptions: ({ form, rowIndex }) => {
+        const loadType = form.getValues(
+          `wastewaterSanitation.treatmentDischarge.dataSet.${rowIndex}.loadType` as never
+        );
+        const values =
+          loadType === "industrial"
+            ? wastewaterSanitation.industrialTreatmentSystemValues
+            : wastewaterSanitation.treatmentSystemValues;
+        return values.map((value) => ({ value, label: t(`treatment.systems.${value}`) }));
+      },
     },
     {
       key: "loadType",

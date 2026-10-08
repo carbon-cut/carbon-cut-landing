@@ -248,6 +248,47 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/collectivity/projects/{projectSlug}/current-inventory/debug-calculate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Calculate one inventory dataset without persistence */
+    post: operations["debugCalculateCollectivityInventory"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/collectivity/projects/{projectSlug}/current-inventory/calculate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Save and calculate the current inventory
+     * @description The submitted input remains saved as a draft when calculation readiness fails.
+     */
+    post: operations["calculateCollectivityInventory"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -285,6 +326,202 @@ export interface components {
     };
     JsonObject: {
       [key: string]: unknown;
+    };
+    /** @enum {string} */
+    WastewaterLoadType: "domestic" | "industrial" | "unclassified";
+    /** @enum {string} */
+    WastewaterTreatmentSystem:
+      | "centralizedAerobic"
+      | "anaerobicReactor"
+      | "anaerobicShallowFacultativeLagoon"
+      | "anaerobicDeepLagoon"
+      | "constructedWetlandSurfaceFlow"
+      | "constructedWetlandHorizontalSubsurfaceFlow"
+      | "constructedWetlandVerticalSubsurfaceFlow"
+      | "septicTank"
+      | "septicTankLandDispersal"
+      | "stagnantSewer"
+      | "flowingSewer"
+      | "latrineDryHousehold"
+      | "latrineDryCommunal"
+      | "latrineWetOrFlush"
+      | "aquaticDischarge";
+    /** @enum {string} */
+    WastewaterIndustrialTreatmentSystem:
+      | "centralizedAerobic"
+      | "anaerobicReactor"
+      | "anaerobicShallowFacultativeLagoon"
+      | "anaerobicDeepLagoon"
+      | "constructedWetlandSurfaceFlow"
+      | "constructedWetlandHorizontalSubsurfaceFlow"
+      | "constructedWetlandVerticalSubsurfaceFlow"
+      | "aquaticDischarge";
+    /** @enum {string} */
+    WastewaterReceivingWater: "otherAquatic" | "reservoirLakeEstuary" | "unknown";
+    /** @enum {string} */
+    WastewaterEffluentPath: "measuredOutgoingLoad" | "treatmentLevel";
+    /** @enum {string} */
+    WastewaterEffluentTreatmentLevel:
+      | "untreated"
+      | "primaryMechanical"
+      | "secondaryBiological"
+      | "advancedBiological"
+      | "notEstimated";
+    /** @enum {string} */
+    WastewaterSludgePathway:
+      | "anaerobicDigestion"
+      | "composting"
+      | "landfill"
+      | "incineration"
+      | "landApplication"
+      | "notEstimated";
+    /** @enum {string} */
+    WastewaterLandfillClimate: "temperateDry" | "temperateWet" | "tropicalDry" | "tropicalWet";
+    /** @enum {string} */
+    WastewaterLandfillSiteType:
+      | "managedAnaerobic"
+      | "unmanagedDeep"
+      | "unmanagedShallow"
+      | "uncategorised";
+    /** @enum {string} */
+    WastewaterLandfillOxidationCover: "noneOrUnspecified" | "managedCoveredWithOxidizingMaterial";
+    /** @enum {string} */
+    WastewaterUnit: "kg BOD" | "kg COD" | "kg N" | "kg CH4" | "t wet sludge" | "%" | "capita";
+    WastewaterCapabilityMatrix: {
+      /**
+       * @example [
+       *       "centralizedAerobic",
+       *       "anaerobicReactor",
+       *       "anaerobicShallowFacultativeLagoon",
+       *       "anaerobicDeepLagoon",
+       *       "constructedWetlandSurfaceFlow",
+       *       "constructedWetlandHorizontalSubsurfaceFlow",
+       *       "constructedWetlandVerticalSubsurfaceFlow",
+       *       "septicTank",
+       *       "septicTankLandDispersal",
+       *       "stagnantSewer",
+       *       "flowingSewer",
+       *       "latrineDryHousehold",
+       *       "latrineDryCommunal",
+       *       "latrineWetOrFlush",
+       *       "aquaticDischarge"
+       *     ]
+       */
+      domesticBod: components["schemas"]["WastewaterTreatmentSystem"][];
+      /**
+       * @example [
+       *       "centralizedAerobic",
+       *       "anaerobicReactor",
+       *       "anaerobicShallowFacultativeLagoon",
+       *       "anaerobicDeepLagoon",
+       *       "constructedWetlandSurfaceFlow",
+       *       "constructedWetlandHorizontalSubsurfaceFlow",
+       *       "constructedWetlandVerticalSubsurfaceFlow",
+       *       "aquaticDischarge"
+       *     ]
+       */
+      industrialCod: components["schemas"]["WastewaterIndustrialTreatmentSystem"][];
+      /**
+       * @description Unclassified BOD is calculated through the explicit domestic-method proxy.
+       * @example [
+       *       "centralizedAerobic",
+       *       "anaerobicReactor",
+       *       "anaerobicShallowFacultativeLagoon",
+       *       "anaerobicDeepLagoon",
+       *       "constructedWetlandSurfaceFlow",
+       *       "constructedWetlandHorizontalSubsurfaceFlow",
+       *       "constructedWetlandVerticalSubsurfaceFlow",
+       *       "septicTank",
+       *       "septicTankLandDispersal",
+       *       "stagnantSewer",
+       *       "flowingSewer",
+       *       "latrineDryHousehold",
+       *       "latrineDryCommunal",
+       *       "latrineWetOrFlush",
+       *       "aquaticDischarge"
+       *     ]
+       */
+      unclassifiedBodDomesticProxy: components["schemas"]["WastewaterTreatmentSystem"][];
+    };
+    WastewaterWetSludgeAnnualSeries: {
+      /** @description Complete y-YYYY map from site commissioning through the maximum calculated year. */
+      value: {
+        [key: string]: number;
+      };
+      /** @enum {string} */
+      unit: "t wet sludge";
+    };
+    WastewaterMethaneRecoveryAnnualSeries: {
+      value: {
+        [key: string]: number;
+      };
+      /** @enum {string} */
+      unit: "kg CH4";
+    };
+    WastewaterLandfillSite: {
+      landfillIdentifier: string;
+      commissioningYear: number;
+      climate: components["schemas"]["WastewaterLandfillClimate"];
+      landfillSiteType: components["schemas"]["WastewaterLandfillSiteType"];
+      oxidationCover: components["schemas"]["WastewaterLandfillOxidationCover"];
+      disposalHistory: {
+        domestic: components["schemas"]["WastewaterWetSludgeAnnualSeries"];
+        industrial: components["schemas"]["WastewaterWetSludgeAnnualSeries"];
+      };
+      methaneRecovery: components["schemas"]["WastewaterMethaneRecoveryAnnualSeries"];
+    };
+    WastewaterLandfillSites: {
+      dataSet: components["schemas"]["WastewaterLandfillSite"][];
+    };
+    /** @enum {string} */
+    CalculationReasonCode:
+      | "missingCalculationInput"
+      | "invalidInput"
+      | "missingParameter"
+      | "unsupportedDataset"
+      | "RExceedInput"
+      | "invalidControlledValue"
+      | "unsupportedWastewaterMethod"
+      | "missingAnnualDependency"
+      | "orphanAnnualValue"
+      | "invalidUnit"
+      | "invalidRange"
+      | "populationAllocationExceeded"
+      | "populationActivityConflict"
+      | "methaneRecoveryNotSupported"
+      | "missingLandfillSite"
+      | "landfillSiteConflict"
+      | "landfillHistoryMismatch";
+    /** @enum {string} */
+    CalculationWarningCode:
+      | "negativeEstimatedActivityClamped"
+      | "missingLtoCorrectionFactorDefaulted"
+      | "treeAbsorptionFactorFallbackUsed"
+      | "greenWasteAbsorptionFallbackUsed"
+      | "wastewaterEffluentNotEstimated"
+      | "wastewaterEffluentNitrogenNotEstimated"
+      | "wastewaterLandfillNotEstimated"
+      | "wastewaterPopulationUnallocated"
+      | "wastewaterUnclassifiedDomesticProxyUsed"
+      | "wastewaterReceivingWaterTier1FallbackUsed"
+      | "wastewaterRecoveryIncludedInFactor"
+      | "manureBeddingNitrogenNotEstimated"
+      | "portNavigationNotEstimated";
+    /** @description Backend-owned calculation-readiness contract. Draft inventory storage remains a permissive JsonObject; zero is an explicitly supplied annual value and validation is limited to active inventory years and in-boundary rows. */
+    WastewaterCalculationContract: {
+      controlledValues: {
+        loadTypes: components["schemas"]["WastewaterLoadType"][];
+        treatmentSystems: components["schemas"]["WastewaterTreatmentSystem"][];
+        receivingWaters: components["schemas"]["WastewaterReceivingWater"][];
+        effluentPaths: components["schemas"]["WastewaterEffluentPath"][];
+        effluentTreatmentLevels: components["schemas"]["WastewaterEffluentTreatmentLevel"][];
+        sludgePathways: components["schemas"]["WastewaterSludgePathway"][];
+        units: components["schemas"]["WastewaterUnit"][];
+      };
+      capabilityMatrix: components["schemas"]["WastewaterCapabilityMatrix"];
+      landfillSites: components["schemas"]["WastewaterLandfillSites"];
+      reasonCodes: components["schemas"]["CalculationReasonCode"][];
+      warningCodes: components["schemas"]["CalculationWarningCode"][];
     };
     ProjectSetup: {
       name: string;
@@ -344,6 +581,59 @@ export interface components {
     InventoryInputRequest: {
       inventoryInput: components["schemas"]["JsonObject"];
     };
+    DebugCalculationRequest: {
+      datasetKey: string;
+      inventoryInput: components["schemas"]["JsonObject"];
+    };
+    CalculationWarning: {
+      code: components["schemas"]["CalculationWarningCode"];
+      itemId?: string;
+      path?: string;
+      message: string;
+      details?: components["schemas"]["JsonObject"];
+    };
+    DebugCalculationResponse: {
+      data: {
+        datasetKey: string;
+        resultRows: components["schemas"]["JsonObject"];
+        energyRows: components["schemas"]["JsonObject"];
+        parameterSnapshot: components["schemas"]["JsonObject"];
+        formulaVersion: string;
+        warnings?: components["schemas"]["CalculationWarning"][];
+      };
+    };
+    CalculationResponse: {
+      data: {
+        context: components["schemas"]["JsonObject"];
+        output: components["schemas"]["JsonObject"];
+        runData: components["schemas"]["JsonObject"];
+        resultData: components["schemas"]["JsonObject"];
+        persisted: components["schemas"]["JsonObject"];
+      };
+    };
+    CalculationCannotRunReason: {
+      code: components["schemas"]["CalculationReasonCode"];
+      path?: string;
+      paths?: string[];
+      parameterKey?: string;
+      year?: number;
+      details?: components["schemas"]["JsonObject"];
+    };
+    CalculationCannotRunResponse: {
+      data: Record<string, never> | null;
+      error: {
+        /** @enum {integer} */
+        status: 422;
+        /** @enum {string} */
+        name: "ApplicationError";
+        /** @enum {string} */
+        message: "calculationCannotRun" | "debugCalculationCannotRun";
+        details: {
+          datasetKey: string;
+          reasons: components["schemas"]["CalculationCannotRunReason"][];
+        };
+      };
+    };
     InventorySaveProject: {
       id: string;
       slug: string;
@@ -375,6 +665,15 @@ export interface components {
       };
       content: {
         "application/json": components["schemas"]["ErrorResponse"];
+      };
+    };
+    /** @description The submitted inventory cannot be calculated */
+    CalculationCannotRun: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        "application/json": components["schemas"]["CalculationCannotRunResponse"];
       };
     };
   };
@@ -790,6 +1089,68 @@ export interface operations {
       401: components["responses"]["Error"];
       403: components["responses"]["Error"];
       404: components["responses"]["Error"];
+    };
+  };
+  debugCalculateCollectivityInventory: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DebugCalculationRequest"];
+      };
+    };
+    responses: {
+      /** @description Debug calculation output */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DebugCalculationResponse"];
+        };
+      };
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+      422: components["responses"]["CalculationCannotRun"];
+    };
+  };
+  calculateCollectivityInventory: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["InventoryInputRequest"];
+      };
+    };
+    responses: {
+      /** @description Stored calculation artifacts */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CalculationResponse"];
+        };
+      };
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+      422: components["responses"]["CalculationCannotRun"];
     };
   };
 }

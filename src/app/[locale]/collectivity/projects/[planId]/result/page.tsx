@@ -14,7 +14,7 @@ export default async function CollectivityResultPocPage({
 
   await requireCollectivityPlanSession({
     requestedPlanId: planId,
-    returnTo: `/collectivity/${planId}/result/poc`,
+    returnTo: `/collectivity/projects/${planId}/result/poc`,
   });
 
   return (

@@ -73,6 +73,10 @@ function NitrogenCell({
           "treatment.receivingWaterConditions"
         )
       : null;
+  if (column.key === "outgoingNitrogen") {
+    const wetland = wastewaterSanitation.constructedWetlandSystemValues.includes(system as never);
+    if (!wetland || discharges !== "yes") return null;
+  }
   return (
     <NumberInputCell
       form={form}
