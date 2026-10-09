@@ -259,7 +259,7 @@ function computeNaturalGasProgress(
   return createProgress(bp.completed + mp.completed + hp.completed, bp.total + mp.total + hp.total);
 }
 
-function computePhotovoltaicProgress(
+/* function computePhotovoltaicProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
 ) {
@@ -280,7 +280,7 @@ function computeSolarWaterHeatingProgress(
   const total = countMatrixTotal(solarWaterHeating.defaultRowKeys.length * 3, years.length);
 
   return createProgress(countFilledYearValues(dataSet), total);
-}
+} */
 
 function computeTerritoryVehiclesProgress(
   values: Partial<InventoryFormValues> | undefined,
@@ -514,9 +514,9 @@ const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
   buildings: computeBuildingsProgress,
   treesParksWaste: computeTreesParksWasteProgress,
   electricity: computeElectricityProgress,
-  photovoltaic: computePhotovoltaicProgress,
+  //photovoltaic: computePhotovoltaicProgress,
   naturalGas: computeNaturalGasProgress,
-  solarWaterHeating: computeSolarWaterHeatingProgress,
+  //solarWaterHeating: computeSolarWaterHeatingProgress,
   port: computePortProgress,
   buses: computeBusesProgress,
   urbanRail: computeUrbanRailProgress,
