@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+  "/api/contact": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Send a contact form message to the team
+     * @description A nonempty website honeypot returns success without sending email. Requests are limited to five per IP in ten minutes. The sender and team inbox must be configured on the server.
+     */
+    post: operations["sendContactMessage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/auth/local": {
     parameters: {
       query?: never;
@@ -686,6 +706,44 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+  sendContactMessage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          name: string;
+          /** Format: email */
+          email: string;
+          topic: string;
+          message: string;
+          /** @description Optional honeypot; leave empty. */
+          website?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Message accepted, including honeypot submissions */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            data: components["schemas"]["OkResponse"];
+          };
+        };
+      };
+      400: components["responses"]["Error"];
+      413: components["responses"]["Error"];
+      429: components["responses"]["Error"];
+      503: components["responses"]["Error"];
+    };
+  };
   login: {
     parameters: {
       query?: never;

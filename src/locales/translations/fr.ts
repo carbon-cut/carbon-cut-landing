@@ -3576,6 +3576,8 @@ export default {
         topic: "Sujet",
         message: "Message",
         submit: "Envoyer la demande",
+        success: "Votre message a été envoyé.",
+        error: "Votre message n'a pas pu être envoyé. Veuillez réessayer.",
       },
       actions: {
         goHelp: "Aller au centre d'aide",

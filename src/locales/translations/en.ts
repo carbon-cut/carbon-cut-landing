@@ -3525,6 +3525,8 @@ export default {
         topic: "Subject",
         message: "Message",
         submit: "Send request",
+        success: "Your message has been sent.",
+        error: "We couldn't send your message. Please try again.",
       },
       actions: {
         goHelp: "Go to help center",

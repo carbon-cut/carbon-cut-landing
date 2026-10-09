@@ -13,6 +13,7 @@ import {
   ContactFormProvider,
   ContactInventoryInput,
   ContactInventoryTextarea,
+  ContactWebsiteHoneypot,
 } from "./ContactFormProvider";
 import { FeatherAtSign, FeatherSend, FeatherTag, FeatherUser } from "@subframe/core";
 
@@ -102,41 +103,40 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             </div>
 
             <ContactFormProvider>
-              <form className="mt-6 space-y-5" noValidate>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <ContactInventoryInput
-                    icon={<FeatherUser className="text-brand-600" />}
-                    name="name"
-                    label={t("form.name")}
-                  />
-                  <ContactInventoryInput
-                    icon={<FeatherAtSign className="text-brand-600" />}
-                    name="email"
-                    label={t("form.email")}
-                    type="email"
-                  />
-                </div>
-
+              <ContactWebsiteHoneypot />
+              <div className="grid gap-4 sm:grid-cols-2">
                 <ContactInventoryInput
-                  icon={<FeatherTag className="text-brand-600" />}
-                  name="topic"
-                  label={t("form.topic")}
+                  icon={<FeatherUser className="text-brand-600" />}
+                  name="name"
+                  label={t("form.name")}
                 />
+                <ContactInventoryInput
+                  icon={<FeatherAtSign className="text-brand-600" />}
+                  name="email"
+                  label={t("form.email")}
+                  type="email"
+                />
+              </div>
 
-                <ContactInventoryTextarea label={t("form.message")} />
+              <ContactInventoryInput
+                icon={<FeatherTag className="text-brand-600" />}
+                name="topic"
+                label={t("form.topic")}
+              />
 
-                <div className="flex flex-wrap justify-end items-center gap-3 pt-1">
-                  <Button
-                    type="button"
-                    icon={<FeatherSend />}
-                    size="large"
-                    variant="brand-primary"
-                    className=""
-                  >
-                    {t("form.submit")}
-                  </Button>
-                </div>
-              </form>
+              <ContactInventoryTextarea label={t("form.message")} />
+
+              <div className="flex flex-wrap justify-end items-center gap-3 pt-1">
+                <Button
+                  type="submit"
+                  icon={<FeatherSend />}
+                  size="large"
+                  variant="brand-primary"
+                  className=""
+                >
+                  {t("form.submit")}
+                </Button>
+              </div>
             </ContactFormProvider>
           </section>
         </div>
