@@ -14,6 +14,7 @@ import GHGDevelopmentChart from "./_charts/GHGDevelopmentChart";
 import MunicipalAssetsChart from "./_charts/MunicipalAssetsChart";
 import TerritorialEnergyChart from "./_charts/TerritorialEnergyChart";
 import ResultSummaryCards from "./_components/ResultSummaryCards";
+import ReportingLinesTable from "./_components/ReportingLinesTable";
 
 export default function ResultRouteClient({ projectSlug }: { projectSlug: string }) {
   const resultQuery = useQuery({
@@ -31,6 +32,11 @@ export default function ResultRouteClient({ projectSlug }: { projectSlug: string
           error={resultQuery.error}
         />
       </div>
+      {resultQuery.data && (
+        <div className="mt-6">
+          <ReportingLinesTable result={resultQuery.data} />
+        </div>
+      )}
       <div className="mt-6 flex flex-col gap-6">
         <GHGDevelopmentChart
           result={resultQuery.data}

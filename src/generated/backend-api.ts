@@ -230,6 +230,25 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/collectivity/projects/{projectSlug}/current-inventory/result": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    /** Get the latest calculation result and reporting lines */
+    get: operations["getCollectivityCurrentInventoryResult"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/collectivity/projects/{projectSlug}/setup": {
     parameters: {
       query?: never;
@@ -300,7 +319,7 @@ export interface paths {
     put?: never;
     /**
      * Save and calculate the current inventory
-     * @description The submitted input remains saved as a draft when calculation readiness fails.
+     * @description The submitted input remains saved as a draft when calculation readiness fails. The response includes energy quantities but not grouped emission result rows; fetch Get Result for grouped rows and reporting lines.
      */
     post: operations["calculateCollectivityInventory"];
     delete?: never;
@@ -598,6 +617,51 @@ export interface components {
     ProjectSnapshotResponse: {
       data: components["schemas"]["ProjectSnapshot"];
     };
+    CurrentInventoryResultResponse: {
+      data: {
+        id: string;
+        calculationRunId: string;
+        resultRows: components["schemas"]["JsonObject"];
+        context: components["schemas"]["JsonObject"];
+        warnings: components["schemas"]["CalculationWarning"][];
+        reportingLines: components["schemas"]["ReportingLine"][];
+        /** Format: date-time */
+        createdAt: string;
+      };
+    };
+    ReportingLine: {
+      /** @enum {string} */
+      key:
+        | "municipalHeritage"
+        | "navigation"
+        | "terrestrialTransport"
+        | "soretras"
+        | "nationalAirTransport"
+        | "airportGroundElectricity"
+        | "industryElectricity"
+        | "industryThermal"
+        | "residentialElectricity"
+        | "residentialGplAndGas"
+        | "tertiaryElectricity"
+        | "tertiaryGplAndGas"
+        | "tourismElectricity"
+        | "tourismNaturalGas"
+        | "pumpingElectricity"
+        | "agricultureElectricity"
+        | "sanitation"
+        | "greenWaste"
+        | "householdWaste"
+        | "livestock"
+        | "crops"
+        | "grossEmissions"
+        | "absorptions"
+        | "urbanTrees"
+        | "oliveOrchards"
+        | "fruitTrees";
+      values: {
+        [key: string]: number | "NE";
+      };
+    };
     InventoryInputRequest: {
       inventoryInput: components["schemas"]["JsonObject"];
     };
@@ -625,11 +689,22 @@ export interface components {
     CalculationResponse: {
       data: {
         context: components["schemas"]["JsonObject"];
-        output: components["schemas"]["JsonObject"];
+        output: components["schemas"]["CalculationOutput"];
         runData: components["schemas"]["JsonObject"];
-        resultData: components["schemas"]["JsonObject"];
+        resultData: components["schemas"]["StoredCalculationResultData"];
         persisted: components["schemas"]["JsonObject"];
       };
+    };
+    CalculationOutput: {
+      energyRows: components["schemas"]["JsonObject"];
+      formulaVersion: string;
+      parameterSnapshot: components["schemas"]["JsonObject"];
+      warnings?: components["schemas"]["CalculationWarning"][];
+    };
+    StoredCalculationResultData: {
+      project: number;
+      energyRows: components["schemas"]["JsonObject"];
+      context: components["schemas"]["JsonObject"];
     };
     CalculationCannotRunReason: {
       code: components["schemas"]["CalculationReasonCode"];
@@ -1080,6 +1155,31 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ProjectSnapshotResponse"];
+        };
+      };
+      401: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  getCollectivityCurrentInventoryResult: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Latest successful calculation result with aggregated reporting lines */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CurrentInventoryResultResponse"];
         };
       };
       401: components["responses"]["Error"];

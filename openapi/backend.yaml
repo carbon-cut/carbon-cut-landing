@@ -315,6 +315,22 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /api/collectivity/projects/{projectSlug}/current-inventory/result:
+    parameters:
+      - $ref: "#/components/parameters/ProjectSlug"
+    get:
+      operationId: getCollectivityCurrentInventoryResult
+      summary: Get the latest calculation result and reporting lines
+      tags: [Collectivity projects]
+      responses:
+        "200":
+          description: Latest successful calculation result with aggregated reporting lines
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CurrentInventoryResultResponse" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
   /api/collectivity/projects/{projectSlug}/setup:
     parameters:
       - $ref: "#/components/parameters/ProjectSlug"
@@ -392,7 +408,10 @@ paths:
     post:
       operationId: calculateCollectivityInventory
       summary: Save and calculate the current inventory
-      description: The submitted input remains saved as a draft when calculation readiness fails.
+      description: >-
+        The submitted input remains saved as a draft when calculation readiness fails.
+        The response includes energy quantities but not grouped emission result rows; fetch
+        Get Result for grouped rows and reporting lines.
       tags: [Collectivity projects]
       x-calculation-contract:
         $ref: "#/components/schemas/WastewaterCalculationContract"
@@ -833,6 +852,64 @@ components:
       required: [data]
       properties:
         data: { $ref: "#/components/schemas/ProjectSnapshot" }
+    CurrentInventoryResultResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [id, calculationRunId, resultRows, context, warnings, reportingLines, createdAt]
+          properties:
+            id: { type: string }
+            calculationRunId: { type: string }
+            resultRows: { $ref: "#/components/schemas/JsonObject" }
+            context: { $ref: "#/components/schemas/JsonObject" }
+            warnings:
+              type: array
+              items: { $ref: "#/components/schemas/CalculationWarning" }
+            reportingLines:
+              type: array
+              items: { $ref: "#/components/schemas/ReportingLine" }
+            createdAt: { type: string, format: date-time }
+    ReportingLine:
+      type: object
+      required: [key, values]
+      properties:
+        key:
+          type: string
+          enum:
+            - municipalHeritage
+            - navigation
+            - terrestrialTransport
+            - soretras
+            - nationalAirTransport
+            - airportGroundElectricity
+            - industryElectricity
+            - industryThermal
+            - residentialElectricity
+            - residentialGplAndGas
+            - tertiaryElectricity
+            - tertiaryGplAndGas
+            - tourismElectricity
+            - tourismNaturalGas
+            - pumpingElectricity
+            - agricultureElectricity
+            - sanitation
+            - greenWaste
+            - householdWaste
+            - livestock
+            - crops
+            - grossEmissions
+            - absorptions
+            - urbanTrees
+            - oliveOrchards
+            - fruitTrees
+        values:
+          type: object
+          additionalProperties:
+            oneOf:
+              - { type: number }
+              - { type: string, enum: [NE] }
     InventoryInputRequest:
       type: object
       required: [inventoryInput]
@@ -878,10 +955,29 @@ components:
           required: [context, output, runData, resultData, persisted]
           properties:
             context: { $ref: "#/components/schemas/JsonObject" }
-            output: { $ref: "#/components/schemas/JsonObject" }
+            output: { $ref: "#/components/schemas/CalculationOutput" }
             runData: { $ref: "#/components/schemas/JsonObject" }
-            resultData: { $ref: "#/components/schemas/JsonObject" }
+            resultData: { $ref: "#/components/schemas/StoredCalculationResultData" }
             persisted: { $ref: "#/components/schemas/JsonObject" }
+    CalculationOutput:
+      type: object
+      additionalProperties: false
+      required: [energyRows, formulaVersion, parameterSnapshot]
+      properties:
+        energyRows: { $ref: "#/components/schemas/JsonObject" }
+        formulaVersion: { type: string }
+        parameterSnapshot: { $ref: "#/components/schemas/JsonObject" }
+        warnings:
+          type: array
+          items: { $ref: "#/components/schemas/CalculationWarning" }
+    StoredCalculationResultData:
+      type: object
+      additionalProperties: false
+      required: [project, energyRows, context]
+      properties:
+        project: { type: integer }
+        energyRows: { $ref: "#/components/schemas/JsonObject" }
+        context: { $ref: "#/components/schemas/JsonObject" }
     CalculationCannotRunReason:
       type: object
       required: [code]

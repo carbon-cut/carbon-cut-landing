@@ -54,9 +54,9 @@ const electricityMtLines = {
   food: { sector: "industry" },
   otherIndustries: { sector: "industry" },
   agriculture: { sector: "agriculture" },
-  pumping: { sector: "agriculture" },
+  pumping: { sector: "tertiary" },
   tourism: { sector: "tertiary" },
-  transportTelco: { sector: "transport" },
+  transportTelco: { sector: "tertiary" },
 } as const satisfies TerritorialEnergyLineDefinitions;
 
 const electricityHtLines = {
@@ -146,7 +146,7 @@ const naturalGasMpLines = {
   otherIndustries: { sector: "industry" },
   agriculture: { sector: "agriculture" },
   tourism: { sector: "tertiary" },
-  transportTelco: { sector: "transport" },
+  transportTelco: { sector: "tertiary" },
   services: { sector: "tertiary" },
 } as const satisfies TerritorialEnergyLineDefinitions;
 
