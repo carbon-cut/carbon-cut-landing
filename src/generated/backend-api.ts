@@ -249,6 +249,29 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/collectivity/projects/{projectSlug}/calculation-runs/{runId}/explanation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+        runId: number;
+      };
+      cookie?: never;
+    };
+    /**
+     * Get a stored calculation explanation
+     * @description Only the owning project subscriber may read a successful run belonging to the project. Filters intersect. Item and dataset filters return source-level outputs; grouped rows are returned only when neither filter is present. Filtered reads omit the whole submitted input and setup snapshot. A run without a recorded explanation returns traceUnavailable.
+     */
+    get: operations["getCollectivityCalculationExplanation"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/collectivity/projects/{projectSlug}/setup": {
     parameters: {
       query?: never;
@@ -630,34 +653,10 @@ export interface components {
       };
     };
     ReportingLine: {
-      /** @enum {string} */
-      key:
-        | "municipalHeritage"
-        | "navigation"
-        | "terrestrialTransport"
-        | "soretras"
-        | "nationalAirTransport"
-        | "airportGroundElectricity"
-        | "industryElectricity"
-        | "industryThermal"
-        | "residentialElectricity"
-        | "residentialGplAndGas"
-        | "tertiaryElectricity"
-        | "tertiaryGplAndGas"
-        | "tourismElectricity"
-        | "tourismNaturalGas"
-        | "pumpingElectricity"
-        | "agricultureElectricity"
-        | "sanitation"
-        | "greenWaste"
-        | "householdWaste"
-        | "livestock"
-        | "crops"
-        | "grossEmissions"
-        | "absorptions"
-        | "urbanTrees"
-        | "oliveOrchards"
-        | "fruitTrees";
+      /** @description Standard report key or a source-derived operator/absorption key. */
+      key: string;
+      /** @description Display name supplied for source-derived detail lines. */
+      label?: string;
       values: {
         [key: string]: number | "NE";
       };
@@ -676,13 +675,209 @@ export interface components {
       message: string;
       details?: components["schemas"]["JsonObject"];
     };
+    ExplanationQuantity: {
+      value: number;
+      unit: string;
+      /** @enum {string} */
+      role: "input" | "convertedActivity" | "gasMass" | "co2e" | "reportedQuantity";
+    };
+    InputProvenance: {
+      path: string;
+      raw: components["schemas"]["ExplanationQuantity"];
+      prepared: components["schemas"]["ExplanationQuantity"];
+      transformations: {
+        key: string;
+        inputPaths: string[];
+        output: components["schemas"]["ExplanationQuantity"];
+      }[];
+    };
+    ParameterRequirementTrace: {
+      familyKey: string;
+      year: number;
+      selectors: {
+        [key: string]: string;
+      };
+    };
+    ParameterSelectionRule: {
+      kind: string;
+      matchedSelectors: {
+        [key: string]: string;
+      };
+      selectorFallbackIndex: number;
+      requestedYear: number;
+      selectedDataYear: number | null;
+      /** @enum {string} */
+      yearBasis:
+        | "entryYear"
+        | "validFromYear"
+        | "validToYear"
+        | "requestedYearProxy"
+        | "validityRange";
+    };
+    /** @description Entry in the run's parameter snapshot. resolutionId identifies the requested family, year, and canonical selectors, even if another request selects the same entry. */
+    ResolvedParameterTrace: {
+      resolutionId: string;
+      requirement: components["schemas"]["ParameterRequirementTrace"];
+      selectionRule: components["schemas"]["ParameterSelectionRule"];
+      parameterEntryId: number;
+      value: number;
+      unit?: string | null;
+      selector?: {
+        [key: string]: string;
+      };
+      /** @enum {string} */
+      applicability?: "global" | "country-specific";
+      country?: string | null;
+      year?: number | null;
+      validFromYear?: number | null;
+      validToYear?: number | null;
+      gas?: string | null;
+      emissionScope?: string | null;
+      isDefault?: boolean;
+      sourceReference?: Record<string, never> | null;
+    };
+    UnresolvedOptionalParameterTrace: {
+      resolutionId: string;
+      requirement: components["schemas"]["ParameterRequirementTrace"];
+      /** @enum {string} */
+      reason: "noEligibleEntry";
+    };
+    ParameterSnapshotTrace: {
+      requestedFamilies: string[];
+      items: components["schemas"]["ResolvedParameterTrace"][];
+      unresolvedOptional?: components["schemas"]["UnresolvedOptionalParameterTrace"][];
+    };
+    FormulaOperandTrace:
+      | {
+          /** @enum {string} */
+          kind: "input";
+          key: string;
+        }
+      | {
+          /** @enum {string} */
+          kind: "step";
+          stepKey: string;
+        }
+      | {
+          /** @enum {string} */
+          kind: "parameter";
+          resolutionId: string;
+        }
+      | {
+          /** @enum {string} */
+          kind: "constant";
+          key: string;
+          quantity: components["schemas"]["ExplanationQuantity"];
+        };
+    FormulaStepTrace: {
+      key: string;
+      /** @enum {string} */
+      operation:
+        | "multiply"
+        | "divide"
+        | "sum"
+        | "subtract"
+        | "convert"
+        | "exp"
+        | "max"
+        | "identity";
+      operands: components["schemas"]["FormulaOperandTrace"][];
+      output: components["schemas"]["ExplanationQuantity"];
+      warningIds?: string[];
+    };
+    ItemExplanationTrace: {
+      itemId: string;
+      year: number;
+      datasetKey?: string;
+      method: string;
+      input: {
+        [key: string]: components["schemas"]["InputProvenance"];
+      };
+      steps: components["schemas"]["FormulaStepTrace"][];
+      components: {
+        key: string;
+        componentId: string;
+        itemId: string;
+        year: number;
+        quantity: components["schemas"]["ExplanationQuantity"];
+        stepKeys: string[];
+        sourceRowId?: string;
+      }[];
+      outcome?: {
+        /** @enum {string} */
+        kind: "notEstimated";
+        rule: string;
+        warningIds?: string[];
+      };
+    };
+    SourceRowLinkTrace: {
+      sourceRowId: string;
+      componentKey: string;
+      itemId: string;
+      year: number;
+      rowKey: string;
+      quantity: components["schemas"]["ExplanationQuantity"];
+    };
+    AccountingAdjustmentTrace: {
+      key: string;
+      year: number;
+      ownedSourceRowId: string;
+      territorialSourceRowId: string;
+      before: components["schemas"]["ExplanationQuantity"];
+      deduction: components["schemas"]["ExplanationQuantity"];
+      after: components["schemas"]["ExplanationQuantity"];
+    };
+    ReportingContributionTrace: {
+      reportingLineKey: string;
+      year: number;
+      sourceRowId?: string;
+      quantity:
+        | components["schemas"]["ExplanationQuantity"]
+        | {
+            /** @enum {string} */
+            outcome: "NE";
+            rule: string;
+          };
+    };
+    /** @description Versioned explanation artifact for a successful calculation. */
+    CalculationExplanation: {
+      /** @enum {integer} */
+      schemaVersion: 1;
+      submittedInput: components["schemas"]["JsonObject"];
+      calculationContext: components["schemas"]["JsonObject"];
+      items: components["schemas"]["ItemExplanationTrace"][];
+      sourceRowLinks: components["schemas"]["SourceRowLinkTrace"][];
+      accountingAdjustments: components["schemas"]["AccountingAdjustmentTrace"][];
+      reportingContributions: components["schemas"]["ReportingContributionTrace"][];
+    };
+    CalculationExplanationResponse: {
+      data: {
+        runId: string;
+        /** @enum {integer} */
+        schemaVersion: 1;
+        calculationCodeDigest: string;
+        parameterSnapshot: components["schemas"]["ParameterSnapshotTrace"];
+        warnings: components["schemas"]["CalculationWarning"][];
+        submittedInput?: components["schemas"]["JsonObject"];
+        calculationContext?: components["schemas"]["JsonObject"];
+        items: components["schemas"]["ItemExplanationTrace"][];
+        sourceRowLinks: components["schemas"]["SourceRowLinkTrace"][];
+        sourceRows: components["schemas"]["JsonObject"];
+        accountingAdjustments: components["schemas"]["AccountingAdjustmentTrace"][];
+        reportingContributions: components["schemas"]["ReportingContributionTrace"][];
+        resultRows?: components["schemas"]["JsonObject"];
+        energyRows?: components["schemas"]["JsonObject"];
+        reportingLines?: components["schemas"]["ReportingLine"][];
+      };
+    };
     DebugCalculationResponse: {
       data: {
         datasetKey: string;
         resultRows: components["schemas"]["JsonObject"];
         energyRows: components["schemas"]["JsonObject"];
         parameterSnapshot: components["schemas"]["JsonObject"];
-        formulaVersion: string;
+        calculationCodeDigest: string;
+        explanation: components["schemas"]["CalculationExplanation"];
         warnings?: components["schemas"]["CalculationWarning"][];
       };
     };
@@ -697,8 +892,8 @@ export interface components {
     };
     CalculationOutput: {
       energyRows: components["schemas"]["JsonObject"];
-      formulaVersion: string;
-      parameterSnapshot: components["schemas"]["JsonObject"];
+      calculationCodeDigest: string;
+      parameterSnapshot: components["schemas"]["ParameterSnapshotTrace"];
       warnings?: components["schemas"]["CalculationWarning"][];
     };
     StoredCalculationResultData: {
@@ -1185,6 +1380,48 @@ export interface operations {
       401: components["responses"]["Error"];
       403: components["responses"]["Error"];
       404: components["responses"]["Error"];
+    };
+  };
+  getCollectivityCalculationExplanation: {
+    parameters: {
+      query?: {
+        year?: number;
+        dataset?: string;
+        item?: string;
+        reportingLine?: string;
+      };
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+        runId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Stored explanation and matching outputs */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CalculationExplanationResponse"];
+        };
+      };
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+      /** @description Run has no recorded trace (traceUnavailable) */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      413: components["responses"]["Error"];
     };
   };
   updateCollectivityProjectSetup: {

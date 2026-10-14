@@ -175,13 +175,14 @@ export default {
       subscription: "Gérer mon abonnement",
     },
     hero: {
-      badge: "Prototype collectivité",
+      badge: "Prototype communal",
       title: {
-        text: "Construisez un {inventory} que vous pouvez comprendre, expliquer et améliorer au fil du temps.",
-        highlight: "inventaire carbone municipal",
+        text: "Faites des {data} une base claire pour {action}.",
+        dataHighlight: "données territoriales locales",
+        actionHighlight: "agir",
       },
       description:
-        "Carbon Cut aide les municipalités à transformer leurs données locales sur l’énergie, les transports, l’agriculture, les eaux usées et d’autres activités en un inventaire structuré des émissions — chaque résultat restant relié à ses données, paramètres et sources.",
+        "Carbon Cut aide les communes à organiser leurs données territoriales locales, à calculer et comprendre leurs émissions, et à faire évoluer ce travail dans le temps.",
       imageAlt: "Paysage illustrant l'entrée collectivité de Carbon Cut",
       primaryCta: {
         label: "Voir le catalogue",
@@ -189,16 +190,16 @@ export default {
       },
       secondaryCta: {
         label: "Demander un accès au prototype",
-        aria: "Demander un accès au prototype collectivité",
+        aria: "Demander un accès au prototype communal",
       },
     },
     screenshot: {
       alt: "Capture d’écran des résultats d’émissions d’un projet de collectivité, avec des indicateurs clés et un graphique des émissions de GES.",
     },
     afatSection: {
-      title: "Au-delà d’un bilan limité à l’électricité et aux carburants.",
+      title: "Comprenez les différentes sources d’émissions sur votre territoire.",
       description:
-        "L’agriculture, l’utilisation des terres, les déchets et les eaux usées sont structurés avec le même soin que l’énergie et les transports.",
+        "L’énergie, les transports, l’agriculture, les eaux usées, les déchets et les autres activités locales peuvent être analysés dans un même cadre.",
       imageAlt:
         "Graphique des émissions AFAT par catégories agricoles, cultures, déchets et arbres.",
       municipalAssetsImageAlt: "Graphique des émissions des actifs de la collectivité.",
@@ -213,9 +214,9 @@ export default {
       ireBei: "Approches IRE / BEI",
     },
     validation: {
-      title: "Mis à l’épreuve de travaux réels d’inventaire municipal.",
+      title: "Mis à l’épreuve de travaux réels d’inventaire communal.",
       claim:
-        "Le moteur de calcul est développé et vérifié à partir de jeux de données municipaux réels et de calculs de référence, notamment le cas du Grand Sfax — et pas uniquement d’exemples théoriques. Cette validation est en cours et ne constitue pas une certification externe.",
+        "Le moteur de calcul est développé et vérifié à partir de jeux de données communaux réels et de calculs de référence, notamment le cas du Grand Sfax — et pas uniquement d’exemples théoriques. Cette validation est en cours et ne constitue pas une certification externe.",
       cardTitle: "Grand Sfax · journal de validation",
       caseStudy: "Étude de cas",
       columns: {
@@ -230,7 +231,7 @@ export default {
         wastewater: { sector: "Déchets et eaux usées" },
       },
       referenceCalculation: "Calcul de référence",
-      municipalDatasets: "Données municipales",
+      municipalDatasets: "Données communales",
       compared: "Comparé",
       footnote:
         "Structure illustrative. La comparaison s’inscrit dans un travail de développement en cours et ne constitue pas une certification.",
@@ -261,7 +262,7 @@ export default {
         },
       },
       output: {
-        title: "Inventaire municipal des GES",
+        title: "Inventaire communal des GES",
         year: "2025",
         status: "Structuré",
         columns: { sector: "Secteur", emissions: "t éq. CO₂" },
@@ -281,9 +282,9 @@ export default {
       },
     },
     cta: {
-      title: "Construisez un inventaire climatique qui gagne en utilité au fil du temps.",
+      title: "Donnez à votre commune une base durable pour piloter son action.",
       description:
-        "Rassemblez les données de votre collectivité, établissez un inventaire clair des émissions et gardez les résultats à disposition pour éclairer vos prochaines décisions.",
+        "Centralisez les données, les analyses et les décisions qui permettent de comprendre le territoire, définir les priorités et suivre les progrès dans le temps.",
       primaryCta: {
         label: "Accéder à la configuration",
         aria: "Accéder à la configuration de la collectivité",

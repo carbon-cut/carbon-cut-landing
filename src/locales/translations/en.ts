@@ -173,13 +173,14 @@ export default {
       subscription: "Manage subscription",
     },
     hero: {
-      badge: "Municipal prototype",
+      badge: "Community prototype",
       title: {
-        text: "Build a {inventory} you can understand, explain and improve over time.",
-        highlight: "municipal GHG inventory",
+        text: "Turn {data} into a clear basis for {action}.",
+        dataHighlight: "local territorial data",
+        actionHighlight: "action",
       },
       description:
-        "Carbon Cut helps municipalities turn energy, transport, agriculture, wastewater and other local activity data into a structured emissions inventory — with every result traceable to its data, parameters and sources.",
+        "Carbon Cut helps communities organise local territorial data, calculate and understand emissions, and build on that work over time.",
       imageAlt: "Landscape illustrating the Carbon Cut municipality entrance",
       primaryCta: {
         label: "View pricing",
@@ -187,16 +188,16 @@ export default {
       },
       secondaryCta: {
         label: "Request prototype access",
-        aria: "Request access to the municipality prototype",
+        aria: "Request access to the community prototype",
       },
     },
     screenshot: {
       alt: "Screenshot of a municipal project's emissions results, with summary metrics and a GHG emissions chart.",
     },
     afatSection: {
-      title: "Beyond an electricity-and-fuel footprint.",
+      title: "Understand the different emission sources across your territory.",
       description:
-        "Agriculture, land use, waste and wastewater are structured with the same care as energy and transport.",
+        "Energy, transport, agriculture, wastewater, waste and other local activities can be analysed within one framework.",
       imageAlt: "AFOLU emissions chart showing agriculture, crops, waste and tree categories.",
       municipalAssetsImageAlt: "Municipal assets emissions chart.",
     },
@@ -210,9 +211,9 @@ export default {
       ireBei: "IRE / BEI approaches",
     },
     validation: {
-      title: "Tested against real municipal inventory work.",
+      title: "Tested against real territorial inventory work.",
       claim:
-        "The calculation engine is developed and checked against actual municipal datasets and reference calculations, including the Grand Sfax case — not only theoretical examples. This is ongoing validation, not an external certification.",
+        "The calculation engine is developed and checked against actual territorial datasets and reference calculations, including the Grand Sfax case — not only theoretical examples. This is ongoing validation, not an external certification.",
       cardTitle: "Grand Sfax · validation log",
       caseStudy: "Case study",
       columns: {
@@ -227,7 +228,7 @@ export default {
         wastewater: { sector: "Waste & wastewater" },
       },
       referenceCalculation: "Reference calculation",
-      municipalDatasets: "Municipal datasets",
+      municipalDatasets: "Territorial datasets",
       compared: "Compared",
       footnote:
         "Illustrative structure. Comparison is part of ongoing development, not a certification.",
@@ -248,7 +249,7 @@ export default {
         wastewater: { title: "Wastewater & other local datasets", detail: "Operator reports" },
       },
       output: {
-        title: "Municipal GHG inventory",
+        title: "Territorial GHG inventory",
         year: "2025",
         status: "Structured",
         columns: { sector: "Sector", emissions: "tCO₂e" },
@@ -268,9 +269,9 @@ export default {
       },
     },
     cta: {
-      title: "Build a climate inventory that grows more useful over time.",
+      title: "Give your community a lasting foundation for guiding its climate action.",
       description:
-        "Bring your municipal data together, build a clear emissions inventory, and keep the results ready for the decisions ahead.",
+        "Bring together the data, analyses and decisions that help you understand your territory, set priorities and track progress over time.",
       primaryCta: {
         label: "Access configuration",
         aria: "Access the municipality configuration",

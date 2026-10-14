@@ -69,7 +69,7 @@ export default async function CollectivityIndexPage({
   const { locale } = await params;
   setStaticParamsLocale(locale);
   const t = await getScopedI18n("collectivityLanding");
-  const supportedCountries = await getCollectivityCountries().catch(() => []);
+  /* const supportedCountries = await getCollectivityCountries().catch(() => []); */
   const validationRows = [
     {
       key: "stationaryEnergy",
@@ -110,7 +110,8 @@ export default async function CollectivityIndexPage({
             <Typography asChild variant="marketingDisplay" className="text-left">
               <h1 id="collectivity-hero-heading">
                 {t("hero.title.text", {
-                  inventory: <span className="text-chart-3">{t("hero.title.highlight")}</span>,
+                  data: <span className="text-chart-3">{t("hero.title.dataHighlight")}</span>,
+                  action: <span className="text-chart-3">{t("hero.title.actionHighlight")}</span>,
                 })}
               </h1>
             </Typography>
@@ -323,7 +324,7 @@ export default async function CollectivityIndexPage({
         </div>
       </section>
 
-      <CountrySupport supportedCountries={supportedCountries} />
+      {/* <CountrySupport supportedCountries={supportedCountries} /> */}
 
       <section
         id="cta"

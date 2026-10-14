@@ -331,6 +331,51 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /api/collectivity/projects/{projectSlug}/calculation-runs/{runId}/explanation:
+    parameters:
+      - $ref: "#/components/parameters/ProjectSlug"
+      - name: runId
+        in: path
+        required: true
+        schema: { type: integer, minimum: 1 }
+    get:
+      operationId: getCollectivityCalculationExplanation
+      summary: Get a stored calculation explanation
+      description: >-
+        Only the owning project subscriber may read a successful run belonging to the project.
+        Filters intersect. Item and dataset filters return source-level outputs; grouped rows are
+        returned only when neither filter is present. Filtered reads omit the whole submitted
+        input and setup snapshot. A run without a recorded explanation returns traceUnavailable.
+      tags: [Collectivity projects]
+      parameters:
+        - name: year
+          in: query
+          schema: { type: integer, minimum: 1900, maximum: 2200 }
+        - name: dataset
+          in: query
+          schema: { type: string }
+        - name: item
+          in: query
+          schema: { type: string }
+        - name: reportingLine
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Stored explanation and matching outputs
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CalculationExplanationResponse" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409":
+          description: Run has no recorded trace (traceUnavailable)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+        "413": { $ref: "#/components/responses/Error" }
   /api/collectivity/projects/{projectSlug}/setup:
     parameters:
       - $ref: "#/components/parameters/ProjectSlug"
@@ -877,33 +922,10 @@ components:
       properties:
         key:
           type: string
-          enum:
-            - municipalHeritage
-            - navigation
-            - terrestrialTransport
-            - soretras
-            - nationalAirTransport
-            - airportGroundElectricity
-            - industryElectricity
-            - industryThermal
-            - residentialElectricity
-            - residentialGplAndGas
-            - tertiaryElectricity
-            - tertiaryGplAndGas
-            - tourismElectricity
-            - tourismNaturalGas
-            - pumpingElectricity
-            - agricultureElectricity
-            - sanitation
-            - greenWaste
-            - householdWaste
-            - livestock
-            - crops
-            - grossEmissions
-            - absorptions
-            - urbanTrees
-            - oliveOrchards
-            - fruitTrees
+          description: Standard report key or a source-derived operator/absorption key.
+        label:
+          type: string
+          description: Display name supplied for source-derived detail lines.
         values:
           type: object
           additionalProperties:
@@ -930,19 +952,320 @@ components:
         path: { type: string }
         message: { type: string }
         details: { $ref: "#/components/schemas/JsonObject" }
+    ExplanationQuantity:
+      type: object
+      additionalProperties: false
+      required: [value, unit, role]
+      properties:
+        value: { type: number }
+        unit: { type: string }
+        role:
+          type: string
+          enum: [input, convertedActivity, gasMass, co2e, reportedQuantity]
+    InputProvenance:
+      type: object
+      additionalProperties: false
+      required: [path, raw, prepared, transformations]
+      properties:
+        path: { type: string }
+        raw: { $ref: "#/components/schemas/ExplanationQuantity" }
+        prepared: { $ref: "#/components/schemas/ExplanationQuantity" }
+        transformations:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [key, inputPaths, output]
+            properties:
+              key: { type: string }
+              inputPaths: { type: array, items: { type: string } }
+              output: { $ref: "#/components/schemas/ExplanationQuantity" }
+    ParameterRequirementTrace:
+      type: object
+      additionalProperties: false
+      required: [familyKey, year, selectors]
+      properties:
+        familyKey: { type: string }
+        year: { type: integer }
+        selectors:
+          type: object
+          additionalProperties: { type: string }
+    ParameterSelectionRule:
+      type: object
+      additionalProperties: false
+      required:
+        [kind, matchedSelectors, selectorFallbackIndex, requestedYear, selectedDataYear, yearBasis]
+      properties:
+        kind: { type: string }
+        matchedSelectors:
+          type: object
+          additionalProperties: { type: string }
+        selectorFallbackIndex: { type: integer, minimum: 0 }
+        requestedYear: { type: integer }
+        selectedDataYear: { type: integer, nullable: true }
+        yearBasis:
+          type: string
+          enum: [entryYear, validFromYear, validToYear, requestedYearProxy, validityRange]
+    ResolvedParameterTrace:
+      type: object
+      description: >-
+        Entry in the run's parameter snapshot. resolutionId identifies the requested
+        family, year, and canonical selectors, even if another request selects the same entry.
+      required: [resolutionId, requirement, selectionRule, parameterEntryId, value]
+      properties:
+        resolutionId: { type: string }
+        requirement: { $ref: "#/components/schemas/ParameterRequirementTrace" }
+        selectionRule: { $ref: "#/components/schemas/ParameterSelectionRule" }
+        parameterEntryId: { type: integer }
+        value: { type: number }
+        unit: { type: string, nullable: true }
+        selector: { type: object, additionalProperties: { type: string } }
+        applicability: { type: string, enum: [global, country-specific] }
+        country: { type: string, nullable: true }
+        year: { type: integer, nullable: true }
+        validFromYear: { type: integer, nullable: true }
+        validToYear: { type: integer, nullable: true }
+        gas: { type: string, nullable: true }
+        emissionScope: { type: string, nullable: true }
+        isDefault: { type: boolean }
+        sourceReference:
+          type: object
+          nullable: true
+    UnresolvedOptionalParameterTrace:
+      type: object
+      additionalProperties: false
+      required: [resolutionId, requirement, reason]
+      properties:
+        resolutionId: { type: string }
+        requirement: { $ref: "#/components/schemas/ParameterRequirementTrace" }
+        reason: { type: string, enum: [noEligibleEntry] }
+    ParameterSnapshotTrace:
+      type: object
+      additionalProperties: false
+      required: [requestedFamilies, items]
+      properties:
+        requestedFamilies: { type: array, items: { type: string } }
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/ResolvedParameterTrace" }
+        unresolvedOptional:
+          type: array
+          items: { $ref: "#/components/schemas/UnresolvedOptionalParameterTrace" }
+    FormulaOperandTrace:
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [kind, key]
+          properties:
+            kind: { type: string, enum: [input] }
+            key: { type: string }
+        - type: object
+          additionalProperties: false
+          required: [kind, stepKey]
+          properties:
+            kind: { type: string, enum: [step] }
+            stepKey: { type: string }
+        - type: object
+          additionalProperties: false
+          required: [kind, resolutionId]
+          properties:
+            kind: { type: string, enum: [parameter] }
+            resolutionId: { type: string }
+        - type: object
+          additionalProperties: false
+          required: [kind, key, quantity]
+          properties:
+            kind: { type: string, enum: [constant] }
+            key: { type: string }
+            quantity: { $ref: "#/components/schemas/ExplanationQuantity" }
+    FormulaStepTrace:
+      type: object
+      additionalProperties: false
+      required: [key, operation, operands, output]
+      properties:
+        key: { type: string }
+        operation:
+          { type: string, enum: [multiply, divide, sum, subtract, convert, exp, max, identity] }
+        operands:
+          type: array
+          items: { $ref: "#/components/schemas/FormulaOperandTrace" }
+        output: { $ref: "#/components/schemas/ExplanationQuantity" }
+        warningIds: { type: array, items: { type: string } }
+    ItemExplanationTrace:
+      type: object
+      additionalProperties: false
+      required: [itemId, year, method, input, steps, components]
+      properties:
+        itemId: { type: string }
+        year: { type: integer }
+        datasetKey: { type: string }
+        method: { type: string }
+        input:
+          type: object
+          additionalProperties: { $ref: "#/components/schemas/InputProvenance" }
+        steps:
+          type: array
+          items: { $ref: "#/components/schemas/FormulaStepTrace" }
+        components:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [key, componentId, itemId, year, quantity, stepKeys]
+            properties:
+              key: { type: string }
+              componentId: { type: string }
+              itemId: { type: string }
+              year: { type: integer }
+              quantity: { $ref: "#/components/schemas/ExplanationQuantity" }
+              stepKeys: { type: array, items: { type: string } }
+              sourceRowId: { type: string }
+        outcome:
+          type: object
+          additionalProperties: false
+          required: [kind, rule]
+          properties:
+            kind: { type: string, enum: [notEstimated] }
+            rule: { type: string }
+            warningIds: { type: array, items: { type: string } }
+    SourceRowLinkTrace:
+      type: object
+      additionalProperties: false
+      required: [sourceRowId, componentKey, itemId, year, rowKey, quantity]
+      properties:
+        sourceRowId: { type: string }
+        componentKey: { type: string }
+        itemId: { type: string }
+        year: { type: integer }
+        rowKey: { type: string }
+        quantity: { $ref: "#/components/schemas/ExplanationQuantity" }
+    AccountingAdjustmentTrace:
+      type: object
+      additionalProperties: false
+      required: [key, year, ownedSourceRowId, territorialSourceRowId, before, deduction, after]
+      properties:
+        key: { type: string }
+        year: { type: integer }
+        ownedSourceRowId: { type: string }
+        territorialSourceRowId: { type: string }
+        before: { $ref: "#/components/schemas/ExplanationQuantity" }
+        deduction: { $ref: "#/components/schemas/ExplanationQuantity" }
+        after: { $ref: "#/components/schemas/ExplanationQuantity" }
+    ReportingContributionTrace:
+      type: object
+      additionalProperties: false
+      required: [reportingLineKey, year, quantity]
+      properties:
+        reportingLineKey: { type: string }
+        year: { type: integer }
+        sourceRowId: { type: string }
+        quantity:
+          oneOf:
+            - { $ref: "#/components/schemas/ExplanationQuantity" }
+            - type: object
+              additionalProperties: false
+              required: [outcome, rule]
+              properties:
+                outcome: { type: string, enum: [NE] }
+                rule: { type: string }
+    CalculationExplanation:
+      type: object
+      description: Versioned explanation artifact for a successful calculation.
+      required:
+        [
+          schemaVersion,
+          submittedInput,
+          calculationContext,
+          items,
+          sourceRowLinks,
+          accountingAdjustments,
+          reportingContributions,
+        ]
+      properties:
+        schemaVersion: { type: integer, enum: [1] }
+        submittedInput: { $ref: "#/components/schemas/JsonObject" }
+        calculationContext: { $ref: "#/components/schemas/JsonObject" }
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/ItemExplanationTrace" }
+        sourceRowLinks:
+          type: array
+          items: { $ref: "#/components/schemas/SourceRowLinkTrace" }
+        accountingAdjustments:
+          type: array
+          items: { $ref: "#/components/schemas/AccountingAdjustmentTrace" }
+        reportingContributions:
+          type: array
+          items: { $ref: "#/components/schemas/ReportingContributionTrace" }
+    CalculationExplanationResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required:
+            [
+              runId,
+              schemaVersion,
+              calculationCodeDigest,
+              parameterSnapshot,
+              warnings,
+              items,
+              sourceRowLinks,
+              sourceRows,
+              accountingAdjustments,
+              reportingContributions,
+            ]
+          properties:
+            runId: { type: string }
+            schemaVersion: { type: integer, enum: [1] }
+            calculationCodeDigest: { type: string, pattern: "^sha256:[0-9a-f]{64}$" }
+            parameterSnapshot: { $ref: "#/components/schemas/ParameterSnapshotTrace" }
+            warnings:
+              type: array
+              items: { $ref: "#/components/schemas/CalculationWarning" }
+            submittedInput: { $ref: "#/components/schemas/JsonObject" }
+            calculationContext: { $ref: "#/components/schemas/JsonObject" }
+            items:
+              type: array
+              items: { $ref: "#/components/schemas/ItemExplanationTrace" }
+            sourceRowLinks:
+              type: array
+              items: { $ref: "#/components/schemas/SourceRowLinkTrace" }
+            sourceRows: { $ref: "#/components/schemas/JsonObject" }
+            accountingAdjustments:
+              type: array
+              items: { $ref: "#/components/schemas/AccountingAdjustmentTrace" }
+            reportingContributions:
+              type: array
+              items: { $ref: "#/components/schemas/ReportingContributionTrace" }
+            resultRows: { $ref: "#/components/schemas/JsonObject" }
+            energyRows: { $ref: "#/components/schemas/JsonObject" }
+            reportingLines:
+              type: array
+              items: { $ref: "#/components/schemas/ReportingLine" }
     DebugCalculationResponse:
       type: object
       required: [data]
       properties:
         data:
           type: object
-          required: [datasetKey, resultRows, energyRows, parameterSnapshot, formulaVersion]
+          required:
+            [
+              datasetKey,
+              resultRows,
+              energyRows,
+              parameterSnapshot,
+              calculationCodeDigest,
+              explanation,
+            ]
           properties:
             datasetKey: { type: string }
             resultRows: { $ref: "#/components/schemas/JsonObject" }
             energyRows: { $ref: "#/components/schemas/JsonObject" }
             parameterSnapshot: { $ref: "#/components/schemas/JsonObject" }
-            formulaVersion: { type: string }
+            calculationCodeDigest: { type: string, pattern: "^sha256:[0-9a-f]{64}$" }
+            explanation: { $ref: "#/components/schemas/CalculationExplanation" }
             warnings:
               type: array
               items: { $ref: "#/components/schemas/CalculationWarning" }
@@ -962,11 +1285,11 @@ components:
     CalculationOutput:
       type: object
       additionalProperties: false
-      required: [energyRows, formulaVersion, parameterSnapshot]
+      required: [energyRows, calculationCodeDigest, parameterSnapshot]
       properties:
         energyRows: { $ref: "#/components/schemas/JsonObject" }
-        formulaVersion: { type: string }
-        parameterSnapshot: { $ref: "#/components/schemas/JsonObject" }
+        calculationCodeDigest: { type: string, pattern: "^sha256:[0-9a-f]{64}$" }
+        parameterSnapshot: { $ref: "#/components/schemas/ParameterSnapshotTrace" }
         warnings:
           type: array
           items: { $ref: "#/components/schemas/CalculationWarning" }
