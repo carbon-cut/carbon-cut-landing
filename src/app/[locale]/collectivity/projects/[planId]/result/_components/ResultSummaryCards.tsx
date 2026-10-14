@@ -23,10 +23,7 @@ export default function ResultSummaryCards({
   const summaryMetrics = result ? buildSummaryMetrics(result) : null;
 
   return (
-    <section
-      aria-label={t("summaryCards.ariaLabel")}
-      className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
-    >
+    <section aria-label={t("summaryCards.ariaLabel")} className="grid gap-4 sm:grid-cols-4">
       <ResultMetricCard
         favorableChange="decrease"
         label={t("summaryCards.emissions")}

@@ -1,10 +1,16 @@
 .header {
   @apply fixed left-0 right-0 top-0 z-50 w-full border-b border-solid border-neutral-border
-        bg-default-background px-4 lg:px-10
+        bg-default-background px-4 lg:px-0
         transition-all duration-700;
 }
 .headerInner {
-  @apply mx-auto flex w-full max-w-6xl items-center justify-between gap-6 py-4;
+  @apply flex w-full px-44 items-center justify-between gap-6 py-4;
+}
+.headerInner[data-state="bigSticky"] {
+  @apply px-44;
+}
+.headerInner[data-state="small"] {
+  @apply pl-0 pr-36;
 }
 .logoRegion {
   @apply xl:flex-1;

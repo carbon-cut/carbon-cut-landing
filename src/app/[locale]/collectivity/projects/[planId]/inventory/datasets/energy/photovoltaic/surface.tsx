@@ -21,14 +21,16 @@ export default function PhotovoltaicSurface() {
         title={tPhotovoltaic("bt.title")}
         rows={btRows}
         form={mainForm}
-        baseName="energy.photovoltaic.dataSet.bt"
+        //baseName="energy.photovoltaic.dataSet.bt"
+        baseName="transport"
       />
       <div className="border-t border-border/10 pt-8">
         <MatrixTable
           title={tPhotovoltaic("mt.title")}
           rows={mtRows}
           form={mainForm}
-          baseName="energy.photovoltaic.dataSet.mt"
+          //baseName="energy.photovoltaic.dataSet.mt"
+          baseName="transport"
         />
       </div>
     </div>

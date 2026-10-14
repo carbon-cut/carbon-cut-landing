@@ -110,6 +110,16 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --map-region: oklch(44.3% 0.11 240.79);
+    --map-region-hover: oklch(50% 0.134 242.748);
+    --map-region-selected: oklch(39.1% 0.09 240.875);
+    --map-region-disabled: oklch(55.4% 0.046 257.417);
+    --map-region-stroke: oklch(28.2% 0.091 267.935);
+    --map-region-stroke-hover: oklch(28.2% 0.091 267.935);
+    --map-region-focus-ring: oklch(70.7% 0.165 254.624);
+    --map-label: oklch(100% 0 0);
+    --map-label-hover: oklch(100% 0 0);
+    --map-label-selected: oklch(100% 0 0);
   }
   .dark {
     --workspace-background: 222.2 20% 10%;
@@ -158,6 +168,16 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --map-region: oklch(44.3% 0.11 240.79);
+    --map-region-hover: oklch(50% 0.134 242.748);
+    --map-region-selected: oklch(39.1% 0.09 240.875);
+    --map-region-disabled: oklch(55.4% 0.046 257.417);
+    --map-region-stroke: oklch(28.2% 0.091 267.935);
+    --map-region-stroke-hover: oklch(28.2% 0.091 267.935);
+    --map-region-focus-ring: oklch(70.7% 0.165 254.624);
+    --map-label: oklch(100% 0 0);
+    --map-label-hover: oklch(100% 0 0);
+    --map-label-selected: oklch(100% 0 0);
   }
 }
 

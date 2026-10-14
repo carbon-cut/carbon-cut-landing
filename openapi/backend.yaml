@@ -11,6 +11,43 @@ servers:
 security:
   - bearerAuth: []
 paths:
+  /api/contact:
+    post:
+      operationId: sendContactMessage
+      tags: [Contact]
+      summary: Send a contact form message to the team
+      security: []
+      description: A nonempty website honeypot returns success without sending email. Requests are limited to five per IP in ten minutes. The sender and team inbox must be configured on the server.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, topic, message]
+              properties:
+                name: { type: string, minLength: 1, maxLength: 150 }
+                email: { type: string, format: email, maxLength: 254 }
+                topic: { type: string, minLength: 1, maxLength: 200 }
+                message: { type: string, minLength: 1, maxLength: 5000 }
+                website:
+                  type: string
+                  maxLength: 200
+                  description: Optional honeypot; leave empty.
+      responses:
+        "200":
+          description: Message accepted, including honeypot submissions
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data: { $ref: "#/components/schemas/OkResponse" }
+        "400": { $ref: "#/components/responses/Error" }
+        "413": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+        "503": { $ref: "#/components/responses/Error" }
   /api/auth/local:
     post:
       operationId: login
@@ -278,6 +315,67 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /api/collectivity/projects/{projectSlug}/current-inventory/result:
+    parameters:
+      - $ref: "#/components/parameters/ProjectSlug"
+    get:
+      operationId: getCollectivityCurrentInventoryResult
+      summary: Get the latest calculation result and reporting lines
+      tags: [Collectivity projects]
+      responses:
+        "200":
+          description: Latest successful calculation result with aggregated reporting lines
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CurrentInventoryResultResponse" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+  /api/collectivity/projects/{projectSlug}/calculation-runs/{runId}/explanation:
+    parameters:
+      - $ref: "#/components/parameters/ProjectSlug"
+      - name: runId
+        in: path
+        required: true
+        schema: { type: integer, minimum: 1 }
+    get:
+      operationId: getCollectivityCalculationExplanation
+      summary: Get a stored calculation explanation
+      description: >-
+        Only the owning project subscriber may read a successful run belonging to the project.
+        Filters intersect. Item and dataset filters return source-level outputs; grouped rows are
+        returned only when neither filter is present. Filtered reads omit the whole submitted
+        input and setup snapshot. A run without a recorded explanation returns traceUnavailable.
+      tags: [Collectivity projects]
+      parameters:
+        - name: year
+          in: query
+          schema: { type: integer, minimum: 1900, maximum: 2200 }
+        - name: dataset
+          in: query
+          schema: { type: string }
+        - name: item
+          in: query
+          schema: { type: string }
+        - name: reportingLine
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Stored explanation and matching outputs
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CalculationExplanationResponse" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "409":
+          description: Run has no recorded trace (traceUnavailable)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+        "413": { $ref: "#/components/responses/Error" }
   /api/collectivity/projects/{projectSlug}/setup:
     parameters:
       - $ref: "#/components/parameters/ProjectSlug"
@@ -324,6 +422,60 @@ paths:
         "401": { $ref: "#/components/responses/Error" }
         "403": { $ref: "#/components/responses/Error" }
         "404": { $ref: "#/components/responses/Error" }
+  /api/collectivity/projects/{projectSlug}/current-inventory/debug-calculate:
+    parameters:
+      - $ref: "#/components/parameters/ProjectSlug"
+    post:
+      operationId: debugCalculateCollectivityInventory
+      summary: Calculate one inventory dataset without persistence
+      tags: [Collectivity projects]
+      x-calculation-contract:
+        $ref: "#/components/schemas/WastewaterCalculationContract"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DebugCalculationRequest" }
+      responses:
+        "200":
+          description: Debug calculation output
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DebugCalculationResponse" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/CalculationCannotRun" }
+  /api/collectivity/projects/{projectSlug}/current-inventory/calculate:
+    parameters:
+      - $ref: "#/components/parameters/ProjectSlug"
+    post:
+      operationId: calculateCollectivityInventory
+      summary: Save and calculate the current inventory
+      description: >-
+        The submitted input remains saved as a draft when calculation readiness fails.
+        The response includes energy quantities but not grouped emission result rows; fetch
+        Get Result for grouped rows and reporting lines.
+      tags: [Collectivity projects]
+      x-calculation-contract:
+        $ref: "#/components/schemas/WastewaterCalculationContract"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/InventoryInputRequest" }
+      responses:
+        "200":
+          description: Stored calculation artifacts
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CalculationResponse" }
+        "400": { $ref: "#/components/responses/Error" }
+        "401": { $ref: "#/components/responses/Error" }
+        "403": { $ref: "#/components/responses/Error" }
+        "404": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/CalculationCannotRun" }
 components:
   securitySchemes:
     bearerAuth:
@@ -342,6 +494,11 @@ components:
       content:
         application/json:
           schema: { $ref: "#/components/schemas/ErrorResponse" }
+    CalculationCannotRun:
+      description: The submitted inventory cannot be calculated
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/CalculationCannotRunResponse" }
   schemas:
     RegistrationPending:
       type: object
@@ -385,6 +542,263 @@ components:
     JsonObject:
       type: object
       additionalProperties: true
+    WastewaterLoadType:
+      type: string
+      enum: [domestic, industrial, unclassified]
+    WastewaterTreatmentSystem:
+      type: string
+      enum:
+        - centralizedAerobic
+        - anaerobicReactor
+        - anaerobicShallowFacultativeLagoon
+        - anaerobicDeepLagoon
+        - constructedWetlandSurfaceFlow
+        - constructedWetlandHorizontalSubsurfaceFlow
+        - constructedWetlandVerticalSubsurfaceFlow
+        - septicTank
+        - septicTankLandDispersal
+        - stagnantSewer
+        - flowingSewer
+        - latrineDryHousehold
+        - latrineDryCommunal
+        - latrineWetOrFlush
+        - aquaticDischarge
+    WastewaterIndustrialTreatmentSystem:
+      type: string
+      enum:
+        - centralizedAerobic
+        - anaerobicReactor
+        - anaerobicShallowFacultativeLagoon
+        - anaerobicDeepLagoon
+        - constructedWetlandSurfaceFlow
+        - constructedWetlandHorizontalSubsurfaceFlow
+        - constructedWetlandVerticalSubsurfaceFlow
+        - aquaticDischarge
+    WastewaterReceivingWater:
+      type: string
+      enum: [otherAquatic, reservoirLakeEstuary, unknown]
+    WastewaterEffluentPath:
+      type: string
+      enum: [measuredOutgoingLoad, treatmentLevel]
+    WastewaterEffluentTreatmentLevel:
+      type: string
+      enum: [untreated, primaryMechanical, secondaryBiological, advancedBiological, notEstimated]
+    WastewaterSludgePathway:
+      type: string
+      enum: [anaerobicDigestion, composting, landfill, incineration, landApplication, notEstimated]
+    WastewaterLandfillClimate:
+      type: string
+      enum: [temperateDry, temperateWet, tropicalDry, tropicalWet]
+    WastewaterLandfillSiteType:
+      type: string
+      enum: [managedAnaerobic, unmanagedDeep, unmanagedShallow, uncategorised]
+    WastewaterLandfillOxidationCover:
+      type: string
+      enum: [noneOrUnspecified, managedCoveredWithOxidizingMaterial]
+    WastewaterUnit:
+      type: string
+      enum: [kg BOD, kg COD, kg N, kg CH4, t wet sludge, "%", capita]
+    WastewaterCapabilityMatrix:
+      type: object
+      readOnly: true
+      required: [domesticBod, industrialCod, unclassifiedBodDomesticProxy]
+      properties:
+        domesticBod:
+          type: array
+          uniqueItems: true
+          minItems: 15
+          maxItems: 15
+          items: { $ref: "#/components/schemas/WastewaterTreatmentSystem" }
+          example:
+            - centralizedAerobic
+            - anaerobicReactor
+            - anaerobicShallowFacultativeLagoon
+            - anaerobicDeepLagoon
+            - constructedWetlandSurfaceFlow
+            - constructedWetlandHorizontalSubsurfaceFlow
+            - constructedWetlandVerticalSubsurfaceFlow
+            - septicTank
+            - septicTankLandDispersal
+            - stagnantSewer
+            - flowingSewer
+            - latrineDryHousehold
+            - latrineDryCommunal
+            - latrineWetOrFlush
+            - aquaticDischarge
+        industrialCod:
+          type: array
+          uniqueItems: true
+          minItems: 8
+          maxItems: 8
+          items: { $ref: "#/components/schemas/WastewaterIndustrialTreatmentSystem" }
+          example:
+            - centralizedAerobic
+            - anaerobicReactor
+            - anaerobicShallowFacultativeLagoon
+            - anaerobicDeepLagoon
+            - constructedWetlandSurfaceFlow
+            - constructedWetlandHorizontalSubsurfaceFlow
+            - constructedWetlandVerticalSubsurfaceFlow
+            - aquaticDischarge
+        unclassifiedBodDomesticProxy:
+          type: array
+          uniqueItems: true
+          minItems: 15
+          maxItems: 15
+          items: { $ref: "#/components/schemas/WastewaterTreatmentSystem" }
+          description: Unclassified BOD is calculated through the explicit domestic-method proxy.
+          example:
+            - centralizedAerobic
+            - anaerobicReactor
+            - anaerobicShallowFacultativeLagoon
+            - anaerobicDeepLagoon
+            - constructedWetlandSurfaceFlow
+            - constructedWetlandHorizontalSubsurfaceFlow
+            - constructedWetlandVerticalSubsurfaceFlow
+            - septicTank
+            - septicTankLandDispersal
+            - stagnantSewer
+            - flowingSewer
+            - latrineDryHousehold
+            - latrineDryCommunal
+            - latrineWetOrFlush
+            - aquaticDischarge
+    WastewaterWetSludgeAnnualSeries:
+      type: object
+      required: [value, unit]
+      properties:
+        value:
+          type: object
+          description: Complete y-YYYY map from site commissioning through the maximum calculated year.
+          additionalProperties: { type: number, minimum: 0 }
+        unit: { type: string, enum: [t wet sludge] }
+    WastewaterMethaneRecoveryAnnualSeries:
+      type: object
+      required: [value, unit]
+      properties:
+        value:
+          type: object
+          additionalProperties: { type: number, minimum: 0 }
+        unit: { type: string, enum: [kg CH4] }
+    WastewaterLandfillSite:
+      type: object
+      required:
+        [
+          landfillIdentifier,
+          commissioningYear,
+          climate,
+          landfillSiteType,
+          oxidationCover,
+          disposalHistory,
+          methaneRecovery,
+        ]
+      properties:
+        landfillIdentifier: { type: string, minLength: 1 }
+        commissioningYear: { type: integer }
+        climate: { $ref: "#/components/schemas/WastewaterLandfillClimate" }
+        landfillSiteType: { $ref: "#/components/schemas/WastewaterLandfillSiteType" }
+        oxidationCover: { $ref: "#/components/schemas/WastewaterLandfillOxidationCover" }
+        disposalHistory:
+          type: object
+          required: [domestic, industrial]
+          properties:
+            domestic: { $ref: "#/components/schemas/WastewaterWetSludgeAnnualSeries" }
+            industrial: { $ref: "#/components/schemas/WastewaterWetSludgeAnnualSeries" }
+        methaneRecovery: { $ref: "#/components/schemas/WastewaterMethaneRecoveryAnnualSeries" }
+    WastewaterLandfillSites:
+      type: object
+      required: [dataSet]
+      properties:
+        dataSet:
+          type: array
+          items: { $ref: "#/components/schemas/WastewaterLandfillSite" }
+    CalculationReasonCode:
+      type: string
+      enum:
+        - missingCalculationInput
+        - invalidInput
+        - missingParameter
+        - unsupportedDataset
+        - RExceedInput
+        - invalidControlledValue
+        - unsupportedWastewaterMethod
+        - missingAnnualDependency
+        - orphanAnnualValue
+        - invalidUnit
+        - invalidRange
+        - populationAllocationExceeded
+        - populationActivityConflict
+        - methaneRecoveryNotSupported
+        - missingLandfillSite
+        - landfillSiteConflict
+        - landfillHistoryMismatch
+    CalculationWarningCode:
+      type: string
+      enum:
+        - negativeEstimatedActivityClamped
+        - missingLtoCorrectionFactorDefaulted
+        - treeAbsorptionFactorFallbackUsed
+        - greenWasteAbsorptionFallbackUsed
+        - wastewaterEffluentNotEstimated
+        - wastewaterEffluentNitrogenNotEstimated
+        - wastewaterLandfillNotEstimated
+        - wastewaterPopulationUnallocated
+        - wastewaterUnclassifiedDomesticProxyUsed
+        - wastewaterReceivingWaterTier1FallbackUsed
+        - wastewaterRecoveryIncludedInFactor
+        - manureBeddingNitrogenNotEstimated
+        - portNavigationNotEstimated
+    WastewaterCalculationContract:
+      type: object
+      readOnly: true
+      description: >-
+        Backend-owned calculation-readiness contract. Draft inventory storage remains a permissive
+        JsonObject; zero is an explicitly supplied annual value and validation is limited to active
+        inventory years and in-boundary rows.
+      required: [controlledValues, capabilityMatrix, landfillSites, reasonCodes, warningCodes]
+      properties:
+        controlledValues:
+          type: object
+          required:
+            [
+              loadTypes,
+              treatmentSystems,
+              receivingWaters,
+              effluentPaths,
+              effluentTreatmentLevels,
+              sludgePathways,
+              units,
+            ]
+          properties:
+            loadTypes:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterLoadType" }
+            treatmentSystems:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterTreatmentSystem" }
+            receivingWaters:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterReceivingWater" }
+            effluentPaths:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterEffluentPath" }
+            effluentTreatmentLevels:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterEffluentTreatmentLevel" }
+            sludgePathways:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterSludgePathway" }
+            units:
+              type: array
+              items: { $ref: "#/components/schemas/WastewaterUnit" }
+        capabilityMatrix: { $ref: "#/components/schemas/WastewaterCapabilityMatrix" }
+        landfillSites: { $ref: "#/components/schemas/WastewaterLandfillSites" }
+        reasonCodes:
+          type: array
+          items: { $ref: "#/components/schemas/CalculationReasonCode" }
+        warningCodes:
+          type: array
+          items: { $ref: "#/components/schemas/CalculationWarningCode" }
     ProjectSetup:
       type: object
       required: [name, slug, country, territory, referenceYear, inventoryYears, applicability]
@@ -483,11 +897,442 @@ components:
       required: [data]
       properties:
         data: { $ref: "#/components/schemas/ProjectSnapshot" }
+    CurrentInventoryResultResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [id, calculationRunId, resultRows, context, warnings, reportingLines, createdAt]
+          properties:
+            id: { type: string }
+            calculationRunId: { type: string }
+            resultRows: { $ref: "#/components/schemas/JsonObject" }
+            context: { $ref: "#/components/schemas/JsonObject" }
+            warnings:
+              type: array
+              items: { $ref: "#/components/schemas/CalculationWarning" }
+            reportingLines:
+              type: array
+              items: { $ref: "#/components/schemas/ReportingLine" }
+            createdAt: { type: string, format: date-time }
+    ReportingLine:
+      type: object
+      required: [key, values]
+      properties:
+        key:
+          type: string
+          description: Standard report key or a source-derived operator/absorption key.
+        label:
+          type: string
+          description: Display name supplied for source-derived detail lines.
+        values:
+          type: object
+          additionalProperties:
+            oneOf:
+              - { type: number }
+              - { type: string, enum: [NE] }
     InventoryInputRequest:
       type: object
       required: [inventoryInput]
       properties:
         inventoryInput: { $ref: "#/components/schemas/JsonObject" }
+    DebugCalculationRequest:
+      type: object
+      required: [datasetKey, inventoryInput]
+      properties:
+        datasetKey: { type: string, minLength: 1 }
+        inventoryInput: { $ref: "#/components/schemas/JsonObject" }
+    CalculationWarning:
+      type: object
+      required: [code, message]
+      properties:
+        code: { $ref: "#/components/schemas/CalculationWarningCode" }
+        itemId: { type: string }
+        path: { type: string }
+        message: { type: string }
+        details: { $ref: "#/components/schemas/JsonObject" }
+    ExplanationQuantity:
+      type: object
+      additionalProperties: false
+      required: [value, unit, role]
+      properties:
+        value: { type: number }
+        unit: { type: string }
+        role:
+          type: string
+          enum: [input, convertedActivity, gasMass, co2e, reportedQuantity]
+    InputProvenance:
+      type: object
+      additionalProperties: false
+      required: [path, raw, prepared, transformations]
+      properties:
+        path: { type: string }
+        raw: { $ref: "#/components/schemas/ExplanationQuantity" }
+        prepared: { $ref: "#/components/schemas/ExplanationQuantity" }
+        transformations:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [key, inputPaths, output]
+            properties:
+              key: { type: string }
+              inputPaths: { type: array, items: { type: string } }
+              output: { $ref: "#/components/schemas/ExplanationQuantity" }
+    ParameterRequirementTrace:
+      type: object
+      additionalProperties: false
+      required: [familyKey, year, selectors]
+      properties:
+        familyKey: { type: string }
+        year: { type: integer }
+        selectors:
+          type: object
+          additionalProperties: { type: string }
+    ParameterSelectionRule:
+      type: object
+      additionalProperties: false
+      required:
+        [kind, matchedSelectors, selectorFallbackIndex, requestedYear, selectedDataYear, yearBasis]
+      properties:
+        kind: { type: string }
+        matchedSelectors:
+          type: object
+          additionalProperties: { type: string }
+        selectorFallbackIndex: { type: integer, minimum: 0 }
+        requestedYear: { type: integer }
+        selectedDataYear: { type: integer, nullable: true }
+        yearBasis:
+          type: string
+          enum: [entryYear, validFromYear, validToYear, requestedYearProxy, validityRange]
+    ResolvedParameterTrace:
+      type: object
+      description: >-
+        Entry in the run's parameter snapshot. resolutionId identifies the requested
+        family, year, and canonical selectors, even if another request selects the same entry.
+      required: [resolutionId, requirement, selectionRule, parameterEntryId, value]
+      properties:
+        resolutionId: { type: string }
+        requirement: { $ref: "#/components/schemas/ParameterRequirementTrace" }
+        selectionRule: { $ref: "#/components/schemas/ParameterSelectionRule" }
+        parameterEntryId: { type: integer }
+        value: { type: number }
+        unit: { type: string, nullable: true }
+        selector: { type: object, additionalProperties: { type: string } }
+        applicability: { type: string, enum: [global, country-specific] }
+        country: { type: string, nullable: true }
+        year: { type: integer, nullable: true }
+        validFromYear: { type: integer, nullable: true }
+        validToYear: { type: integer, nullable: true }
+        gas: { type: string, nullable: true }
+        emissionScope: { type: string, nullable: true }
+        isDefault: { type: boolean }
+        sourceReference:
+          type: object
+          nullable: true
+    UnresolvedOptionalParameterTrace:
+      type: object
+      additionalProperties: false
+      required: [resolutionId, requirement, reason]
+      properties:
+        resolutionId: { type: string }
+        requirement: { $ref: "#/components/schemas/ParameterRequirementTrace" }
+        reason: { type: string, enum: [noEligibleEntry] }
+    ParameterSnapshotTrace:
+      type: object
+      additionalProperties: false
+      required: [requestedFamilies, items]
+      properties:
+        requestedFamilies: { type: array, items: { type: string } }
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/ResolvedParameterTrace" }
+        unresolvedOptional:
+          type: array
+          items: { $ref: "#/components/schemas/UnresolvedOptionalParameterTrace" }
+    FormulaOperandTrace:
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [kind, key]
+          properties:
+            kind: { type: string, enum: [input] }
+            key: { type: string }
+        - type: object
+          additionalProperties: false
+          required: [kind, stepKey]
+          properties:
+            kind: { type: string, enum: [step] }
+            stepKey: { type: string }
+        - type: object
+          additionalProperties: false
+          required: [kind, resolutionId]
+          properties:
+            kind: { type: string, enum: [parameter] }
+            resolutionId: { type: string }
+        - type: object
+          additionalProperties: false
+          required: [kind, key, quantity]
+          properties:
+            kind: { type: string, enum: [constant] }
+            key: { type: string }
+            quantity: { $ref: "#/components/schemas/ExplanationQuantity" }
+    FormulaStepTrace:
+      type: object
+      additionalProperties: false
+      required: [key, operation, operands, output]
+      properties:
+        key: { type: string }
+        operation:
+          { type: string, enum: [multiply, divide, sum, subtract, convert, exp, max, identity] }
+        operands:
+          type: array
+          items: { $ref: "#/components/schemas/FormulaOperandTrace" }
+        output: { $ref: "#/components/schemas/ExplanationQuantity" }
+        warningIds: { type: array, items: { type: string } }
+    ItemExplanationTrace:
+      type: object
+      additionalProperties: false
+      required: [itemId, year, method, input, steps, components]
+      properties:
+        itemId: { type: string }
+        year: { type: integer }
+        datasetKey: { type: string }
+        method: { type: string }
+        input:
+          type: object
+          additionalProperties: { $ref: "#/components/schemas/InputProvenance" }
+        steps:
+          type: array
+          items: { $ref: "#/components/schemas/FormulaStepTrace" }
+        components:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [key, componentId, itemId, year, quantity, stepKeys]
+            properties:
+              key: { type: string }
+              componentId: { type: string }
+              itemId: { type: string }
+              year: { type: integer }
+              quantity: { $ref: "#/components/schemas/ExplanationQuantity" }
+              stepKeys: { type: array, items: { type: string } }
+              sourceRowId: { type: string }
+        outcome:
+          type: object
+          additionalProperties: false
+          required: [kind, rule]
+          properties:
+            kind: { type: string, enum: [notEstimated] }
+            rule: { type: string }
+            warningIds: { type: array, items: { type: string } }
+    SourceRowLinkTrace:
+      type: object
+      additionalProperties: false
+      required: [sourceRowId, componentKey, itemId, year, rowKey, quantity]
+      properties:
+        sourceRowId: { type: string }
+        componentKey: { type: string }
+        itemId: { type: string }
+        year: { type: integer }
+        rowKey: { type: string }
+        quantity: { $ref: "#/components/schemas/ExplanationQuantity" }
+    AccountingAdjustmentTrace:
+      type: object
+      additionalProperties: false
+      required: [key, year, ownedSourceRowId, territorialSourceRowId, before, deduction, after]
+      properties:
+        key: { type: string }
+        year: { type: integer }
+        ownedSourceRowId: { type: string }
+        territorialSourceRowId: { type: string }
+        before: { $ref: "#/components/schemas/ExplanationQuantity" }
+        deduction: { $ref: "#/components/schemas/ExplanationQuantity" }
+        after: { $ref: "#/components/schemas/ExplanationQuantity" }
+    ReportingContributionTrace:
+      type: object
+      additionalProperties: false
+      required: [reportingLineKey, year, quantity]
+      properties:
+        reportingLineKey: { type: string }
+        year: { type: integer }
+        sourceRowId: { type: string }
+        quantity:
+          oneOf:
+            - { $ref: "#/components/schemas/ExplanationQuantity" }
+            - type: object
+              additionalProperties: false
+              required: [outcome, rule]
+              properties:
+                outcome: { type: string, enum: [NE] }
+                rule: { type: string }
+    CalculationExplanation:
+      type: object
+      description: Versioned explanation artifact for a successful calculation.
+      required:
+        [
+          schemaVersion,
+          submittedInput,
+          calculationContext,
+          items,
+          sourceRowLinks,
+          accountingAdjustments,
+          reportingContributions,
+        ]
+      properties:
+        schemaVersion: { type: integer, enum: [1] }
+        submittedInput: { $ref: "#/components/schemas/JsonObject" }
+        calculationContext: { $ref: "#/components/schemas/JsonObject" }
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/ItemExplanationTrace" }
+        sourceRowLinks:
+          type: array
+          items: { $ref: "#/components/schemas/SourceRowLinkTrace" }
+        accountingAdjustments:
+          type: array
+          items: { $ref: "#/components/schemas/AccountingAdjustmentTrace" }
+        reportingContributions:
+          type: array
+          items: { $ref: "#/components/schemas/ReportingContributionTrace" }
+    CalculationExplanationResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required:
+            [
+              runId,
+              schemaVersion,
+              calculationCodeDigest,
+              parameterSnapshot,
+              warnings,
+              items,
+              sourceRowLinks,
+              sourceRows,
+              accountingAdjustments,
+              reportingContributions,
+            ]
+          properties:
+            runId: { type: string }
+            schemaVersion: { type: integer, enum: [1] }
+            calculationCodeDigest: { type: string, pattern: "^sha256:[0-9a-f]{64}$" }
+            parameterSnapshot: { $ref: "#/components/schemas/ParameterSnapshotTrace" }
+            warnings:
+              type: array
+              items: { $ref: "#/components/schemas/CalculationWarning" }
+            submittedInput: { $ref: "#/components/schemas/JsonObject" }
+            calculationContext: { $ref: "#/components/schemas/JsonObject" }
+            items:
+              type: array
+              items: { $ref: "#/components/schemas/ItemExplanationTrace" }
+            sourceRowLinks:
+              type: array
+              items: { $ref: "#/components/schemas/SourceRowLinkTrace" }
+            sourceRows: { $ref: "#/components/schemas/JsonObject" }
+            accountingAdjustments:
+              type: array
+              items: { $ref: "#/components/schemas/AccountingAdjustmentTrace" }
+            reportingContributions:
+              type: array
+              items: { $ref: "#/components/schemas/ReportingContributionTrace" }
+            resultRows: { $ref: "#/components/schemas/JsonObject" }
+            energyRows: { $ref: "#/components/schemas/JsonObject" }
+            reportingLines:
+              type: array
+              items: { $ref: "#/components/schemas/ReportingLine" }
+    DebugCalculationResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required:
+            [
+              datasetKey,
+              resultRows,
+              energyRows,
+              parameterSnapshot,
+              calculationCodeDigest,
+              explanation,
+            ]
+          properties:
+            datasetKey: { type: string }
+            resultRows: { $ref: "#/components/schemas/JsonObject" }
+            energyRows: { $ref: "#/components/schemas/JsonObject" }
+            parameterSnapshot: { $ref: "#/components/schemas/JsonObject" }
+            calculationCodeDigest: { type: string, pattern: "^sha256:[0-9a-f]{64}$" }
+            explanation: { $ref: "#/components/schemas/CalculationExplanation" }
+            warnings:
+              type: array
+              items: { $ref: "#/components/schemas/CalculationWarning" }
+    CalculationResponse:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: object
+          required: [context, output, runData, resultData, persisted]
+          properties:
+            context: { $ref: "#/components/schemas/JsonObject" }
+            output: { $ref: "#/components/schemas/CalculationOutput" }
+            runData: { $ref: "#/components/schemas/JsonObject" }
+            resultData: { $ref: "#/components/schemas/StoredCalculationResultData" }
+            persisted: { $ref: "#/components/schemas/JsonObject" }
+    CalculationOutput:
+      type: object
+      additionalProperties: false
+      required: [energyRows, calculationCodeDigest, parameterSnapshot]
+      properties:
+        energyRows: { $ref: "#/components/schemas/JsonObject" }
+        calculationCodeDigest: { type: string, pattern: "^sha256:[0-9a-f]{64}$" }
+        parameterSnapshot: { $ref: "#/components/schemas/ParameterSnapshotTrace" }
+        warnings:
+          type: array
+          items: { $ref: "#/components/schemas/CalculationWarning" }
+    StoredCalculationResultData:
+      type: object
+      additionalProperties: false
+      required: [project, energyRows, context]
+      properties:
+        project: { type: integer }
+        energyRows: { $ref: "#/components/schemas/JsonObject" }
+        context: { $ref: "#/components/schemas/JsonObject" }
+    CalculationCannotRunReason:
+      type: object
+      required: [code]
+      properties:
+        code: { $ref: "#/components/schemas/CalculationReasonCode" }
+        path: { type: string }
+        paths:
+          type: array
+          items: { type: string }
+        parameterKey: { type: string }
+        year: { type: integer }
+        details: { $ref: "#/components/schemas/JsonObject" }
+    CalculationCannotRunResponse:
+      type: object
+      required: [data, error]
+      properties:
+        data: { type: object, nullable: true }
+        error:
+          type: object
+          required: [status, name, message, details]
+          properties:
+            status: { type: integer, enum: [422] }
+            name: { type: string, enum: [ApplicationError] }
+            message: { type: string, enum: [calculationCannotRun, debugCalculationCannotRun] }
+            details:
+              type: object
+              required: [datasetKey, reasons]
+              properties:
+                datasetKey: { type: string }
+                reasons:
+                  type: array
+                  items: { $ref: "#/components/schemas/CalculationCannotRunReason" }
     InventorySaveProject:
       type: object
       required: [id, slug, currentInventoryId, updatedAt]

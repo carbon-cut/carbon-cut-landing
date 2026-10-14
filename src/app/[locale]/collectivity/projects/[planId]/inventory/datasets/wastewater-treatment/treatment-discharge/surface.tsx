@@ -52,6 +52,11 @@ function TreatmentCell({
     control: form.control,
     name: `${baseName}.${row.index}.effluentPath` as TName<InventoryFormValues>,
   });
+  const methaneRecovery = useWatch({
+    control: form.control,
+    name: `${baseName}.${row.index}.value.methaneRecovery.value.y-${selectedYear}` as TName<InventoryFormValues>,
+    disabled: selectedYear === undefined,
+  });
   const direct = system === "aquaticDischarge";
   const automatic = wastewaterSanitation.automaticEffluentDefaultSystemValues.includes(
     system as never
@@ -109,6 +114,12 @@ function TreatmentCell({
           "treatment.effluentTreatmentLevels"
         );
   if (!wastewaterSanitation.organicLoadKeys.includes(loadType as never)) return null;
+  if (
+    column.key === "methaneRecovery" &&
+    !wastewaterSanitation.methaneRecoverySystemValues.includes(system as never) &&
+    (methaneRecovery === undefined || methaneRecovery === "")
+  )
+    return null;
   if (column.key === "sludgeRemoved" && !supportsSludge) return null;
   if (column.key === "populationAllocation" && loadType !== "domestic") return null;
   if (column.key === "outgoingLoad" && !automatic && effluentPath !== "measuredOutgoingLoad")

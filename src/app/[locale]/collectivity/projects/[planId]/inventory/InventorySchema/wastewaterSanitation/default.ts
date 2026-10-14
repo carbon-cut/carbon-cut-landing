@@ -15,6 +15,9 @@ export function wastewaterSanitationDefault(years: readonly number[]) {
     },
     sludgeDestination: {
       dataSet: [],
+      landfillSites: {
+        dataSet: [],
+      },
     },
     populationFallback: {
       dataSet: {

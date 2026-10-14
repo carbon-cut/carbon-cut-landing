@@ -155,22 +155,32 @@ export default {
           "buildings energy data",
           "territorial data collection",
         ],
+        soon: "soon",
       },
     },
   },
   collectivityLanding: {
     nav: {
-      prototype: "Prototype",
-      setup: "Setup",
+      product: "Product",
+      methodology: "Methodology",
+      contact: "Contact",
+      language: "Language",
+    },
+    footerLinks: {
+      explore: "Explore",
+      account: "Your account",
+      projects: "Open my projects",
+      subscription: "Manage subscription",
     },
     hero: {
-      badge: "Municipal prototype",
+      badge: "Community prototype",
       title: {
-        text: "Build a {inventory} you can understand, explain and improve over time.",
-        highlight: "municipal GHG inventory",
+        text: "Turn {data} into a clear basis for {action}.",
+        dataHighlight: "local territorial data",
+        actionHighlight: "action",
       },
       description:
-        "Carbon Cut helps municipalities turn energy, transport, agriculture, wastewater and other local activity data into a structured emissions inventory — with every result traceable to its data, parameters and sources.",
+        "Carbon Cut helps communities organise local territorial data, calculate and understand emissions, and build on that work over time.",
       imageAlt: "Landscape illustrating the Carbon Cut municipality entrance",
       primaryCta: {
         label: "View pricing",
@@ -178,36 +188,90 @@ export default {
       },
       secondaryCta: {
         label: "Request prototype access",
-        aria: "Request access to the municipality prototype",
+        aria: "Request access to the community prototype",
       },
     },
-    proof: {
-      badge: "What this version covers",
-      title: "A simple entry point before the workspace.",
+    screenshot: {
+      alt: "Screenshot of a municipal project's emissions results, with summary metrics and a GHG emissions chart.",
+    },
+    afatSection: {
+      title: "Understand the different emission sources across your territory.",
       description:
-        "This page remains deliberately minimal: it presents the prototype, clarifies its current scope and leads to the configuration, without promising a complete municipal platform.",
-      points: {
-        territory: {
-          title: "Define the perimeter",
-          description:
-            "Setup begins with territory, inventory years, and basic information needed before entry.",
+        "Energy, transport, agriculture, wastewater, waste and other local activities can be analysed within one framework.",
+      imageAlt: "AFOLU emissions chart showing agriculture, crops, waste and tree categories.",
+      municipalAssetsImageAlt: "Municipal assets emissions chart.",
+    },
+    references: {
+      title: "Built on recognised climate-accounting references.",
+      description:
+        "Carbon Cut incorporates methods, parameters and concepts derived from recognised international references.",
+      ipcc: "IPCC / GIEC",
+      jrc: "JRC",
+      ghgProtocol: "GHG Protocol for Cities (GPC)",
+      ireBei: "IRE / BEI approaches",
+    },
+    validation: {
+      title: "Tested against real territorial inventory work.",
+      claim:
+        "The calculation engine is developed and checked against actual territorial datasets and reference calculations, including the Grand Sfax case — not only theoretical examples. This is ongoing validation, not an external certification.",
+      cardTitle: "Grand Sfax · validation log",
+      caseStudy: "Case study",
+      columns: {
+        sector: "Sector",
+        comparedAgainst: "Compared against",
+        status: "Status",
+      },
+      rows: {
+        stationaryEnergy: { sector: "Stationary energy" },
+        transport: { sector: "Transport" },
+        afolu: { sector: "AFOLU" },
+        wastewater: { sector: "Waste & wastewater" },
+      },
+      referenceCalculation: "Reference calculation",
+      municipalDatasets: "Territorial datasets",
+      compared: "Compared",
+      footnote:
+        "Illustrative structure. Comparison is part of ongoing development, not a certification.",
+    },
+    coverageCountries: {
+      title: "Supporting municipalities across countries",
+      description: "Explore the countries supported by Carbon Cut for emissions calculations.",
+      mapLabel: "Countries supported by Carbon Cut",
+    },
+    inventoryFlow: {
+      connectionsLabel: "Municipal data sources connected to a greenhouse gas inventory",
+      sources: {
+        energy: { title: "Electricity & energy consumption", detail: "Utility exports, .xlsx" },
+        buildings: { title: "Municipal buildings", detail: "Meter readings" },
+        lighting: { title: "Public lighting", detail: "Inventory of lighting points" },
+        fleet: { title: "Fleet & transport", detail: "Fuel logs" },
+        agriculture: { title: "Agricultural statistics", detail: "Regional agriculture office" },
+        wastewater: { title: "Wastewater & other local datasets", detail: "Operator reports" },
+      },
+      output: {
+        title: "Territorial GHG inventory",
+        year: "2025",
+        status: "Structured",
+        columns: { sector: "Sector", emissions: "tCO₂e" },
+        rows: {
+          stationaryEnergy: { label: "Stationary energy", value: "512,300" },
+          residentialBuildings: { label: "Residential buildings", value: "278,336" },
+          municipalBuildings: { label: "Municipal buildings & lighting", value: "21,650" },
+          transport: { label: "Transport", value: "398,700" },
+          municipalFleet: { label: "Municipal fleet", value: "4,870" },
+          afolu: { label: "AFOLU", value: "214,900" },
+          wastewater: { label: "Waste & wastewater", value: "121,280" },
+          industry: { label: "Industrial processes", value: "37,420" },
         },
-        inventory: {
-          title: "Prepare the collection",
-          description:
-            "The prototype structures the data families to facilitate the rest of the inventory work.",
-        },
-        review: {
-          title: "Stay in proof of concept",
-          description:
-            "The current version shows a product direction, with a limited scope and still improving.",
-        },
+        total: "Total",
+        totalValue: "1,284,600",
+        note: "Illustrative data",
       },
     },
     cta: {
-      title: "Start by setting up the territory.",
+      title: "Give your community a lasting foundation for guiding its climate action.",
       description:
-        "For this first version, the call to action leads to the configuration module for your municipality.",
+        "Bring together the data, analyses and decisions that help you understand your territory, set priorities and track progress over time.",
       primaryCta: {
         label: "Access configuration",
         aria: "Access the municipality configuration",
@@ -1044,9 +1108,10 @@ export default {
       ],
     },
     footer: {
+      copyright: "© 2026 Carbon Cut. All rights reserved.",
       brand: {
         name: "Carbon Cut",
-        description: "Personal carbon dashboard to track, understand and reduce your emissions.",
+        description: "Structured, traceable and reusable municipal greenhouse-gas inventories.",
       },
       headings: {
         quickLinks: "Quick links",
@@ -1259,6 +1324,13 @@ export default {
         text: "Need additional help?",
         linkText: "Visit the Contact page.",
       },
+      underDevelopment: {
+        title: "The Help Center is under development",
+        description:
+          "We’re preparing the Help Center. In the meantime, contact us if you need help.",
+        primaryButton: "Back to home",
+        secondaryButton: "Contact us",
+      },
     },
     collectivityDashboard: {
       header: {
@@ -1357,7 +1429,7 @@ export default {
           errorTitle: "Unable to load GHG emissions graph",
           series: {
             energy: "Energy",
-            afatEmissions: "AFAT (emissions)",
+            afatEmissions: "AFOLU (emissions)",
             waste: "Waste",
             absorptions: "Absorptions",
             totalGrossEmissions: "Total gross emissions",
@@ -1375,7 +1447,7 @@ export default {
           },
         },
         territorialEnergyChart: {
-          title: "Details of broadcasts",
+          title: "Emissions details",
           description: "By category, source and sector.",
           ariaLabel: "Graph of territorial energy emissions by source and sector",
           tabListAriaLabel: "Emission Detail Categories",
@@ -1398,11 +1470,11 @@ export default {
           transportTab: "Transportation",
           transportAriaLabel: "Graph of transport emissions by owner",
           transportErrorTitle: "Unable to load transport emissions graph",
-          afatTab: "AFAT",
-          afatAriaLabel: "AFAT graph by breeding, crops and tree absorptions",
-          afatErrorTitle: "Unable to load AFAT chart",
+          afatTab: "AFOLU",
+          afatAriaLabel: "AFOLU graph by Animal Husbandry, crops and tree absorptions",
+          afatErrorTitle: "Unable to load AFOLU chart",
           afatSeries: {
-            livestock: "Breeding",
+            livestock: "Animal Husbandry",
             crops: "Crops",
             urbanTrees: "Urban trees",
           },
@@ -1412,7 +1484,7 @@ export default {
         },
         summaryCards: {
           ariaLabel: "Main results indicators",
-          emissions: "Broadcasts",
+          emissions: "Emissions",
           netEmissions: "Net emissions",
           absorptions: "Absorptions",
           emissionsPerCapita: "Emissions per capita",
@@ -1420,6 +1492,40 @@ export default {
           unavailable: "Comparison unavailable",
           noData: "Data unavailable",
           errorTitle: "Unable to load indicator",
+        },
+        reportingLines: {
+          title: "Reporting lines",
+          line: "Reporting line",
+          exportCsv: "Export CSV",
+          notEstimated: "NE",
+          labels: {
+            municipalHeritage: "Municipal heritage",
+            navigation: "Navigation",
+            terrestrialTransport: "Terrestrial transport",
+            soretras: "Soretras",
+            nationalAirTransport: "National air transport",
+            airportGroundElectricity: "Airport ground electricity",
+            industryElectricity: "Industry electricity",
+            industryThermal: "Industry thermal energy",
+            residentialElectricity: "Residential electricity",
+            residentialGplAndGas: "Residential LPG and gas",
+            tertiaryElectricity: "Tertiary electricity",
+            tertiaryGplAndGas: "Tertiary LPG and gas",
+            tourismElectricity: "Tourism electricity",
+            tourismNaturalGas: "Tourism natural gas",
+            pumpingElectricity: "Pumping electricity",
+            agricultureElectricity: "Agriculture electricity",
+            sanitation: "Sanitation",
+            greenWaste: "Green waste",
+            householdWaste: "Household waste",
+            livestock: "Livestock",
+            crops: "Crops",
+            grossEmissions: "Gross emissions",
+            absorptions: "Absorptions",
+            urbanTrees: "Urban trees",
+            oliveOrchards: "Olive orchards",
+            fruitTrees: "Fruit trees",
+          },
         },
       },
       moduleStructure: {
@@ -1595,7 +1701,7 @@ export default {
               agriculture: {
                 label: "Agriculture",
                 helper:
-                  "Activates AFAT sections related to production and agricultural activities.",
+                  "Activates AFOLU sections related to production and agricultural activities.",
               },
             },
           },
@@ -1634,6 +1740,11 @@ export default {
         description:
           "Four modules visible at startup: configuration, inventory, scenarios and action plan. Entry routes remain non-modular.",
         projects: "My projects",
+      },
+      profilePopover: {
+        subscription: "My subscription",
+        projects: "My projects",
+        help: "Help",
       },
       planMarkers: {
         territory: "Reference territory",
@@ -2223,6 +2334,7 @@ export default {
                   organicLoad: "Organic load",
                   sludgeRemoved: "Organic load removed in sludge (S)",
                   nitrogen: "Nitrogen from wastewater",
+                  outgoingNitrogen: "Outgoing nitrogen",
                   methaneRecovery: "Methane recovered",
                   populationAllocation: "Share of domestic BOD treated by this system",
                   effluentPath: "Treated effluent data",
@@ -2239,6 +2351,7 @@ export default {
                 receivingWater: {
                   otherAquatic: "Other aquatic environment",
                   reservoirLakeEstuary: "Reservoir, lake or estuary",
+                  unknown: "Unknown receiving water",
                 },
                 effluentPaths: {
                   measuredOutgoingLoad: "Outgoing organic load measured",
@@ -2279,6 +2392,9 @@ export default {
                   sludgeRemovedLabel: "Information on load removed in sludge",
                   nitrogen: "Optional: enter the annual nitrogen only if it is known.",
                   nitrogenLabel: "Nitrogen Information",
+                  outgoingNitrogen:
+                    "Enter the annual nitrogen leaving the constructed wetland when known.",
+                  outgoingNitrogenLabel: "Outgoing nitrogen information",
                   methaneRecovery: "Optional: leave blank if no methane is recovered.",
                   methaneRecoveryLabel: "Information on recovered methane",
                   populationAllocation:
@@ -2357,6 +2473,24 @@ export default {
                   notEstimated: "Destination not estimated",
                 },
                 withinMunicipalBoundary: { true: "Yes", false: "No" },
+                options: {
+                  sludgeType: {
+                    domestic: "Domestic sludge",
+                    industrial: "Industrial sludge",
+                  },
+                  climate: {
+                    temperateDry: "Temperate dry",
+                    temperateWet: "Temperate wet",
+                    tropicalDry: "Tropical dry",
+                    tropicalWet: "Tropical wet",
+                  },
+                  landfillSiteType: {
+                    managedAnaerobic: "Managed anaerobic site",
+                    unmanagedDeep: "Unmanaged deep site",
+                    unmanagedShallow: "Unmanaged shallow site",
+                    uncategorised: "Uncategorised site",
+                  },
+                },
                 help: {
                   mass: "Indicate the annual mass of wet sludge. It is independent of the organic load removed in the sludge (S).",
                   massLabel: "Information on sludge mass",
@@ -2375,6 +2509,55 @@ export default {
                   withinMunicipalBoundary:
                     "Indicate whether this sludge destination is located within the municipal perimeter.",
                   withinMunicipalBoundaryLabel: "Information on the municipal perimeter",
+                },
+                history: {
+                  title: "Landfill site history",
+                  description:
+                    "Enter annual quantities from each site's commissioning year, including explicit zero years.",
+                  add: "Add a site",
+                  remove: "Remove site",
+                  fields: {
+                    landfillIdentifier: "Site identifier",
+                    commissioningYear: "Commissioning year",
+                    climate: "Climate",
+                    landfillSiteType: "Site type",
+                    oxidationCover: "Oxidation cover",
+                  },
+                  help: {
+                    commissioningYear:
+                      "History starts at the commissioning year, even when it predates the inventory.",
+                    oxidationCover:
+                      "Indicate whether the managed site is covered with methane-oxidising material.",
+                  },
+                  options: {
+                    climate: {
+                      temperateDry: "Temperate dry",
+                      temperateWet: "Temperate wet",
+                      tropicalDry: "Tropical dry",
+                      tropicalWet: "Tropical wet",
+                    },
+                    landfillSiteType: {
+                      managedAnaerobic: "Managed anaerobic site",
+                      unmanagedDeep: "Unmanaged deep site",
+                      unmanagedShallow: "Unmanaged shallow site",
+                      uncategorised: "Uncategorised site",
+                    },
+                    oxidationCover: {
+                      noneOrUnspecified: "None or unspecified",
+                      managedCoveredWithOxidizingMaterial: "Managed site with oxidising material",
+                    },
+                  },
+                  columns: {
+                    year: "Year",
+                    domestic: "Domestic sludge",
+                    industrial: "Industrial sludge",
+                    methaneRecovery: "Methane recovered",
+                  },
+                  aria: {
+                    domestic: "Domestic sludge in {year}",
+                    industrial: "Industrial sludge in {year}",
+                    methaneRecovery: "Methane recovered in {year}",
+                  },
                 },
               },
               fallback: {
@@ -2799,7 +2982,7 @@ export default {
             implementationNote: "The panel combines monitored crops and fruit trees.",
           },
           livestock: {
-            title: "Breeding",
+            title: "Livestock",
             description: "AFAT game quotes, still without product field contract.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO temporality and classifications.",
@@ -2807,10 +2990,10 @@ export default {
           },
           fertilizers: {
             title: "Fertilizer",
-            description: "AFAT game quotes, still in provisional block produced.",
+            description: "AFOLU game quotes, still in provisional block produced.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO annual logic and scope.",
-            implementationNote: "Voluntary AFAT placeholder.",
+            implementationNote: "Voluntary AFOLU placeholder.",
           },
         },
       },
@@ -3353,9 +3536,10 @@ export default {
     },
     contact: {
       badge: "Contact",
+      eyebrow: "Support & contact",
       title: "Contact the Carbon Cut team",
       description:
-        "Send your request via the form below. Processing is done by email during the testing phase.",
+        "Have a question, feedback, or need help? Write to us directly or fill out the form. We’ll reply within 48 business hours.",
       emailLabel: "Direct contact",
       responseTime: "Response generally within 24 to 48 working hours.",
       checklistTitle: "This page is for sending a clear request with:",
@@ -3369,12 +3553,15 @@ export default {
       scopeDescription:
         "This page is for users of the personal journey under test (transport and household energy).",
       form: {
+        title: "Contact form",
+        description: "All fields are required so we can process your request.",
         name: "Name",
         email: "Email",
         topic: "Subject",
         message: "Message",
         submit: "Send request",
-        notLive: "The form is in place, sending will be activated soon.",
+        success: "Your message has been sent.",
+        error: "We couldn't send your message. Please try again.",
       },
       actions: {
         goHelp: "Go to help center",

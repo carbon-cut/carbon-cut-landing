@@ -262,7 +262,7 @@ export function BrowserWindow({
       ? "bg-background border-border"
       : theme === "light"
         ? "bg-background border-border"
-        : "bg-background border-border";
+        : "bg-card border-border";
 
   const getHeaderStyles = () => {
     const baseStyles = "h-11 border-b border-foreground/5 flex items-center px-4";

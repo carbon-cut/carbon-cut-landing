@@ -14,14 +14,14 @@ export default async function CollectivityResultPocPage({
 
   await requireCollectivityPlanSession({
     requestedPlanId: planId,
-    returnTo: `/collectivity/${planId}/result/poc`,
+    returnTo: `/collectivity/projects/${planId}/result/poc`,
   });
 
   return (
     <>
-      <Typography asChild size="lg" variant="title">
+      {/* <Typography asChild size="lg" variant="title">
         <h1>{t("title")}</h1>
-      </Typography>
+      </Typography> */}
       <ResultRouteClient projectSlug={planId} />
     </>
   );

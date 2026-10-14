@@ -98,6 +98,10 @@ export type CollectivityInventoryCalculationResult = {
     population: Partial<Record<CollectivityResultYearKey, { value: number; unit: "capita" }>>;
   };
   warnings: CollectivityCalculationWarning[];
+  reportingLines: Array<{
+    key: string;
+    values: Record<string, number | "NE">;
+  }>;
   createdAt: string;
 };
 

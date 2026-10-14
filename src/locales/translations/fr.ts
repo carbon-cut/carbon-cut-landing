@@ -157,22 +157,32 @@ export default {
           "buildings energy data",
           "territorial data collection",
         ],
+        soon: "À venir",
       },
     },
   },
   collectivityLanding: {
     nav: {
-      prototype: "Prototype",
-      setup: "Configuration",
+      product: "Produit",
+      methodology: "Méthodologie",
+      contact: "Contact",
+      language: "Langue",
+    },
+    footerLinks: {
+      explore: "Découvrir",
+      account: "Votre espace",
+      projects: "Ouvrir mes projets",
+      subscription: "Gérer mon abonnement",
     },
     hero: {
-      badge: "Prototype collectivité",
+      badge: "Prototype communal",
       title: {
-        text: "Construisez un {inventory} que vous pouvez comprendre, expliquer et améliorer au fil du temps.",
-        highlight: "inventaire carbone municipal",
+        text: "Faites des {data} une base claire pour {action}.",
+        dataHighlight: "données territoriales locales",
+        actionHighlight: "agir",
       },
       description:
-        "Carbon Cut aide les municipalités à transformer leurs données locales sur l’énergie, les transports, l’agriculture, les eaux usées et d’autres activités en un inventaire structuré des émissions — chaque résultat restant relié à ses données, paramètres et sources.",
+        "Carbon Cut aide les communes à organiser leurs données territoriales locales, à calculer et comprendre leurs émissions, et à faire évoluer ce travail dans le temps.",
       imageAlt: "Paysage illustrant l'entrée collectivité de Carbon Cut",
       primaryCta: {
         label: "Voir le catalogue",
@@ -180,36 +190,101 @@ export default {
       },
       secondaryCta: {
         label: "Demander un accès au prototype",
-        aria: "Demander un accès au prototype collectivité",
+        aria: "Demander un accès au prototype communal",
       },
     },
-    proof: {
-      badge: "Ce que couvre cette version",
-      title: "Un point d'entrée simple avant l'espace de travail.",
+    screenshot: {
+      alt: "Capture d’écran des résultats d’émissions d’un projet de collectivité, avec des indicateurs clés et un graphique des émissions de GES.",
+    },
+    afatSection: {
+      title: "Comprenez les différentes sources d’émissions sur votre territoire.",
       description:
-        "Cette page reste volontairement minimale : elle présente le prototype, clarifie son périmètre actuel et mène vers la configuration, sans promettre une plateforme collectivité complète.",
-      points: {
-        territory: {
-          title: "Définir le périmètre",
-          description:
-            "La configuration commence par le territoire, les années d'inventaire et les informations de base nécessaires avant la saisie.",
+        "L’énergie, les transports, l’agriculture, les eaux usées, les déchets et les autres activités locales peuvent être analysés dans un même cadre.",
+      imageAlt:
+        "Graphique des émissions AFAT par catégories agricoles, cultures, déchets et arbres.",
+      municipalAssetsImageAlt: "Graphique des émissions des actifs de la collectivité.",
+    },
+    references: {
+      title: "Fondé sur des références reconnues en comptabilité climatique.",
+      description:
+        "Carbon Cut intègre des méthodes, des paramètres et des concepts issus de références internationales reconnues.",
+      ipcc: "IPCC / GIEC",
+      jrc: "JRC",
+      ghgProtocol: "GHG Protocol for Cities (GPC)",
+      ireBei: "Approches IRE / BEI",
+    },
+    validation: {
+      title: "Mis à l’épreuve de travaux réels d’inventaire communal.",
+      claim:
+        "Le moteur de calcul est développé et vérifié à partir de jeux de données communaux réels et de calculs de référence, notamment le cas du Grand Sfax — et pas uniquement d’exemples théoriques. Cette validation est en cours et ne constitue pas une certification externe.",
+      cardTitle: "Grand Sfax · journal de validation",
+      caseStudy: "Étude de cas",
+      columns: {
+        sector: "Secteur",
+        comparedAgainst: "Comparé à",
+        status: "Statut",
+      },
+      rows: {
+        stationaryEnergy: { sector: "Énergie stationnaire" },
+        transport: { sector: "Transports" },
+        afolu: { sector: "AFAT" },
+        wastewater: { sector: "Déchets et eaux usées" },
+      },
+      referenceCalculation: "Calcul de référence",
+      municipalDatasets: "Données communales",
+      compared: "Comparé",
+      footnote:
+        "Structure illustrative. La comparaison s’inscrit dans un travail de développement en cours et ne constitue pas une certification.",
+    },
+    coverageCountries: {
+      title: "Au service des collectivités dans plusieurs pays",
+      description: "Découvrez les pays pris en charge par Carbon Cut pour le calcul des émissions.",
+      mapLabel: "Pays pris en charge par Carbon Cut",
+    },
+    inventoryFlow: {
+      connectionsLabel:
+        "Sources de données municipales reliées à un inventaire des émissions de gaz à effet de serre",
+      sources: {
+        energy: {
+          title: "Consommation d’électricité et d’énergie",
+          detail: "Exports des fournisseurs, .xlsx",
         },
-        inventory: {
-          title: "Préparer la collecte",
-          description:
-            "Le prototype structure les familles de données pour faciliter la suite du travail d'inventaire.",
+        buildings: { title: "Bâtiments municipaux", detail: "Relevés de compteurs" },
+        lighting: { title: "Éclairage public", detail: "Inventaire des points lumineux" },
+        fleet: { title: "Flotte et transports", detail: "Registres de carburant" },
+        agriculture: {
+          title: "Statistiques agricoles",
+          detail: "Direction régionale de l’agriculture",
         },
-        review: {
-          title: "Rester en preuve de concept",
-          description:
-            "La version actuelle montre une direction produit, avec un périmètre limité et encore en amélioration.",
+        wastewater: {
+          title: "Eaux usées et autres données locales",
+          detail: "Rapports des opérateurs",
         },
+      },
+      output: {
+        title: "Inventaire communal des GES",
+        year: "2025",
+        status: "Structuré",
+        columns: { sector: "Secteur", emissions: "t éq. CO₂" },
+        rows: {
+          stationaryEnergy: { label: "Énergie stationnaire", value: "512 300" },
+          residentialBuildings: { label: "Bâtiments résidentiels", value: "278 336" },
+          municipalBuildings: { label: "Bâtiments municipaux et éclairage", value: "21 650" },
+          transport: { label: "Transports", value: "398 700" },
+          municipalFleet: { label: "Flotte municipale", value: "4 870" },
+          afolu: { label: "AFAT", value: "214 900" },
+          wastewater: { label: "Déchets et eaux usées", value: "121 280" },
+          industry: { label: "Procédés industriels", value: "37 420" },
+        },
+        total: "Total",
+        totalValue: "1 284 600",
+        note: "Données illustratives",
       },
     },
     cta: {
-      title: "Commencez par configurer le territoire.",
+      title: "Donnez à votre commune une base durable pour piloter son action.",
       description:
-        "Pour cette première version, l'appel à l'action mène vers le module de configuration associé à votre collectivité.",
+        "Centralisez les données, les analyses et les décisions qui permettent de comprendre le territoire, définir les priorités et suivre les progrès dans le temps.",
       primaryCta: {
         label: "Accéder à la configuration",
         aria: "Accéder à la configuration de la collectivité",
@@ -1052,10 +1127,11 @@ export default {
       ],
     },
     footer: {
+      copyright: "© 2026 Carbon Cut. Tous droits réservés.",
       brand: {
         name: "Carbon Cut",
         description:
-          "Tableau de bord carbone personnel pour suivre, comprendre et réduire vos émissions.",
+          "Des inventaires municipaux de gaz à effet de serre structurés, traçables et réutilisables.",
       },
       headings: {
         quickLinks: "Liens rapides",
@@ -1269,6 +1345,13 @@ export default {
         text: "Besoin d'aide supplémentaire ?",
         linkText: "Consultez la page Contact.",
       },
+      underDevelopment: {
+        title: "Le centre d’aide est en cours de préparation",
+        description:
+          "Nous préparons le centre d’aide. En attendant, contactez-nous si vous avez besoin d’aide.",
+        primaryButton: "Retour à l’accueil",
+        secondaryButton: "Nous contacter",
+      },
     },
     collectivityDashboard: {
       header: {
@@ -1431,6 +1514,40 @@ export default {
           unavailable: "Comparaison indisponible",
           noData: "Données indisponibles",
           errorTitle: "Impossible de charger l'indicateur",
+        },
+        reportingLines: {
+          title: "Lignes de reporting",
+          line: "Ligne de reporting",
+          exportCsv: "Exporter en CSV",
+          notEstimated: "NE",
+          labels: {
+            municipalHeritage: "Patrimoine municipal",
+            navigation: "Navigation",
+            terrestrialTransport: "Transport terrestre",
+            soretras: "Soretras",
+            nationalAirTransport: "Transport aérien national",
+            airportGroundElectricity: "Électricité au sol de l'aéroport",
+            industryElectricity: "Électricité de l'industrie",
+            industryThermal: "Énergie thermique de l'industrie",
+            residentialElectricity: "Électricité résidentielle",
+            residentialGplAndGas: "GPL et gaz résidentiels",
+            tertiaryElectricity: "Électricité tertiaire",
+            tertiaryGplAndGas: "GPL et gaz tertiaires",
+            tourismElectricity: "Électricité du tourisme",
+            tourismNaturalGas: "Gaz naturel du tourisme",
+            pumpingElectricity: "Électricité de pompage",
+            agricultureElectricity: "Électricité agricole",
+            sanitation: "Assainissement",
+            greenWaste: "Déchets verts",
+            householdWaste: "Déchets ménagers",
+            livestock: "Élevage",
+            crops: "Cultures",
+            grossEmissions: "Émissions brutes",
+            absorptions: "Absorptions",
+            urbanTrees: "Arbres urbains",
+            oliveOrchards: "Oliveraies",
+            fruitTrees: "Arbres fruitiers",
+          },
         },
       },
       moduleStructure: {
@@ -1656,6 +1773,11 @@ export default {
         description:
           "Quatre modules visibles au démarrage : configuration, inventaire, scénarios et plan d'action. Les routes d'entrée restent non modulaires.",
         projects: "Mes projets",
+      },
+      profilePopover: {
+        subscription: "Mon abonnement",
+        projects: "Mes projets",
+        help: "Aide",
       },
       planMarkers: {
         territory: "Territoire de référence",
@@ -2248,6 +2370,7 @@ export default {
                   organicLoad: "Charge organique",
                   sludgeRemoved: "Charge organique retirée dans les boues (S)",
                   nitrogen: "Azote des eaux usées",
+                  outgoingNitrogen: "Azote sortant",
                   methaneRecovery: "Méthane récupéré",
                   populationAllocation: "Part de la DBO domestique traitée par ce système",
                   effluentPath: "Données sur l'effluent traité",
@@ -2263,6 +2386,7 @@ export default {
                 receivingWater: {
                   otherAquatic: "Autre milieu aquatique",
                   reservoirLakeEstuary: "Réservoir, lac ou estuaire",
+                  unknown: "Milieu récepteur inconnu",
                 },
                 effluentPaths: {
                   measuredOutgoingLoad: "Charge organique sortante mesurée",
@@ -2303,6 +2427,9 @@ export default {
                   sludgeRemovedLabel: "Information sur la charge retirée dans les boues",
                   nitrogen: "Facultatif : renseignez l'azote annuel seulement s'il est connu.",
                   nitrogenLabel: "Information sur l'azote",
+                  outgoingNitrogen:
+                    "Renseignez l'azote annuel sortant de la zone humide lorsqu'il est connu.",
+                  outgoingNitrogenLabel: "Information sur l'azote sortant",
                   methaneRecovery: "Facultatif : laissez vide si aucun méthane n'est récupéré.",
                   methaneRecoveryLabel: "Information sur le méthane récupéré",
                   populationAllocation:
@@ -2380,6 +2507,24 @@ export default {
                   notEstimated: "Destination non estimée",
                 },
                 withinMunicipalBoundary: { true: "Oui", false: "Non" },
+                options: {
+                  sludgeType: {
+                    domestic: "Boues domestiques",
+                    industrial: "Boues industrielles",
+                  },
+                  climate: {
+                    temperateDry: "Tempéré sec",
+                    temperateWet: "Tempéré humide",
+                    tropicalDry: "Tropical sec",
+                    tropicalWet: "Tropical humide",
+                  },
+                  landfillSiteType: {
+                    managedAnaerobic: "Site géré anaérobie",
+                    unmanagedDeep: "Site non géré profond",
+                    unmanagedShallow: "Site non géré peu profond",
+                    uncategorised: "Site non catégorisé",
+                  },
+                },
                 help: {
                   mass: "Indiquez la masse annuelle de boues humides. Elle est indépendante de la charge organique retirée dans les boues (S).",
                   massLabel: "Information sur la masse de boues",
@@ -2399,6 +2544,55 @@ export default {
                   withinMunicipalBoundary:
                     "Indiquez si cette destination des boues est située dans le périmètre municipal.",
                   withinMunicipalBoundaryLabel: "Information sur le périmètre municipal",
+                },
+                history: {
+                  title: "Historique des sites d'enfouissement",
+                  description:
+                    "Renseignez les quantités annuelles depuis la mise en service de chaque site, y compris les années à zéro.",
+                  add: "Ajouter un site",
+                  remove: "Supprimer le site",
+                  fields: {
+                    landfillIdentifier: "Identifiant du site",
+                    commissioningYear: "Année de mise en service",
+                    climate: "Climat",
+                    landfillSiteType: "Type de site",
+                    oxidationCover: "Couverture oxydante",
+                  },
+                  help: {
+                    commissioningYear:
+                      "L'historique commence à l'année de mise en service, même si elle précède l'inventaire.",
+                    oxidationCover:
+                      "Indiquez si le site géré est couvert par un matériau favorisant l'oxydation du méthane.",
+                  },
+                  options: {
+                    climate: {
+                      temperateDry: "Tempéré sec",
+                      temperateWet: "Tempéré humide",
+                      tropicalDry: "Tropical sec",
+                      tropicalWet: "Tropical humide",
+                    },
+                    landfillSiteType: {
+                      managedAnaerobic: "Site géré anaérobie",
+                      unmanagedDeep: "Site non géré profond",
+                      unmanagedShallow: "Site non géré peu profond",
+                      uncategorised: "Site non catégorisé",
+                    },
+                    oxidationCover: {
+                      noneOrUnspecified: "Aucune ou non précisée",
+                      managedCoveredWithOxidizingMaterial: "Site géré avec matériau oxydant",
+                    },
+                  },
+                  columns: {
+                    year: "Année",
+                    domestic: "Boues domestiques",
+                    industrial: "Boues industrielles",
+                    methaneRecovery: "Méthane récupéré",
+                  },
+                  aria: {
+                    domestic: "Boues domestiques en {year}",
+                    industrial: "Boues industrielles en {year}",
+                    methaneRecovery: "Méthane récupéré en {year}",
+                  },
                 },
               },
               fallback: {
@@ -3393,9 +3587,10 @@ export default {
     },
     contact: {
       badge: "Contact",
+      eyebrow: "Support & contact",
       title: "Contactez l'équipe Carbon Cut",
       description:
-        "Envoyez votre demande via le formulaire ci-dessous. Le traitement se fait par email pendant la phase de test.",
+        "Une question, un retour ou besoin d'aide ? Écrivez-nous directement ou remplissez le formulaire, nous vous répondons sous 48 h ouvrées.",
       emailLabel: "Contact direct",
       responseTime: "Réponse généralement sous 24 à 48h ouvrées.",
       checklistTitle: "Cette page est pour envoyer une demande claire avec :",
@@ -3409,12 +3604,15 @@ export default {
       scopeDescription:
         "Cette page est pour les utilisateurs du parcours personnel en test (transport et énergie du foyer).",
       form: {
+        title: "Formulaire de contact",
+        description: "Tous les champs sont nécessaires pour traiter votre demande.",
         name: "Nom",
         email: "Email",
         topic: "Sujet",
         message: "Message",
         submit: "Envoyer la demande",
-        notLive: "Le formulaire est en place, l'envoi sera activé bientôt.",
+        success: "Votre message a été envoyé.",
+        error: "Votre message n'a pas pu être envoyé. Veuillez réessayer.",
       },
       actions: {
         goHelp: "Aller au centre d'aide",

@@ -12,7 +12,7 @@ import {
   FormMessage,
   TName,
 } from "@/components/ui/forms";
-import { Input as InputRoot } from "@/components/ui/input";
+import { Input as InputRoot, type InputIcon } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 type Props<T extends FieldValues> = {
@@ -22,6 +22,7 @@ type Props<T extends FieldValues> = {
   label?: string;
   description?: string;
   type?: React.HTMLInputTypeAttribute | undefined;
+  icon?: InputIcon;
   unitAdornment?: React.ReactNode;
   unitAdornmentPlacement?: "start" | "end";
   disabled?: boolean;
@@ -43,6 +44,7 @@ function InventoryFieldInput<T extends FieldValues>({
   placeholder,
   description,
   type,
+  icon,
   unitAdornment,
   unitAdornmentPlacement = "end",
   disabled = false,
@@ -112,6 +114,7 @@ function InventoryFieldInput<T extends FieldValues>({
                 <div className="flex grow shrink-0 basis-0 self-stretch px-1">
                   <InputRoot
                     ref={field.ref}
+                    icon={icon}
                     disabled={disabled}
                     required={required}
                     placeholder={placeholder}

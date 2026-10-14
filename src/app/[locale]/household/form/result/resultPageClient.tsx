@@ -64,7 +64,7 @@ export default function ResultPageClient() {
     animateCounter();
   }, []);
 
-  const woodScope1N = cachedResult?.energy?.thermal?.wood?.scope1N ?? 0;
+  const woodScope1N = 0; //cachedResult?.energy?.thermal?.wood?.scope1N ?? 0;
   const shouldShowWoodNotice = woodScope1N > 0;
 
   const breakdownData: {

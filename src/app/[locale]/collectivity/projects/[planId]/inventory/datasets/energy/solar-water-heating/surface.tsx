@@ -21,14 +21,16 @@ export default function SolarWaterHeatingSurface() {
         title={tSolarWaterHeating("residential.title")}
         rows={residentialRows}
         form={mainForm}
-        baseName="energy.solarWaterHeating.dataSet.residential"
+        //baseName="energy.solarWaterHeating.dataSet.residential"
+        baseName="transport"
       />
       <div className="border-t border-border/10 pt-8">
         <MatrixTable
           title={tSolarWaterHeating("tertiary.title")}
           rows={tertiaryRows}
           form={mainForm}
-          baseName="energy.solarWaterHeating.dataSet.tertiary"
+          //baseName="energy.solarWaterHeating.dataSet.tertiary"
+          baseName="transport"
         />
       </div>
       <div className="border-t border-border/10 pt-8">
@@ -36,7 +38,8 @@ export default function SolarWaterHeatingSurface() {
           title={tSolarWaterHeating("industrial.title")}
           rows={industrialRows}
           form={mainForm}
-          baseName="energy.solarWaterHeating.dataSet.industrial"
+          //baseName="energy.solarWaterHeating.dataSet.industrial"
+          baseName="transport"
         />
       </div>
     </div>
