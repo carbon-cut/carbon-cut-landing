@@ -6,6 +6,9 @@ export const collectivityModuleSlugs = [
   "result",
   "scenarios",
   "actions",
+  "mrv",
+  "multiCriteriaAnalysis",
+  "objectives",
 ] as const;
 
 export type CollectivityModuleSlug = (typeof collectivityModuleSlugs)[number];

@@ -4,12 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ClipboardList,
+  ClipboardCheck,
   ChartColumn,
   ChevronUp,
   FileSpreadsheet,
+  Goal,
+  ChartScatter,
   SlidersHorizontal,
   Target,
   type LucideIcon,
+  ChartSpline,
 } from "lucide-react";
 
 import Logo from "@/components/Logo";
@@ -47,25 +51,30 @@ export type CollectivityRouteItem = {
   status: string;
   icon: LucideIcon;
   available: boolean;
+  soon: boolean;
 };
 
 const routeDefinitions: Array<{
   key: CollectivityModuleSlug;
   icon: LucideIcon;
   available: boolean;
+  soon?: boolean;
 }> = [
   { key: "setup", icon: SlidersHorizontal, available: true },
   { key: "inventory", icon: FileSpreadsheet, available: true },
   { key: "result", icon: ChartColumn, available: true },
-  { key: "scenarios", icon: Target, available: false },
+  { key: "multiCriteriaAnalysis", icon: ChartScatter, available: false, soon: true },
+  { key: "objectives", icon: Goal, available: false },
+  { key: "scenarios", icon: ChartSpline, available: false },
   { key: "actions", icon: ClipboardList, available: false },
+  { key: "mrv", icon: ClipboardCheck, available: false },
 ];
 
 const BRAND_MARK_SIZE = 40;
 const FULL_LOGO_WIDTH = (BRAND_MARK_SIZE * 89) / 36;
 const NAV_ICON_SIZE_CLASS = "[&_svg]:!size-[16px]";
 
-export function useCollectivityRouteItems(planId: string) {
+export function useCollectivityRouteItems(planId: string): CollectivityRouteItem[] {
   const t = useScopedI18n("(pages).collectivityDashboard");
 
   return routeDefinitions.map((route) => {
@@ -76,6 +85,7 @@ export function useCollectivityRouteItems(planId: string) {
       title: t(`${routeKey}.title`) as string,
       status: t(`${routeKey}.status`) as string,
       available: route.available,
+      soon: route.soon ?? false,
     };
   });
 }
@@ -172,18 +182,16 @@ export default function CollectivitySidebar({
                             isCollapsed && isActive && "text-primary-foreground"
                           )}
                         />
-                        <Typography
-                          variant={"bodyBold"}
-                          size="xs"
-                          className="text-foreground  group-data-[collapsible=icon]:hidden"
-                        >
-                          <span className="truncate">{route.title}</span>
-                        </Typography>
-                        {!route.available && !isCollapsed && (
-                          <Badge className="rounded-full" variant="warning">
-                            {t("soon")}
-                          </Badge>
-                        )}
+                        <div className="group-data-[collapsible=icon]:hidden">
+                          <Typography variant={"bodyBold"} size="xs" className="text-foreground ">
+                            <span className="truncate">{route.title}</span>
+                          </Typography>
+                          {route.soon && !isCollapsed && (
+                            <Badge className="rounded-full w-fit" variant="warning">
+                              {t("soon")}
+                            </Badge>
+                          )}
+                        </div>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

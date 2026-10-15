@@ -1409,6 +1409,21 @@ export default {
               "Gérer le portefeuille des fiches actions, avec les coûts, le calendrier et le suivi dans ce même module.",
             status: "À structurer",
           },
+          mrv: {
+            title: "MRV",
+            description: "Mesurer, rapporter et vérifier les actions climatiques.",
+            status: "Indisponible",
+          },
+          multiCriteriaAnalysis: {
+            title: "Analyse multicritère",
+            description: "Évaluer les options selon plusieurs critères de décision.",
+            status: "Indisponible",
+          },
+          objectives: {
+            title: "Objectifs",
+            description: "Définir et suivre les objectifs climatiques du plan.",
+            status: "Indisponible",
+          },
         },
       },
       resultPoc: {

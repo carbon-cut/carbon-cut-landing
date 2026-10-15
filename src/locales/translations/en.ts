@@ -1387,6 +1387,21 @@ export default {
               "Manage the portfolio of action sheets, with costs, calendar and monitoring in this same module.",
             status: "To structure",
           },
+          mrv: {
+            title: "MRV",
+            description: "Measurement, reporting and verification of climate actions.",
+            status: "Unavailable",
+          },
+          multiCriteriaAnalysis: {
+            title: "Multi-criteria analysis",
+            description: "Assess options against multiple decision criteria.",
+            status: "Unavailable",
+          },
+          objectives: {
+            title: "Objectives",
+            description: "Define and track the plan's climate objectives.",
+            status: "Unavailable",
+          },
         },
       },
       resultPoc: {
