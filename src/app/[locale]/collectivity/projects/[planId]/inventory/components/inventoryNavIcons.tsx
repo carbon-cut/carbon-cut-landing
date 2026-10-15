@@ -28,7 +28,7 @@ import {
 
 const familyIconMap: Record<string, LucideIcon> = {
   municipalPatrimoine: Building2,
-  territorialEnergy: HousePlug,
+  stationaryEnergy: HousePlug,
   transportMobility: BusFront,
   afat: Leaf,
   waste: Trash2,

@@ -117,7 +117,7 @@ function computeYearBlockProgress(
   return createProgress(completed, total);
 }
 
-function computeTerritorialEnergyBlockProgress(
+function computeStationaryEnergyBlockProgress(
   block: unknown,
   metricKeys: readonly string[],
   fixedLineCount: number,
@@ -207,19 +207,19 @@ function computeElectricityProgress(
     | { lt?: unknown; mt?: unknown; ht?: unknown }
     | undefined;
   const metricKeys = ["consumption"] as const;
-  const lt = computeTerritorialEnergyBlockProgress(
+  const lt = computeStationaryEnergyBlockProgress(
     dataSet?.lt,
     metricKeys,
     Object.keys(electricity.lines.lt).length,
     years
   );
-  const mt = computeTerritorialEnergyBlockProgress(
+  const mt = computeStationaryEnergyBlockProgress(
     dataSet?.mt,
     metricKeys,
     Object.keys(electricity.lines.mt).length,
     years
   );
-  const ht = computeTerritorialEnergyBlockProgress(
+  const ht = computeStationaryEnergyBlockProgress(
     dataSet?.ht,
     metricKeys,
     Object.keys(electricity.lines.ht).length,
@@ -237,19 +237,19 @@ function computeNaturalGasProgress(
     | { bp?: unknown; mp?: unknown; hp?: unknown }
     | undefined;
   const metricKeys = ["consumption"] as const;
-  const bp = computeTerritorialEnergyBlockProgress(
+  const bp = computeStationaryEnergyBlockProgress(
     dataSet?.bp,
     metricKeys,
     Object.keys(naturalGas.lines.lp).length,
     years
   );
-  const mp = computeTerritorialEnergyBlockProgress(
+  const mp = computeStationaryEnergyBlockProgress(
     dataSet?.mp,
     metricKeys,
     Object.keys(naturalGas.lines.mp).length,
     years
   );
-  const hp = computeTerritorialEnergyBlockProgress(
+  const hp = computeStationaryEnergyBlockProgress(
     dataSet?.hp,
     metricKeys,
     Object.keys(naturalGas.lines.hp).length,

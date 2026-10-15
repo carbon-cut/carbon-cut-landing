@@ -2841,8 +2841,8 @@ export default {
           municipalPatrimoine: {
             title: "Patrimoine municipal",
           },
-          territorialEnergy: {
-            title: "Energie territoriale",
+          stationaryEnergy: {
+            title: "Énergie stationnaire",
           },
           transportMobility: {
             title: "Transport et mobilite",
@@ -2896,7 +2896,7 @@ export default {
           },
           electricity: {
             title: "Demande d'electricite",
-            description: "Dataset energie territorial connu, sans structure de champs finalisee.",
+            description: "Dataset Énergie stationnaire connu, sans structure de champs finalisee.",
             sourceMode: "TODO entre fournisseur, secteur, usage ou fichier agrege.",
             yearMode: "TODO lecture pluriannuelle et completude par annee.",
             implementationNote:
@@ -2905,7 +2905,7 @@ export default {
           photovoltaic: {
             title: "Photovoltaique",
             description:
-              "Dataset energie territorial cite par le rapport, sans details de champs finalises.",
+              "Dataset Énergie stationnaire cite par le rapport, sans details de champs finalises.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO blocs de production ou capacite annuelle.",
             implementationNote: "Placeholder volontaire pour le panneau energie.",
@@ -2913,14 +2913,14 @@ export default {
           naturalGas: {
             title: "Gaz naturel",
             description:
-              "Dataset energie territorial connu, mais encore sans structure de saisie fixe.",
+              "Dataset Énergie stationnaire connu, mais encore sans structure de saisie fixe.",
             sourceMode: "TODO fournisseur vs secteur vs agrege.",
             yearMode: "TODO logique de comparaison inter-annuelle.",
             implementationNote: "Placeholder volontaire pour la route inventaire complete.",
           },
           solarWaterHeating: {
             title: "Chauffe-eau solaire",
-            description: "Dataset energie territorial cite, encore en mode placeholder produit.",
+            description: "Dataset Énergie stationnaire cite, encore en mode placeholder produit.",
             sourceMode: "TODO source-native vs year-native.",
             yearMode: "TODO production, nombre d'installations ou capacite.",
             implementationNote:

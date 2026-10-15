@@ -2807,8 +2807,8 @@ export default {
           municipalPatrimoine: {
             title: "Municipal assets",
           },
-          territorialEnergy: {
-            title: "Territorial energy",
+          stationaryEnergy: {
+            title: "Stationary energy",
           },
           transportMobility: {
             title: "Transport and mobility",

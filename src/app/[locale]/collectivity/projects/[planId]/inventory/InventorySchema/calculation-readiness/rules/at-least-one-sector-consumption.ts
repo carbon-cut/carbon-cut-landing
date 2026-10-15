@@ -1,15 +1,15 @@
 import { getInventoryYears, getPath, hasActivityValue, toPath } from "../helpers";
 import type { CalculationReadinessIssue } from "../types";
 import type {
-  TerritorialEnergyLineDefinitions,
-  TerritorialEnergySector,
-} from "../../energy/territorial-energy";
+  StationaryEnergyLineDefinitions,
+  StationaryEnergySector,
+} from "../../energy/stationary-energy";
 
 export type AtLeastOneSectorConsumptionRule = {
   datasetBasePath: string;
   ghostErrorPath: string;
-  blocks: Record<string, TerritorialEnergyLineDefinitions>;
-  sector: TerritorialEnergySector;
+  blocks: Record<string, StationaryEnergyLineDefinitions>;
+  sector: StationaryEnergySector;
 };
 
 export function atLeastOneSectorConsumptionRule(rule: AtLeastOneSectorConsumptionRule) {

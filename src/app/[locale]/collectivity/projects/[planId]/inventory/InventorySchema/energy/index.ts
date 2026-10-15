@@ -2,12 +2,12 @@ import { z } from "zod";
 
 import { createGroupSchema, createMatrixSchema, metadata } from "../_shared";
 import { electricity, naturalGas, photovoltaic, solarWaterHeating } from "./config";
-import { createTerritorialEnergyBlockSchema } from "./territorial-energy";
+import { createStationaryEnergyBlockSchema } from "./stationary-energy";
 export { energyDefault } from "./default";
 
 const electricitySchema = z.object({
   dataSet: z.object({
-    lt: createTerritorialEnergyBlockSchema({
+    lt: createStationaryEnergyBlockSchema({
       fixedLines: electricity.lines.lt,
       metrics: {
         consumption: electricity.units.tensions.consumption,
@@ -16,7 +16,7 @@ const electricitySchema = z.object({
         subscribers: electricity.units.tensions.subscribers,
       },
     }),
-    mt: createTerritorialEnergyBlockSchema({
+    mt: createStationaryEnergyBlockSchema({
       fixedLines: electricity.lines.mt,
       metrics: {
         consumption: electricity.units.tensions.consumption,
@@ -25,7 +25,7 @@ const electricitySchema = z.object({
         subscribers: electricity.units.tensions.subscribers,
       },
     }),
-    ht: createTerritorialEnergyBlockSchema({
+    ht: createStationaryEnergyBlockSchema({
       fixedLines: electricity.lines.ht,
       metrics: {
         consumption: electricity.units.tensions.consumption,
@@ -40,7 +40,7 @@ const electricitySchema = z.object({
 
 const naturalGasSchema = z.object({
   dataSet: z.object({
-    lp: createTerritorialEnergyBlockSchema({
+    lp: createStationaryEnergyBlockSchema({
       fixedLines: naturalGas.lines.lp,
       metrics: {
         consumption: naturalGas.units.tensions.consumption,
@@ -49,7 +49,7 @@ const naturalGasSchema = z.object({
         subscribers: naturalGas.units.tensions.subscribers,
       },
     }),
-    mp: createTerritorialEnergyBlockSchema({
+    mp: createStationaryEnergyBlockSchema({
       fixedLines: naturalGas.lines.mp,
       metrics: {
         consumption: naturalGas.units.tensions.consumption,
@@ -58,7 +58,7 @@ const naturalGasSchema = z.object({
         subscribers: naturalGas.units.tensions.subscribers,
       },
     }),
-    hp: createTerritorialEnergyBlockSchema({
+    hp: createStationaryEnergyBlockSchema({
       fixedLines: naturalGas.lines.hp,
       metrics: {
         consumption: naturalGas.units.tensions.consumption,

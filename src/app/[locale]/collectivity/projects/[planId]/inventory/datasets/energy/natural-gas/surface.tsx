@@ -14,7 +14,7 @@ import InventoryYearSelector, {
   InventoryYearErrors,
 } from "../../../components/InventoryYearSelector";
 import { useInventoryContext } from "../../../context/inventory-context";
-import { territorialEnergySectorValues } from "../../../InventorySchema/energy/territorial-energy";
+import { stationaryEnergySectorValues } from "../../../InventorySchema/energy/stationary-energy";
 import {
   buildNaturalGasAssumptionFields,
   buildNaturalGasFixedLines,
@@ -56,7 +56,7 @@ export default function NaturalGasSurface() {
     metrics: buildNaturalGasMetrics(tNaturalGas),
     populationRows: buildNaturalGasPopulationRows(tNaturalGas),
     assumptionFields: buildNaturalGasAssumptionFields(tNaturalGas),
-    sectorOptions: territorialEnergySectorValues.map((sector) => ({
+    sectorOptions: stationaryEnergySectorValues.map((sector) => ({
       value: sector,
       label: tTable(`sectors.${sector}`),
     })),

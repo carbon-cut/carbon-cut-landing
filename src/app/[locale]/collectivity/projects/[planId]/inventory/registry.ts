@@ -3,7 +3,7 @@ import type { InventoryDataset, InventoryWorkspaceConfig } from "./types";
 
 const families = [
   "municipalPatrimoine",
-  "territorialEnergy",
+  "stationaryEnergy",
   "transportMobility",
   "afat",
   "waste",
@@ -23,8 +23,8 @@ const datasetDefinitions = [
   { key: "publicLighting", familyKey: "municipalPatrimoine" },
   { key: "buildings", familyKey: "municipalPatrimoine" },
   { key: "treesParksWaste", familyKey: "municipalPatrimoine" },
-  { key: "electricity", familyKey: "territorialEnergy" },
-  { key: "naturalGas", familyKey: "territorialEnergy" },
+  { key: "electricity", familyKey: "stationaryEnergy" },
+  { key: "naturalGas", familyKey: "stationaryEnergy" },
   { key: "port", familyKey: "transportMobility", applicability: "port" },
   { key: "buses", familyKey: "transportMobility" },
   { key: "urbanRail", familyKey: "transportMobility" },

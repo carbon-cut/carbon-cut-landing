@@ -3,9 +3,9 @@ import { z } from "zod";
 import { createYearValueSchema } from "../_shared";
 
 type NonEmptyStringArray = [string, ...string[]];
-type TerritorialEnergyMetricDefinitions = Record<string, NonEmptyStringArray>;
+type StationaryEnergyMetricDefinitions = Record<string, NonEmptyStringArray>;
 
-export const territorialEnergySectorValues = [
+export const stationaryEnergySectorValues = [
   "residential",
   "tertiary",
   "industry",
@@ -13,28 +13,28 @@ export const territorialEnergySectorValues = [
   "agriculture",
 ] as const;
 
-export const territorialEnergySectorSchema = z.enum(territorialEnergySectorValues, {
+export const stationaryEnergySectorSchema = z.enum(stationaryEnergySectorValues, {
   errorMap: () => ({ message: "Required" }),
 });
 
-export type TerritorialEnergySector = (typeof territorialEnergySectorValues)[number];
+export type StationaryEnergySector = (typeof stationaryEnergySectorValues)[number];
 
-export type TerritorialEnergyLineDefinitions = Record<
+export type StationaryEnergyLineDefinitions = Record<
   string,
   {
-    sector: TerritorialEnergySector;
+    sector: StationaryEnergySector;
     required?: boolean;
   }
 >;
 
-type TerritorialEnergyBlockSchemaOptions<FixedLines extends TerritorialEnergyLineDefinitions> = {
+type StationaryEnergyBlockSchemaOptions<FixedLines extends StationaryEnergyLineDefinitions> = {
   fixedLines: FixedLines;
-  metrics: TerritorialEnergyMetricDefinitions;
-  optionalMetrics?: TerritorialEnergyMetricDefinitions;
+  metrics: StationaryEnergyMetricDefinitions;
+  optionalMetrics?: StationaryEnergyMetricDefinitions;
 };
 
-function createTerritorialEnergyMetricShape(
-  metrics: TerritorialEnergyMetricDefinitions = {},
+function createStationaryEnergyMetricShape(
+  metrics: StationaryEnergyMetricDefinitions = {},
   optional = false
 ) {
   return Object.fromEntries(
@@ -42,12 +42,12 @@ function createTerritorialEnergyMetricShape(
   );
 }
 
-export function createTerritorialEnergyBlockSchema<
-  FixedLines extends TerritorialEnergyLineDefinitions,
->({ fixedLines, metrics, optionalMetrics }: TerritorialEnergyBlockSchemaOptions<FixedLines>) {
+export function createStationaryEnergyBlockSchema<
+  FixedLines extends StationaryEnergyLineDefinitions,
+>({ fixedLines, metrics, optionalMetrics }: StationaryEnergyBlockSchemaOptions<FixedLines>) {
   const metricShape = (optional: boolean = false) => ({
-    ...createTerritorialEnergyMetricShape(metrics, optional),
-    ...createTerritorialEnergyMetricShape(optionalMetrics, true),
+    ...createStationaryEnergyMetricShape(metrics, optional),
+    ...createStationaryEnergyMetricShape(optionalMetrics, true),
   });
 
   return z.object({
@@ -67,7 +67,7 @@ export function createTerritorialEnergyBlockSchema<
       .array(
         z.object({
           label: z.string().min(1, "Required"),
-          sector: territorialEnergySectorSchema,
+          sector: stationaryEnergySectorSchema,
           ...metricShape(),
         })
       )

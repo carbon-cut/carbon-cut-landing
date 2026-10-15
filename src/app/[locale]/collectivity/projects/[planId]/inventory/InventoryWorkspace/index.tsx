@@ -381,7 +381,7 @@ export default function InventoryWorkspace({
     switch (activeFamilyKey) {
       case "municipalPatrimoine":
         return "/form/banner-illustrations/05_mairie_place.png";
-      case "territorialEnergy":
+      case "stationaryEnergy":
         return "/form/banner-illustrations/03_zone_industrielle.png";
       case "transportMobility":
         return "/form/banner-illustrations/01_ville_skyline.png";

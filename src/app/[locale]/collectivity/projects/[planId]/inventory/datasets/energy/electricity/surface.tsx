@@ -12,7 +12,7 @@ import InventoryYearSelector, {
   InventoryYearErrors,
 } from "../../../components/InventoryYearSelector";
 import { useInventoryContext } from "../../../context/inventory-context";
-import { territorialEnergySectorValues } from "../../../InventorySchema/energy/territorial-energy";
+import { stationaryEnergySectorValues } from "../../../InventorySchema/energy/stationary-energy";
 import {
   buildElectricityFixedLines,
   buildElectricityMetrics,
@@ -41,7 +41,7 @@ export default function ElectricitySurface() {
       ),
     })),
     metrics: buildElectricityMetrics(tElectricity),
-    sectorOptions: territorialEnergySectorValues.map((sector) => ({
+    sectorOptions: stationaryEnergySectorValues.map((sector) => ({
       value: sector,
       label: tTable(`sectors.${sector}`),
     })),

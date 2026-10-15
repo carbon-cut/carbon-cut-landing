@@ -123,7 +123,7 @@ export default function TerritorialEnergyChart({
           t(`territorialEnergyChart.energySources.${energy}` as Parameters<typeof t>[0]) as string
       )
     : null;
-  const EnergyIcon = getInventoryFamilyNavIcon("territorialEnergy");
+  const EnergyIcon = getInventoryFamilyNavIcon("stationaryEnergy");
   const TransportIcon = getInventoryFamilyNavIcon("transportMobility");
   const AfatIcon = getInventoryFamilyNavIcon("afat");
   const MunicipalIcon = getInventoryFamilyNavIcon("municipalPatrimoine");

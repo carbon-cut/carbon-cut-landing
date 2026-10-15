@@ -1,4 +1,4 @@
-import type { TerritorialEnergyLineDefinitions } from "./territorial-energy";
+import type { StationaryEnergyLineDefinitions } from "./stationary-energy";
 import { electricityConsumptionUnits } from "../_sharedUnits";
 
 type UnitConf = {
@@ -45,7 +45,7 @@ const electricityLtLines = {
   smallIndustry: { sector: "industry" },
   workshops: { sector: "industry" },
   industries: { sector: "industry" },
-} as const satisfies TerritorialEnergyLineDefinitions;
+} as const satisfies StationaryEnergyLineDefinitions;
 
 const electricityMtLines = {
   extractive: { sector: "industry" },
@@ -57,13 +57,13 @@ const electricityMtLines = {
   pumping: { sector: "tertiary" },
   tourism: { sector: "tertiary" },
   transportTelco: { sector: "tertiary" },
-} as const satisfies TerritorialEnergyLineDefinitions;
+} as const satisfies StationaryEnergyLineDefinitions;
 
 const electricityHtLines = {
   cement: { sector: "industry" },
   water: { sector: "tertiary" },
   industrialZone: { sector: "industry" },
-} as const satisfies TerritorialEnergyLineDefinitions;
+} as const satisfies StationaryEnergyLineDefinitions;
 
 const electricityUnits: UnitConf = {
   tensions: {
@@ -136,7 +136,7 @@ const naturalGasLpLines = {
   smallIndustry: { sector: "industry" },
   workshops: { sector: "industry" },
   industries: { sector: "industry" },
-} as const satisfies TerritorialEnergyLineDefinitions;
+} as const satisfies StationaryEnergyLineDefinitions;
 
 const naturalGasMpLines = {
   extractive: { sector: "industry" },
@@ -148,12 +148,12 @@ const naturalGasMpLines = {
   tourism: { sector: "tertiary" },
   transportTelco: { sector: "tertiary" },
   services: { sector: "tertiary" },
-} as const satisfies TerritorialEnergyLineDefinitions;
+} as const satisfies StationaryEnergyLineDefinitions;
 
 const naturalGasHpLines = {
   powerPlant: { sector: "industry" },
   industrialHub: { sector: "industry" },
-} as const satisfies TerritorialEnergyLineDefinitions;
+} as const satisfies StationaryEnergyLineDefinitions;
 
 const naturalGasUnits: UnitConf = {
   tensions: {
