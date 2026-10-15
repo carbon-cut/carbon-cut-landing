@@ -6,6 +6,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import InventoryDatasetButton from "./InventoryDatasetButton";
 import type { InventoryDataset, InventoryFamily, InventoryWorkspaceConfig } from "../types";
 import { useI18n, useScopedI18n } from "@/locales/client";
+import Image from "next/image";
 
 export default function InventoryDatasetNav({
   activeFamily,
@@ -36,6 +37,15 @@ export default function InventoryDatasetNav({
           ) : null}
         </h2>
       </Typography>
+      {/* <div className="w-full overflow-hidden h-[300px]">
+        <Image
+        width={300}
+        height={100}
+        src="/form/banner-illustrations/05_mairie_place.png"
+        alt="Inventory Dataset Nav"
+        className="w-full"
+        />
+      </div> */}
 
       <ScrollArea className="mt-3">
         <div className="flex items-end gap-x-8 gap-y-2 border-b border-border/10 pb-3">

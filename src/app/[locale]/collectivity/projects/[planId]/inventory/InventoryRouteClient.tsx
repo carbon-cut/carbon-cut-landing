@@ -28,6 +28,7 @@ import {
   validateInventoryCalculationReadiness,
 } from "./InventorySchema/calculation-readiness";
 import { buildInventoryRegistry, type InventoryWorkspaceLocale } from "./registry";
+import Image from "next/image";
 
 function buildInventoryYearPlan(snapshot: CollectivitySetupSnapshot) {
   const reference = snapshot.currentInventory.setupPayload.referenceYear;

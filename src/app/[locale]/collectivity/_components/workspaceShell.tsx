@@ -37,9 +37,7 @@ export default function WorkspaceShell({
 
           <SidebarInset className="min-w-0 bg-workspace">
             <main id="content" className="min-h-screen bg-workspace text-foreground">
-              <div className="mx-auto w-full max-w-[1500px] px-4 py-3 md:px-8 md:py-4">
-                {children}
-              </div>
+              <div className="mx-auto relative w-full max-w-[1500px] py-1">{children}</div>
             </main>
           </SidebarInset>
         </TooltipProvider>
