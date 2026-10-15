@@ -50,6 +50,7 @@ import type { InventoryDataset, InventoryWorkspaceConfig } from "../types";
 import type { InventoryFamilyKey } from "../registry";
 import { DebugCalculationPanel } from "./debugCalc";
 import { DebugCalculationPanelState, DebugResultRow } from "./types";
+import Image from "next/image";
 
 function getDisplayResultRows(resultRows: CollectivityResultsByYear): DebugResultRow[] {
   return Object.entries(resultRows)
@@ -376,44 +377,71 @@ export default function InventoryWorkspace({
   };
   const tDataSet = useScopedI18n("(pages).collectivityDashboard.inventoryWorkspace.datasets");
   const tFamily = useScopedI18n("(pages).collectivityDashboard.inventoryWorkspace.families");
-
+  const getSrc = () => {
+    switch (activeFamilyKey) {
+      case "municipalPatrimoine":
+        return "/form/banner-illustrations/05_mairie_place.png";
+      case "territorialEnergy":
+        return "/form/banner-illustrations/03_zone_industrielle.png";
+      case "transportMobility":
+        return "/form/banner-illustrations/01_ville_skyline.png";
+      case "wastewater":
+        return "/form/banner-illustrations/07_assainissement_eau.png";
+      case "afat":
+        return "/form/banner-illustrations/08_agriculture_commune.png";
+      default:
+        return "/form/notFound.png";
+    }
+  };
   return (
     <section className="space-y-6">
-      <header className="h-[var(--sidebar-width-icon)] border-b border-border/10 bg-card px-4 py-3 md:-mx-8 md:-mt-4 md:px-8">
-        <div className="my-auto flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <Typography asChild variant="subtitle" size="md">
-            <h1>
-              {tFamily(`${activeFamily.key}.title`)}
-              {activeDataset ? " · " : ""}
-              {tDataSet(`${activeDataset.key}.title`)}
-            </h1>
-          </Typography>
+      <div className="absolute top-0 left-0 max-w-full right-0">
+        <header className="h-[var(--sidebar-width-icon)] border-b border-border/10 bg-card px-4 py-3">
+          <div className="my-auto flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <Typography asChild variant="subtitle" size="md">
+              <h1>
+                {tFamily(`${activeFamily.key}.title`)}
+                {activeDataset ? " · " : ""}
+                {tDataSet(`${activeDataset.key}.title`)}
+              </h1>
+            </Typography>
 
-          <div className="flex flex-wrap items-center gap-2.5 md:justify-end">
-            <Button
-              type="button"
-              variant="brand-secondary"
-              size="medium"
-              disabled={isSaving || isSubmitting}
-              onClick={onSaveDraft}
-              icon={<Save aria-hidden="true" className="size-4 shrink-0" />}
-            >
-              {t("actions.save") as string}
-            </Button>
-            <Button
-              type="button"
-              variant="brand-primary"
-              size="medium"
-              disabled={isSaving || isSubmitting}
-              onClick={onSubmitInventory}
-              icon={<CloudUpload aria-hidden="true" className="size-4 shrink-0" />}
-            >
-              {t("actions.submitData") as string}
-            </Button>
+            <div className="flex flex-wrap items-center gap-2.5 md:justify-end">
+              <Button
+                type="button"
+                variant="brand-secondary"
+                size="medium"
+                disabled={isSaving || isSubmitting}
+                onClick={onSaveDraft}
+                icon={<Save aria-hidden="true" className="size-4 shrink-0" />}
+              >
+                {t("actions.save") as string}
+              </Button>
+              <Button
+                type="button"
+                variant="brand-primary"
+                size="medium"
+                disabled={isSaving || isSubmitting}
+                onClick={onSubmitInventory}
+                icon={<CloudUpload aria-hidden="true" className="size-4 shrink-0" />}
+              >
+                {t("actions.submitData") as string}
+              </Button>
+            </div>
           </div>
+        </header>
+        <div className="h-[350px]">
+          <Image
+            width={1772}
+            height={466}
+            src={getSrc()}
+            alt="Inventory Dataset Nav"
+            className="w-full h-auto"
+          />
         </div>
-      </header>
-      <section className="relative !mt-8 pt-14">
+      </div>
+      <div className="h-[200px]" />
+      <section className="relative !mt-20 pt-14 px-4 md:px-6">
         <InventoryDomainNav
           label={""} //workspace.controls.domainsLabel}
           families={familiesWithError}

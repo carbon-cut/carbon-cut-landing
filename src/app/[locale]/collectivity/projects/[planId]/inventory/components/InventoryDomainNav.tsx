@@ -21,7 +21,7 @@ export default function InventoryDomainNav({
   const tFamily = useScopedI18n("(pages).collectivityDashboard.inventoryWorkspace.families");
 
   return (
-    <div className="z-0 absolute top-0 w-full" aria-label={label}>
+    <div className="z-0 absolute top-0 left-4 right-4 md:left-6 md:right-6" aria-label={label}>
       {/*       <Typography asChild variant="sectionTitle" size="sm">
         <h2>{label}</h2>
       </Typography>
