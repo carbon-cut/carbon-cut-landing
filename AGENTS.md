@@ -118,3 +118,13 @@ before proceeding.
 A repository plan may reference a canonical full feature plan in another
 in-scope repository. Follow that full plan for shared behavior, contracts,
 responsibilities, sequencing, and cross-repository decisions.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs are tracked in GitHub Issues for this repository. See `docs/agents/issue-tracker.md`.
+
+### Domain docs
+
+Single-context layout: a root `GLOSSARY.md` and `docs/adr/` when domain documentation is added. See `docs/agents/domain.md`.
