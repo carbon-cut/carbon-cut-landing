@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useForm, type FieldPath } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { type FieldPath } from "react-hook-form";
 import { toast } from "sonner";
 
 import {
@@ -21,8 +20,12 @@ import { useScopedI18n } from "@/locales/client";
 
 import InventoryWorkspace from "./InventoryWorkspace";
 import { InventoryProvider, type InventoryFormValues } from "./context/inventory-context";
-import { buildInventoryDefaultValues } from "./inventoryDefaultValues";
-import { inventorySchema } from "./InventorySchema";
+import {
+  buildInventoryDefaultValues,
+  buildInventoryDefaultValuesAfterPerimeterChange,
+} from "./inventoryDefaultValues";
+import { buildInventoryDraftInput } from "./inventoryDraft";
+import { useInventoryForm } from "./useInventoryForm";
 import {
   getInventoryCalculationReadinessPaths,
   validateInventoryCalculationReadiness,
@@ -50,14 +53,19 @@ export default function InventoryRouteClient() {
   //const inventoryLocale = t("inventoryWorkspace") as InventoryWorkspaceLocale;
   const projectSlug = snapshot.project.slug;
   const snapshotVersion = `${snapshot.currentInventory.id}:${snapshot.currentInventory.updatedAt}`;
+  const previousPerimeter = useRef(snapshot.project.perimeter);
   const inventoryYearPlan = useMemo(() => buildInventoryYearPlan(snapshot), [snapshot]);
   const years = useMemo(
     () => [inventoryYearPlan.reference, ...inventoryYearPlan.comparisons].sort((a, b) => a - b),
     [inventoryYearPlan]
   );
   const { workspace } = useMemo(
-    () => buildInventoryRegistry(snapshot.currentInventory.setupPayload.applicability),
-    [snapshot.currentInventory.setupPayload.applicability]
+    () =>
+      buildInventoryRegistry(
+        snapshot.currentInventory.setupPayload.applicability,
+        snapshot.project.perimeter
+      ),
+    [snapshot.currentInventory.setupPayload.applicability, snapshot.project.perimeter]
   );
   const defaultValues = useMemo(
     () => ({
@@ -66,10 +74,9 @@ export default function InventoryRouteClient() {
     }),
     [inventoryYearPlan, snapshot.currentInventory.inventoryInput, workspace, years]
   );
-  const mainForm = useForm<InventoryFormValues>({
-    resolver: zodResolver(inventorySchema),
-    defaultValues,
-    mode: "onChange",
+  const mainForm = useInventoryForm(defaultValues, {
+    perimeter: snapshot.project.perimeter,
+    applicability: snapshot.currentInventory.setupPayload.applicability,
   });
   const saveDraftMutation = useMutation({
     mutationFn: saveCollectivityInventoryDraftRequest,
@@ -95,11 +102,25 @@ export default function InventoryRouteClient() {
     },
   });
   useEffect(() => {
+    if (previousPerimeter.current !== snapshot.project.perimeter) {
+      previousPerimeter.current = snapshot.project.perimeter;
+      const currentValues = mainForm.getValues();
+
+      mainForm.reset(
+        buildInventoryDefaultValuesAfterPerimeterChange(
+          currentValues,
+          years,
+          workspace,
+          inventoryYearPlan
+        )
+      );
+      return;
+    }
+
     mainForm.reset(defaultValues);
-    // Only rebuild the editable form when the current inventory snapshot itself changes.
     // Query cache object changes must not overwrite in-progress edits.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mainForm, snapshotVersion]);
+  }, [mainForm, snapshotVersion, snapshot.project.perimeter]);
   function getCalculationReadinessKeys() {
     return workspace.datasets.map((dataset) => dataset.key);
   }
@@ -131,7 +152,7 @@ export default function InventoryRouteClient() {
 
   const handleSaveDraft = async () => {
     const currentValues = mainForm.getValues();
-    const { years: _years, ...inventoryInput } = currentValues;
+    const inventoryInput = buildInventoryDraftInput(currentValues);
 
     try {
       await saveDraftMutation.mutateAsync({

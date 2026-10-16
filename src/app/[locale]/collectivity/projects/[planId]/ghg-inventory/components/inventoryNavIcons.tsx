@@ -36,6 +36,7 @@ const familyIconMap: Record<string, LucideIcon> = {
 };
 
 const datasetIconMap: Record<string, LucideIcon> = {
+  referenceData: Layers3,
   fleet: CarFront,
   publicLighting: Lightbulb,
   buildings: Building2,

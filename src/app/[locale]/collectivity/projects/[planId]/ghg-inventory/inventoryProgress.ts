@@ -159,6 +159,16 @@ function computeFleetProgress(
   return createProgress(countFilledYearValues(values?.municipal?.fleet?.dataSet), total);
 }
 
+function computeReferenceDataProgress(
+  values: Partial<InventoryFormValues> | undefined,
+  years: readonly InventoryYear[]
+) {
+  return createProgress(
+    countFilledYearValues(values?.sharedData?.population?.dataSet?.count?.value),
+    years.length
+  );
+}
+
 function computePublicLightingProgress(
   values: Partial<InventoryFormValues> | undefined,
   years: readonly InventoryYear[]
@@ -509,6 +519,7 @@ function computeWastewaterSludgeProgress(
 }
 
 const progressCalculators: Partial<Record<string, ProgressCalculator>> = {
+  referenceData: computeReferenceDataProgress,
   fleet: computeFleetProgress,
   publicLighting: computePublicLightingProgress,
   buildings: computeBuildingsProgress,

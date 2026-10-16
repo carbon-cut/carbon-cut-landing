@@ -2830,6 +2830,9 @@ export default {
           },
         },
         datasets: {
+          referenceData: {
+            title: "Reference data",
+          },
           fleet: {
             title: "Fleet",
             description:

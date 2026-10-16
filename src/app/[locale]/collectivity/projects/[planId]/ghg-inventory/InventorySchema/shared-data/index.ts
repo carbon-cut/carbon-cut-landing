@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { CollectivityProjectSnapshot } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
 
 import {
   createGroupSchema,
@@ -28,5 +29,11 @@ const sharedDataSchema = createGroupSchema({
   population: populationSchema,
   householdEnergy: householdEnergySchema,
 });
+
+export function createSharedDataSchema(perimeter: CollectivityProjectSnapshot["perimeter"]) {
+  return perimeter === "territorial_communes"
+    ? sharedDataSchema
+    : sharedDataSchema.extend({ householdEnergy: z.unknown().optional() });
+}
 
 export { sharedDataSchema };

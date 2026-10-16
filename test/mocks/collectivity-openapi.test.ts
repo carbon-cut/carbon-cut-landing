@@ -11,6 +11,24 @@ describe("collectivity project mock contract", () => {
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
+  it("serves a municipal-assets-only project for its dedicated mock user", async () => {
+    const session = mockSignIn({
+      identifier: "collectivity.municipal-assets@example.com",
+      password: "123",
+    });
+    const response = await fetch(
+      "http://localhost:1337/api/collectivity/projects/municipal-assets-only/current-inventory",
+      { headers: { Authorization: `Bearer ${session.access_token}` } }
+    );
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.project).toMatchObject({
+      slug: "municipal-assets-only",
+      perimeter: "patrimoine_communal",
+    });
+  });
+
   it("returns the compact project shape after saving an inventory draft", async () => {
     const session = mockSignIn({
       identifier: "collectivity.ready@example.com",

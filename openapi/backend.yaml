@@ -838,6 +838,7 @@ components:
           name,
           territory,
           country,
+          perimeter,
           referenceYear,
           inventoryYears,
           currentInventoryId,
@@ -850,6 +851,10 @@ components:
         name: { type: string }
         territory: { type: string }
         country: { type: string, nullable: true }
+        perimeter:
+          type: string
+          description: Inventory boundary purchased by the subscription attached to this project.
+          enum: [patrimoine_communal, territorial_communes]
         referenceYear: { type: integer }
         inventoryYears:
           type: array

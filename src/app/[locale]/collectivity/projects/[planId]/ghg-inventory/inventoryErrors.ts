@@ -1,4 +1,5 @@
 const datasetErrorPaths: Partial<Record<string, readonly string[]>> = {
+  referenceData: ["sharedData", "population"],
   fleet: ["municipal", "fleet"],
   publicLighting: ["municipal", "publicLighting"],
   buildings: ["municipal", "buildings"],

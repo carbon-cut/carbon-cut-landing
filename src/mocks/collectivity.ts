@@ -31,6 +31,7 @@ export const COLLECTIVITY_MOCK_USERS = {
     inventory: {
       municipalElectricityConsumptionKwh: 42000,
     },
+    perimeter: "territorial_communes" as const,
   },
   noInventory: {
     id: 5,
@@ -69,6 +70,7 @@ export const COLLECTIVITY_MOCK_USERS = {
     inventory: {
       municipalElectricityConsumptionKwh: 42000,
     },
+    perimeter: "territorial_communes" as const,
   },
   subscriptionDemo: {
     id: 8,
@@ -78,12 +80,34 @@ export const COLLECTIVITY_MOCK_USERS = {
     setup: null,
     inventory: null,
   },
+  municipalAssetsOnly: {
+    id: 9,
+    username: "municipal-assets-only-user",
+    email: "collectivity.municipal-assets@example.com",
+    planId: ["municipal-assets-only"],
+    setup: {
+      name: "Inventaire des actifs municipaux",
+      slug: "municipal-assets-only",
+      country: "TUN",
+      territory: "Sfax",
+      referenceYear: 2024,
+      inventoryYears: [2024],
+      applicability: {
+        airport: false,
+        port: false,
+        agriculture: false,
+      },
+    },
+    inventory: null,
+    perimeter: "patrimoine_communal" as const,
+  },
 };
 
 export type MockCollectivityUserState = {
   userId: number;
   email: string;
   planId: string[] | undefined;
+  perimeter: CollectivityProjectSnapshot["perimeter"];
   setup: CollectivitySetupData | null;
   hasInventory: boolean;
   inventory: Record<string, unknown> | null;
@@ -163,6 +187,7 @@ function buildProjectSnapshot(
   options?: {
     projectId?: string;
     currentInventoryId?: string;
+    perimeter?: CollectivityProjectSnapshot["perimeter"];
     createdAt?: string;
     updatedAt?: string;
   }
@@ -175,6 +200,7 @@ function buildProjectSnapshot(
     name: setup.name,
     territory: setup.territory,
     country: setup.country,
+    perimeter: options?.perimeter ?? "territorial_communes",
     referenceYear: setup.referenceYear,
     inventoryYears: [...setup.inventoryYears],
     currentInventoryId: options?.currentInventoryId ?? `inventory:${setup.slug}:current`,
@@ -214,6 +240,7 @@ function buildSetupSnapshot(
     inventoryInput?: Record<string, unknown> | null;
     projectId?: string;
     inventoryId?: string;
+    perimeter?: CollectivityProjectSnapshot["perimeter"];
     createdAt?: string;
     updatedAt?: string;
   }
@@ -234,6 +261,7 @@ function buildSetupSnapshot(
     project: buildProjectSnapshot(setup, {
       projectId,
       currentInventoryId: inventoryId,
+      perimeter: options?.perimeter,
       createdAt,
       updatedAt,
     }),
@@ -245,11 +273,13 @@ const collectivityStateByEmail = new Map<string, MockCollectivityUserState>(
   Object.values(COLLECTIVITY_MOCK_USERS).map((user) => [
     user.email.toLowerCase(),
     (() => {
+      const perimeter = "perimeter" in user ? user.perimeter : undefined;
       const createdAt = "2026-01-01T00:00:00.000Z";
       const updatedAt = user.inventory ? "2026-06-01T00:00:00.000Z" : createdAt;
       const snapshot = user.setup
         ? buildSetupSnapshot(user.setup, {
             inventoryInput: user.inventory,
+            perimeter,
             createdAt,
             updatedAt,
           })
@@ -259,6 +289,7 @@ const collectivityStateByEmail = new Map<string, MockCollectivityUserState>(
         userId: user.id,
         email: user.email,
         planId: user.planId,
+        perimeter: perimeter ?? "territorial_communes",
         setup: cloneSetup(user.setup),
         hasInventory: Boolean(snapshot?.currentInventory),
         inventory: user.inventory,
@@ -298,6 +329,7 @@ export function getMockCollectivityUserState(userOrEmail: Pick<AuthUser, "email"
   return {
     ...state,
     planId: state.planId ? [...state.planId] : undefined,
+    perimeter: state.perimeter,
     setup: cloneSetup(state.setup),
     inventory: state.inventory ? { ...state.inventory } : null,
     project: cloneProject(state.project),
@@ -401,6 +433,7 @@ export function saveMockCollectivitySetup(
     inventoryInput: previousSnapshot?.currentInventory.inventoryInput ?? null,
     projectId: previousSnapshot?.project.id,
     inventoryId: previousSnapshot?.currentInventory.id,
+    perimeter: previousState?.perimeter ?? "territorial_communes",
     createdAt: previousSnapshot?.project.createdAt,
   });
 
@@ -419,6 +452,7 @@ export function saveMockCollectivitySetup(
     userId: previousState?.userId ?? user.id,
     email: normalizedEmail,
     planId: nextPlanIds,
+    perimeter: previousState?.perimeter ?? "territorial_communes",
     setup: nextSetup,
     hasInventory: true,
     inventory: snapshot.currentInventory.inventoryInput

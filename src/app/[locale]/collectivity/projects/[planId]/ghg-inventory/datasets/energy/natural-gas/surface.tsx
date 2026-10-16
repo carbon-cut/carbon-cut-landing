@@ -1,6 +1,5 @@
 "use client";
 
-import MatrixTable from "@/components/table/matrix";
 import ScalarTable from "@/components/table/scalar";
 import { InventoryTableHeader } from "@/components/table/InventoryTableHeader";
 import YearMetricsTable from "@/components/table/year-metrics";
@@ -19,7 +18,6 @@ import {
   buildNaturalGasAssumptionFields,
   buildNaturalGasFixedLines,
   buildNaturalGasMetrics,
-  buildNaturalGasPopulationRows,
   buildNaturalGasTitleWithRequirement,
   FixedLineKey,
 } from "./config";
@@ -43,7 +41,7 @@ export default function NaturalGasSurface() {
   const naturalGasFixedLabel = (key: FixedLineKey) => {
     return tTable(`fixedLabels.${key}`);
   };
-  const { blocks, metrics, populationRows, assumptionFields, sectorOptions } = useState(() => ({
+  const { blocks, metrics, assumptionFields, sectorOptions } = useState(() => ({
     blocks: blockKeys.map((key) => ({
       key,
       title: tNaturalGas(`${key}.title`),
@@ -54,7 +52,6 @@ export default function NaturalGasSurface() {
       ),
     })),
     metrics: buildNaturalGasMetrics(tNaturalGas),
-    populationRows: buildNaturalGasPopulationRows(tNaturalGas),
     assumptionFields: buildNaturalGasAssumptionFields(tNaturalGas),
     sectorOptions: stationaryEnergySectorValues.map((sector) => ({
       value: sector,
@@ -161,15 +158,6 @@ export default function NaturalGasSurface() {
 
   return (
     <section className="space-y-8">
-      <MatrixTable
-        title={buildNaturalGasTitleWithRequirement(
-          tNaturalGas("populationTitle"),
-          tNaturalGas("populationRequirementTooltip")
-        )}
-        rows={populationRows}
-        form={mainForm}
-        baseName="sharedData.population.dataSet"
-      />
       <ScalarTable
         title={buildNaturalGasTitleWithRequirement(
           tNaturalGas("assumptionsTitle"),

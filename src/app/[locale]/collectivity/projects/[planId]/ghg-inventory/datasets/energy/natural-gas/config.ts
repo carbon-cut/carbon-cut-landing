@@ -87,16 +87,6 @@ export function buildNaturalGasMetrics(
   }));
 }
 
-export function buildNaturalGasPopulationRows(
-  labelFunc: (...args: [string, ...any]) => string
-): InventoryTableRow[] {
-  return sharedData.population.metricKeys.map((key) => ({
-    key,
-    label: labelFunc(`population.${key}`),
-    unit: sharedData.population.units.dataSet[key][0],
-  }));
-}
-
 export function buildNaturalGasAssumptionFields(
   labelFunc: (...args: [string, ...any]) => string
 ): ScalarTableField<InventoryFormValues>[] {

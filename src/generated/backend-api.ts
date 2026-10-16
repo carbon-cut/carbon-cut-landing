@@ -609,6 +609,11 @@ export interface components {
       name: string;
       territory: string;
       country: string | null;
+      /**
+       * @description Inventory boundary purchased by the subscription attached to this project.
+       * @enum {string}
+       */
+      perimeter: "patrimoine_communal" | "territorial_communes";
       referenceYear: number;
       inventoryYears: number[];
       currentInventoryId: string | null;

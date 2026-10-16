@@ -187,10 +187,22 @@ function ensureSeedUsers() {
       confirmationToken: defaultConfirmationToken,
       resetCode: defaultResetCode,
     },
+    {
+      id: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.id,
+      username: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.username,
+      email: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.email,
+      provider: "local",
+      confirmed: true,
+      blocked: false,
+      planId: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.planId,
+      password: COLLECTIVITY_MOCK_PASSWORD,
+      confirmationToken: defaultConfirmationToken,
+      resetCode: defaultResetCode,
+    },
   ] satisfies MockUserRecord[];
 
   seed.forEach((user) => users.set(user.email.toLowerCase(), user));
-  nextUserId = 9;
+  nextUserId = 10;
 }
 
 ensureSeedUsers();

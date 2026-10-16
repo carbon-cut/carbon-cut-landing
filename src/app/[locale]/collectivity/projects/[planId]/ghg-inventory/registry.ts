@@ -1,4 +1,5 @@
 import type { CollectivitySetupApplicability } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+import type { CollectivityProjectSnapshot } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
 import type { InventoryDataset, InventoryWorkspaceConfig } from "./types";
 
 const families = [
@@ -19,6 +20,7 @@ type InventoryDatasetDefinition = {
 };
 
 const datasetDefinitions = [
+  { key: "referenceData", familyKey: "municipalPatrimoine" },
   { key: "fleet", familyKey: "municipalPatrimoine" },
   { key: "publicLighting", familyKey: "municipalPatrimoine" },
   { key: "buildings", familyKey: "municipalPatrimoine" },
@@ -46,18 +48,25 @@ export type InventoryWorkspaceLocale = {
 
 function isDatasetEnabled(
   dataset: InventoryDatasetDefinition,
-  applicability: CollectivitySetupApplicability | null
+  applicability: CollectivitySetupApplicability | null,
+  perimeter: CollectivityProjectSnapshot["perimeter"]
 ) {
-  return !dataset.applicability || applicability?.[dataset.applicability] !== false;
+  const isInBoundary =
+    perimeter !== "patrimoine_communal" || dataset.familyKey === "municipalPatrimoine";
+
+  return (
+    isInBoundary && (!dataset.applicability || applicability?.[dataset.applicability] !== false)
+  );
 }
 
 function buildInventoryRegistryWithApplicability(
-  applicability: CollectivitySetupApplicability | null
+  applicability: CollectivitySetupApplicability | null,
+  perimeter: CollectivityProjectSnapshot["perimeter"]
 ): {
   workspace: InventoryWorkspaceConfig;
 } {
   const inventoryDatasets: InventoryDataset[] = datasetDefinitions
-    .filter((dataset) => isDatasetEnabled(dataset, applicability))
+    .filter((dataset) => isDatasetEnabled(dataset, applicability, perimeter))
     .map(({ key, familyKey }) => ({ key, familyKey }));
 
   const visibleFamilyKeys = new Set(inventoryDatasets.map((dataset) => dataset.familyKey));
@@ -75,9 +84,10 @@ function buildInventoryRegistryWithApplicability(
 }
 
 export function buildInventoryRegistry(
-  applicability: CollectivitySetupApplicability | null = null
+  applicability: CollectivitySetupApplicability | null = null,
+  perimeter: CollectivityProjectSnapshot["perimeter"] = "territorial_communes"
 ): {
   workspace: InventoryWorkspaceConfig;
 } {
-  return buildInventoryRegistryWithApplicability(applicability);
+  return buildInventoryRegistryWithApplicability(applicability, perimeter);
 }

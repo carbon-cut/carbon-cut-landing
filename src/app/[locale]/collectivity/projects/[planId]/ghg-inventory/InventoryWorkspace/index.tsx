@@ -19,6 +19,7 @@ import { useScopedI18n } from "@/locales/client";
 
 import InventoryDatasetNav from "../components/InventoryDatasetNav";
 import InventoryDomainNav from "../components/InventoryDomainNav";
+import SharedPopulationTable from "../components/SharedPopulationTable";
 import FertilizersSurface from "../datasets/afat/fertilizers/surface";
 import LivestockSurface from "../datasets/afat/livestock/surface";
 import TreesSurface from "../datasets/afat/trees/surface";
@@ -77,6 +78,8 @@ function renderDatasetSurface(dataset: InventoryDataset | undefined) {
   if (!dataset) return null;
 
   switch (dataset.key) {
+    case "referenceData":
+      return <SharedPopulationTable />;
     case "fleet":
       return <FleetSurface />;
     case "publicLighting":

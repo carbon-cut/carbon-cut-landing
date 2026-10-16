@@ -100,3 +100,19 @@ export function buildInventoryDefaultValues(
     },
   } as Partial<InventoryFormValues>;
 }
+
+export function buildInventoryDefaultValuesAfterPerimeterChange(
+  currentValues: InventoryFormValues,
+  years: readonly number[],
+  workspace: InventoryWorkspaceConfig,
+  yearPlan: InventoryFormValues["years"]
+) {
+  return {
+    ...buildInventoryDefaultValues(
+      currentValues as unknown as Record<string, unknown>,
+      years,
+      workspace
+    ),
+    years: yearPlan,
+  };
+}

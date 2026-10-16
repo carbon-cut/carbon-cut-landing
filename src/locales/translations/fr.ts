@@ -2863,6 +2863,9 @@ export default {
           },
         },
         datasets: {
+          referenceData: {
+            title: "Données de référence",
+          },
           fleet: {
             title: "Flotte",
             description:
