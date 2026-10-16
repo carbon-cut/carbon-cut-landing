@@ -2,13 +2,15 @@
 
 The folders separate document purpose. Most of these files are legacy material and should not be used as current product or implementation truth without review.
 
-## Product and route intent
+For confirmed terms such as project, commune, inventory, and municipal assets, read the [Carbon Cut domain glossary](../../GLOSSAIRE.md). Collectivity is one offering within Carbon Cut; the glossary does not define the scope of the whole application.
 
-- [Product assumptions](product/00-product-truth.md) need discussion before they can be treated as current.
-- [Route map](product/routes.md) is outdated and needs a separate review. The three old route specs were removed.
+## Current product and routes
+
+- [Product scope](product/00-product-truth.md) records confirmed domain decisions, the implemented journey, and open questions.
+- [Route map](product/routes.md) lists current frontend entry points.
 - [Result page requirements](product/result-page-requirements.md) remain to be audited.
 
-These files record earlier proposals and assumptions. The product truth needs a new discussion before it can guide route or UI work.
+Open questions in the product scope document still require a product decision. Other product notes may record earlier proposals and need review before they guide new work.
 
 ## Legacy architecture to audit
 

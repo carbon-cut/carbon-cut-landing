@@ -1,92 +1,34 @@
-# Collectivity Route Map
+# Collectivity route map
 
-This document defines the current `collectivity` route structure.
+This map records the current frontend pages under the localized `/collectivity` route. The locale prefix is omitted below. It describes implemented entry points; use [Collectivity product scope](00-product-truth.md) for product claims and the [domain glossary](../../../GLOSSAIRE.md) for terminology.
 
-It follows `docs/collectivity/product/00-product-truth.md`.
+## Public and commercial entry
 
-If a route is not listed here as current scope, do not assume it is part of the product today.
+| Route                        | Current role                                                 |
+| ---------------------------- | ------------------------------------------------------------ |
+| `/collectivity`              | Collectivity landing page with entry to pricing and contact. |
+| `/collectivity/pricing`      | Configure a subscription and begin the quote flow.           |
+| `/collectivity/pricing/[id]` | Read the status of a submitted quote.                        |
 
-## Current Product Scope
+## Subscription access and project creation
 
-The current product is an inventory workspace for one municipality and its territory.
+| Route                                       | Current role                                                                            |
+| ------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `/collectivity/subscription`                | Manage capacity and access for an eligible subscription, including invitation requests. |
+| `/collectivity/invitation`                  | Open an invitation or subscription access request.                                      |
+| `/collectivity/projects/start`              | Select available approved access for creating a project.                                |
+| `/collectivity/projects/setup?claimId=[id]` | Set up a new project using an approved subscription claim.                              |
 
-The route structure should reflect three things:
+## Project work
 
-- a root entry that summarizes workspace status
-- a cadrage route that sets the territory and the inventory years
-- an inventory entry route for data input and import
-- a separate inventory result route for reading outputs
+`[planId]` is the project slug in the current route structure. Each project concerns one commune.
 
-## Current Routes
+| Route                                           | Current role                                                                        |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `/collectivity/projects`                        | List projects accessible to the signed-in user and open one.                        |
+| `/collectivity/projects/[planId]`               | Redirect to that project's setup page.                                              |
+| `/collectivity/projects/[planId]/setup`         | Review or edit the project's territory, years, and initial inventory applicability. |
+| `/collectivity/projects/[planId]/ghg-inventory` | Enter inventory data, save a draft, and submit it for calculation.                  |
+| `/collectivity/projects/[planId]/ghg-result`    | Read calculated inventory results.                                                  |
 
-### 1. Root Workspace
-
-`/collectivity`
-
-Role:
-
-- global access point to collectivity
-- workspace entry or plan selector when needed
-
-### 2. Municipality Workspace
-
-`/collectivity/[planId]`
-
-Role:
-
-- workspace entry for one municipality
-- surface the current completeness state
-- provide the main entry point into the inventory workspace
-
-This route is where completeness should be summarized.
-
-### 3. Inventory
-
-`/collectivity/[planId]/inventaire`
-
-Role:
-
-- enter or import inventory data
-- manage the data collection workflow
-
-This route is for input only.
-
-Evidence and hypotheses are embedded in the input flow and are not separate top-level product areas.
-
-### 4. Cadrage
-
-`/collectivity/[planId]/cadrage`
-
-Role:
-
-- define the territory of reference for the inventory
-- confirm the reference year and support years before data entry
-
-This route is part of the current product scope.
-
-### 5. Inventory Results
-
-`/collectivity/[planId]/result`
-
-Role:
-
-- read the inventory output
-- inspect results by category, source, or perimeter
-
-This is a separate route from input because reading results is a different task from entering data.
-
-## Out Of Scope For Current Product
-
-These routes may exist in code or documentation, but they are not current product scope:
-
-- `/collectivity/[planId]/scenarios`
-- `/collectivity/[planId]/actions`
-
-They should not be marketed or described as active product capabilities.
-
-## Routing Rules
-
-- Keep inventory entry and inventory reading separate.
-- Keep completeness at the workspace root, not inside the inventory input route.
-- Do not let future planning routes shape current product claims.
-- Do not treat old route drafts as product truth.
+The route names for objectives, investment plans, indicators, rankings, and intercommunal pooling in navigation code are not evidence of developed pages or services. Their product meaning remains open.
