@@ -1,6 +1,6 @@
 "use client";
 
-import ResultMetricCard from "@/app/[locale]/collectivity/projects/[planId]/result/_components/ResultMetricCard";
+import ResultMetricCard from "@/app/[locale]/collectivity/projects/[planId]/ghg-result/_components/ResultMetricCard";
 import { useCollectivityWorkspaceSnapshot } from "@/app/[locale]/collectivity/_components/collectivityProjectContext";
 import type { CollectivityInventoryCalculationResult } from "@/app/[locale]/collectivity/_lib/queries";
 import { useScopedI18n } from "@/locales/client";
@@ -20,6 +20,7 @@ export default function ResultSummaryCards({
   const snapshot = useCollectivityWorkspaceSnapshot();
 
   const referenceYear = snapshot.currentInventory.setupPayload.referenceYear;
+
   const summaryMetrics = result ? buildSummaryMetrics(result) : null;
 
   return (

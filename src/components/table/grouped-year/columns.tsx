@@ -9,7 +9,7 @@ import type { GroupedYearTableProps } from "./types";
 import type {
   InventoryTableColumn,
   InventoryTableRow,
-} from "@/app/[locale]/collectivity/projects/[planId]/inventory/types";
+} from "@/app/[locale]/collectivity/projects/[planId]/ghg-inventory/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { InventoryTableIconButton } from "../InventoryTableHeader";
 

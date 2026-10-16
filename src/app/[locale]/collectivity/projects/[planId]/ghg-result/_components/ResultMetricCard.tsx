@@ -5,7 +5,7 @@ import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 import {
   summarizeResultMetric,
   type ResultMetricSeries,
-} from "@/app/[locale]/collectivity/projects/[planId]/result/_lib/summary-metric";
+} from "@/app/[locale]/collectivity/projects/[planId]/ghg-result/_lib/summary-metric";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";

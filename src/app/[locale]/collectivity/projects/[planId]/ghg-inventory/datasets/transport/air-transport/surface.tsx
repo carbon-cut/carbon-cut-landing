@@ -3,8 +3,8 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import { useInventoryContext } from "@/app/[locale]/collectivity/projects/[planId]/inventory/context/inventory-context";
-import { InventoryYearErrors } from "@/app/[locale]/collectivity/projects/[planId]/inventory/components/InventoryYearSelector";
+import { useInventoryContext } from "@/app/[locale]/collectivity/projects/[planId]/ghg-inventory/context/inventory-context";
+import { InventoryYearErrors } from "@/app/[locale]/collectivity/projects/[planId]/ghg-inventory/components/InventoryYearSelector";
 import {
   collectivityQueryKeys,
   collectivityQueryOptions,

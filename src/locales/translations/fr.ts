@@ -1383,46 +1383,36 @@ export default {
             title: "Configuration",
             description:
               "Définir le territoire de référence, les années et le périmètre initial du projet.",
-            status: "À configurer",
           },
-          inventory: {
-            title: "Inventaire",
+          "ghg-inventory": {
+            title: "Inventaire GES",
             description:
               "Gérer la collecte, les années couvertes et les résultats d'inventaire dans un même espace de travail.",
-            status: "Actif",
           },
-          result: {
-            title: "Résultat",
+          "ghg-result": {
+            title: "Résultats GES",
             description:
               "Lire les sorties calculées de l'inventaire et vérifier les valeurs retournées par le backend.",
-            status: "Lecture",
           },
-          scenarios: {
-            title: "Scénarios",
-            description:
-              "Comparer les trajectoires prospectives et construire les hypothèses BaU / BaC.",
-            status: "À structurer",
+          "prospectives&Objectives": {
+            title: "Objectifs & trajectoires",
+            description: "Définir les orientations prospectives et les objectifs.",
           },
-          actions: {
+          "investment-plan": {
             title: "Plan d'action",
-            description:
-              "Gérer le portefeuille des fiches actions, avec les coûts, le calendrier et le suivi dans ce même module.",
-            status: "À structurer",
+            description: "Plan d'action et d'investissement d'atténuation des GES.",
           },
-          mrv: {
-            title: "MRV",
-            description: "Mesurer, rapporter et vérifier les actions climatiques.",
-            status: "Indisponible",
+          "significant-indicators": {
+            title: "Indicateurs",
+            description: "Suivre les indicateurs climatiques significatifs.",
           },
-          multiCriteriaAnalysis: {
-            title: "Analyse multicritère",
-            description: "Évaluer les options selon plusieurs critères de décision.",
-            status: "Indisponible",
+          "performance-ranking": {
+            title: "Performance & classement",
+            description: "Comparer les performances climatiques et les classements.",
           },
-          objectives: {
-            title: "Objectifs",
-            description: "Définir et suivre les objectifs climatiques du plan.",
-            status: "Indisponible",
+          "intercommunal-pooling": {
+            title: "Mutualisation intercommunale",
+            description: "Coordonner les actions climatiques entre communes.",
           },
         },
       },
@@ -1855,7 +1845,7 @@ export default {
           calculationError: "Le serveur ne peut pas calculer ce jeu de données.",
           requestError: "La demande de calcul n'a pas abouti.",
           total: "Total",
-          formulaVersion: "Version formule",
+          calculationCodeDigest: "Empreinte du code de calcul",
           parameters: "Paramètres",
           warnings: "Avertissements",
         },

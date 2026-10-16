@@ -1,6 +1,5 @@
-import type { CollectivitySetupSnapshot } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
 import { fetchAuthenticated } from "@/lib/auth/browser-request";
-import type { operations } from "@/generated/backend-api";
+import type { components, operations } from "@/generated/backend-api";
 import type { CollectivitySetupValues } from "@/app/[locale]/collectivity/projects/setup/_lib/schema";
 import type { AvailableCollectivityClaim } from "@/app/[locale]/collectivity/invitation/_lib/types";
 import type {
@@ -11,12 +10,6 @@ import type {
   SubscriptionPricePreview,
   SubscriptionPricePreviewRequest,
 } from "@/app/[locale]/collectivity/pricing/_lib/pricing";
-import type {
-  CollectivityResultRow,
-  CollectivityResultsByYear,
-  CollectivityResultYearKey,
-} from "@/lib/collectivity/result-types";
-
 export type {
   CollectivityResultRow,
   CollectivityResultsByYear,
@@ -70,40 +63,15 @@ type ApiErrorPayload = {
   };
 };
 
-type DebugCalculationWarning = {
-  code?: string;
-  itemId?: string;
-  path?: string;
-  message?: string;
-  details?: Record<string, unknown>;
-};
+type InventoryResultResponse =
+  operations["getCollectivityCurrentInventoryResult"]["responses"][200]["content"]["application/json"];
 
-export type CollectivityCalculationWarning = {
-  code:
-    | "negativeEstimatedActivityClamped"
-    | "missingLtoCorrectionFactorDefaulted"
-    | "treeAbsorptionFactorFallbackUsed"
-    | "greenWasteAbsorptionFallbackUsed";
-  itemId?: string;
-  path?: string;
-  message: string;
-  details?: Record<string, unknown>;
-};
+export type CollectivityCalculationWarning = components["schemas"]["CalculationWarning"];
+export type CollectivityInventoryCalculationResult = InventoryResultResponse["data"];
 
-export type CollectivityInventoryCalculationResult = {
-  id: string;
-  calculationRunId: string;
-  resultRows: Record<CollectivityResultYearKey, CollectivityResultRow[]>;
-  context: {
-    population: Partial<Record<CollectivityResultYearKey, { value: number; unit: "capita" }>>;
-  };
-  warnings: CollectivityCalculationWarning[];
-  reportingLines: Array<{
-    key: string;
-    values: Record<string, number | "NE">;
-  }>;
-  createdAt: string;
-};
+type DebugCalculationResponse =
+  operations["debugCalculateCollectivityInventory"]["responses"][200]["content"]["application/json"];
+export type DebugCalculationResult = DebugCalculationResponse["data"];
 
 export type CollectivitySupportedValue = {
   value: string;
@@ -225,7 +193,7 @@ export async function fetchCollectivityInventoryResult(projectSlug: string) {
     }
   );
 
-  const payload = await readApiJson<{ data?: CollectivityInventoryCalculationResult }>(response);
+  const payload = await readApiJson<InventoryResultResponse>(response);
 
   if (!payload.data) {
     throw new Error("Collectivity inventory result not found");
@@ -241,7 +209,10 @@ export async function fetchCollectivitySetupSnapshot(projectSlug: string) {
       credentials: "same-origin",
     }
   );
-  const payload = await readApiJson<{ data?: CollectivitySetupSnapshot }>(response);
+  const payload =
+    await readApiJson<
+      operations["getCollectivityCurrentInventory"]["responses"][200]["content"]["application/json"]
+    >(response);
 
   if (!payload.data) {
     throw new Error("Collectivity setup not found");
@@ -289,7 +260,10 @@ export async function saveCollectivitySetupRequest({
       body: JSON.stringify(currentPlanId ? values : { ...values, approvedClaimId }),
     }
   );
-  const payload = await readApiJson<{ data?: CollectivitySetupSnapshot }>(response);
+  const payload = await readApiJson<
+    | operations["updateCollectivityProjectSetup"]["responses"][200]["content"]["application/json"]
+    | operations["initializeCollectivityProject"]["responses"][200]["content"]["application/json"]
+  >(response);
 
   if (!payload.data) {
     throw new Error("Collectivity setup save returned no data");
@@ -351,7 +325,9 @@ export async function calculateCollectivityInventoryRequest({
     }
   );
 
-  return readApiJson<Record<string, unknown>>(response);
+  return readApiJson<
+    operations["calculateCollectivityInventory"]["responses"][200]["content"]["application/json"]
+  >(response);
 }
 
 export async function debugCalculateCollectivityDatasetRequest({
@@ -377,17 +353,7 @@ export async function debugCalculateCollectivityDatasetRequest({
       }),
     }
   );
-  const payload = await readApiJson<{
-    data?: {
-      datasetKey: string;
-      resultRows: CollectivityResultsByYear;
-      parameterSnapshot?: {
-        items?: unknown[];
-      };
-      warnings?: DebugCalculationWarning[];
-      formulaVersion: string;
-    };
-  }>(response);
+  const payload = await readApiJson<DebugCalculationResponse>(response);
 
   if (!payload.data) {
     throw new Error("Collectivity debug calculation returned no data");

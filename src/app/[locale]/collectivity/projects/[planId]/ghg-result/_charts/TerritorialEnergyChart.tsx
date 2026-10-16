@@ -15,7 +15,7 @@ import {
   TabsList,
   TabsTrigger as TabsPrimitiveTrigger,
 } from "@/components/ui/tabs";
-import { getInventoryFamilyNavIcon } from "@/app/[locale]/collectivity/projects/[planId]/inventory/components/inventoryNavIcons";
+import { getInventoryFamilyNavIcon } from "@/app/[locale]/collectivity/projects/[planId]/ghg-inventory/components/inventoryNavIcons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useScopedI18n } from "@/locales/client";
 

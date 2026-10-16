@@ -3,17 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ClipboardList,
-  ClipboardCheck,
   ChartColumn,
   ChevronUp,
   FileSpreadsheet,
   Goal,
-  ChartScatter,
+  ChartNoAxesCombined,
+  Network,
   SlidersHorizontal,
-  Target,
+  ClipboardList,
+  CircleGauge,
   type LucideIcon,
-  ChartSpline,
 } from "lucide-react";
 
 import Logo from "@/components/Logo";
@@ -48,7 +47,6 @@ export type CollectivityRouteItem = {
   key: CollectivityModuleSlug;
   href: string;
   title: string;
-  status: string;
   icon: LucideIcon;
   available: boolean;
   soon: boolean;
@@ -61,13 +59,13 @@ const routeDefinitions: Array<{
   soon?: boolean;
 }> = [
   { key: "setup", icon: SlidersHorizontal, available: true },
-  { key: "inventory", icon: FileSpreadsheet, available: true },
-  { key: "result", icon: ChartColumn, available: true },
-  { key: "multiCriteriaAnalysis", icon: ChartScatter, available: false, soon: true },
-  { key: "objectives", icon: Goal, available: false },
-  { key: "scenarios", icon: ChartSpline, available: false },
-  { key: "actions", icon: ClipboardList, available: false },
-  { key: "mrv", icon: ClipboardCheck, available: false },
+  { key: "ghg-inventory", icon: FileSpreadsheet, available: true },
+  { key: "ghg-result", icon: ChartColumn, available: true },
+  { key: "prospectives&Objectives", icon: Goal, available: false },
+  { key: "investment-plan", icon: ClipboardList, available: false },
+  { key: "significant-indicators", icon: CircleGauge, available: false },
+  { key: "performance-ranking", icon: ChartNoAxesCombined, available: false },
+  { key: "intercommunal-pooling", icon: Network, available: false },
 ];
 
 const BRAND_MARK_SIZE = 40;
@@ -83,7 +81,6 @@ export function useCollectivityRouteItems(planId: string): CollectivityRouteItem
       ...route,
       href: getCollectivityModuleRoute(planId, route.key),
       title: t(`${routeKey}.title`) as string,
-      status: t(`${routeKey}.status`) as string,
       available: route.available,
       soon: route.soon ?? false,
     };
@@ -156,7 +153,7 @@ export default function CollectivitySidebar({
                       tooltip={route.title}
                       disabled={!route.available}
                       className={cn(
-                        "relative gap-4 h-9 w-full overflow-hidden rounded-md px-4 text-sm transition-all duration-200 group-data-[collapsible=icon]:h-fit group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:rounded-xl group-data-[collapsible=icon]:px-0",
+                        "relative gap-4 min-h-9 h-fit w-full overflow-hidden rounded-md px-4 text-sm transition-all duration-200 group-data-[collapsible=icon]:h-fit group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:rounded-xl group-data-[collapsible=icon]:px-0",
                         NAV_ICON_SIZE_CLASS,
                         "hover:bg-[hsl(var(--primary)/0.07)] group-data-[collapsible=icon]:hover:bg-sidebar-accent",
                         "data-[active=true]:bg-primary/10 data-[active=true]:text-foreground data-[active=true]:before:absolute data-[active=true]:before:inset-y-0 data-[active=true]:before:left-0 data-[active=true]:before:w-[3px] data-[active=true]:before:bg-primary",
@@ -182,9 +179,9 @@ export default function CollectivitySidebar({
                             isCollapsed && isActive && "text-primary-foreground"
                           )}
                         />
-                        <div className="group-data-[collapsible=icon]:hidden">
+                        <div className="group-data-[collapsible=icon]:hidden block">
                           <Typography variant={"bodyBold"} size="xs" className="text-foreground ">
-                            <span className="truncate">{route.title}</span>
+                            <span className="">{route.title}</span>
                           </Typography>
                           {route.soon && !isCollapsed && (
                             <Badge className="rounded-full w-fit" variant="warning">

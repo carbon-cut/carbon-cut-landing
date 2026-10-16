@@ -1362,45 +1362,36 @@ export default {
             title: "Setup",
             description:
               "Define the reference territory, the years and the initial scope of the project.",
-            status: "To configure",
           },
-          inventory: {
-            title: "Inventory",
+          "ghg-inventory": {
+            title: "GHG inventory",
             description:
               "Manage collection, years covered and inventory results in the same workspace.",
-            status: "Active",
           },
-          result: {
-            title: "Result",
+          "ghg-result": {
+            title: "GHG results",
             description:
               "Read the calculated inventory outputs and check the values returned by the backend.",
-            status: "Reading",
           },
-          scenarios: {
-            title: "Scenarios",
-            description: "Compare prospective trajectories and construct BaU/BaC hypotheses.",
-            status: "To structure",
+          "prospectives&Objectives": {
+            title: "Objectives & trajectories",
+            description: "Set prospective directions and objectives.",
           },
-          actions: {
+          "investment-plan": {
             title: "Action plan",
-            description:
-              "Manage the portfolio of action sheets, with costs, calendar and monitoring in this same module.",
-            status: "To structure",
+            description: "Action and investment plan for GHG mitigation.",
           },
-          mrv: {
-            title: "MRV",
-            description: "Measurement, reporting and verification of climate actions.",
-            status: "Unavailable",
+          "significant-indicators": {
+            title: "Indicators",
+            description: "Track significant climate indicators.",
           },
-          multiCriteriaAnalysis: {
-            title: "Multi-criteria analysis",
-            description: "Assess options against multiple decision criteria.",
-            status: "Unavailable",
+          "performance-ranking": {
+            title: "Performance & ranking",
+            description: "Compare climate performance and rankings.",
           },
-          objectives: {
-            title: "Objectives",
-            description: "Define and track the plan's climate objectives.",
-            status: "Unavailable",
+          "intercommunal-pooling": {
+            title: "Intermunicipal cooperation",
+            description: "Coordinate climate work across municipalities.",
           },
         },
       },
@@ -1822,7 +1813,7 @@ export default {
           calculationError: "The server cannot calculate this dataset.",
           requestError: "The calculation request was not successful.",
           total: "Total",
-          formulaVersion: "Formula version",
+          calculationCodeDigest: "Calculation code digest",
           parameters: "Settings",
           warnings: "Warnings",
         },

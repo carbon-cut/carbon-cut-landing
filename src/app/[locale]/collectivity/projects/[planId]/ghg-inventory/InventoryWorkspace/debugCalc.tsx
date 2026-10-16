@@ -7,13 +7,13 @@ import { Calculator } from "lucide-react";
 export function DebugCalculationResult({
   result,
   label,
-  formulaVersionLabel,
+  calculationCodeDigestLabel,
   parametersLabel,
   warningsLabel,
 }: {
   result: DebugCalculationPanelState;
   label: string;
-  formulaVersionLabel: string;
+  calculationCodeDigestLabel: string;
   parametersLabel: string;
   warningsLabel: string;
 }) {
@@ -48,12 +48,12 @@ export function DebugCalculationResult({
           <div className="flex flex-wrap gap-x-4 gap-y-1">
             <Typography asChild variant="caption" size="sm">
               <span>
-                {formulaVersionLabel}: {result.formulaVersion}
+                {calculationCodeDigestLabel}: {result.calculationCodeDigest}
               </span>
             </Typography>
             <Typography asChild variant="caption" size="sm">
               <span>
-                {parametersLabel}: {result.parameterCount}
+                {parametersLabel}: {result.parameterCount ?? "—"}
               </span>
             </Typography>
           </div>
@@ -133,7 +133,9 @@ export function DebugCalculationPanel({
           <DebugCalculationResult
             result={result}
             label={t("inventoryWorkspace.debugCalculation.label") as string}
-            formulaVersionLabel={t("inventoryWorkspace.debugCalculation.formulaVersion") as string}
+            calculationCodeDigestLabel={
+              t("inventoryWorkspace.debugCalculation.calculationCodeDigest") as string
+            }
             parametersLabel={t("inventoryWorkspace.debugCalculation.parameters") as string}
             warningsLabel={t("inventoryWorkspace.debugCalculation.warnings") as string}
           />

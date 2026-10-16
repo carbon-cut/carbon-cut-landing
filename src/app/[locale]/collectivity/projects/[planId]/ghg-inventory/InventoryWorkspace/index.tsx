@@ -309,8 +309,8 @@ export default function InventoryWorkspace({
           datasetKey: debugDatasetKey,
           resultRows,
           warnings: debugData.warnings ?? [],
-          formulaVersion: debugData.formulaVersion,
-          parameterCount: debugData.parameterSnapshot?.items?.length ?? 0,
+          calculationCodeDigest: debugData.calculationCodeDigest,
+          parameterCount: debugData.parameterCount,
         },
       }));
       console.log("debugData", debugData);
