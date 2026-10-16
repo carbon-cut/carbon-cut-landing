@@ -1,6 +1,6 @@
 # Collectivity product scope
 
-This document records confirmed product decisions and the customer journey represented by the current frontend. Use the [domain glossary](../../../GLOSSAIRE.md) for definitions. A visible label or placeholder does not by itself establish a product capability.
+This document records confirmed product decisions and the customer journey represented by the current frontend. Use the [domain glossary](../../../GLOSSARY.md) for definitions. A visible label or placeholder does not by itself establish a product capability.
 
 ## Place within Carbon Cut
 

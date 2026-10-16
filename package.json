@@ -15,6 +15,7 @@
     "install:types": "dotenv -e .env -- npm install @carbon-cut/types",
     "start": "next start",
     "lint": "next lint",
+    "docs:check-links": "node scripts/check-doc-links.mjs",
     "api:sync": "node scripts/sync-backend-openapi.mjs && npm run api:generate",
     "api:generate": "openapi-typescript openapi/backend.yaml -o src/generated/backend-api.ts && prettier --write src/generated/backend-api.ts",
     "api:check:source": "node scripts/check-backend-openapi.mjs",

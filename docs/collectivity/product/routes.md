@@ -1,6 +1,6 @@
 # Collectivity route map
 
-This map records the current frontend pages under the localized `/collectivity` route. The locale prefix is omitted below. It describes implemented entry points; use [Collectivity product scope](00-product-truth.md) for product claims and the [domain glossary](../../../GLOSSAIRE.md) for terminology.
+This map records the current frontend pages under the localized `/collectivity` route. The locale prefix is omitted below. It describes implemented entry points; use [Collectivity product scope](00-product-truth.md) for product claims and the [domain glossary](../../../GLOSSARY.md) for terminology.
 
 ## Public and commercial entry
 

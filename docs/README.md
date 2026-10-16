@@ -1,6 +1,6 @@
 # Documentation map
 
-For confirmed business terminology across Carbon Cut, start with the [domain glossary](../GLOSSAIRE.md).
+For confirmed business terminology across Carbon Cut, start with the [domain glossary](../GLOSSARY.md).
 
 Start with the area you are working on:
 

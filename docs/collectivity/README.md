@@ -2,7 +2,7 @@
 
 The folders separate document purpose. Most of these files are legacy material and should not be used as current product or implementation truth without review.
 
-For confirmed terms such as project, commune, inventory, and municipal assets, read the [Carbon Cut domain glossary](../../GLOSSAIRE.md). Collectivity is one offering within Carbon Cut; the glossary does not define the scope of the whole application.
+For confirmed terms such as project, commune, inventory, and municipal assets, read the [Carbon Cut domain glossary](../../GLOSSARY.md). Collectivity is one offering within Carbon Cut; the glossary does not define the scope of the whole application.
 
 ## Current product and routes
 
@@ -21,6 +21,5 @@ Open questions in the product scope document still require a product decision. O
 ## Planning and references
 
 - [Central backlog](planning/backlog.md), [setup edit audit](planning/notes/setup-edit-audit.md), and [task example](planning/tasks/taskExemple.md)
-- [Auth revalidation](planning/auth-revalidation.md) remains to be audited.
 
 The backlog is provisional. Other planning files may describe completed work or superseded proposals; their status is unverified unless an audit note says otherwise.
