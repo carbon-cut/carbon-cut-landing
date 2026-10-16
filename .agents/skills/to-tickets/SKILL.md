@@ -10,6 +10,8 @@ Break a plan, spec, or conversation into a set of **tickets**: tracer-bullet ver
 
 The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
 
+When a feature spans repositories, read `.agents/skills/cross-repo-coordination/SKILL.md` before drafting tickets. It defines the canonical parent, repository ownership, cross-repository blockers, and scope rules.
+
 ## Process
 
 ### 1. Gather context

@@ -23,16 +23,41 @@ jobs:
             echo "Configure BACKEND_CONTRACT_READ_TOKEN with read access to carbon-cut-backend."
             exit 1
           fi
-      - name: Checkout backend contract
+      - name: Checkout backend target contract
         uses: actions/checkout@v4
         with:
           repository: carbon-cut/carbon-cut-backend
           ref: ${{ github.base_ref || github.ref_name }}
           token: ${{ secrets.BACKEND_CONTRACT_READ_TOKEN }}
-          path: backend-contract
+          path: backend-contract-target
           persist-credentials: false
-          sparse-checkout: openapi/openapi.yaml
+          sparse-checkout: |
+            openapi/openapi.yaml
+            .agents/skills/cross-repo-coordination/SKILL.md
           sparse-checkout-cone-mode: false
+      - name: Checkout paired backend contract
+        id: paired-backend
+        if: startsWith(github.head_ref, 'integrate/')
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          repository: carbon-cut/carbon-cut-backend
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.BACKEND_CONTRACT_READ_TOKEN }}
+          path: backend-contract-paired
+          persist-credentials: false
+          sparse-checkout: |
+            openapi/openapi.yaml
+            .agents/skills/cross-repo-coordination/SKILL.md
+          sparse-checkout-cone-mode: false
+      - name: Select backend contract source
+        id: backend-contract-source
+        run: |
+          if [ -f backend-contract-paired/openapi/openapi.yaml ]; then
+            echo "path=backend-contract-paired" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=backend-contract-target" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -42,5 +67,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: npm run api:check:source
         env:
-          BACKEND_OPENAPI_FILE: backend-contract/openapi/openapi.yaml
+          BACKEND_OPENAPI_FILE: ${{ steps.backend-contract-source.outputs.path }}/openapi/openapi.yaml
+      - run: npm run skills:check-cross-repo
+        env:
+          CROSS_REPO_SKILL_FILE: ${{ steps.backend-contract-source.outputs.path }}/.agents/skills/cross-repo-coordination/SKILL.md
       - run: npm run api:check
