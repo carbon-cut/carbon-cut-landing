@@ -321,7 +321,10 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** Calculate one inventory dataset without persistence */
+    /**
+     * Calculate one inventory dataset without persistence
+     * @description Available in non-production environments only. The route is not registered in production.
+     */
     post: operations["debugCalculateCollectivityInventory"];
     delete?: never;
     options?: never;

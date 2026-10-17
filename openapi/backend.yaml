@@ -428,6 +428,7 @@ paths:
     post:
       operationId: debugCalculateCollectivityInventory
       summary: Calculate one inventory dataset without persistence
+      description: Available in non-production environments only. The route is not registered in production.
       tags: [Collectivity projects]
       x-calculation-contract:
         $ref: "#/components/schemas/WastewaterCalculationContract"
