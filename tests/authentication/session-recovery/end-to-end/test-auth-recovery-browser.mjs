@@ -6,7 +6,7 @@ import {
   integrationConfig,
   revokeRefreshTokens,
   uniquePassword,
-} from "../test/integration/auth-helpers.ts";
+} from "../../../../test/integration/auth-helpers.ts";
 
 const browserBaseUrl = new URL(integrationConfig.frontendUrl);
 browserBaseUrl.hostname = "localhost";

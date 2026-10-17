@@ -34,7 +34,7 @@ vi.mock("next/link", () => ({
   ),
 }));
 
-vi.mock("@/app/auth/_components/auth-brand", () => ({
+vi.mock("@/app/[locale]/auth/_components/auth-brand", () => ({
   default: () => <div>AuthBrand</div>,
 }));
 
@@ -48,10 +48,14 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
-vi.mock("@/app/auth/_components/auth-api", () => ({
+vi.mock("@/app/[locale]/auth/_components/auth-api", () => ({
   postAuth: mockPostAuth,
   getErrorCode: mockGetErrorCode,
   isUpstreamAuthError: mockIsUpstreamAuthError,
+}));
+
+vi.mock("@/locales/client", () => ({
+  useScopedI18n: () => (key: string) => key,
 }));
 
 vi.mock("@/lib/auth/auth-context", () => ({
@@ -93,7 +97,7 @@ describe("auth pages", () => {
   });
 
   it("shows invalid credentials on the sign-in page", async () => {
-    const SignInPage = (await import("@/app/auth/(compact)/sign-in/page")).default;
+    const SignInPage = (await import("@/app/[locale]/auth/(compact)/sign-in/page")).default;
     mockPostAuth.mockResolvedValue({
       ok: false,
       status: 401,
@@ -118,7 +122,7 @@ describe("auth pages", () => {
   });
 
   it("shows service unavailable on the sign-in page for upstream failures", async () => {
-    const SignInPage = (await import("@/app/auth/(compact)/sign-in/page")).default;
+    const SignInPage = (await import("@/app/[locale]/auth/(compact)/sign-in/page")).default;
     mockPostAuth.mockResolvedValue({
       ok: false,
       status: 503,
@@ -146,7 +150,7 @@ describe("auth pages", () => {
   });
 
   it("redirects sign-in to confirmation-required when email confirmation is needed", async () => {
-    const SignInPage = (await import("@/app/auth/(compact)/sign-in/page")).default;
+    const SignInPage = (await import("@/app/[locale]/auth/(compact)/sign-in/page")).default;
     mockSearchParamsGet.mockImplementation((key: string) => {
       if (key === "returnTo") return "/form";
       return null;
@@ -176,7 +180,7 @@ describe("auth pages", () => {
   });
 
   it("preserves collectivity returnTo on the sign-in signup link", async () => {
-    const SignInPage = (await import("@/app/auth/(compact)/sign-in/page")).default;
+    const SignInPage = (await import("@/app/[locale]/auth/(compact)/sign-in/page")).default;
     mockSearchParamsGet.mockImplementation((key: string) => {
       if (key === "returnTo") return "/collectivity/projects/start";
       return null;
@@ -191,7 +195,7 @@ describe("auth pages", () => {
   });
 
   it("preserves collectivity returnTo when sign-up redirects to confirmation-required", async () => {
-    const SignUpPage = (await import("@/app/auth/(shell)/sign-up/page")).default;
+    const SignUpPage = (await import("@/app/[locale]/auth/(shell)/sign-up/page")).default;
     mockSearchParamsGet.mockImplementation((key: string) => {
       if (key === "returnTo") return "/collectivity/projects/start";
       return null;
@@ -229,7 +233,8 @@ describe("auth pages", () => {
   });
 
   it("shows forgot-password success without backend", async () => {
-    const ForgotPasswordPage = (await import("@/app/auth/(compact)/forgot-password/page")).default;
+    const ForgotPasswordPage = (await import("@/app/[locale]/auth/(compact)/forgot-password/page"))
+      .default;
     mockPostAuth.mockResolvedValue({
       ok: true,
       data: { ok: true },
@@ -248,7 +253,8 @@ describe("auth pages", () => {
   });
 
   it("shows forgot-password unavailable instead of fake success on upstream failure", async () => {
-    const ForgotPasswordPage = (await import("@/app/auth/(compact)/forgot-password/page")).default;
+    const ForgotPasswordPage = (await import("@/app/[locale]/auth/(compact)/forgot-password/page"))
+      .default;
     mockPostAuth.mockResolvedValue({
       ok: false,
       status: 503,
@@ -274,7 +280,8 @@ describe("auth pages", () => {
   });
 
   it("shows resend success on the confirm-email page", async () => {
-    const ConfirmEmailPage = (await import("@/app/auth/(compact)/confirm-email/page")).default;
+    const ConfirmEmailPage = (await import("@/app/[locale]/auth/(compact)/confirm-email/page"))
+      .default;
     mockPostAuth.mockResolvedValue({
       ok: true,
       data: { email: "pending@example.com", sent: true },
@@ -295,7 +302,8 @@ describe("auth pages", () => {
   });
 
   it("shows invalid token on the confirm-email page", async () => {
-    const ConfirmEmailPage = (await import("@/app/auth/(compact)/confirm-email/page")).default;
+    const ConfirmEmailPage = (await import("@/app/[locale]/auth/(compact)/confirm-email/page"))
+      .default;
     mockPostAuth.mockResolvedValue({
       ok: false,
       status: 400,
@@ -316,7 +324,8 @@ describe("auth pages", () => {
   });
 
   it("preserves collectivity returnTo on the confirm-email sign-in link", async () => {
-    const ConfirmEmailPage = (await import("@/app/auth/(compact)/confirm-email/page")).default;
+    const ConfirmEmailPage = (await import("@/app/[locale]/auth/(compact)/confirm-email/page"))
+      .default;
     mockSearchParamsGet.mockImplementation((key: string) => {
       if (key === "email") return "pending@example.com";
       if (key === "returnTo") return "/collectivity/projects/start";

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { NextRequest } from "next/server";
+import { NextRequest, type NextFetchEvent } from "next/server";
 import type { AuthSessionResponse } from "@/lib/auth/types";
 
 const session: AuthSessionResponse = {
@@ -15,6 +15,8 @@ const session: AuthSessionResponse = {
   },
 };
 
+const event = {} as NextFetchEvent;
+
 describe("auth middleware", () => {
   const originalFetch = global.fetch;
 
@@ -24,14 +26,14 @@ describe("auth middleware", () => {
   });
 
   it("allows requests that already have an access token and user cookie", async () => {
-    const { middleware } = await import("../../middleware");
+    const middleware = (await import("@/middleware")).default;
     const request = new NextRequest("http://localhost/form", {
       headers: {
         cookie: `cc_access_token=${session.access_token}; cc_auth_user=${encodeURIComponent(JSON.stringify(session.user))}`,
       },
     });
 
-    const response = await middleware(request);
+    const response = await middleware(request, event);
     expect(response.status).toBe(200);
     expect(response.headers.get("location")).toBeNull();
   });
@@ -47,14 +49,14 @@ describe("auth middleware", () => {
         })
     ) as typeof fetch;
 
-    const { middleware } = await import("../../middleware");
+    const middleware = (await import("@/middleware")).default;
     const request = new NextRequest("http://localhost/form/questions", {
       headers: {
         cookie: "cc_refresh_token=refresh-token",
       },
     });
 
-    const response = await middleware(request);
+    const response = await middleware(request, event);
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining("/api/refresh-token-rotation"),
@@ -68,9 +70,9 @@ describe("auth middleware", () => {
 
   it("redirects to sign-in and preserves returnTo when unauthenticated", async () => {
     global.fetch = originalFetch;
-    const { middleware } = await import("../../middleware");
+    const middleware = (await import("@/middleware")).default;
     const request = new NextRequest("http://localhost/form/result?id=123");
-    const response = await middleware(request);
+    const response = await middleware(request, event);
 
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toBe(
