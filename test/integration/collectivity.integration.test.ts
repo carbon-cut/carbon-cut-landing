@@ -4,7 +4,11 @@ import {
   AUTH_REFRESH_COOKIE,
   AUTH_USER_COOKIE,
 } from "../../src/lib/auth/constants";
-import { CookieJar, ensureIntegrationServicesAvailable, fetchFrontend } from "./auth-helpers";
+import {
+  CookieJar,
+  ensureIntegrationServicesAvailable,
+  fetchFrontend,
+} from "../../tests/test-support/integration/auth-helpers";
 
 const integrationCollectivityUser = {
   email:

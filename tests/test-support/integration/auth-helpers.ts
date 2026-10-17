@@ -4,7 +4,7 @@ import {
   AUTH_ACCESS_COOKIE,
   AUTH_REFRESH_COOKIE,
   AUTH_USER_COOKIE,
-} from "../../src/lib/auth/constants";
+} from "../../../src/lib/auth/constants";
 const AUTH_TEST_SUPPORT_HEADER = "x-auth-test-support-key";
 
 loadLocalEnv();

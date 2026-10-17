@@ -1,5 +1,8 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { ensureIntegrationServicesAvailable, fetchFrontend } from "../../auth-helpers";
+import {
+  ensureIntegrationServicesAvailable,
+  fetchFrontend,
+} from "../../../test-support/integration/auth-helpers";
 
 const validContactMessage = {
   name: "Contact Integration Test",

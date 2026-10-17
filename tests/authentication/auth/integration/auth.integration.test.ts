@@ -13,7 +13,7 @@ import {
   revokeRefreshTokens,
   type TestSupportUser,
   uniquePassword,
-} from "../../../../test/integration/auth-helpers";
+} from "../../../test-support/integration/auth-helpers";
 
 type ManagedUser = {
   user: TestSupportUser;

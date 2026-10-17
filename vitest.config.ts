@@ -5,14 +5,14 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
-      "server-only": path.resolve(__dirname, "test/mocks/server-only.ts"),
+      "server-only": path.resolve(__dirname, "tests/test-support/in-process/server-only.ts"),
     },
   },
   test: {
     environment: "node",
     include: ["tests/**/*.test.{ts,tsx}", "test/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
     exclude: ["tests/**/integration/**/*.test.ts", "test/**/integration/**/*.test.ts"],
-    setupFiles: ["./test/vitest.setup.ts"],
+    setupFiles: ["./tests/test-support/in-process/vitest.setup.ts"],
     clearMocks: true,
     restoreMocks: true,
     mockReset: true,
