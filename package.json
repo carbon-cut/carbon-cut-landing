@@ -20,7 +20,7 @@
     "api:sync": "node scripts/sync-backend-openapi.mjs && prettier --write openapi/backend.yaml && npm run api:generate",
     "api:generate": "openapi-typescript openapi/backend.yaml -o src/generated/backend-api.ts && prettier --write src/generated/backend-api.ts",
     "api:check:source": "node scripts/check-backend-openapi.mjs",
-    "api:check": "npm run api:generate && git diff --exit-code -- src/generated/backend-api.ts",
+    "api:check": "node scripts/check-generated-backend-api.mjs",
     "format": "prettier --write .",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
