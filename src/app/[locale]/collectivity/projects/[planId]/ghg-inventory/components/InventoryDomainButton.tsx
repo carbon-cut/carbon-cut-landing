@@ -36,10 +36,10 @@ export default function InventoryDomainButton({
         "bg-background w-full transition-all duration-200 relative justify-center gap-2.5 rounded-none px-5 pb-[1.75rem] h-16 mt-4 hover:mt-1 hover:h-[4.25rem] hover:pt-[0.25rem] text-left shadow-none hover:bg-background/60",
         hasError
           ? active
-            ? "z-10 h-[4.5rem] pt-[0.5rem] mt-0 hover:h-[4.5rem] hover:pt-[0.5rem] hover:mt-0 rounded-t-2xl border-x border-t border-destructive/25 border-b-0 bg-card text-destructive hover:bg-card/60 hover:text-destructive"
+            ? "z-10 h-[4.5rem] pt-[0.5rem] mt-0 hover:h-[4.5rem] hover:pt-[0.5rem] hover:mt-0 rounded-t-2xl border-x border-t border-destructive/25 border-b-0 bg-card hover:bg-card text-destructive hover:text-destructive"
             : "text-destructive hover:text-destructive"
           : active
-            ? "z-10 h-[4.5rem] pt-[0.5rem] mt-0 hover:h-[4.5rem] hover:pt-[0.5rem] hover:mt-0  rounded-t-2xl border-x border-t border-border/10 border-b-0 border-b-primary bg-card hover:bg-card/60  text-primary hover:text-primary"
+            ? "z-10 h-[4.5rem] pt-[0.5rem] mt-0 hover:h-[4.5rem] hover:pt-[0.5rem] hover:mt-0  rounded-t-2xl border-x border-t border-border/10 border-b-0 border-b-primary bg-card hover:bg-card  text-primary hover:text-primary"
             : "text-secondary hover:text-foreground",
         className
       )}
