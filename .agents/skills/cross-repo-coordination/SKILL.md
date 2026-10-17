@@ -39,6 +39,7 @@ Use this workflow when a feature has implementation, contracts, tests, or ticket
 - Review each repository's integration branch against its intended target branch and the canonical spec, using `code-review`. Check the combined behavior across repositories, including API compatibility, authorization and error behavior, and the user flow named by the spec. Verify that every in-scope ticket is represented; a passing per-repository review alone does not establish cross-repository compatibility.
 - Run the relevant checks in each repository and the available cross-repository integration tests against the paired branches. Assess whether the integration tests cover the shared acceptance criteria. Report missing coverage or a contract mismatch as a finding for the owning implementation agent; do not make a reviewer-authored implementation change to clear the gate.
 - Record exactly which reviews and checks ran, their results, and any environment blocker. If a finding affects acceptance criteria or integration, pause PR readiness and give the user a precise handoff for the owning ticket or a proposed new ticket through `to-tickets`.
+- On each recheck, rewrite the review handoff so its blocking findings list contains only unresolved findings. Put verified fixes under a separate resolved heading and label deferred checks separately before sharing the handoff.
 
 ## Completion
 
