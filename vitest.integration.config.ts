@@ -13,7 +13,7 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["test/integration/**/*.test.ts"],
+    include: ["tests/integration/**/*.test.ts", "test/integration/**/*.test.ts"],
     clearMocks: true,
     restoreMocks: true,
     mockReset: true,
