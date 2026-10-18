@@ -13,7 +13,7 @@ import {
 const backendDirectory = resolve(process.env.INTEGRATION_BACKEND_DIR ?? "../carbon-cut-backend");
 const backendFixturePath = path.join(
   backendDirectory,
-  "tests/carbon-footprint/tunisia/sfax-inventory.js"
+  "tests/carbon-footprint/tunisia/sfax-dev-inventory.js"
 );
 const backendComparisonPath = path.join(
   backendDirectory,
@@ -28,7 +28,7 @@ for (const [description, filename] of [
   }
 }
 const requireBackend = createRequire(path.join(backendDirectory, "package.json"));
-const { sfaxInventory } = requireBackend(backendFixturePath);
+const { sfaxDevInventory } = requireBackend(backendFixturePath);
 const { compareSfaxInventoryResults } = requireBackend(backendComparisonPath);
 
 const userEmail = "sfax.user@example.com";
@@ -55,7 +55,7 @@ try {
 
   const restoreDraft = await context.request.put(
     new URL(`${inventoryPath}/input`, browserBaseUrl).toString(),
-    { data: { inventoryInput: sfaxInventory.inventoryInput } }
+    { data: { inventoryInput: sfaxDevInventory.inventoryInput } }
   );
   assert.equal(restoreDraft.status(), 200, "the saved Sfax draft should be restored");
 
