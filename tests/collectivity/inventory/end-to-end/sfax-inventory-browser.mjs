@@ -32,7 +32,7 @@ const { sfaxInventory } = requireBackend(backendFixturePath);
 const { compareSfaxInventoryResults } = requireBackend(backendComparisonPath);
 
 const userEmail = "sfax.user@example.com";
-const userPassword = "Password123!";
+const userPassword = process.env.INTEGRATION_SFAX_PASSWORD ?? "Password123!";
 const projectSlug = "sfax-end-to-end";
 // Run backend integration #21 first to restore this shared isolated test database.
 const browserBaseUrl = new URL(integrationConfig.frontendUrl);
