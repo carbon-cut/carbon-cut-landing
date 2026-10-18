@@ -44,7 +44,7 @@ AUTH_TEST_SUPPORT_KEY=your-test-support-secret
 
 The key must match the backend's `AUTH_TEST_SUPPORT_KEY`. The runner uses ports 3001 (frontend) and 1338 (backend) by default; set `INTEGRATION_FRONTEND_PORT` and `INTEGRATION_BACKEND_PORT` to change them. It fails if either port is already occupied.
 
-Install the Playwright browser once with `npx playwright install chromium`. The recovery browser test creates and cleans up its own auth user through the backend test-support HTTP surface. The collectivity project-creation integration test is skipped because project creation now depends on subscriptions; cover that flow with subscription tests.
+Install the Playwright browser once with `npx playwright install chromium`. The recovery browser test creates and cleans up its own auth user through the backend test-support HTTP surface. The Collectivity project-creation integration check uses `INTEGRATION_COLLECTIVITY_EMAIL` and `INTEGRATION_COLLECTIVITY_PASSWORD` (or the legacy `INTEGRATION_COLLECTIVITY_NEW_EMAIL`) and requires that user to have an approved, unconsumed Subscription claim in the test database. It consumes one claim per run; the integration runner does not provision or replenish Subscription claims.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

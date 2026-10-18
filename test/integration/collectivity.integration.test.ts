@@ -4,6 +4,7 @@ import {
   AUTH_REFRESH_COOKIE,
   AUTH_USER_COOKIE,
 } from "../../src/lib/auth/constants";
+import type { AvailableCollectivityClaim } from "../../src/app/[locale]/collectivity/invitation/_lib/types";
 import {
   CookieJar,
   ensureIntegrationServicesAvailable,
@@ -53,18 +54,36 @@ type CollectivitySetupResponse = {
   };
 };
 
+type AvailableClaimsResponse = {
+  data: AvailableCollectivityClaim[];
+};
+
 describe.sequential("collectivity integration", () => {
   beforeAll(async () => {
     await ensureIntegrationServicesAvailable();
   });
 
-  // Outdated: project creation now depends on subscriptions; cover it with subscription tests.
-  it.skip("creates a project, reloads setup from backend, and opens inventory", async () => {
+  it("creates a project using an available Subscription claim", async () => {
     const signInResult = await signInCollectivity(
       integrationCollectivityUser.email,
       integrationCollectivityUser.password
     );
     const jar = signInResult.jar;
+    const availableClaimsResponse = await fetchFrontend(
+      "/api/collectivity/subscription-claims/available",
+      undefined,
+      jar
+    );
+
+    expect(availableClaimsResponse.status).toBe(200);
+    const availableClaims = (await availableClaimsResponse.json()) as AvailableClaimsResponse;
+    const availableClaim = availableClaims.data[0];
+    if (!availableClaim) {
+      throw new Error(
+        `No available Subscription claim for ${integrationCollectivityUser.email}; configure an integration user with an approved, unconsumed claim`
+      );
+    }
+
     const slug = `it-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const payload: CollectivitySetupPayload = {
       name: `Integration ${slug}`,
@@ -87,7 +106,7 @@ describe.sequential("collectivity integration", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, approvedClaimId: availableClaim.id }),
       },
       jar
     );
