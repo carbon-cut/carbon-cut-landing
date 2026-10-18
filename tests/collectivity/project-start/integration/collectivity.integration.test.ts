@@ -3,13 +3,13 @@ import {
   AUTH_ACCESS_COOKIE,
   AUTH_REFRESH_COOKIE,
   AUTH_USER_COOKIE,
-} from "../../src/lib/auth/constants";
-import type { AvailableCollectivityClaim } from "../../src/app/[locale]/collectivity/invitation/_lib/types";
+} from "../../../../src/lib/auth/constants";
+import type { AvailableCollectivityClaim } from "../../../../src/app/[locale]/collectivity/invitation/_lib/types";
 import {
   CookieJar,
   ensureIntegrationServicesAvailable,
   fetchFrontend,
-} from "../../tests/test-support/integration/auth-helpers";
+} from "../../../test-support/integration/auth-helpers";
 
 const integrationCollectivityUser = {
   email:

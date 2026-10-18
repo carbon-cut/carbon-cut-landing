@@ -10,8 +10,8 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["tests/**/*.test.{ts,tsx}", "test/**/*.test.{ts,tsx}", "src/**/*.test.{ts,tsx}"],
-    exclude: ["tests/**/integration/**/*.test.ts", "test/**/integration/**/*.test.ts"],
+    include: ["tests/**/*.test.{ts,tsx}"],
+    exclude: ["tests/**/integration/**/*.test.ts"],
     setupFiles: ["./tests/test-support/in-process/vitest.setup.ts"],
     clearMocks: true,
     restoreMocks: true,
