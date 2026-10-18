@@ -82,7 +82,14 @@ try {
     if (args[0] === "submitError") submissionErrors.push(args[1]);
   });
 
+  const calculationResponse = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" &&
+      new URL(response.url()).pathname.endsWith(`${inventoryPath}/calculate`),
+    { timeout: 30_000 }
+  );
   await Promise.all([
+    calculationResponse,
     page.waitForRequest(
       (request) =>
         request.method() === "POST" &&
@@ -99,12 +106,7 @@ try {
     );
   });
 
-  const resultResponse = await page.waitForResponse(
-    (response) =>
-      response.request().method() === "GET" &&
-      new URL(response.url()).pathname.endsWith(resultPath),
-    { timeout: 120_000 }
-  );
+  const resultResponse = await context.request.get(new URL(resultPath, browserBaseUrl).toString());
   assert.equal(
     resultResponse.status(),
     200,
