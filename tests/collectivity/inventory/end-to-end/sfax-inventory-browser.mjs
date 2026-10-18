@@ -36,7 +36,6 @@ const userPassword = process.env.INTEGRATION_SFAX_PASSWORD ?? "Password123!";
 const projectSlug = "sfax-end-to-end";
 // Run backend integration #21 first to restore this shared isolated test database.
 const browserBaseUrl = new URL(integrationConfig.frontendUrl);
-browserBaseUrl.hostname = "localhost";
 const inventoryPath = `/api/collectivity/projects/${projectSlug}/current-inventory`;
 const resultPath = `${inventoryPath}/result`;
 

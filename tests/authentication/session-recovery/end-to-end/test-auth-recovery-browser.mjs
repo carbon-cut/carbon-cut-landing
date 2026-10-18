@@ -9,7 +9,6 @@ import {
 } from "../../../test-support/integration/auth-helpers.ts";
 
 const browserBaseUrl = new URL(integrationConfig.frontendUrl);
-browserBaseUrl.hostname = "localhost";
 const accessCookieName = "cc_access_token";
 const expiredAccessToken = "x.eyJleHAiOjF9.x";
 const password = uniquePassword();
@@ -39,6 +38,18 @@ try {
     cookies.some((cookie) => cookie.name === "cc_refresh_token"),
     "sign-in should set the refresh cookie"
   );
+
+  const page = await context.newPage();
+  const projectResponse = await page.goto(
+    new URL("/collectivity/projects/start", browserBaseUrl).toString(),
+    { waitUntil: "domcontentloaded" }
+  );
+  assert.equal(projectResponse?.status(), 200, "the signed-in user should open the Project page");
+  assert.ok(
+    new URL(page.url()).pathname.startsWith("/collectivity/"),
+    "the signed-in user should remain in Collectivity after opening the Project page"
+  );
+
   await context.addCookies([
     {
       name: accessCookieName,
@@ -51,7 +62,6 @@ try {
     },
   ]);
 
-  const page = await context.newPage();
   const refreshStatuses = [];
   page.on("response", (response) => {
     if (new URL(response.url()).pathname === "/api/auth/refresh") {
@@ -100,7 +110,7 @@ try {
   );
 
   console.log(
-    "Browser auth recovery passed: refresh return navigation and rejected-refresh expiry UX."
+    "Browser integration passed: signed-in Project navigation and refresh recovery/expiry."
   );
 } finally {
   await context?.close();
