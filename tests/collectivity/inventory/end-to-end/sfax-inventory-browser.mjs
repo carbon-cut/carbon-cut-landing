@@ -76,15 +76,35 @@ try {
     { waitUntil: "domcontentloaded" }
   );
 
-  const resultResponsePromise = page.waitForResponse(
+  const submissionErrors = [];
+  page.on("console", async (message) => {
+    const args = await Promise.all(message.args().map((argument) => argument.jsonValue()));
+    if (args[0] === "submitError") submissionErrors.push(args[1]);
+  });
+
+  await Promise.all([
+    page.waitForRequest(
+      (request) =>
+        request.method() === "POST" &&
+        new URL(request.url()).pathname.endsWith(`${inventoryPath}/calculate`),
+      { timeout: 30_000 }
+    ),
+    page.getByRole("button", { name: /^(Submit data|Soumettre les données)$/i }).click({
+      timeout: 10_000,
+    }),
+  ]).catch(async (error) => {
+    await page.close();
+    throw new Error(
+      `The frontend did not submit the Sfax calculation: ${JSON.stringify(submissionErrors)}. ${error.message}`
+    );
+  });
+
+  const resultResponse = await page.waitForResponse(
     (response) =>
       response.request().method() === "GET" &&
       new URL(response.url()).pathname.endsWith(resultPath),
     { timeout: 120_000 }
   );
-  await page.getByRole("button", { name: "Submit data", exact: true }).click();
-
-  const resultResponse = await resultResponsePromise;
   assert.equal(
     resultResponse.status(),
     200,
