@@ -34,6 +34,14 @@ npm run test:integration
 
 The command verifies the backend's configured test database, starts Strapi with `NODE_ENV=test`, starts Next.js with MSW disabled, waits for both, runs the integration suite and the Chromium browser recovery check, and stops only those two server processes. PostgreSQL and the existing test database remain running. Default factors are not seeded or checked by this command.
 
+Run the connected Sfax calculation paths with:
+
+```bash
+npm run test:integration:sfax
+```
+
+This verifies the same isolated database, runs the standalone backend Sfax Jest test, then starts Strapi and Next.js and runs the Sfax browser check. The standalone commands remain available: from the backend, `npm run test:debug -- --runTestsByPath tests/carbon-footprint/collectivity/integration/sfax-inventory.test.js`; from the frontend, `npm run test:integration:browser:sfax` (requires both services running).
+
 The backend must be checked out next to the frontend at `../carbon-cut-backend`, or `INTEGRATION_BACKEND_DIR` must point to it. Its `.env` must contain a complete `DATABASE_TEST_*` connection. The backend owns database verification and refuses to start test mode with a missing or matching normal database name.
 
 Required env vars for the integration suite:

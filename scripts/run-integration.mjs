@@ -9,6 +9,8 @@ const { loadEnvConfig } = nextEnv;
 
 const frontendDir = process.cwd();
 loadEnvConfig(frontendDir);
+const sfaxOnly = process.argv.includes("--sfax");
+const forwardedIntegrationArgs = process.argv.slice(2).filter((argument) => argument !== "--sfax");
 
 const backendDir = resolve(
   frontendDir,
@@ -165,6 +167,20 @@ try {
     backendEnv,
     "Backend DB verification"
   );
+  if (sfaxOnly) {
+    await run(
+      [
+        "run",
+        "test:debug",
+        "--",
+        "--runTestsByPath",
+        "tests/carbon-footprint/collectivity/integration/sfax-inventory.test.js",
+      ],
+      backendDir,
+      backendEnv,
+      "Backend Sfax integration test"
+    );
+  }
   backend = launch(["run", "start"], backendDir, backendEnv);
   await waitForHttp(backend, "Backend", `${backendUrl.origin}/_health`, 204, 120000);
 
@@ -175,18 +191,39 @@ try {
   );
   await waitForHttp(frontend, "Frontend", `${frontendUrl.origin}/api/auth/session`, 200, 120000);
 
-  await run(
-    ["run", "test:integration:vitest", "--", ...process.argv.slice(2)],
-    frontendDir,
-    frontendEnv,
-    "Integration tests"
-  );
-  await run(
-    ["run", "test:integration:browser"],
-    frontendDir,
-    frontendEnv,
-    "Browser integration tests"
-  );
+  if (sfaxOnly) {
+    await run(
+      ["run", "test:integration:browser:sfax"],
+      frontendDir,
+      frontendEnv,
+      "Browser Sfax integration test"
+    );
+  } else {
+    const checkFailures = [];
+    try {
+      await run(
+        ["run", "test:integration:vitest", "--", ...forwardedIntegrationArgs],
+        frontendDir,
+        frontendEnv,
+        "Integration tests"
+      );
+    } catch (error) {
+      checkFailures.push(error.message);
+    }
+    try {
+      await run(
+        ["run", "test:integration:browser"],
+        frontendDir,
+        frontendEnv,
+        "Browser integration tests"
+      );
+    } catch (error) {
+      checkFailures.push(error.message);
+    }
+    if (checkFailures.length > 0) {
+      throw new Error(`Integration checks failed:\n${checkFailures.join("\n")}`);
+    }
+  }
 } catch (error) {
   console.error(error.message);
   process.exitCode = 1;

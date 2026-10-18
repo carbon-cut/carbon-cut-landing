@@ -9,6 +9,7 @@
     "build": "next build",
     "test": "vitest run --config vitest.config.ts",
     "test:integration": "node scripts/run-integration.mjs",
+    "test:integration:sfax": "node scripts/run-integration.mjs --sfax",
     "test:integration:vitest": "vitest run --config vitest.integration.config.ts",
     "test:integration:browser": "node --import tsx tests/authentication/session-recovery/end-to-end/test-auth-recovery-browser.mjs",
     "test:integration:browser:sfax": "node --import tsx tests/collectivity/inventory/end-to-end/sfax-inventory-browser.mjs",
