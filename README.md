@@ -34,6 +34,14 @@ npm run test:browser:auth
 
 The command starts Next.js and a fresh contract-faithful mock backend on available local ports, then stops both. Each journey uses a new browser context; the backend process is recreated for each command run. Install Chromium once with `npx playwright install chromium` if it is not already available.
 
+Run sign-up and email confirmation journeys separately with:
+
+```bash
+npm run test:browser:auth:sign-up
+```
+
+This command starts an isolated Next.js app and mock backend, then checks registration, confirmation feedback, resend, and safe return navigation in Chromium.
+
 Real frontend/Strapi integration tests run separately:
 
 ```bash
