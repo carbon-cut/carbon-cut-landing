@@ -41,6 +41,21 @@ npm run test:browser:session-recovery
 ```
 
 It covers pending, successful, rejected, and unavailable recovery states through the running French app. The separate real frontend/Strapi recovery browser check remains part of `npm run test:integration`.
+Run the authenticated Collectivity Project-entry browser journey against the isolated mock backend and local Next.js app with:
+
+```bash
+npm run test:browser:collectivity-project-entry
+```
+
+This covers the Project destinations for signed-in users with and without an existing Project.
+
+Run sign-up and email confirmation journeys separately with:
+
+```bash
+npm run test:browser:auth:sign-up
+```
+
+This command starts an isolated Next.js app and mock backend, then checks registration, confirmation feedback, resend, and safe return navigation in Chromium.
 
 Real frontend/Strapi integration tests run separately:
 
