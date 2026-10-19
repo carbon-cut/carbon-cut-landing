@@ -7,6 +7,8 @@ import { buildTerritoryVehicleDefaultRows } from "./InventorySchema/transport/co
 import { transportDefault } from "./InventorySchema/transport";
 import { wasteDefault } from "./InventorySchema/waste";
 import { wastewaterSanitationDefault } from "./InventorySchema/wastewaterSanitation";
+import { buildBusesOperatorDefaultValues } from "./datasets/transport/buses/config";
+import { buildUrbanRailServiceDefaultValues } from "./datasets/transport/urban-rail/config";
 import type { InventoryWorkspaceConfig } from "./types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -64,6 +66,12 @@ function mergeInventoryDefaults(defaultValue: unknown, savedValue: unknown): unk
   return savedValue;
 }
 
+function fillSavedRows(dataSet: unknown, buildRowDefaults: () => Record<string, unknown>): unknown {
+  return Array.isArray(dataSet)
+    ? dataSet.map((row) => mergeInventoryDefaults(buildRowDefaults(), row))
+    : dataSet;
+}
+
 export function buildInventoryDefaultValues(
   inventoryInput: Record<string, unknown> | null | undefined,
   years: readonly number[],
@@ -71,25 +79,47 @@ export function buildInventoryDefaultValues(
 ) {
   const defaults = buildInventoryDefaults(years, workspace);
   const merged = mergeInventoryDefaults(defaults, inventoryInput) as Partial<InventoryFormValues>;
+  const activeDatasetKeys = new Set(workspace.datasets.map((dataset) => dataset.key));
+  const hasTransportRowsToFill =
+    activeDatasetKeys.has("buses") || activeDatasetKeys.has("urbanRail");
+  const mergedRecord = merged as Record<string, unknown>;
+  const transport = isRecord(mergedRecord.transport) ? mergedRecord.transport : {};
+  const normalizedTransport = { ...transport };
+
+  for (const [datasetKey, buildRowDefaults] of [
+    ["buses", buildBusesOperatorDefaultValues],
+    ["urbanRail", buildUrbanRailServiceDefaultValues],
+  ] as const) {
+    const dataset = transport[datasetKey];
+
+    if (activeDatasetKeys.has(datasetKey) && isRecord(dataset)) {
+      normalizedTransport[datasetKey] = {
+        ...dataset,
+        dataSet: fillSavedRows(dataset.dataSet, buildRowDefaults),
+      };
+    }
+  }
+
+  const normalized = hasTransportRowsToFill
+    ? ({ ...merged, transport: normalizedTransport } as Partial<InventoryFormValues>)
+    : merged;
   const hasTerritoryVehicles = workspace.datasets.some(
     (dataset) => dataset.key === "territoryVehicles"
   );
 
   if (!hasTerritoryVehicles) {
-    return merged;
+    return normalized;
   }
 
-  const mergedRecord = merged as Record<string, unknown>;
-  const transport = isRecord(mergedRecord.transport) ? mergedRecord.transport : {};
-  const territoryVehicles = isRecord(transport.territoryVehicles)
-    ? transport.territoryVehicles
+  const territoryVehicles = isRecord(normalizedTransport.territoryVehicles)
+    ? normalizedTransport.territoryVehicles
     : {};
   const dataSet = isRecord(territoryVehicles.dataSet) ? territoryVehicles.dataSet : {};
 
   return {
-    ...merged,
+    ...normalized,
     transport: {
-      ...transport,
+      ...normalizedTransport,
       territoryVehicles: {
         ...territoryVehicles,
         dataSet: {

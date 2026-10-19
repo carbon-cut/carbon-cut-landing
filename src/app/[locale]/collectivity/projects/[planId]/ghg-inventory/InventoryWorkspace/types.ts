@@ -8,7 +8,6 @@ type DebugCalculationPanelState =
       resultRows: DebugResultRow[];
       warnings: CollectivityCalculationWarning[];
       calculationCodeDigest: string;
-      parameterCount: number | null;
     }
   | {
       status: "error";

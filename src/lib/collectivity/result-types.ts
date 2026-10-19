@@ -11,7 +11,7 @@ export type CollectivityResultRow = {
   energy?: "electricity" | "naturalGas" | "gpl" | "diesel" | "gasoline" | "gnv";
   activity?: "landTransport" | "airport" | "navigation" | "municipalFleet";
   afatSource?: string;
-  wasteSource?: "greenWaste";
+  wasteSource?: "greenWaste" | "wastewater";
   direction: "emission" | "absorption";
 };
 

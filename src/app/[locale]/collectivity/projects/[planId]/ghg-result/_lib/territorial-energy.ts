@@ -25,7 +25,7 @@ export function buildTerritorialEnergyChartData(
 ): { categories: string[]; groups: GroupedStackedBarGroup[] } {
   const yearKeys = Object.keys(result.resultRows).sort(
     (left, right) => Number(left.slice(2)) - Number(right.slice(2))
-  ) as Array<keyof typeof result.resultRows>;
+  );
   const matchesTerritorialEnergy = (
     row: (typeof result.resultRows)[(typeof yearKeys)[number]][number]
   ) => row.family === "energy" && row.direction === "emission" && row.sector !== "transport";

@@ -12,8 +12,8 @@ export default async function CollectivityPlanInventoryPage({
 
   await requireCollectivityPlanSession({
     requestedPlanId: planId,
-    requestedModule: "inventory",
-    returnTo: getCollectivityModuleRoute(planId, "inventory"),
+    requestedModule: "ghg-inventory",
+    returnTo: getCollectivityModuleRoute(planId, "ghg-inventory"),
   });
 
   return <InventoryRouteClient />;

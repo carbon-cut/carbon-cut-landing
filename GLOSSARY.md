@@ -22,6 +22,9 @@ _Avoid_: climate plan, when referring to inventory work.
 **Subscription**:
 An agreement for Collectivity services covering one or more communes.
 
+**Subscription access**:
+Permission to create a Project using the capacity of a Subscription.
+
 **Service**:
 A Collectivity capability purchased through a Subscription. A service can require activity data outside the GHG emissions inventory, such as data for an indicators or notation system.
 

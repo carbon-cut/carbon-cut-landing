@@ -1,0 +1,37 @@
+name: Frontend checks
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  frontend-check:
+    name: Frontend ${{ matrix.check }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        check: [lint, test, build]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run ${{ matrix.check }}
+        run: npm run ${{ matrix.check }}

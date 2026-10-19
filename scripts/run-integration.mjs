@@ -9,6 +9,8 @@ const { loadEnvConfig } = nextEnv;
 
 const frontendDir = process.cwd();
 loadEnvConfig(frontendDir);
+const sfaxOnly = process.argv.includes("--sfax");
+const forwardedIntegrationArgs = process.argv.slice(2).filter((argument) => argument !== "--sfax");
 
 const backendDir = resolve(
   frontendDir,
@@ -16,8 +18,12 @@ const backendDir = resolve(
 );
 const backendPort = parsePort(process.env.INTEGRATION_BACKEND_PORT, 1338);
 const frontendPort = parsePort(process.env.INTEGRATION_FRONTEND_PORT, 3001);
-const backendUrl = `http://127.0.0.1:${backendPort}`;
-const frontendUrl = `http://127.0.0.1:${frontendPort}`;
+const backendUrl = new URL(process.env.BACKEND_URL ?? "http://127.0.0.1:1337");
+backendUrl.port = String(backendPort);
+const backendHostname = backendUrl.hostname;
+const frontendUrl = new URL(process.env.FRONTEND_URL ?? "http://localhost:3000");
+frontendUrl.port = String(frontendPort);
+const frontendHostname = frontendUrl.hostname;
 const ownedChildren = new Set();
 let interrupted = false;
 
@@ -41,11 +47,11 @@ function assertConfiguration() {
   }
 }
 
-async function assertPortAvailable(port) {
+async function assertPortAvailable(port, hostname) {
   await new Promise((accept, reject) => {
     const server = createServer();
     server.once("error", () => reject(new Error(`Integration port ${port} is already in use`)));
-    server.listen(port, "127.0.0.1", () => server.close(accept));
+    server.listen(port, hostname, () => server.close(accept));
   });
 }
 
@@ -132,25 +138,26 @@ let backend;
 let frontend;
 try {
   assertConfiguration();
-  await assertPortAvailable(backendPort);
-  await assertPortAvailable(frontendPort);
+  await assertPortAvailable(backendPort, backendHostname);
+  await assertPortAvailable(frontendPort, frontendHostname);
 
   const backendEnv = {
     ...process.env,
     NODE_ENV: "test",
-    HOST: "127.0.0.1",
+    HOST: backendHostname,
     PORT: String(backendPort),
-    FRONTEND_URL: frontendUrl,
+    FRONTEND_URL: frontendUrl.origin,
     AUTH_TEST_SUPPORT_ENABLED: "true",
     EMAIL_PROVIDER_STUB: "true",
-    DEV_INTEGRATION_SEED_ENABLED: "false",
+    DEV_INTEGRATION_SEED_ENABLED: "true",
     CRON_ENABLED: "false",
   };
   const frontendEnv = {
     ...process.env,
     NODE_ENV: "development",
-    BACKEND_URL: backendUrl,
-    FRONTEND_URL: frontendUrl,
+    BACKEND_URL: backendUrl.origin,
+    FRONTEND_URL: frontendUrl.origin,
+    NEXT_PUBLIC_APP_URL: frontendUrl.origin,
     NEXT_PUBLIC_ENABLE_MSW: "false",
   };
 
@@ -160,28 +167,63 @@ try {
     backendEnv,
     "Backend DB verification"
   );
+  if (sfaxOnly) {
+    await run(
+      [
+        "run",
+        "test:debug",
+        "--",
+        "--runTestsByPath",
+        "tests/carbon-footprint/collectivity/integration/sfax-inventory.test.js",
+      ],
+      backendDir,
+      backendEnv,
+      "Backend Sfax integration test"
+    );
+  }
   backend = launch(["run", "start"], backendDir, backendEnv);
-  await waitForHttp(backend, "Backend", `${backendUrl}/_health`, 204, 120000);
+  await waitForHttp(backend, "Backend", `${backendUrl.origin}/_health`, 204, 120000);
 
   frontend = launch(
-    ["run", "dev:next", "--", "--hostname", "127.0.0.1", "--port", String(frontendPort)],
+    ["run", "dev:next", "--", "--hostname", frontendHostname, "--port", String(frontendPort)],
     frontendDir,
     frontendEnv
   );
-  await waitForHttp(frontend, "Frontend", `${frontendUrl}/api/auth/session`, 200, 120000);
+  await waitForHttp(frontend, "Frontend", `${frontendUrl.origin}/api/auth/session`, 200, 120000);
 
-  await run(
-    ["run", "test:integration:vitest", "--", ...process.argv.slice(2)],
-    frontendDir,
-    frontendEnv,
-    "Integration tests"
-  );
-  await run(
-    ["run", "test:integration:browser"],
-    frontendDir,
-    frontendEnv,
-    "Browser integration tests"
-  );
+  if (sfaxOnly) {
+    await run(
+      ["run", "test:integration:browser:sfax"],
+      frontendDir,
+      frontendEnv,
+      "Browser Sfax integration test"
+    );
+  } else {
+    const checkFailures = [];
+    try {
+      await run(
+        ["run", "test:integration:vitest", "--", ...forwardedIntegrationArgs],
+        frontendDir,
+        frontendEnv,
+        "Integration tests"
+      );
+    } catch (error) {
+      checkFailures.push(error.message);
+    }
+    try {
+      await run(
+        ["run", "test:integration:browser"],
+        frontendDir,
+        frontendEnv,
+        "Browser integration tests"
+      );
+    } catch (error) {
+      checkFailures.push(error.message);
+    }
+    if (checkFailures.length > 0) {
+      throw new Error(`Integration checks failed:\n${checkFailures.join("\n")}`);
+    }
+  }
 } catch (error) {
   console.error(error.message);
   process.exitCode = 1;

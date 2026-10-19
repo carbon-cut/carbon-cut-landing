@@ -321,7 +321,10 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** Calculate one inventory dataset without persistence */
+    /**
+     * Calculate one inventory dataset without persistence
+     * @description Available in non-production environments only. The route is not registered in production.
+     */
     post: operations["debugCalculateCollectivityInventory"];
     delete?: never;
     options?: never;
@@ -388,6 +391,14 @@ export interface components {
     };
     JsonObject: {
       [key: string]: unknown;
+    };
+    /** @description Numbers indexed by inventory year keys in the form y-<number>, such as y-2021. */
+    YearNumberValues: {
+      [key: string]: number;
+    };
+    AnnualQuantity: {
+      value: components["schemas"]["YearNumberValues"];
+      unit: string;
     };
     /** @enum {string} */
     WastewaterLoadType: "domestic" | "industrial" | "unclassified";
@@ -505,20 +516,20 @@ export interface components {
        */
       unclassifiedBodDomesticProxy: components["schemas"]["WastewaterTreatmentSystem"][];
     };
-    WastewaterWetSludgeAnnualSeries: {
-      /** @description Complete y-YYYY map from site commissioning through the maximum calculated year. */
-      value: {
+    /** @description Complete year map from site commissioning through the maximum calculated year. */
+    WastewaterWetSludgeAnnualSeries: components["schemas"]["AnnualQuantity"] & {
+      value?: {
         [key: string]: number;
       };
       /** @enum {string} */
-      unit: "t wet sludge";
+      unit?: "t wet sludge";
     };
-    WastewaterMethaneRecoveryAnnualSeries: {
-      value: {
+    WastewaterMethaneRecoveryAnnualSeries: components["schemas"]["AnnualQuantity"] & {
+      value?: {
         [key: string]: number;
       };
       /** @enum {string} */
-      unit: "kg CH4";
+      unit?: "kg CH4";
     };
     WastewaterLandfillSite: {
       landfillIdentifier: string;
@@ -645,12 +656,65 @@ export interface components {
     ProjectSnapshotResponse: {
       data: components["schemas"]["ProjectSnapshot"];
     };
+    CalculationRowFields: {
+      key: string;
+      value: number;
+      unit: string;
+      owner: string;
+      /** @enum {string} */
+      family: "energy" | "afat" | "waste";
+      /** @enum {string} */
+      sector?: "transport" | "industry" | "residential" | "tertiary" | "agriculture";
+      /** @enum {string} */
+      scope?: "scope1" | "scope2" | "scope3";
+      /** @enum {string} */
+      energy?: "electricity" | "naturalGas" | "gpl" | "diesel" | "gasoline" | "gnv";
+      /** @enum {string} */
+      activity?: "landTransport" | "airport" | "navigation" | "municipalFleet";
+      afatSource?: string;
+      /** @enum {string} */
+      wasteSource?: "greenWaste" | "wastewater";
+    };
+    CalculationResultRow: components["schemas"]["CalculationRowFields"] & {
+      /** @enum {string} */
+      direction: "emission" | "absorption";
+    };
+    CalculationEnergyRow: components["schemas"]["CalculationRowFields"] & {
+      /** @enum {string} */
+      unit: "MWh";
+    };
+    /** @description Result row arrays indexed by inventory year keys in the form y-<number>. */
+    CalculationResultRowsByYear: {
+      [key: string]: components["schemas"]["CalculationResultRow"][];
+    };
+    /** @description Energy row arrays indexed by inventory year keys in the form y-<number>. */
+    CalculationEnergyRowsByYear: {
+      [key: string]: components["schemas"]["CalculationEnergyRow"][];
+    };
+    CalculationResultContext: {
+      /** @description Population quantities indexed by inventory year keys in the form y-<number>. */
+      population: {
+        [key: string]: {
+          value: number;
+          unit: string;
+        };
+      };
+      wastewater?: {
+        /** @description Wastewater population allocation indexed by year keys in the form y-<number>. */
+        populationAllocation: {
+          [key: string]: {
+            allocatedPercent: number;
+            unallocatedPercent: number;
+          };
+        };
+      };
+    };
     CurrentInventoryResultResponse: {
       data: {
         id: string;
         calculationRunId: string;
-        resultRows: components["schemas"]["JsonObject"];
-        context: components["schemas"]["JsonObject"];
+        resultRows: components["schemas"]["CalculationResultRowsByYear"];
+        context: components["schemas"]["CalculationResultContext"];
         warnings: components["schemas"]["CalculationWarning"][];
         reportingLines: components["schemas"]["ReportingLine"][];
         /** Format: date-time */
@@ -750,6 +814,38 @@ export interface components {
     ParameterSnapshotTrace: {
       requestedFamilies: string[];
       items: components["schemas"]["ResolvedParameterTrace"][];
+      unresolvedOptional?: components["schemas"]["UnresolvedOptionalParameterTrace"][];
+    };
+    DebugResolvedParameter: {
+      resolutionId: string;
+      requirement?: components["schemas"]["ParameterRequirementTrace"];
+      selectionRule?: components["schemas"]["ParameterSelectionRule"];
+      parameterEntryId: number;
+      key: string;
+      selector: {
+        [key: string]: string;
+      };
+      value: number;
+      unit: string;
+      gas?: string | null;
+      country?: string | null;
+      year?: number | null;
+      validFromYear?: number | null;
+      validToYear?: number | null;
+      sourceReferenceId?: string | null;
+      sourceReference?: {
+        id: number;
+        title?: string | null;
+        type?: string | null;
+        publisher?: string | null;
+        year?: number | null;
+        url?: string | null;
+        note?: string | null;
+      } | null;
+    };
+    DebugParameterSnapshot: {
+      requestedFamilies: string[];
+      items: components["schemas"]["DebugResolvedParameter"][];
       unresolvedOptional?: components["schemas"]["UnresolvedOptionalParameterTrace"][];
     };
     FormulaOperandTrace:
@@ -870,17 +966,17 @@ export interface components {
         sourceRows: components["schemas"]["JsonObject"];
         accountingAdjustments: components["schemas"]["AccountingAdjustmentTrace"][];
         reportingContributions: components["schemas"]["ReportingContributionTrace"][];
-        resultRows?: components["schemas"]["JsonObject"];
-        energyRows?: components["schemas"]["JsonObject"];
+        resultRows?: components["schemas"]["CalculationResultRowsByYear"];
+        energyRows?: components["schemas"]["CalculationEnergyRowsByYear"];
         reportingLines?: components["schemas"]["ReportingLine"][];
       };
     };
     DebugCalculationResponse: {
       data: {
         datasetKey: string;
-        resultRows: components["schemas"]["JsonObject"];
-        energyRows: components["schemas"]["JsonObject"];
-        parameterSnapshot: components["schemas"]["JsonObject"];
+        resultRows: components["schemas"]["CalculationResultRowsByYear"];
+        energyRows: components["schemas"]["CalculationEnergyRowsByYear"];
+        parameterSnapshot: components["schemas"]["DebugParameterSnapshot"];
         calculationCodeDigest: string;
         explanation: components["schemas"]["CalculationExplanation"];
         warnings?: components["schemas"]["CalculationWarning"][];
@@ -896,15 +992,15 @@ export interface components {
       };
     };
     CalculationOutput: {
-      energyRows: components["schemas"]["JsonObject"];
+      energyRows: components["schemas"]["CalculationEnergyRowsByYear"];
       calculationCodeDigest: string;
       parameterSnapshot: components["schemas"]["ParameterSnapshotTrace"];
       warnings?: components["schemas"]["CalculationWarning"][];
     };
     StoredCalculationResultData: {
       project: number;
-      energyRows: components["schemas"]["JsonObject"];
-      context: components["schemas"]["JsonObject"];
+      energyRows: components["schemas"]["CalculationEnergyRowsByYear"];
+      context: components["schemas"]["CalculationResultContext"];
     };
     CalculationCannotRunReason: {
       code: components["schemas"]["CalculationReasonCode"];

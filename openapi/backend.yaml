@@ -428,6 +428,7 @@ paths:
     post:
       operationId: debugCalculateCollectivityInventory
       summary: Calculate one inventory dataset without persistence
+      description: Available in non-production environments only. The route is not registered in production.
       tags: [Collectivity projects]
       x-calculation-contract:
         $ref: "#/components/schemas/WastewaterCalculationContract"
@@ -542,6 +543,16 @@ components:
     JsonObject:
       type: object
       additionalProperties: true
+    YearNumberValues:
+      type: object
+      description: Numbers indexed by inventory year keys in the form y-<number>, such as y-2021.
+      additionalProperties: { type: number }
+    AnnualQuantity:
+      type: object
+      required: [value, unit]
+      properties:
+        value: { $ref: "#/components/schemas/YearNumberValues" }
+        unit: { type: string }
     WastewaterLoadType:
       type: string
       enum: [domestic, industrial, unclassified]
@@ -664,22 +675,24 @@ components:
             - latrineWetOrFlush
             - aquaticDischarge
     WastewaterWetSludgeAnnualSeries:
-      type: object
-      required: [value, unit]
-      properties:
-        value:
-          type: object
-          description: Complete y-YYYY map from site commissioning through the maximum calculated year.
-          additionalProperties: { type: number, minimum: 0 }
-        unit: { type: string, enum: [t wet sludge] }
+      description: Complete year map from site commissioning through the maximum calculated year.
+      allOf:
+        - { $ref: "#/components/schemas/AnnualQuantity" }
+        - type: object
+          properties:
+            value:
+              type: object
+              additionalProperties: { type: number, minimum: 0 }
+            unit: { type: string, enum: [t wet sludge] }
     WastewaterMethaneRecoveryAnnualSeries:
-      type: object
-      required: [value, unit]
-      properties:
-        value:
-          type: object
-          additionalProperties: { type: number, minimum: 0 }
-        unit: { type: string, enum: [kg CH4] }
+      allOf:
+        - { $ref: "#/components/schemas/AnnualQuantity" }
+        - type: object
+          properties:
+            value:
+              type: object
+              additionalProperties: { type: number, minimum: 0 }
+            unit: { type: string, enum: [kg CH4] }
     WastewaterLandfillSite:
       type: object
       required:
@@ -902,6 +915,73 @@ components:
       required: [data]
       properties:
         data: { $ref: "#/components/schemas/ProjectSnapshot" }
+    CalculationRowFields:
+      type: object
+      required: [key, value, unit, owner, family]
+      properties:
+        key: { type: string }
+        value: { type: number }
+        unit: { type: string }
+        owner: { type: string }
+        family: { type: string, enum: [energy, afat, waste] }
+        sector: { type: string, enum: [transport, industry, residential, tertiary, agriculture] }
+        scope: { type: string, enum: [scope1, scope2, scope3] }
+        energy: { type: string, enum: [electricity, naturalGas, gpl, diesel, gasoline, gnv] }
+        activity: { type: string, enum: [landTransport, airport, navigation, municipalFleet] }
+        afatSource: { type: string }
+        wasteSource: { type: string, enum: [greenWaste, wastewater] }
+    CalculationResultRow:
+      allOf:
+        - { $ref: "#/components/schemas/CalculationRowFields" }
+        - type: object
+          required: [direction]
+          properties:
+            direction: { type: string, enum: [emission, absorption] }
+    CalculationEnergyRow:
+      allOf:
+        - { $ref: "#/components/schemas/CalculationRowFields" }
+        - type: object
+          required: [unit]
+          properties:
+            unit: { type: string, enum: [MWh] }
+    CalculationResultRowsByYear:
+      type: object
+      description: Result row arrays indexed by inventory year keys in the form y-<number>.
+      additionalProperties:
+        type: array
+        items: { $ref: "#/components/schemas/CalculationResultRow" }
+    CalculationEnergyRowsByYear:
+      type: object
+      description: Energy row arrays indexed by inventory year keys in the form y-<number>.
+      additionalProperties:
+        type: array
+        items: { $ref: "#/components/schemas/CalculationEnergyRow" }
+    CalculationResultContext:
+      type: object
+      required: [population]
+      properties:
+        population:
+          type: object
+          description: Population quantities indexed by inventory year keys in the form y-<number>.
+          additionalProperties:
+            type: object
+            required: [value, unit]
+            properties:
+              value: { type: number }
+              unit: { type: string }
+        wastewater:
+          type: object
+          required: [populationAllocation]
+          properties:
+            populationAllocation:
+              type: object
+              description: Wastewater population allocation indexed by year keys in the form y-<number>.
+              additionalProperties:
+                type: object
+                required: [allocatedPercent, unallocatedPercent]
+                properties:
+                  allocatedPercent: { type: number }
+                  unallocatedPercent: { type: number }
     CurrentInventoryResultResponse:
       type: object
       required: [data]
@@ -912,8 +992,8 @@ components:
           properties:
             id: { type: string }
             calculationRunId: { type: string }
-            resultRows: { $ref: "#/components/schemas/JsonObject" }
-            context: { $ref: "#/components/schemas/JsonObject" }
+            resultRows: { $ref: "#/components/schemas/CalculationResultRowsByYear" }
+            context: { $ref: "#/components/schemas/CalculationResultContext" }
             warnings:
               type: array
               items: { $ref: "#/components/schemas/CalculationWarning" }
@@ -1053,6 +1133,47 @@ components:
         items:
           type: array
           items: { $ref: "#/components/schemas/ResolvedParameterTrace" }
+        unresolvedOptional:
+          type: array
+          items: { $ref: "#/components/schemas/UnresolvedOptionalParameterTrace" }
+    DebugResolvedParameter:
+      type: object
+      required: [resolutionId, parameterEntryId, key, selector, value, unit]
+      properties:
+        resolutionId: { type: string }
+        requirement: { $ref: "#/components/schemas/ParameterRequirementTrace" }
+        selectionRule: { $ref: "#/components/schemas/ParameterSelectionRule" }
+        parameterEntryId: { type: integer }
+        key: { type: string }
+        selector: { type: object, additionalProperties: { type: string } }
+        value: { type: number }
+        unit: { type: string }
+        gas: { type: string, nullable: true }
+        country: { type: string, nullable: true }
+        year: { type: integer, nullable: true }
+        validFromYear: { type: integer, nullable: true }
+        validToYear: { type: integer, nullable: true }
+        sourceReferenceId: { type: string, nullable: true }
+        sourceReference:
+          type: object
+          nullable: true
+          required: [id]
+          properties:
+            id: { type: integer }
+            title: { type: string, nullable: true }
+            type: { type: string, nullable: true }
+            publisher: { type: string, nullable: true }
+            year: { type: integer, nullable: true }
+            url: { type: string, nullable: true }
+            note: { type: string, nullable: true }
+    DebugParameterSnapshot:
+      type: object
+      required: [requestedFamilies, items]
+      properties:
+        requestedFamilies: { type: array, items: { type: string } }
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/DebugResolvedParameter" }
         unresolvedOptional:
           type: array
           items: { $ref: "#/components/schemas/UnresolvedOptionalParameterTrace" }
@@ -1244,8 +1365,8 @@ components:
             reportingContributions:
               type: array
               items: { $ref: "#/components/schemas/ReportingContributionTrace" }
-            resultRows: { $ref: "#/components/schemas/JsonObject" }
-            energyRows: { $ref: "#/components/schemas/JsonObject" }
+            resultRows: { $ref: "#/components/schemas/CalculationResultRowsByYear" }
+            energyRows: { $ref: "#/components/schemas/CalculationEnergyRowsByYear" }
             reportingLines:
               type: array
               items: { $ref: "#/components/schemas/ReportingLine" }
@@ -1266,9 +1387,9 @@ components:
             ]
           properties:
             datasetKey: { type: string }
-            resultRows: { $ref: "#/components/schemas/JsonObject" }
-            energyRows: { $ref: "#/components/schemas/JsonObject" }
-            parameterSnapshot: { $ref: "#/components/schemas/JsonObject" }
+            resultRows: { $ref: "#/components/schemas/CalculationResultRowsByYear" }
+            energyRows: { $ref: "#/components/schemas/CalculationEnergyRowsByYear" }
+            parameterSnapshot: { $ref: "#/components/schemas/DebugParameterSnapshot" }
             calculationCodeDigest: { type: string, pattern: "^sha256:[0-9a-f]{64}$" }
             explanation: { $ref: "#/components/schemas/CalculationExplanation" }
             warnings:
@@ -1292,7 +1413,7 @@ components:
       additionalProperties: false
       required: [energyRows, calculationCodeDigest, parameterSnapshot]
       properties:
-        energyRows: { $ref: "#/components/schemas/JsonObject" }
+        energyRows: { $ref: "#/components/schemas/CalculationEnergyRowsByYear" }
         calculationCodeDigest: { type: string, pattern: "^sha256:[0-9a-f]{64}$" }
         parameterSnapshot: { $ref: "#/components/schemas/ParameterSnapshotTrace" }
         warnings:
@@ -1304,8 +1425,8 @@ components:
       required: [project, energyRows, context]
       properties:
         project: { type: integer }
-        energyRows: { $ref: "#/components/schemas/JsonObject" }
-        context: { $ref: "#/components/schemas/JsonObject" }
+        energyRows: { $ref: "#/components/schemas/CalculationEnergyRowsByYear" }
+        context: { $ref: "#/components/schemas/CalculationResultContext" }
     CalculationCannotRunReason:
       type: object
       required: [code]

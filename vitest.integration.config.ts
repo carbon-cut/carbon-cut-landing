@@ -8,12 +8,12 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
-      "server-only": path.resolve(__dirname, "test/mocks/server-only.ts"),
+      "server-only": path.resolve(__dirname, "tests/test-support/in-process/server-only.ts"),
     },
   },
   test: {
     environment: "node",
-    include: ["test/integration/**/*.test.ts"],
+    include: ["tests/**/integration/**/*.test.ts"],
     clearMocks: true,
     restoreMocks: true,
     mockReset: true,

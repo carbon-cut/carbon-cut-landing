@@ -51,11 +51,6 @@ export function DebugCalculationResult({
                 {calculationCodeDigestLabel}: {result.calculationCodeDigest}
               </span>
             </Typography>
-            <Typography asChild variant="caption" size="sm">
-              <span>
-                {parametersLabel}: {result.parameterCount ?? "—"}
-              </span>
-            </Typography>
           </div>
           {result.warnings.length > 0 ? (
             <div className="space-y-1 pt-1">

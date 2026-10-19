@@ -1,16 +1,16 @@
-import { Manrope, Work_Sans } from "next/font/google";
+import localFont from "next/font/local";
 
-const workSans = Work_Sans({
+const workSans = localFont({
+  src: "./fonts/work-sans-latin-variable.woff2",
   variable: "--font-work_sans",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "400 500",
 });
 
 // Retained while Work Sans is the application default, so the prior family can be restored.
-const manropeSans = Manrope({
+const manropeSans = localFont({
+  src: "./fonts/manrope-latin-variable.woff2",
   variable: "--font-manrope_sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: "300 800",
 });
 
 export { manropeSans, workSans };
