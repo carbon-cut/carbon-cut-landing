@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  packages: read
 
 jobs:
   browser-journeys:
@@ -26,6 +27,8 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
