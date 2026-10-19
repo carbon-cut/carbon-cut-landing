@@ -34,6 +34,14 @@ npm run test:browser:auth
 
 The command starts Next.js and a fresh contract-faithful mock backend on available local ports, then stops both. Each journey uses a new browser context; the backend process is recreated for each command run. Install Chromium once with `npx playwright install chromium` if it is not already available.
 
+Run the authenticated Collectivity Project-entry browser journey against the isolated mock backend and local Next.js app with:
+
+```bash
+npm run test:browser:collectivity-project-entry
+```
+
+This covers the Project destinations for signed-in users with and without an existing Project.
+
 Real frontend/Strapi integration tests run separately:
 
 ```bash
