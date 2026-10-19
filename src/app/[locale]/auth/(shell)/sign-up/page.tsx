@@ -13,9 +13,10 @@ import {
   postRegistration,
 } from "@/app/[locale]/auth/_components/auth-api";
 import AuthBrand from "@/app/[locale]/auth/_components/auth-brand";
+import { InventoryFieldInput } from "@/app/[locale]/collectivity/_components/fields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/forms";
 import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
 import { useScopedI18n } from "@/locales/client";
@@ -33,12 +34,12 @@ export default function SignUpPage() {
   const searchParams = useSearchParams();
   const signupSchema = z
     .object({
-      firstName: z.string().trim().min(1, t("error.firstNameRequired")),
-      lastName: z.string().trim().min(1, t("error.lastNameRequired")),
-      email: z.string().email(),
+      firstName: z.string().trim().min(1, "Required"),
+      lastName: z.string().trim().min(1, "Required"),
+      email: z.string().trim().min(1, "Required").email(),
       organisation: z.string(),
-      password: z.string().min(1),
-      passwordConfirmation: z.string().min(1),
+      password: z.string().min(1, "Required"),
+      passwordConfirmation: z.string().min(1, "Required"),
     })
     .refine((values) => values.password === values.passwordConfirmation, {
       path: ["passwordConfirmation"],
@@ -47,7 +48,7 @@ export default function SignUpPage() {
   type SignupValues = z.infer<typeof signupSchema>;
   const form = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
-    mode: "onBlur",
+    mode: "onSubmit",
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -155,109 +156,69 @@ export default function SignUpPage() {
             <p>{t("description")}</p>
           </Typography>
 
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6 space-y-4">
-            {errorMessage ? (
-              <Alert variant="destructive">
-                <AlertTitle>{t("title")}</AlertTitle>
-                <AlertDescription>{errorMessage}</AlertDescription>
-              </Alert>
-            ) : null}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="firstName">
-                {t("form.firstName")}
-              </label>
-              <Input
-                id="firstName"
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6 space-y-4">
+              {errorMessage ? (
+                <Alert variant="destructive">
+                  <AlertTitle>{t("title")}</AlertTitle>
+                  <AlertDescription>{errorMessage}</AlertDescription>
+                </Alert>
+              ) : null}
+              <div className="grid grid-cols-2 gap-4">
+              <InventoryFieldInput
+                form={form}
+                name="firstName"
+                label={t("form.firstName")}
                 autoComplete="given-name"
                 required
-                aria-invalid={Boolean(form.formState.errors.firstName)}
-                {...form.register("firstName")}
               />
-              {form.formState.errors.firstName ? (
-                <Typography asChild variant="description" size="sm" className="text-destructive">
-                  <p role="alert">{form.formState.errors.firstName.message}</p>
-                </Typography>
-              ) : null}
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="lastName">
-                {t("form.lastName")}
-              </label>
-              <Input
-                id="lastName"
+              <InventoryFieldInput
+                form={form}
+                name="lastName"
+                label={t("form.lastName")}
                 autoComplete="family-name"
                 required
-                aria-invalid={Boolean(form.formState.errors.lastName)}
-                {...form.register("lastName")}
               />
-              {form.formState.errors.lastName ? (
-                <Typography asChild variant="description" size="sm" className="text-destructive">
-                  <p role="alert">{form.formState.errors.lastName.message}</p>
-                </Typography>
-              ) : null}
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="email">
-                {t("form.email")}
-              </label>
-              <Input
-                id="email"
+              </div>
+              <InventoryFieldInput
+                form={form}
+                name="email"
+                label={t("form.email")}
                 type="email"
                 autoComplete="email"
                 required
-                {...form.register("email")}
               />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="organisation">
-                {t("form.organisation")}
-              </label>
-              <Input
-                id="organisation"
+              <InventoryFieldInput
+                form={form}
+                name="organisation"
+                label={t("form.organisation")}
                 autoComplete="organization"
-                {...form.register("organisation")}
               />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="password">
-                {t("form.password")}
-              </label>
-              <Input
-                id="password"
+              <InventoryFieldInput
+                form={form}
+                name="password"
+                label={t("form.password")}
                 type="password"
                 autoComplete="new-password"
                 required
-                {...form.register("password")}
               />
-            </div>
-            <div className="space-y-2">
-              <label
-                className="text-sm font-medium text-foreground/80"
-                htmlFor="passwordConfirmation"
+              <InventoryFieldInput
+                form={form}
+                name="passwordConfirmation"
+                label={t("form.passwordConfirm")}
+                type="password"
+                autoComplete="new-password"
+                required
+              />
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+                className="mt-3 h-11 w-full"
               >
-                {t("form.passwordConfirm")}
-              </label>
-              <Input
-                id="passwordConfirmation"
-                type="password"
-                autoComplete="new-password"
-                required
-                {...form.register("passwordConfirmation")}
-              />
-              {form.formState.errors.passwordConfirmation ? (
-                <Typography asChild variant="description" size="sm" className="text-destructive">
-                  <p role="alert">{form.formState.errors.passwordConfirmation.message}</p>
-                </Typography>
-              ) : null}
-            </div>
-            <Button
-              type="submit"
-              disabled={form.formState.isSubmitting}
-              className="mt-3 h-11 w-full"
-            >
-              {t("form.submit")}
-            </Button>
-          </form>
+                {t("form.submit")}
+              </Button>
+            </form>
+          </Form>
 
           <p className="mt-6 text-center text-sm text-secondary">
             {t("message.login")}{" "}

@@ -152,16 +152,17 @@ export function ConfirmEmailPageContent() {
               required
             />
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex gap-3">
             <Button
               type="button"
-              variant="outline"
+              variant="brand-secondary"
+              className=""
               disabled={submitting !== null}
               onClick={handleResend}
             >
               {t("form.reset")}
             </Button>
-            <Button type="submit" disabled={submitting !== null} className="h-11 flex-1">
+            <Button variant="brand-primary" className="w-full" type="submit" disabled={submitting !== null}>
               {t("form.submit")}
             </Button>
           </div>

@@ -21,6 +21,7 @@ type Props<T extends FieldValues> = {
   placeholder?: string;
   label?: string;
   description?: string;
+  autoComplete?: string;
   type?: React.HTMLInputTypeAttribute | undefined;
   icon?: InputIcon;
   unitAdornment?: React.ReactNode;
@@ -43,6 +44,7 @@ function InventoryFieldInput<T extends FieldValues>({
   labelClassName,
   placeholder,
   description,
+  autoComplete,
   type,
   icon,
   unitAdornment,
@@ -118,6 +120,7 @@ function InventoryFieldInput<T extends FieldValues>({
                     disabled={disabled}
                     required={required}
                     placeholder={placeholder}
+                    autoComplete={autoComplete}
                     type={type}
                     value={field.value ?? ""}
                     style={

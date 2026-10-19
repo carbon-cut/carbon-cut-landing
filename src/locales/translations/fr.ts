@@ -3698,8 +3698,6 @@ export default {
       },
       error: {
         emailTaken: "Cette adresse e-mail est déjà utilisée.",
-        firstNameRequired: "Saisissez votre prénom.",
-        lastNameRequired: "Saisissez votre nom.",
         disabled: "L'inscription est desactivee pour le moment.",
         defaultRole: "La configuration d'inscription est incomplete.",
         passwordMismatch: "Les mots de passe ne correspondent pas.",
@@ -4555,6 +4553,7 @@ export default {
     errors: {
       Required: "Obligatoire",
       Invalid: "Invalide",
+      "Invalid email": "Adresse e-mail invalide.",
       nonNegative: "0 ou plus",
       between0And100: "Valeur entre 0 et 100",
       manureManagementSharesMustTotal100:

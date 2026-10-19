@@ -3648,8 +3648,6 @@ export default {
       },
       error: {
         emailTaken: "This email is already in use.",
-        firstNameRequired: "Enter your first name.",
-        lastNameRequired: "Enter your last name.",
         disabled: "Registration is disabled at this time.",
         defaultRole: "The registration configuration is incomplete.",
         passwordMismatch: "Passwords do not match.",
@@ -4500,6 +4498,7 @@ export default {
     errors: {
       Required: "Mandatory",
       Invalid: "Invalid",
+      "Invalid email": "Invalid email address.",
       nonNegative: "0 or more",
       between0And100: "Value between 0 and 100",
       manureManagementSharesMustTotal100:
