@@ -4554,6 +4554,7 @@ export default {
       Required: "Obligatoire",
       Invalid: "Invalide",
       "Invalid email": "Adresse e-mail invalide.",
+      passwordMismatch: "Les mots de passe ne correspondent pas.",
       nonNegative: "0 ou plus",
       between0And100: "Valeur entre 0 et 100",
       manureManagementSharesMustTotal100:

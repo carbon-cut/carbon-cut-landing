@@ -4499,6 +4499,7 @@ export default {
       Required: "Mandatory",
       Invalid: "Invalid",
       "Invalid email": "Invalid email address.",
+      passwordMismatch: "Passwords do not match.",
       nonNegative: "0 or more",
       between0And100: "Value between 0 and 100",
       manureManagementSharesMustTotal100:

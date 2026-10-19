@@ -44,7 +44,7 @@ export default function SignUpPage() {
     })
     .refine((values) => values.password === values.passwordConfirmation, {
       path: ["passwordConfirmation"],
-      message: t("error.passwordMismatch"),
+      message: "passwordMismatch",
     });
   type SignupValues = z.infer<typeof signupSchema>;
   const form = useForm<SignupValues>({
