@@ -66,6 +66,14 @@ npm run test:browser:auth:sign-up
 
 This command starts an isolated Next.js app and mock backend, then checks registration, confirmation feedback, resend, and safe return navigation in Chromium.
 
+Run password recovery journeys separately with:
+
+```bash
+npm run test:browser:auth:password-recovery
+```
+
+This command checks forgot-password feedback for success and backend unavailability, reset-link submission and token cleanup, and safe navigation after the app creates a session.
+
 Real frontend/Strapi integration tests run separately:
 
 ```bash

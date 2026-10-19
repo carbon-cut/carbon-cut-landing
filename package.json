@@ -17,6 +17,7 @@
     "test:browser:session-recovery": "node tests/authentication/session-recovery/end-to-end/session-recovery-browser.mjs",
     "test:browser:collectivity-project-entry": "node tests/collectivity/project/end-to-end/project-entry-browser.mjs",
     "test:browser:auth:sign-up": "node tests/authentication/sign-up/end-to-end/sign-up-browser.mjs",
+    "test:browser:auth:password-recovery": "node tests/authentication/password-recovery/end-to-end/password-recovery-browser.mjs",
     "test:integration:browser:sfax": "node --import tsx tests/collectivity/inventory/end-to-end/sfax-inventory-browser.mjs",
     "install:auth": "bash -lc 'set -a; source .env.local; set +a; npm install'",
     "install:types": "dotenv -e .env -- npm install @carbon-cut/types",
