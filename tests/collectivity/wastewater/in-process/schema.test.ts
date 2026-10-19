@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   validateWastewaterCalculation,
   wastewaterSanitationSchema,
-} from "@/app/[locale]/collectivity/projects/[planId]/inventory/InventorySchema/wastewaterSanitation";
+} from "@/app/[locale]/collectivity/projects/[planId]/ghg-inventory/InventorySchema/wastewaterSanitation";
 
 const metric = (unit: string, value: Record<string, number | undefined> = {}) => ({ value, unit });
 

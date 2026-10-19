@@ -16,8 +16,9 @@ function makeValidInput(overrides: Partial<QuoteInformationInput> = {}): QuoteIn
       city: "Orléans",
       countryCode: " fra ",
       siren: "732 829 320",
-      siret: "",
+      siret: "732 829 320 00009",
       vatNumber: "",
+      hasNoVatNumber: true,
     },
     contact: {
       name: "Marie Dupont",
@@ -55,13 +56,12 @@ describe("quote information schema", () => {
     expect(result.error?.issues[0]?.message).toBe("Invalid");
   });
 
-  it("requires a French SIREN or SIRET", () => {
+  it("requires both a French SIREN and SIRET", () => {
     const result = quoteInformationSchema.safeParse(
       makeValidInput({
         customer: {
           ...makeValidInput().customer,
           siren: "",
-          siret: "",
         },
       })
     );
@@ -69,6 +69,20 @@ describe("quote information schema", () => {
     expect(result.success).toBe(false);
     expect(result.error?.issues).toContainEqual(
       expect.objectContaining({ path: ["customer", "siren"], message: "Required" })
+    );
+
+    const missingSiret = quoteInformationSchema.safeParse(
+      makeValidInput({
+        customer: {
+          ...makeValidInput().customer,
+          siret: "",
+        },
+      })
+    );
+
+    expect(missingSiret.success).toBe(false);
+    expect(missingSiret.error?.issues).toContainEqual(
+      expect.objectContaining({ path: ["customer", "siret"], message: "Required" })
     );
   });
 
@@ -80,6 +94,8 @@ describe("quote information schema", () => {
           countryCode: "BEL",
           siren: "",
           siret: "",
+          vatNumber: "BE0123456789",
+          hasNoVatNumber: false,
         },
       })
     );
