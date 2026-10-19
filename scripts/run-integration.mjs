@@ -149,7 +149,7 @@ try {
     FRONTEND_URL: frontendUrl.origin,
     AUTH_TEST_SUPPORT_ENABLED: "true",
     EMAIL_PROVIDER_STUB: "true",
-    DEV_INTEGRATION_SEED_ENABLED: "false",
+    DEV_INTEGRATION_SEED_ENABLED: "true",
     CRON_ENABLED: "false",
   };
   const frontendEnv = {

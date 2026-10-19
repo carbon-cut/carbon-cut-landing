@@ -26,6 +26,54 @@ Frontend-only tests stay under the default test command:
 npm run test
 ```
 
+Run the isolated real-app sign-in journeys in Chromium with:
+
+```bash
+npm run test:browser:auth
+```
+
+Run every browser journey with the same command used by CI:
+
+```bash
+npx playwright install chromium # once per machine
+npm run test:browser
+```
+
+The aggregate command discovers and runs each `test:browser:*` script in package order. Each runner starts its controlled backend and app as needed. CI installs Chromium and its system dependencies in a separate setup step, so missing dependencies are reported separately from a failing journey.
+
+The command starts Next.js and a fresh contract-faithful mock backend on available local ports, then stops both. Each journey uses a new browser context; the backend process is recreated for each command run. Install Chromium once with `npx playwright install chromium` if it is not already available.
+
+Run the mock-backed session recovery journey separately with:
+
+```bash
+npm run test:browser:session-recovery
+```
+
+It covers pending, successful, rejected, and unavailable recovery states through the running French app. The separate real frontend/Strapi recovery browser check remains part of `npm run test:integration`.
+Run the authenticated Collectivity Project-entry browser journey against the isolated mock backend and local Next.js app with:
+
+```bash
+npm run test:browser:collectivity-project-entry
+```
+
+This covers the Project destinations for signed-in users with and without an existing Project.
+
+Run sign-up and email confirmation journeys separately with:
+
+```bash
+npm run test:browser:auth:sign-up
+```
+
+This command starts an isolated Next.js app and mock backend, then checks registration, confirmation feedback, resend, and safe return navigation in Chromium.
+
+Run password recovery journeys separately with:
+
+```bash
+npm run test:browser:auth:password-recovery
+```
+
+This command checks forgot-password feedback for success and backend unavailability, reset-link submission and token cleanup, and safe navigation after the app creates a session.
+
 Real frontend/Strapi integration tests run separately:
 
 ```bash
@@ -52,7 +100,7 @@ AUTH_TEST_SUPPORT_KEY=your-test-support-secret
 
 The key must match the backend's `AUTH_TEST_SUPPORT_KEY`. The runner uses ports 3001 (frontend) and 1338 (backend) by default; set `INTEGRATION_FRONTEND_PORT` and `INTEGRATION_BACKEND_PORT` to change them. It fails if either port is already occupied.
 
-Install the Playwright browser once with `npx playwright install chromium`. The recovery browser test creates and cleans up its own auth user through the backend test-support HTTP surface. The Sfax browser check uses `INTEGRATION_SFAX_PASSWORD` when set, defaulting to the backend integration user's `Password123!`. The Collectivity project-creation integration check uses `INTEGRATION_COLLECTIVITY_EMAIL` and `INTEGRATION_COLLECTIVITY_PASSWORD` (or the legacy `INTEGRATION_COLLECTIVITY_NEW_EMAIL`) and requires that user to have an approved, unconsumed Subscription claim in the test database. It consumes one claim per run; the integration runner does not provision or replenish Subscription claims.
+Install the Playwright browser once with `npx playwright install chromium`. The recovery browser test creates and cleans up its own auth user through the backend test-support HTTP surface. The Sfax browser check uses `INTEGRATION_SFAX_PASSWORD` when set, defaulting to the backend integration user's `Password123!`.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

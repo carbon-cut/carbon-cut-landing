@@ -84,6 +84,8 @@ export const authHandlers = [
   }),
   http.post(`${process.env.BACKEND_URL}/api/refresh-token-rotation`, async ({ request }) => {
     try {
+      const delayMs = Number(process.env.MOCK_AUTH_REFRESH_DELAY_MS ?? 0);
+      if (delayMs > 0) await new Promise((resolve) => setTimeout(resolve, delayMs));
       const payload = await body<{ refresh_token?: string }>(request);
       return HttpResponse.json(mockRotateRefreshToken(payload.refresh_token ?? ""));
     } catch (error) {

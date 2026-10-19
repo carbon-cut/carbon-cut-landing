@@ -10,12 +10,12 @@ async function start() {
 
   const server = createServer(...handlers);
 
-  server.listen(port, strapiUrl.hostname, () => {
+  const httpServer = server.listen(port, strapiUrl.hostname, () => {
     console.log(`Mock Strapi listening on ${strapiUrl.origin}`);
   });
 
   function close() {
-    server.close(() => process.exit(0));
+    httpServer.close(() => process.exit(0));
   }
 
   process.once("SIGINT", close);
