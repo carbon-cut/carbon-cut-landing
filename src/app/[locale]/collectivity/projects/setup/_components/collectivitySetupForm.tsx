@@ -625,7 +625,7 @@ export default function CollectivitySetupForm({
                 <Button
                   type="submit"
                   variant="brand-primary"
-                  className={cn("", variant === "setup" ? "w-full rounded-full" : "")}
+                  className={cn("", variant === "setup" ? "h-11 w-full rounded-full" : "")}
                   disabled={setupMutation.isPending}
                 >
                   {variant === "setup"
