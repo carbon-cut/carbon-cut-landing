@@ -4,10 +4,10 @@ The frontend discovery baseline and its original file list are in [frontend-test
 
 ## Discovery and commands
 
-| Repository | Final discovery                                                                  | Focused commands                                                                                                               |
-| ---------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Frontend   | 24 in-process Vitest files, 3 integration files, and 2 standalone browser checks | `npm run test`; `npm run test:integration:vitest`; `npm run test:integration:browser`; `npm run test:integration:browser:sfax` |
-| Backend    | 35 Jest suites under `tests/`; no skipped or focused test declarations remain    | `npm test`; `npm run test:debug -- --runTestsByPath tests/carbon-footprint/collectivity/integration/sfax-inventory.test.js`    |
+| Repository | Final discovery                                                                                         | Focused commands                                                                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Frontend   | 17 in-process Vitest files, 3 integration files, 3 mock-contract files, and 7 standalone browser checks | `npm run test`; `npm run test:integration:vitest`; `npm run test:browser`; `npm run test:integration:browser`; `npm run test:integration:browser:sfax` |
+| Backend    | 35 Jest suites under `tests/`; no skipped or focused test declarations remain                           | `npm test`; `npm run test:debug -- --runTestsByPath tests/carbon-footprint/collectivity/integration/sfax-inventory.test.js`                            |
 
 The combined connected command is `npm run test:integration:sfax`. It verifies the isolated backend database, runs the backend Sfax calculation and persisted-result test, starts Strapi and Next.js, then runs the browser Sfax comparison. The backend and browser commands remain independently selectable.
 
@@ -15,13 +15,14 @@ The combined connected command is `npm run test:integration:sfax`. It verifies t
 
 ### Frontend
 
-- Authentication in-process and real integration tests moved under `tests/authentication/`; the recovery browser script moved under `tests/authentication/session-recovery/end-to-end/`. All original checks were retained.
+- Authentication request-coordination, schema, access, middleware, and route-handler checks remain focused Vitest tests under `tests/authentication/`. The recovery current-path bridge remains at `tests/authentication/session-recovery/in-process/recover-current-path.test.tsx`.
 - Collectivity in-process checks moved under `tests/collectivity/` by module and seam; the three mock-contract checks remain under `tests/collectivity/*/mock-contract/`. Shared test support and runtime mock fixtures remain support material, not executable tests.
-- The locale middleware check moved under `tests/localization/`; Contact, Collectivity, and database-backed checks moved under their feature paths. The last legacy-root Collectivity integration test moved to `tests/collectivity/project-start/integration/` in #69.
-- The Sfax browser end-to-end check was added in #68. The existing authentication recovery browser check remains.
-- No original frontend executable test was removed or deferred. The unused French fixture, shared helpers, and runtime mock data remain classified as non-test material.
+- The locale middleware check moved under `tests/localization/`; Contact and Collectivity integration checks remain under their feature paths.
+- Explicit #74 disposition: sign-in, sign-up and confirmation, forgot-password and reset-password, recovery-page, and Project-start journey assertions moved from jsdom to browser coverage after equivalent browser scenarios passed. The Project-start Vitest case was not restored: #79 identified that it mocked `getPrimaryPlanId` and `requireCollectivitySession` and duplicated the browser journey. Direct request-coordination, schema, access, and recovery current-path bridge checks remain focused tests.
+- The five standalone browser flows are sign-in, sign-up, password recovery, session recovery, and Project entry. The pre-existing authentication recovery and Sfax inventory browser checks also remain. `npm run test:browser` runs the five browser journey commands as an aggregate.
+- #80 remains blocked because the app/API perimeter-change operation is missing; no transition or mock-only scenario was added. The unused French fixture, shared helpers, and runtime mock data remain classified as non-test material.
 
-References: [#63](https://github.com/carbon-cut/carbon-cut-landing/issues/63), [#64](https://github.com/carbon-cut/carbon-cut-landing/issues/64), [#65](https://github.com/carbon-cut/carbon-cut-landing/issues/65), [#66](https://github.com/carbon-cut/carbon-cut-landing/issues/66), [#67](https://github.com/carbon-cut/carbon-cut-landing/issues/67), [#68](https://github.com/carbon-cut/carbon-cut-landing/issues/68), and [#69](https://github.com/carbon-cut/carbon-cut-landing/issues/69).
+References: [#63](https://github.com/carbon-cut/carbon-cut-landing/issues/63), [#64](https://github.com/carbon-cut/carbon-cut-landing/issues/64), [#65](https://github.com/carbon-cut/carbon-cut-landing/issues/65), [#66](https://github.com/carbon-cut/carbon-cut-landing/issues/66), [#67](https://github.com/carbon-cut/carbon-cut-landing/issues/67), [#68](https://github.com/carbon-cut/carbon-cut-landing/issues/68), [#69](https://github.com/carbon-cut/carbon-cut-landing/issues/69), and [#74](https://github.com/carbon-cut/carbon-cut-landing/issues/74) with the specific Project-start disposition from [#79](https://github.com/carbon-cut/carbon-cut-landing/issues/79). The blocked perimeter-change draft remains tracked in [#80](https://github.com/carbon-cut/carbon-cut-landing/issues/80).
 
 ### Backend
 
@@ -38,7 +39,7 @@ References: [backend #12](https://github.com/carbon-cut/carbon-cut-backend/issue
 
 ## Discovery snapshots
 
-The frontend baseline below is the pre-migration tree at `cdc5dec9^`; its original list is also preserved in [frontend-test-discovery-baseline.md](frontend-test-discovery-baseline.md). The final lists are the current paired integration branches. Browser scripts are listed separately because Vitest and Jest do not discover them.
+The frontend baseline below refers to the pre-migration tree at `cdc5dec9^`; its original list is preserved in [frontend-test-discovery-baseline.md](frontend-test-discovery-baseline.md). The lists that follow are the current paired integration branch inventory after #74. Browser scripts are listed separately because Vitest and Jest do not discover them.
 
 ### Frontend: final Vitest files
 
@@ -49,19 +50,15 @@ tests/authentication/browser-request/in-process/browser-request.test.ts
 tests/authentication/cookies/in-process/cookies.test.ts
 tests/authentication/middleware/in-process/collectivity-recovery-middleware.test.ts
 tests/authentication/middleware/in-process/middleware.test.ts
-tests/authentication/pages/in-process/pages.test.tsx
 tests/authentication/redirects/in-process/redirect.test.ts
 tests/authentication/refresh-coordination/in-process/refresh-coordination.test.ts
-tests/authentication/reset-link/in-process/reset-link.test.tsx
 tests/authentication/route-handlers/in-process/route-handlers.test.ts
 tests/authentication/session-recovery/in-process/recover-current-path.test.tsx
-tests/authentication/session-recovery/in-process/recover-page.test.tsx
 tests/collectivity/access/in-process/access.test.ts
 tests/collectivity/cadrage/in-process/route.test.ts
 tests/collectivity/cadrage/in-process/schema.test.ts
 tests/collectivity/inventory/in-process/inventory-boundary.test.ts
 tests/collectivity/inventory/in-process/inventory-draft-preservation.test.tsx
-tests/collectivity/project-start/in-process/start.test.ts
 tests/collectivity/project-start/integration/collectivity.integration.test.ts
 tests/collectivity/project/mock-contract/project.test.ts
 tests/collectivity/quote-information/in-process/schema.test.ts
@@ -75,9 +72,16 @@ tests/localization/middleware/in-process/locale-middleware.test.ts
 Standalone browser checks:
 
 ```text
+tests/authentication/sign-in/end-to-end/sign-in-browser.mjs
+tests/authentication/sign-up/end-to-end/sign-up-browser.mjs
+tests/authentication/password-recovery/end-to-end/password-recovery-browser.mjs
+tests/authentication/session-recovery/end-to-end/session-recovery-browser.mjs
 tests/authentication/session-recovery/end-to-end/test-auth-recovery-browser.mjs
+tests/collectivity/project/end-to-end/project-entry-browser.mjs
 tests/collectivity/inventory/end-to-end/sfax-inventory-browser.mjs
 ```
+
+The five browser journeys above are run together by `npm run test:browser`.
 
 ### Backend: original Jest files at `e25faffe^`
 
