@@ -35,8 +35,8 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
-7. Stop at the implementation handoff. Do not invoke `code-review`, create or update pull requests, mark pull requests ready, or close issues as part of this implementation session. Those actions belong to a separately invoked final-review/integration session.
+7. Stop at the implementation handoff. Do not invoke `code-review`, create or update pull requests, or mark pull requests ready; those actions belong to a separately invoked final-review/integration session. Resolve each completed selected child ticket according to its issue tracker's workflow after its relevant checks pass. If resolution depends on a pull-request merge, report that follow-up instead of claiming the ticket is closed. Leave the canonical parent open for final integration.
 
-8. Report the requested ticket scope, completed work, integration branch, checks and results, unresolved dependencies, and any excluded dependent tickets. Leave issue status and pull-request lifecycle unchanged for the final-review/integration session.
+8. Report the requested ticket scope, completed work, integration branch, checks and results, ticket status, unresolved dependencies, and any excluded dependent tickets. Leave pull-request lifecycle unchanged for the final-review/integration session.
 
 9. Clean up all **implementer subagent** worktrees.
