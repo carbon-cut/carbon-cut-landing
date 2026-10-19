@@ -42,6 +42,14 @@ npm run test:browser:collectivity-project-entry
 
 This covers the Project destinations for signed-in users with and without an existing Project.
 
+Run sign-up and email confirmation journeys separately with:
+
+```bash
+npm run test:browser:auth:sign-up
+```
+
+This command starts an isolated Next.js app and mock backend, then checks registration, confirmation feedback, resend, and safe return navigation in Chromium.
+
 Real frontend/Strapi integration tests run separately:
 
 ```bash
