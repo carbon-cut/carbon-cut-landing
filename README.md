@@ -34,6 +34,14 @@ npm run test:browser:auth
 
 The command starts Next.js and a fresh contract-faithful mock backend on available local ports, then stops both. Each journey uses a new browser context; the backend process is recreated for each command run. Install Chromium once with `npx playwright install chromium` if it is not already available.
 
+Run the mock-backed session recovery journey separately with:
+
+```bash
+npm run test:browser:session-recovery
+```
+
+It covers pending, successful, rejected, and unavailable recovery states through the running French app. The separate real frontend/Strapi recovery browser check remains part of `npm run test:integration`.
+
 Real frontend/Strapi integration tests run separately:
 
 ```bash
