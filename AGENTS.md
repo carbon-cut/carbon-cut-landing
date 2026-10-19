@@ -28,6 +28,7 @@ Carbon Cut's frontend is a TypeScript Next.js App Router application. Collectivi
 - Keep route-specific components, state, and supporting code close to the route or flow that owns them. Use its existing `_components`, `_lib`, or form directories when they fit.
 - Prefer solving a feature requirement within its owning surface before considering a change to foundation code.
 - Put application components shared across flows in `src/components`; put generic design-system primitives in `src/components/ui`. Do not move feature-specific code into shared infrastructure merely because it could theoretically be reused.
+- `InventoryField*` components in `src/app/[locale]/collectivity/_components/fields` are established field standards used across flows. Their current location is an intentional exception to the shared-component placement rule; using them elsewhere does not call for a replacement or relocation.
 - Keep feature-specific logic in the owning flow's existing `_lib` location rather than creating a generic `utils`, `helpers`, or `common` module for it.
 - Put reusable client query keys, fetchers, and options in the relevant `*_lib/queries.ts` module, as described under Architecture.
 - Keep validation and form-specific code with the owning form or flow, following its established schema structure. Use the `frontend-forms` skill for form conventions.
@@ -81,6 +82,7 @@ Use verification proportional to the behavior changed.
 - Run relevant targeted Vitest tests when tested frontend behavior changes.
 - Run `npm run test:integration` when the change affects behavior covered by the real frontend/Strapi integration suite and the required environment is available.
 - Run `npm run build` when the change could affect routing, server/client boundaries, bundling, configuration, or production build behavior.
+- Run build and browser checks sequentially in the same checkout; both use `.next`, so concurrent runs can interfere.
 - Do not claim that a command or test passed unless it was actually run.
 - If an applicable check cannot run because its environment or a dependency is unavailable, state that explicitly.
 - Report failures unrelated to the requested change separately; do not fix them as collateral work.

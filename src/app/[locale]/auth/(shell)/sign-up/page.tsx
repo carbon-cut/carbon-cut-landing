@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   getErrorCode,
   isUpstreamAuthError,
-  postRegistration,
 } from "@/app/[locale]/auth/_components/auth-api";
+import { registrationMutationOptions } from "@/app/[locale]/auth/_lib/queries";
 import AuthBrand from "@/app/[locale]/auth/_components/auth-brand";
 import { InventoryFieldInput } from "@/app/[locale]/collectivity/_components/fields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -63,11 +64,12 @@ export default function SignUpPage() {
     description: t(`highlights.items.${i}.description` as Parameters<typeof t>[0]),
   }));
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const registrationMutation = useMutation(registrationMutationOptions());
 
   async function handleSubmit(values: SignupValues) {
     setErrorMessage(null);
 
-    const result = await postRegistration({
+    const result = await registrationMutation.mutateAsync({
       firstName: values.firstName.trim(),
       lastName: values.lastName.trim(),
       email: values.email,
@@ -212,7 +214,7 @@ export default function SignUpPage() {
               />
               <Button
                 type="submit"
-                disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting || registrationMutation.isPending}
                 className="mt-3 h-11 w-full"
               >
                 {t("form.submit")}

@@ -13,7 +13,9 @@ import {
   TName,
 } from "@/components/ui/forms";
 import { Input as InputRoot, type InputIcon } from "@/components/ui/input";
+import { FieldRequired } from "@/components/ui/field-help";
 import { cn } from "@/lib/utils";
+import { useScopedI18n } from "@/locales/client";
 
 type Props<T extends FieldValues> = {
   form: UseFormReturn<T, undefined>;
@@ -60,6 +62,7 @@ function InventoryFieldInput<T extends FieldValues>({
 }: Props<T>) {
   const unitRef = React.useRef<HTMLSpanElement>(null);
   const [unitPx, setUnitPx] = React.useState<number>(0);
+  const tErrors = useScopedI18n("forms.errors");
 
   React.useLayoutEffect(() => {
     if (!unitAdornment) {
@@ -100,7 +103,9 @@ function InventoryFieldInput<T extends FieldValues>({
               )}
             >
               {label}
-              {required && <span className="text-error-600"> *</span>}
+              {required ? (
+                <FieldRequired srLabel={tErrors("Required")} className="text-error-600" />
+              ) : null}
             </FormLabel>
           ) : null}
 
