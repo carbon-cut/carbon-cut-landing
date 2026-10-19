@@ -1,0 +1,481 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useFormState, useWatch, type FieldPath } from "react-hook-form";
+import { Calculator, CloudUpload, Save } from "lucide-react";
+import { toast } from "sonner";
+
+import {
+  CollectivityApiError,
+  debugCalculateCollectivityDatasetRequest,
+  type CollectivityResultsByYear,
+  type CollectivityResultYearKey,
+} from "@/app/[locale]/collectivity/_lib/queries";
+import { Button } from "@/components/ui/button";
+import Typography from "@/components/ui/typography";
+import { useScopedI18n } from "@/locales/client";
+
+import InventoryDatasetNav from "../components/InventoryDatasetNav";
+import InventoryDomainNav from "../components/InventoryDomainNav";
+import SharedPopulationTable from "../components/SharedPopulationTable";
+import FertilizersSurface from "../datasets/afat/fertilizers/surface";
+import LivestockSurface from "../datasets/afat/livestock/surface";
+import TreesSurface from "../datasets/afat/trees/surface";
+import ElectricitySurface from "../datasets/energy/electricity/surface";
+import NaturalGasSurface from "../datasets/energy/natural-gas/surface";
+import BuildingsSurface from "../datasets/municipal/buildings/surface";
+import FleetSurface from "../datasets/municipal/fleet/surface";
+import PublicLightingSurface from "../datasets/municipal/public-lighting/surface";
+import TreesParksWasteSurface from "../datasets/municipal/trees-parks-waste/surface";
+import PortSurface from "../datasets/transport/port/surface";
+import BusesSurface from "../datasets/transport/buses/surface";
+import TerritoryVehiclesSurface from "../datasets/transport/territory-vehicles/surface";
+import UrbanRailSurface from "../datasets/transport/urban-rail/surface";
+import WastewaterNitrogenSurface from "../datasets/wastewater-treatment/nitrogen/surface";
+import WastewaterSludgeSurface from "../datasets/wastewater-treatment/sludge/surface";
+import WastewaterTreatmentSurface from "../datasets/wastewater-treatment/treatment-discharge/surface";
+import { useInventoryContext, type InventoryFormValues } from "../context/inventory-context";
+import {
+  getInventoryCalculationReadinessPaths,
+  validateInventoryCalculationReadiness,
+} from "../InventorySchema/calculation-readiness";
+import {
+  getInventoryDatasetErrorSignature,
+  getInventoryDatasetFieldName,
+  getInventoryDatasetHasError,
+} from "../inventoryErrors";
+import { getInventoryDatasetProgress } from "../inventoryProgress";
+import type { InventoryDataset, InventoryWorkspaceConfig } from "../types";
+import type { InventoryFamilyKey } from "../registry";
+import { DebugCalculationPanel } from "./debugCalc";
+import { DebugCalculationPanelState, DebugResultRow } from "./types";
+import Image from "next/image";
+
+function getDisplayResultRows(resultRows: CollectivityResultsByYear): DebugResultRow[] {
+  return Object.entries(resultRows)
+    .flatMap(([year, rows]) =>
+      (rows ?? []).map((row) => ({ ...row, year: year as CollectivityResultYearKey }))
+    )
+    .sort(
+      (left, right) =>
+        left.year.localeCompare(right.year) ||
+        left.key.localeCompare(right.key) ||
+        left.direction.localeCompare(right.direction)
+    );
+}
+
+function getDefaultDataset(datasets: InventoryDataset[]) {
+  return datasets[0];
+}
+
+function isWastewaterDataset(datasetKey: string) {
+  return ["wastewaterTreatment", "wastewaterNitrogen", "wastewaterSludge"].includes(datasetKey);
+}
+
+function renderDatasetSurface(dataset: InventoryDataset | undefined) {
+  if (!dataset) return null;
+
+  switch (dataset.key) {
+    case "referenceData":
+      return <SharedPopulationTable />;
+    case "fleet":
+      return <FleetSurface />;
+    case "publicLighting":
+      return <PublicLightingSurface />;
+    case "buildings":
+      return <BuildingsSurface />;
+    case "treesParksWaste":
+      return <TreesParksWasteSurface />;
+    case "electricity":
+      return <ElectricitySurface />;
+    case "naturalGas":
+      return <NaturalGasSurface />;
+    case "port":
+      return <PortSurface />;
+    case "buses":
+      return <BusesSurface />;
+    case "urbanRail":
+      return <UrbanRailSurface />;
+    case "territoryVehicles":
+      return <TerritoryVehiclesSurface />;
+    case "trees":
+      return <TreesSurface />;
+    case "livestock":
+      return <LivestockSurface />;
+    case "fertilizers":
+      return <FertilizersSurface />;
+    case "wastewaterTreatment":
+      return <WastewaterTreatmentSurface />;
+    case "wastewaterNitrogen":
+      return <WastewaterNitrogenSurface />;
+    case "wastewaterSludge":
+      return <WastewaterSludgeSurface />;
+    default:
+      return <></>; //<PlaceholderSurface dataset={dataset} />;
+  }
+}
+
+export default function InventoryWorkspace({
+  workspace,
+  isSaving,
+  isSubmitting,
+  onSaveDraft,
+  onSubmitInventory,
+  projectSlug,
+}: {
+  workspace: InventoryWorkspaceConfig;
+  isSaving: boolean;
+  isSubmitting: boolean;
+  onSaveDraft: () => void;
+  onSubmitInventory: () => void;
+  projectSlug: string;
+}) {
+  const { mainForm, years } = useInventoryContext();
+  const t = useScopedI18n("(pages).collectivityDashboard");
+  const statusLabels = useMemo(
+    () => ({
+      todo: t("status.todo") as string,
+      complete: t("status.complete") as string,
+      inProgress: t("status.inProgress") as string,
+    }),
+    [t]
+  );
+  const formValues = useWatch({ control: mainForm.control }) as
+    | Partial<InventoryFormValues>
+    | undefined;
+  const { errors, isValidating } = useFormState({ control: mainForm.control });
+  const datasetErrorSignature = getInventoryDatasetErrorSignature(
+    workspace.datasets.map((dataset) => dataset.key),
+    errors
+  );
+  const defaultFamily = useMemo(() => workspace.families[0]?.key ?? "", [workspace.families]);
+  const [activeFamilyKey, setActiveFamilyKey] = useState(defaultFamily);
+  const [debugCalculationsByDatasetKey, setDebugCalculationsByDatasetKey] = useState<
+    Record<string, DebugCalculationPanelState>
+  >({});
+  const debugCalculationMutation = useMutation({
+    mutationFn: debugCalculateCollectivityDatasetRequest,
+  });
+  const datasetsWithProgress = useMemo(
+    () =>
+      workspace.datasets.map((dataset) => {
+        const progress = getInventoryDatasetProgress(dataset.key, formValues, years);
+        const hasError = getInventoryDatasetHasError(dataset.key, errors);
+        const progressPercent = progress?.percent;
+
+        return {
+          ...dataset,
+          navStatusLabel:
+            progressPercent === undefined
+              ? dataset.navStatusLabel
+              : progressPercent === 0
+                ? statusLabels.todo
+                : progressPercent === 100
+                  ? statusLabels.complete
+                  : statusLabels.inProgress,
+          progressLabel:
+            progressPercent === undefined ? dataset.progressLabel : `${progressPercent}%`,
+          progressPercent,
+          hasError,
+          isComplete: progressPercent === 100,
+        };
+      }),
+    // RHF keeps the errors object reference stable; use primitive validation signals instead.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [datasetErrorSignature, formValues, isValidating, statusLabels, workspace.datasets, years]
+  );
+
+  const datasetsInFamily = useMemo(
+    () => datasetsWithProgress.filter((dataset) => dataset.familyKey === activeFamilyKey),
+    [activeFamilyKey, datasetsWithProgress]
+  );
+  const familiesWithError = useMemo(
+    () =>
+      workspace.families.map((family) => ({
+        ...family,
+        hasError: datasetsWithProgress.some(
+          (dataset) => dataset.familyKey === family.key && dataset.hasError
+        ),
+      })),
+    [datasetsWithProgress, workspace.families]
+  );
+
+  const defaultDataset = useMemo(() => getDefaultDataset(datasetsInFamily), [datasetsInFamily]);
+  const [activeDatasetKey, setActiveDatasetKey] = useState(defaultDataset?.key ?? "");
+
+  useEffect(() => {
+    if (!workspace.families.some((family) => family.key === activeFamilyKey)) {
+      setActiveFamilyKey(defaultFamily);
+    }
+  }, [activeFamilyKey, defaultFamily, workspace.families]);
+
+  useEffect(() => {
+    if (!datasetsInFamily.some((dataset) => dataset.key === activeDatasetKey)) {
+      setActiveDatasetKey(defaultDataset?.key ?? "");
+    }
+  }, [activeDatasetKey, datasetsInFamily, defaultDataset]);
+
+  const activeDataset =
+    datasetsInFamily.find((dataset) => dataset.key === activeDatasetKey) ?? defaultDataset;
+  const activeFamily =
+    familiesWithError.find((family) => family.key === activeFamilyKey) ?? familiesWithError[0];
+  const activeDebugCalculation = activeDataset
+    ? debugCalculationsByDatasetKey[activeDataset.key]
+    : null;
+
+  const handleFamilyChange = (familyKey: InventoryFamilyKey) => {
+    setActiveFamilyKey(familyKey);
+    const nextDatasets = datasetsWithProgress.filter((dataset) => dataset.familyKey === familyKey);
+    const nextDataset = getDefaultDataset(nextDatasets);
+    setActiveDatasetKey(nextDataset?.key ?? "");
+  };
+
+  const handleDebugCalculate = async () => {
+    if (!activeDataset) {
+      return;
+    }
+
+    const wastewaterDataset = isWastewaterDataset(activeDataset.key);
+    const debugDatasetKey = wastewaterDataset ? "wastewaterSanitation" : activeDataset.key;
+    const readinessDatasetKey = wastewaterDataset ? "wastewaterTreatment" : activeDataset.key;
+    const datasetFieldName = wastewaterDataset
+      ? "wastewaterSanitation"
+      : getInventoryDatasetFieldName(activeDataset.key);
+    const debugFieldNames =
+      activeDataset.key === "naturalGas"
+        ? ([datasetFieldName, "sharedData.population", "sharedData.householdEnergy"].filter(
+            Boolean
+          ) as FieldPath<InventoryFormValues>[])
+        : datasetFieldName
+          ? [datasetFieldName as FieldPath<InventoryFormValues>]
+          : [];
+    const isDatasetValid =
+      debugFieldNames.length > 0
+        ? await mainForm.trigger(debugFieldNames, {
+            shouldFocus: true,
+          })
+        : true;
+    const currentValues = mainForm.getValues();
+    const debugData = datasetFieldName
+      ? mainForm.getValues(datasetFieldName as FieldPath<InventoryFormValues>)
+      : undefined;
+
+    if (!isDatasetValid) {
+      console.log("debugData", debugData);
+      console.log("debugError", mainForm.formState.errors);
+      toast.error(t("inventoryWorkspace.debugCalculation.validationError") as string);
+      return;
+    }
+
+    for (const path of getInventoryCalculationReadinessPaths(readinessDatasetKey, currentValues)) {
+      mainForm.clearErrors(path.join(".") as FieldPath<InventoryFormValues>);
+    }
+
+    const readinessResult = validateInventoryCalculationReadiness(
+      readinessDatasetKey,
+      currentValues
+    );
+
+    if (!readinessResult.success) {
+      for (const issue of readinessResult.error.issues) {
+        mainForm.setError(issue.path.join(".") as FieldPath<InventoryFormValues>, {
+          type: "custom",
+          message: issue.message,
+        });
+      }
+
+      console.log("debugData", debugData);
+      console.log("debugError", readinessResult.error);
+      toast.error(t("inventoryWorkspace.debugCalculation.validationError") as string);
+      return;
+    }
+
+    const { years: _years, ...inventoryInput } = currentValues;
+    const debugRequest = {
+      datasetKey: debugDatasetKey,
+      inventoryInput,
+    };
+
+    try {
+      const debugData = await debugCalculationMutation.mutateAsync({
+        projectSlug,
+        ...debugRequest,
+      });
+      const resultRows = getDisplayResultRows(debugData.resultRows);
+
+      setDebugCalculationsByDatasetKey((current) => ({
+        ...current,
+        [activeDataset.key]: {
+          status: "success",
+          datasetKey: debugDatasetKey,
+          resultRows,
+          warnings: debugData.warnings ?? [],
+          calculationCodeDigest: debugData.calculationCodeDigest,
+        },
+      }));
+      console.log("debugData", debugData);
+      toast.success(t("inventoryWorkspace.debugCalculation.success") as string);
+    } catch (error) {
+      if (error instanceof CollectivityApiError) {
+        console.log("debugData", debugRequest);
+        console.log("debugError", error.payload.error);
+        const backendReasons = error.payload.error?.details?.reasons ?? [];
+        const reasons = wastewaterDataset
+          ? Array.from(
+              new Set(
+                backendReasons.map((reason) => {
+                  const message =
+                    reason.code === "RExceedInput"
+                      ? (t("inventoryWorkspace.debugCalculation.errors.RExceedInput") as string)
+                      : (t("inventoryWorkspace.debugCalculation.errors.unknown") as string);
+                  const paths = reason.paths ?? (reason.path ? [reason.path] : []);
+
+                  paths.forEach((path) => {
+                    mainForm.setError(path as FieldPath<InventoryFormValues>, {
+                      type: "server",
+                      message,
+                    });
+                  });
+
+                  return message;
+                })
+              )
+            )
+          : backendReasons.map((reason) =>
+              [reason.code, reason.path, reason.parameterKey].filter(Boolean).join(" · ")
+            );
+
+        setDebugCalculationsByDatasetKey((current) => ({
+          ...current,
+          [activeDataset.key]: {
+            status: "error",
+            datasetKey: debugDatasetKey,
+            message: wastewaterDataset
+              ? (t("inventoryWorkspace.debugCalculation.calculationError") as string)
+              : (error.payload.error?.message ??
+                (t("inventoryWorkspace.debugCalculation.calculationError") as string)),
+            reasons,
+          },
+        }));
+        toast.error(t("inventoryWorkspace.debugCalculation.calculationError") as string);
+        return;
+      }
+
+      console.log("debugData", debugRequest);
+      console.log("debugError", error);
+      setDebugCalculationsByDatasetKey((current) => ({
+        ...current,
+        [activeDataset.key]: {
+          status: "error",
+          datasetKey: activeDataset.key,
+          message: t("inventoryWorkspace.debugCalculation.requestError") as string,
+          reasons: [],
+        },
+      }));
+      toast.error(t("inventoryWorkspace.debugCalculation.requestError") as string);
+    }
+  };
+  const tDataSet = useScopedI18n("(pages).collectivityDashboard.inventoryWorkspace.datasets");
+  const tFamily = useScopedI18n("(pages).collectivityDashboard.inventoryWorkspace.families");
+  const getSrc = () => {
+    switch (activeFamilyKey) {
+      case "municipalPatrimoine":
+        return "/form/banner-illustrations/05_mairie_place.png";
+      case "stationaryEnergy":
+        return "/form/banner-illustrations/03_zone_industrielle.png";
+      case "transportMobility":
+        return "/form/banner-illustrations/01_ville_skyline.png";
+      case "wastewater":
+        return "/form/banner-illustrations/07_assainissement_eau.png";
+      case "afat":
+        return "/form/banner-illustrations/08_agriculture_commune.png";
+      default:
+        return "/form/notFound.png";
+    }
+  };
+  return (
+    <section className="space-y-6">
+      <div className="absolute top-0 left-0 max-w-full right-0">
+        <header className="h-[var(--sidebar-width-icon)] border-b border-border/10 bg-card px-4 py-3">
+          <div className="my-auto flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <Typography asChild variant="subtitle" size="md">
+              <h1>
+                {tFamily(`${activeFamily.key}.title`)}
+                {activeDataset ? " · " : ""}
+                {tDataSet(`${activeDataset.key}.title`)}
+              </h1>
+            </Typography>
+
+            <div className="flex flex-wrap items-center gap-2.5 md:justify-end">
+              <Button
+                type="button"
+                variant="brand-secondary"
+                size="medium"
+                disabled={isSaving || isSubmitting}
+                onClick={onSaveDraft}
+                icon={<Save aria-hidden="true" className="size-4 shrink-0" />}
+              >
+                {t("actions.save") as string}
+              </Button>
+              <Button
+                type="button"
+                variant="brand-primary"
+                size="medium"
+                disabled={isSaving || isSubmitting}
+                onClick={onSubmitInventory}
+                icon={<CloudUpload aria-hidden="true" className="size-4 shrink-0" />}
+              >
+                {t("actions.submitData") as string}
+              </Button>
+            </div>
+          </div>
+        </header>
+        <div className="h-[350px]">
+          <Image
+            width={1772}
+            height={466}
+            src={getSrc()}
+            alt="Inventory Dataset Nav"
+            className="w-full h-auto"
+          />
+        </div>
+      </div>
+      <div className="h-[200px]" />
+      <section className="relative !mt-20 pt-14 px-4 md:px-6">
+        <InventoryDomainNav
+          label={""} //workspace.controls.domainsLabel}
+          families={familiesWithError}
+          activeFamilyKey={activeFamily?.key ?? ""}
+          onFamilyChange={handleFamilyChange}
+        />
+
+        <section className="!mt-0 relative z-1 overflow-hidden rounded-2xl border border-t-0 border-border/10 bg-card shadow-[0_16px_34px_rgba(9,35,31,0.035)]">
+          <div className="space-y-4 border-b border-border/10 px-6 py-4 md:px-8 md:py-4">
+            <InventoryDatasetNav
+              activeFamily={activeFamily}
+              datasets={datasetsInFamily}
+              activeDatasetKey={activeDataset?.key ?? ""}
+              onDatasetChange={setActiveDatasetKey}
+            />
+
+            {/* <DebugCalculationPanel
+              disabled={
+                debugCalculationMutation.isPending ||
+                !activeDataset ||
+                !getInventoryDatasetFieldName(activeDataset.key)
+              }
+              result={activeDebugCalculation}
+              t={t}
+              handleDebugCalculate={handleDebugCalculate}
+              tDataSet={tDataSet}
+              activeDataset={activeDataset}
+            /> */}
+          </div>
+
+          <div className="space-y-4 px-6 md:px-8">{renderDatasetSurface(activeDataset)}</div>
+        </section>
+      </section>
+    </section>
+  );
+}

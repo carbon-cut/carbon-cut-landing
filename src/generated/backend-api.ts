@@ -4,6 +4,179 @@
  */
 
 export interface paths {
+  "/api/contact": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Send a contact form message to the team
+     * @description A nonempty website honeypot returns success without sending email. Requests are limited to five per IP in ten minutes. The sender and team inbox must be configured on the server.
+     */
+    post: operations["sendContactMessage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/local": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Sign in with email and password */
+    post: operations["login"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/local/register": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Create a local account */
+    post: operations["register"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/email-confirmation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Confirm email and start a session */
+    post: operations["confirmEmail"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/send-email-confirmation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Resend a confirmation email */
+    post: operations["resendEmailConfirmation"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/forgot-password": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Email a password reset link */
+    post: operations["forgotPassword"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/reset-password": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Consume a single-use reset link and start a new session */
+    post: operations["resetPassword"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/change-password": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Change password and invalidate earlier sessions */
+    post: operations["changePassword"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/logout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Revoke one refresh token */
+    post: operations["logout"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/refresh-token-rotation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Rotate a refresh token once */
+    post: operations["refreshSession"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/collectivity/projects": {
     parameters: {
       query?: never;
@@ -57,6 +230,48 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/collectivity/projects/{projectSlug}/current-inventory/result": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    /** Get the latest calculation result and reporting lines */
+    get: operations["getCollectivityCurrentInventoryResult"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/collectivity/projects/{projectSlug}/calculation-runs/{runId}/explanation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+        runId: number;
+      };
+      cookie?: never;
+    };
+    /**
+     * Get a stored calculation explanation
+     * @description Only the owning project subscriber may read a successful run belonging to the project. Filters intersect. Item and dataset filters return source-level outputs; grouped rows are returned only when neither filter is present. Filtered reads omit the whole submitted input and setup snapshot. A run without a recorded explanation returns traceUnavailable.
+     */
+    get: operations["getCollectivityCalculationExplanation"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/collectivity/projects/{projectSlug}/setup": {
     parameters: {
       query?: never;
@@ -95,12 +310,291 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/collectivity/projects/{projectSlug}/current-inventory/debug-calculate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Calculate one inventory dataset without persistence
+     * @description Available in non-production environments only. The route is not registered in production.
+     */
+    post: operations["debugCalculateCollectivityInventory"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/collectivity/projects/{projectSlug}/current-inventory/calculate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Save and calculate the current inventory
+     * @description The submitted input remains saved as a draft when calculation readiness fails. The response includes energy quantities but not grouped emission result rows; fetch Get Result for grouped rows and reporting lines.
+     */
+    post: operations["calculateCollectivityInventory"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    RegistrationPending: {
+      user: components["schemas"]["AuthUser"];
+      /** @enum {boolean} */
+      confirmation_required: true;
+      /** @enum {boolean} */
+      confirmation_email_sent: true;
+    };
+    RefreshRequest: {
+      refresh_token: string;
+    };
+    OkResponse: {
+      /** @enum {boolean} */
+      ok: true;
+    };
+    AuthUser: {
+      id: number;
+      firstName: string;
+      lastName: string;
+      organisation?: string | null;
+      /** Format: email */
+      email: string;
+      provider: string;
+      confirmed: boolean;
+      blocked: boolean;
+      planId?: string[];
+    };
+    AuthSession: {
+      access_token: string;
+      refresh_token: string;
+      user: components["schemas"]["AuthUser"];
+    };
     JsonObject: {
       [key: string]: unknown;
+    };
+    /** @description Numbers indexed by inventory year keys in the form y-<number>, such as y-2021. */
+    YearNumberValues: {
+      [key: string]: number;
+    };
+    AnnualQuantity: {
+      value: components["schemas"]["YearNumberValues"];
+      unit: string;
+    };
+    /** @enum {string} */
+    WastewaterLoadType: "domestic" | "industrial" | "unclassified";
+    /** @enum {string} */
+    WastewaterTreatmentSystem:
+      | "centralizedAerobic"
+      | "anaerobicReactor"
+      | "anaerobicShallowFacultativeLagoon"
+      | "anaerobicDeepLagoon"
+      | "constructedWetlandSurfaceFlow"
+      | "constructedWetlandHorizontalSubsurfaceFlow"
+      | "constructedWetlandVerticalSubsurfaceFlow"
+      | "septicTank"
+      | "septicTankLandDispersal"
+      | "stagnantSewer"
+      | "flowingSewer"
+      | "latrineDryHousehold"
+      | "latrineDryCommunal"
+      | "latrineWetOrFlush"
+      | "aquaticDischarge";
+    /** @enum {string} */
+    WastewaterIndustrialTreatmentSystem:
+      | "centralizedAerobic"
+      | "anaerobicReactor"
+      | "anaerobicShallowFacultativeLagoon"
+      | "anaerobicDeepLagoon"
+      | "constructedWetlandSurfaceFlow"
+      | "constructedWetlandHorizontalSubsurfaceFlow"
+      | "constructedWetlandVerticalSubsurfaceFlow"
+      | "aquaticDischarge";
+    /** @enum {string} */
+    WastewaterReceivingWater: "otherAquatic" | "reservoirLakeEstuary" | "unknown";
+    /** @enum {string} */
+    WastewaterEffluentPath: "measuredOutgoingLoad" | "treatmentLevel";
+    /** @enum {string} */
+    WastewaterEffluentTreatmentLevel:
+      | "untreated"
+      | "primaryMechanical"
+      | "secondaryBiological"
+      | "advancedBiological"
+      | "notEstimated";
+    /** @enum {string} */
+    WastewaterSludgePathway:
+      | "anaerobicDigestion"
+      | "composting"
+      | "landfill"
+      | "incineration"
+      | "landApplication"
+      | "notEstimated";
+    /** @enum {string} */
+    WastewaterLandfillClimate: "temperateDry" | "temperateWet" | "tropicalDry" | "tropicalWet";
+    /** @enum {string} */
+    WastewaterLandfillSiteType:
+      | "managedAnaerobic"
+      | "unmanagedDeep"
+      | "unmanagedShallow"
+      | "uncategorised";
+    /** @enum {string} */
+    WastewaterLandfillOxidationCover: "noneOrUnspecified" | "managedCoveredWithOxidizingMaterial";
+    /** @enum {string} */
+    WastewaterUnit: "kg BOD" | "kg COD" | "kg N" | "kg CH4" | "t wet sludge" | "%" | "capita";
+    WastewaterCapabilityMatrix: {
+      /**
+       * @example [
+       *       "centralizedAerobic",
+       *       "anaerobicReactor",
+       *       "anaerobicShallowFacultativeLagoon",
+       *       "anaerobicDeepLagoon",
+       *       "constructedWetlandSurfaceFlow",
+       *       "constructedWetlandHorizontalSubsurfaceFlow",
+       *       "constructedWetlandVerticalSubsurfaceFlow",
+       *       "septicTank",
+       *       "septicTankLandDispersal",
+       *       "stagnantSewer",
+       *       "flowingSewer",
+       *       "latrineDryHousehold",
+       *       "latrineDryCommunal",
+       *       "latrineWetOrFlush",
+       *       "aquaticDischarge"
+       *     ]
+       */
+      domesticBod: components["schemas"]["WastewaterTreatmentSystem"][];
+      /**
+       * @example [
+       *       "centralizedAerobic",
+       *       "anaerobicReactor",
+       *       "anaerobicShallowFacultativeLagoon",
+       *       "anaerobicDeepLagoon",
+       *       "constructedWetlandSurfaceFlow",
+       *       "constructedWetlandHorizontalSubsurfaceFlow",
+       *       "constructedWetlandVerticalSubsurfaceFlow",
+       *       "aquaticDischarge"
+       *     ]
+       */
+      industrialCod: components["schemas"]["WastewaterIndustrialTreatmentSystem"][];
+      /**
+       * @description Unclassified BOD is calculated through the explicit domestic-method proxy.
+       * @example [
+       *       "centralizedAerobic",
+       *       "anaerobicReactor",
+       *       "anaerobicShallowFacultativeLagoon",
+       *       "anaerobicDeepLagoon",
+       *       "constructedWetlandSurfaceFlow",
+       *       "constructedWetlandHorizontalSubsurfaceFlow",
+       *       "constructedWetlandVerticalSubsurfaceFlow",
+       *       "septicTank",
+       *       "septicTankLandDispersal",
+       *       "stagnantSewer",
+       *       "flowingSewer",
+       *       "latrineDryHousehold",
+       *       "latrineDryCommunal",
+       *       "latrineWetOrFlush",
+       *       "aquaticDischarge"
+       *     ]
+       */
+      unclassifiedBodDomesticProxy: components["schemas"]["WastewaterTreatmentSystem"][];
+    };
+    /** @description Complete year map from site commissioning through the maximum calculated year. */
+    WastewaterWetSludgeAnnualSeries: components["schemas"]["AnnualQuantity"] & {
+      value?: {
+        [key: string]: number;
+      };
+      /** @enum {string} */
+      unit?: "t wet sludge";
+    };
+    WastewaterMethaneRecoveryAnnualSeries: components["schemas"]["AnnualQuantity"] & {
+      value?: {
+        [key: string]: number;
+      };
+      /** @enum {string} */
+      unit?: "kg CH4";
+    };
+    WastewaterLandfillSite: {
+      landfillIdentifier: string;
+      commissioningYear: number;
+      climate: components["schemas"]["WastewaterLandfillClimate"];
+      landfillSiteType: components["schemas"]["WastewaterLandfillSiteType"];
+      oxidationCover: components["schemas"]["WastewaterLandfillOxidationCover"];
+      disposalHistory: {
+        domestic: components["schemas"]["WastewaterWetSludgeAnnualSeries"];
+        industrial: components["schemas"]["WastewaterWetSludgeAnnualSeries"];
+      };
+      methaneRecovery: components["schemas"]["WastewaterMethaneRecoveryAnnualSeries"];
+    };
+    WastewaterLandfillSites: {
+      dataSet: components["schemas"]["WastewaterLandfillSite"][];
+    };
+    /** @enum {string} */
+    CalculationReasonCode:
+      | "missingCalculationInput"
+      | "invalidInput"
+      | "missingParameter"
+      | "unsupportedDataset"
+      | "RExceedInput"
+      | "invalidControlledValue"
+      | "unsupportedWastewaterMethod"
+      | "missingAnnualDependency"
+      | "orphanAnnualValue"
+      | "invalidUnit"
+      | "invalidRange"
+      | "populationAllocationExceeded"
+      | "populationActivityConflict"
+      | "methaneRecoveryNotSupported"
+      | "missingLandfillSite"
+      | "landfillSiteConflict"
+      | "landfillHistoryMismatch";
+    /** @enum {string} */
+    CalculationWarningCode:
+      | "negativeEstimatedActivityClamped"
+      | "missingLtoCorrectionFactorDefaulted"
+      | "treeAbsorptionFactorFallbackUsed"
+      | "greenWasteAbsorptionFallbackUsed"
+      | "wastewaterEffluentNotEstimated"
+      | "wastewaterEffluentNitrogenNotEstimated"
+      | "wastewaterLandfillNotEstimated"
+      | "wastewaterPopulationUnallocated"
+      | "wastewaterUnclassifiedDomesticProxyUsed"
+      | "wastewaterReceivingWaterTier1FallbackUsed"
+      | "wastewaterRecoveryIncludedInFactor"
+      | "manureBeddingNitrogenNotEstimated"
+      | "portNavigationNotEstimated";
+    /** @description Backend-owned calculation-readiness contract. Draft inventory storage remains a permissive JsonObject; zero is an explicitly supplied annual value and validation is limited to active inventory years and in-boundary rows. */
+    WastewaterCalculationContract: {
+      controlledValues: {
+        loadTypes: components["schemas"]["WastewaterLoadType"][];
+        treatmentSystems: components["schemas"]["WastewaterTreatmentSystem"][];
+        receivingWaters: components["schemas"]["WastewaterReceivingWater"][];
+        effluentPaths: components["schemas"]["WastewaterEffluentPath"][];
+        effluentTreatmentLevels: components["schemas"]["WastewaterEffluentTreatmentLevel"][];
+        sludgePathways: components["schemas"]["WastewaterSludgePathway"][];
+        units: components["schemas"]["WastewaterUnit"][];
+      };
+      capabilityMatrix: components["schemas"]["WastewaterCapabilityMatrix"];
+      landfillSites: components["schemas"]["WastewaterLandfillSites"];
+      reasonCodes: components["schemas"]["CalculationReasonCode"][];
+      warningCodes: components["schemas"]["CalculationWarningCode"][];
     };
     ProjectSetup: {
       name: string;
@@ -126,6 +620,11 @@ export interface components {
       name: string;
       territory: string;
       country: string | null;
+      /**
+       * @description Inventory boundary purchased by the subscription attached to this project.
+       * @enum {string}
+       */
+      perimeter: "patrimoine_communal" | "territorial_communes";
       referenceYear: number;
       inventoryYears: number[];
       currentInventoryId: string | null;
@@ -157,8 +656,374 @@ export interface components {
     ProjectSnapshotResponse: {
       data: components["schemas"]["ProjectSnapshot"];
     };
+    CalculationRowFields: {
+      key: string;
+      value: number;
+      unit: string;
+      owner: string;
+      /** @enum {string} */
+      family: "energy" | "afat" | "waste";
+      /** @enum {string} */
+      sector?: "transport" | "industry" | "residential" | "tertiary" | "agriculture";
+      /** @enum {string} */
+      scope?: "scope1" | "scope2" | "scope3";
+      /** @enum {string} */
+      energy?: "electricity" | "naturalGas" | "gpl" | "diesel" | "gasoline" | "gnv";
+      /** @enum {string} */
+      activity?: "landTransport" | "airport" | "navigation" | "municipalFleet";
+      afatSource?: string;
+      /** @enum {string} */
+      wasteSource?: "greenWaste" | "wastewater";
+    };
+    CalculationResultRow: components["schemas"]["CalculationRowFields"] & {
+      /** @enum {string} */
+      direction: "emission" | "absorption";
+    };
+    CalculationEnergyRow: components["schemas"]["CalculationRowFields"] & {
+      /** @enum {string} */
+      unit: "MWh";
+    };
+    /** @description Result row arrays indexed by inventory year keys in the form y-<number>. */
+    CalculationResultRowsByYear: {
+      [key: string]: components["schemas"]["CalculationResultRow"][];
+    };
+    /** @description Energy row arrays indexed by inventory year keys in the form y-<number>. */
+    CalculationEnergyRowsByYear: {
+      [key: string]: components["schemas"]["CalculationEnergyRow"][];
+    };
+    CalculationResultContext: {
+      /** @description Population quantities indexed by inventory year keys in the form y-<number>. */
+      population: {
+        [key: string]: {
+          value: number;
+          unit: string;
+        };
+      };
+      wastewater?: {
+        /** @description Wastewater population allocation indexed by year keys in the form y-<number>. */
+        populationAllocation: {
+          [key: string]: {
+            allocatedPercent: number;
+            unallocatedPercent: number;
+          };
+        };
+      };
+    };
+    CurrentInventoryResultResponse: {
+      data: {
+        id: string;
+        calculationRunId: string;
+        resultRows: components["schemas"]["CalculationResultRowsByYear"];
+        context: components["schemas"]["CalculationResultContext"];
+        warnings: components["schemas"]["CalculationWarning"][];
+        reportingLines: components["schemas"]["ReportingLine"][];
+        /** Format: date-time */
+        createdAt: string;
+      };
+    };
+    ReportingLine: {
+      /** @description Standard report key or a source-derived operator/absorption key. */
+      key: string;
+      /** @description Display name supplied for source-derived detail lines. */
+      label?: string;
+      values: {
+        [key: string]: number | "NE";
+      };
+    };
     InventoryInputRequest: {
       inventoryInput: components["schemas"]["JsonObject"];
+    };
+    DebugCalculationRequest: {
+      datasetKey: string;
+      inventoryInput: components["schemas"]["JsonObject"];
+    };
+    CalculationWarning: {
+      code: components["schemas"]["CalculationWarningCode"];
+      itemId?: string;
+      path?: string;
+      message: string;
+      details?: components["schemas"]["JsonObject"];
+    };
+    ExplanationQuantity: {
+      value: number;
+      unit: string;
+      /** @enum {string} */
+      role: "input" | "convertedActivity" | "gasMass" | "co2e" | "reportedQuantity";
+    };
+    InputProvenance: {
+      path: string;
+      raw: components["schemas"]["ExplanationQuantity"];
+      prepared: components["schemas"]["ExplanationQuantity"];
+      transformations: {
+        key: string;
+        inputPaths: string[];
+        output: components["schemas"]["ExplanationQuantity"];
+      }[];
+    };
+    ParameterRequirementTrace: {
+      familyKey: string;
+      year: number;
+      selectors: {
+        [key: string]: string;
+      };
+    };
+    ParameterSelectionRule: {
+      kind: string;
+      matchedSelectors: {
+        [key: string]: string;
+      };
+      selectorFallbackIndex: number;
+      requestedYear: number;
+      selectedDataYear: number | null;
+      /** @enum {string} */
+      yearBasis:
+        | "entryYear"
+        | "validFromYear"
+        | "validToYear"
+        | "requestedYearProxy"
+        | "validityRange";
+    };
+    /** @description Entry in the run's parameter snapshot. resolutionId identifies the requested family, year, and canonical selectors, even if another request selects the same entry. */
+    ResolvedParameterTrace: {
+      resolutionId: string;
+      requirement: components["schemas"]["ParameterRequirementTrace"];
+      selectionRule: components["schemas"]["ParameterSelectionRule"];
+      parameterEntryId: number;
+      value: number;
+      unit?: string | null;
+      selector?: {
+        [key: string]: string;
+      };
+      /** @enum {string} */
+      applicability?: "global" | "country-specific";
+      country?: string | null;
+      year?: number | null;
+      validFromYear?: number | null;
+      validToYear?: number | null;
+      gas?: string | null;
+      emissionScope?: string | null;
+      isDefault?: boolean;
+      sourceReference?: Record<string, never> | null;
+    };
+    UnresolvedOptionalParameterTrace: {
+      resolutionId: string;
+      requirement: components["schemas"]["ParameterRequirementTrace"];
+      /** @enum {string} */
+      reason: "noEligibleEntry";
+    };
+    ParameterSnapshotTrace: {
+      requestedFamilies: string[];
+      items: components["schemas"]["ResolvedParameterTrace"][];
+      unresolvedOptional?: components["schemas"]["UnresolvedOptionalParameterTrace"][];
+    };
+    DebugResolvedParameter: {
+      resolutionId: string;
+      requirement?: components["schemas"]["ParameterRequirementTrace"];
+      selectionRule?: components["schemas"]["ParameterSelectionRule"];
+      parameterEntryId: number;
+      key: string;
+      selector: {
+        [key: string]: string;
+      };
+      value: number;
+      unit: string;
+      gas?: string | null;
+      country?: string | null;
+      year?: number | null;
+      validFromYear?: number | null;
+      validToYear?: number | null;
+      sourceReferenceId?: string | null;
+      sourceReference?: {
+        id: number;
+        title?: string | null;
+        type?: string | null;
+        publisher?: string | null;
+        year?: number | null;
+        url?: string | null;
+        note?: string | null;
+      } | null;
+    };
+    DebugParameterSnapshot: {
+      requestedFamilies: string[];
+      items: components["schemas"]["DebugResolvedParameter"][];
+      unresolvedOptional?: components["schemas"]["UnresolvedOptionalParameterTrace"][];
+    };
+    FormulaOperandTrace:
+      | {
+          /** @enum {string} */
+          kind: "input";
+          key: string;
+        }
+      | {
+          /** @enum {string} */
+          kind: "step";
+          stepKey: string;
+        }
+      | {
+          /** @enum {string} */
+          kind: "parameter";
+          resolutionId: string;
+        }
+      | {
+          /** @enum {string} */
+          kind: "constant";
+          key: string;
+          quantity: components["schemas"]["ExplanationQuantity"];
+        };
+    FormulaStepTrace: {
+      key: string;
+      /** @enum {string} */
+      operation:
+        | "multiply"
+        | "divide"
+        | "sum"
+        | "subtract"
+        | "convert"
+        | "exp"
+        | "max"
+        | "identity";
+      operands: components["schemas"]["FormulaOperandTrace"][];
+      output: components["schemas"]["ExplanationQuantity"];
+      warningIds?: string[];
+    };
+    ItemExplanationTrace: {
+      itemId: string;
+      year: number;
+      datasetKey?: string;
+      method: string;
+      input: {
+        [key: string]: components["schemas"]["InputProvenance"];
+      };
+      steps: components["schemas"]["FormulaStepTrace"][];
+      components: {
+        key: string;
+        componentId: string;
+        itemId: string;
+        year: number;
+        quantity: components["schemas"]["ExplanationQuantity"];
+        stepKeys: string[];
+        sourceRowId?: string;
+      }[];
+      outcome?: {
+        /** @enum {string} */
+        kind: "notEstimated";
+        rule: string;
+        warningIds?: string[];
+      };
+    };
+    SourceRowLinkTrace: {
+      sourceRowId: string;
+      componentKey: string;
+      itemId: string;
+      year: number;
+      rowKey: string;
+      quantity: components["schemas"]["ExplanationQuantity"];
+    };
+    AccountingAdjustmentTrace: {
+      key: string;
+      year: number;
+      ownedSourceRowId: string;
+      territorialSourceRowId: string;
+      before: components["schemas"]["ExplanationQuantity"];
+      deduction: components["schemas"]["ExplanationQuantity"];
+      after: components["schemas"]["ExplanationQuantity"];
+    };
+    ReportingContributionTrace: {
+      reportingLineKey: string;
+      year: number;
+      sourceRowId?: string;
+      quantity:
+        | components["schemas"]["ExplanationQuantity"]
+        | {
+            /** @enum {string} */
+            outcome: "NE";
+            rule: string;
+          };
+    };
+    /** @description Versioned explanation artifact for a successful calculation. */
+    CalculationExplanation: {
+      /** @enum {integer} */
+      schemaVersion: 1;
+      submittedInput: components["schemas"]["JsonObject"];
+      calculationContext: components["schemas"]["JsonObject"];
+      items: components["schemas"]["ItemExplanationTrace"][];
+      sourceRowLinks: components["schemas"]["SourceRowLinkTrace"][];
+      accountingAdjustments: components["schemas"]["AccountingAdjustmentTrace"][];
+      reportingContributions: components["schemas"]["ReportingContributionTrace"][];
+    };
+    CalculationExplanationResponse: {
+      data: {
+        runId: string;
+        /** @enum {integer} */
+        schemaVersion: 1;
+        calculationCodeDigest: string;
+        parameterSnapshot: components["schemas"]["ParameterSnapshotTrace"];
+        warnings: components["schemas"]["CalculationWarning"][];
+        submittedInput?: components["schemas"]["JsonObject"];
+        calculationContext?: components["schemas"]["JsonObject"];
+        items: components["schemas"]["ItemExplanationTrace"][];
+        sourceRowLinks: components["schemas"]["SourceRowLinkTrace"][];
+        sourceRows: components["schemas"]["JsonObject"];
+        accountingAdjustments: components["schemas"]["AccountingAdjustmentTrace"][];
+        reportingContributions: components["schemas"]["ReportingContributionTrace"][];
+        resultRows?: components["schemas"]["CalculationResultRowsByYear"];
+        energyRows?: components["schemas"]["CalculationEnergyRowsByYear"];
+        reportingLines?: components["schemas"]["ReportingLine"][];
+      };
+    };
+    DebugCalculationResponse: {
+      data: {
+        datasetKey: string;
+        resultRows: components["schemas"]["CalculationResultRowsByYear"];
+        energyRows: components["schemas"]["CalculationEnergyRowsByYear"];
+        parameterSnapshot: components["schemas"]["DebugParameterSnapshot"];
+        calculationCodeDigest: string;
+        explanation: components["schemas"]["CalculationExplanation"];
+        warnings?: components["schemas"]["CalculationWarning"][];
+      };
+    };
+    CalculationResponse: {
+      data: {
+        context: components["schemas"]["JsonObject"];
+        output: components["schemas"]["CalculationOutput"];
+        runData: components["schemas"]["JsonObject"];
+        resultData: components["schemas"]["StoredCalculationResultData"];
+        persisted: components["schemas"]["JsonObject"];
+      };
+    };
+    CalculationOutput: {
+      energyRows: components["schemas"]["CalculationEnergyRowsByYear"];
+      calculationCodeDigest: string;
+      parameterSnapshot: components["schemas"]["ParameterSnapshotTrace"];
+      warnings?: components["schemas"]["CalculationWarning"][];
+    };
+    StoredCalculationResultData: {
+      project: number;
+      energyRows: components["schemas"]["CalculationEnergyRowsByYear"];
+      context: components["schemas"]["CalculationResultContext"];
+    };
+    CalculationCannotRunReason: {
+      code: components["schemas"]["CalculationReasonCode"];
+      path?: string;
+      paths?: string[];
+      parameterKey?: string;
+      year?: number;
+      details?: components["schemas"]["JsonObject"];
+    };
+    CalculationCannotRunResponse: {
+      data: Record<string, never> | null;
+      error: {
+        /** @enum {integer} */
+        status: 422;
+        /** @enum {string} */
+        name: "ApplicationError";
+        /** @enum {string} */
+        message: "calculationCannotRun" | "debugCalculationCannotRun";
+        details: {
+          datasetKey: string;
+          reasons: components["schemas"]["CalculationCannotRunReason"][];
+        };
+      };
     };
     InventorySaveProject: {
       id: string;
@@ -193,6 +1058,15 @@ export interface components {
         "application/json": components["schemas"]["ErrorResponse"];
       };
     };
+    /** @description The submitted inventory cannot be calculated */
+    CalculationCannotRun: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        "application/json": components["schemas"]["CalculationCannotRunResponse"];
+      };
+    };
   };
   parameters: {
     ProjectSlug: string;
@@ -203,6 +1077,310 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+  sendContactMessage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          name: string;
+          /** Format: email */
+          email: string;
+          topic: string;
+          message: string;
+          /** @description Optional honeypot; leave empty. */
+          website?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Message accepted, including honeypot submissions */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            data: components["schemas"]["OkResponse"];
+          };
+        };
+      };
+      400: components["responses"]["Error"];
+      413: components["responses"]["Error"];
+      429: components["responses"]["Error"];
+      503: components["responses"]["Error"];
+    };
+  };
+  login: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** Format: email */
+          identifier: string;
+          password: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Session */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AuthSession"];
+        };
+      };
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+    };
+  };
+  register: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** Format: email */
+          email: string;
+          firstName: string;
+          lastName: string;
+          organisation?: string | null;
+          password: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Pending confirmation or session when confirmation is disabled */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json":
+            | components["schemas"]["RegistrationPending"]
+            | components["schemas"]["AuthSession"];
+        };
+      };
+      400: components["responses"]["Error"];
+    };
+  };
+  confirmEmail: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** Format: email */
+          email: string;
+          confirmation: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Session */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AuthSession"];
+        };
+      };
+      400: components["responses"]["Error"];
+    };
+  };
+  resendEmailConfirmation: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** Format: email */
+          email: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Confirmation email requested */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** Format: email */
+            email: string;
+            /** @enum {boolean} */
+            sent: true;
+          };
+        };
+      };
+      400: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+    };
+  };
+  forgotPassword: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** Format: email */
+          email: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Neutral acknowledgement, including unknown and blocked accounts */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OkResponse"];
+        };
+      };
+      400: components["responses"]["Error"];
+    };
+  };
+  resetPassword: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description Random token from the emailed link */
+          code: string;
+          password: string;
+          passwordConfirmation: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Session */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AuthSession"];
+        };
+      };
+      400: components["responses"]["Error"];
+    };
+  };
+  changePassword: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          currentPassword: string;
+          password: string;
+          passwordConfirmation: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Replacement session */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AuthSession"];
+        };
+      };
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+    };
+  };
+  logout: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RefreshRequest"];
+      };
+    };
+    responses: {
+      /** @description Revoked */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OkResponse"];
+        };
+      };
+      401: components["responses"]["Error"];
+    };
+  };
+  refreshSession: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RefreshRequest"];
+      };
+    };
+    responses: {
+      /** @description Replacement session */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AuthSession"];
+        };
+      };
+      401: components["responses"]["Error"];
+    };
+  };
   listCollectivityProjects: {
     parameters: {
       query?: never;
@@ -280,6 +1458,73 @@ export interface operations {
       404: components["responses"]["Error"];
     };
   };
+  getCollectivityCurrentInventoryResult: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Latest successful calculation result with aggregated reporting lines */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CurrentInventoryResultResponse"];
+        };
+      };
+      401: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  getCollectivityCalculationExplanation: {
+    parameters: {
+      query?: {
+        year?: number;
+        dataset?: string;
+        item?: string;
+        reportingLine?: string;
+      };
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+        runId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Stored explanation and matching outputs */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CalculationExplanationResponse"];
+        };
+      };
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+      /** @description Run has no recorded trace (traceUnavailable) */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ErrorResponse"];
+        };
+      };
+      413: components["responses"]["Error"];
+    };
+  };
   updateCollectivityProjectSetup: {
     parameters: {
       query?: never;
@@ -340,6 +1585,68 @@ export interface operations {
       401: components["responses"]["Error"];
       403: components["responses"]["Error"];
       404: components["responses"]["Error"];
+    };
+  };
+  debugCalculateCollectivityInventory: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DebugCalculationRequest"];
+      };
+    };
+    responses: {
+      /** @description Debug calculation output */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DebugCalculationResponse"];
+        };
+      };
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+      422: components["responses"]["CalculationCannotRun"];
+    };
+  };
+  calculateCollectivityInventory: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectSlug: components["parameters"]["ProjectSlug"];
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["InventoryInputRequest"];
+      };
+    };
+    responses: {
+      /** @description Stored calculation artifacts */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CalculationResponse"];
+        };
+      };
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      403: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+      422: components["responses"]["CalculationCannotRun"];
     };
   };
 }

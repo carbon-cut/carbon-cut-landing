@@ -171,6 +171,14 @@ export default {
         "heading-3": ["16px", { lineHeight: "20px", fontWeight: "500", letterSpacing: "0em" }],
         "heading-2": ["20px", { lineHeight: "24px", fontWeight: "500", letterSpacing: "0em" }],
         "heading-1": ["30px", { lineHeight: "36px", fontWeight: "500", letterSpacing: "0em" }],
+        "marketing-display-mobile": [
+          "34px",
+          { lineHeight: "40px", fontWeight: "500", letterSpacing: "-0.02em" },
+        ],
+        "marketing-display": [
+          "52px",
+          { lineHeight: "60px", fontWeight: "500", letterSpacing: "-0.02em" },
+        ],
       },
       keyframes: {
         "accordion-down": {

@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   getErrorCode,
   isUpstreamAuthError,
@@ -28,6 +29,7 @@ export function SignInPageContent() {
   const t = useScopedI18n("(auth).login");
   const tCommon = useScopedI18n("(auth).common");
   const router = useRouter();
+  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const { refetchSession } = useAuth();
   const [identifier, setIdentifier] = useState("");
@@ -89,10 +91,11 @@ export function SignInPageContent() {
         return;
       }
 
-      setErrorMessage(result.error.error?.message ?? t("error.generic"));
+      setErrorMessage(t("error.generic"));
       return;
     }
 
+    queryClient.clear();
     await refetchSession();
     router.replace(returnTo ?? getHomeRoute());
   }
@@ -109,6 +112,12 @@ export function SignInPageContent() {
         <Typography asChild variant="description" size="sm" className="mt-2">
           <p>{t("description")}</p>
         </Typography>
+
+        {searchParams.get("reason") === "expired" ? (
+          <Alert className="mt-4">
+            <AlertDescription>{t("sessionExpired")}</AlertDescription>
+          </Alert>
+        ) : null}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {errorMessage ? (

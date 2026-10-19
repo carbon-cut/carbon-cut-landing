@@ -1,7 +1,7 @@
 "use client";
 
 import Typography from "@/components/ui/typography";
-import { useScopedI18n } from "@/locales/client";
+import { useCurrentLocale, useScopedI18n } from "@/locales/client";
 import {
   formatSubscriptionCurrency,
   formatSubscriptionLabel,
@@ -23,6 +23,7 @@ export default function SelectedOfferSummaryContent({
   showModuleBreakdown = false,
 }: SelectedOfferSummaryContentProps) {
   const t = useScopedI18n("collectivityPricing");
+  const locale = useCurrentLocale();
 
   return (
     <>
@@ -65,12 +66,12 @@ export default function SelectedOfferSummaryContent({
                 <Typography variant="captionSubframe" className="text-subtext-color">
                   {t("summary.moduleQuantityPrice", {
                     count: configuration.communes,
-                    price: formatSubscriptionCurrency(module.annualUnitAmountCents),
+                    price: formatSubscriptionCurrency(module.annualUnitAmountCents, locale),
                   })}
                 </Typography>
               </div>
               <Typography variant="captionBold" className="whitespace-nowrap text-default-font">
-                {formatSubscriptionCurrency(module.annualAmountCents)}
+                {formatSubscriptionCurrency(module.annualAmountCents, locale)}
               </Typography>
             </div>
           ))}
@@ -83,7 +84,7 @@ export default function SelectedOfferSummaryContent({
         <SummaryRow
           align="start"
           label={t("summary.annualSubtotal")}
-          value={formatSubscriptionCurrency(pricing.baseAnnualTotalCents)}
+          value={formatSubscriptionCurrency(pricing.baseAnnualTotalCents, locale)}
         />
         {pricing.discountBasisPoints > 0 ? (
           <SummaryRow
@@ -91,7 +92,7 @@ export default function SelectedOfferSummaryContent({
             label={t("configuration.combinedDiscount", {
               discount: pricing.discountBasisPoints / 100,
             })}
-            value={`−${formatSubscriptionCurrency(pricing.discountAmountCents)}`}
+            value={`−${formatSubscriptionCurrency(pricing.discountAmountCents, locale)}`}
             valueClassName="text-success-600"
           />
         ) : null}
@@ -106,7 +107,7 @@ export default function SelectedOfferSummaryContent({
           </Typography>
           <div className="flex items-end gap-2">
             <Typography variant="heading1" className="text-default-font">
-              {formatSubscriptionCurrency(pricing.annualTotalCents)} {t("summary.perYear")}
+              {formatSubscriptionCurrency(pricing.annualTotalCents, locale)} {t("summary.perYear")}
             </Typography>
             <Typography variant="captionSubframe" className="pb-1 text-subtext-color">
               {t("summary.taxSuffix")}
@@ -118,7 +119,7 @@ export default function SelectedOfferSummaryContent({
             {t("summary.contractTotal", { years: configuration.term })}
           </Typography>
           <Typography variant="heading3" className="whitespace-nowrap text-brand-800">
-            {formatSubscriptionCurrency(pricing.contractTotalCents)}
+            {formatSubscriptionCurrency(pricing.contractTotalCents, locale)}
           </Typography>
         </div>
       </div>

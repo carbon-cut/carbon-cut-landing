@@ -326,6 +326,7 @@ function VerificationSidebar({
   t: ReturnType<typeof useScopedI18n>;
   pricingLabels: ReturnType<typeof useScopedI18n>;
 }) {
+  const locale = useCurrentLocale();
   const totalIncludingVat = contractTotalCents + vatAmountCents;
   return (
     <aside className="sticky top-6 flex w-96 flex-none mobile:static mobile:w-full">
@@ -348,7 +349,7 @@ function VerificationSidebar({
         <dl className="flex w-full flex-col items-start gap-3">
           <TotalRow
             label={pricingLabels("summary.annualTotal")}
-            value={formatSubscriptionCurrency(annualTotalCents)}
+            value={formatSubscriptionCurrency(annualTotalCents, locale)}
           />
           <TotalRow
             label={pricingLabels("summary.duration")}
@@ -363,9 +364,12 @@ function VerificationSidebar({
         <dl className="flex w-full flex-col items-start gap-3">
           <TotalRow
             label={t("sidebar.totalHt")}
-            value={formatSubscriptionCurrency(contractTotalCents)}
+            value={formatSubscriptionCurrency(contractTotalCents, locale)}
           />
-          <TotalRow label={t("sidebar.vat")} value={formatSubscriptionCurrency(vatAmountCents)} />
+          <TotalRow
+            label={t("sidebar.vat")}
+            value={formatSubscriptionCurrency(vatAmountCents, locale)}
+          />
         </dl>
         <div className="h-px w-full bg-neutral-border" />
         <div className="flex w-full flex-col items-start gap-1">
@@ -373,7 +377,7 @@ function VerificationSidebar({
             {t("sidebar.totalTtc")}
           </Typography>
           <Typography variant="heading1" className="text-default-font">
-            {formatSubscriptionCurrency(totalIncludingVat)}
+            {formatSubscriptionCurrency(totalIncludingVat, locale)}
           </Typography>
           <Typography variant="captionSubframe" className="text-subtext-color">
             {t("sidebar.totalTtcDescription", { years })}

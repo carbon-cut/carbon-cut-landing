@@ -4,16 +4,25 @@ import React, { useEffect } from "react";
 import style from "./header.module.css";
 import { Button } from "../../ui/button";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import MenuHamburger from "./_menuHamburger";
-import Image from "next/image";
+import NavItem from "./_NavItem";
 import { useAuth } from "@/lib/auth/auth-context";
-import { useScopedI18n } from "@/locales/client";
+import { useChangeLocale, useCurrentLocale, useScopedI18n } from "@/locales/client";
 import {
   getCollectivityLandingRoute,
-  getCollectivityStartRoute,
-  getFormRoute,
+  getCollectivityPricingRoute,
+  getAuthSignInRoute,
+  getContactRoute,
 } from "@/lib/routing/routes";
+import { cn } from "@/lib/utils";
+import Logo from "@/components/Logo";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import Typography from "@/components/ui/typography";
+import { ProfilePopoverContent } from "@/app/[locale]/collectivity/_components/ui/profile";
+import { CollectivitySelect } from "@/app/[locale]/collectivity/_components/fields";
+import { supportedLocales } from "@/locales/supportedLocales";
 
 type MenuItem = {
   title: string;
@@ -22,29 +31,31 @@ type MenuItem = {
 
 function Header() {
   const tNav = useScopedI18n("home.nav");
-  const tPrimaryCta = useScopedI18n("home.hero.primaryCta");
   const tCollectivityNav = useScopedI18n("collectivityLanding.nav");
   const tCollectivityPrimaryCta = useScopedI18n("collectivityLanding.hero.primaryCta");
   const tAuth = useScopedI18n("(auth).common");
+  const locale = useCurrentLocale();
+  const changeLocale = useChangeLocale();
   const [dataState, setDataState] = React.useState("big");
   const [show, setShow] = React.useState(false);
   const [isDesktop, setIsDesktop] = React.useState(false);
-
   const pathName = usePathname();
-  const router = useRouter();
-  const { status, signOut } = useAuth();
+  const { status, user } = useAuth();
   const isCollectivityLanding = pathName === "/collectivity";
   const isLandingHeader = pathName === "/" || isCollectivityLanding;
-  const primaryCtaHref = isCollectivityLanding ? getCollectivityStartRoute() : getFormRoute();
   const menu: MenuItem[] = isCollectivityLanding
     ? [
         {
-          title: tCollectivityNav("prototype"),
-          url: `${getCollectivityLandingRoute()}#proof`,
+          title: tCollectivityNav("product"),
+          url: `${getCollectivityLandingRoute()}#product`,
         },
         {
-          title: tCollectivityNav("setup"),
-          url: `${getCollectivityLandingRoute()}#cta`,
+          title: tCollectivityNav("methodology"),
+          url: `${getCollectivityLandingRoute()}#methodology`,
+        },
+        {
+          title: tCollectivityNav("contact"),
+          url: getContactRoute(),
         },
       ]
     : [
@@ -71,7 +82,7 @@ function Header() {
   }, [isLandingHeader, isDesktop]);
 
   useEffect(() => {
-    const media = window.matchMedia("(min-width: 768px)");
+    const media = window.matchMedia("(min-width: 1280px)");
     const updateMatch = () => setIsDesktop(media.matches);
     updateMatch();
     media.addEventListener("change", updateMatch);
@@ -79,17 +90,6 @@ function Header() {
   }, []);
 
   const navHidden = !show && !isDesktop;
-
-  async function handleSignOut() {
-    const signedOut = await signOut();
-
-    if (!signedOut) {
-      return;
-    }
-
-    setShow(false);
-    router.push("/");
-  }
 
   if (pathName.startsWith("/auth")) {
     return null;
@@ -100,76 +100,118 @@ function Header() {
   }
 
   return (
-    <header /* ref={headerDiv} */ data-state={dataState} className={style.header}>
-      <Link className="z-50" href="/" onClick={() => setShow(false)}>
-        <Image
-          data-state={dataState}
-          src={`${process.env.NEXT_PUBLIC_BASE_PATH}/logo/logoLight.svg`}
-          className={style.logo}
-          alt="logo"
-          width={141}
-          height={48}
-        />
-      </Link>
+    <header data-state={dataState} className={style.header}>
+      <div data-state={dataState} className={style.headerInner}>
+        <div className={style.logoRegion}>
+          <Link className="z-50 shrink-0" href="/" onClick={() => setShow(false)}>
+            <Logo bg="light" size={dataState === "small" ? 40 : 42} variant="full" />
+          </Link>
+        </div>
 
-      <nav
-        id="primary-navigation"
-        aria-label="Primary navigation"
-        aria-hidden={navHidden}
-        className={`${style.itemsContainer} ${show ? style.show : ""}`}
-      >
-        {menu.map((item) => (
-          <div key={item.title} className="self-center md:text-base md:font-normal text-4xl">
-            <Link
-              onClick={() => setShow(false)}
-              href={item.url}
-              tabIndex={navHidden ? -1 : 0}
-              className="px-2 py-1"
-            >
-              {item.title}
-            </Link>
+        <nav
+          id="primary-navigation"
+          aria-label="Primary navigation"
+          aria-hidden={navHidden}
+          className={`${style.itemsContainer} ${show ? style.show : ""}`}
+        >
+          <div className={style.navLinks}>
+            {menu.map((item) => (
+              <NavItem
+                key={item.title}
+                href={item.url}
+                tabIndex={navHidden ? -1 : 0}
+                onClick={() => setShow(false)}
+              >
+                {item.title}
+              </NavItem>
+            ))}
           </div>
-        ))}
-        {status === "authenticated" ? (
-          <Button
-            data-state={dataState}
-            className={style.button}
-            size={"lg"}
-            tabIndex={navHidden ? -1 : 0}
-            onClick={handleSignOut}
-          >
-            {tAuth("cta.logout")}
-          </Button>
-        ) : (
-          <Button
-            asChild
-            data-state={dataState}
-            variant="cta"
-            className={style.button}
-            size={"lg"}
-            tabIndex={navHidden ? -1 : 0}
-            aria-label={
-              isCollectivityLanding ? tCollectivityPrimaryCta("aria") : tPrimaryCta("aria")
-            }
-            onClick={() => setShow(false)}
-          >
-            <Link href={primaryCtaHref}>
-              {isCollectivityLanding ? tCollectivityPrimaryCta("label") : tPrimaryCta("label")}
-            </Link>
-          </Button>
-        )}
-      </nav>
-      <Button
-        className="md:hidden z-10 flex flex-col items-center justify-center hover:bg-transparent"
-        variant={"ghost"}
-        type="button"
-        aria-label={tNav("toggleLabel")}
-        aria-expanded={show}
-        aria-controls="primary-navigation"
-        onClick={() => setShow(!show)}
-      >
-        <MenuHamburger isOpen={show} />
-      </Button>
+        </nav>
+        <div className={style.navActions}>
+          {status === "authenticated" ? (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="neutral-tertiary"
+                  className="size-10 rounded-full p-0"
+                  tabIndex={navHidden ? -1 : 0}
+                  aria-label={user?.username || user?.email || tAuth("cta.signIn")}
+                >
+                  <Avatar className="size-8">
+                    <AvatarFallback className="bg-brand-100 text-brand-700">
+                      <Typography variant="captionBold">
+                        {(user?.username || user?.email || "?").slice(0, 2).toUpperCase()}
+                      </Typography>
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </PopoverTrigger>
+              <ProfilePopoverContent
+                userName={user?.username || user?.email || ""}
+                side="bottom"
+                align="end"
+              />
+            </Popover>
+          ) : (
+            <>
+              <Button
+                asChild
+                variant="brand-tertiary"
+                size="medium"
+                tabIndex={navHidden ? -1 : 0}
+                onClick={() => setShow(false)}
+                className="rounded-full"
+              >
+                <Link href={getAuthSignInRoute()}>{tAuth("cta.signIn")}</Link>
+              </Button>
+              <Button
+                asChild
+                data-state={dataState}
+                variant="cta"
+                className={cn(style.button, "rounded-full hidden md:flex")}
+                size="large"
+                tabIndex={navHidden ? -1 : 0}
+                aria-label={tCollectivityPrimaryCta("aria")}
+                onClick={() => setShow(false)}
+              >
+                <Link href={getCollectivityPricingRoute()}>{tCollectivityPrimaryCta("label")}</Link>
+              </Button>
+            </>
+          )}
+        </div>
+        {/* <Button
+          className="z-50 flex flex-col items-center justify-center hover:bg-transparent xl:hidden"
+          variant="ghost"
+          type="button"
+          aria-label={tNav("toggleLabel")}
+          aria-expanded={show}
+          aria-controls="primary-navigation"
+          onClick={() => setShow(!show)}
+        >
+          <MenuHamburger isOpen={show} />
+        </Button> */}
+      </div>
+      <div className="absolute right-6 top-1/2 w-[140px] -translate-y-1/2">
+        <CollectivitySelect
+          className="h-10"
+          options={supportedLocales.map((supportedLocale) => ({
+            value: supportedLocale,
+            label: (
+              <span className="inline-flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className={`flag:${supportedLocale === "en" ? "GB" : supportedLocale.toUpperCase()}`}
+                />
+                {new Intl.DisplayNames([supportedLocale], { type: "language" }).of(supportedLocale)}
+              </span>
+            ),
+          }))}
+          placeholder={tCollectivityNav("language")}
+          value={locale}
+          onValueChange={changeLocale}
+        />
+      </div>
     </header>
   );
 }

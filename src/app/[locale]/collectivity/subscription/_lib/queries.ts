@@ -1,3 +1,4 @@
+import { fetchAuthenticated } from "@/lib/auth/browser-request";
 import type {
   CollectivitySubscriptionClaim,
   CollectivitySubscriptionDetail,
@@ -52,7 +53,7 @@ async function readSubscriptionResponse<T>(response: Response): Promise<T> {
 }
 
 export async function fetchSubscriptionDetail(subscriptionId: number) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}`,
     { credentials: "same-origin" }
   );
@@ -63,7 +64,7 @@ export async function fetchSubscriptionDetail(subscriptionId: number) {
 }
 
 export async function fetchSubscriptionClaims(subscriptionId: number) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims`,
     { credentials: "same-origin" }
   );
@@ -74,7 +75,7 @@ export async function fetchSubscriptionClaims(subscriptionId: number) {
 }
 
 export async function assignSubscriptionPlaceToSelf(subscriptionId: number) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/self-claims`,
     { method: "POST", credentials: "same-origin" }
   );
@@ -86,7 +87,7 @@ export async function assignSubscriptionPlaceDirectly(
   subscriptionId: number,
   claimantUserId: number
 ) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/direct`,
     {
       method: "POST",
@@ -100,7 +101,7 @@ export async function assignSubscriptionPlaceDirectly(
 }
 
 export async function createSubscriptionInvitationLink(subscriptionId: number) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claim-link`,
     { method: "POST", credentials: "same-origin" }
   );
@@ -111,7 +112,7 @@ export async function createSubscriptionInvitationLink(subscriptionId: number) {
 }
 
 export async function revokeSubscriptionInvitationLink(subscriptionId: number) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claim-link`,
     { method: "DELETE", credentials: "same-origin" }
   );
@@ -122,7 +123,7 @@ export async function revokeSubscriptionInvitationLink(subscriptionId: number) {
 }
 
 export async function revokeSubscriptionAssignment(subscriptionId: number, claimId: number) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/${encodeURIComponent(claimId)}/revoke`,
     { method: "POST", credentials: "same-origin" }
   );
@@ -131,7 +132,7 @@ export async function revokeSubscriptionAssignment(subscriptionId: number, claim
 }
 
 export async function approveSubscriptionRequest(subscriptionId: number, claimId: number) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/${encodeURIComponent(claimId)}/approve`,
     { method: "POST", credentials: "same-origin" }
   );
@@ -140,7 +141,7 @@ export async function approveSubscriptionRequest(subscriptionId: number, claimId
 }
 
 export async function denySubscriptionRequest(subscriptionId: number, claimId: number) {
-  const response = await fetch(
+  const response = await fetchAuthenticated(
     `/api/collectivity/subscriptions/${encodeURIComponent(subscriptionId)}/claims/${encodeURIComponent(claimId)}/deny`,
     { method: "POST", credentials: "same-origin" }
   );

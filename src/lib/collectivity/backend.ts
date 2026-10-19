@@ -3,7 +3,6 @@ import "server-only";
 import { fetchWithAuth, UnauthenticatedRequestError } from "@/lib/auth/fetchWithAuth";
 import type { AuthUser } from "@/lib/auth/types";
 import type { operations } from "@/generated/backend-api";
-import type { CollectivityResultsByYear } from "@/lib/collectivity/result-types";
 import type {
   CreateCollectivityQuoteRequest,
   PublicCollectivityQuote,
@@ -12,11 +11,7 @@ import type {
   SubscriptionPricePreview,
   SubscriptionPricePreviewRequest,
 } from "@/app/[locale]/collectivity/pricing/_lib/pricing";
-import type {
-  CollectivityProjectSnapshot,
-  CollectivitySetupData,
-  CollectivitySetupSnapshot,
-} from "@/app/[locale]/collectivity/projects/setup/_lib/types";
+import type { CollectivitySetupData } from "@/app/[locale]/collectivity/projects/setup/_lib/types";
 import type {
   CollectivitySubscriptionClaim,
   CollectivitySubscriptionDetail,
@@ -41,40 +36,24 @@ export type CollectivityCountry = {
   name: string;
 };
 
-type ListProjectsResponse = {
-  data: CollectivityProjectSnapshot[];
-};
-
-type CurrentInventoryResponse = {
-  data: CollectivitySetupSnapshot;
-};
-
-type InitProjectResponse = {
-  data: CollectivitySetupSnapshot;
-};
-
-type UpdateProjectSetupResponse = {
-  data: CollectivitySetupSnapshot;
-};
+type ListProjectsResponse =
+  operations["listCollectivityProjects"]["responses"][200]["content"]["application/json"];
+type CurrentInventoryResponse =
+  operations["getCollectivityCurrentInventory"]["responses"][200]["content"]["application/json"];
+type InitProjectResponse =
+  operations["initializeCollectivityProject"]["responses"][200]["content"]["application/json"];
+type UpdateProjectSetupResponse =
+  operations["updateCollectivityProjectSetup"]["responses"][200]["content"]["application/json"];
 
 type SaveInventoryInputResponse =
   operations["saveCollectivityInventoryInput"]["responses"][200]["content"]["application/json"];
 
-type CalculateInventoryResponse = Record<string, unknown>;
-
-type CurrentInventoryResultResponse = Record<string, unknown>;
-
-type DebugCalculationResponse = {
-  data: {
-    datasetKey: string;
-    resultRows: CollectivityResultsByYear;
-    parameterSnapshot: {
-      items: Array<Record<string, unknown>>;
-    };
-    formulaVersion: string;
-    warnings?: Array<Record<string, unknown>>;
-  };
-};
+type CalculateInventoryResponse =
+  operations["calculateCollectivityInventory"]["responses"][200]["content"]["application/json"];
+type CurrentInventoryResultResponse =
+  operations["getCollectivityCurrentInventoryResult"]["responses"][200]["content"]["application/json"];
+type DebugCalculationResponse =
+  operations["debugCalculateCollectivityInventory"]["responses"][200]["content"]["application/json"];
 
 type SupportedValuesResponse = {
   data: {
@@ -385,14 +364,14 @@ export async function cancelCollectivityQuote(quoteId: number): Promise<PublicCo
 
 export async function listCollectivityProjects(
   _user: Pick<AuthUser, "planId">
-): Promise<CollectivityProjectSnapshot[]> {
+): Promise<ListProjectsResponse["data"]> {
   const response = await requestCollectivity<ListProjectsResponse>("/api/collectivity/projects");
   return response.data;
 }
 
 export async function getCollectivitySetupSnapshot(
   projectSlug: string
-): Promise<CollectivitySetupSnapshot | null> {
+): Promise<CurrentInventoryResponse["data"] | null> {
   const response = await requestCollectivity<CurrentInventoryResponse>(
     `/api/collectivity/projects/${encodeURIComponent(projectSlug)}/current-inventory`
   );
@@ -404,7 +383,7 @@ export async function saveCollectivitySetup(
   setup: CollectivitySetupData,
   currentPlanId?: string | null,
   approvedClaimId?: number | null
-): Promise<CollectivitySetupSnapshot> {
+): Promise<UpdateProjectSetupResponse["data"] | InitProjectResponse["data"]> {
   if (currentPlanId) {
     const response = await requestCollectivity<UpdateProjectSetupResponse>(
       `/api/collectivity/projects/${encodeURIComponent(currentPlanId)}/setup`,

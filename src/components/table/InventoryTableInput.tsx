@@ -208,7 +208,11 @@ function InventoryTableInput<T extends FieldValues>({
                         size === "xl" ? "h-6 leading-6" : "h-5 leading-5"
                       )}
                     >
-                      {displayUnit(unitAdornment, { localize: t, locale, countryCode: country })}
+                      {displayUnit(unitAdornment, {
+                        localize: t,
+                        locale,
+                        countryCode: country ?? undefined,
+                      })}
                     </span>
                   </div>
                 )}

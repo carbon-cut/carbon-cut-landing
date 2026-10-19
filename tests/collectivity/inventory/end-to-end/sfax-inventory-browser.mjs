@@ -1,0 +1,123 @@
+import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
+import { createRequire } from "node:module";
+import path from "node:path";
+import { resolve } from "node:path";
+import { chromium } from "playwright";
+
+import {
+  ensureIntegrationServicesAvailable,
+  integrationConfig,
+} from "../../../test-support/integration/auth-helpers.ts";
+
+const backendDirectory = resolve(process.env.INTEGRATION_BACKEND_DIR ?? "../carbon-cut-backend");
+const backendFixturePath = path.join(
+  backendDirectory,
+  "tests/carbon-footprint/tunisia/sfax-dev-inventory.js"
+);
+const backendComparisonPath = path.join(
+  backendDirectory,
+  "tests/carbon-footprint/collectivity/integration/sfax-inventory-comparison.js"
+);
+for (const [description, filename] of [
+  ["Sfax inventory fixture", backendFixturePath],
+  ["Sfax result comparison", backendComparisonPath],
+]) {
+  if (!existsSync(filename)) {
+    throw new Error(`${description} is missing from INTEGRATION_BACKEND_DIR: ${filename}`);
+  }
+}
+const requireBackend = createRequire(path.join(backendDirectory, "package.json"));
+const { sfaxDevInventory } = requireBackend(backendFixturePath);
+const { compareSfaxInventoryResults } = requireBackend(backendComparisonPath);
+
+const userEmail = "sfax.user@example.com";
+const userPassword = process.env.INTEGRATION_SFAX_PASSWORD ?? "Password123!";
+const projectSlug = "sfax-end-to-end";
+// Run backend integration #21 first to restore this shared isolated test database.
+const browserBaseUrl = new URL(integrationConfig.frontendUrl);
+const inventoryPath = `/api/collectivity/projects/${projectSlug}/current-inventory`;
+const resultPath = `${inventoryPath}/result`;
+
+let browser;
+let context;
+
+try {
+  await ensureIntegrationServicesAvailable();
+  browser = await chromium.launch({ headless: true });
+  context = await browser.newContext();
+
+  const signIn = await context.request.post(
+    new URL("/api/auth/sign-in", browserBaseUrl).toString(),
+    { data: { identifier: userEmail, password: userPassword } }
+  );
+  assert.equal(signIn.status(), 200, "the Sfax integration user should sign in");
+
+  const restoreDraft = await context.request.put(
+    new URL(`${inventoryPath}/input`, browserBaseUrl).toString(),
+    { data: { inventoryInput: sfaxDevInventory.inventoryInput } }
+  );
+  assert.equal(restoreDraft.status(), 200, "the saved Sfax draft should be restored");
+
+  const initialInventory = await context.request.get(
+    new URL(inventoryPath, browserBaseUrl).toString()
+  );
+  assert.equal(
+    initialInventory.status(),
+    200,
+    "the existing Sfax Inventory should load through GET"
+  );
+  const initialInventoryBody = await initialInventory.json();
+  assert.equal(initialInventoryBody.data.project.slug, projectSlug);
+
+  const page = await context.newPage();
+  await page.goto(
+    new URL(`/collectivity/projects/${projectSlug}/ghg-inventory`, browserBaseUrl).toString(),
+    { waitUntil: "domcontentloaded" }
+  );
+
+  const submissionErrors = [];
+  page.on("console", async (message) => {
+    const args = await Promise.all(message.args().map((argument) => argument.jsonValue()));
+    if (args[0] === "submitError") submissionErrors.push(args[1]);
+  });
+
+  const calculationResponse = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" &&
+      new URL(response.url()).pathname.endsWith(`${inventoryPath}/calculate`),
+    { timeout: 30_000 }
+  );
+  await Promise.all([
+    calculationResponse,
+    page.waitForRequest(
+      (request) =>
+        request.method() === "POST" &&
+        new URL(request.url()).pathname.endsWith(`${inventoryPath}/calculate`),
+      { timeout: 30_000 }
+    ),
+    page.getByRole("button", { name: /^(Submit data|Soumettre les données)$/i }).click({
+      timeout: 10_000,
+    }),
+  ]).catch(async (error) => {
+    await page.close();
+    throw new Error(
+      `The frontend did not submit the Sfax calculation: ${JSON.stringify(submissionErrors)}. ${error.message}`
+    );
+  });
+
+  const resultResponse = await context.request.get(new URL(resultPath, browserBaseUrl).toString());
+  assert.equal(
+    resultResponse.status(),
+    200,
+    "the frontend should receive saved results through GET"
+  );
+  const resultBody = await resultResponse.json();
+  const comparison = compareSfaxInventoryResults(resultBody.data);
+  assert.deepEqual(comparison.failures, []);
+
+  console.log("Sfax browser calculation passed using the backend-owned comparison.");
+} finally {
+  await context?.close();
+  await browser?.close();
+}

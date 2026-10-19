@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 
 import { InventoryDataTableHead, InventoryDataTableRowLabel } from "../InventoryDataTable";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 type InventoryTanstackColumnMeta = {
   align?: "left" | "center";
@@ -71,85 +72,88 @@ export default function InventoryTanstackTable<TData>({
 
   return (
     <section>
-      <Table className={cn("min-w-full overflow-hidden", tableClassName)}>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow
-              key={headerGroup.id}
-              className={cn(
-                "border-transparent rounded-xl bg-surface-warm/60 hover:bg-surface-warm",
-                headerRowClassName
-              )}
-            >
-              {headerGroup.headers.map((header) => {
-                const meta = header.column.columnDef.meta as
-                  | InventoryTanstackColumnMeta
-                  | undefined;
-                const isStickyColumn = stickyColumnIds.includes(header.column.id);
-
-                return (
-                  <InventoryDataTableHead
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    sticky={isStickyColumn}
-                    align={meta?.align}
-                    tone={meta?.tone}
-                    className={cn(
-                      !isStickyColumn && !meta?.className ? "min-w-[142px]" : undefined,
-                      meta?.className,
-                      isStickyColumn ? stickyHeaderClassName : undefined
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        "flex items-center gap-2",
-                        (meta?.align ?? "left") === "center" ? "justify-center" : ""
-                      )}
-                    >
-                      {header.isPlaceholder ? null : renderHeader(header)}
-                    </span>
-                  </InventoryDataTableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-
-        <TableBody>
-          {table.getRowModel().rows.map((row) => {
-            return (
-              <TableRow key={row.id} className={cn("border-border/60", rowClassName)}>
-                {row.getVisibleCells().map((cell) => {
-                  const meta = cell.column.columnDef.meta as
+      <ScrollArea className="">
+        <Table className={cn("min-w-full overflow-hidden", tableClassName)}>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow
+                key={headerGroup.id}
+                className={cn(
+                  "border-transparent rounded-xl bg-surface-warm/60 hover:bg-surface-warm",
+                  headerRowClassName
+                )}
+              >
+                {headerGroup.headers.map((header) => {
+                  const meta = header.column.columnDef.meta as
                     | InventoryTanstackColumnMeta
                     | undefined;
-                  const isStickyColumn = stickyColumnIds.includes(cell.column.id);
-
-                  if (isStickyColumn) {
-                    return (
-                      <InventoryDataTableRowLabel
-                        key={cell.id}
-                        className={cn(meta?.className, stickyCellClassName)}
-                      >
-                        {renderCell(cell)}
-                      </InventoryDataTableRowLabel>
-                    );
-                  }
+                  const isStickyColumn = stickyColumnIds.includes(header.column.id);
 
                   return (
-                    <TableCell
-                      key={cell.id}
-                      className={cn("px-3 py-2 align-middle", meta?.className, dataCellClassName)}
+                    <InventoryDataTableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      sticky={isStickyColumn}
+                      align={meta?.align}
+                      tone={meta?.tone}
+                      className={cn(
+                        !isStickyColumn && !meta?.className ? "min-w-[142px]" : undefined,
+                        meta?.className,
+                        isStickyColumn ? stickyHeaderClassName : undefined
+                      )}
                     >
-                      {renderCell(cell)}
-                    </TableCell>
+                      <span
+                        className={cn(
+                          "flex items-center gap-2",
+                          (meta?.align ?? "left") === "center" ? "justify-center" : ""
+                        )}
+                      >
+                        {header.isPlaceholder ? null : renderHeader(header)}
+                      </span>
+                    </InventoryDataTableHead>
                   );
                 })}
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+
+          <TableBody>
+            {table.getRowModel().rows.map((row) => {
+              return (
+                <TableRow key={row.id} className={cn("border-border/60", rowClassName)}>
+                  {row.getVisibleCells().map((cell) => {
+                    const meta = cell.column.columnDef.meta as
+                      | InventoryTanstackColumnMeta
+                      | undefined;
+                    const isStickyColumn = stickyColumnIds.includes(cell.column.id);
+
+                    if (isStickyColumn) {
+                      return (
+                        <InventoryDataTableRowLabel
+                          key={cell.id}
+                          className={cn(meta?.className, stickyCellClassName, "z-0")}
+                        >
+                          {renderCell(cell)}
+                        </InventoryDataTableRowLabel>
+                      );
+                    }
+
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className={cn("px-3 py-2 align-middle", meta?.className, dataCellClassName)}
+                      >
+                        {renderCell(cell)}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </section>
   );
 }

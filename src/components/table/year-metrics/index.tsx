@@ -85,8 +85,8 @@ export default function YearMetricsTable<T extends FieldValues>({
                   event.preventDefault();
                   addRow.onAdd();
                 }}
+                icon={<Plus aria-hidden="true" className="w-4 h-4" />}
               >
-                <Plus aria-hidden="true" />
                 {addRow.label}
               </InventoryTableActionButton>
             ) : null}

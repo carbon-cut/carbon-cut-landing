@@ -243,7 +243,7 @@ export default function SubscriptionCapacityCard({
                     showSelfAction ? "border-brand-300" : "border-neutral-300"
                   }`}
                 >
-                  <div className="relative w-full spce-y-2">
+                  <div className="relative w-full spce-y-2 min-h-6">
                     <div className="absolute flex w-full items-center justify-between gap-2">
                       <span className="flex h-6 w-6 items-center justify-center rounded-full border border-dashed border-neutral-400">
                         <FeatherPlus className="size-3 text-subtext-color" aria-hidden="true" />

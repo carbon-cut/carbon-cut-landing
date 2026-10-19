@@ -2,10 +2,13 @@ export const DEFAULT_COLLECTIVITY_PLAN_ID = "grand-sfax";
 
 export const collectivityModuleSlugs = [
   "setup",
-  "inventory",
-  "result",
-  "scenarios",
-  "actions",
+  "ghg-inventory",
+  "ghg-result",
+  "prospectives&Objectives",
+  "investment-plan",
+  "significant-indicators",
+  "performance-ranking",
+  "intercommunal-pooling",
 ] as const;
 
 export type CollectivityModuleSlug = (typeof collectivityModuleSlugs)[number];

@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import Typography from "@/components/ui/typography";
-import { useScopedI18n } from "@/locales/client";
+import { useCurrentLocale, useScopedI18n } from "@/locales/client";
 import {
   formatSubscriptionCurrency,
   formatSubscriptionLabel,
@@ -168,6 +168,7 @@ function ModuleRow({
   muted?: boolean;
   onCheckedChange?: (checked: boolean) => void;
 }) {
+  const locale = useCurrentLocale();
   return (
     <div
       className={`flex w-full items-center gap-4 px-6 mobile:flex-wrap mobile:px-4 ${
@@ -209,7 +210,7 @@ function ModuleRow({
         variant={muted ? "bodySubframe" : "bodyBold"}
         className={`w-28 flex-none text-right mobile:grow ${muted ? "text-neutral-400" : ""}`}
       >
-        {price === undefined ? "—" : `${formatSubscriptionCurrency(price)} ${perYear}`}
+        {price === undefined ? "—" : `${formatSubscriptionCurrency(price, locale)} ${perYear}`}
       </Typography>
     </div>
   );

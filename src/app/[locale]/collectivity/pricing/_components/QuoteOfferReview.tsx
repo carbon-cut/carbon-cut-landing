@@ -3,7 +3,7 @@
 import { FeatherCalendarRange, FeatherMap, FeatherMapPin } from "@subframe/core";
 
 import Typography from "@/components/ui/typography";
-import { useScopedI18n } from "@/locales/client";
+import { useCurrentLocale, useScopedI18n } from "@/locales/client";
 import { formatSubscriptionCurrency, formatSubscriptionLabel } from "../_lib/pricing";
 import { QuoteOfferTile, QuoteTotalRow } from "./QuoteReviewPrimitives";
 
@@ -56,6 +56,7 @@ export function QuoteOfferTable({
 }) {
   const t = useScopedI18n("collectivityPricing.quoteVerification");
   const pricing = useScopedI18n("collectivityPricing");
+  const locale = useCurrentLocale();
 
   return (
     <div className="w-full overflow-x-auto rounded-sm border border-solid border-neutral-border">
@@ -83,10 +84,10 @@ export function QuoteOfferTable({
               {t("offer.communesValue", { count: communeQuantity })}
             </Typography>
             <Typography variant="bodySubframe" className="text-right text-default-font">
-              {formatSubscriptionCurrency(module.annualUnitAmountCents)}
+              {formatSubscriptionCurrency(module.annualUnitAmountCents, locale)}
             </Typography>
             <Typography variant="bodyBold" className="text-right text-default-font">
-              {formatSubscriptionCurrency(module.annualAmountCents)}
+              {formatSubscriptionCurrency(module.annualAmountCents, locale)}
             </Typography>
           </div>
         ))}
@@ -112,30 +113,31 @@ export function QuoteOfferTotals({
 }) {
   const t = useScopedI18n("collectivityPricing.quoteVerification");
   const pricing = useScopedI18n("collectivityPricing");
+  const locale = useCurrentLocale();
 
   return (
     <dl className="ml-auto flex w-full max-w-md flex-col items-start gap-3">
       <QuoteTotalRow
         label={pricing("summary.annualSubtotal")}
-        value={formatSubscriptionCurrency(annualSubtotalCents)}
+        value={formatSubscriptionCurrency(annualSubtotalCents, locale)}
       />
       {discountBasisPoints > 0 ? (
         <QuoteTotalRow
           label={t("offer.discount", { discount: discountBasisPoints / 100 })}
-          value={`−${formatSubscriptionCurrency(discountAmountCents)}`}
+          value={`−${formatSubscriptionCurrency(discountAmountCents, locale)}`}
           success
         />
       ) : null}
       <QuoteTotalRow
         label={t("offer.annualAfterDiscount")}
-        value={`${formatSubscriptionCurrency(annualTotalCents)} HT`}
+        value={`${formatSubscriptionCurrency(annualTotalCents, locale)} ${pricing("summary.taxSuffix")}`}
       />
       <div className="flex w-full items-center justify-between gap-4 rounded-sm bg-brand-50 px-4 py-3">
         <Typography variant="bodyBold" className="text-brand-800">
           {pricing("summary.contractTotal", { years: termYears })}
         </Typography>
         <Typography variant="heading3" className="whitespace-nowrap text-brand-800">
-          {formatSubscriptionCurrency(contractTotalCents)} HT
+          {formatSubscriptionCurrency(contractTotalCents, locale)} {pricing("summary.taxSuffix")}
         </Typography>
       </div>
     </dl>

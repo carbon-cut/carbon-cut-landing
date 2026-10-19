@@ -50,16 +50,19 @@ export default function UnderDevelopmentPage({
             </Typography>
 
             <div className="mt-8 flex w-full max-w-lg flex-col justify-center gap-4 sm:w-auto sm:flex-row">
-              <Button asChild variant="outline" size="lg" className="justify-center">
-                <Link href={primaryButton.href}>
-                  <ArrowLeft />
-                  {primaryButton.label}
-                </Link>
+              <Button
+                asChild
+                icon={<ArrowLeft className="!size-4" />}
+                variant="brand-secondary"
+                size="large"
+                className="justify-center rounded-full"
+              >
+                <Link href={primaryButton.href}>{primaryButton.label}</Link>
               </Button>
-              <Button asChild variant="cta" size="lg" className="justify-center py-6">
+              <Button asChild variant="cta" size="large" className="justify-center rounded-full">
                 <Link href={secondaryButton.href}>
                   {secondaryButton.label}
-                  <ArrowRight />
+                  <ArrowRight className="!size-4" />
                 </Link>
               </Button>
             </div>

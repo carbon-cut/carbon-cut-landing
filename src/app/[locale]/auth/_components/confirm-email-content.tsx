@@ -67,7 +67,7 @@ export function ConfirmEmailPageContent() {
         return;
       }
 
-      setErrorMessage(result.error.error?.message ?? t("error.genericConfirm"));
+      setErrorMessage(t("error.genericConfirm"));
       return;
     }
 
@@ -104,7 +104,7 @@ export function ConfirmEmailPageContent() {
         return;
       }
 
-      setErrorMessage(result.error.error?.message ?? t("error.genericResend"));
+      setErrorMessage(t("error.genericResend"));
       return;
     }
 

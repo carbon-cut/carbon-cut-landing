@@ -101,7 +101,7 @@ export default function QuoteStatusPage({
     endDate: formatQuoteDate(subscription.endsAt, locale),
   });
   const paymentDueDate = formatQuoteDate(acceptedPaymentInstructions.dueDate, locale);
-  const totalIncludingTax = formatSubscriptionCurrency(amounts.totalIncludingTaxCents);
+  const totalIncludingTax = formatSubscriptionCurrency(amounts.totalIncludingTaxCents, locale);
 
   return (
     <div className="flex w-full flex-col items-start gap-8 mobile:gap-6">
@@ -328,7 +328,7 @@ export default function QuoteStatusPage({
           title={verification("sidebar.title")}
           frozenLabel={verification("sidebar.frozen")}
           annualLabel={pricing("summary.annualTotal")}
-          annualValue={formatSubscriptionCurrency(amounts.annualTotalExcludingTaxCents)}
+          annualValue={formatSubscriptionCurrency(amounts.annualTotalExcludingTaxCents, locale)}
           durationLabel={pricing("summary.duration")}
           durationValue={
             selection.termYears === 1
@@ -336,9 +336,9 @@ export default function QuoteStatusPage({
               : pricing("configuration.term.threeYears")
           }
           totalHtLabel={verification("sidebar.totalHt")}
-          totalHtValue={formatSubscriptionCurrency(amounts.contractTotalExcludingTaxCents)}
+          totalHtValue={formatSubscriptionCurrency(amounts.contractTotalExcludingTaxCents, locale)}
           vatLabel={verification("sidebar.vat")}
-          vatValue={formatSubscriptionCurrency(amounts.vatAmountCents)}
+          vatValue={formatSubscriptionCurrency(amounts.vatAmountCents, locale)}
           totalTtcLabel={verification("sidebar.totalTtc")}
           totalTtcValue={totalIncludingTax}
           totalDescription={verification("sidebar.totalTtcDescription", {

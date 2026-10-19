@@ -24,7 +24,7 @@ export function FieldAlert({ title, description }: Props) {
         </svg>
       </div>
       <div className="text-sm text-foreground/90">
-        <AlertTitle className="inline-block font-semibold">{title}</AlertTitle>
+        <AlertTitle className="inline-block">{title}</AlertTitle>
         <AlertDescription className="inline-block whitespace-pre-line pl-1">
           {description}
         </AlertDescription>

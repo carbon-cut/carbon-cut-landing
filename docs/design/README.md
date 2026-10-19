@@ -12,7 +12,7 @@ This folder contains the existing design documentation. Its content still needs 
 - `subframe-token-mapping.md`: required local token equivalents when implementing from Subframe.
 - `logs/ui-criticism-log.md`: implementation feedback history.
 
-Household is retired and is not active product scope. For collectivity product scope, consult [collectivity product assumptions](../collectivity/product/00-product-truth.md) and [routes](../collectivity/product/routes.md), then verify open assumptions.
+Household is retired and is not active product scope. For Collectivity, consult the [product scope](../collectivity/product/00-product-truth.md) and [current routes](../collectivity/product/routes.md). The product scope document marks questions that remain open.
 
 ## Existing design precedence order, pending review
 

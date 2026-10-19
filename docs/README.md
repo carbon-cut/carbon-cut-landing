@@ -1,5 +1,7 @@
 # Documentation map
 
+For confirmed business terminology across Carbon Cut, start with the [domain glossary](../GLOSSARY.md).
+
 Start with the area you are working on:
 
 | Area                | Entry point                                 | Contents                                                                                                     |
@@ -13,4 +15,4 @@ Start with the area you are working on:
 
 Folder placement describes a document's purpose, not whether its content is current. Most remaining documents predate the present product and need review. The collectivity backlog is a provisional working list with some entries still to verify. Labels such as "current" inside older documents are not evidence of current scope. Use code to check implementation claims and explicit product decisions to establish intended scope.
 
-Household is retired. Its remaining code and documentation do not make it an active product flow. For collectivity scope, start with [collectivity product assumptions](collectivity/product/00-product-truth.md) and [routes](collectivity/product/routes.md), and verify any open assumptions.
+Household is retired. Its remaining code and documentation do not make it an active product flow. For Collectivity, start with the [product scope](collectivity/product/00-product-truth.md) and [current routes](collectivity/product/routes.md). The product scope document marks questions that remain open.

@@ -6,7 +6,7 @@ const {
   getStaticParams,
   getCurrentLocale,
 } = createI18nServer({
-  fr: () => import("./fr"),
+  fr: () => import("./translations/fr"),
 });
 
 const modifiedGetI18n: () => Promise<(key: string, ...args: any[]) => string> = () =>

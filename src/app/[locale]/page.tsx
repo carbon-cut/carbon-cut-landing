@@ -1,3 +1,10 @@
+import { redirect } from "next/navigation";
+
+export default function Home() {
+  redirect("/collectivity");
+}
+
+/*
 import React from "react";
 import type { Metadata } from "next";
 import { getScopedI18n } from "@/locales/server";
@@ -47,3 +54,5 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     </main>
   );
 }
+
+*/

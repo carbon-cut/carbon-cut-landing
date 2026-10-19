@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { type FieldValues } from "react-hook-form";
 import { Plus } from "lucide-react";
 
-import { useInventoryContext } from "@/app/[locale]/collectivity/projects/[planId]/inventory/context/inventory-context";
+import { useInventoryContext } from "@/app/[locale]/collectivity/projects/[planId]/ghg-inventory/context/inventory-context";
 import { InventoryTableActionButton, InventoryTableHeader } from "../InventoryTableHeader";
 import InventoryTanstackTable from "../tanstack";
 import { createGroupedYearColumns } from "./columns";
@@ -16,7 +16,6 @@ import { useEditableTableRows } from "../editable-rows/useEditableTableRows";
 function EditableInventoryGroupedYearTable<T extends FieldValues>({
   title,
   description,
-  rows,
   subcolumns,
   form,
   baseName,
@@ -77,8 +76,8 @@ function EditableInventoryGroupedYearTable<T extends FieldValues>({
             title={editableRows.addLabel}
             aria-label={editableRows.addLabel}
             onClick={addEmptyRow}
+            icon={<Plus aria-hidden="true" className="h-4 w-4" />}
           >
-            <Plus aria-hidden="true" />
             {editableRows.addLabel}
           </InventoryTableActionButton>
         ) : null}

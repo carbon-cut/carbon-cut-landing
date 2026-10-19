@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { FeatherCheck } from "@subframe/core";
 import { redirect } from "next/navigation";
 import { setStaticParamsLocale } from "next-international/server";
+import RecoverCurrentPath from "@/app/[locale]/auth/_components/recover-current-path";
 
 import { formatQuoteDate } from "../pricing/_lib/quotePresentation";
 import { Badge } from "@/components/ui/badge";
@@ -48,6 +49,9 @@ export default async function CollectivitySubscriptionPage({
   try {
     quote = await getLatestCollectivityQuote();
   } catch (error) {
+    if (error instanceof CollectivityBackendError && error.status === 401) {
+      return <RecoverCurrentPath />;
+    }
     if (error instanceof CollectivityBackendError && error.status === 404) {
       redirect(getCollectivityPricingRoute());
     }
@@ -68,6 +72,9 @@ export default async function CollectivitySubscriptionPage({
   try {
     subscription = await getCollectivitySubscriptionDetail(quote.subscriptionId);
   } catch (error) {
+    if (error instanceof CollectivityBackendError && error.status === 401) {
+      return <RecoverCurrentPath />;
+    }
     if (error instanceof CollectivityBackendError && error.status === 404) {
       redirect(getCollectivityPricingQuoteRoute(quote.id));
     }

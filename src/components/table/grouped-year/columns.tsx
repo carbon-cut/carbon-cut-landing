@@ -9,7 +9,7 @@ import type { GroupedYearTableProps } from "./types";
 import type {
   InventoryTableColumn,
   InventoryTableRow,
-} from "@/app/[locale]/collectivity/projects/[planId]/inventory/types";
+} from "@/app/[locale]/collectivity/projects/[planId]/ghg-inventory/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { InventoryTableIconButton } from "../InventoryTableHeader";
 
@@ -122,9 +122,8 @@ export function createGroupedYearColumns<T extends FieldValues>({
             aria-label={`Supprimer ${row.original.label}`}
             disabled={!canRemove}
             onClick={() => onRemoveRow(row.index)}
-          >
-            <Trash2 aria-hidden="true" />
-          </InventoryTableIconButton>
+            icon={<Trash2 aria-hidden="true" className="h-4 w-4" />}
+          ></InventoryTableIconButton>
         );
       },
     });

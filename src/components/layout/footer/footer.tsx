@@ -3,71 +3,58 @@
 import React from "react";
 import { Button } from "../../ui/button";
 import { useScopedI18n } from "@/locales/client";
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import FooterColumn, { FooterItem } from "./footerColumn";
-import Image from "next/image";
 import Typography from "@/components/ui/typography";
+import Logo from "@/components/Logo";
 import { usePathname } from "next/navigation";
-import { getContactRoute, getFormRoute, getHelpRoute } from "@/lib/routing/routes";
+import {
+  getAuthSignInRoute,
+  getCollectivityLandingRoute,
+  getCollectivityPricingRoute,
+  getCollectivitySubscriptionRoute,
+  getContactRoute,
+} from "@/lib/routing/routes";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
 function Footer() {
-  const tNav = useScopedI18n("home.nav");
   const tFooter = useScopedI18n("home.footer");
+  const tCollectivityNav = useScopedI18n("collectivityLanding.nav");
+  const tCollectivityFooter = useScopedI18n("collectivityLanding.footerLinks");
+  const tCollectivityPrimaryCta = useScopedI18n("collectivityLanding.hero.primaryCta");
+  const tAuth = useScopedI18n("(auth).common");
   const pathname = usePathname();
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const quickLinks: FooterItem[] = [
     {
-      title: tNav("features"),
-      url: "/#features",
+      title: tCollectivityNav("product"),
+      url: `${getCollectivityLandingRoute()}#product`,
     },
     {
-      title: tNav("trust"),
-      url: "/#trust",
+      title: tCollectivityNav("methodology"),
+      url: `${getCollectivityLandingRoute()}#methodology`,
     },
     {
-      title: tNav("results"),
-      url: "/#cta",
+      title: tCollectivityPrimaryCta("label"),
+      url: getCollectivityPricingRoute(),
     },
-  ];
-  const contactLinks = [
     {
-      title: tFooter("contact.email"),
+      title: tCollectivityNav("contact"),
       url: getContactRoute(),
     },
-    {
-      title: tFooter("contact.helpCenter"),
-      url: getHelpRoute(),
-    },
-    {
-      title: tFooter("contact.demo"),
-      url: getFormRoute(),
-    },
   ];
-  const socialLinks: FooterItem[] = [
+  const AccountLinks = [
     {
-      title: tFooter("social.linkedin"),
-      url: "https://www.linkedin.com",
-      Icon: Linkedin,
-      external: true,
-    },
-    { title: tFooter("social.twitter"), url: "https://twitter.com", Icon: Twitter, external: true },
-    {
-      title: tFooter("social.facebook"),
-      url: "https://www.facebook.com",
-      Icon: Facebook,
-      external: true,
+      title: tAuth("cta.signIn"),
+      url: getAuthSignInRoute(),
     },
     {
-      title: tFooter("social.instagram"),
-      url: "https://www.instagram.com",
-      Icon: Instagram,
-      external: true,
+      title: tCollectivityFooter("projects"),
+      url: "/collectivity/projects",
     },
-  ];
-  const legalLinks: FooterItem[] = [
-    { title: tFooter("legal.privacy"), url: "/legal/privacy" },
-    { title: tFooter("legal.terms"), url: "/legal/terms" },
-    { title: tFooter("legal.cookies"), url: "/legal/cookies" },
+    {
+      title: tCollectivityFooter("subscription"),
+      url: getCollectivitySubscriptionRoute(),
+    },
   ];
   if (pathname.startsWith("/auth")) {
     return null;
@@ -78,76 +65,70 @@ function Footer() {
   }
 
   return (
-    <footer id="site-footer" className="bg-card-primary md:p-12 p-6 z-[60]">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8">
-        <div className="flex flex-col lg:col-span-3 sm:col-span-2 self-start">
-          <Image
-            className="mb-6 self-start scale-125"
-            src={`${basePath}/logo/logoDark.svg`}
-            alt={`${tFooter("brand.name")} logo`}
-            width={141}
-            height={48}
-          />
-          <Typography asChild variant="description" className="text-card-primary-foreground">
-            <p>{tFooter("brand.description")}</p>
-          </Typography>
-        </div>
-        <FooterColumn
-          className="lg:col-span-2 sm:col-span-1"
-          title={tFooter("headings.quickLinks")}
-          items={quickLinks}
-          ariaLabel="Quick links"
-        />
-        <FooterColumn
-          className="lg:col-span-2 sm:col-span-1"
-          title={tFooter("headings.contact")}
-          items={contactLinks}
-          ariaLabel="Contact links"
-        />
-        <div className="flex flex-col lg:col-span-2 sm:col-span-1 self-start gap-3 lg:gap-6">
-          {/* <FooterColumn
-            title={tFooter("headings.social")}
-            items={socialLinks}
-            ariaLabel="Social media links"
-          />
-          <FooterColumn
-            title={tFooter("headings.legal")}
-            items={legalLinks}
-            headingLevel="h2"
-            ariaLabel="Legal links"
-          /> */}
-        </div>
-        <div className="flex flex-col lg:col-span-3 sm:col-span-2 self-start">
-          <Typography
+    <footer id="site-footer" className="z-[60] bg-card-primary px-4 py-10 sm:px-6 md:px-6 md:py-12">
+      <div className="max-w-6xl w-full mx-auto">
+        <div className="mx-auto grid w-full  grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4 lg:gap-x-10">
+          <div className="col-span-2 flex flex-col self-start lg:col-span-1">
+            <div className="mb-5 self-start">
+              <Logo bg="dark" size={50} variant="full" className="dark:hidden" />
+              <Logo bg="light" size={50} variant="full" className="hidden dark:block" />
+            </div>
+            <Typography asChild variant="bodySubframe" className="text-card-primary-foreground">
+              <p>{tFooter("brand.description")}</p>
+            </Typography>
+          </div>
+          <div className={"col-span-2 flex flex-row justify-center gap-6 lg:col-span-2"}>
+            <FooterColumn
+              className="col-span-1"
+              title={tCollectivityFooter("explore")}
+              items={quickLinks}
+              ariaLabel={tCollectivityFooter("explore")}
+            />
+            <FooterColumn
+              className="col-span-1"
+              title={tCollectivityFooter("account")}
+              items={AccountLinks}
+              ariaLabel={tCollectivityFooter("account")}
+            />
+          </div>
+          <div className="col-span-2 flex flex-col self-start lg:col-span-1">
+            {/* <Typography
             asChild
-            variant="default"
-            size="md"
-            className="mb-3 text-card-primary-foreground font-semibold tracking-tight"
+            variant="heading3"
+            className="mb-3 text-card-primary-foreground"
           >
             <h2>{tFooter("headings.newsletter")}</h2>
           </Typography>
-          <Typography asChild variant="description" className="mb-6 text-card-primary-foreground">
+          <Typography asChild variant="bodySubframe" className="mb-6 text-card-primary-foreground/80">
             <p>{tFooter("newsletter.description")}</p>
           </Typography>
           <div className="relative w-full md:w-11/12">
-            <input
+            <Input
               type="email"
               placeholder={tFooter("newsletter.placeholder")}
-              className="h-12 w-full rounded-full border border-card-primary-foreground/15 bg-card px-5 pr-36 text-foreground shadow-sm outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-card-primary-muted/70 focus:border-primary-border focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-0"
+              className="h-10 w-full rounded-full border border-card-primary-foreground/15 bg-card px-5 pr-24 text-foreground shadow-sm outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-card-primary-muted/70 focus:border-primary-border focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-0"
             />
             <Button
               variant="footer"
-              className="absolute right-1 top-1 z-10 h-10 px-5 text-primary-foreground"
+              className="absolute rounded-full right-1 top-1 z-10 h-8 text-primary-foreground"
             >
               <span className="relative z-10">{tFooter("newsletter.cta")}</span>
             </Button>
           </div>
           <Typography
             asChild
-            variant="description"
+            variant="bodySubframe"
             className="mt-4 ml-1 text-sm text-card-primary-muted/70"
           >
             <span>{tFooter("newsletter.privacy")}</span>
+          </Typography> */}
+          </div>
+        </div>
+
+        <Separator className="mt-6 mb-2 bg-card-primary-muted/60" />
+        <div>
+          <Typography variant="bodySubframe" className="text-card-primary-muted/70">
+            {tFooter("copyright")}
           </Typography>
         </div>
       </div>

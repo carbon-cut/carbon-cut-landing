@@ -23,5 +23,15 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "test", "test/**/*"]
+  "exclude": [
+    "node_modules",
+    "test",
+    "test/**/*",
+    "tests",
+    "tests/**/*",
+    "out",
+    "out/**/*",
+    "storybook-static",
+    "storybook-static/**/*"
+  ]
 }

@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation";
+import RecoverCurrentPath from "@/app/[locale]/auth/_components/recover-current-path";
 
 import countryMetadata from "../../pricing/_lib/countries.json";
 import { requireCollectivitySession } from "@/lib/auth/access";
 import {
+  CollectivityBackendError,
   getAvailableCollectivityClaims,
   getCollectivityCountries,
 } from "@/lib/collectivity/backend";
@@ -27,11 +29,20 @@ export default async function CollectivitySetupPage({
     redirect(getCollectivityStartRoute());
   }
 
-  const [{ locale }, supportedCountries, availableClaims] = await Promise.all([
-    params,
-    getCollectivityCountries(),
-    getAvailableCollectivityClaims(),
-  ]);
+  let loaded;
+  try {
+    loaded = await Promise.all([
+      params,
+      getCollectivityCountries(),
+      getAvailableCollectivityClaims(),
+    ] as const);
+  } catch (error) {
+    if (error instanceof CollectivityBackendError && error.status === 401) {
+      return <RecoverCurrentPath />;
+    }
+    throw error;
+  }
+  const [{ locale }, supportedCountries, availableClaims] = loaded;
 
   if (!availableClaims.some((claim) => claim.id === claimId)) {
     redirect(getCollectivityStartRoute());

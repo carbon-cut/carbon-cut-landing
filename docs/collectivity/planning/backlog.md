@@ -40,3 +40,9 @@ Keep this file as the working index for open items. If another doc contains a ba
   workflow test: setup creation and editing, inventory persistence, calculation,
   and result retrieval. Setup-edit coverage includes destructive year/applicability
   changes, slug conflicts, and refreshed state.
+
+## Engineering Checks
+
+- Add frontend lint, test, and build checks to CI after resolving the existing
+  TypeScript build failures, so each check gives a useful result. Tracked in
+  [issue #73](https://github.com/carbon-cut/carbon-cut-landing/issues/73).

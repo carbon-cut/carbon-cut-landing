@@ -11,9 +11,9 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover hover:shadow-md",
-        cta: "bg-linear-primary-diagonal text-primary-foreground shadow-sm hover:shadow-md active:shadow-sm [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5",
-        footer:
-          "relative overflow-hidden bg-linear-primary-diagonal text-primary-foreground shadow-sm hover:shadow-md active:shadow-sm before:absolute before:inset-y-0 before:left-0 before:w-10 before:-translate-x-12 before:skew-x-[-20deg] before:bg-white/20 before:content-[''] before:transition-transform before:duration-300 hover:before:translate-x-[220%]",
+        //cta: "bg-linear-primary-diagonal text-primary-foreground shadow-sm hover:shadow-md active:shadow-sm [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5",
+        //footer:
+        //"relative overflow-hidden bg-linear-primary-diagonal text-primary-foreground shadow-sm hover:shadow-md active:shadow-sm before:absolute before:inset-y-0 before:left-0 before:w-10 before:-translate-x-12 before:skew-x-[-20deg] before:bg-white/20 before:content-[''] before:transition-transform before:duration-300 hover:before:translate-x-[220%]",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
           "border border-primary-border bg-primary-subtle text-primary shadow-sm hover:border-primary hover:bg-primary-subtle-hover",
@@ -57,7 +57,9 @@ export type SubframeVariant =
   | "inverse"
   | "link-neutral"
   | "link-brand"
-  | "link-inverse";
+  | "link-inverse"
+  | "cta"
+  | "footer";
 
 type SubframeSize = "small" | "medium" | "large";
 
@@ -71,11 +73,15 @@ const subframeVariants: Record<SubframeVariant, string> = {
   "neutral-tertiary": "bg-transparent text-neutral-700 hover:bg-neutral-100 active:bg-neutral-200",
   "destructive-primary": "bg-error-600 text-white hover:bg-error-500 active:bg-error-600",
   "destructive-secondary": "bg-error-50 text-error-800 hover:bg-error-100 active:bg-error-50",
-  "destructive-tertiary": "bg-transparent text-error-700 hover:bg-error-50 active:bg-error-100",
+  "destructive-tertiary":
+    "bg-transparent text-error-700 hover:bg-error-50 active:bg-error-100 disabled:cursor-default disabled:bg-transparent disabled:text-error-700/40",
   inverse: "bg-transparent text-white hover:bg-white/20 active:bg-white/25",
   "link-neutral": "",
   "link-brand": "",
   "link-inverse": "",
+  cta: "bg-linear-primary-diagonal text-primary-foreground shadow-sm hover:shadow-md active:shadow-sm [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5",
+  footer:
+    "relative overflow-hidden bg-linear-primary-diagonal text-primary-foreground shadow-sm hover:shadow-md active:shadow-sm before:absolute before:inset-y-0 before:left-0 before:w-10 before:-translate-x-12 before:skew-x-[-20deg] before:bg-white/20 before:content-[''] before:transition-transform before:duration-300 hover:before:translate-x-[220%]",
 };
 
 const subframeSizes: Record<SubframeSize, string> = {

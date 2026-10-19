@@ -32,12 +32,12 @@ export function InventoryTableHeader({
     >
       <div>
         {title ? (
-          <Typography asChild variant="sectionTitle" size={"lg"}>
+          <Typography asChild variant="heading3">
             <TitleTag>{title}</TitleTag>
           </Typography>
         ) : null}
         {description ? (
-          <Typography asChild variant="description" size="sm" className={" font-normal"}>
+          <Typography asChild variant="bodySubframe" className="text-secondary">
             <p>{description}</p>
           </Typography>
         ) : null}
@@ -56,12 +56,7 @@ export function InventoryTableActionButton({
   ...props
 }: InventoryTableActionButtonProps) {
   return (
-    <Button
-      variant="outline"
-      size="sm"
-      className={cn("h-8 rounded-full px-3 shadow-none", className)}
-      {...props}
-    >
+    <Button variant="brand-secondary" size="medium" className={cn("", className)} {...props}>
       {children}
     </Button>
   );
@@ -72,10 +67,16 @@ type InventoryTableIconButtonProps = ComponentPropsWithoutRef<typeof Button>;
 export function InventoryTableIconButton({
   className,
   children,
+  variant = "destructive-tertiary",
   ...props
 }: InventoryTableIconButtonProps) {
   return (
-    <Button variant="ghost" size="icon" className={cn("h-8 w-8", className)} {...props}>
+    <Button
+      variant={variant}
+      size="icon"
+      className={cn("h-8 w-8 rounded-full", className)}
+      {...props}
+    >
       {children}
     </Button>
   );
