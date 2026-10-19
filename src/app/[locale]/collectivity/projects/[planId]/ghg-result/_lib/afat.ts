@@ -17,7 +17,7 @@ export function buildAfatChartData(
 ): { categories: string[]; data: StackedBarDatum[] } {
   const yearKeys = Object.keys(result.resultRows).sort(
     (left, right) => Number(left.slice(2)) - Number(right.slice(2))
-  ) as Array<keyof typeof result.resultRows>;
+  );
   const rows = yearKeys.flatMap((yearKey) => result.resultRows[yearKey]);
   const treeSources = [
     ...new Set(

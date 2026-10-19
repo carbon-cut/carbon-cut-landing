@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import {
   CollectivityApiError,
   debugCalculateCollectivityDatasetRequest,
-  type CollectivityResultRow,
   type CollectivityResultsByYear,
   type CollectivityResultYearKey,
 } from "@/app/[locale]/collectivity/_lib/queries";
@@ -313,7 +312,6 @@ export default function InventoryWorkspace({
           resultRows,
           warnings: debugData.warnings ?? [],
           calculationCodeDigest: debugData.calculationCodeDigest,
-          parameterCount: debugData.parameterCount,
         },
       }));
       console.log("debugData", debugData);
