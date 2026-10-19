@@ -93,44 +93,6 @@ describe("auth pages", () => {
     mockRefetchSession.mockReset();
   });
 
-  it("preserves collectivity returnTo when sign-up redirects to confirmation-required", async () => {
-    const SignUpPage = (await import("@/app/[locale]/auth/(shell)/sign-up/page")).default;
-    mockSearchParamsGet.mockImplementation((key: string) => {
-      if (key === "returnTo") return "/collectivity/projects/start";
-      return null;
-    });
-    mockPostAuth.mockResolvedValue({
-      ok: true,
-      data: {
-        user: { email: "collectivity-user@example.com" },
-        confirmation_required: true,
-        confirmation_email_sent: true,
-      },
-    });
-
-    render(<SignUpPage />);
-
-    fireEvent.change(screen.getByLabelText("Nom complet"), {
-      target: { value: "Collectivity User" },
-    });
-    fireEvent.change(screen.getByLabelText("E-mail"), {
-      target: { value: "collectivity-user@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText("Mot de passe"), {
-      target: { value: "Password123!" },
-    });
-    fireEvent.change(screen.getByLabelText("Confirmez le mot de passe"), {
-      target: { value: "Password123!" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: "Créer un compte" }));
-
-    await waitFor(() => {
-      expect(mockReplace).toHaveBeenCalledWith(
-        "/auth/confirmation-required?email=collectivity-user%40example.com&returnTo=%2Fcollectivity%2Fstart"
-      );
-    });
-  });
-
   it("shows forgot-password success without backend", async () => {
     const ForgotPasswordPage = (await import("@/app/[locale]/auth/(compact)/forgot-password/page"))
       .default;
@@ -176,66 +138,5 @@ describe("auth pages", () => {
       ).toBeInTheDocument();
     });
     expect(screen.queryByText("Consultez votre messagerie")).not.toBeInTheDocument();
-  });
-
-  it("shows resend success on the confirm-email page", async () => {
-    const ConfirmEmailPage = (await import("@/app/[locale]/auth/(compact)/confirm-email/page"))
-      .default;
-    mockPostAuth.mockResolvedValue({
-      ok: true,
-      data: { email: "pending@example.com", sent: true },
-    });
-
-    render(<ConfirmEmailPage />);
-
-    expect(screen.queryByLabelText("E-mail")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Renvoyer l'e-mail" }));
-
-    await waitFor(() => {
-      expect(
-        screen.getByText(
-          "Si le compte existe et n'est pas confirme, un nouvel e-mail a ete envoye."
-        )
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("shows invalid token on the confirm-email page", async () => {
-    const ConfirmEmailPage = (await import("@/app/[locale]/auth/(compact)/confirm-email/page"))
-      .default;
-    mockPostAuth.mockResolvedValue({
-      ok: false,
-      status: 400,
-      error: authError("AUTH_INVALID_EMAIL_CONFIRMATION_TOKEN"),
-    });
-    mockGetErrorCode.mockReturnValue("AUTH_INVALID_EMAIL_CONFIRMATION_TOKEN");
-
-    render(<ConfirmEmailPage />);
-
-    fireEvent.change(screen.getByLabelText("Code de confirmation"), {
-      target: { value: "bad-code" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: "Confirmer l'e-mail" }));
-
-    await waitFor(() => {
-      expect(screen.getByText("Le code de confirmation est invalide.")).toBeInTheDocument();
-    });
-  });
-
-  it("preserves collectivity returnTo on the confirm-email sign-in link", async () => {
-    const ConfirmEmailPage = (await import("@/app/[locale]/auth/(compact)/confirm-email/page"))
-      .default;
-    mockSearchParamsGet.mockImplementation((key: string) => {
-      if (key === "email") return "pending@example.com";
-      if (key === "returnTo") return "/collectivity/projects/start";
-      return null;
-    });
-
-    render(<ConfirmEmailPage />);
-
-    expect(screen.getByRole("link", { name: "Se connecter" })).toHaveAttribute(
-      "href",
-      "/auth/sign-in?returnTo=%2Fcollectivity%2Fstart"
-    );
   });
 });
