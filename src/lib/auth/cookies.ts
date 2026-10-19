@@ -1,4 +1,4 @@
-import type { AuthSessionResponse, AuthUser } from "@/lib/auth/types";
+import { isAuthUser, type AuthSessionResponse, type AuthUser } from "@/lib/auth/types";
 import {
   AUTH_ACCESS_COOKIE,
   AUTH_COOKIE_PATH,
@@ -47,7 +47,8 @@ function parseUser(value?: string | null) {
   if (!value) return null;
 
   try {
-    return JSON.parse(decodeURIComponent(value)) as AuthUser;
+    const user: unknown = JSON.parse(decodeURIComponent(value));
+    return isAuthUser(user) ? user : null;
   } catch {
     return null;
   }

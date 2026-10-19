@@ -1,9 +1,18 @@
 import { NextResponse } from "next/server";
 import { clearSessionCookies, writeSessionCookies } from "@/lib/auth/cookies";
+import { isAuthSessionResponse } from "@/lib/auth/types";
 import { StrapiAuthError, StrapiTransportError } from "@/lib/auth/strapi";
 import type { AuthSessionResponse, SessionState } from "@/lib/auth/types";
 
 export function sessionResponse(session: AuthSessionResponse) {
+  if (!isAuthSessionResponse(session)) {
+    throw new StrapiTransportError(
+      "AUTH_UPSTREAM_INVALID_RESPONSE",
+      "Authentication service returned an invalid session",
+      502
+    );
+  }
+
   const response = NextResponse.json<SessionState>({
     authenticated: true,
     user: session.user,

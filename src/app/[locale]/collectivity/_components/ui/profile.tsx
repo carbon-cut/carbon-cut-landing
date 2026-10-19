@@ -72,7 +72,7 @@ export function ProfilePopoverContent({
     <PopoverContent side={side} align={align} sideOffset={8} className="w-56 p-1">
       <div className="flex w-full flex-col items-start gap-0.5 px-3 py-2">
         <Typography variant="bodyBold" className="w-full truncate text-default-font">
-          {user?.username || userName}
+          {user ? `${user.firstName} ${user.lastName}` : userName}
         </Typography>
         {user?.email && (
           <Typography variant="captionSubframe" className="w-full truncate text-subtext-color">

@@ -96,7 +96,8 @@ function ensureSeedUsers() {
   const seed = [
     {
       id: 1,
-      username: "demo-user",
+      firstName: "Demo",
+      lastName: "User",
       email: "demo@example.com",
       provider: "local",
       confirmed: true,
@@ -107,7 +108,8 @@ function ensureSeedUsers() {
     },
     {
       id: 2,
-      username: "pending-user",
+      firstName: "Pending",
+      lastName: "User",
       email: "pending@example.com",
       provider: "local",
       confirmed: false,
@@ -118,7 +120,8 @@ function ensureSeedUsers() {
     },
     {
       id: 3,
-      username: "blocked-user",
+      firstName: "Blocked",
+      lastName: "User",
       email: "blocked@example.com",
       provider: "local",
       confirmed: true,
@@ -129,7 +132,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.developedInventory.id,
-      username: COLLECTIVITY_MOCK_USERS.developedInventory.username,
+      firstName: COLLECTIVITY_MOCK_USERS.developedInventory.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.developedInventory.lastName,
       email: COLLECTIVITY_MOCK_USERS.developedInventory.email,
       provider: "local",
       confirmed: true,
@@ -141,7 +145,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.noInventory.id,
-      username: COLLECTIVITY_MOCK_USERS.noInventory.username,
+      firstName: COLLECTIVITY_MOCK_USERS.noInventory.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.noInventory.lastName,
       email: COLLECTIVITY_MOCK_USERS.noInventory.email,
       provider: "local",
       confirmed: true,
@@ -153,7 +158,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.newlyCreated.id,
-      username: COLLECTIVITY_MOCK_USERS.newlyCreated.username,
+      firstName: COLLECTIVITY_MOCK_USERS.newlyCreated.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.newlyCreated.lastName,
       email: COLLECTIVITY_MOCK_USERS.newlyCreated.email,
       provider: "local",
       confirmed: true,
@@ -165,7 +171,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.superUser.id,
-      username: COLLECTIVITY_MOCK_USERS.superUser.username,
+      firstName: COLLECTIVITY_MOCK_USERS.superUser.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.superUser.lastName,
       email: COLLECTIVITY_MOCK_USERS.superUser.email,
       provider: "local",
       confirmed: true,
@@ -177,7 +184,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.subscriptionDemo.id,
-      username: COLLECTIVITY_MOCK_USERS.subscriptionDemo.username,
+      firstName: COLLECTIVITY_MOCK_USERS.subscriptionDemo.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.subscriptionDemo.lastName,
       email: COLLECTIVITY_MOCK_USERS.subscriptionDemo.email,
       provider: "local",
       confirmed: true,
@@ -189,7 +197,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.id,
-      username: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.username,
+      firstName: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.lastName,
       email: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.email,
       provider: "local",
       confirmed: true,
@@ -240,11 +249,7 @@ export function mockSignIn(body: SignInRequest): AuthSessionResponse {
 export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse {
   const normalizedEmail = body.email.toLowerCase();
   const existingByEmail = requireUser(normalizedEmail);
-  const existingByUsername = Array.from(users.values()).find(
-    (user) => user.username === body.username
-  );
-
-  if (existingByEmail || existingByUsername) {
+  if (existingByEmail) {
     throw new MockAuthError(
       400,
       "Email or username already taken",
@@ -254,7 +259,8 @@ export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse {
 
   const user: MockUserRecord = {
     id: nextUserId++,
-    username: body.username,
+    firstName: body.username,
+    lastName: "User",
     email: normalizedEmail,
     provider: "local",
     confirmed: false,

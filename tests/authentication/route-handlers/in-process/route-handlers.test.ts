@@ -50,7 +50,8 @@ const session: AuthSessionResponse = {
   refresh_token: "refresh-token",
   user: {
     id: 1,
-    username: "tester",
+    firstName: "Test",
+    lastName: "User",
     email: "tester@example.com",
     provider: "local",
     confirmed: true,
@@ -104,6 +105,24 @@ describe("auth route handlers", () => {
       user: session.user,
     });
     expect(response.headers.get("set-cookie")).toContain("cc_access_token=access-token");
+  });
+
+  it("rejects a session without both names and does not set cookies", async () => {
+    mockSignIn.mockResolvedValue({
+      ...session,
+      user: { ...session.user, firstName: "  " },
+    });
+    const { POST } = await import("@/app/api/auth/sign-in/route");
+
+    const response = await POST(
+      new Request("http://localhost/api/auth/sign-in", {
+        method: "POST",
+        body: JSON.stringify({ identifier: "tester@example.com", password: "Password123!" }),
+      })
+    );
+
+    expect(response.status).toBe(502);
+    expect(response.headers.get("set-cookie")).toBeNull();
   });
 
   it("sign-up keeps pending confirmation responses cookie-free", async () => {

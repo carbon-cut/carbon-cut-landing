@@ -40,7 +40,8 @@ describe("AuthProvider signOut", () => {
           authenticated: true,
           user: {
             id: 7,
-            username: "collectivity-super-user",
+            firstName: "Collectivity",
+            lastName: "Super User",
             email: "collectivity.super@example.com",
             provider: "local",
             confirmed: true,
@@ -85,7 +86,8 @@ describe("AuthProvider signOut", () => {
         authenticated: true,
         user: {
           id: 7,
-          username: "collectivity-super-user",
+          firstName: "Collectivity",
+          lastName: "Super User",
           email: "collectivity.super@example.com",
           provider: "local",
           confirmed: true,

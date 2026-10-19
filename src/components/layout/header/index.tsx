@@ -136,19 +136,19 @@ function Header() {
                   variant="neutral-tertiary"
                   className="size-10 rounded-full p-0"
                   tabIndex={navHidden ? -1 : 0}
-                  aria-label={user?.username || user?.email || tAuth("cta.signIn")}
+                  aria-label={`${user?.firstName} ${user?.lastName}`}
                 >
                   <Avatar className="size-8">
                     <AvatarFallback className="bg-brand-100 text-brand-700">
                       <Typography variant="captionBold">
-                        {(user?.username || user?.email || "?").slice(0, 2).toUpperCase()}
+                        {`${user?.firstName[0] ?? ""}${user?.lastName[0] ?? ""}`.toUpperCase()}
                       </Typography>
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </PopoverTrigger>
               <ProfilePopoverContent
-                userName={user?.username || user?.email || ""}
+                userName={`${user?.firstName} ${user?.lastName}`}
                 side="bottom"
                 align="end"
               />

@@ -1,24 +1,8 @@
-export type AuthUser = {
-  id: number;
-  username: string;
-  email: string;
-  provider: string;
-  confirmed: boolean;
-  blocked: boolean;
-  planId?: string[];
-};
+import type { components } from "@/generated/backend-api";
 
-export type AuthSessionResponse = {
-  access_token: string;
-  refresh_token: string;
-  user: AuthUser;
-};
-
-export type RegistrationPendingResponse = {
-  user: AuthUser;
-  confirmation_required: true;
-  confirmation_email_sent: true;
-};
+export type AuthUser = components["schemas"]["AuthUser"];
+export type AuthSessionResponse = components["schemas"]["AuthSession"];
+export type RegistrationPendingResponse = components["schemas"]["RegistrationPending"];
 
 export type SessionState =
   | { authenticated: true; user: AuthUser }
@@ -95,11 +79,34 @@ export type ChangePasswordRequest = {
   passwordConfirmation: string;
 };
 
+export function isAuthUser(value: unknown): value is AuthUser {
+  if (!value || typeof value !== "object") return false;
+
+  const user = value as Partial<AuthUser>;
+  return (
+    typeof user.id === "number" &&
+    typeof user.firstName === "string" &&
+    user.firstName.trim().length > 0 &&
+    typeof user.lastName === "string" &&
+    user.lastName.trim().length > 0 &&
+    typeof user.email === "string" &&
+    typeof user.provider === "string" &&
+    typeof user.confirmed === "boolean" &&
+    typeof user.blocked === "boolean"
+  );
+}
+
 export function isAuthSessionResponse(value: unknown): value is AuthSessionResponse {
   if (!value || typeof value !== "object") return false;
 
   const session = value as Partial<AuthSessionResponse>;
-  return Boolean(session.access_token && session.refresh_token && session.user?.email);
+  return (
+    typeof session.access_token === "string" &&
+    session.access_token.length > 0 &&
+    typeof session.refresh_token === "string" &&
+    session.refresh_token.length > 0 &&
+    isAuthUser(session.user)
+  );
 }
 
 export function isRegistrationPendingResponse(

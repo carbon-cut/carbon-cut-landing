@@ -31,7 +31,8 @@ const session: AuthSessionResponse = {
   refresh_token: "refresh-token",
   user: {
     id: 1,
-    username: "tester",
+    firstName: "Test",
+    lastName: "User",
     email: "tester@example.com",
     provider: "local",
     confirmed: true,
@@ -49,6 +50,25 @@ describe("auth cookies", () => {
     expect(output.accessToken).toBe("access-token");
     expect(output.refreshToken).toBe("refresh-token");
     expect(output.user?.email).toBe("tester@example.com");
+  });
+
+  it("does not accept a stored user without contract names", () => {
+    const cookieStore = createCookieStore();
+    cookieStore.values.set(
+      "cc_auth_user",
+      encodeURIComponent(
+        JSON.stringify({
+          id: 1,
+          username: "legacy-user",
+          email: "tester@example.com",
+          provider: "local",
+          confirmed: true,
+          blocked: false,
+        })
+      )
+    );
+
+    expect(readAuthCookies(cookieStore).user).toBeNull();
   });
 
   it("clears all auth cookies", () => {
