@@ -32,6 +32,15 @@ Run the isolated real-app sign-in journeys in Chromium with:
 npm run test:browser:auth
 ```
 
+Run every browser journey with the same command used by CI:
+
+```bash
+npx playwright install chromium # once per machine
+npm run test:browser
+```
+
+The aggregate command discovers and runs each `test:browser:*` script in package order. Each runner starts its controlled backend and app as needed. CI installs Chromium and its system dependencies in a separate setup step, so missing dependencies are reported separately from a failing journey.
+
 The command starts Next.js and a fresh contract-faithful mock backend on available local ports, then stops both. Each journey uses a new browser context; the backend process is recreated for each command run. Install Chromium once with `npx playwright install chromium` if it is not already available.
 
 Run the authenticated Collectivity Project-entry browser journey against the isolated mock backend and local Next.js app with:
