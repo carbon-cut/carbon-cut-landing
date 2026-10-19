@@ -10,7 +10,7 @@ When the spec or selected tickets span repositories, read `.agents/skills/cross-
 
 The issue tracker should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
 
-The goal is the entire spec implemented on a single **integration branch**, with every ticket resolved the way the issue tracker closes work.
+The goal is the requested implementation scope completed on an integration branch, with relevant checks run and a clear handoff. If the user names a ticket subset, implement only that subset; do not expand it to the parent spec or its other tickets.
 
 The tickets are not a list of steps. They are a **task graph** with blocking relationships between them. This means there is always a **frontier** of tickets which are ready to be grabbed.
 
@@ -24,7 +24,7 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 2. (optional) Use an **exploration subagent** to conduct any exploration required by the tickets - relevant codebase files or external documentation. Ensure the exploration subagent can save files - it should save its markdown notes in a directory outside the repo, accessible by all future subagents. This lets **implementer subagents** focus on implementation rather than exploration.
 
-3. Create the integration branch. If the issue tracker closes work through PRs, or the user asks for one, open a draft PR after the first merge in step 5 (a branch with no commits ahead of main can't open one), marked as closing the spec and tickets.
+3. Create the integration branch. For cross-repository work, follow the paired-branch instructions in `cross-repo-coordination`. Branch creation does not authorize creating a pull request.
 
 4. Use **implementer subagents** to implement each ticket, each in its own worktree on its own branch. Each implementer subagent:
    - confirms its worktree is based on the integration branch before starting, and resets onto it if not;
@@ -35,8 +35,8 @@ Communication to and from subagents should be sparse. Communicate primarily thro
 
 6. If this changes the **frontier** of available tickets, kick off more **implementer subagents** to work on the new tickets. This allows for maximum concurrency.
 
-7. Once all tickets are complete, call the Skill tool with `code-review` on the integration branch. Fix all issues raised by the code review in a single **implementer subagent**.
+7. Stop at the implementation handoff. Do not invoke `code-review`, create or update pull requests, mark pull requests ready, or close issues as part of this implementation session. Those actions belong to a separately invoked final-review/integration session.
 
-8. If a draft PR exists, mark it ready for review. Otherwise, resolve each ticket the way the issue tracker closes work, and report the integration branch.
+8. Report the requested ticket scope, completed work, integration branch, checks and results, unresolved dependencies, and any excluded dependent tickets. Leave issue status and pull-request lifecycle unchanged for the final-review/integration session.
 
 9. Clean up all **implementer subagent** worktrees.
