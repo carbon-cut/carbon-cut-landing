@@ -41,6 +41,11 @@ function Header() {
   const [isDesktop, setIsDesktop] = React.useState(false);
   const pathName = usePathname();
   const { status, user } = useAuth();
+  const authenticatedUserName = [user?.firstName, user?.lastName]
+    .map((part) => part?.trim())
+    .filter(Boolean)
+    .join(" ");
+  const displayedUserName = authenticatedUserName || tAuth("cta.signIn");
   const isCollectivityLanding = pathName === "/collectivity";
   const isLandingHeader = pathName === "/" || isCollectivityLanding;
   const menu: MenuItem[] = isCollectivityLanding
@@ -136,22 +141,19 @@ function Header() {
                   variant="neutral-tertiary"
                   className="size-10 rounded-full p-0"
                   tabIndex={navHidden ? -1 : 0}
-                  aria-label={`${user?.firstName} ${user?.lastName}`}
+                  aria-label={displayedUserName}
                 >
                   <Avatar className="size-8">
                     <AvatarFallback className="bg-brand-100 text-brand-700">
                       <Typography variant="captionBold">
-                        {`${user?.firstName[0] ?? ""}${user?.lastName[0] ?? ""}`.toUpperCase()}
+                        {`${user?.firstName?.trim()[0] ?? ""}${user?.lastName?.trim()[0] ?? ""}`.toUpperCase() ||
+                          "?"}
                       </Typography>
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </PopoverTrigger>
-              <ProfilePopoverContent
-                userName={`${user?.firstName} ${user?.lastName}`}
-                side="bottom"
-                align="end"
-              />
+              <ProfilePopoverContent userName={displayedUserName} side="bottom" align="end" />
             </Popover>
           ) : (
             <>
