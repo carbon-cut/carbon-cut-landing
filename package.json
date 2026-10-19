@@ -13,6 +13,7 @@
     "test:integration:vitest": "vitest run --config vitest.integration.config.ts",
     "test:integration:browser": "node --import tsx tests/authentication/session-recovery/end-to-end/test-auth-recovery-browser.mjs",
     "test:browser:auth": "node tests/authentication/sign-in/end-to-end/sign-in-browser.mjs",
+    "test:browser:session-recovery": "node tests/authentication/session-recovery/end-to-end/session-recovery-browser.mjs",
     "test:browser:collectivity-project-entry": "node tests/collectivity/project/end-to-end/project-entry-browser.mjs",
     "test:browser:auth:sign-up": "node tests/authentication/sign-up/end-to-end/sign-up-browser.mjs",
     "test:browser:auth:password-recovery": "node tests/authentication/password-recovery/end-to-end/password-recovery-browser.mjs",
