@@ -26,6 +26,14 @@ Frontend-only tests stay under the default test command:
 npm run test
 ```
 
+Run the isolated real-app sign-in journeys in Chromium with:
+
+```bash
+npm run test:browser:auth
+```
+
+The command starts Next.js and a fresh contract-faithful mock backend on available local ports, then stops both. Each journey uses a new browser context; the backend process is recreated for each command run. Install Chromium once with `npx playwright install chromium` if it is not already available.
+
 Real frontend/Strapi integration tests run separately:
 
 ```bash

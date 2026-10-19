@@ -5,7 +5,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AuthErrorPayload } from "@/lib/auth/types";
 
 const {
-  mockPush,
   mockReplace,
   mockSearchParamsGet,
   mockPostAuth,
@@ -13,7 +12,6 @@ const {
   mockIsUpstreamAuthError,
   mockRefetchSession,
 } = vi.hoisted(() => ({
-  mockPush: vi.fn(),
   mockReplace: vi.fn(),
   mockSearchParamsGet: vi.fn((key: string): string | null => {
     if (key === "email") return "pending@example.com";
@@ -40,7 +38,7 @@ vi.mock("@/app/[locale]/auth/_components/auth-brand", () => ({
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
-    push: mockPush,
+    push: vi.fn(),
     replace: mockReplace,
   }),
   useSearchParams: () => ({
@@ -81,7 +79,6 @@ function authError(code: string, message = "error"): AuthErrorPayload {
 
 describe("auth pages", () => {
   beforeEach(() => {
-    mockPush.mockReset();
     mockReplace.mockReset();
     mockSearchParamsGet.mockReset();
     mockSearchParamsGet.mockImplementation((key: string) => {
@@ -94,104 +91,6 @@ describe("auth pages", () => {
     mockIsUpstreamAuthError.mockReset();
     mockIsUpstreamAuthError.mockReturnValue(false);
     mockRefetchSession.mockReset();
-  });
-
-  it("shows invalid credentials on the sign-in page", async () => {
-    const SignInPage = (await import("@/app/[locale]/auth/(compact)/sign-in/page")).default;
-    mockPostAuth.mockResolvedValue({
-      ok: false,
-      status: 401,
-      error: authError("AUTH_INVALID_CREDENTIALS"),
-    });
-    mockGetErrorCode.mockReturnValue("AUTH_INVALID_CREDENTIALS");
-
-    render(<SignInPage />);
-
-    fireEvent.change(screen.getByLabelText("E-mail"), {
-      target: { value: "demo@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText("Mot de passe"), {
-      target: { value: "wrong" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: "Connexion" }));
-
-    await waitFor(() => {
-      expect(screen.getByText("Identifiants invalides.")).toBeInTheDocument();
-    });
-    expect(mockPush).not.toHaveBeenCalled();
-  });
-
-  it("shows service unavailable on the sign-in page for upstream failures", async () => {
-    const SignInPage = (await import("@/app/[locale]/auth/(compact)/sign-in/page")).default;
-    mockPostAuth.mockResolvedValue({
-      ok: false,
-      status: 503,
-      error: authError("AUTH_UPSTREAM_UNAVAILABLE"),
-    });
-    mockIsUpstreamAuthError.mockReturnValue(true);
-
-    render(<SignInPage />);
-
-    fireEvent.change(screen.getByLabelText("E-mail"), {
-      target: { value: "demo@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText("Mot de passe"), {
-      target: { value: "Password123!" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: "Connexion" }));
-
-    await waitFor(() => {
-      expect(
-        screen.getByText(
-          "Le service d'authentification est indisponible pour le moment. Veuillez reessayer plus tard."
-        )
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("redirects sign-in to confirmation-required when email confirmation is needed", async () => {
-    const SignInPage = (await import("@/app/[locale]/auth/(compact)/sign-in/page")).default;
-    mockSearchParamsGet.mockImplementation((key: string) => {
-      if (key === "returnTo") return "/form";
-      return null;
-    });
-    mockPostAuth.mockResolvedValue({
-      ok: false,
-      status: 403,
-      error: authError("AUTH_EMAIL_CONFIRMATION_REQUIRED"),
-    });
-    mockGetErrorCode.mockReturnValue("AUTH_EMAIL_CONFIRMATION_REQUIRED");
-
-    render(<SignInPage />);
-
-    fireEvent.change(screen.getByLabelText("E-mail"), {
-      target: { value: "pending@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText("Mot de passe"), {
-      target: { value: "Password123!" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: "Connexion" }));
-
-    await waitFor(() => {
-      expect(mockReplace).toHaveBeenCalledWith(
-        "/auth/confirmation-required?email=pending%40example.com&returnTo=%2Fform"
-      );
-    });
-  });
-
-  it("preserves collectivity returnTo on the sign-in signup link", async () => {
-    const SignInPage = (await import("@/app/[locale]/auth/(compact)/sign-in/page")).default;
-    mockSearchParamsGet.mockImplementation((key: string) => {
-      if (key === "returnTo") return "/collectivity/projects/start";
-      return null;
-    });
-
-    render(<SignInPage />);
-
-    expect(screen.getByRole("link", { name: "S'inscrire" })).toHaveAttribute(
-      "href",
-      "/auth/sign-up?returnTo=%2Fcollectivity%2Fstart"
-    );
   });
 
   it("preserves collectivity returnTo when sign-up redirects to confirmation-required", async () => {

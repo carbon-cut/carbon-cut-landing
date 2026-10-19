@@ -12,6 +12,7 @@
     "test:integration:sfax": "node scripts/run-integration.mjs --sfax",
     "test:integration:vitest": "vitest run --config vitest.integration.config.ts",
     "test:integration:browser": "node --import tsx tests/authentication/session-recovery/end-to-end/test-auth-recovery-browser.mjs",
+    "test:browser:auth": "node tests/authentication/sign-in/end-to-end/sign-in-browser.mjs",
     "test:integration:browser:sfax": "node --import tsx tests/collectivity/inventory/end-to-end/sfax-inventory-browser.mjs",
     "install:auth": "bash -lc 'set -a; source .env.local; set +a; npm install'",
     "install:types": "dotenv -e .env -- npm install @carbon-cut/types",
