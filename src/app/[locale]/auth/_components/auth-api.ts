@@ -1,10 +1,25 @@
 "use client";
 
 import type { AuthErrorPayload } from "@/lib/auth/types";
+import { isAuthUser, isRegistrationPendingResponse } from "@/lib/auth/types";
+import type { RegistrationPendingResponse, SessionState, SignUpRequest } from "@/lib/auth/types";
 
 export type ApiResult<T> =
   | { ok: true; data: T }
   | { ok: false; status: number; error: AuthErrorPayload };
+
+type ImmediateRegistrationResponse = Extract<SessionState, { authenticated: true }>;
+
+function isImmediateRegistrationResponse(value: unknown): value is ImmediateRegistrationResponse {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "authenticated" in value &&
+    value.authenticated === true &&
+    "user" in value &&
+    isAuthUser(value.user)
+  );
+}
 
 async function parseResponseBody(response: Response) {
   const text = await response.text();
@@ -71,6 +86,29 @@ export async function postAuth<T>(url: string, body: unknown): Promise<ApiResult
           },
         },
       } satisfies AuthErrorPayload),
+  };
+}
+
+export async function postRegistration(
+  body: SignUpRequest
+): Promise<ApiResult<RegistrationPendingResponse | ImmediateRegistrationResponse>> {
+  const result = await postAuth<unknown>("/api/auth/sign-up", body);
+  if (!result.ok) return result;
+
+  if (isRegistrationPendingResponse(result.data) || isImmediateRegistrationResponse(result.data)) {
+    return { ok: true, data: result.data };
+  }
+
+  return {
+    ok: false,
+    status: 502,
+    error: {
+      error: {
+        status: 502,
+        message: "Authentication service returned an invalid registration response",
+        details: { code: "AUTH_UPSTREAM_INVALID_RESPONSE" },
+      },
+    },
   };
 }
 

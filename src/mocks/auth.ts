@@ -246,24 +246,21 @@ export function mockSignIn(body: SignInRequest): AuthSessionResponse {
   return makeSession(publicUser(user));
 }
 
-export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse {
+export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse | AuthSessionResponse {
   const normalizedEmail = body.email.toLowerCase();
   const existingByEmail = requireUser(normalizedEmail);
   if (existingByEmail) {
-    throw new MockAuthError(
-      400,
-      "Email or username already taken",
-      "AUTH_REGISTER_IDENTIFIER_TAKEN"
-    );
+    throw new MockAuthError(400, "Email already taken", "AUTH_EMAIL_TAKEN");
   }
 
   const user: MockUserRecord = {
     id: nextUserId++,
-    firstName: body.username,
-    lastName: "User",
+    firstName: body.firstName.trim(),
+    lastName: body.lastName.trim(),
+    organisation: body.organisation?.trim() || null,
     email: normalizedEmail,
     provider: "local",
-    confirmed: false,
+    confirmed: process.env.MOCK_AUTH_CONFIRMATION_REQUIRED === "false",
     blocked: false,
     password: body.password,
     confirmationToken: defaultConfirmationToken,
@@ -271,6 +268,10 @@ export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse {
   };
 
   users.set(normalizedEmail, user);
+
+  if (process.env.MOCK_AUTH_CONFIRMATION_REQUIRED === "false") {
+    return makeSession(publicUser(user));
+  }
 
   return {
     user: publicUser(user),

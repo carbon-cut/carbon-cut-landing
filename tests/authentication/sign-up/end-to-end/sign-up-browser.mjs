@@ -51,7 +51,9 @@ async function registrationRequiresConfirmationAndPreservesReturnPath(browser) {
       `/auth/sign-in?${new URLSearchParams({ returnTo })}`
     );
 
-    await page.getByLabel("Nom complet").fill("Browser Signup");
+    await page.getByLabel("Prénom").fill("Browser");
+    await page.getByLabel("Nom", { exact: true }).fill("Signup");
+    await page.getByLabel("Organisation (facultatif)").fill("Carbon Cut Test");
     await page.getByLabel("E-mail").fill(email);
     await page.getByLabel("Mot de passe", { exact: true }).fill("BrowserPassword123!");
     await page.getByLabel("Confirmez le mot de passe").fill("BrowserPassword123!");
@@ -66,6 +68,13 @@ async function registrationRequiresConfirmationAndPreservesReturnPath(browser) {
       page.getByRole("button", { name: "Créer un compte" }).click(),
     ]);
     assert.equal(registrationResponse.status(), 200);
+    assert.deepEqual(registrationResponse.request().postDataJSON(), {
+      firstName: "Browser",
+      lastName: "Signup",
+      email,
+      organisation: "Carbon Cut Test",
+      password: "BrowserPassword123!",
+    });
 
     await page.waitForURL((url) => url.pathname === "/auth/confirm-email");
     let currentUrl = new URL(page.url());

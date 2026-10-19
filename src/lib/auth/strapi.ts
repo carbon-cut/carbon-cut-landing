@@ -6,7 +6,7 @@ import type {
   ChangePasswordRequest,
   EmailConfirmationRequest,
   ForgotPasswordRequest,
-  RegistrationPendingResponse,
+  RegistrationResponse,
   ResetPasswordRequest,
   ResendConfirmationRequest,
   SignInRequest,
@@ -132,10 +132,7 @@ export function signIn(body: SignInRequest) {
 }
 
 export function signUp(body: SignUpRequest) {
-  return request<AuthSessionResponse | RegistrationPendingResponse>(
-    "/api/auth/local/register",
-    withPostBody(body)
-  );
+  return request<RegistrationResponse>("/api/auth/local/register", withPostBody(body));
 }
 
 export function resendConfirmation(body: ResendConfirmationRequest) {

@@ -3631,9 +3631,10 @@ export default {
         ],
       },
       form: {
-        fullName: "Full name",
-        username: "Username",
+        firstName: "First name",
+        lastName: "Last name",
         email: "Email",
+        organisation: "Organisation (optional)",
         password: "Password",
         passwordConfirm: "Confirm password",
         submit: "Create an account",
@@ -3646,7 +3647,9 @@ export default {
         login: "Log in",
       },
       error: {
-        identifierTaken: "This email or username is already in use.",
+        emailTaken: "This email is already in use.",
+        firstNameRequired: "Enter your first name.",
+        lastNameRequired: "Enter your last name.",
         disabled: "Registration is disabled at this time.",
         defaultRole: "The registration configuration is incomplete.",
         passwordMismatch: "Passwords do not match.",

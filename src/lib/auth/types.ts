@@ -1,8 +1,11 @@
-import type { components } from "@/generated/backend-api";
+import type { components, operations } from "@/generated/backend-api";
 
 export type AuthUser = components["schemas"]["AuthUser"];
 export type AuthSessionResponse = components["schemas"]["AuthSession"];
 export type RegistrationPendingResponse = components["schemas"]["RegistrationPending"];
+export type SignUpRequest = operations["register"]["requestBody"]["content"]["application/json"];
+export type RegistrationResponse =
+  operations["register"]["responses"][200]["content"]["application/json"];
 
 export type SessionState =
   | { authenticated: true; user: AuthUser }
@@ -15,7 +18,7 @@ export type AuthErrorCode =
   | "AUTH_PROVIDER_DISABLED"
   | "AUTH_REGISTER_DISABLED"
   | "AUTH_DEFAULT_ROLE_NOT_FOUND"
-  | "AUTH_REGISTER_IDENTIFIER_TAKEN"
+  | "AUTH_EMAIL_TAKEN"
   | "AUTH_EMAIL_ALREADY_CONFIRMED"
   | "AUTH_INVALID_EMAIL_CONFIRMATION_TOKEN"
   | "AUTH_INVALID_REFRESH_TOKEN"
@@ -45,12 +48,6 @@ export type AuthErrorPayload = {
 
 export type SignInRequest = {
   identifier: string;
-  password: string;
-};
-
-export type SignUpRequest = {
-  email: string;
-  username: string;
   password: string;
 };
 
@@ -115,5 +112,9 @@ export function isRegistrationPendingResponse(
   if (!value || typeof value !== "object") return false;
 
   const response = value as Partial<RegistrationPendingResponse>;
-  return response.confirmation_required === true && response.confirmation_email_sent === true;
+  return (
+    response.confirmation_required === true &&
+    response.confirmation_email_sent === true &&
+    isAuthUser(response.user)
+  );
 }

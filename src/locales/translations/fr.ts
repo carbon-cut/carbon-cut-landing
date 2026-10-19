@@ -3681,9 +3681,10 @@ export default {
         ],
       },
       form: {
-        fullName: "Nom complet",
-        username: "Nom d'utilisateur",
+        firstName: "Prénom",
+        lastName: "Nom",
         email: "E-mail",
+        organisation: "Organisation (facultatif)",
         password: "Mot de passe",
         passwordConfirm: "Confirmez le mot de passe",
         submit: "Créer un compte",
@@ -3696,7 +3697,9 @@ export default {
         login: "Se connecter",
       },
       error: {
-        identifierTaken: "Cet e-mail ou ce nom d'utilisateur est deja utilise.",
+        emailTaken: "Cette adresse e-mail est déjà utilisée.",
+        firstNameRequired: "Saisissez votre prénom.",
+        lastNameRequired: "Saisissez votre nom.",
         disabled: "L'inscription est desactivee pour le moment.",
         defaultRole: "La configuration d'inscription est incomplete.",
         passwordMismatch: "Les mots de passe ne correspondent pas.",

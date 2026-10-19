@@ -2,12 +2,15 @@
 
 import React from "react";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   getErrorCode,
   isUpstreamAuthError,
-  postAuth,
+  postRegistration,
 } from "@/app/[locale]/auth/_components/auth-api";
 import AuthBrand from "@/app/[locale]/auth/_components/auth-brand";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -16,7 +19,11 @@ import { Input } from "@/components/ui/input";
 import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
 import { useScopedI18n } from "@/locales/client";
-import { getAuthConfirmationRequiredRoute, getAuthSignInRoute } from "@/lib/routing/routes";
+import {
+  getAuthConfirmationRequiredRoute,
+  getAuthSignInRoute,
+  getHomeRoute,
+} from "@/lib/routing/routes";
 import { Lightbulb, Rocket, Zap } from "lucide-react";
 
 export default function SignUpPage() {
@@ -24,39 +31,48 @@ export default function SignUpPage() {
   const tCommon = useScopedI18n("(auth).common");
   const router = useRouter();
   const searchParams = useSearchParams();
+  const signupSchema = z
+    .object({
+      firstName: z.string().trim().min(1, t("error.firstNameRequired")),
+      lastName: z.string().trim().min(1, t("error.lastNameRequired")),
+      email: z.string().email(),
+      organisation: z.string(),
+      password: z.string().min(1),
+      passwordConfirmation: z.string().min(1),
+    })
+    .refine((values) => values.password === values.passwordConfirmation, {
+      path: ["passwordConfirmation"],
+      message: t("error.passwordMismatch"),
+    });
+  type SignupValues = z.infer<typeof signupSchema>;
+  const form = useForm<SignupValues>({
+    resolver: zodResolver(signupSchema),
+    mode: "onBlur",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      organisation: "",
+      password: "",
+      passwordConfirmation: "",
+    },
+  });
   const highlights = Array.from({ length: 3 }).map((_, i) => ({
     title: t(`highlights.items.${i}.title` as Parameters<typeof t>[0]),
     description: t(`highlights.items.${i}.description` as Parameters<typeof t>[0]),
   }));
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (password !== passwordConfirmation) {
-      setErrorMessage(t("error.passwordMismatch"));
-      return;
-    }
-
-    setSubmitting(true);
+  async function handleSubmit(values: SignupValues) {
     setErrorMessage(null);
 
-    const result = await postAuth<{
-      user: { email: string };
-      confirmation_required: true;
-      confirmation_email_sent: true;
-    }>("/api/auth/sign-up", {
-      username,
-      email,
-      password,
+    const result = await postRegistration({
+      firstName: values.firstName.trim(),
+      lastName: values.lastName.trim(),
+      email: values.email,
+      organisation: values.organisation.trim() || null,
+      password: values.password,
     });
-
-    setSubmitting(false);
 
     if (!result.ok) {
       if (isUpstreamAuthError(result.error)) {
@@ -66,8 +82,8 @@ export default function SignUpPage() {
 
       const code = getErrorCode(result.error);
 
-      if (code === "AUTH_REGISTER_IDENTIFIER_TAKEN") {
-        setErrorMessage(t("error.identifierTaken"));
+      if (code === "AUTH_EMAIL_TAKEN") {
+        setErrorMessage(t("error.emailTaken"));
         return;
       }
 
@@ -85,10 +101,14 @@ export default function SignUpPage() {
       return;
     }
 
-    const nextParams = new URLSearchParams({
-      email: result.data.user.email,
-    });
     const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
+
+    if ("authenticated" in result.data) {
+      router.replace(returnTo ?? getHomeRoute());
+      return;
+    }
+
+    const nextParams = new URLSearchParams({ email: result.data.user.email });
 
     if (returnTo) {
       nextParams.set("returnTo", returnTo);
@@ -135,7 +155,7 @@ export default function SignUpPage() {
             <p>{t("description")}</p>
           </Typography>
 
-          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6 space-y-4">
             {errorMessage ? (
               <Alert variant="destructive">
                 <AlertTitle>{t("title")}</AlertTitle>
@@ -143,15 +163,38 @@ export default function SignUpPage() {
               </Alert>
             ) : null}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="username">
-                {t("form.fullName")}
+              <label className="text-sm font-medium text-foreground/80" htmlFor="firstName">
+                {t("form.firstName")}
               </label>
               <Input
-                id="username"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
+                id="firstName"
+                autoComplete="given-name"
                 required
+                aria-invalid={Boolean(form.formState.errors.firstName)}
+                {...form.register("firstName")}
               />
+              {form.formState.errors.firstName ? (
+                <Typography asChild variant="description" size="sm" className="text-destructive">
+                  <p role="alert">{form.formState.errors.firstName.message}</p>
+                </Typography>
+              ) : null}
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground/80" htmlFor="lastName">
+                {t("form.lastName")}
+              </label>
+              <Input
+                id="lastName"
+                autoComplete="family-name"
+                required
+                aria-invalid={Boolean(form.formState.errors.lastName)}
+                {...form.register("lastName")}
+              />
+              {form.formState.errors.lastName ? (
+                <Typography asChild variant="description" size="sm" className="text-destructive">
+                  <p role="alert">{form.formState.errors.lastName.message}</p>
+                </Typography>
+              ) : null}
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground/80" htmlFor="email">
@@ -160,9 +203,19 @@ export default function SignUpPage() {
               <Input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                autoComplete="email"
                 required
+                {...form.register("email")}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground/80" htmlFor="organisation">
+                {t("form.organisation")}
+              </label>
+              <Input
+                id="organisation"
+                autoComplete="organization"
+                {...form.register("organisation")}
               />
             </div>
             <div className="space-y-2">
@@ -172,9 +225,9 @@ export default function SignUpPage() {
               <Input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                autoComplete="new-password"
                 required
+                {...form.register("password")}
               />
             </div>
             <div className="space-y-2">
@@ -187,12 +240,21 @@ export default function SignUpPage() {
               <Input
                 id="passwordConfirmation"
                 type="password"
-                value={passwordConfirmation}
-                onChange={(event) => setPasswordConfirmation(event.target.value)}
+                autoComplete="new-password"
                 required
+                {...form.register("passwordConfirmation")}
               />
+              {form.formState.errors.passwordConfirmation ? (
+                <Typography asChild variant="description" size="sm" className="text-destructive">
+                  <p role="alert">{form.formState.errors.passwordConfirmation.message}</p>
+                </Typography>
+              ) : null}
             </div>
-            <Button type="submit" disabled={submitting} className="mt-3 h-11 w-full">
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              className="mt-3 h-11 w-full"
+            >
               {t("form.submit")}
             </Button>
           </form>

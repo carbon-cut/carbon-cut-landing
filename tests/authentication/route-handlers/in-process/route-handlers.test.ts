@@ -141,7 +141,8 @@ describe("auth route handlers", () => {
         method: "POST",
         body: JSON.stringify({
           email: "tester@example.com",
-          username: "tester",
+          firstName: "Test",
+          lastName: "User",
           password: "Password123!",
         }),
       })
@@ -156,6 +157,49 @@ describe("auth route handlers", () => {
       confirmation_required: true,
       confirmation_email_sent: true,
     });
+    expect(response.headers.get("set-cookie")).toBeNull();
+  });
+
+  it("sign-up establishes a session when confirmation is not required", async () => {
+    mockSignUp.mockResolvedValue(session);
+    const { POST } = await import("@/app/api/auth/sign-up/route");
+
+    const response = await POST(
+      new Request("http://localhost/api/auth/sign-up", {
+        method: "POST",
+        body: JSON.stringify({
+          email: "tester@example.com",
+          firstName: "Test",
+          lastName: "User",
+          password: "Password123!",
+        }),
+      })
+    );
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual({
+      authenticated: true,
+      user: session.user,
+    });
+    expect(response.headers.get("set-cookie")).toContain("cc_access_token=access-token");
+  });
+
+  it("rejects malformed pending registration data", async () => {
+    mockSignUp.mockResolvedValue({
+      confirmation_required: true,
+      confirmation_email_sent: true,
+      user: { email: "tester@example.com" },
+    });
+    const { POST } = await import("@/app/api/auth/sign-up/route");
+
+    const response = await POST(
+      new Request("http://localhost/api/auth/sign-up", {
+        method: "POST",
+        body: JSON.stringify({ email: "tester@example.com" }),
+      })
+    );
+
+    expect(response.status).toBe(502);
     expect(response.headers.get("set-cookie")).toBeNull();
   });
 
