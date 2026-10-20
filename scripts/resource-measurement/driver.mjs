@@ -181,6 +181,10 @@ async function doAction(session, sequence) {
       method: "PUT",
       body: JSON.stringify({ inventoryInput: session.inventoryInput }),
     });
+  return calculate(session);
+}
+
+async function calculate(session) {
   const calculation = await request(session, "calculation", endpoint(session, "/calculate"), {
     method: "POST",
     body: JSON.stringify({ inventoryInput: session.inventoryInput }),
@@ -193,10 +197,19 @@ async function doAction(session, sequence) {
 async function runWindow(seconds, phase) {
   currentPhase = phase;
   const deadline = Date.now() + seconds * 1000;
+  let releaseCalculationBarrier;
+  const calculationBarrier = new Promise((resolve) => {
+    releaseCalculationBarrier = resolve;
+  });
+  let calculationArrivals = 0;
   await Promise.all(
     workers.map(async (session) => {
       let sequence = randomInt(1, calculateEvery);
       let timedSignInAt = null;
+      let overlappingCalculationPending =
+        phase === "measurement" &&
+        workers.length >= 3 &&
+        (session.worker === 2 || session.worker === 3);
       if (phase === "measurement" && session.worker === 1) {
         const cooldownRemaining = 65_000 - (Date.now() - session.lastSignInAt);
         const signInDelay = Math.max(
@@ -206,6 +219,13 @@ async function runWindow(seconds, phase) {
         timedSignInAt = Date.now() + signInDelay;
       }
       while (!stopping && Date.now() < deadline) {
+        if (overlappingCalculationPending) {
+          overlappingCalculationPending = false;
+          calculationArrivals += 1;
+          if (calculationArrivals === 2) releaseCalculationBarrier();
+          await calculationBarrier;
+          await calculate(session);
+        }
         if (timedSignInAt !== null && Date.now() >= timedSignInAt) {
           await signIn(session);
           timedSignInAt = null;
