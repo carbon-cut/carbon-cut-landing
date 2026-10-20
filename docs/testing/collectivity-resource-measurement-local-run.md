@@ -9,6 +9,7 @@
 - Host: 16 logical CPUs, 27.9 GiB physical RAM. WSL reported 13.6 GiB memory and 4 GiB swap.
 - Topology: built Next.js production server and production Strapi in WSL; PostgreSQL 16.3 on Windows. Strapi used the verified `carbon_cut_test` database. The database verifier and independent `current_database()` checks passed before fixture writes and production Strapi startup.
 - Backend pool settings from `config/database.ts`: min 2, max 10. No backend pool instrumentation was added.
+- Source revisions: the production Next.js build used landing commit `b7feb7c6`; the measurement harness and report are in landing commit `3f4921c8`. Production Strapi used backend commit `33ccbc7e`; the fixture-preparation tool is in backend commit `81178ede`.
 - Fixture: 25 distinct users, projects, inventories, subscriptions, claims, quotes, calculation runs and results. Each project used an 18,292-byte Sfax inventory input (457,300 bytes total input). The first fixture report recorded an 82,964,963-byte database; the reset before the repeat run recorded 84,365,795 bytes. Persisted calculations increased database size during measurement. Fixture row counts were recreated and checked before the repeat run.
 - Next.js was built in production mode with MSW disabled. Each step used a 15-second warm-up, then a requested 60-second timed interval, think time of 800–3,000 ms, and one calculation action per twelve actions. Smoke checks verified sign-in, inventory read/save, calculation persistence to the expected project, changed result run ID, stored result read, session read and project navigation.
 - All readings are warm-process measurements: services were already running and each timed window followed a warm-up. The repeated three-session step reset fixture rows and credentials but did not restart services or clear OS/database caches.
@@ -58,6 +59,9 @@ The available `Get-Process` CPU resolution reported 0.0% for Windows PostgreSQL 
 - Raw HTTP records: `/tmp/carbon-cut-active-{1,3,5,10}-http.jsonl` and `/tmp/carbon-cut-active-3-repeat-http.jsonl`.
 - Raw resources: `/tmp/carbon-cut-idle.jsonl`, `/tmp/carbon-cut-active-{1,3,5,10}-resources.jsonl`, and `/tmp/carbon-cut-active-3-repeat-resources.jsonl`.
 - Fixture reset: `npm run resource:measurement:prepare -- --count 25 --manifest /tmp/carbon-cut-resource-sessions.json --report /tmp/carbon-cut-resource-summary-repeat.json` from the backend checkout.
+- Production Next build: `NEXT_PUBLIC_ENABLE_MSW=false BACKEND_URL=http://127.0.0.1:1338 NEXT_PUBLIC_APP_URL=http://127.0.0.1:3010 npm run build`.
+- Production Strapi: `INTEGRATION_BACKEND_DIR=/home/lenovo/projects/carbon-cut-backend HOST=127.0.0.1 PORT=1338 node scripts/resource-measurement/start-production-strapi.mjs`.
+- Production Next start: `NODE_ENV=production NEXT_PUBLIC_ENABLE_MSW=false NEXT_PUBLIC_APP_URL=http://localhost:3010 BACKEND_URL=http://127.0.0.1:1338 npm run start -- --hostname :: --port 3010`.
 - Driver: `node scripts/resource-measurement/driver.mjs --manifest /tmp/carbon-cut-resource-sessions.json --url http://localhost:3010 --sessions N --warmup 15 --duration 60 --think-min 800 --think-max 3000 --calculate-every 12 --output /tmp/carbon-cut-active-N-http.jsonl --report /tmp/carbon-cut-active-N-summary.json`.
 - Resource sampler: `node scripts/resource-measurement/sample-resources.mjs --phase LABEL --duration 100 --interval 5 --next-pid NEXT_PID --strapi-pid STRAPI_PID --output /tmp/carbon-cut-active-LABEL-resources.jsonl`.
 
