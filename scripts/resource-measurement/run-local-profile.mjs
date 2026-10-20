@@ -47,7 +47,7 @@ if (args.plan) {
   console.log(
     JSON.stringify(
       {
-        estimatedMinutes: Math.ceil(estimatedSeconds / 60),
+        nominalCleanRunMinutes: Math.ceil(estimatedSeconds / 60),
         buildProductionNext: true,
         prepareFixtures: fixtureCount,
         startProductionStrapi: true,
@@ -69,7 +69,7 @@ const completedRuns = [];
 
 await mkdir(outputDir, { recursive: true });
 console.log(
-  `Starting local resource profile. Estimated run time: about ${Math.ceil(estimatedSeconds / 60)} minutes. Output: ${outputDir}`
+  `Starting local resource profile. Nominal clean-run estimate: about ${Math.ceil(estimatedSeconds / 60)} minutes. Output: ${outputDir}`
 );
 
 const children = new Set();
