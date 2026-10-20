@@ -103,6 +103,7 @@ async function signIn(session) {
     body: JSON.stringify({ identifier: session.identifier, password: session.password }),
   });
   if (record.status !== 200) throw new Error(`Sign-in failed for worker ${session.worker}.`);
+  session.lastSignInAt = Date.now();
 }
 
 let currentPhase = "setup";
@@ -195,12 +196,20 @@ async function runWindow(seconds, phase) {
   await Promise.all(
     workers.map(async (session) => {
       let sequence = randomInt(1, calculateEvery);
+      let timedSignInAt = null;
       if (phase === "measurement" && session.worker === 1) {
-        const signInDelay = randomInt(minThinkMs, maxThinkMs + 1);
-        await new Promise((resolve) => setTimeout(resolve, signInDelay));
-        await signIn(session);
+        const cooldownRemaining = 65_000 - (Date.now() - session.lastSignInAt);
+        const signInDelay = Math.max(
+          randomInt(minThinkMs, maxThinkMs + 1),
+          cooldownRemaining
+        );
+        timedSignInAt = Date.now() + signInDelay;
       }
       while (!stopping && Date.now() < deadline) {
+        if (timedSignInAt !== null && Date.now() >= timedSignInAt) {
+          await signIn(session);
+          timedSignInAt = null;
+        }
         await doAction(session, sequence++);
         const think = randomInt(minThinkMs, maxThinkMs + 1);
         await new Promise((resolve) => setTimeout(resolve, think));
