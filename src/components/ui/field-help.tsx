@@ -82,6 +82,7 @@ type FieldRequiredProps = {
   contentClassName?: string;
   side?: TooltipContentProps["side"];
   align?: TooltipContentProps["align"];
+  size?: React.ComponentProps<typeof Typography>["size"];
 };
 
 export function FieldRequired({
@@ -92,12 +93,13 @@ export function FieldRequired({
   contentClassName,
   side = "top",
   align = "center",
+  size = "xl",
 }: FieldRequiredProps) {
   const marker = (
     <Typography
       asChild
       variant="label"
-      size="xl"
+      size={size}
       className={cn(
         "inline-flex items-center justify-center leading-none text-destructive",
         content ? "cursor-help" : "",
