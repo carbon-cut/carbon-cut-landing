@@ -195,7 +195,7 @@ async function runWindow(seconds, phase) {
   await Promise.all(
     workers.map(async (session) => {
       let sequence = randomInt(1, calculateEvery);
-      if (phase === "measurement") {
+      if (phase === "measurement" && session.worker === 1) {
         const signInDelay = randomInt(minThinkMs, maxThinkMs + 1);
         await new Promise((resolve) => setTimeout(resolve, signInDelay));
         await signIn(session);
