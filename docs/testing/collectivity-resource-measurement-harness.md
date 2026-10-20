@@ -2,6 +2,21 @@
 
 The landing repository contains the timed same-origin HTTP driver, production Strapi launcher, and resource sampler for the local split-host profile described in [collectivity-resource-measurement.md](./collectivity-resource-measurement.md). Fixture preparation lives in the backend repository beside the schema and Sfax fixture it uses.
 
+## Run the complete local profile
+
+From the landing checkout, run the orchestrator to build production Next.js, prepare the isolated test fixtures, start production Strapi and Next.js, collect the idle baseline, run the 1/3/5/10/3-session sequence with resource sampling, reset fixtures before the repeat, validate request counts/errors/sign-in/overlapping calculations, collect post-load idle readings, and stop only the services it started:
+
+```bash
+npm run resource:measurement:run -- \
+  --backend-dir ../carbon-cut-backend \
+  --manifest /tmp/carbon-cut-resource-sessions.json \
+  --output-dir ./measurement-$(date -u +%Y%m%dT%H%M%SZ)
+```
+
+The default profile takes about 22 minutes, including authentication cooldowns. It resets the resource-measurement fixture namespace in the backend test database, so confirm the test database is available and not shared with another integration run. PostgreSQL must already be running and reachable from the backend's test database configuration. The runner prints its current step and cooldown countdown; Ctrl-C stops its active sampler/driver and only the service process groups it launched. It does not stop PostgreSQL. If interrupted during fixture preparation, rerun the command to recreate the complete fixture before measuring.
+
+Use `npm run resource:measurement:run -- --help` for ports, profile timing, output, and cooldown overrides. Pass `--plan` to inspect the steps and estimate without starting services or resetting fixtures. The default output directory is timestamped and contains raw request/resource JSONL, per-step summaries, fixture summaries, and `run-report.json`. Failed runs leave `run-failure.json` with completed steps and the failure point. Keep this output local unless you review and redact host-specific data.
+
 ## Fixture boundary
 
 Prepare or reset the standard 25-project fixture from the backend checkout:
