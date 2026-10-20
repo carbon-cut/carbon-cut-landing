@@ -5,6 +5,11 @@ This glossary records business terms used across Carbon Cut. It grows by domain 
 **Carbon Cut**:
 The overall application that can contain multiple offerings.
 
+## Accounts
+
+**User account**:
+An identity used to sign in to Carbon Cut. It has an email address, first name, and last name, and may include an organisation.
+
 ## Collectivity
 
 ### Work and access

@@ -7,6 +7,7 @@ import { buildRecoveryRedirect, buildSignInRedirect } from "@/lib/auth/redirect"
 import { logout, rotateRefreshToken, StrapiAuthError } from "@/lib/auth/strapi";
 import { isAccessTokenCurrent } from "@/lib/auth/token";
 import type { AuthSessionResponse, SessionState } from "@/lib/auth/types";
+import { isAuthUser } from "@/lib/auth/types";
 
 type CookieReader = {
   get(name: string): { value: string } | undefined;
@@ -16,7 +17,7 @@ export async function getServerSession(): Promise<SessionState> {
   const cookieStore = await cookies();
   const { accessToken, user } = readAuthCookies(cookieStore);
 
-  if (accessToken && user && isAccessTokenCurrent(accessToken)) {
+  if (accessToken && isAuthUser(user) && isAccessTokenCurrent(accessToken)) {
     return {
       authenticated: true,
       user,

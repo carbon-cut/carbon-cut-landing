@@ -29,15 +29,13 @@ const refreshTokens = new Map<string, string>();
 const accessTokens = new Map<string, string>();
 let nextUserId = 1000;
 
-function buildError(status: number, message: string, code: AuthErrorCode): AuthErrorPayload {
+function buildError(status: number, message: string, code?: AuthErrorCode): AuthErrorPayload {
   return {
     error: {
       status,
       name: "MockAuthError",
       message,
-      details: {
-        code,
-      },
+      details: code ? { code } : {},
     },
   };
 }
@@ -96,7 +94,8 @@ function ensureSeedUsers() {
   const seed = [
     {
       id: 1,
-      username: "demo-user",
+      firstName: "Demo",
+      lastName: "User",
       email: "demo@example.com",
       provider: "local",
       confirmed: true,
@@ -107,7 +106,8 @@ function ensureSeedUsers() {
     },
     {
       id: 2,
-      username: "pending-user",
+      firstName: "Pending",
+      lastName: "User",
       email: "pending@example.com",
       provider: "local",
       confirmed: false,
@@ -118,7 +118,8 @@ function ensureSeedUsers() {
     },
     {
       id: 3,
-      username: "blocked-user",
+      firstName: "Blocked",
+      lastName: "User",
       email: "blocked@example.com",
       provider: "local",
       confirmed: true,
@@ -129,7 +130,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.developedInventory.id,
-      username: COLLECTIVITY_MOCK_USERS.developedInventory.username,
+      firstName: COLLECTIVITY_MOCK_USERS.developedInventory.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.developedInventory.lastName,
       email: COLLECTIVITY_MOCK_USERS.developedInventory.email,
       provider: "local",
       confirmed: true,
@@ -141,7 +143,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.noInventory.id,
-      username: COLLECTIVITY_MOCK_USERS.noInventory.username,
+      firstName: COLLECTIVITY_MOCK_USERS.noInventory.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.noInventory.lastName,
       email: COLLECTIVITY_MOCK_USERS.noInventory.email,
       provider: "local",
       confirmed: true,
@@ -153,7 +156,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.newlyCreated.id,
-      username: COLLECTIVITY_MOCK_USERS.newlyCreated.username,
+      firstName: COLLECTIVITY_MOCK_USERS.newlyCreated.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.newlyCreated.lastName,
       email: COLLECTIVITY_MOCK_USERS.newlyCreated.email,
       provider: "local",
       confirmed: true,
@@ -165,7 +169,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.superUser.id,
-      username: COLLECTIVITY_MOCK_USERS.superUser.username,
+      firstName: COLLECTIVITY_MOCK_USERS.superUser.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.superUser.lastName,
       email: COLLECTIVITY_MOCK_USERS.superUser.email,
       provider: "local",
       confirmed: true,
@@ -177,7 +182,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.subscriptionDemo.id,
-      username: COLLECTIVITY_MOCK_USERS.subscriptionDemo.username,
+      firstName: COLLECTIVITY_MOCK_USERS.subscriptionDemo.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.subscriptionDemo.lastName,
       email: COLLECTIVITY_MOCK_USERS.subscriptionDemo.email,
       provider: "local",
       confirmed: true,
@@ -189,7 +195,8 @@ function ensureSeedUsers() {
     },
     {
       id: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.id,
-      username: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.username,
+      firstName: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.firstName,
+      lastName: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.lastName,
       email: COLLECTIVITY_MOCK_USERS.municipalAssetsOnly.email,
       provider: "local",
       confirmed: true,
@@ -211,11 +218,26 @@ export class MockAuthError extends Error {
   status: number;
   body: AuthErrorPayload;
 
-  constructor(status: number, message: string, code: AuthErrorCode) {
+  constructor(status: number, message: string, code?: AuthErrorCode) {
     super(message);
     this.name = "MockAuthError";
     this.status = status;
     this.body = buildError(status, message, code);
+  }
+}
+
+class MockRegistrationValidationError extends MockAuthError {
+  constructor() {
+    super(400, "Invalid registration data");
+    this.body = {
+      data: null,
+      error: {
+        status: this.status,
+        name: "ValidationError",
+        message: this.message,
+        details: {},
+      },
+    };
   }
 }
 
@@ -237,27 +259,35 @@ export function mockSignIn(body: SignInRequest): AuthSessionResponse {
   return makeSession(publicUser(user));
 }
 
-export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse {
+export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse | AuthSessionResponse {
+  const firstName = typeof body.firstName === "string" ? body.firstName.trim() : "";
+  const lastName = typeof body.lastName === "string" ? body.lastName.trim() : "";
+  const organisation = body.organisation?.trim() || null;
+
+  if (
+    firstName.length === 0 ||
+    firstName.length > 100 ||
+    lastName.length === 0 ||
+    lastName.length > 100 ||
+    (organisation !== null && organisation.length > 200)
+  ) {
+    throw new MockRegistrationValidationError();
+  }
+
   const normalizedEmail = body.email.toLowerCase();
   const existingByEmail = requireUser(normalizedEmail);
-  const existingByUsername = Array.from(users.values()).find(
-    (user) => user.username === body.username
-  );
-
-  if (existingByEmail || existingByUsername) {
-    throw new MockAuthError(
-      400,
-      "Email or username already taken",
-      "AUTH_REGISTER_IDENTIFIER_TAKEN"
-    );
+  if (existingByEmail) {
+    throw new MockAuthError(400, "Email already taken", "AUTH_EMAIL_TAKEN");
   }
 
   const user: MockUserRecord = {
     id: nextUserId++,
-    username: body.username,
+    firstName,
+    lastName,
+    organisation,
     email: normalizedEmail,
     provider: "local",
-    confirmed: false,
+    confirmed: process.env.MOCK_AUTH_CONFIRMATION_REQUIRED === "false",
     blocked: false,
     password: body.password,
     confirmationToken: defaultConfirmationToken,
@@ -265,6 +295,10 @@ export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse {
   };
 
   users.set(normalizedEmail, user);
+
+  if (process.env.MOCK_AUTH_CONFIRMATION_REQUIRED === "false") {
+    return makeSession(publicUser(user));
+  }
 
   return {
     user: publicUser(user),

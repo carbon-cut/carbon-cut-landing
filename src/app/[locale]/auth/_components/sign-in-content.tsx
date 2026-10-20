@@ -2,7 +2,10 @@
 
 import React from "react";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -11,8 +14,10 @@ import {
   postAuth,
 } from "@/app/[locale]/auth/_components/auth-api";
 import AuthBrand from "@/app/[locale]/auth/_components/auth-brand";
+import { InventoryFieldInput } from "@/app/[locale]/collectivity/_components/fields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/forms";
 import { Input } from "@/components/ui/input";
 import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
@@ -32,27 +37,34 @@ export function SignInPageContent() {
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const { refetchSession } = useAuth();
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
+  const signInSchema = z.object({
+    identifier: z
+      .string()
+      .trim()
+      .min(1, "Required")
+      .email(),
+    password: z.string().min(1, "Required"),
+  });
+  type SignInValues = z.infer<typeof signInSchema>;
+  const form = useForm<SignInValues>({
+    resolver: zodResolver(signInSchema),
+    mode: "onSubmit",
+    defaultValues: { identifier: "", password: "" },
+  });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
   const signUpHref = getAuthSignUpRoute(returnTo);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSubmitting(true);
+  async function handleSubmit(values: SignInValues) {
     setErrorMessage(null);
 
     const result = await postAuth<{ authenticated: true; user: { email: string } }>(
       "/api/auth/sign-in",
       {
-        identifier,
-        password,
+        identifier: values.identifier,
+        password: values.password,
       }
     );
-
-    setSubmitting(false);
 
     if (!result.ok) {
       if (isUpstreamAuthError(result.error)) {
@@ -66,7 +78,7 @@ export function SignInPageContent() {
         router.replace(
           getAuthConfirmationRequiredRoute(
             new URLSearchParams({
-              email: identifier,
+              email: values.identifier,
               ...(searchParams.get("returnTo")
                 ? { returnTo: searchParams.get("returnTo") as string }
                 : {}),
@@ -119,49 +131,43 @@ export function SignInPageContent() {
           </Alert>
         ) : null}
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          {errorMessage ? (
-            <Alert variant="destructive">
-              <AlertTitle>{t("title")}</AlertTitle>
-              <AlertDescription>{errorMessage}</AlertDescription>
-            </Alert>
-          ) : null}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground/80" htmlFor="identifier">
-              {t("form.email")}
-            </label>
-            <Input
-              id="identifier"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6 space-y-4">
+            {errorMessage ? (
+              <Alert variant="destructive">
+                <AlertTitle>{t("title")}</AlertTitle>
+                <AlertDescription>{errorMessage}</AlertDescription>
+              </Alert>
+            ) : null}
+            <InventoryFieldInput
+              form={form}
+              name="identifier"
+              label={t("form.email")}
               type="email"
-              value={identifier}
-              onChange={(event) => setIdentifier(event.target.value)}
+              autoComplete="email"
               required
             />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground/80" htmlFor="password">
-              {t("form.password")}
-            </label>
-            <Input
-              id="password"
+            <InventoryFieldInput
+              form={form}
+              name="password"
+              label={t("form.password")}
               type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
               required
             />
-          </div>
-          <div className="flex justify-end">
-            <Link
-              href={getAuthForgotPasswordRoute()}
-              className="text-sm text-foreground/90 underline-offset-4 hover:underline"
-            >
-              {t("link.forgetPassword")}
-            </Link>
-          </div>
-          <Button type="submit" disabled={submitting} className="h-11 w-full">
-            {t("form.submit")}
-          </Button>
-        </form>
+            <div className="flex justify-end">
+              <Link
+                href={getAuthForgotPasswordRoute()}
+                className="text-sm text-foreground/90 underline-offset-4 hover:underline"
+              >
+                {t("link.forgetPassword")}
+              </Link>
+            </div>
+            <Button type="submit" disabled={form.formState.isSubmitting} className="h-11 w-full">
+              {t("form.submit")}
+            </Button>
+          </form>
+        </Form>
 
         <p className="mt-6 text-center text-sm text-secondary">
           {t("message.signup")}{" "}

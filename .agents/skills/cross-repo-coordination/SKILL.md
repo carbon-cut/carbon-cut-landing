@@ -10,8 +10,10 @@ Use this workflow when a feature has implementation, contracts, tests, or ticket
 ## Sessions and handoffs
 
 - A planning agent can create the canonical spec and tickets, then stop. Any number of implementation agents can work on different tickets in either repository through `implement-spec`, each leaving a handoff. The planning agent does not need to stay in context.
+- The implementation agent resolves its completed child ticket according to that repository's issue-tracker workflow after the ticket's checks pass. This does not close the canonical parent, which remains open for final integration.
 - A fresh agent can invoke this skill with the canonical spec and all available implementation handoffs to finish the feature. Treat handoffs as context pointers, not proof of completion: read the linked tickets and inspect the actual branches, changes, review results, and checks in each repository. Accept multiple handoffs from the same repository and identify any missing ticket coverage.
 - This fresh agent owns the independent final review, cross-repository integration verification, and pull requests. It does not silently repair implementation findings. Report a small finding with its location and impact; for substantial new work, use `to-tickets` with the user to agree on a ticket. Hand implementation findings back to the owning agent or ticket and resume final verification from the updated handoff.
+- Implementation and final review/integration are separate invocations. `implement-spec` ends with an implementation handoff; it does not trigger this final-review stage automatically, even when all selected work is complete or the branches are paired. Run this stage only when the user invokes final review/integration.
 
 ## Ticket ownership and scope
 
@@ -19,6 +21,7 @@ Use this workflow when a feature has implementation, contracts, tests, or ticket
 - Create each child ticket in the repository that owns its implementation. Link every child to the canonical parent and record cross-repository blockers in native issue dependencies when supported; otherwise include direct issue links in the ticket body.
 - Keep the parent spec as the only copy of shared requirements and decisions. Child tickets link to the relevant parent sections and state only their own deliverable and acceptance criteria.
 - A request to implement a parent spec includes all its child tickets across repositories. A request naming a ticket subset limits implementation to that subset; still report excluded dependent tickets and the coordination needed to resume them.
+- Carry the invoked scope into final review and pull-request decisions. Review and report only the selected ticket scope and dependencies needed to validate it. Do not claim the parent spec is complete, close it, or include unrelated ticket work merely because it shares an integration branch. Identify excluded parent tickets and their status in the handoff.
 
 ## Repository and branch coordination
 
@@ -36,6 +39,7 @@ Use this workflow when a feature has implementation, contracts, tests, or ticket
 
 ## Final review and integration
 
+- This section applies only in the separately invoked final-review/integration session, not during `implement-spec`. The user invoking implementation of a ticket or parent spec does not by itself invoke this stage.
 - Review each repository's integration branch against its intended target branch and the canonical spec, using `code-review`. Check the combined behavior across repositories, including API compatibility, authorization and error behavior, and the user flow named by the spec. Verify that every in-scope ticket is represented; a passing per-repository review alone does not establish cross-repository compatibility.
 - Run the relevant checks in each repository and the available cross-repository integration tests against the paired branches. Assess whether the integration tests cover the shared acceptance criteria. Report missing coverage or a contract mismatch as a finding for the owning implementation agent; do not make a reviewer-authored implementation change to clear the gate.
 - Record exactly which reviews and checks ran, their results, and any environment blocker. If a finding affects acceptance criteria or integration, pause PR readiness and give the user a precise handoff for the owning ticket or a proposed new ticket through `to-tickets`.
@@ -43,6 +47,6 @@ Use this workflow when a feature has implementation, contracts, tests, or ticket
 
 ## Completion
 
-- After final review and integration checks pass, open or update a pull request from each paired integration branch and mark each ready for review. Follow the repository's `pr` skill for PR bodies. Link the paired PRs and state the backend-before-frontend merge order.
-- Resolve child tickets according to the owning tracker's workflow; close the canonical parent only after all children are complete. If ticket closure depends on later PR merges, report that follow-up instead of claiming the tickets are closed.
+- After final review and integration checks pass, open or update a pull request from each paired integration branch in the selected scope and mark each ready for review. Follow the repository's `pr` skill for PR bodies. Link the paired PRs and state the backend-before-frontend merge order. Do not create PRs for out-of-scope work solely because it is present on a paired branch; identify the owning ticket/handoff and leave it for its separately authorized completion.
+- Close the canonical parent only after all child tickets are complete and final integration checks pass. If parent closure depends on later PR merges, report that follow-up instead of claiming the parent is closed.
 - End the final-review session when both PRs are ready for review or when a blocking finding has been handed back. Report the canonical parent, all child tickets, handoffs reviewed, paired branches and PRs, merge order, checks run in each repository, and any deliberately excluded tickets or unresolved findings.

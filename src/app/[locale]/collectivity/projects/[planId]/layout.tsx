@@ -83,7 +83,7 @@ export default async function CollectivityPlanLayout({
     <WorkspaceShell
       initialSnapshot={snapshot}
       planId={planId}
-      userName={session.user.username || session.user.email}
+      userName={`${session.user.firstName} ${session.user.lastName}`}
     >
       {children}
     </WorkspaceShell>

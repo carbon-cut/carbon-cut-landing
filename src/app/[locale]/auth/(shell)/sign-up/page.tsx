@@ -2,61 +2,80 @@
 
 import React from "react";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  getErrorCode,
-  isUpstreamAuthError,
-  postAuth,
-} from "@/app/[locale]/auth/_components/auth-api";
+import { getErrorCode, isUpstreamAuthError } from "@/app/[locale]/auth/_components/auth-api";
+import { registrationMutationOptions } from "@/app/[locale]/auth/_lib/queries";
 import AuthBrand from "@/app/[locale]/auth/_components/auth-brand";
+import { InventoryFieldInput } from "@/app/[locale]/collectivity/_components/fields";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/forms";
 import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
+import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
-import { getAuthConfirmationRequiredRoute, getAuthSignInRoute } from "@/lib/routing/routes";
+import {
+  getAuthConfirmationRequiredRoute,
+  getAuthSignInRoute,
+  getHomeRoute,
+} from "@/lib/routing/routes";
 import { Lightbulb, Rocket, Zap } from "lucide-react";
 
 export default function SignUpPage() {
   const t = useScopedI18n("(auth).signup");
   const tCommon = useScopedI18n("(auth).common");
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { refetchSession } = useAuth();
   const searchParams = useSearchParams();
+  const signupSchema = z
+    .object({
+      firstName: z.string().trim().min(1, "Required"),
+      lastName: z.string().trim().min(1, "Required"),
+      email: z.string().trim().min(1, "Required").email(),
+      organisation: z.string(),
+      password: z.string().min(1, "Required"),
+      passwordConfirmation: z.string().min(1, "Required"),
+    })
+    .refine((values) => values.password === values.passwordConfirmation, {
+      path: ["passwordConfirmation"],
+      message: "passwordMismatch",
+    });
+  type SignupValues = z.infer<typeof signupSchema>;
+  const form = useForm<SignupValues>({
+    resolver: zodResolver(signupSchema),
+    mode: "onSubmit",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      organisation: "",
+      password: "",
+      passwordConfirmation: "",
+    },
+  });
   const highlights = Array.from({ length: 3 }).map((_, i) => ({
     title: t(`highlights.items.${i}.title` as Parameters<typeof t>[0]),
     description: t(`highlights.items.${i}.description` as Parameters<typeof t>[0]),
   }));
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
+  const registrationMutation = useMutation(registrationMutationOptions());
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (password !== passwordConfirmation) {
-      setErrorMessage(t("error.passwordMismatch"));
-      return;
-    }
-
-    setSubmitting(true);
+  async function handleSubmit(values: SignupValues) {
     setErrorMessage(null);
 
-    const result = await postAuth<{
-      user: { email: string };
-      confirmation_required: true;
-      confirmation_email_sent: true;
-    }>("/api/auth/sign-up", {
-      username,
-      email,
-      password,
+    const result = await registrationMutation.mutateAsync({
+      firstName: values.firstName.trim(),
+      lastName: values.lastName.trim(),
+      email: values.email,
+      organisation: values.organisation.trim() || null,
+      password: values.password,
     });
-
-    setSubmitting(false);
 
     if (!result.ok) {
       if (isUpstreamAuthError(result.error)) {
@@ -66,8 +85,8 @@ export default function SignUpPage() {
 
       const code = getErrorCode(result.error);
 
-      if (code === "AUTH_REGISTER_IDENTIFIER_TAKEN") {
-        setErrorMessage(t("error.identifierTaken"));
+      if (code === "AUTH_EMAIL_TAKEN") {
+        setErrorMessage(t("error.emailTaken"));
         return;
       }
 
@@ -85,10 +104,16 @@ export default function SignUpPage() {
       return;
     }
 
-    const nextParams = new URLSearchParams({
-      email: result.data.user.email,
-    });
     const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
+
+    if ("authenticated" in result.data) {
+      queryClient.clear();
+      await refetchSession();
+      router.replace(returnTo ?? getHomeRoute());
+      return;
+    }
+
+    const nextParams = new URLSearchParams({ email: result.data.user.email });
 
     if (returnTo) {
       nextParams.set("returnTo", returnTo);
@@ -135,67 +160,69 @@ export default function SignUpPage() {
             <p>{t("description")}</p>
           </Typography>
 
-          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            {errorMessage ? (
-              <Alert variant="destructive">
-                <AlertTitle>{t("title")}</AlertTitle>
-                <AlertDescription>{errorMessage}</AlertDescription>
-              </Alert>
-            ) : null}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="username">
-                {t("form.fullName")}
-              </label>
-              <Input
-                id="username"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="email">
-                {t("form.email")}
-              </label>
-              <Input
-                id="email"
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-6 space-y-4">
+              {errorMessage ? (
+                <Alert variant="destructive">
+                  <AlertTitle>{t("title")}</AlertTitle>
+                  <AlertDescription>{errorMessage}</AlertDescription>
+                </Alert>
+              ) : null}
+              <div className="grid grid-cols-2 gap-4">
+                <InventoryFieldInput
+                  form={form}
+                  name="firstName"
+                  label={t("form.firstName")}
+                  autoComplete="given-name"
+                  required
+                />
+                <InventoryFieldInput
+                  form={form}
+                  name="lastName"
+                  label={t("form.lastName")}
+                  autoComplete="family-name"
+                  required
+                />
+              </div>
+              <InventoryFieldInput
+                form={form}
+                name="email"
+                label={t("form.email")}
                 type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                autoComplete="email"
                 required
               />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80" htmlFor="password">
-                {t("form.password")}
-              </label>
-              <Input
-                id="password"
+              <InventoryFieldInput
+                form={form}
+                name="organisation"
+                label={t("form.organisation")}
+                autoComplete="organization"
+              />
+              <InventoryFieldInput
+                form={form}
+                name="password"
+                label={t("form.password")}
                 type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                autoComplete="new-password"
                 required
               />
-            </div>
-            <div className="space-y-2">
-              <label
-                className="text-sm font-medium text-foreground/80"
-                htmlFor="passwordConfirmation"
+              <InventoryFieldInput
+                form={form}
+                name="passwordConfirmation"
+                label={t("form.passwordConfirm")}
+                type="password"
+                autoComplete="new-password"
+                required
+              />
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting || registrationMutation.isPending}
+                className="mt-3 h-11 w-full"
               >
-                {t("form.passwordConfirm")}
-              </label>
-              <Input
-                id="passwordConfirmation"
-                type="password"
-                value={passwordConfirmation}
-                onChange={(event) => setPasswordConfirmation(event.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" disabled={submitting} className="mt-3 h-11 w-full">
-              {t("form.submit")}
-            </Button>
-          </form>
+                {t("form.submit")}
+              </Button>
+            </form>
+          </Form>
 
           <p className="mt-6 text-center text-sm text-secondary">
             {t("message.login")}{" "}

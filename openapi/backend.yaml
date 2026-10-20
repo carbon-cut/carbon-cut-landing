@@ -88,13 +88,28 @@ paths:
               required: [email, firstName, lastName, password]
               properties:
                 email: { type: string, format: email }
-                firstName: { type: string }
-                lastName: { type: string }
-                organisation: { type: string, nullable: true }
+                firstName:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                  pattern: '.*\S.*'
+                  description: Required and must contain a non-whitespace character.
+                lastName:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                  pattern: '.*\S.*'
+                  description: Required and must contain a non-whitespace character.
+                organisation:
+                  type: string
+                  nullable: true
+                  maxLength: 200
                 password: { type: string }
       responses:
         "200":
-          description: Pending confirmation or session when confirmation is disabled
+          description: >-
+            Returns a pending-confirmation result when email confirmation is enabled,
+            or an authenticated session when email confirmation is disabled.
           content:
             application/json:
               schema:
@@ -523,9 +538,22 @@ components:
       required: [id, firstName, lastName, email, provider, confirmed, blocked]
       properties:
         id: { type: integer }
-        firstName: { type: string }
-        lastName: { type: string }
-        organisation: { type: string, nullable: true }
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: '.*\S.*'
+          description: Must contain a non-whitespace character.
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 100
+          pattern: '.*\S.*'
+          description: Must contain a non-whitespace character.
+        organisation:
+          type: string
+          nullable: true
+          maxLength: 200
         email: { type: string, format: email }
         provider: { type: string }
         confirmed: { type: boolean }

@@ -221,7 +221,7 @@ export default function CollectivitySidebar({
                     }
                   >
                     <Typography
-                      variant="bodyBold"
+                      variant="captionBold"
                       className="min-w-0 flex-1 truncate self-center text-left group-data-[collapsible=icon]:hidden"
                     >
                       {userName}

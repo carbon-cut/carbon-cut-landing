@@ -25,6 +25,50 @@ describe.sequential("auth integration", () => {
     await ensureIntegrationServicesAvailable();
   });
 
+  it("registers through the same-origin route with separate names and optional organisation", async () => {
+    const email = `auth-register-${Date.now()}-${Math.random().toString(36).slice(2, 7)}@example.com`;
+    let userId: number | undefined;
+
+    try {
+      const response = await fetchFrontend("/api/auth/sign-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: "Integration",
+          lastName: "Registration",
+          email,
+          organisation: "Carbon Cut Integration",
+          password: uniquePassword(),
+        }),
+      });
+
+      expect(response.status).toBe(200);
+      const body = (await response.json()) as {
+        authenticated?: boolean;
+        user?: { id?: number; firstName?: string; lastName?: string; email?: string };
+        confirmation_required?: boolean;
+        confirmation_email_sent?: boolean;
+      };
+      userId = body.user?.id;
+      expect(body.user).toMatchObject({
+        firstName: "Integration",
+        lastName: "Registration",
+        email,
+      });
+
+      if (body.authenticated === true) {
+        expect(
+          getSetCookieHeaders(response).some((header) => header.startsWith("cc_access_token="))
+        ).toBe(true);
+      } else {
+        expect(body).toMatchObject({ confirmation_required: true, confirmation_email_sent: true });
+        expect(getSetCookieHeaders(response)).toHaveLength(0);
+      }
+    } finally {
+      if (userId) await cleanupTestUser(userId);
+    }
+  });
+
   describe("session and guard flows", () => {
     let confirmedUser: ManagedUser;
     let authenticatedJar: CookieJar;

@@ -5,10 +5,7 @@ description: Use for frontend forms, React Hook Form, Zod validation, form schem
 
 # Frontend forms
 
-- Forms use `react-hook-form` + `zod` schemas from `src/app/[locale]/household/form/_forms/formSchema` with shared form context.
-
-- Form Schemas produce a pattern through a shared folder. don't invent a new pattern / shema unless there is no option.
-
--Schemas are organized by index / config files. config files are for shared constants, enums. probably columns. that are then called in the surface. this guarentee one source of truth to the form and the ui.
-
--when a field / row / column is vague, we have a component `src/components/ui/field-help.tsx` that gets attached to the ui to indicate informations. in the same way, if the field / row / column is required we have a component named FieldRequired in the same `src/components/ui/field-help.tsx` file.
+- Use React Hook Form and Zod for form state and validation.
+- Keep schemas with the form or feature that owns them. Collectivity inventory forms must follow the existing schema modules and shared configuration under `src/app/[locale]/collectivity/projects/[planId]/ghg-inventory/InventorySchema`; extend that pattern instead of inventing another one. This pattern is specific to inventory forms and is not the generic schema pattern for other forms.
+- `FormMessage` translates Zod message keys through the shared `forms.errors` locale entries. Use the shared `"Required"` key for required-field errors. Leave Zod's `.email()` message unchanged; its default `"Invalid email"` key is localized through the same map. Add or update both English and French entries there when a shared message needs localization. Do not call `t()` inside the schema for these messages, because `FormMessage` performs the translation.
+- When a field needs help text or a required indicator, use `FieldHelp` or `FieldRequired` from `src/components/ui/field-help.tsx`.

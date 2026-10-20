@@ -12,8 +12,8 @@ describe("collectivity recovery redirects", () => {
     );
 
     const response = await middleware(request, event);
-    expect(response.status).toBe(307);
-    expect(response.headers.get("location")).toBe(
+    expect(response?.status).toBe(307);
+    expect(response?.headers.get("location")).toBe(
       "http://localhost/auth/recover?returnTo=%2Fcollectivity%2Fprojects%2Fgrand-sfax%2Finventory%3Fyear%3D2026"
     );
   });
@@ -23,8 +23,8 @@ describe("collectivity recovery redirects", () => {
       "http://localhost/collectivity/projects/grand-sfax/result?view=yearly"
     );
     const response = await middleware(request, event);
-    expect(response.status).toBe(307);
-    expect(response.headers.get("location")).toBe(
+    expect(response?.status).toBe(307);
+    expect(response?.headers.get("location")).toBe(
       "http://localhost/auth/sign-in?returnTo=%2Fcollectivity%2Fprojects%2Fgrand-sfax%2Fresult%3Fview%3Dyearly"
     );
   });
@@ -35,7 +35,7 @@ describe("collectivity recovery redirects", () => {
       { headers: { cookie: "cc_refresh_token=refresh-token" } }
     );
     const response = await middleware(request, event);
-    expect(response.headers.get("location")).toBe(
+    expect(response?.headers.get("location")).toBe(
       "http://localhost/collectivity/projects/grand-sfax/actions?tab=next"
     );
   });
@@ -44,11 +44,19 @@ describe("collectivity recovery redirects", () => {
     const payload = btoa(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 300 }));
     const request = new NextRequest("http://localhost/collectivity/projects/grand-sfax/inventory", {
       headers: {
-        cookie: `cc_access_token=header.${payload}.signature; cc_auth_user=${encodeURIComponent(JSON.stringify({ id: 1, email: "a@example.com" }))}`,
+        cookie: `cc_access_token=header.${payload}.signature; cc_auth_user=${encodeURIComponent(JSON.stringify({
+          id: 1,
+          firstName: "A",
+          lastName: "Example",
+          email: "a@example.com",
+          provider: "local",
+          confirmed: true,
+          blocked: false,
+        }))}`,
       },
     });
     const response = await middleware(request, event);
-    expect(response.status).toBe(200);
-    expect(response.headers.get("location")).toBeNull();
+    expect(response?.status).toBe(200);
+    expect(response?.headers.get("location")).toBeNull();
   });
 });

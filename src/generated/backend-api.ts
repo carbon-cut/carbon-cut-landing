@@ -374,7 +374,9 @@ export interface components {
     };
     AuthUser: {
       id: number;
+      /** @description Must contain a non-whitespace character. */
       firstName: string;
+      /** @description Must contain a non-whitespace character. */
       lastName: string;
       organisation?: string | null;
       /** Format: email */
@@ -1158,7 +1160,9 @@ export interface operations {
         "application/json": {
           /** Format: email */
           email: string;
+          /** @description Required and must contain a non-whitespace character. */
           firstName: string;
+          /** @description Required and must contain a non-whitespace character. */
           lastName: string;
           organisation?: string | null;
           password: string;
@@ -1166,7 +1170,7 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Pending confirmation or session when confirmation is disabled */
+      /** @description Returns a pending-confirmation result when email confirmation is enabled, or an authenticated session when email confirmation is disabled. */
       200: {
         headers: {
           [name: string]: unknown;

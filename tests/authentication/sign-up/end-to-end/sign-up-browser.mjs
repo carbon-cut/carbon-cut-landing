@@ -13,9 +13,18 @@ try {
   frontendUrl = servers.frontendUrl;
   browser = await chromium.launch({ headless: true });
   await registrationRequiresConfirmationAndPreservesReturnPath(browser);
+  await registrationRejectsInvalidNamesAndDuplicateEmail(browser);
   await confirmationLinksPreserveReturnPath(browser);
+  await servers.close();
+  servers = await startBrowserTestServers({
+    frontendPath: "/auth/sign-up",
+    backendEnvironment: { MOCK_AUTH_CONFIRMATION_REQUIRED: "false" },
+  });
+  backendUrl = servers.backendUrl;
+  frontendUrl = servers.frontendUrl;
+  await immediateRegistrationEstablishesBrowserAuthState(browser);
   console.log(
-    "Browser sign-up passed: registration, resend, invalid and valid confirmation, and safe return paths."
+    "Browser sign-up passed: pending and immediate registration, invalid names, duplicate email, confirmation, and safe return paths."
   );
 } catch (error) {
   console.error("Browser sign-up runner failed.");
@@ -26,6 +35,93 @@ try {
     await browser?.close();
   } finally {
     await servers?.close();
+  }
+}
+
+async function immediateRegistrationEstablishesBrowserAuthState(browser) {
+  const context = await browser.newContext();
+  try {
+    const page = await context.newPage();
+    page.setDefaultTimeout(15_000);
+    await page.goto(`${frontendUrl}/auth/sign-up`);
+    await page.getByLabel("Prénom").fill("Immediate");
+    await page.getByLabel(/^Nom/).fill("User");
+    await page.getByLabel("E-mail").fill(`immediate-${Date.now()}@example.com`);
+    await page.getByLabel(/^Mot de passe/).fill("BrowserPassword123!");
+    await page.getByLabel("Confirmez le mot de passe").fill("BrowserPassword123!");
+
+    const responsePromise = page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === "/api/auth/sign-up" &&
+        response.request().method() === "POST"
+    );
+    const [response] = await Promise.all([
+      responsePromise,
+      page.getByRole("button", { name: "Créer un compte" }).click(),
+    ]);
+    assert.equal(response.status(), 200);
+    await page.waitForURL((url) => url.pathname === "/collectivity");
+    await page.getByRole("button", { name: "Immediate User" }).waitFor();
+    assert.ok(
+      (await context.cookies(frontendUrl)).some((cookie) => cookie.name === "cc_access_token"),
+      "immediate registration should establish a browser session before navigation"
+    );
+  } finally {
+    await context.close();
+  }
+}
+
+async function registrationRejectsInvalidNamesAndDuplicateEmail(browser) {
+  const context = await browser.newContext();
+  try {
+    const page = await context.newPage();
+    page.setDefaultTimeout(15_000);
+    await page.goto(`${frontendUrl}/auth/sign-up`);
+    await page.getByRole("heading", { name: "Creer un compte" }).waitFor();
+
+    await page.getByLabel("E-mail").fill("invalid-names@example.com");
+    await page.getByLabel(/^Mot de passe/).fill("BrowserPassword123!");
+    await page.getByLabel("Confirmez le mot de passe").fill("BrowserPassword123!");
+    await page.getByRole("button", { name: "Créer un compte" }).click();
+    assert.equal(
+      await page.getByLabel("Prénom").evaluate((input) => input.validity.valueMissing),
+      true
+    );
+    assert.equal(
+      await page.getByLabel(/^Nom/).evaluate((input) => input.validity.valueMissing),
+      true
+    );
+
+    const invalidResponse = await page.evaluate(async () => {
+      const response = await fetch("/api/auth/sign-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: "A".repeat(101),
+          lastName: "Signup",
+          email: "too-long-name@example.com",
+          password: "BrowserPassword123!",
+        }),
+      });
+      return { status: response.status, body: await response.json() };
+    });
+    assert.equal(invalidResponse.status, 400);
+    const invalidBody = invalidResponse.body;
+    assert.equal(invalidBody.error.status, 400);
+    assert.equal(typeof invalidBody.error.name, "string");
+    assert.equal(typeof invalidBody.error.message, "string");
+    assert.equal(typeof invalidBody.error.details, "object");
+
+    await page.getByLabel("Prénom").fill("Duplicate");
+    await page.getByLabel(/^Nom/).fill("User");
+    await page.getByLabel("E-mail").fill("demo@example.com");
+    await page.getByLabel(/^Mot de passe/).fill("BrowserPassword123!");
+    await page.getByLabel("Confirmez le mot de passe").fill("BrowserPassword123!");
+    await page.getByRole("button", { name: "Créer un compte" }).click();
+    await page.getByText("Cette adresse e-mail est déjà utilisée.", { exact: true }).waitFor();
+    assert.equal(new URL(page.url()).pathname, "/auth/sign-up");
+  } finally {
+    await context.close();
   }
 }
 
@@ -51,9 +147,11 @@ async function registrationRequiresConfirmationAndPreservesReturnPath(browser) {
       `/auth/sign-in?${new URLSearchParams({ returnTo })}`
     );
 
-    await page.getByLabel("Nom complet").fill("Browser Signup");
+    await page.getByLabel("Prénom").fill("Browser");
+    await page.getByLabel(/^Nom/).fill("Signup");
+    await page.getByLabel("Organisation (facultatif)").fill("Carbon Cut Test");
     await page.getByLabel("E-mail").fill(email);
-    await page.getByLabel("Mot de passe", { exact: true }).fill("BrowserPassword123!");
+    await page.getByLabel(/^Mot de passe/).fill("BrowserPassword123!");
     await page.getByLabel("Confirmez le mot de passe").fill("BrowserPassword123!");
 
     const registrationResponsePromise = page.waitForResponse(
@@ -66,6 +164,13 @@ async function registrationRequiresConfirmationAndPreservesReturnPath(browser) {
       page.getByRole("button", { name: "Créer un compte" }).click(),
     ]);
     assert.equal(registrationResponse.status(), 200);
+    assert.deepEqual(registrationResponse.request().postDataJSON(), {
+      firstName: "Browser",
+      lastName: "Signup",
+      email,
+      organisation: "Carbon Cut Test",
+      password: "BrowserPassword123!",
+    });
 
     await page.waitForURL((url) => url.pathname === "/auth/confirm-email");
     let currentUrl = new URL(page.url());

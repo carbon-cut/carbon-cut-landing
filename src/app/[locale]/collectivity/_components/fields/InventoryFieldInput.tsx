@@ -13,7 +13,9 @@ import {
   TName,
 } from "@/components/ui/forms";
 import { Input as InputRoot, type InputIcon } from "@/components/ui/input";
+import { FieldRequired } from "@/components/ui/field-help";
 import { cn } from "@/lib/utils";
+import { useScopedI18n } from "@/locales/client";
 
 type Props<T extends FieldValues> = {
   form: UseFormReturn<T, undefined>;
@@ -21,6 +23,7 @@ type Props<T extends FieldValues> = {
   placeholder?: string;
   label?: string;
   description?: string;
+  autoComplete?: string;
   type?: React.HTMLInputTypeAttribute | undefined;
   icon?: InputIcon;
   unitAdornment?: React.ReactNode;
@@ -43,6 +46,7 @@ function InventoryFieldInput<T extends FieldValues>({
   labelClassName,
   placeholder,
   description,
+  autoComplete,
   type,
   icon,
   unitAdornment,
@@ -58,6 +62,7 @@ function InventoryFieldInput<T extends FieldValues>({
 }: Props<T>) {
   const unitRef = React.useRef<HTMLSpanElement>(null);
   const [unitPx, setUnitPx] = React.useState<number>(0);
+  const tErrors = useScopedI18n("forms.errors");
 
   React.useLayoutEffect(() => {
     if (!unitAdornment) {
@@ -98,26 +103,29 @@ function InventoryFieldInput<T extends FieldValues>({
               )}
             >
               {label}
-              {required && <span className="text-error-600"> *</span>}
+              {required ? (
+                <FieldRequired srLabel={tErrors("Required")} className="text-error-600" />
+              ) : null}
             </FormLabel>
           ) : null}
 
           <div className={cn("w-full inline-block")}>
-            <FormControl>
-              <div
-                className={cn(
-                  "relative flex h-8 w-full items-center gap-1 rounded-md border border-solid border-neutral-border bg-default-background px-2 focus-within:border-brand-600",
-                  fieldState.error ? "border-error-600" : "",
-                  disabled ? "border-neutral-200 bg-neutral-200" : ""
-                )}
-              >
-                <div className="flex grow shrink-0 basis-0 self-stretch px-1">
+            <div
+              className={cn(
+                "relative flex h-8 w-full items-center gap-1 rounded-md border border-solid border-neutral-border bg-default-background px-2 focus-within:border-brand-600",
+                fieldState.error ? "border-error-600" : "",
+                disabled ? "border-neutral-200 bg-neutral-200" : ""
+              )}
+            >
+              <div className="flex grow shrink-0 basis-0 self-stretch px-1">
+                <FormControl>
                   <InputRoot
                     ref={field.ref}
                     icon={icon}
                     disabled={disabled}
                     required={required}
                     placeholder={placeholder}
+                    autoComplete={autoComplete}
                     type={type}
                     value={field.value ?? ""}
                     style={
@@ -171,28 +179,28 @@ function InventoryFieldInput<T extends FieldValues>({
                     }}
                     name={field.name}
                   />
-                </div>
+                </FormControl>
+              </div>
 
-                {unitAdornment ? (
-                  <div
+              {unitAdornment ? (
+                <div
+                  className={cn(
+                    "pointer-events-none absolute inset-y-0 flex items-center",
+                    unitAdornmentPlacement === "end" ? "right-2.5" : "left-2.5"
+                  )}
+                >
+                  <span
+                    ref={unitRef}
                     className={cn(
-                      "pointer-events-none absolute inset-y-0 flex items-center",
-                      unitAdornmentPlacement === "end" ? "right-2.5" : "left-2.5"
+                      "rounded-full border border-input bg-muted/50 px-2 text-xs font-medium text-foreground/70",
+                      size === "xl" ? "h-6 leading-6" : "h-5 leading-5"
                     )}
                   >
-                    <span
-                      ref={unitRef}
-                      className={cn(
-                        "rounded-full border border-input bg-muted/50 px-2 text-xs font-medium text-foreground/70",
-                        size === "xl" ? "h-6 leading-6" : "h-5 leading-5"
-                      )}
-                    >
-                      {unitAdornment}
-                    </span>
-                  </div>
-                ) : null}
-              </div>
-            </FormControl>
+                    {unitAdornment}
+                  </span>
+                </div>
+              ) : null}
+            </div>
           </div>
 
           {description ? <FormDescription>{description}</FormDescription> : null}

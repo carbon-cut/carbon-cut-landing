@@ -484,7 +484,7 @@ export function assignMockCollectivitySubscriptionPlaceToSelf(
     id: state.nextClaimId++,
     claimantEmail: user.email,
     claimantUserId: user.id,
-    claimantFullName: user.username,
+    claimantFullName: `${user.firstName} ${user.lastName}`,
     projectId: null,
     source: "self_assignment",
     status: "approved",

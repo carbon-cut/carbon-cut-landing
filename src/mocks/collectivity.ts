@@ -12,7 +12,8 @@ export const COLLECTIVITY_MOCK_PASSWORD = "123";
 export const COLLECTIVITY_MOCK_USERS = {
   developedInventory: {
     id: 4,
-    username: "collectivity-ready-user",
+    firstName: "Collectivity",
+    lastName: "Ready",
     email: "collectivity.ready@example.com",
     planId: ["grand-sfax-inventory"],
     setup: {
@@ -35,7 +36,8 @@ export const COLLECTIVITY_MOCK_USERS = {
   },
   noInventory: {
     id: 5,
-    username: "collectivity-no-inventory-user",
+    firstName: "Collectivity",
+    lastName: "No Inventory",
     email: "collectivity.no-inventory@example.com",
     planId: undefined,
     setup: null,
@@ -43,7 +45,8 @@ export const COLLECTIVITY_MOCK_USERS = {
   },
   newlyCreated: {
     id: 6,
-    username: "collectivity-new-user",
+    firstName: "Collectivity",
+    lastName: "New User",
     email: "collectivity.new@example.com",
     planId: undefined,
     setup: null,
@@ -51,7 +54,8 @@ export const COLLECTIVITY_MOCK_USERS = {
   },
   superUser: {
     id: 7,
-    username: "collectivity-super-user",
+    firstName: "Collectivity",
+    lastName: "Super User",
     email: "collectivity.super@example.com",
     planId: ["grand-sfax-inventory"],
     setup: {
@@ -74,7 +78,8 @@ export const COLLECTIVITY_MOCK_USERS = {
   },
   subscriptionDemo: {
     id: 8,
-    username: "sub-test-user",
+    firstName: "Subscription",
+    lastName: "Demo",
     email: "subTest@example.com",
     planId: undefined,
     setup: null,
@@ -82,7 +87,8 @@ export const COLLECTIVITY_MOCK_USERS = {
   },
   municipalAssetsOnly: {
     id: 9,
-    username: "municipal-assets-only-user",
+    firstName: "Municipal Assets",
+    lastName: "User",
     email: "collectivity.municipal-assets@example.com",
     planId: ["municipal-assets-only"],
     setup: {

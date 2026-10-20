@@ -3681,9 +3681,10 @@ export default {
         ],
       },
       form: {
-        fullName: "Nom complet",
-        username: "Nom d'utilisateur",
+        firstName: "Prénom",
+        lastName: "Nom",
         email: "E-mail",
+        organisation: "Organisation (facultatif)",
         password: "Mot de passe",
         passwordConfirm: "Confirmez le mot de passe",
         submit: "Créer un compte",
@@ -3696,7 +3697,7 @@ export default {
         login: "Se connecter",
       },
       error: {
-        identifierTaken: "Cet e-mail ou ce nom d'utilisateur est deja utilise.",
+        emailTaken: "Cette adresse e-mail est déjà utilisée.",
         disabled: "L'inscription est desactivee pour le moment.",
         defaultRole: "La configuration d'inscription est incomplete.",
         passwordMismatch: "Les mots de passe ne correspondent pas.",
@@ -4552,6 +4553,8 @@ export default {
     errors: {
       Required: "Obligatoire",
       Invalid: "Invalide",
+      "Invalid email": "Adresse e-mail invalide.",
+      passwordMismatch: "Les mots de passe ne correspondent pas.",
       nonNegative: "0 ou plus",
       between0And100: "Valeur entre 0 et 100",
       manureManagementSharesMustTotal100:

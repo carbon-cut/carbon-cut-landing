@@ -25,7 +25,8 @@ describe("auth access helpers", () => {
       authenticated: true,
       user: {
         id: 4,
-        username: "collectivity-user",
+        firstName: "Collectivity",
+        lastName: "User",
         email: "collectivity.ready@example.com",
         provider: "local",
         confirmed: true,
@@ -46,7 +47,8 @@ describe("auth access helpers", () => {
       authenticated: true,
       user: {
         id: 1,
-        username: "demo-user",
+        firstName: "Demo",
+        lastName: "User",
         email: "demo@example.com",
         provider: "local",
         confirmed: true,
@@ -66,7 +68,8 @@ describe("auth access helpers", () => {
       authenticated: true,
       user: {
         id: 5,
-        username: "collectivity-no-inventory-user",
+        firstName: "Collectivity",
+        lastName: "No Inventory",
         email: "collectivity.no-inventory@example.com",
         provider: "local",
         confirmed: true,
@@ -89,7 +92,8 @@ describe("auth access helpers", () => {
       authenticated: true,
       user: {
         id: 4,
-        username: "collectivity-user",
+        firstName: "Collectivity",
+        lastName: "User",
         email: "collectivity.ready@example.com",
         provider: "local",
         confirmed: true,
@@ -113,7 +117,8 @@ describe("auth access helpers", () => {
       authenticated: true,
       user: {
         id: 7,
-        username: "collectivity-super-user",
+        firstName: "Collectivity",
+        lastName: "Super User",
         email: "collectivity.super@example.com",
         provider: "local",
         confirmed: true,
@@ -141,7 +146,8 @@ describe("auth access helpers", () => {
       authenticated: true,
       user: {
         id: 4,
-        username: "collectivity-user",
+        firstName: "Collectivity",
+        lastName: "User",
         email: "collectivity.ready@example.com",
         provider: "local",
         confirmed: true,
