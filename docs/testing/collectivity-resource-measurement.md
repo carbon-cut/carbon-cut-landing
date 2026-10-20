@@ -1,6 +1,6 @@
 # Collectivity resource measurement protocol
 
-Status: agreed approach for [landing issue #102](https://github.com/carbon-cut/carbon-cut-landing/issues/102). No resource measurement has been run under this protocol yet. The [preceding research](https://github.com/carbon-cut/carbon-cut-landing/issues/101) found that the archived Household benchmark and the single-project Sfax integration test cannot size active Collectivity.
+Status: agreed approach for [landing issue #102](https://github.com/carbon-cut/carbon-cut-landing/issues/102). The first local split-host profile is recorded in [the local run report](./collectivity-resource-measurement-local-run.md). The [preceding research](https://github.com/carbon-cut/carbon-cut-landing/issues/101) found that the archived Household benchmark and the single-project Sfax integration test cannot size active Collectivity.
 
 ## Purpose and limits
 

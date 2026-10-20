@@ -125,6 +125,13 @@ for (const session of workers) {
   });
   if (save.status !== 200)
     throw new Error(`Draft smoke check failed for worker ${session.worker}.`);
+  const previousResult = await request(
+    session,
+    "smoke-previous-result-read",
+    endpoint(session, "/result")
+  );
+  if (previousResult.status !== 200 || !previousResult.body?.data?.calculationRunId)
+    throw new Error(`Fixture needs an existing stored result for worker ${session.worker}.`);
   const calculation = await request(session, "smoke-calculation", endpoint(session, "/calculate"), {
     method: "POST",
     body: JSON.stringify({ inventoryInput: session.inventoryInput }),
@@ -137,11 +144,34 @@ for (const session of workers) {
     throw new Error(`Calculation smoke check failed for worker ${session.worker}.`);
   }
   const result = await request(session, "smoke-result-read", endpoint(session, "/result"));
-  if (result.status !== 200)
+  if (
+    result.status !== 200 ||
+    !result.body?.data?.calculationRunId ||
+    result.body.data.calculationRunId === previousResult.body.data.calculationRunId
+  )
     throw new Error(`Stored result smoke check failed for worker ${session.worker}.`);
+  const sessionRead = await request(session, "smoke-session-read", "/api/auth/session");
+  if (sessionRead.status !== 200)
+    throw new Error(`Session smoke check failed for worker ${session.worker}.`);
+  const projectPage = await request(
+    session,
+    "smoke-project-navigation",
+    `/collectivity/projects/${encodeURIComponent(session.projectSlug)}/ghg-inventory`
+  );
+  if (projectPage.status !== 200)
+    throw new Error(`Project navigation smoke check failed for worker ${session.worker}.`);
 }
 
 async function doAction(session, sequence) {
+  if (sequence % 50 === 0) return signIn(session);
+  if (sequence % 8 === 0) return request(session, "session-read", "/api/auth/session");
+  if (sequence % 5 === 0) {
+    return request(
+      session,
+      "project-navigation",
+      `/collectivity/projects/${encodeURIComponent(session.projectSlug)}/ghg-inventory`
+    );
+  }
   const roll =
     sequence % calculateEvery === 0 ? "calculate" : randomInt(0, 10) < 3 ? "save" : "read";
   if (roll === "read") return request(session, "inventory-read", endpoint(session));

@@ -1,7 +1,14 @@
-import { spawn, spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
 import { resolve } from "node:path";
 
 const backendDir = resolve(process.env.INTEGRATION_BACKEND_DIR ?? "../carbon-cut-backend");
+const requireBackend = createRequire(resolve(backendDir, "package.json"));
+requireBackend("dotenv").config({
+  path: resolve(backendDir, ".env"),
+  override: false,
+  quiet: true,
+});
 const requiredDatabaseVariables = [
   "DATABASE_TEST_HOST",
   "DATABASE_TEST_PORT",
@@ -41,29 +48,23 @@ console.log(
   `Verifying the backend test database before production launch (database: ${process.env.DATABASE_TEST_NAME}).`
 );
 await run("npm", ["run", "test:integration:verify-db"], verifyEnv);
-const databaseCheck = spawnSync("psql", ["-X", "-A", "-t", "-c", "SELECT current_database()"], {
-  encoding: "utf8",
-  env: {
-    ...process.env,
-    PGHOST: process.env.DATABASE_TEST_HOST,
-    PGPORT: process.env.DATABASE_TEST_PORT,
-    PGDATABASE: process.env.DATABASE_TEST_NAME,
-    PGUSER: process.env.DATABASE_TEST_USERNAME,
-    PGPASSWORD: process.env.DATABASE_TEST_PASSWORD,
-    ...(process.env.DATABASE_TEST_SSL === undefined
-      ? {}
-      : { PGSSLMODE: process.env.DATABASE_TEST_SSL === "true" ? "require" : "disable" }),
-  },
+const { Client } = requireBackend("pg");
+const database = new Client({
+  host: process.env.DATABASE_TEST_HOST,
+  port: Number(process.env.DATABASE_TEST_PORT),
+  database: process.env.DATABASE_TEST_NAME,
+  user: process.env.DATABASE_TEST_USERNAME,
+  password: process.env.DATABASE_TEST_PASSWORD,
+  ssl: process.env.DATABASE_TEST_SSL === "true",
+  connectionTimeoutMillis: 10000,
 });
-if (databaseCheck.error || databaseCheck.status !== 0) {
-  throw new Error(
-    `Could not independently verify the PostgreSQL test connection with psql: ${databaseCheck.error?.message ?? databaseCheck.stderr.trim()}`
-  );
-}
-const connectedDatabase = databaseCheck.stdout.trim();
+await database.connect();
+const databaseCheck = await database.query("SELECT current_database() AS name");
+await database.end();
+const connectedDatabase = databaseCheck.rows[0]?.name;
 if (connectedDatabase !== process.env.DATABASE_TEST_NAME) {
   throw new Error(
-    `The verified PostgreSQL connection returned ${connectedDatabase}; expected ${process.env.DATABASE_TEST_NAME}.`
+    `The verified PostgreSQL connection returned ${connectedDatabase ?? "unknown"}; expected ${process.env.DATABASE_TEST_NAME}.`
   );
 }
 console.log(`Independent PostgreSQL check confirmed current_database() = ${connectedDatabase}.`);
@@ -87,17 +88,22 @@ if (process.env.DATABASE_TEST_SSL !== undefined)
 console.log(
   `Starting production Strapi against verified test database ${process.env.DATABASE_TEST_NAME}.`
 );
-
+const connectionProbe = new Client({
+  host: process.env.DATABASE_TEST_HOST,
+  port: Number(process.env.DATABASE_TEST_PORT),
+  database: process.env.DATABASE_TEST_NAME,
+  user: process.env.DATABASE_TEST_USERNAME,
+  password: process.env.DATABASE_TEST_PASSWORD,
+  ssl: process.env.DATABASE_TEST_SSL === "true",
+  connectionTimeoutMillis: 10000,
+});
+await connectionProbe.connect();
+const launchedAt = new Date();
 const server = spawn("npm", ["run", "start"], {
   cwd: backendDir,
   env: productionEnv,
   stdio: "inherit",
 });
-const stop = (signal) => {
-  if (server.exitCode === null) server.kill(signal);
-};
-process.once("SIGINT", () => stop("SIGINT"));
-process.once("SIGTERM", () => stop("SIGTERM"));
 server.once("error", (error) => {
   console.error(error.message);
   process.exitCode = 1;
@@ -105,3 +111,51 @@ server.once("error", (error) => {
 server.once("exit", (code, signal) => {
   process.exitCode = code ?? (signal ? 1 : 0);
 });
+try {
+  await waitForProductionDatabaseConnection(server, connectionProbe, launchedAt);
+  console.log(`Running Strapi confirmed a live PostgreSQL connection to ${connectedDatabase}.`);
+  await connectionProbe.end();
+} catch (error) {
+  server.kill("SIGTERM");
+  await connectionProbe.end();
+  throw error;
+}
+const stop = (signal) => {
+  if (server.exitCode === null) server.kill(signal);
+};
+process.once("SIGINT", () => stop("SIGINT"));
+process.once("SIGTERM", () => stop("SIGTERM"));
+
+async function waitForProductionDatabaseConnection(serverProcess, probe, launchedAt) {
+  const port = Number(process.env.PORT ?? 1337);
+  const healthUrl = `http://127.0.0.1:${port}/_health`;
+  const deadline = Date.now() + 120000;
+  while (Date.now() < deadline) {
+    if (serverProcess.exitCode !== null || serverProcess.signalCode !== null) {
+      throw new Error(
+        "Production Strapi exited before the database connection could be confirmed."
+      );
+    }
+    try {
+      const health = await fetch(healthUrl, { signal: AbortSignal.timeout(2000) });
+      if (health.status === 204) {
+        const result = await probe.query(
+          `SELECT count(*)::integer AS connections
+           FROM pg_stat_activity
+           WHERE datname = $1
+             AND usename = $2
+             AND backend_start >= $3
+             AND pid <> pg_backend_pid()`,
+          [process.env.DATABASE_TEST_NAME, process.env.DATABASE_TEST_USERNAME, launchedAt]
+        );
+        if (result.rows[0]?.connections > 0) return;
+      }
+    } catch {
+      // Strapi or its database pool may still be starting.
+    }
+    await new Promise((resolveWait) => setTimeout(resolveWait, 1000));
+  }
+  throw new Error(
+    `Production Strapi did not expose ${healthUrl} and a matching live connection to ${process.env.DATABASE_TEST_NAME} within 120 seconds.`
+  );
+}
