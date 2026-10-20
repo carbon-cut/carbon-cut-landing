@@ -204,7 +204,9 @@ async function runWindow(seconds, phase) {
   );
 }
 
+const warmupStarted = Date.now();
 await runWindow(warmupSeconds, "warmup");
+const warmupCompleted = Date.now();
 const timedStart = records.length;
 const measurementStarted = Date.now();
 await runWindow(durationSeconds, "measurement");
@@ -235,7 +237,10 @@ const summary = Object.fromEntries(
 const report = {
   baseUrl: baseUrl.origin,
   sessions: activeSessions,
-  warmupSeconds,
+  requestedWarmupSeconds: warmupSeconds,
+  actualWarmupSeconds: Number(((warmupCompleted - warmupStarted) / 1000).toFixed(2)),
+  warmupStartedAt: new Date(warmupStarted).toISOString(),
+  warmupCompletedAt: new Date(warmupCompleted).toISOString(),
   requestedMeasurementSeconds: durationSeconds,
   actualMeasurementSeconds: Number(elapsedSeconds.toFixed(2)),
   thinkTimeMs: [minThinkMs, maxThinkMs],
