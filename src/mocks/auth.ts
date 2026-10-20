@@ -29,15 +29,13 @@ const refreshTokens = new Map<string, string>();
 const accessTokens = new Map<string, string>();
 let nextUserId = 1000;
 
-function buildError(status: number, message: string, code: AuthErrorCode): AuthErrorPayload {
+function buildError(status: number, message: string, code?: AuthErrorCode): AuthErrorPayload {
   return {
     error: {
       status,
       name: "MockAuthError",
       message,
-      details: {
-        code,
-      },
+      details: code ? { code } : {},
     },
   };
 }
@@ -220,11 +218,26 @@ export class MockAuthError extends Error {
   status: number;
   body: AuthErrorPayload;
 
-  constructor(status: number, message: string, code: AuthErrorCode) {
+  constructor(status: number, message: string, code?: AuthErrorCode) {
     super(message);
     this.name = "MockAuthError";
     this.status = status;
     this.body = buildError(status, message, code);
+  }
+}
+
+class MockRegistrationValidationError extends MockAuthError {
+  constructor() {
+    super(400, "Invalid registration data");
+    this.body = {
+      data: null,
+      error: {
+        status: this.status,
+        name: "ValidationError",
+        message: this.message,
+        details: {},
+      },
+    };
   }
 }
 
@@ -247,6 +260,20 @@ export function mockSignIn(body: SignInRequest): AuthSessionResponse {
 }
 
 export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse | AuthSessionResponse {
+  const firstName = body.firstName.trim();
+  const lastName = body.lastName.trim();
+  const organisation = body.organisation?.trim() || null;
+
+  if (
+    firstName.length === 0 ||
+    firstName.length > 100 ||
+    lastName.length === 0 ||
+    lastName.length > 100 ||
+    (organisation !== null && organisation.length > 200)
+  ) {
+    throw new MockRegistrationValidationError();
+  }
+
   const normalizedEmail = body.email.toLowerCase();
   const existingByEmail = requireUser(normalizedEmail);
   if (existingByEmail) {
@@ -255,9 +282,9 @@ export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse | A
 
   const user: MockUserRecord = {
     id: nextUserId++,
-    firstName: body.firstName.trim(),
-    lastName: body.lastName.trim(),
-    organisation: body.organisation?.trim() || null,
+    firstName,
+    lastName,
+    organisation,
     email: normalizedEmail,
     provider: "local",
     confirmed: process.env.MOCK_AUTH_CONFIRMATION_REQUIRED === "false",

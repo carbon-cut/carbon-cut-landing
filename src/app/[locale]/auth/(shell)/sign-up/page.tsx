@@ -5,13 +5,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  getErrorCode,
-  isUpstreamAuthError,
-} from "@/app/[locale]/auth/_components/auth-api";
+import { getErrorCode, isUpstreamAuthError } from "@/app/[locale]/auth/_components/auth-api";
 import { registrationMutationOptions } from "@/app/[locale]/auth/_lib/queries";
 import AuthBrand from "@/app/[locale]/auth/_components/auth-brand";
 import { InventoryFieldInput } from "@/app/[locale]/collectivity/_components/fields";
@@ -20,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/forms";
 import Typography from "@/components/ui/typography";
 import { sanitizeReturnTo } from "@/lib/auth/redirect";
+import { useAuth } from "@/lib/auth/auth-context";
 import { useScopedI18n } from "@/locales/client";
 import {
   getAuthConfirmationRequiredRoute,
@@ -32,6 +30,8 @@ export default function SignUpPage() {
   const t = useScopedI18n("(auth).signup");
   const tCommon = useScopedI18n("(auth).common");
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { refetchSession } = useAuth();
   const searchParams = useSearchParams();
   const signupSchema = z
     .object({
@@ -107,6 +107,8 @@ export default function SignUpPage() {
     const returnTo = sanitizeReturnTo(searchParams.get("returnTo"));
 
     if ("authenticated" in result.data) {
+      queryClient.clear();
+      await refetchSession();
       router.replace(returnTo ?? getHomeRoute());
       return;
     }
@@ -167,20 +169,20 @@ export default function SignUpPage() {
                 </Alert>
               ) : null}
               <div className="grid grid-cols-2 gap-4">
-              <InventoryFieldInput
-                form={form}
-                name="firstName"
-                label={t("form.firstName")}
-                autoComplete="given-name"
-                required
-              />
-              <InventoryFieldInput
-                form={form}
-                name="lastName"
-                label={t("form.lastName")}
-                autoComplete="family-name"
-                required
-              />
+                <InventoryFieldInput
+                  form={form}
+                  name="firstName"
+                  label={t("form.firstName")}
+                  autoComplete="given-name"
+                  required
+                />
+                <InventoryFieldInput
+                  form={form}
+                  name="lastName"
+                  label={t("form.lastName")}
+                  autoComplete="family-name"
+                  required
+                />
               </div>
               <InventoryFieldInput
                 form={form}

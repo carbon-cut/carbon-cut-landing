@@ -110,15 +110,15 @@ function InventoryFieldInput<T extends FieldValues>({
           ) : null}
 
           <div className={cn("w-full inline-block")}>
-            <FormControl>
-              <div
-                className={cn(
-                  "relative flex h-8 w-full items-center gap-1 rounded-md border border-solid border-neutral-border bg-default-background px-2 focus-within:border-brand-600",
-                  fieldState.error ? "border-error-600" : "",
-                  disabled ? "border-neutral-200 bg-neutral-200" : ""
-                )}
-              >
-                <div className="flex grow shrink-0 basis-0 self-stretch px-1">
+            <div
+              className={cn(
+                "relative flex h-8 w-full items-center gap-1 rounded-md border border-solid border-neutral-border bg-default-background px-2 focus-within:border-brand-600",
+                fieldState.error ? "border-error-600" : "",
+                disabled ? "border-neutral-200 bg-neutral-200" : ""
+              )}
+            >
+              <div className="flex grow shrink-0 basis-0 self-stretch px-1">
+                <FormControl>
                   <InputRoot
                     ref={field.ref}
                     icon={icon}
@@ -179,28 +179,28 @@ function InventoryFieldInput<T extends FieldValues>({
                     }}
                     name={field.name}
                   />
-                </div>
+                </FormControl>
+              </div>
 
-                {unitAdornment ? (
-                  <div
+              {unitAdornment ? (
+                <div
+                  className={cn(
+                    "pointer-events-none absolute inset-y-0 flex items-center",
+                    unitAdornmentPlacement === "end" ? "right-2.5" : "left-2.5"
+                  )}
+                >
+                  <span
+                    ref={unitRef}
                     className={cn(
-                      "pointer-events-none absolute inset-y-0 flex items-center",
-                      unitAdornmentPlacement === "end" ? "right-2.5" : "left-2.5"
+                      "rounded-full border border-input bg-muted/50 px-2 text-xs font-medium text-foreground/70",
+                      size === "xl" ? "h-6 leading-6" : "h-5 leading-5"
                     )}
                   >
-                    <span
-                      ref={unitRef}
-                      className={cn(
-                        "rounded-full border border-input bg-muted/50 px-2 text-xs font-medium text-foreground/70",
-                        size === "xl" ? "h-6 leading-6" : "h-5 leading-5"
-                      )}
-                    >
-                      {unitAdornment}
-                    </span>
-                  </div>
-                ) : null}
-              </div>
-            </FormControl>
+                    {unitAdornment}
+                  </span>
+                </div>
+              ) : null}
+            </div>
           </div>
 
           {description ? <FormDescription>{description}</FormDescription> : null}
