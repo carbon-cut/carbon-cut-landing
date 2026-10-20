@@ -260,8 +260,8 @@ export function mockSignIn(body: SignInRequest): AuthSessionResponse {
 }
 
 export function mockSignUp(body: SignUpRequest): RegistrationPendingResponse | AuthSessionResponse {
-  const firstName = body.firstName.trim();
-  const lastName = body.lastName.trim();
+  const firstName = typeof body.firstName === "string" ? body.firstName.trim() : "";
+  const lastName = typeof body.lastName === "string" ? body.lastName.trim() : "";
   const organisation = body.organisation?.trim() || null;
 
   if (
