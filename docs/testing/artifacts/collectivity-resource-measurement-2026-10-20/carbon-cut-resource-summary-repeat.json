@@ -1,10 +1,10 @@
 {
-  "preparedAt": "2026-10-20T03:50:48.258Z",
-  "backendCommit": "33ccbc7e663034ae73bb72f40b7f8624f29233a2",
+  "preparedAt": "2026-10-20T04:58:06.932Z",
+  "backendCommit": "81178ede3de95febfe9ac086a769679a5721b46c",
   "database": {
     "name": "carbon_cut_test",
     "server_version": "16.3",
-    "database_size_bytes": "84365795"
+    "database_size_bytes": "87765475"
   },
   "projects": 25,
   "inventoryPayloadBytesPerProject": 18292,
@@ -22,15 +22,15 @@
   "totalTableSizes": [
     {
       "table_name": "calculation_results",
-      "total_size_bytes": "18653184"
+      "total_size_bytes": "21012480"
     },
     {
       "table_name": "calculation_runs",
-      "total_size_bytes": "7135232"
+      "total_size_bytes": "7929856"
     },
     {
       "table_name": "inventories",
-      "total_size_bytes": "458752"
+      "total_size_bytes": "614400"
     },
     {
       "table_name": "projects",
@@ -38,7 +38,7 @@
     },
     {
       "table_name": "subscription_claims",
-      "total_size_bytes": "81920"
+      "total_size_bytes": "98304"
     },
     {
       "table_name": "subscription_quotes",
@@ -77,5 +77,5 @@
     "resource-measurement-25"
   ],
   "manifestPath": "/tmp/carbon-cut-resource-sessions.json",
-  "resetCommand": "npm run resource:measurement:prepare -- --count 25 --manifest /tmp/carbon-cut-resource-sessions.json --report /tmp/carbon-cut-resource-summary-repeat.json"
+  "resetCommand": "npm run resource:measurement:prepare -- --count 25 --manifest /tmp/carbon-cut-resource-sessions.json --report /tmp/carbon-cut-resource-summary-final-repeat.json"
 }

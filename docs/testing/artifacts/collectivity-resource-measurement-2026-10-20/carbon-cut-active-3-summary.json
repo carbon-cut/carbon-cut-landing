@@ -1,71 +1,85 @@
 {
   "baseUrl": "http://localhost:3010",
   "sessions": 3,
-  "warmupSeconds": 15,
+  "requestedWarmupSeconds": 15,
+  "actualWarmupSeconds": 17.32,
+  "warmupStartedAt": "2026-10-20T04:52:09.167Z",
+  "warmupCompletedAt": "2026-10-20T04:52:26.492Z",
   "requestedMeasurementSeconds": 60,
-  "actualMeasurementSeconds": 62.82,
+  "actualMeasurementSeconds": 63.95,
   "thinkTimeMs": [
     800,
     3000
   ],
   "calculateEveryActions": 12,
-  "startedAt": "2026-10-20T03:45:21.406Z",
-  "completedAt": "2026-10-20T03:46:24.226Z",
+  "startedAt": "2026-10-20T04:52:26.492Z",
+  "completedAt": "2026-10-20T04:53:30.447Z",
   "operations": {
-    "session-read": {
-      "requests": 12,
-      "requestsPerSecond": 0.191,
-      "errors": 0,
-      "p50Ms": 4.96,
-      "p95Ms": 28.78,
-      "p99Ms": 28.78
-    },
-    "draft-save": {
-      "requests": 12,
-      "requestsPerSecond": 0.191,
-      "errors": 0,
-      "p50Ms": 47.62,
-      "p95Ms": 129.31,
-      "p99Ms": 129.31
-    },
     "project-navigation": {
-      "requests": 18,
-      "requestsPerSecond": 0.287,
+      "requests": 19,
+      "requestsPerSecond": 0.297,
       "errors": 0,
-      "p50Ms": 141.01,
-      "p95Ms": 193.15,
-      "p99Ms": 193.15
-    },
-    "inventory-read": {
-      "requests": 40,
-      "requestsPerSecond": 0.637,
-      "errors": 0,
-      "p50Ms": 30.44,
-      "p95Ms": 39.76,
-      "p99Ms": 79.91
+      "p50Ms": 167.37,
+      "p95Ms": 308.99,
+      "p99Ms": 308.99
     },
     "calculation": {
-      "requests": 4,
-      "requestsPerSecond": 0.064,
+      "requests": 7,
+      "requestsPerSecond": 0.109,
       "errors": 0,
-      "p50Ms": 129.85,
-      "p95Ms": 188.62,
-      "p99Ms": 188.62,
+      "p50Ms": 163.06,
+      "p95Ms": 448.32,
+      "p99Ms": 448.32,
       "calculationDurationMs": [
-        126.16,
-        129.85,
-        130.05,
-        188.62
+        121.37,
+        126.68,
+        139.35,
+        163.06,
+        167.63,
+        254.3,
+        448.32
       ]
     },
     "result-read": {
-      "requests": 4,
-      "requestsPerSecond": 0.064,
+      "requests": 7,
+      "requestsPerSecond": 0.109,
       "errors": 0,
-      "p50Ms": 33.38,
-      "p95Ms": 44.54,
-      "p99Ms": 44.54
+      "p50Ms": 37.4,
+      "p95Ms": 95.89,
+      "p99Ms": 95.89
+    },
+    "draft-save": {
+      "requests": 25,
+      "requestsPerSecond": 0.391,
+      "errors": 0,
+      "p50Ms": 52.76,
+      "p95Ms": 72.58,
+      "p99Ms": 73.47
+    },
+    "inventory-read": {
+      "requests": 30,
+      "requestsPerSecond": 0.469,
+      "errors": 0,
+      "p50Ms": 30.44,
+      "p95Ms": 42.7,
+      "p99Ms": 50.61
+    },
+    "session-read": {
+      "requests": 11,
+      "requestsPerSecond": 0.172,
+      "errors": 0,
+      "p50Ms": 5.33,
+      "p95Ms": 44.8,
+      "p99Ms": 44.8
+    },
+    "sign-in": {
+      "requests": 1,
+      "requestsPerSecond": 0.016,
+      "errors": 0,
+      "p50Ms": 116.54,
+      "p95Ms": 116.54,
+      "p99Ms": 116.54
     }
   },
-  "rawSamples": "/tmp/carbon-cut-active-3-http.jsonl"
+  "rawSamples": "carbon-cut-active-3-http.jsonl"
 }

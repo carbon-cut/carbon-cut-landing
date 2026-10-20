@@ -1,68 +1,80 @@
 {
   "baseUrl": "http://localhost:3010",
   "sessions": 1,
-  "warmupSeconds": 15,
+  "requestedWarmupSeconds": 15,
+  "actualWarmupSeconds": 16.55,
+  "warmupStartedAt": "2026-10-20T04:39:05.030Z",
+  "warmupCompletedAt": "2026-10-20T04:39:21.581Z",
   "requestedMeasurementSeconds": 60,
-  "actualMeasurementSeconds": 60.1,
+  "actualMeasurementSeconds": 60.4,
   "thinkTimeMs": [
     800,
     3000
   ],
   "calculateEveryActions": 12,
-  "startedAt": "2026-10-20T03:43:44.191Z",
-  "completedAt": "2026-10-20T03:44:44.291Z",
+  "startedAt": "2026-10-20T04:39:21.581Z",
+  "completedAt": "2026-10-20T04:40:21.982Z",
   "operations": {
-    "inventory-read": {
-      "requests": 11,
-      "requestsPerSecond": 0.183,
-      "errors": 0,
-      "p50Ms": 34.06,
-      "p95Ms": 39.93,
-      "p99Ms": 39.93
-    },
     "project-navigation": {
-      "requests": 5,
-      "requestsPerSecond": 0.083,
+      "requests": 6,
+      "requestsPerSecond": 0.099,
       "errors": 0,
-      "p50Ms": 179.97,
-      "p95Ms": 254.24,
-      "p99Ms": 254.24
+      "p50Ms": 175.01,
+      "p95Ms": 207.23,
+      "p99Ms": 207.23
     },
     "draft-save": {
-      "requests": 7,
-      "requestsPerSecond": 0.116,
+      "requests": 6,
+      "requestsPerSecond": 0.099,
       "errors": 0,
-      "p50Ms": 57.2,
-      "p95Ms": 83.53,
-      "p99Ms": 83.53
+      "p50Ms": 52.79,
+      "p95Ms": 73.51,
+      "p99Ms": 73.51
+    },
+    "calculation": {
+      "requests": 2,
+      "requestsPerSecond": 0.033,
+      "errors": 0,
+      "p50Ms": 123.31,
+      "p95Ms": 170.6,
+      "p99Ms": 170.6,
+      "calculationDurationMs": [
+        123.31,
+        170.6
+      ]
+    },
+    "result-read": {
+      "requests": 2,
+      "requestsPerSecond": 0.033,
+      "errors": 0,
+      "p50Ms": 25.22,
+      "p95Ms": 39.68,
+      "p99Ms": 39.68
+    },
+    "inventory-read": {
+      "requests": 11,
+      "requestsPerSecond": 0.182,
+      "errors": 0,
+      "p50Ms": 30.28,
+      "p95Ms": 40.17,
+      "p99Ms": 40.17
     },
     "session-read": {
       "requests": 3,
       "requestsPerSecond": 0.05,
       "errors": 0,
-      "p50Ms": 6.95,
-      "p95Ms": 7.34,
-      "p99Ms": 7.34
+      "p50Ms": 4.56,
+      "p95Ms": 6.05,
+      "p99Ms": 6.05
     },
-    "calculation": {
+    "sign-in": {
       "requests": 1,
       "requestsPerSecond": 0.017,
       "errors": 0,
-      "p50Ms": 150.77,
-      "p95Ms": 150.77,
-      "p99Ms": 150.77,
-      "calculationDurationMs": [
-        150.77
-      ]
-    },
-    "result-read": {
-      "requests": 1,
-      "requestsPerSecond": 0.017,
-      "errors": 0,
-      "p50Ms": 39.54,
-      "p95Ms": 39.54,
-      "p99Ms": 39.54
+      "p50Ms": 100.23,
+      "p95Ms": 100.23,
+      "p99Ms": 100.23
     }
   },
-  "rawSamples": "/tmp/carbon-cut-active-1-http.jsonl"
+  "rawSamples": "carbon-cut-active-1-http.jsonl"
 }
