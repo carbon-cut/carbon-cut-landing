@@ -1,0 +1,68 @@
+{
+  "baseUrl": "http://localhost:3010",
+  "sessions": 1,
+  "warmupSeconds": 15,
+  "requestedMeasurementSeconds": 60,
+  "actualMeasurementSeconds": 60.1,
+  "thinkTimeMs": [
+    800,
+    3000
+  ],
+  "calculateEveryActions": 12,
+  "startedAt": "2026-10-20T03:43:44.191Z",
+  "completedAt": "2026-10-20T03:44:44.291Z",
+  "operations": {
+    "inventory-read": {
+      "requests": 11,
+      "requestsPerSecond": 0.183,
+      "errors": 0,
+      "p50Ms": 34.06,
+      "p95Ms": 39.93,
+      "p99Ms": 39.93
+    },
+    "project-navigation": {
+      "requests": 5,
+      "requestsPerSecond": 0.083,
+      "errors": 0,
+      "p50Ms": 179.97,
+      "p95Ms": 254.24,
+      "p99Ms": 254.24
+    },
+    "draft-save": {
+      "requests": 7,
+      "requestsPerSecond": 0.116,
+      "errors": 0,
+      "p50Ms": 57.2,
+      "p95Ms": 83.53,
+      "p99Ms": 83.53
+    },
+    "session-read": {
+      "requests": 3,
+      "requestsPerSecond": 0.05,
+      "errors": 0,
+      "p50Ms": 6.95,
+      "p95Ms": 7.34,
+      "p99Ms": 7.34
+    },
+    "calculation": {
+      "requests": 1,
+      "requestsPerSecond": 0.017,
+      "errors": 0,
+      "p50Ms": 150.77,
+      "p95Ms": 150.77,
+      "p99Ms": 150.77,
+      "calculationDurationMs": [
+        150.77
+      ]
+    },
+    "result-read": {
+      "requests": 1,
+      "requestsPerSecond": 0.017,
+      "errors": 0,
+      "p50Ms": 39.54,
+      "p95Ms": 39.54,
+      "p99Ms": 39.54
+    }
+  },
+  "rawSamples": "/tmp/carbon-cut-active-1-http.jsonl"
+}

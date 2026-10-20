@@ -26,7 +26,6 @@ const expectedPids = {
   driver:
     args["driver-pid"] === undefined ? null : positiveInt(args["driver-pid"], 0, "driver-pid"),
 };
-const driverPid = Number(args["driver-pid"] ?? 0);
 const required = [
   "DATABASE_TEST_HOST",
   "DATABASE_TEST_PORT",

@@ -1,0 +1,80 @@
+{
+  "baseUrl": "http://localhost:3010",
+  "sessions": 10,
+  "warmupSeconds": 15,
+  "requestedMeasurementSeconds": 60,
+  "actualMeasurementSeconds": 61.93,
+  "thinkTimeMs": [
+    800,
+    3000
+  ],
+  "calculateEveryActions": 12,
+  "startedAt": "2026-10-20T03:48:51.409Z",
+  "completedAt": "2026-10-20T03:49:53.341Z",
+  "operations": {
+    "session-read": {
+      "requests": 36,
+      "requestsPerSecond": 0.581,
+      "errors": 0,
+      "p50Ms": 4.74,
+      "p95Ms": 34.83,
+      "p99Ms": 54.7
+    },
+    "inventory-read": {
+      "requests": 137,
+      "requestsPerSecond": 2.212,
+      "errors": 0,
+      "p50Ms": 31.5,
+      "p95Ms": 97.29,
+      "p99Ms": 122.57
+    },
+    "draft-save": {
+      "requests": 57,
+      "requestsPerSecond": 0.92,
+      "errors": 0,
+      "p50Ms": 53.39,
+      "p95Ms": 223.64,
+      "p99Ms": 245.5
+    },
+    "project-navigation": {
+      "requests": 56,
+      "requestsPerSecond": 0.904,
+      "errors": 0,
+      "p50Ms": 145.95,
+      "p95Ms": 255.17,
+      "p99Ms": 398.51
+    },
+    "calculation": {
+      "requests": 13,
+      "requestsPerSecond": 0.21,
+      "errors": 0,
+      "p50Ms": 171.81,
+      "p95Ms": 237.51,
+      "p99Ms": 237.51,
+      "calculationDurationMs": [
+        134.41,
+        136.28,
+        144.3,
+        158.12,
+        169.81,
+        170.11,
+        171.81,
+        176.7,
+        179.69,
+        203.03,
+        220.94,
+        229.36,
+        237.51
+      ]
+    },
+    "result-read": {
+      "requests": 13,
+      "requestsPerSecond": 0.21,
+      "errors": 0,
+      "p50Ms": 40.39,
+      "p95Ms": 95.2,
+      "p99Ms": 95.2
+    }
+  },
+  "rawSamples": "/tmp/carbon-cut-active-10-http.jsonl"
+}

@@ -54,10 +54,7 @@ The available `Get-Process` CPU resolution reported 0.0% for Windows PostgreSQL 
 ## Artifacts and commands
 
 - Owner-only fixture credentials: `/tmp/carbon-cut-resource-sessions.json` (do not commit or share).
-- Fixture reports: `/tmp/carbon-cut-resource-fixture-summary.json` and `/tmp/carbon-cut-resource-summary-repeat.json`.
-- Driver summaries: `/tmp/carbon-cut-active-{1,3,5,10}-summary.json` and `/tmp/carbon-cut-active-3-repeat-summary.json`.
-- Raw HTTP records: `/tmp/carbon-cut-active-{1,3,5,10}-http.jsonl` and `/tmp/carbon-cut-active-3-repeat-http.jsonl`.
-- Raw resources: `/tmp/carbon-cut-idle.jsonl`, `/tmp/carbon-cut-active-{1,3,5,10}-resources.jsonl`, and `/tmp/carbon-cut-active-3-repeat-resources.jsonl`.
+- Durable fixture reports, driver summaries, and raw timing/resource samples are in [`artifacts/collectivity-resource-measurement-2026-10-20`](./artifacts/collectivity-resource-measurement-2026-10-20/). The Windows hostname in performance-counter paths is redacted; measurements and counter names are unchanged. The local `/tmp` copies remain available on the measurement machine.
 - Fixture reset: `npm run resource:measurement:prepare -- --count 25 --manifest /tmp/carbon-cut-resource-sessions.json --report /tmp/carbon-cut-resource-summary-repeat.json` from the backend checkout.
 - Production Next build: `NEXT_PUBLIC_ENABLE_MSW=false BACKEND_URL=http://127.0.0.1:1338 NEXT_PUBLIC_APP_URL=http://127.0.0.1:3010 npm run build`.
 - Production Strapi: `INTEGRATION_BACKEND_DIR=/home/lenovo/projects/carbon-cut-backend HOST=127.0.0.1 PORT=1338 node scripts/resource-measurement/start-production-strapi.mjs`.

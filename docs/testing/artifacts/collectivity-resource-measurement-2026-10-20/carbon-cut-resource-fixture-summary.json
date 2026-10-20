@@ -1,0 +1,81 @@
+{
+  "preparedAt": "2026-10-20T03:34:45.329Z",
+  "backendCommit": "33ccbc7e663034ae73bb72f40b7f8624f29233a2",
+  "database": {
+    "name": "carbon_cut_test",
+    "server_version": "16.3",
+    "database_size_bytes": "82964963"
+  },
+  "projects": 25,
+  "inventoryPayloadBytesPerProject": 18292,
+  "totalInventoryPayloadBytes": 457300,
+  "rows": {
+    "users": 25,
+    "projects": 25,
+    "inventories": 25,
+    "subscriptions": 25,
+    "claims": 25,
+    "quotes": 25,
+    "calculationRuns": 25,
+    "calculationResults": 25
+  },
+  "totalTableSizes": [
+    {
+      "table_name": "calculation_results",
+      "total_size_bytes": "17743872"
+    },
+    {
+      "table_name": "calculation_runs",
+      "total_size_bytes": "6627328"
+    },
+    {
+      "table_name": "inventories",
+      "total_size_bytes": "499712"
+    },
+    {
+      "table_name": "projects",
+      "total_size_bytes": "114688"
+    },
+    {
+      "table_name": "subscription_claims",
+      "total_size_bytes": "81920"
+    },
+    {
+      "table_name": "subscription_quotes",
+      "total_size_bytes": "319488"
+    },
+    {
+      "table_name": "subscriptions",
+      "total_size_bytes": "122880"
+    }
+  ],
+  "projectSlugs": [
+    "resource-measurement-01",
+    "resource-measurement-02",
+    "resource-measurement-03",
+    "resource-measurement-04",
+    "resource-measurement-05",
+    "resource-measurement-06",
+    "resource-measurement-07",
+    "resource-measurement-08",
+    "resource-measurement-09",
+    "resource-measurement-10",
+    "resource-measurement-11",
+    "resource-measurement-12",
+    "resource-measurement-13",
+    "resource-measurement-14",
+    "resource-measurement-15",
+    "resource-measurement-16",
+    "resource-measurement-17",
+    "resource-measurement-18",
+    "resource-measurement-19",
+    "resource-measurement-20",
+    "resource-measurement-21",
+    "resource-measurement-22",
+    "resource-measurement-23",
+    "resource-measurement-24",
+    "resource-measurement-25"
+  ],
+  "manifestPath": "/tmp/carbon-cut-resource-sessions.json",
+  "resetCommand": "npm run resource:measurement:prepare -- --count 25 --manifest /tmp/carbon-cut-resource-sessions.json --report /tmp/carbon-cut-resource-summary.json"
+}
