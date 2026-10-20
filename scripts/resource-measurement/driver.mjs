@@ -195,6 +195,11 @@ async function runWindow(seconds, phase) {
   await Promise.all(
     workers.map(async (session) => {
       let sequence = randomInt(1, calculateEvery);
+      if (phase === "measurement") {
+        const signInDelay = randomInt(minThinkMs, maxThinkMs + 1);
+        await new Promise((resolve) => setTimeout(resolve, signInDelay));
+        await signIn(session);
+      }
       while (!stopping && Date.now() < deadline) {
         await doAction(session, sequence++);
         const think = randomInt(minThinkMs, maxThinkMs + 1);
