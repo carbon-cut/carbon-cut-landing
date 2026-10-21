@@ -1,0 +1,88 @@
+{
+  "baseUrl": "http://localhost:3010",
+  "sessions": 5,
+  "requestedWarmupSeconds": 15,
+  "actualWarmupSeconds": 17.33,
+  "warmupStartedAt": "2026-10-20T04:53:42.510Z",
+  "warmupCompletedAt": "2026-10-20T04:53:59.841Z",
+  "requestedMeasurementSeconds": 60,
+  "actualMeasurementSeconds": 62.02,
+  "thinkTimeMs": [
+    800,
+    3000
+  ],
+  "calculateEveryActions": 12,
+  "startedAt": "2026-10-20T04:53:59.841Z",
+  "completedAt": "2026-10-20T04:55:01.866Z",
+  "operations": {
+    "draft-save": {
+      "requests": 21,
+      "requestsPerSecond": 0.339,
+      "errors": 0,
+      "p50Ms": 44.17,
+      "p95Ms": 116.96,
+      "p99Ms": 250.99
+    },
+    "project-navigation": {
+      "requests": 29,
+      "requestsPerSecond": 0.468,
+      "errors": 0,
+      "p50Ms": 137.41,
+      "p95Ms": 350.03,
+      "p99Ms": 350.67
+    },
+    "calculation": {
+      "requests": 10,
+      "requestsPerSecond": 0.161,
+      "errors": 0,
+      "p50Ms": 112.95,
+      "p95Ms": 445.85,
+      "p99Ms": 445.85,
+      "calculationDurationMs": [
+        105.62,
+        106.96,
+        111.34,
+        112.48,
+        112.95,
+        120.43,
+        132.5,
+        142.58,
+        399,
+        445.85
+      ]
+    },
+    "result-read": {
+      "requests": 10,
+      "requestsPerSecond": 0.161,
+      "errors": 0,
+      "p50Ms": 27.61,
+      "p95Ms": 47.43,
+      "p99Ms": 47.43
+    },
+    "inventory-read": {
+      "requests": 70,
+      "requestsPerSecond": 1.129,
+      "errors": 0,
+      "p50Ms": 26.95,
+      "p95Ms": 40.03,
+      "p99Ms": 79.61
+    },
+    "session-read": {
+      "requests": 16,
+      "requestsPerSecond": 0.258,
+      "errors": 0,
+      "p50Ms": 4.45,
+      "p95Ms": 6.33,
+      "p99Ms": 6.33
+    },
+    "sign-in": {
+      "requests": 1,
+      "requestsPerSecond": 0.016,
+      "errors": 0,
+      "p50Ms": 129.43,
+      "p95Ms": 129.43,
+      "p99Ms": 129.43
+    }
+  },
+  "rawSamples": "carbon-cut-active-5-http.jsonl"
+}

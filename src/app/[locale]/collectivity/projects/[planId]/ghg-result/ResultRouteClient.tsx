@@ -24,7 +24,7 @@ export default function ResultRouteClient({ projectSlug }: { projectSlug: string
   });
 
   return (
-    <>
+    <section className="px-8 py-4">
       <div className="mt-6">
         <ResultSummaryCards
           result={resultQuery.data}
@@ -32,11 +32,11 @@ export default function ResultRouteClient({ projectSlug }: { projectSlug: string
           error={resultQuery.error}
         />
       </div>
-      {resultQuery.data && (
+      {/* {resultQuery.data && (
         <div className="mt-6">
           <ReportingLinesTable result={resultQuery.data} />
         </div>
-      )}
+      )} */}
       <div className="mt-6 flex flex-col gap-6">
         <GHGDevelopmentChart
           result={resultQuery.data}
@@ -66,6 +66,6 @@ export default function ResultRouteClient({ projectSlug }: { projectSlug: string
           error={resultQuery.error}
         />
       </div>
-    </>
+    </section>
   );
 }

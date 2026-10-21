@@ -658,7 +658,7 @@ export default function CollectivitySetupForm({
   }
 
   return (
-    <section className="">
+    <section className="px-8 py-4">
       <header className="px-5 py-5 md:px-6">
         <Typography asChild variant="heading1">
           <h2>{t("setupWorkspace.title") as string}</h2>

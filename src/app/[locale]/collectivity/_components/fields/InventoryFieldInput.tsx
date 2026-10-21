@@ -104,7 +104,7 @@ function InventoryFieldInput<T extends FieldValues>({
             >
               {label}
               {required ? (
-                <FieldRequired srLabel={tErrors("Required")} className="text-error-600" />
+                <FieldRequired size={'body'} srLabel={tErrors("Required")} className="text-error-600" />
               ) : null}
             </FormLabel>
           ) : null}

@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { mkdir } from "node:fs/promises";
+import path from "node:path";
 import { chromium } from "playwright";
 import { startBrowserTestServers } from "../../../browser/support/servers.mjs";
 
@@ -40,9 +42,38 @@ try {
 
 async function immediateRegistrationEstablishesBrowserAuthState(browser) {
   const context = await browser.newContext();
+  await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
+  let traceSaved = false;
+  let page;
+  const browserEvents = [];
   try {
-    const page = await context.newPage();
+    page = await context.newPage();
     page.setDefaultTimeout(15_000);
+    page.on("pageerror", (error) => browserEvents.push(`pageerror ${error.message}`));
+    page.on("console", (message) => {
+      if (message.type() === "error") browserEvents.push(`console-error ${message.text()}`);
+    });
+    page.on("request", (request) => {
+      const url = new URL(request.url());
+      if (url.pathname === "/api/auth/sign-up") {
+        browserEvents.push(`request ${request.method()} ${url.pathname}`);
+      }
+    });
+    page.on("requestfailed", (request) => {
+      const url = new URL(request.url());
+      if (url.pathname === "/api/auth/sign-up") {
+        browserEvents.push(
+          `request-failed ${request.method()} ${url.pathname} ${request.failure()?.errorText ?? "unknown"}`
+        );
+      }
+    });
+    page.on("response", (response) => {
+      const url = new URL(response.url());
+      if (url.pathname === "/api/auth/sign-up") {
+        browserEvents.push(`response ${response.status()} ${url.pathname}`);
+      }
+    });
+
     await page.goto(`${frontendUrl}/auth/sign-up`);
     await page.getByLabel("Prénom").fill("Immediate");
     await page.getByLabel(/^Nom/).fill("User");
@@ -50,13 +81,12 @@ async function immediateRegistrationEstablishesBrowserAuthState(browser) {
     await page.getByLabel(/^Mot de passe/).fill("BrowserPassword123!");
     await page.getByLabel("Confirmez le mot de passe").fill("BrowserPassword123!");
 
-    const responsePromise = page.waitForResponse(
-      (response) =>
-        new URL(response.url()).pathname === "/api/auth/sign-up" &&
-        response.request().method() === "POST"
-    );
     const [response] = await Promise.all([
-      responsePromise,
+      page.waitForResponse(
+        (response) =>
+          new URL(response.url()).pathname === "/api/auth/sign-up" &&
+          response.request().method() === "POST"
+      ),
       page.getByRole("button", { name: "Créer un compte" }).click(),
     ]);
     assert.equal(response.status(), 200);
@@ -66,8 +96,55 @@ async function immediateRegistrationEstablishesBrowserAuthState(browser) {
       (await context.cookies(frontendUrl)).some((cookie) => cookie.name === "cc_access_token"),
       "immediate registration should establish a browser session before navigation"
     );
+  } catch (error) {
+    console.error(`[browser-diagnostics] ${JSON.stringify(browserEvents)}`);
+    try {
+      const formState = await page?.evaluate(() => {
+        const form = document.querySelector("form");
+        const invalidInputs = Array.from(form?.querySelectorAll("input:invalid") ?? []).map(
+          (input) => ({
+            name: input.name,
+            type: input.type,
+            hasValue: Boolean(input.value),
+            validationMessage: input.validationMessage,
+          })
+        );
+        return {
+          formIsValid: form?.checkValidity() ?? null,
+          invalidInputs,
+          submitDisabled: form?.querySelector('button[type="submit"]')?.disabled ?? null,
+        };
+      });
+      console.error(`[browser-diagnostics] submit-state ${JSON.stringify(formState)}`);
+    } catch (diagnosticError) {
+      console.error(`[browser-diagnostics] Could not read form state: ${diagnosticError.message}`);
+    }
+
+    try {
+      const artifactDirectory = path.join(process.cwd(), "artifacts", "browser-failures");
+      await mkdir(artifactDirectory, { recursive: true });
+      const tracePath = path.join(artifactDirectory, `sign-up-${Date.now()}.zip`);
+      await context.tracing.stop({ path: tracePath });
+      traceSaved = true;
+      console.error(`[browser-diagnostics] Playwright trace saved to ${tracePath}`);
+    } catch (traceError) {
+      console.error(`[browser-diagnostics] Could not save Playwright trace: ${traceError.message}`);
+    }
+    throw error;
   } finally {
-    await context.close();
+    try {
+      if (!traceSaved) {
+        try {
+          await context.tracing.stop();
+        } catch (traceError) {
+          console.error(
+            `[browser-diagnostics] Could not stop Playwright trace: ${traceError.message}`
+          );
+        }
+      }
+    } finally {
+      await context.close();
+    }
   }
 }
 

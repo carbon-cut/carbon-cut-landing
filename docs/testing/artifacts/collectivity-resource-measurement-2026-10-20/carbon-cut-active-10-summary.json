@@ -1,0 +1,95 @@
+{
+  "baseUrl": "http://localhost:3010",
+  "sessions": 10,
+  "requestedWarmupSeconds": 15,
+  "actualWarmupSeconds": 17.28,
+  "warmupStartedAt": "2026-10-20T04:56:03.560Z",
+  "warmupCompletedAt": "2026-10-20T04:56:20.840Z",
+  "requestedMeasurementSeconds": 60,
+  "actualMeasurementSeconds": 62.59,
+  "thinkTimeMs": [
+    800,
+    3000
+  ],
+  "calculateEveryActions": 12,
+  "startedAt": "2026-10-20T04:56:20.840Z",
+  "completedAt": "2026-10-20T04:57:23.427Z",
+  "operations": {
+    "session-read": {
+      "requests": 38,
+      "requestsPerSecond": 0.607,
+      "errors": 0,
+      "p50Ms": 4.66,
+      "p95Ms": 16.34,
+      "p99Ms": 43.41
+    },
+    "inventory-read": {
+      "requests": 139,
+      "requestsPerSecond": 2.221,
+      "errors": 0,
+      "p50Ms": 28.25,
+      "p95Ms": 106.52,
+      "p99Ms": 136.22
+    },
+    "draft-save": {
+      "requests": 57,
+      "requestsPerSecond": 0.911,
+      "errors": 0,
+      "p50Ms": 46.45,
+      "p95Ms": 132.32,
+      "p99Ms": 175.15
+    },
+    "calculation": {
+      "requests": 17,
+      "requestsPerSecond": 0.272,
+      "errors": 0,
+      "p50Ms": 130.99,
+      "p95Ms": 340.87,
+      "p99Ms": 340.87,
+      "calculationDurationMs": [
+        111.58,
+        119.37,
+        122.24,
+        124.66,
+        124.91,
+        127.13,
+        127.24,
+        128.32,
+        130.99,
+        135.82,
+        138.69,
+        146.58,
+        154.63,
+        160.12,
+        239.83,
+        244.94,
+        340.87
+      ]
+    },
+    "result-read": {
+      "requests": 17,
+      "requestsPerSecond": 0.272,
+      "errors": 0,
+      "p50Ms": 31.31,
+      "p95Ms": 107.96,
+      "p99Ms": 107.96
+    },
+    "project-navigation": {
+      "requests": 58,
+      "requestsPerSecond": 0.927,
+      "errors": 0,
+      "p50Ms": 133.11,
+      "p95Ms": 250.02,
+      "p99Ms": 274.7
+    },
+    "sign-in": {
+      "requests": 1,
+      "requestsPerSecond": 0.016,
+      "errors": 0,
+      "p50Ms": 117.24,
+      "p95Ms": 117.24,
+      "p99Ms": 117.24
+    }
+  },
+  "rawSamples": "carbon-cut-active-10-http.jsonl"
+}

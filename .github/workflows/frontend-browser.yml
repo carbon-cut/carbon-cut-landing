@@ -5,6 +5,20 @@ on:
     branches: [main, develop]
   push:
     branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      browser_journey:
+        description: Run all browser journeys or one selected journey
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - auth
+          - auth:password-recovery
+          - auth:sign-up
+          - collectivity-project-entry
+          - session-recovery
 
 permissions:
   contents: read
@@ -34,4 +48,20 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run browser journeys
-        run: npm run test:browser
+        run: |
+          if [ "$BROWSER_JOURNEY" = "all" ]; then
+            npm run test:browser
+          else
+            npm run "test:browser:$BROWSER_JOURNEY"
+          fi
+        env:
+          BROWSER_JOURNEY: ${{ inputs.browser_journey || 'all' }}
+
+      - name: Upload browser failure traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failure-traces-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/browser-failures/
+          if-no-files-found: ignore
+          retention-days: 7

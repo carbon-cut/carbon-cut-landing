@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/artifacts/browser-failures/
 
 # next.js
 /.next/
