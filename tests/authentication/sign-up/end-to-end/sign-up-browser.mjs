@@ -50,15 +50,63 @@ async function immediateRegistrationEstablishesBrowserAuthState(browser) {
     await page.getByLabel(/^Mot de passe/).fill("BrowserPassword123!");
     await page.getByLabel("Confirmez le mot de passe").fill("BrowserPassword123!");
 
+    const debugPrefix = "[DEBUG-signup-ci-7f2a]";
+    const registrationPath = "/api/auth/sign-up";
+    page.on("request", (request) => {
+      const url = new URL(request.url());
+      if (url.pathname === registrationPath) {
+        console.log(`${debugPrefix} request ${request.method()} ${url.pathname}`);
+      }
+    });
+    page.on("requestfailed", (request) => {
+      const url = new URL(request.url());
+      if (url.pathname === registrationPath) {
+        console.log(`${debugPrefix} request-failed ${request.failure()?.errorText ?? "unknown"}`);
+      }
+    });
+    page.on("response", (response) => {
+      const url = new URL(response.url());
+      if (url.pathname === registrationPath) {
+        console.log(`${debugPrefix} response ${response.status()} ${url.pathname}`);
+      }
+    });
+
     const responsePromise = page.waitForResponse(
       (response) =>
-        new URL(response.url()).pathname === "/api/auth/sign-up" &&
+        new URL(response.url()).pathname === registrationPath &&
         response.request().method() === "POST"
     );
-    const [response] = await Promise.all([
-      responsePromise,
-      page.getByRole("button", { name: "Créer un compte" }).click(),
-    ]);
+    let response;
+    try {
+      [response] = await Promise.all([
+        responsePromise,
+        page.getByRole("button", { name: "Créer un compte" }).click(),
+      ]);
+    } catch (error) {
+      const diagnostics = await page.evaluate(() => {
+        const form = document.querySelector("form");
+        const invalidInputs = Array.from(
+          form?.querySelectorAll("input:invalid") ?? []
+        ).map((input) => ({
+          name: input.name,
+          type: input.type,
+          hasValue: Boolean(input.value),
+          validationMessage: input.validationMessage,
+        }));
+        const errorLabels = Array.from(
+          form?.querySelectorAll('[data-state="error"]') ?? []
+        ).map((element) => element.textContent?.trim() ?? "");
+        const submitButton = form?.querySelector('button[type="submit"]');
+        return {
+          formIsValid: form?.checkValidity() ?? null,
+          invalidInputs,
+          errorLabels,
+          submitDisabled: submitButton?.disabled ?? null,
+        };
+      });
+      console.log(`${debugPrefix} submit-state ${JSON.stringify(diagnostics)}`);
+      throw error;
+    }
     assert.equal(response.status(), 200);
     await page.waitForURL((url) => url.pathname === "/collectivity");
     await page.getByRole("button", { name: "Immediate User" }).waitFor();
